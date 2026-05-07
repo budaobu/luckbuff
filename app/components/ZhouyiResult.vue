@@ -1,0 +1,257 @@
+<template>
+  <div class="space-y-5">
+    <!-- 起卦信息 -->
+    <div ref="qiguaInfoRef">
+      <GlowCard title="起卦信息" icon="i-heroicons-information-circle">
+        <div class="space-y-1.5">
+          <p class="text-xs text-[#e8e0d0]/50">
+            起卦方法：{{ result.methodName }}
+          </p>
+          <p v-if="result.lunarDate" class="text-xs text-[#e8e0d0]/50">
+            农历：{{ result.lunarDate.year }}年{{ result.lunarDate.isLeap ? '闰' : '' }}{{ result.lunarDate.month }}月{{ result.lunarDate.day }}日 · {{ result.lunarDate.dizhi }}年
+          </p>
+          <pre class="text-[11px] text-[#e8e0d0]/40 leading-relaxed whitespace-pre-wrap font-mono">{{ result.calcDetail }}</pre>
+        </div>
+      </GlowCard>
+    </div>
+
+    <!-- 本卦 → 互卦 → 变卦 -->
+    <div class="grid grid-cols-3 gap-3">
+      <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">本卦（当前）</p>
+        <p class="text-lg font-bold text-[#f5e6c0]">{{ benGua?.name }}</p>
+        <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ benGua?.meaning }}</p>
+        <p class="text-[10px] text-[#c9a227]/60 mt-1">动第{{ result.dongYao }}爻</p>
+      </div>
+      <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">互卦（过程）</p>
+        <p class="text-lg font-bold text-[#f5e6c0]">{{ huGua?.name }}</p>
+        <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ huGua?.meaning }}</p>
+        <p class="text-[10px] text-[#c9a227]/60 mt-1">{{ result.timeLevels.huGua }}</p>
+      </div>
+      <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">变卦（结果）</p>
+        <p class="text-lg font-bold text-[#f5e6c0]">{{ bianGua?.name }}</p>
+        <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ bianGua?.meaning }}</p>
+        <p class="text-[10px] text-[#c9a227]/60 mt-1">{{ result.timeLevels.bianGua }}</p>
+      </div>
+    </div>
+
+    <!-- 体用分析 -->
+    <div class="grid grid-cols-2 gap-3">
+      <!-- 体卦 -->
+      <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-[#c9a227]/10 flex items-center justify-center text-[#c9a227]">
+            <UIcon name="i-heroicons-user" class="w-3.5 h-3.5" />
+          </div>
+          <span class="text-xs font-medium text-[#e8e0d0]/60">体卦（自身）</span>
+        </div>
+        <p class="text-base font-bold text-[#f5e6c0]">
+          {{ getGuaById(result.tiGuaId)?.name }} · {{ result.tiWuxing }}
+        </p>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-[10px] px-2 py-0.5 rounded-full" :class="wangshuaiClass(result.tiWangshuai)">
+            {{ result.tiWangshuai }}
+          </span>
+          <span class="text-[10px] text-[#e8e0d0]/40">当令五行：{{ result.seasonWuxing }}</span>
+        </div>
+      </div>
+      <!-- 用卦 -->
+      <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-[#e8e0d0]/60">
+            <UIcon name="i-heroicons-globe-alt" class="w-3.5 h-3.5" />
+          </div>
+          <span class="text-xs font-medium text-[#e8e0d0]/60">用卦（外境）</span>
+        </div>
+        <p class="text-base font-bold text-[#f5e6c0]">
+          {{ getGuaById(result.yongGuaId)?.name }} · {{ result.yongWuxing }}
+        </p>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-[10px] px-2 py-0.5 rounded-full" :class="wangshuaiClass(result.yongWangshuai)">
+            {{ result.yongWangshuai }}
+          </span>
+          <span class="text-[10px] text-[#e8e0d0]/40">当令五行：{{ result.seasonWuxing }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 生克吉凶 -->
+    <div class="rounded-xl border border-white/[0.06] p-4" :class="shengkeBgClass">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <UIcon name="i-heroicons-scale" class="w-4 h-4" :class="shengkeIconClass" />
+          <span class="text-sm font-semibold" :class="shengkeTextClass">
+            体用关系：{{ result.shengkeRelation }}
+          </span>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-full font-medium" :class="shengkeBadgeClass">
+          {{ result.shengkeResult }}
+        </span>
+      </div>
+    </div>
+
+    <!-- 策略建议 -->
+    <GlowCard v-if="result.strategyType" title="策略建议" icon="i-heroicons-light-bulb">
+      <div class="space-y-3">
+        <div class="flex flex-wrap gap-2">
+          <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
+            类型：{{ result.strategyType }}
+          </span>
+          <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
+            策略：{{ result.strategyAction }}
+          </span>
+          <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
+            吉率：{{ result.jiRate }}%
+          </span>
+        </div>
+        <div class="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+          <p class="text-xs font-medium text-[#f5e6c0] mb-1">【下一步】</p>
+          <p class="text-sm text-[#e8e0d0]/70 leading-relaxed">{{ result.strategyNextStep }}</p>
+        </div>
+        <p v-if="result.changePath" class="text-[11px] text-[#e8e0d0]/40">
+          变卦路径：{{ result.changePath }}
+        </p>
+      </div>
+    </GlowCard>
+
+    <!-- 爻位风险 -->
+    <GlowCard v-if="result.positionRisk" title="动爻分析" icon="i-heroicons-bolt">
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-semibold text-[#f5e6c0]">第{{ result.dongYao }}爻</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full" :class="riskBadgeClass">
+            {{ result.positionRisk.riskLevel }}
+          </span>
+          <span class="text-[10px] text-[#e8e0d0]/40">系数：{{ result.positionRisk.coefficient.toFixed(3) }}</span>
+        </div>
+        <p v-if="result.positionRisk.warning" class="text-xs text-amber-400/80">
+          {{ result.positionRisk.warning }}
+        </p>
+        <p v-if="yaoCi" class="text-sm text-[#e8e0d0]/70 leading-relaxed">
+          <span class="text-[#c9a227]/60">爻辞：</span>{{ yaoCi }}
+        </p>
+      </div>
+    </GlowCard>
+
+    <!-- AI 断语 -->
+    <ZhouyiAiInterpretation
+      :content="aiStream.content"
+      :streaming="aiStream.streaming"
+      :started="aiStream.started"
+      :error="aiStream.error"
+    />
+
+    <!-- 重试按钮 -->
+    <div v-if="aiStream.error" class="flex justify-center">
+      <UButton
+        color="warning"
+        variant="soft"
+        class="group/btn"
+        @click="$emit('retry')"
+      >
+        <template #leading>
+          <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+        </template>
+        重新生成 AI 断语
+      </UButton>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { MeihuaResult } from '~/types/zhouyi'
+import { getGuaById } from '~/utils/zhouyi/constants'
+import { YAOCI } from '~/utils/zhouyi/yaoci'
+
+const props = defineProps<{
+  result: MeihuaResult
+  aiStream: {
+    content: string
+    streaming: boolean
+    started: boolean
+    error: string | null
+  }
+}>()
+
+defineEmits<{
+  retry: []
+}>()
+
+const qiguaInfoRef = ref<HTMLDivElement>()
+
+defineExpose({
+  shareTarget: qiguaInfoRef,
+})
+
+// 计算属性
+const benGua = computed(() => getGuaById(props.result.benGuaId))
+const bianGua = computed(() => getGuaById(props.result.bianGuaId))
+const huGua = computed(() => getGuaById(props.result.huGuaId))
+const yaoCi = computed(() => YAOCI[props.result.benGuaId]?.[props.result.dongYao] || '')
+
+// 旺衰颜色
+function wangshuaiClass(w: string) {
+  switch (w) {
+    case '旺': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case '相': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case '休': return 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+    case '囚': return 'bg-red-500/10 text-red-400 border border-red-500/20'
+    case '死': return 'bg-red-500/10 text-red-400 border border-red-500/20'
+    default: return 'bg-white/5 text-[#e8e0d0]/40 border border-white/10'
+  }
+}
+
+// 生克吉凶样式
+const shengkeBgClass = computed(() => {
+  switch (props.result.shengkeResult) {
+    case '大吉': return 'bg-emerald-500/5 border-emerald-500/20'
+    case '吉': return 'bg-[#c9a227]/5 border-[#c9a227]/20'
+    case '凶': return 'bg-red-500/5 border-red-500/20'
+    case '泄耗': return 'bg-amber-500/5 border-amber-500/20'
+    default: return 'bg-white/[0.02] border-white/[0.06]'
+  }
+})
+
+const shengkeTextClass = computed(() => {
+  switch (props.result.shengkeResult) {
+    case '大吉': return 'text-emerald-400'
+    case '吉': return 'text-[#c9a227]'
+    case '凶': return 'text-red-400'
+    case '泄耗': return 'text-amber-400'
+    default: return 'text-[#e8e0d0]/70'
+  }
+})
+
+const shengkeIconClass = computed(() => {
+  switch (props.result.shengkeResult) {
+    case '大吉': return 'text-emerald-400'
+    case '吉': return 'text-[#c9a227]'
+    case '凶': return 'text-red-400'
+    case '泄耗': return 'text-amber-400'
+    default: return 'text-[#e8e0d0]/50'
+  }
+})
+
+const shengkeBadgeClass = computed(() => {
+  switch (props.result.shengkeResult) {
+    case '大吉': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case '吉': return 'bg-[#c9a227]/10 text-[#c9a227] border border-[#c9a227]/20'
+    case '凶': return 'bg-red-500/10 text-red-400 border border-red-500/20'
+    case '泄耗': return 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+    default: return 'bg-white/5 text-[#e8e0d0]/50 border border-white/10'
+  }
+})
+
+// 风险等级样式
+const riskBadgeClass = computed(() => {
+  switch (props.result.positionRisk?.riskLevel) {
+    case '高风险': return 'bg-red-500/10 text-red-400 border border-red-500/20'
+    case '较差': return 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+    case '最佳': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    case '佳': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+    default: return 'bg-white/5 text-[#e8e0d0]/50 border border-white/10'
+  }
+})
+</script>
