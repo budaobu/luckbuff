@@ -18,7 +18,7 @@ export const useProfilesStore = defineStore('profiles', {
     },
     add(data: Omit<UserProfile, 'id'>): { ok: boolean; error?: string } {
       if (!this.isLabelUnique(data.label)) {
-        return { ok: false, error: '标签已存在，请使用其他名称' }
+        return { ok: false, error: 'profileForm.labelExists' }
       }
       if (data.isDefault) this._clearDefault()
       this.list.push({ ...data, id: nanoid() })
@@ -26,9 +26,9 @@ export const useProfilesStore = defineStore('profiles', {
     },
     update(id: string, data: Partial<Omit<UserProfile, 'id'>>): { ok: boolean; error?: string } {
       const idx = this.list.findIndex(p => p.id === id)
-      if (idx === -1) return { ok: false, error: '档案不存在' }
+      if (idx === -1) return { ok: false, error: 'profileForm.profileNotFound' }
       if (data.label !== undefined && !this.isLabelUnique(data.label, id)) {
-        return { ok: false, error: '标签已存在，请使用其他名称' }
+        return { ok: false, error: 'profileForm.labelExists' }
       }
       if (data.isDefault) this._clearDefault()
       this.list[idx] = { ...this.list[idx], ...data }

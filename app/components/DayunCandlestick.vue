@@ -8,8 +8,8 @@
           <UIcon name="i-heroicons-chart-bar" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">大运运势图</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">每步大运运势走势（开盘·最高·最低·收盘）</p>
+          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.dayunChart') }}</h3>
+          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.dayunChartSubtitle') }}</p>
         </div>
       </div>
 
@@ -17,15 +17,15 @@
       <div class="flex items-center gap-5 mb-4 text-[11px] text-[#e8e0d0]/40">
         <div class="flex items-center gap-1.5">
           <span class="w-2.5 h-3.5 rounded-sm bg-[#c9a227]" />
-          <span>上升运</span>
+          <span>{{ $t('bazi.risingTrend') }}</span>
         </div>
         <div class="flex items-center gap-1.5">
           <span class="w-2.5 h-3.5 rounded-sm bg-[#e8e0d0]/50 border border-[#e8e0d0]/30" />
-          <span>下降运</span>
+          <span>{{ $t('bazi.fallingTrend') }}</span>
         </div>
         <div class="flex items-center gap-1.5">
           <span class="w-2.5 h-3.5 rounded-sm border-2 border-[#c9a227]" />
-          <span>当前大运</span>
+          <span>{{ $t('bazi.currentDayun') }}</span>
         </div>
       </div>
 
@@ -70,41 +70,41 @@
                   <div class="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[#1a1612] border-b border-r border-white/[0.08] rotate-45" />
                   <div class="flex items-center gap-2 mb-2">
                     <span class="text-sm font-bold" :class="d.isCurrent ? 'text-[#c9a227]' : 'text-[#f5e6c0]'">
-                      {{ d.gan }}{{ d.zhi }}大运
+                      {{ d.gan }}{{ d.zhi }}{{ $t('bazi.daYunLabel') }}
                     </span>
                     <span
                       v-if="d.isCurrent"
                       class="text-[9px] px-1.5 py-0.5 rounded bg-[#c9a227]/15 text-[#c9a227] border border-[#c9a227]/20"
                     >
-                      当前
+                      {{ $t('bazi.currentLabel') }}
                     </span>
                   </div>
                   <div class="space-y-1.5">
                     <div class="flex items-center justify-between text-[11px]">
-                      <span class="text-[#e8e0d0]/40">年龄段</span>
-                      <span class="text-[#e8e0d0]/80">{{ d.ageRange[0] }}-{{ d.ageRange[1] }}岁</span>
+                      <span class="text-[#e8e0d0]/40">{{ $t('bazi.ageRangeLabel') }}</span>
+                      <span class="text-[#e8e0d0]/80">{{ d.ageRange[0] }}-{{ d.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}</span>
                     </div>
                     <div class="grid grid-cols-4 gap-1 pt-1 border-t border-white/[0.06]">
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">开盘</p>
+                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcOpen') }}</p>
                         <p class="text-[11px] font-bold text-[#e8e0d0]/70">{{ d.open }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">最高</p>
+                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcHigh') }}</p>
                         <p class="text-[11px] font-bold text-[#c9a227]">{{ d.high }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">最低</p>
+                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcLow') }}</p>
                         <p class="text-[11px] font-bold text-red-400/80">{{ d.low }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">收盘</p>
+                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcClose') }}</p>
                         <p class="text-[11px] font-bold" :class="d.close >= d.open ? 'text-[#c9a227]' : 'text-[#e8e0d0]/70'">{{ d.close }}</p>
                       </div>
                     </div>
                     <div class="flex items-center justify-between text-[11px]">
-                      <span class="text-[#e8e0d0]/40">运势等级</span>
-                      <span class="text-[#e8e0d0]/80">{{ d.fortune || '未评' }}</span>
+                      <span class="text-[#e8e0d0]/40">{{ $t('bazi.fortuneLevelLabel') }}</span>
+                      <span class="text-[#e8e0d0]/80">{{ d.fortune || $t('bazi.fortuneUnevaluated') }}</span>
                     </div>
                     <div v-if="d.analysis" class="pt-1.5 border-t border-white/[0.06]">
                       <p class="text-[11px] text-[#e8e0d0]/60 leading-relaxed">{{ d.analysis }}</p>
@@ -179,7 +179,7 @@
               {{ d.gan }}{{ d.zhi }}
             </p>
             <p class="text-[9px] text-[#e8e0d0]/30 mt-0.5">
-              {{ d.ageRange[0] }}-{{ d.ageRange[1] }}
+              {{ d.ageRange[0] }}-{{ d.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}
             </p>
           </div>
         </div>
@@ -210,6 +210,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const CHART_H = 200
 const CANDLE_W = 28

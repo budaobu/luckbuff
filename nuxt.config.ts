@@ -1,3 +1,10 @@
+import { createRequire } from 'node:module'
+import { dirname, join } from 'node:path'
+
+const requireFromHere = createRequire(import.meta.url)
+const piniaPkgPath = requireFromHere.resolve('pinia/package.json')
+const piniaEsmPath = join(dirname(piniaPkgPath), 'dist/pinia.mjs')
+
 export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   srcDir: 'app',
@@ -8,7 +15,21 @@ export default defineNuxtConfig({
     'nuxt-security',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    '@nuxtjs/i18n',
   ],
+
+  i18n: {
+    locales: [
+      { code: 'zh-CN', name: '简体中文', file: 'zh-CN.json' },
+      { code: 'zh-TW', name: '繁體中文', file: 'zh-TW.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'zh-CN',
+    lazy: true,
+    bundle: {
+      commonJs: false,
+    },
+  },
 
   css: ['~/assets/css/main.css'],
 
@@ -22,10 +43,23 @@ export default defineNuxtConfig({
     xssValidator: false,
   },
 
-  icon: {
-    serverBundle: {
-      collections: ['heroicons'],
+  alias: {
+    pinia: piniaEsmPath,
+  },
+
+  vite: {
+    optimizeDeps: {
+      include: ['nanoid'],
     },
+    resolve: {
+      alias: {
+        pinia: piniaEsmPath,
+      },
+    },
+  },
+
+  icon: {
+    serverBundle: 'remote',
   },
 
   runtimeConfig: {
@@ -36,6 +70,8 @@ export default defineNuxtConfig({
     aiProvider: 'newapi',
     public: {
       siteUrl: '',
+      googleSiteVerification: '',
+      baiduAnalyticsId: '',
     },
   },
 })

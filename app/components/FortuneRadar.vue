@@ -8,8 +8,8 @@
           <UIcon name="i-heroicons-chart-pie" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">运势五维分析</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">各维度综合评分与解读</p>
+          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('fortuneRadar.title') }}</h3>
+          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('fortuneRadar.subtitle') }}</p>
         </div>
       </div>
 
@@ -91,55 +91,42 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const labels = ['感情运', '事业运', '财运', '健康运', '学业运']
+const { t } = useI18n()
+
+const labelKeys = ['relationship', 'career', 'wealth', 'health', 'study'] as const
+// Map English keys to Chinese keys used in aiResult.dimensionScores
+const chineseKeyMap: Record<string, string> = {
+  relationship: '感情运',
+  career: '事业运',
+  wealth: '财运',
+  health: '健康运',
+  study: '学业运',
+}
+const labels = computed(() => labelKeys.map(k => t(`fortuneRadar.labels.${k}`)))
 const colors = ['#ef4444', '#f59e0b', '#c9a227', '#10b981', '#8b5cf6']
 
 function getLevel(score: number): string {
-  if (score >= 85) return '极佳'
-  if (score >= 70) return '良好'
-  if (score >= 55) return '平稳'
-  if (score >= 40) return '偏弱'
-  return '低迷'
+  if (score >= 85) return t('fortuneRadar.levels.excellent')
+  if (score >= 70) return t('fortuneRadar.levels.good')
+  if (score >= 55) return t('fortuneRadar.levels.stable')
+  if (score >= 40) return t('fortuneRadar.levels.weak')
+  return t('fortuneRadar.levels.low')
 }
 
 function getTip(label: string, score: number): string {
-  const tips: Record<string, Record<string, string>> = {
-    感情运: {
-      high: '桃花运势较旺，容易遇到良缘，适合主动社交、拓展人际圈。',
-      mid: '感情发展平稳，需用心经营，不宜操之过急，细水长流为上。',
-      low: '感情运偏弱，宜先修身养性、提升自我，等待合适时机。',
-    },
-    事业运: {
-      high: '事业运旺，贵人相助，宜积极进取，把握上升与突破机会。',
-      mid: '事业平稳发展，宜稳扎稳打，积累经验与资历，厚积薄发。',
-      low: '事业运受阻，宜低调行事，避免重大变动，静待时机转机。',
-    },
-    财运: {
-      high: '财源广进，正财偏财皆有机会，可适当投资，注意见好就收。',
-      mid: '财运平稳，宜守不宜攻，量入为出，稳健理财为佳。',
-      low: '财运偏弱，宜节俭理财，避免大额支出与高风险投资。',
-    },
-    健康运: {
-      high: '身体状态良好，精力充沛，注意保持规律作息即可。',
-      mid: '健康状况平稳，需注意劳逸结合，预防季节性小病。',
-      low: '健康运偏弱，需注意调养身心，避免过度劳累与熬夜。',
-    },
-    学业运: {
-      high: '学业运旺，思维敏捷吸收快，适合深造进修、考取证书。',
-      mid: '学业进展平稳，需持之以恒，制定计划方能见效。',
-      low: '学业运受阻，宜调整学习方法，寻求良师指点与同伴互助。',
-    },
-  }
+  // Find which english key maps to the current label (which is in the user's locale)
+  const labelKey = labelKeys.find(k => chineseKeyMap[k] === label || t(`fortuneRadar.labels.${k}`) === label)
+  if (!labelKey) return ''
   const level = score >= 70 ? 'high' : score >= 50 ? 'mid' : 'low'
-  return tips[label]?.[level] ?? ''
+  return t(`fortuneRadar.tips.${labelKey}.${level}`)
 }
 
 const chartData = computed(() => ({
-  labels,
+  labels: labels.value,
   datasets: [
     {
-      label: '运势评分',
-      data: labels.map(l => props.scores[l] ?? 50),
+      label: t('fortuneRadar.title'),
+      data: labelKeys.map(k => props.scores[chineseKeyMap[k]] ?? 50),
       backgroundColor: 'rgba(139, 92, 246, 0.15)',
       borderColor: '#8b5cf6',
       pointBackgroundColor: colors,
@@ -186,7 +173,7 @@ const options = {
         label: (ctx: any) => {
           const score = ctx.raw
           const level = getLevel(score)
-          return `评分：${score}（${level}）`
+          return t('fortuneRadar.tooltipScoreFormat', { score, level })
         },
       },
     },

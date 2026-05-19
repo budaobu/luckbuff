@@ -24,7 +24,24 @@ logs
 
 # Screenshots (generated during development)
 screenshot-*.png
+calendar-*.png
+bazi-calendar-*.png
 
 # WorkBuddy local data
 .workbuddy/memory/
 .workbuddy/*.db
+
+# Playwright / MCP browser artifacts
+.playwright-mcp/
+test-results/
+e2e-results/
+
+# Ad-hoc i18n / e2e scratch files
+i18n_scan_raw.txt
+e2e-test-pages.mjs
+e2e-test-pages.spec.ts
+e2e-test-pages.ts
+app/hardcoded-chinese-ui-strings.md
+
+# Liu-yao engine skill payload (rsynced separately by scripts/deploy.sh)
+liuyao-three-coin-physical-core-SKILL-contract-v2.md

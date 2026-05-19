@@ -18,14 +18,14 @@
 
       <!-- 标题 -->
       <h1 class="text-2xl font-bold text-[#f5e6c0] mb-3">
-        {{ error.statusCode === 404 ? '页面未找到' : '出了点问题' }}
+        {{ error.statusCode === 404 ? $t('error.notFound') : $t('error.generic') }}
       </h1>
 
       <!-- 描述 -->
       <p class="text-sm text-[#e8e0d0]/50 max-w-sm mx-auto mb-8 leading-relaxed">
         {{ error.statusCode === 404
-          ? '您访问的页面不存在或已被移除。请检查链接是否正确，或返回首页继续探索。'
-          : '服务器暂时无法处理您的请求，请稍后再试。'
+          ? $t('error.notFoundDesc')
+          : $t('error.genericDesc')
         }}
       </p>
 
@@ -39,7 +39,7 @@
           <template #leading>
             <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
           </template>
-          {{ error.statusCode === 404 ? '回到首页' : '刷新重试' }}
+          {{ error.statusCode === 404 ? $t('error.backHome') : $t('error.refresh') }}
         </UButton>
         <UButton
           color="neutral"
@@ -50,20 +50,22 @@
           <template #leading>
             <UIcon name="i-heroicons-sparkles" class="w-4 h-4" />
           </template>
-          算命工具
+          {{ $t('error.goTools') }}
         </UButton>
       </div>
     </div>
 
     <!-- 底部提示 -->
     <p class="relative z-10 mt-16 text-xs text-[#e8e0d0]/20">
-      LuckBuff · 仅供文化娱乐参考
+      {{ $t('footer.copyright') }}
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   error: NuxtError
@@ -79,6 +81,6 @@ const handleError = () => {
 }
 
 useSeoMeta({
-  title: props.error.statusCode === 404 ? '页面未找到 - LuckBuff' : '出错啦 - LuckBuff',
+  title: props.error.statusCode === 404 ? t('error.seoNotFound') : t('error.seoGeneric'),
 })
 </script>

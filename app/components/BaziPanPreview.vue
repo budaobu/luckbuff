@@ -1,9 +1,9 @@
 <template>
   <div class="space-y-4">
     <!-- 四柱精简 -->
-    <GlowCard title="命盘预览">
+    <GlowCard :title="$t('bazi.panPreview')">
       <div class="flex justify-between text-center">
-        <div v-for="(label, idx) in ['年柱', '月柱', '日柱', '时柱']" :key="label" class="flex-1">
+        <div v-for="(label, idx) in pillarLabels" :key="label" class="flex-1">
           <p class="text-xs text-[#e8e0d0]/50 mb-1">{{ label }}</p>
           <p class="text-lg font-bold" :class="idx === 2 ? 'text-[#c9a227]' : 'text-[#e8e0d0]'">
             {{ getPillarText(idx) }}
@@ -14,21 +14,21 @@
     </GlowCard>
 
     <!-- 当前大运 -->
-    <GlowCard v-if="chart.currentDaYun" title="当前大运">
+    <GlowCard v-if="chart.currentDaYun" :title="$t('bazi.currentDayun')">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-2xl font-bold text-[#c9a227]">
             {{ chart.currentDaYun.gan }}{{ chart.currentDaYun.zhi }}
           </p>
           <p class="text-sm text-[#e8e0d0]/60">
-            第{{ chart.currentDaYun.index }}步大运
+            {{ $t('bazi.stepOfDaYun', { index: chart.currentDaYun.index }) }}
           </p>
         </div>
         <div class="text-right">
           <p class="text-lg text-[#e8e0d0]">
-            {{ chart.currentDaYun.ageRange[0] }}-{{ chart.currentDaYun.ageRange[1] }}岁
+            {{ chart.currentDaYun.ageRange[0] }}-{{ chart.currentDaYun.ageRange[1] }}{{ $t('bazi.ageUnit') }}
           </p>
-          <p class="text-xs text-[#e8e0d0]/50">当前 {{ chart.currentAge }} 岁</p>
+          <p class="text-xs text-[#e8e0d0]/50">{{ $t('bazi.currentAgeLabel', { age: chart.currentAge }) }}</p>
         </div>
       </div>
     </GlowCard>
@@ -43,6 +43,15 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const { t } = useI18n()
+
+const pillarLabels = computed(() => [
+  t('baziPan.yearPillar'),
+  t('baziPan.monthPillar'),
+  t('baziPan.dayPillar'),
+  t('baziPan.hourPillar'),
+])
 
 const pillars = computed(() => [
   props.chart.year,

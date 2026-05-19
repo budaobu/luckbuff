@@ -3,7 +3,7 @@
     <!-- 起卦方式选择 -->
     <div class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-        起卦方式
+        {{ $t('zhouyiForm.method') }}
         <span class="text-[#c9a227]">*</span>
       </label>
       <div class="grid grid-cols-3 gap-2">
@@ -28,7 +28,7 @@
       <!-- 起卦日期 -->
       <div class="space-y-1.5">
         <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-          起卦日期
+          {{ $t('zhouyiForm.date') }}
           <span class="text-[#c9a227]">*</span>
         </label>
         <UPopover>
@@ -39,35 +39,26 @@
             :class="{ 'text-[#e8e0d0]/25': !timeForm.date }"
           >
             <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[#e8e0d0]/40" />
-            {{ timeForm.date && calendarDate ? df.format(calendarDate.toDate(tz)) : '选择日期' }}
+            {{ timeForm.date && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('zhouyiForm.datePlaceholder') }}
           </UButton>
           <template #content>
-            <UCalendar
+            <AppCalendar
               v-model="calendarDate"
               color="warning"
               class="p-2"
-              :ui="{
-                root: 'bg-[#0f0c09] border border-white/8 rounded-xl shadow-2xl',
-                header: 'bg-[#0f0c09]',
-                body: 'bg-[#0f0c09]',
-                grid: 'bg-[#0f0c09]',
-                heading: 'text-[#f5e6c0] font-medium',
-                headCell: 'text-[#e8e0d0]/40',
-                cellTrigger: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[selected]:bg-[#c9a227] data-[selected]:text-[#1a1612]',
-              }"
             />
           </template>
         </UPopover>
-        <p class="text-[10px] text-[#e8e0d0]/30">梅花易数使用农历计算，后台自动转换</p>
+        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.lunarNote') }}</p>
       </div>
 
       <!-- 起卦时辰 -->
       <div class="space-y-1.5">
-        <label class="text-xs font-medium text-[#e8e0d0]/60">起卦时辰（可选，默认当前）</label>
+        <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('zhouyiForm.hourLabel') }}</label>
         <USelect
           v-model="timeForm.hour"
           :items="hourOptions"
-          placeholder="选择时辰"
+          :placeholder="$t('zhouyiForm.hourPlaceholder')"
           color="warning"
           class="w-full"
           :ui="{
@@ -84,47 +75,47 @@
     <template v-if="method === 'numbers'">
       <div class="space-y-1.5">
         <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-          第一个数字
+          {{ $t('zhouyiForm.firstNumber') }}
           <span class="text-[#c9a227]">*</span>
         </label>
         <UInput
           v-model.number="numbersForm.num1"
           type="number"
-          placeholder="如：6"
+          :placeholder="$t('zhouyiForm.firstNumberPlaceholder')"
           color="warning"
           class="w-full"
           :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">÷8 余数 = 上卦</p>
+        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.upperGuaHint') }}</p>
       </div>
 
       <div class="space-y-1.5">
         <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-          第二个数字
+          {{ $t('zhouyiForm.secondNumber') }}
           <span class="text-[#c9a227]">*</span>
         </label>
         <UInput
           v-model.number="numbersForm.num2"
           type="number"
-          placeholder="如：8"
+          :placeholder="$t('zhouyiForm.secondNumberPlaceholder')"
           color="warning"
           class="w-full"
           :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">÷8 余数 = 下卦</p>
+        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.lowerGuaHint') }}</p>
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-xs font-medium text-[#e8e0d0]/60">第三个数字（动爻，可选）</label>
+        <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('zhouyiForm.thirdNumber') }}</label>
         <UInput
           v-model.number="numbersForm.num3"
           type="number"
-          placeholder="不填则自动计算"
+          :placeholder="$t('zhouyiForm.thirdNumberPlaceholder')"
           color="warning"
           class="w-full"
           :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">÷6 余数 = 动爻。不填则用 (第一数+第二数)÷6</p>
+        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.dongYaoHint') }}</p>
       </div>
     </template>
 
@@ -132,20 +123,19 @@
     <template v-if="method === 'character'">
       <div class="space-y-1.5">
         <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-          汉字
+          {{ $t('zhouyiForm.charLabel') }}
           <span class="text-[#c9a227]">*</span>
         </label>
         <UInput
           v-model="charForm.char"
-          placeholder="输入一个或两个汉字"
+          :placeholder="$t('zhouyiForm.charPlaceholder')"
           color="warning"
           class="w-full"
           maxlength="2"
           :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
         />
         <p class="text-[10px] text-[#e8e0d0]/30">
-          单字：笔画数÷8=卦象，÷6=动爻
-          双字：第一字÷8=上卦，第二字÷8=下卦，笔画和÷6=动爻
+          {{ $t('zhouyiForm.charHint') }}
         </p>
       </div>
     </template>
@@ -153,12 +143,12 @@
     <!-- 具体问题 -->
     <div class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-        具体问题
+        {{ $t('zhouyiForm.queryLabel') }}
         <span class="text-[#c9a227]">*</span>
       </label>
       <UTextarea
         v-model="query"
-        placeholder="如：我最近工作不顺，想问问事业方向..."
+        :placeholder="$t('zhouyiForm.queryPlaceholder')"
         color="warning"
         :rows="3"
         class="w-full"
@@ -166,7 +156,7 @@
           base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
         }"
       />
-      <p class="text-[10px] text-[#e8e0d0]/30">无疑不卜 — 问题越具体，断卦越准确</p>
+      <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.queryHint') }}</p>
     </div>
 
     <UButton
@@ -180,7 +170,7 @@
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </template>
-      立即起卦
+      {{ $t('zhouyiForm.submit') }}
     </UButton>
   </div>
 </template>
@@ -193,10 +183,13 @@ const emit = defineEmits<{
   submit: [values: QiguaInput]
 }>()
 
+const { t } = useI18n()
+const localePath = useLocalePath()
+
 const methods = [
-  { key: 'time' as const, label: '时间起卦', icon: 'i-heroicons-clock' },
-  { key: 'numbers' as const, label: '数字起卦', icon: 'i-heroicons-numbered-list' },
-  { key: 'character' as const, label: '测字起卦', icon: 'i-heroicons-pencil' },
+  { key: 'time' as const, label: t('zhouyiForm.methodTime'), icon: 'i-heroicons-clock' },
+  { key: 'numbers' as const, label: t('zhouyiForm.methodNumbers'), icon: 'i-heroicons-numbered-list' },
+  { key: 'character' as const, label: t('zhouyiForm.methodCharacter'), icon: 'i-heroicons-pencil' },
 ]
 
 const method = ref<'time' | 'numbers' | 'character'>('time')

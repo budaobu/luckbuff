@@ -12,7 +12,7 @@
         <p v-if="subtitle" class="text-xs text-[#e8e0d0]/40 mt-0.5 truncate">{{ subtitle }}</p>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">解读中</span>
+        <span class="text-xs text-[#c9a227]/60">{{ $t('bazi.interpreting') }}</span>
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
           <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />

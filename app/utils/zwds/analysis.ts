@@ -315,7 +315,7 @@ export function getDaxianAnalysis(chart: ZwdsChart, daxianIndex: number): Daxian
 
 // ========== 流年分析 ==========
 
-export type LiunianRating = '顺遂' | '平稳' | '留意' | '谨慎'
+export type LiunianRating = 'shunSui' | 'stable' | 'liuYi' | 'jinShen'
 
 export interface LiunianAnalysis {
   year: number
@@ -398,7 +398,7 @@ export function getLiunianAnalysis(chart: ZwdsChart, year: number): LiunianAnaly
   }
 
   const rating: LiunianRating =
-    score >= 65 ? '顺遂' : score >= 45 ? '平稳' : score >= 30 ? '留意' : '谨慎'
+    score >= 65 ? 'shunSui' : score >= 45 ? 'stable' : score >= 30 ? 'liuYi' : 'jinShen'
 
   // 四维当年判断
   const dimensions = [

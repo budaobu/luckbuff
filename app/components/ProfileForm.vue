@@ -13,7 +13,7 @@
         @click="$emit('cancel')"
       >
         <UIcon name="i-heroicons-arrow-left" class="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-        返回档案列表
+        {{ $t('profileForm.back') }}
       </button>
 
       <!-- 表单卡片 -->
@@ -31,10 +31,10 @@
           </div>
           <div>
             <h1 class="text-lg font-semibold text-[#f5e6c0]">
-              {{ isEdit ? '编辑档案' : '新建档案' }}
+              {{ isEdit ? $t('profileForm.editTitle') : $t('profileForm.newTitle') }}
             </h1>
             <p class="text-xs text-[#e8e0d0]/40 mt-0.5">
-              {{ isEdit ? '修改档案信息后保存' : '填写基本信息创建新档案' }}
+              {{ isEdit ? $t('profileForm.editSubtitle') : $t('profileForm.newSubtitle') }}
             </p>
           </div>
         </div>
@@ -47,12 +47,12 @@
           <!-- 档案标签 -->
           <div class="space-y-1.5">
             <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-              档案标签
+              {{ $t('profileForm.label') }}
               <span class="text-[#c9a227]">*</span>
             </label>
             <UInput
               v-model="form.label"
-              placeholder="如：我的命盘、妈妈"
+              :placeholder="$t('profileForm.labelPlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
@@ -66,7 +66,7 @@
           <!-- 性别 -->
           <div class="space-y-1.5">
             <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-              性别
+              {{ $t('profileForm.gender') }}
               <span class="text-[#c9a227]">*</span>
             </label>
             <div class="flex gap-2">
@@ -79,7 +79,7 @@
                 @click="form.gender = 'male'"
               >
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
-                乾造（男）
+                {{ $t('common.male') }}
               </button>
               <button
                 type="button"
@@ -90,7 +90,7 @@
                 @click="form.gender = 'female'"
               >
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
-                坤造（女）
+                {{ $t('common.female') }}
               </button>
             </div>
           </div>
@@ -98,7 +98,7 @@
           <!-- 阳历生日 — UPopover + UCalendar -->
           <div class="space-y-1.5">
             <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-              阳历生日
+              {{ $t('profileForm.birthDate') }}
               <span class="text-[#c9a227]">*</span>
             </label>
             <UPopover>
@@ -109,22 +109,13 @@
                 :class="{ 'text-[#e8e0d0]/25': !form.birthDate }"
               >
                 <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[#e8e0d0]/40" />
-                {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : '选择阳历生日' }}
+                {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
               </UButton>
               <template #content>
-                <UCalendar
+                <AppCalendar
                   v-model="calendarDate"
                   color="warning"
                   class="p-2"
-                  :ui="{
-                    root: 'bg-[#0f0c09] border border-white/8 rounded-xl shadow-2xl',
-                    header: 'bg-[#0f0c09]',
-                    body: 'bg-[#0f0c09]',
-                    grid: 'bg-[#0f0c09]',
-                    heading: 'text-[#f5e6c0] font-medium',
-                    headCell: 'text-[#e8e0d0]/40',
-                    cellTrigger: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[selected]:bg-[#c9a227] data-[selected]:text-[#1a1612]',
-                  }"
                 />
               </template>
             </UPopover>
@@ -136,11 +127,11 @@
 
           <!-- 出生时辰 — USelect -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[#e8e0d0]/60">出生时辰</label>
+            <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthHour') }}</label>
             <USelect
               v-model="form.birthHour"
               :items="hourOptions"
-              placeholder="未知时辰"
+              :placeholder="$t('profileForm.birthHourPlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0]',
@@ -153,10 +144,10 @@
 
           <!-- 姓名 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[#e8e0d0]/60">姓名</label>
+            <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.name') }}</label>
             <UInput
               v-model="form.name"
-              placeholder="可选"
+              :placeholder="$t('profileForm.namePlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
@@ -166,10 +157,10 @@
 
           <!-- 曾用名 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[#e8e0d0]/60">曾用名</label>
+            <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.formerName') }}</label>
             <UInput
               v-model="form.formerName"
-              placeholder="可选"
+              :placeholder="$t('profileForm.formerNamePlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
@@ -179,11 +170,11 @@
 
           <!-- 改名年份 -->
           <div v-if="form.formerName" class="space-y-1.5">
-            <label class="text-xs font-medium text-[#e8e0d0]/60">改名年份</label>
+            <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.changedYear') }}</label>
             <UInput
               v-model.number="form.formerNameChangedYear"
               type="number"
-              placeholder="如：2010"
+              :placeholder="$t('profileForm.changedYearPlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
@@ -193,10 +184,10 @@
 
           <!-- 出生地点 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[#e8e0d0]/60">出生地点</label>
+            <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthProvince') }}</label>
             <UInput
               v-model="form.birthProvince"
-              placeholder="如：广东深圳、广东省深圳市"
+              :placeholder="$t('profileForm.birthProvincePlaceholder')"
               color="warning"
               :ui="{
                 base: 'bg-white/[0.03] border-white/8 focus:border-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
@@ -220,7 +211,7 @@
             </div>
             <input v-model="form.isDefault" type="checkbox" class="sr-only" />
             <span class="text-sm text-[#e8e0d0]/60 group-hover:text-[#e8e0d0]/80 transition-colors">
-              设为默认档案
+              {{ $t('profileForm.setDefault') }}
             </span>
           </label>
         </form>
@@ -233,7 +224,7 @@
             class="text-[#e8e0d0]/50 hover:text-[#e8e0d0]/80 hover:bg-white/5"
             @click="$emit('cancel')"
           >
-            取消
+            {{ $t('common.cancel') }}
           </UButton>
           <UButton
             color="warning"
@@ -241,7 +232,7 @@
             @click="handleSubmit"
           >
             <UIcon :name="isEdit ? 'i-heroicons-check' : 'i-heroicons-plus'" class="w-4 h-4 mr-1" />
-            {{ isEdit ? '保存' : '创建' }}
+            {{ isEdit ? $t('common.save') : $t('common.create') }}
           </UButton>
         </div>
       </div>
@@ -249,7 +240,7 @@
       <!-- 底部提示 -->
       <p class="mt-6 text-center text-xs text-[#e8e0d0]/20 flex items-center justify-center gap-2">
         <UIcon name="i-heroicons-shield-check" class="w-3.5 h-3.5" />
-        所有数据仅存储在您的浏览器本地
+        {{ $t('profileForm.privacyNote') }}
       </p>
     </div>
   </div>
@@ -272,6 +263,8 @@ const emit = defineEmits<{
   cancel: []
   submit: [data: Omit<UserProfile, 'id'>]
 }>()
+
+const { t, locale } = useI18n()
 
 const isEdit = computed(() => !!props.profile)
 
@@ -300,7 +293,7 @@ const birthGanZhi = ref('')
 const { dateToGanZhi } = useBaziCalc()
 
 const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
+const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' })
 const calendarDate = ref<CalendarDate | undefined>(undefined)
 
 function syncBirthDateFromCalendar() {
@@ -368,7 +361,7 @@ watch(() => props.profile, (p) => {
 function handleSubmit() {
   errors.label = ''
   if (!form.label.trim()) {
-    errors.label = '档案标签不能为空'
+    errors.label = t('profileForm.labelError')
     return
   }
   if (!form.birthDate) {

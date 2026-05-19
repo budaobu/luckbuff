@@ -13,10 +13,10 @@
         <div class="mb-8">
           <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Bazi</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-            四柱八字
+            {{ $t('bazi.title') }}
           </h1>
           <p class="text-sm text-[#e8e0d0]/40 mt-2">
-            输入生辰，推演命盘
+            {{ $t('bazi.subtitle') }}
           </p>
           <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
         </div>
@@ -37,7 +37,7 @@
 
       <!-- 阶段 2：动画 -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <TianganDizhi size="full" label="天机推演中..." />
+        <TianganDizhi size="full" :label="$t('bazi.calculating')" />
       </div>
 
       <!-- 阶段 3：结果 -->
@@ -60,10 +60,10 @@
         <div class="mb-8">
           <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Result</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-            {{ formValues.name || '命盘' }}的八字
+            {{ formValues.name ? $t('bazi.chartTitle', { name: formValues.name }) : $t('bazi.chartTitleNoName') }}
           </h1>
           <p class="text-sm text-[#e8e0d0]/40 mt-2">
-            日主{{ chart.riZhu }}（{{ chart.riZhuStrength }}）| {{ chart.geju }}
+            {{ $t('bazi.chartSubtitle', { riZhu: chart.riZhu, strength: chart.riZhuStrength, geju: chart.geju }) }}
           </p>
           <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
         </div>
@@ -106,7 +106,7 @@
             <template #leading>
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
-            重新推演
+            {{ $t('common.retry') }}
           </UButton>
           <UButton
             color="warning"
@@ -117,7 +117,7 @@
             <template #leading>
               <UIcon name="i-heroicons-share" class="w-4 h-4" />
             </template>
-            一键分享
+            {{ $t('common.shareResult') }}
           </UButton>
           <UButton
             color="neutral"
@@ -128,7 +128,7 @@
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
             </template>
-            回到首页
+            {{ $t('common.backHome') }}
           </UButton>
         </div>
       </div>
@@ -155,7 +155,7 @@
                 <div class="w-8 h-8 rounded-lg bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
                   <UIcon name="i-heroicons-share" class="w-4 h-4" />
                 </div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0]">分享结果</h3>
+                <h3 class="text-sm font-semibold text-[#f5e6c0]">{{ $t('share.title') }}</h3>
               </div>
               <UButton
                 color="neutral"
@@ -171,7 +171,7 @@
             <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
               <!-- 文案 -->
               <div>
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">分享文案</p>
+                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
                 <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3 text-sm text-[#e8e0d0]/80 leading-relaxed whitespace-pre-wrap">
                   {{ shareData?.copyText }}
                 </div>
@@ -179,28 +179,28 @@
                   <template #leading>
                     <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
                   </template>
-                  复制文案
+                  {{ $t('share.copyText') }}
                 </UButton>
               </div>
 
               <!-- 截图预览 -->
               <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">分享截图</p>
+                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
                 <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-2 overflow-hidden">
-                  <img :src="shareData.screenshotDataUrl" alt="分享截图" class="w-full rounded-lg">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
                   <template #leading>
                     <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
                   </template>
-                  下载图片
+                  {{ $t('share.downloadImage') }}
                 </UButton>
               </div>
 
               <!-- 截图失败提示 -->
               <div v-else class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-6 text-center">
                 <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[#e8e0d0]/20 mx-auto mb-2" />
-                <p class="text-xs text-[#e8e0d0]/40">截图生成失败，请复制文案后手动截图</p>
+                <p class="text-xs text-[#e8e0d0]/40">{{ $t('share.screenshotFailed') }}</p>
                 <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
                   {{ shareData.screenshotError }}
                 </p>
@@ -209,7 +209,7 @@
 
             <!-- 底部 -->
             <div class="px-5 py-3 border-t border-white/[0.06] text-center">
-              <p class="text-[10px] text-[#e8e0d0]/30">由 LuckBuff 生成 · 仅供娱乐参考</p>
+              <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('share.generatedBy') }}</p>
             </div>
           </div>
         </div>
@@ -221,6 +221,8 @@
 <script setup lang="ts">
 import type { BaziChart, BaziAiResult } from '~/types/bazi'
 import type { DiZhi } from '~/types/user'
+const { t } = useI18n()
+const { locale } = useI18n()
 const { build: buildBaziAiPrompt } = useBaziPrompt()
 
 interface FormValues {
@@ -250,9 +252,9 @@ const aiResult = ref<BaziAiResult | null>(null)
 const analysisRef = ref<{ getSummary: () => string } | null>(null)
 
 const tabItems = [
-  { label: 'AI 解读', slot: 'ai' },
-  { label: '排盘计算', slot: 'pan' },
-  { label: '综合分析', slot: 'analysis' },
+  { label: t('bazi.aiInterpret'), slot: 'ai' },
+  { label: t('bazi.panCalculation'), slot: 'pan' },
+  { label: t('bazi.comprehensiveAnalysis'), slot: 'analysis' },
 ]
 
 const store = useProfilesStore()
@@ -322,7 +324,7 @@ async function startAiStream() {
     birthHour: formValues.value.birthHour,
   }
 
-  const { systemPrompt, userPrompt } = buildBaziAiPrompt(chart.value, profile, summary)
+  const { systemPrompt, userPrompt } = buildBaziAiPrompt(chart.value, profile, summary, locale.value)
 
   try {
     const res = await fetch('/api/ai/stream', {
@@ -358,10 +360,10 @@ async function startAiStream() {
         comprehensiveAdvice: parsed.comprehensiveAdvice ?? [],
       }
     } else {
-      aiError.value = 'AI 返回格式异常，请重试'
+      aiError.value = t('bazi.aiResponseFormatError')
     }
   } catch (e) {
-    aiError.value = e instanceof Error ? e.message : 'AI 请求失败'
+    aiError.value = e instanceof Error ? e.message : t('bazi.aiRequestFailed')
   } finally {
     aiLoading.value = false
   }
@@ -390,14 +392,15 @@ async function handleShare() {
       summary: `日主${chart.value.riZhu}（${chart.value.riZhuStrength}），${chart.value.geju}`,
       shareTarget: target,
       filename: `bazi-${formValues.value.name || '命盘'}-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
     })
 
     shareData.value = result
     shareDialogOpen.value = true
   } catch (e: any) {
     toast.add({
-      title: '分享失败',
-      description: e?.message || '请重试',
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
       color: 'error',
     })
   }
@@ -406,9 +409,9 @@ async function handleShare() {
 function copyShareText() {
   if (!shareData.value) return
   navigator.clipboard.writeText(shareData.value.copyText).then(() => {
-    toast.add({ title: '文案已复制', color: 'success' })
+    toast.add({ title: t('share.textCopied'), color: 'success' })
   }).catch(() => {
-    toast.add({ title: '复制失败，请手动复制', color: 'error' })
+    toast.add({ title: t('share.copyFail'), color: 'error' })
   })
 }
 
@@ -418,11 +421,18 @@ function downloadShareImage() {
   a.href = shareData.value.screenshotDataUrl
   a.download = shareData.value.filename
   a.click()
-  toast.add({ title: '图片已开始下载', color: 'success' })
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
 useSeoMeta({
-  title: '四柱八字 - LuckBuff',
-  description: '输入生辰，AI 解读您的四柱命盘',
+  title: t('seo.baziTitle'),
+  titleTemplate: '%s',
+  description: t('seo.baziDesc'),
+  ogTitle: t('seo.baziOgTitle'),
+  ogDescription: t('seo.baziOgDesc'),
+  ogImage: 'https://www.ososn.com/og-image.png',
+  ogType: 'website',
+  ogUrl: 'https://www.ososn.com/tools/bazi',
+  twitterCard: 'summary_large_image',
 })
 </script>

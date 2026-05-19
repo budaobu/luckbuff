@@ -1,14 +1,33 @@
 import type { BaziChart } from '~/types/bazi'
 import type { UserProfile } from '~/types/user'
 
+// 语言钩子映射
+const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
+  'zh-CN': {
+    system: '请使用简体中文输出。',
+    user: '请使用简体中文输出所有内容。',
+  },
+  'zh-TW': {
+    system: '請使用繁體中文輸出。',
+    user: '請使用繁體中文輸出所有內容。',
+  },
+  en: {
+    system: 'Please output in English.',
+    user: 'Please output all content in English.',
+  },
+}
+
 export function useBaziPrompt() {
   function build(
     chart: BaziChart,
     profile: UserProfile,
     analysisSummary: string,
+    locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
 
     const systemPrompt = `你是一个 JSON 生成器。你的唯一任务是把八字分析结果转换成严格有效的 JSON。
+${langHook.system}
 
 绝对规则：
 - 只输出 JSON，不要任何解释、前言、后缀、markdown 格式
@@ -62,7 +81,8 @@ export function useBaziPrompt() {
 1. dayunScores 必须包含全部 ${dayunList.length} 步大运
 2. 每步大运含 score（综合分）和 open/close/high/low（0-100 蜡烛图四值），满足 low≤min(open,close)≤max(open,close)≤high
 3. historicalPredictions 3-5 条，comprehensiveAdvice 3～5 条
-4. 语气积极温暖`
+4. 语气积极温暖
+5. ${langHook.user}`
 
     return { systemPrompt, userPrompt }
   }

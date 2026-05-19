@@ -2,13 +2,13 @@
   <div class="space-y-5">
     <!-- 起卦信息 -->
     <div ref="qiguaInfoRef">
-      <GlowCard title="起卦信息" icon="i-heroicons-information-circle">
+      <GlowCard :title="t('zhouyi.castingInfo')" icon="i-heroicons-information-circle">
         <div class="space-y-1.5">
           <p class="text-xs text-[#e8e0d0]/50">
-            起卦方法：{{ result.methodName }}
+            {{ t('zhouyi.castingMethod') }}{{ result.methodName }}
           </p>
           <p v-if="result.lunarDate" class="text-xs text-[#e8e0d0]/50">
-            农历：{{ result.lunarDate.year }}年{{ result.lunarDate.isLeap ? '闰' : '' }}{{ result.lunarDate.month }}月{{ result.lunarDate.day }}日 · {{ result.lunarDate.dizhi }}年
+            {{ t('zhouyi.lunarDate') }}{{ result.lunarDate.year }}年{{ result.lunarDate.isLeap ? t('zhouyi.leapMonth') : '' }}{{ result.lunarDate.month }}月{{ result.lunarDate.day }}日 · {{ result.lunarDate.dizhi }}年
           </p>
           <pre class="text-[11px] text-[#e8e0d0]/40 leading-relaxed whitespace-pre-wrap font-mono">{{ result.calcDetail }}</pre>
         </div>
@@ -18,19 +18,19 @@
     <!-- 本卦 → 互卦 → 变卦 -->
     <div class="grid grid-cols-3 gap-3">
       <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">本卦（当前）</p>
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">{{ t('zhouyi.benGuaLabel') }}</p>
         <p class="text-lg font-bold text-[#f5e6c0]">{{ benGua?.name }}</p>
         <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ benGua?.meaning }}</p>
-        <p class="text-[10px] text-[#c9a227]/60 mt-1">动第{{ result.dongYao }}爻</p>
+        <p class="text-[10px] text-[#c9a227]/60 mt-1">{{ t('zhouyi.dongYaoLabel') }}{{ result.dongYao }}{{ t('zhouyi.yaoLabel') }}</p>
       </div>
       <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">互卦（过程）</p>
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">{{ t('zhouyi.huGuaLabel') }}</p>
         <p class="text-lg font-bold text-[#f5e6c0]">{{ huGua?.name }}</p>
         <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ huGua?.meaning }}</p>
         <p class="text-[10px] text-[#c9a227]/60 mt-1">{{ result.timeLevels.huGua }}</p>
       </div>
       <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">变卦（结果）</p>
+        <p class="text-[10px] text-[#e8e0d0]/40 mb-1.5">{{ t('zhouyi.bianGuaLabel') }}</p>
         <p class="text-lg font-bold text-[#f5e6c0]">{{ bianGua?.name }}</p>
         <p class="text-xs text-[#e8e0d0]/50 mt-1">{{ bianGua?.meaning }}</p>
         <p class="text-[10px] text-[#c9a227]/60 mt-1">{{ result.timeLevels.bianGua }}</p>
@@ -45,7 +45,7 @@
           <div class="w-6 h-6 rounded-md bg-[#c9a227]/10 flex items-center justify-center text-[#c9a227]">
             <UIcon name="i-heroicons-user" class="w-3.5 h-3.5" />
           </div>
-          <span class="text-xs font-medium text-[#e8e0d0]/60">体卦（自身）</span>
+          <span class="text-xs font-medium text-[#e8e0d0]/60">{{ t('zhouyi.tiGuaLabel') }}</span>
         </div>
         <p class="text-base font-bold text-[#f5e6c0]">
           {{ getGuaById(result.tiGuaId)?.name }} · {{ result.tiWuxing }}
@@ -54,7 +54,7 @@
           <span class="text-[10px] px-2 py-0.5 rounded-full" :class="wangshuaiClass(result.tiWangshuai)">
             {{ result.tiWangshuai }}
           </span>
-          <span class="text-[10px] text-[#e8e0d0]/40">当令五行：{{ result.seasonWuxing }}</span>
+          <span class="text-[10px] text-[#e8e0d0]/40">{{ t('zhouyi.seasonWuxing') }}：{{ result.seasonWuxing }}</span>
         </div>
       </div>
       <!-- 用卦 -->
@@ -63,7 +63,7 @@
           <div class="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-[#e8e0d0]/60">
             <UIcon name="i-heroicons-globe-alt" class="w-3.5 h-3.5" />
           </div>
-          <span class="text-xs font-medium text-[#e8e0d0]/60">用卦（外境）</span>
+          <span class="text-xs font-medium text-[#e8e0d0]/60">{{ t('zhouyi.yongGuaLabel') }}</span>
         </div>
         <p class="text-base font-bold text-[#f5e6c0]">
           {{ getGuaById(result.yongGuaId)?.name }} · {{ result.yongWuxing }}
@@ -72,7 +72,7 @@
           <span class="text-[10px] px-2 py-0.5 rounded-full" :class="wangshuaiClass(result.yongWangshuai)">
             {{ result.yongWangshuai }}
           </span>
-          <span class="text-[10px] text-[#e8e0d0]/40">当令五行：{{ result.seasonWuxing }}</span>
+          <span class="text-[10px] text-[#e8e0d0]/40">{{ t('zhouyi.seasonWuxing') }}：{{ result.seasonWuxing }}</span>
         </div>
       </div>
     </div>
@@ -83,7 +83,7 @@
         <div class="flex items-center gap-2">
           <UIcon name="i-heroicons-scale" class="w-4 h-4" :class="shengkeIconClass" />
           <span class="text-sm font-semibold" :class="shengkeTextClass">
-            体用关系：{{ result.shengkeRelation }}
+            {{ t('zhouyi.tiYongRelation') }}{{ result.shengkeRelation }}
           </span>
         </div>
         <span class="text-xs px-2.5 py-1 rounded-full font-medium" :class="shengkeBadgeClass">
@@ -93,44 +93,44 @@
     </div>
 
     <!-- 策略建议 -->
-    <GlowCard v-if="result.strategyType" title="策略建议" icon="i-heroicons-light-bulb">
+    <GlowCard v-if="result.strategyType" :title="t('zhouyi.strategySuggestion')" icon="i-heroicons-light-bulb">
       <div class="space-y-3">
         <div class="flex flex-wrap gap-2">
           <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
-            类型：{{ result.strategyType }}
+            {{ $t('zhouyi.strategyType') }}：{{ result.strategyType }}
           </span>
           <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
-            策略：{{ result.strategyAction }}
+            {{ $t('zhouyi.strategyAction') }}：{{ result.strategyAction }}
           </span>
           <span class="text-[10px] px-2 py-1 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227]">
-            吉率：{{ result.jiRate }}%
+            {{ $t('zhouyi.jiRate') }}：{{ result.jiRate }}%
           </span>
         </div>
         <div class="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-          <p class="text-xs font-medium text-[#f5e6c0] mb-1">【下一步】</p>
+          <p class="text-xs font-medium text-[#f5e6c0] mb-1">{{ t('zhouyi.nextStep') }}</p>
           <p class="text-sm text-[#e8e0d0]/70 leading-relaxed">{{ result.strategyNextStep }}</p>
         </div>
         <p v-if="result.changePath" class="text-[11px] text-[#e8e0d0]/40">
-          变卦路径：{{ result.changePath }}
+          {{ t('zhouyi.bianGuaPath') }}{{ result.changePath }}
         </p>
       </div>
     </GlowCard>
 
     <!-- 爻位风险 -->
-    <GlowCard v-if="result.positionRisk" title="动爻分析" icon="i-heroicons-bolt">
+    <GlowCard v-if="result.positionRisk" :title="t('zhouyi.dongYaoAnalysis')" icon="i-heroicons-bolt">
       <div class="space-y-2">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-semibold text-[#f5e6c0]">第{{ result.dongYao }}爻</span>
+          <span class="text-sm font-semibold text-[#f5e6c0]">{{ t('zhouyi.dongYaoLabel') }}{{ result.dongYao }}{{ t('zhouyi.yaoLabel') }}</span>
           <span class="text-[10px] px-2 py-0.5 rounded-full" :class="riskBadgeClass">
             {{ result.positionRisk.riskLevel }}
           </span>
-          <span class="text-[10px] text-[#e8e0d0]/40">系数：{{ result.positionRisk.coefficient.toFixed(3) }}</span>
+          <span class="text-[10px] text-[#e8e0d0]/40">{{ t('zhouyi.coefficient') }}：{{ result.positionRisk.coefficient.toFixed(3) }}</span>
         </div>
         <p v-if="result.positionRisk.warning" class="text-xs text-amber-400/80">
           {{ result.positionRisk.warning }}
         </p>
         <p v-if="yaoCi" class="text-sm text-[#e8e0d0]/70 leading-relaxed">
-          <span class="text-[#c9a227]/60">爻辞：</span>{{ yaoCi }}
+          <span class="text-[#c9a227]/60">{{ t('zhouyi.yaoCi') }}</span>{{ yaoCi }}
         </p>
       </div>
     </GlowCard>
@@ -154,7 +154,7 @@
         <template #leading>
           <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
         </template>
-        重新生成 AI 断语
+        {{ t('zhouyi.regenerateAi') }}
       </UButton>
     </div>
   </div>
@@ -164,6 +164,8 @@
 import type { MeihuaResult } from '~/types/zhouyi'
 import { getGuaById } from '~/utils/zhouyi/constants'
 import { YAOCI } from '~/utils/zhouyi/yaoci'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   result: MeihuaResult

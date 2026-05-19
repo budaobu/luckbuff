@@ -18,33 +18,33 @@
     <!-- ===== 本命 ===== -->
     <div v-if="activeTab === 'benming'" class="space-y-3">
       <!-- 命格总览 -->
-      <GlowCard title="命格总览">
+      <GlowCard :title="$t('zwdsAnalysis.lifePalaceLabel') + ' ' + $t('zwdsAi.命格总览')">
         <div class="space-y-2">
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">命宫</div>
+            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.lifePalaceLabel') }}</div>
             <div class="text-base font-bold text-[#c9a227]">
-              {{ chart.mingGong.zhi }}宫 · {{ chart.mingGong.mainStars.join('、') || '借对宫' }}
+              {{ chart.mingGong.zhi }}宫 · {{ chart.mingGong.mainStars.join('、') || $t('zwdsAnalysis.borrow') + $t('zwdsAnalysis.referenceLabel') }}
             </div>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#c9a227]/10 text-[#c9a227]">{{ chart.wuxingJu }}局</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#c9a227]/10 text-[#c9a227]">{{ chart.wuxingJu }}{{ $t('zwds.wuxingBureau') }}</span>
           </div>
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">身宫</div>
+            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.bodyPalaceLabel') }}</div>
             <div class="text-sm text-[#f5e6c0]">
-              {{ chart.shenGong.zhi }}宫 · {{ chart.shenGong.mainStars.join('、') || '借对宫' }}
+              {{ chart.shenGong.zhi }}宫 · {{ chart.shenGong.mainStars.join('、') || $t('zwdsAnalysis.borrow') + $t('zwdsAnalysis.referenceLabel') }}
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">年柱</div>
-            <div class="text-sm text-[#f5e6c0]">{{ chart.yearGan }}{{ chart.yearZhi }} · {{ chart.gender === 'male' ? '阳男' : '阴女' }}</div>
+            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.yearPillarLabel') }}</div>
+            <div class="text-sm text-[#f5e6c0]">{{ chart.yearGan }}{{ chart.yearZhi }} · {{ chart.gender === 'male' ? $t('zwdsAnalysis.sunSign') : $t('zwdsAnalysis.moonSign') }}</div>
           </div>
           <p class="text-xs text-[#e8e0d0]/50 leading-relaxed pt-1">
-            本命盘以{{ chart.mingGong.zhi }}宫为命宫，{{ chart.mingGong.mainStars.length > 0 ? '主星' + chart.mingGong.mainStars.join('、') + '坐守' : '为空宫，借对宫星曜' }}，五行{{ chart.wuxingJu }}局。身宫在{{ chart.shenGong.zhi }}，后天发展以此为核心。
+            {{ $t('zwdsAnalysis.benMingIntro', { minggong: chart.mingGong.zhi, mainStars: chart.mingGong.mainStars.join('、') || $t('zwdsAnalysis.borrow'), secondaryStars: '', tianJi: chart.wuxingJu }) }}
           </p>
         </div>
       </GlowCard>
 
       <!-- 四化总览 -->
-      <GlowCard title="本命四化">
+      <GlowCard :title="$t('zwdsAnalysis.benMingFourTransform')">
         <div class="flex flex-wrap gap-2">
           <span
             v-for="s in benmingSiHua"
@@ -54,7 +54,7 @@
           >
             {{ s.star }}化{{ s.type }} → {{ s.gongName }}宫
           </span>
-          <span v-if="benmingSiHua.length === 0" class="text-xs text-[#e8e0d0]/30">四化分布平和</span>
+          <span v-if="benmingSiHua.length === 0" class="text-xs text-[#e8e0d0]/30">{{ $t('zwdsAnalysis.sihuaPeace') }}</span>
         </div>
       </GlowCard>
 
@@ -62,7 +62,7 @@
       <GlowCard
         v-for="item in benmingAnalysis"
         :key="item.gong.name"
-        :title="`${item.gong.name}（${item.gong.zhi}）${item.isMing ? '· 命宫' : ''}${item.isShen ? '· 身宫' : ''}`"
+        :title="`${item.gong.name}（${item.gong.zhi}）${item.isMing ? '· ' + $t('zwdsAnalysis.lifePalace') : ''}${item.isShen ? '· ' + $t('zwdsAnalysis.bodyPalace') : ''}`"
       >
         <div class="space-y-2">
           <!-- 主星 -->
@@ -75,7 +75,7 @@
             >
               {{ star }}
             </span>
-            <span v-if="item.gong.mainStars.length === 0" class="text-xs text-[#e8e0d0]/30 italic">借{{ getJieDuiZhi(item.gong.zhi) }}参考</span>
+            <span v-if="item.gong.mainStars.length === 0" class="text-xs text-[#e8e0d0]/30 italic">{{ $t('zwdsAnalysis.borrowLabel') }}{{ getJieDuiZhi(item.gong.zhi) }}{{ $t('zwdsAnalysis.referenceLabel') }}</span>
           </div>
           <!-- 辅星 -->
           <div v-if="item.gong.auxStars.length" class="flex flex-wrap gap-1">
@@ -119,8 +119,8 @@
               : 'border-white/[0.06] bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/10'"
           @click="selectedDaxianIndex = idx"
         >
-          <div class="text-[10px] opacity-60">第{{ dx.index }}限</div>
-          <div>{{ dx.ageRange[0] }}-{{ dx.ageRange[1] }}岁</div>
+          <div class="text-[10px] opacity-60">{{ $t('zwds.currentDaXian') }}{{ dx.index }}</div>
+          <div>{{ dx.ageRange[0] }}-{{ dx.ageRange[1] }}{{ $t('zwdsPan.sui') }}</div>
         </button>
       </div>
 
@@ -129,15 +129,15 @@
         <GlowCard :title="`${currentDaxianAnalysis.daxian.gongName}宫大限（${currentDaxianAnalysis.daxian.ageRange[0]}-${currentDaxianAnalysis.daxian.ageRange[1]}岁）`">
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <span v-if="currentDaxianAnalysis.isCurrent" class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">当前大限</span>
-              <span class="text-xs text-[#e8e0d0]/50">主星：{{ currentDaxianAnalysis.daxian.mainStars.join('、') || '借对宫' }}</span>
+              <span v-if="currentDaxianAnalysis.isCurrent" class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">{{ $t('zwdsAnalysis.currentDaXian') }}</span>
+              <span class="text-xs text-[#e8e0d0]/50">{{ $t('zwdsAnalysis.interpretation') }}：{{ currentDaxianAnalysis.daxian.mainStars.join('、') || $t('zwdsAnalysis.borrowLabel') + $t('zwdsAnalysis.referenceLabel') }}</span>
             </div>
             <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ currentDaxianAnalysis.overview }}</p>
           </div>
         </GlowCard>
 
         <!-- 四维走势 -->
-        <GlowCard title="四维走势">
+        <GlowCard :title="$t('zwdsAnalysis.fourTrendTitle')">
           <div class="grid grid-cols-2 gap-3">
             <div
               v-for="dim in currentDaxianAnalysis.dimensions"
@@ -150,7 +150,7 @@
                   class="text-[10px] px-1.5 py-0.5 rounded font-medium"
                   :class="trendClass(dim.trend)"
                 >
-                  {{ dim.trend }}
+                  {{ getTrendLabel(dim.trend) }}
                 </span>
               </div>
               <p class="text-[11px] text-[#e8e0d0]/50 leading-relaxed">{{ dim.text }}</p>
@@ -159,7 +159,7 @@
         </GlowCard>
 
         <!-- 时间节点 -->
-        <GlowCard title="时间节点">
+        <GlowCard :title="$t('zwdsAnalysis.timeNodeTitle')">
           <p class="text-sm text-[#e8e0d0]/70 leading-relaxed">{{ currentDaxianAnalysis.timeHint }}</p>
         </GlowCard>
       </template>
@@ -180,19 +180,19 @@
             item: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[state=checked]:bg-[#c9a227]/10 data-[state=checked]:text-[#c9a227]',
           }"
         />
-        <span class="text-xs text-[#e8e0d0]/40">选择年份查看流年运势</span>
+        <span class="text-xs text-[#e8e0d0]/40">{{ $t('zwdsAnalysis.selectYearHint') }}</span>
       </div>
 
       <template v-if="currentLiunianAnalysis">
         <!-- 流年概览（截图目标） -->
-        <GlowCard title="流年概览" ref="liunianOverviewRef">
+        <GlowCard :title="$t('zwdsAnalysis.liuNianOverviewTitle')" ref="liunianOverviewRef">
           <div class="space-y-2">
             <div class="flex items-center gap-3">
-              <div class="text-sm text-[#e8e0d0]/60">年柱</div>
+              <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
               <div class="text-base font-bold text-[#f5e6c0]">{{ currentLiunianAnalysis.yearGanZhi }}</div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="text-sm text-[#e8e0d0]/60">太岁入宫</div>
+              <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
               <div class="text-sm text-[#f5e6c0]">{{ currentLiunianAnalysis.taiSuiGong }}宫（{{ currentLiunianAnalysis.taiSuiZhi }}）</div>
             </div>
             <div class="flex flex-wrap gap-2 pt-1">
@@ -210,13 +210,13 @@
         </GlowCard>
 
         <!-- 吉凶评级 -->
-        <GlowCard title="吉凶评级">
+        <GlowCard :title="$t('zwdsAnalysis.jiXiongRating')">
           <div class="flex items-center gap-4">
             <div
               class="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold border"
               :class="ratingClass(currentLiunianAnalysis.rating)"
             >
-              {{ currentLiunianAnalysis.rating }}
+              {{ ratingLabel(currentLiunianAnalysis.rating) }}
             </div>
             <div class="flex-1">
               <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">
@@ -227,7 +227,7 @@
         </GlowCard>
 
         <!-- 四维当年 -->
-        <GlowCard title="当年走势">
+        <GlowCard :title="$t('zwdsAnalysis.liuNianTrendTitle')">
           <div class="space-y-2.5">
             <div
               v-for="dim in currentLiunianAnalysis.dimensions"
@@ -260,11 +260,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const tabs = [
-  { key: 'benming' as const, label: '本命' },
-  { key: 'daxian' as const, label: '大限' },
-  { key: 'liunian' as const, label: '流年' },
-]
+const { t } = useI18n()
+
+const tabs = computed(() => [
+  { key: 'benming' as const, label: t('zwdsAnalysis.tabsLabelBenMing') },
+  { key: 'daxian' as const, label: t('zwdsAnalysis.tabsLabelDaXian') },
+  { key: 'liunian' as const, label: t('zwdsAnalysis.tabsLabelLiuNian') },
+])
 
 const activeTab = ref<'benming' | 'daxian' | 'liunian'>('benming')
 
@@ -333,13 +335,23 @@ function trendClass(trend: string): string {
   }
 }
 
+function getTrendLabel(trend: string): string {
+  switch (trend) {
+    case '上升': return t('zwdsAnalysis.trendUp')
+    case '平稳': return t('zwdsAnalysis.trendStable')
+    case '波动': return t('zwdsAnalysis.trendFluctuate')
+    case '调整': return t('zwdsAnalysis.trendAdjust')
+    default: return trend
+  }
+}
+
 // 流年
 const currentYear = new Date().getFullYear()
 const selectedYear = ref(currentYear)
 
 const yearOptions = Array.from({ length: 21 }, (_, i) => {
   const y = currentYear - 10 + i
-  return { label: `${y}年`, value: y }
+  return { label: `${y}${t('zwdsPan.sui')}`, value: y }
 })
 
 const currentLiunianAnalysis = computed<LiunianAnalysis | null>(() => {
@@ -348,21 +360,34 @@ const currentLiunianAnalysis = computed<LiunianAnalysis | null>(() => {
 
 function ratingClass(rating: string): string {
   switch (rating) {
-    case '顺遂': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-    case '平稳': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
-    case '留意': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-    case '谨慎': return 'border-red-500/30 bg-red-500/10 text-red-400'
+    case 'shunSui': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+    case 'stable': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
+    case 'liuYi': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+    case 'jinShen': return 'border-red-500/30 bg-red-500/10 text-red-400'
+    case 'yiBan': return 'border-white/10 bg-white/5 text-[#e8e0d0]'
     default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
   }
 }
 
 function ratingText(rating: string): string {
   switch (rating) {
-    case '顺遂': return '整体运势向好，适合主动推进计划，把握机会。'
-    case '平稳': return '运势平稳，无大起大落，按部就班即可。'
-    case '留意': return '部分领域有波动信号，保持警觉，遇事先观察。'
-    case '谨慎': return '多宫受冲，宜守不宜攻，重大决策建议延后或多方求证。'
-    default: return '运势一般，平常心对待。'
+    case 'shunSui': return t('zwdsAnalysis.ratingShunSui')
+    case 'stable': return t('zwdsAnalysis.ratingPingWen')
+    case 'liuYi': return t('zwdsAnalysis.ratingLiuYi')
+    case 'jinShen': return t('zwdsAnalysis.ratingJinShen')
+    case 'yiBan': return t('zwdsAnalysis.ratingYiBan')
+    default: return t('zwdsAnalysis.ratingPingWen')
+  }
+}
+
+function ratingLabel(rating: string): string {
+  switch (rating) {
+    case 'shunSui': return t('fortuneRadar.levels.excellent')
+    case 'stable': return t('fortuneRadar.levels.stable')
+    case 'liuYi': return t('fortuneRadar.levels.weak')
+    case 'jinShen': return t('fortuneRadar.levels.low')
+    case 'yiBan': return t('fortuneRadar.levels.good')
+    default: return t('fortuneRadar.levels.stable')
   }
 }
 
@@ -370,12 +395,12 @@ const liunianOverviewRef = ref<HTMLElement | null>(null)
 
 function getSummary(): string {
   const parts: string[] = []
-  parts.push(`【命格总览】命宫${props.chart.mingGong.zhi}（${props.chart.mingGong.mainStars.join('、') || '借对宫'}），${props.chart.wuxingJu}局`)
-  parts.push(`【身宫】${props.chart.shenGong.zhi}（${props.chart.shenGong.mainStars.join('、') || '借对宫'}）`)
+  parts.push(`【${t('zwdsAnalysis.lifePalaceLabel')}】${props.chart.mingGong.zhi}（${props.chart.mingGong.mainStars.join('、') || t('zwdsAnalysis.borrowLabel') + t('zwdsAnalysis.referenceLabel')}），${props.chart.wuxingJu}${t('zwdsPan.wuxingBureau')}`)
+  parts.push(`【${t('zwdsAnalysis.bodyPalaceLabel')}】${props.chart.shenGong.zhi}（${props.chart.shenGong.mainStars.join('、') || t('zwdsAnalysis.borrowLabel') + t('zwdsAnalysis.referenceLabel')}）`)
   const dx = props.chart.currentDaXian
-  if (dx) parts.push(`【当前大限】第${dx.index}大限 ${dx.gongName}宫（${dx.gongZhi}）${dx.ageRange[0]}-${dx.ageRange[1]}岁`)
+  if (dx) parts.push(`【${t('zwdsAnalysis.currentDaXian')}】${dx.index} ${dx.gongName}宫（${dx.gongZhi}）${dx.ageRange[0]}-${dx.ageRange[1]}${t('zwdsPan.sui')}`)
   const liu = getLiunianAnalysis(props.chart, currentYear)
-  parts.push(`【${currentYear}流年】${liu.summary}`)
+  parts.push(`【${currentYear}${t('zwds.liuNian')}】${liu.summary}`)
   return parts.join('\n')
 }
 

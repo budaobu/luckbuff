@@ -4,7 +4,7 @@
     <GlowCard
       v-for="(text, title) in textAnalysis"
       :key="title"
-      :title="title"
+      :title="$t('bazi.' + titleKey(title))"
     >
       <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ text }}</p>
     </GlowCard>
@@ -37,6 +37,18 @@ const textAnalysis = computed(() => {
 
 function getSummary(): string {
   return Object.entries(analysis.value).map(([k, v]) => `【${k}】${v}`).join('\n\n')
+}
+
+// Map Chinese analysis titles to i18n keys
+function titleKey(title: string): string {
+  const map: Record<string, string> = {
+    '日主分析': 'riZhuAnalysis',
+    '十神分析': 'shiShenAnalysis',
+    '格局判定': 'gejuAnalysis',
+    '大运分析': 'dayunAnalysis',
+    '流年分析': 'liuNianAnalysis',
+  }
+  return map[title] ?? title
 }
 
 defineExpose({ getSummary })

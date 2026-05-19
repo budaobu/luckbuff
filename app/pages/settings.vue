@@ -22,10 +22,10 @@
           <div>
             <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Profiles</span>
             <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-              我的档案
+              {{ $t('settings.title') }}
             </h1>
             <p class="text-sm text-[#e8e0d0]/40 mt-2">
-              管理生辰信息，推演时自动填入
+              {{ $t('settings.subtitle') }}
             </p>
           </div>
           <UButton
@@ -39,7 +39,7 @@
             <template #leading>
               <UIcon name="i-heroicons-plus" class="w-4 h-4" />
             </template>
-            新建档案
+            {{ $t('settings.newProfile') }}
             <template #trailing>
               <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
             </template>
@@ -51,15 +51,15 @@
           <div class="w-16 h-16 rounded-2xl bg-[#c9a227]/5 border border-[#c9a227]/10 flex items-center justify-center mx-auto mb-5">
             <UIcon name="i-heroicons-user-group" class="w-8 h-8 text-[#c9a227]/30" />
           </div>
-          <h3 class="text-lg font-medium text-[#f5e6c0]/60 mb-2">还没有保存任何档案</h3>
+          <h3 class="text-lg font-medium text-[#f5e6c0]/60 mb-2">{{ $t('settings.emptyTitle') }}</h3>
           <p class="text-sm text-[#e8e0d0]/30 mb-6 max-w-sm mx-auto">
-            创建第一份生辰档案，算命时自动填入，省去每次手动输入的麻烦
+            {{ $t('settings.emptyDesc') }}
           </p>
           <UButton color="warning" variant="soft" size="md" @click="openCreate">
             <template #leading>
               <UIcon name="i-heroicons-plus" class="w-4 h-4" />
             </template>
-            创建第一份档案
+            {{ $t('settings.emptyCta') }}
           </UButton>
         </div>
 
@@ -79,7 +79,7 @@
         <div class="mt-12 text-center">
           <p class="text-xs text-[#e8e0d0]/20 inline-flex items-center gap-2">
             <UIcon name="i-heroicons-shield-check" class="w-3.5 h-3.5" />
-            所有数据仅存储在您的浏览器本地，不会上传服务器
+            {{ $t('settings.privacyNote') }}
           </p>
         </div>
       </div>
@@ -91,6 +91,7 @@
 import type { UserProfile } from '~/types/user'
 import { useProfilesStore } from '~/stores/profiles'
 
+const { t } = useI18n()
 const store = useProfilesStore()
 const { profiles } = useProfiles()
 
@@ -113,7 +114,7 @@ function closeForm() {
 }
 
 function handleDelete(id: string) {
-  if (confirm('确定要删除这份档案吗？')) {
+  if (confirm(t('common.confirm') + '?')) {
     store.remove(id)
   }
 }
@@ -140,7 +141,14 @@ function handleFormSubmit(data: Omit<UserProfile, 'id'>) {
 }
 
 useSeoMeta({
-  title: '我的档案 - LuckBuff',
-  description: '管理您的生辰档案，算命时快速选择',
+  title: t('settings.seoTitle'),
+  titleTemplate: '%s',
+  description: t('settings.seoDesc'),
+  ogTitle: t('settings.seoTitle'),
+  ogDescription: t('settings.seoDesc'),
+  ogImage: 'https://www.ososn.com/og-image.png',
+  ogType: 'website',
+  ogUrl: 'https://www.ososn.com/settings',
+  twitterCard: 'summary_large_image',
 })
 </script>

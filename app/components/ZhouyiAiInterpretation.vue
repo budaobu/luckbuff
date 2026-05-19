@@ -8,10 +8,10 @@
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">AI 断语</h3>
+        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">{{ t('zhouyiPan.aiInterpretation') }}</h3>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">解读中</span>
+        <span class="text-xs text-[#c9a227]/60">{{ t('zhouyiPan.interpreting') }}</span>
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
           <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />
@@ -62,7 +62,7 @@
 
     <!-- 加载中 -->
     <div v-else-if="streaming" class="flex items-center justify-center py-10">
-      <HexagramSpin size="tiny" label="正在生成 AI 断语..." />
+      <HexagramSpin size="tiny" :label="t('zhouyiPan.generating')" />
     </div>
 
     <!-- 错误 -->
@@ -77,6 +77,9 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
   content: string
@@ -86,14 +89,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-interface SectionMeta {
-  icon: string
-  color: string
-  borderColor: string
-  bgGradient: string
-  iconBg: string
-}
 
 const sectionMetaMap: Record<string, SectionMeta> = {
   '总览': {
@@ -154,6 +149,25 @@ const sectionMetaMap: Record<string, SectionMeta> = {
   },
 }
 
+const sectionMeta = computed(() => ({
+  [t('zhouyiPan.sectionOverview')]: sectionMetaMap['总览'],
+  [t('zhouyiPan.sectionMovingLine')]: sectionMetaMap['动爻解读'],
+  [t('zhouyiPan.sectionTiyong')]: sectionMetaMap['体用分析'],
+  [t('zhouyiPan.sectionHugua')]: sectionMetaMap['互卦分析'],
+  [t('zhouyiPan.sectionBiangua')]: sectionMetaMap['变卦分析'],
+  [t('zhouyiPan.sectionYingqi')]: sectionMetaMap['应期推断'],
+  [t('zhouyiPan.sectionStrategy')]: sectionMetaMap['策略建议'],
+  [t('zhouyiPan.sectionReminder')]: sectionMetaMap['温馨提示'],
+}))
+
+interface SectionMeta {
+  icon: string
+  color: string
+  borderColor: string
+  bgGradient: string
+  iconBg: string
+}
+
 const sections = computed(() => {
   if (!props.content) return []
 
@@ -174,7 +188,7 @@ const sections = computed(() => {
       result.push({
         title: titleLine,
         content,
-        meta: sectionMetaMap[titleLine],
+        meta: sectionMeta.value[titleLine],
       })
     }
   }

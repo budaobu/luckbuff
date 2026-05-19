@@ -7,8 +7,8 @@
           <UIcon name="i-heroicons-circle-stack" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">五行力量分布</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">五行平衡与喜忌分析</p>
+          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.wuxingTitle') }}</h3>
+          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.wuxingSubtitle') }}</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
           <!-- 五行图例 -->
           <div class="mt-4 flex flex-wrap gap-2">
             <div
-              v-for="(wx, i) in ['木', '火', '土', '金', '水']"
+              v-for="(wx, i) in wuxingLabels"
               :key="wx"
               class="inline-flex items-center gap-1.5 text-xs"
             >
@@ -36,7 +36,7 @@
                 :style="{ background: wuxingColors[i] }"
               />
               <span class="text-[#e8e0d0]/50">{{ wx }}</span>
-              <span class="text-[#e8e0d0]/70 font-medium">{{ wuxingScore[wx as keyof WuxingScore] }}%</span>
+              <span class="text-[#e8e0d0]/70 font-medium">{{ wuxingScore[wuxingKeys[i] as keyof WuxingScore] }}%</span>
             </div>
           </div>
         </div>
@@ -70,19 +70,23 @@ interface Props {
 const props = defineProps<Props>()
 
 const wuxingColors = ['#4ade80', '#f97316', '#a3855a', '#e2c96a', '#60a5fa']
+const wuxingKeys = ['木', '火', '土', '金', '水']
+const { t } = useI18n()
+
+const wuxingLabels = computed(() => [
+  t('bazi.wuxingWood'),
+  t('bazi.wuxingFire'),
+  t('bazi.wuxingEarth'),
+  t('bazi.wuxingMetal'),
+  t('bazi.wuxingWater'),
+])
 
 const chartData = computed(() => ({
-  labels: ['木', '火', '土', '金', '水'],
+  labels: wuxingLabels.value,
   datasets: [
     {
-      label: '五行力量',
-      data: [
-        props.wuxingScore['木'],
-        props.wuxingScore['火'],
-        props.wuxingScore['土'],
-        props.wuxingScore['金'],
-        props.wuxingScore['水'],
-      ],
+      label: t('bazi.wuxingStrength'),
+      data: wuxingKeys.map(k => props.wuxingScore[k as keyof WuxingScore]),
       backgroundColor: 'rgba(201, 162, 39, 0.2)',
       borderColor: '#c9a227',
       pointBackgroundColor: wuxingColors,

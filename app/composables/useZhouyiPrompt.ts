@@ -2,40 +2,59 @@ import type { MeihuaResult } from '~/types/zhouyi'
 import { getGuaById } from '~/utils/zhouyi/constants'
 import { getYaoci } from '~/utils/zhouyi/yaoci'
 
+// 语言钩子映射
+const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
+  'zh-CN': {
+    system: '请使用简体中文输出。',
+    user: '请使用简体中文输出所有内容。',
+  },
+  'zh-TW': {
+    system: '請使用繁體中文輸出。',
+    user: '請使用繁體中文輸出所有內容。',
+  },
+  en: {
+    system: 'Please output in English.',
+    user: 'Please output all content in English.',
+  },
+}
+
 export function useZhouyiPrompt() {
   function build(
     result: MeihuaResult,
     query: string,
+    locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
     const benGua = getGuaById(result.benGuaId)
     const bianGua = getGuaById(result.bianGuaId)
     const huGua = getGuaById(result.huGuaId)
     const yaoci = getYaoci(result.benGuaId, result.dongYao)
 
     const systemPrompt = `你是一位精通《梅花易数》的解卦师。请使用 Markdown 格式返回解卦结果，严格按照以下分段结构，每段以 ## 中文标题 开头：
+${langHook.system}
 
-## 总览
+## 总览 / Overview
 一句话概括卦象核心含义和整体吉凶判断。
 
-## 动爻解读
+## 动爻解读 / Moving Line Analysis
 结合用户诉求，解读动爻爻辞的含义。
 
-## 体用分析
+## 体用分析 / Body & Application
 分析体卦和用卦的五行生克关系，结合旺衰判断吉凶。
 
-## 互卦分析
+## 互卦分析 / Middle Phase
 分析互卦代表的中期发展趋势。
 
-## 变卦分析
+## 变卦分析 / Transformation
 分析变卦代表的最终结果和长远趋势。
 
-## 应期推断
+## 应期推断 / Timing
 推断事情可能发生的时间。
 
-## 策略建议
+## 策略建议 / Strategy
 给出明确的行动策略和下一步建议。
 
-## 温馨提示
+## 温馨提示 / Note
 卦象仅供参考，最终决策需结合实际情况。
 
 ## 解卦规则
@@ -98,7 +117,7 @@ ${result.positionRisk?.warning ? `- 警告：${result.positionRisk.warning}` : '
 - 【下一步】：${result.strategyNextStep || '未知'}
 ${result.changePath ? `- 变卦路径：${result.changePath}` : ''}
 
-请严格按照标准解卦流程进行解读，必须输出【策略建议】部分。`
+请严格按照标准解卦流程进行解读，必须输出【策略建议】部分。${langHook.user}`
 
     return { systemPrompt, userPrompt }
   }

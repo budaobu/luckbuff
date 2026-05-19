@@ -4,7 +4,7 @@
     <div class="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5">
       <UIcon name="i-heroicons-information-circle" class="w-4 h-4 text-[#c9a227]/50 mt-0.5 shrink-0" />
       <p class="text-xs text-[#e8e0d0]/30 leading-relaxed">
-        AI 解读每次表述略有差异，排盘数据（干支/十神/大运）为确定性计算。
+        {{ $t('bazi.aiDisclaimer') }}
       </p>
     </div>
 
@@ -12,7 +12,7 @@
     <div v-if="!aiStream.started">
       <BaziPanPreview :chart="chart" class="mb-4 opacity-60" />
       <div class="flex flex-col items-center py-6">
-        <TianganDizhi size="compact" label="AI 正在解读命盘..." />
+        <TianganDizhi size="compact" :label="$t('bazi.aiInterpreting')" />
       </div>
     </div>
 
@@ -26,7 +26,7 @@
               <UIcon name="i-heroicons-star" class="w-6 h-6" />
             </div>
             <div>
-              <p class="text-[11px] text-[#c9a227]/60 tracking-wider uppercase mb-1">人生总论</p>
+              <p class="text-[11px] text-[#c9a227]/60 tracking-wider uppercase mb-1">{{ $t('bazi.overviewTitle') }}</p>
               <p class="text-base font-semibold text-[#f5e6c0] leading-relaxed">{{ aiResult.overview }}</p>
             </div>
           </div>
@@ -35,31 +35,31 @@
         <!-- 四维度卡片 2x2 网格 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DimensionCard
-            title="性格特质"
+            :title="$t('bazi.personalityTitle')"
             icon="i-heroicons-user"
             accent-color="#8b5cf6"
             :data="aiResult.personality"
           />
           <DimensionCard
-            title="事业与财运"
+            :title="$t('bazi.careerTitle')"
             icon="i-heroicons-briefcase"
             accent-color="#c9a227"
             :data="aiResult.career"
-            :extra-field="{ label: '财运走势', value: aiResult.career.wealthTrend, icon: 'i-heroicons-arrow-trending-up' }"
+            :extra-field="{ label: $t('bazi.wealthTrend'), value: aiResult.career.wealthTrend, icon: 'i-heroicons-arrow-trending-up' }"
           />
           <DimensionCard
-            title="感情与婚姻"
+            :title="$t('bazi.relationshipTitle')"
             icon="i-heroicons-heart"
             accent-color="#ef4444"
             :data="aiResult.relationship"
-            :extra-field="{ label: '婚恋时机', value: aiResult.relationship.timing, icon: 'i-heroicons-clock' }"
+            :extra-field="{ label: $t('bazi.marriageTiming'), value: aiResult.relationship.timing, icon: 'i-heroicons-clock' }"
           />
           <DimensionCard
-            title="健康与生活"
+            :title="$t('bazi.healthTitle')"
             icon="i-heroicons-bolt"
             accent-color="#10b981"
             :data="aiResult.health"
-            :extra-field="{ label: '注意时节', value: aiResult.health.seasons, icon: 'i-heroicons-calendar' }"
+            :extra-field="{ label: $t('bazi.seasonalNote'), value: aiResult.health.seasons, icon: 'i-heroicons-calendar' }"
           />
         </div>
 
@@ -82,8 +82,8 @@
                 <UIcon name="i-heroicons-clock" class="w-4 h-4" />
               </div>
               <div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">历史事件校准</h3>
-                <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">根据命盘推算的关键时期，供对照参考</p>
+                <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.historicalCalibration') }}</h3>
+                <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.historicalCalibrationDesc') }}</p>
               </div>
             </div>
             <div class="space-y-2.5">
@@ -117,8 +117,8 @@
                 <UIcon name="i-heroicons-light-bulb" class="w-4 h-4" />
               </div>
               <div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">综合建议</h3>
-                <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">基于命盘特征的实用指引</p>
+                <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.comprehensiveAdvice') }}</h3>
+                <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.comprehensiveAdviceDesc') }}</p>
               </div>
             </div>
             <div class="space-y-2.5">
@@ -144,13 +144,13 @@
 
     <!-- AI 错误 -->
     <div v-if="aiStream.error" class="text-center py-8">
-      <TianganDizhi size="compact" label="AI 服务暂时繁忙" />
+      <TianganDizhi size="compact" :label="$t('bazi.aiServiceBusy')" />
       <p class="mt-4 text-sm text-red-400">{{ aiStream.error }}</p>
       <UButton color="warning" class="mt-4" @click="$emit('retry')">
         <template #leading>
           <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
         </template>
-        重试
+        {{ $t('bazi.retry') }}
       </UButton>
     </div>
   </div>

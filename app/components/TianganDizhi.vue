@@ -61,8 +61,8 @@
       </div>
     </div>
 
-    <p v-if="label" class="mt-4 text-sm text-[#c9a227]/80 tracking-wider">
-      {{ label }}
+    <p v-if="computedLabel" class="mt-4 text-sm text-[#c9a227]/80 tracking-wider">
+      {{ computedLabel }}
     </p>
   </div>
 </template>
@@ -76,9 +76,13 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  label: '推演中...',
+  label: undefined,
   size: 'full',
 })
+
+const { t } = useI18n()
+
+const computedLabel = computed(() => props.label ?? t('common.loading'))
 
 const isFull = computed(() => props.size === 'full')
 

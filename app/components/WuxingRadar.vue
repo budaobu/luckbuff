@@ -1,5 +1,5 @@
 <template>
-  <GlowCard title="五行力量分布">
+  <GlowCard :title="t('bazi.wuxingTitle')" icon="i-heroicons-chart-pie">
     <div class="h-64">
       <Radar
         v-if="chartData"
@@ -30,12 +30,19 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const chartData = computed(() => ({
-  labels: ['木', '火', '土', '金', '水'],
+  labels: [
+    t('bazi.wuxingWood'),
+    t('bazi.wuxingFire'),
+    t('bazi.wuxingEarth'),
+    t('bazi.wuxingMetal'),
+    t('bazi.wuxingWater'),
+  ],
   datasets: [
     {
-      label: '五行力量',
+      label: t('bazi.wuxingStrength'),
       data: [props.scores['木'], props.scores['火'], props.scores['土'], props.scores['金'], props.scores['水']],
       backgroundColor: 'rgba(201, 162, 39, 0.2)',
       borderColor: '#c9a227',

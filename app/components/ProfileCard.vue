@@ -6,7 +6,7 @@
       class="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#c9a227]/10 border border-[#c9a227]/20"
     >
       <span class="w-1.5 h-1.5 rounded-full bg-[#c9a227]" />
-      <span class="text-[10px] text-[#c9a227] font-medium tracking-wide">默认</span>
+      <span class="text-[10px] text-[#c9a227] font-medium tracking-wide">{{ $t('profileCard.default') }}</span>
     </div>
 
     <div class="p-6">
@@ -20,7 +20,7 @@
             {{ profile.label }}
           </h3>
           <p class="text-xs text-[#e8e0d0]/40 mt-0.5">
-            {{ profile.gender === 'male' ? '乾造 · 男' : '坤造 · 女' }}
+            {{ profile.gender === 'male' ? $t('profileCard.maleLabel') : $t('profileCard.femaleLabel') }}
           </p>
         </div>
       </div>
@@ -57,7 +57,7 @@
           >
             <UIcon v-if="profile.isDefault" name="i-heroicons-check" class="w-2.5 h-2.5 text-[#0a0a0f]" />
           </span>
-          默认档案
+          {{ $t('profileCard.defaultProfile') }}
         </button>
 
         <div class="flex items-center gap-1">

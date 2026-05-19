@@ -2,7 +2,7 @@
   <div class="space-y-5">
     <!-- 档案快选区 -->
     <div v-if="profiles.length > 0" class="space-y-2">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">选择档案快速填入</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('baziForm.selectProfile') }}</label>
       <div class="flex flex-wrap gap-2">
         <button
           v-for="profile in profiles"
@@ -22,14 +22,14 @@
     </div>
     <div v-else class="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
       <p class="text-sm text-[#e8e0d0]/40">
-        尚无保存档案，<NuxtLink to="/settings" class="text-[#c9a227] hover:underline">前往设置</NuxtLink>创建
+        {{ $t('baziForm.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[#c9a227] hover:underline">{{ $t('baziForm.goSettings') }}</NuxtLink>{{ $t('baziForm.createSuffix') }}
       </p>
     </div>
 
     <!-- 性别 -->
     <div class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-        性别
+        {{ $t('profileForm.gender') }}
         <span class="text-[#c9a227]">*</span>
       </label>
       <div class="flex gap-2">
@@ -42,7 +42,7 @@
           @click="form.gender = 'male'"
         >
           <UIcon name="i-heroicons-user" class="w-4 h-4" />
-          乾造（男）
+          {{ $t('common.male') }}
         </button>
         <button
           type="button"
@@ -53,7 +53,7 @@
           @click="form.gender = 'female'"
         >
           <UIcon name="i-heroicons-user" class="w-4 h-4" />
-          坤造（女）
+          {{ $t('common.female') }}
         </button>
       </div>
     </div>
@@ -61,7 +61,7 @@
     <!-- 阳历生日 -->
     <div class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-        阳历生日
+        {{ $t('profileForm.birthDate') }}
         <span class="text-[#c9a227]">*</span>
       </label>
       <UPopover>
@@ -72,22 +72,13 @@
           :class="{ 'text-[#e8e0d0]/25': !form.birthDate }"
         >
           <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[#e8e0d0]/40" />
-          {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : '选择阳历生日' }}
+          {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
-          <UCalendar
+          <AppCalendar
             v-model="calendarDate"
             color="warning"
             class="p-2"
-            :ui="{
-              root: 'bg-[#0f0c09] border border-white/8 rounded-xl shadow-2xl',
-              header: 'bg-[#0f0c09]',
-              body: 'bg-[#0f0c09]',
-              grid: 'bg-[#0f0c09]',
-              heading: 'text-[#f5e6c0] font-medium',
-              headCell: 'text-[#e8e0d0]/40',
-              cellTrigger: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[selected]:bg-[#c9a227] data-[selected]:text-[#1a1612]',
-            }"
           />
         </template>
       </UPopover>
@@ -99,11 +90,11 @@
 
     <!-- 出生时辰 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">出生时辰</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthHour') }}</label>
       <USelect
         v-model="form.birthHour"
         :items="hourOptions"
-        placeholder="未知时辰"
+        :placeholder="$t('profileForm.birthHourPlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
@@ -117,10 +108,10 @@
 
     <!-- 姓名 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">姓名</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.name') }}</label>
       <UInput
         v-model="form.name"
-        placeholder="可选"
+        :placeholder="$t('profileForm.namePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
@@ -131,10 +122,10 @@
 
     <!-- 曾用名 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">曾用名</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.formerName') }}</label>
       <UInput
         v-model="form.formerName"
-        placeholder="可选"
+        :placeholder="$t('profileForm.formerNamePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
@@ -145,11 +136,11 @@
 
     <!-- 改名年份 -->
     <div v-if="form.formerName" class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">改名年份</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.changedYear') }}</label>
       <UInput
         v-model.number="form.formerNameChangedYear"
         type="number"
-        placeholder="如：2010"
+        :placeholder="$t('profileForm.changedYearPlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
@@ -160,10 +151,10 @@
 
     <!-- 出生地点 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">出生地点</label>
+      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthProvince') }}</label>
       <UInput
         v-model="form.birthProvince"
-        placeholder="如：广东深圳、广东省深圳市"
+        :placeholder="$t('profileForm.birthProvincePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
@@ -184,7 +175,7 @@
         <template #leading>
           <UIcon name="i-heroicons-check-circle" class="w-4 h-4" />
         </template>
-        保存到当前档案
+        {{ $t('baziForm.saveToProfile') }}
       </UButton>
     </div>
 
@@ -199,7 +190,7 @@
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </template>
-      立即推演
+      {{ $t('baziForm.submit') }}
     </UButton>
   </div>
 </template>
@@ -234,6 +225,7 @@ const emit = defineEmits<{
 
 const { profiles, defaultProfile } = useProfiles()
 const store = useProfilesStore()
+const localePath = useLocalePath()
 
 const selectedProfileId = ref<string | null>(null)
 

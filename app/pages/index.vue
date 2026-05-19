@@ -1,5 +1,7 @@
 <template>
   <div>
+    <OrganizationSchema />
+    <FaqSchema />
     <!-- ========== HERO ========== -->
     <section class="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
       <!-- 氛围背景光晕 -->
@@ -10,30 +12,32 @@
       </div>
 
       <!-- 星点装饰 -->
-      <div class="absolute inset-0 pointer-events-none opacity-40">
-        <div
-          v-for="(star, i) in stars"
-          :key="i"
-          class="absolute rounded-full bg-[#f5e6c0]"
-          :class="star.size"
-          :style="{ top: star.top, left: star.left, animationDelay: star.delay }"
-        />
-      </div>
+      <ClientOnly>
+        <div class="absolute inset-0 pointer-events-none opacity-40">
+          <div
+            v-for="(star, i) in stars"
+            :key="i"
+            class="absolute rounded-full bg-[#f5e6c0]"
+            :class="star.size"
+            :style="{ top: star.top, left: star.left, animationDelay: star.delay }"
+          />
+        </div>
+      </ClientOnly>
 
       <!-- 内容 -->
       <div class="relative z-10 max-w-3xl mx-auto">
         <div class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#c9a227]/20 bg-[#c9a227]/5 text-[#c9a227] text-xs tracking-widest uppercase">
           <span class="w-1.5 h-1.5 rounded-full bg-[#c9a227] animate-pulse" />
-          AI × 五千年命理智慧
+          {{ $t('home.badge') }}
         </div>
 
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#f5e6c0] leading-[1.15] tracking-tight mb-6">
-          五千年前就写好的你<br>
-          <span class="text-[#c9a227]">今天 AI 读给你听</span>
+          {{ $t('home.title1') }}<br>
+          <span class="text-[#c9a227]">{{ $t('home.title2') }}</span>
         </h1>
 
         <p class="text-base md:text-lg text-[#e8e0d0]/60 max-w-xl mx-auto mb-10 leading-relaxed">
-          四柱八字推演命格大运，梅花易数占卜吉凶得失，紫微斗数排布十二宫位——五千年命理智慧，AI 为你白话解读。
+          {{ $t('home.subtitle') }}
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -41,22 +45,22 @@
             size="lg"
             color="warning"
             variant="solid"
-            to="/tools"
+            :to="localePath('/tools')"
             class="px-8 py-3 text-base font-medium shadow-lg shadow-[#c9a227]/20 hover:shadow-[#c9a227]/40 transition-all duration-300 hover:-translate-y-0.5"
           >
             <template #leading>
               <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
             </template>
-            立即开始推演
+            {{ $t('common.start') }}
           </UButton>
           <UButton
             size="lg"
             color="neutral"
             variant="ghost"
-            to="/settings"
+            :to="localePath('/settings')"
             class="text-[#e8e0d0] hover:text-white border border-white/15 hover:border-white/30 hover:bg-white/[0.06]"
           >
-            保存生辰档案
+            {{ $t('common.saveProfile') }}
           </UButton>
         </div>
       </div>
@@ -72,7 +76,11 @@
           </div>
           <div>
             <p class="text-sm text-[#f5e6c0]/90 leading-relaxed">
-              建议先 <NuxtLink to="/settings" class="text-[#c9a227] hover:underline font-medium">保存你的生辰信息</NuxtLink>，算命时自动填入。随时可为家人朋友添加多份档案。
+              <i18n-t keypath="home.guideBanner" tag="span">
+                <template #saveLink>
+                  <NuxtLink :to="localePath('/settings')" class="text-[#c9a227] hover:underline font-medium">{{ $t('home.saveLink') }}</NuxtLink>
+                </template>
+              </i18n-t>
             </p>
           </div>
         </div>
@@ -83,25 +91,25 @@
     <!-- ========== 为什么选择 ========== -->
     <section class="max-w-6xl mx-auto px-6 py-20">
       <div class="text-center mb-14">
-        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">Why LuckBuff</span>
+        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">Why ososn</span>
         <h2 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-          为什么选择 LuckBuff
+          {{ $t('home.whyTitle') }}
         </h2>
         <div class="w-12 h-px bg-[#c9a227]/30 mx-auto mt-4" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <GlowCard title="三大命理体系" icon="i-heroicons-cpu-chip">
-          八字命理、梅花易数、紫微斗数全覆盖，算法本地运行，排盘过程透明可追溯。
+        <GlowCard :title="$t('home.feature1Title')" icon="i-heroicons-cpu-chip">
+          {{ $t('home.feature1Desc') }}
         </GlowCard>
-        <GlowCard title="AI 白话解读" icon="i-heroicons-language">
-          将古籍中的命理术语转译为现代语言，结合命盘结构给出针对性分析，非泛泛而谈。
+        <GlowCard :title="$t('home.feature2Title')" icon="i-heroicons-language">
+          {{ $t('home.feature2Desc') }}
         </GlowCard>
-        <GlowCard title="流式交互体验" icon="i-heroicons-bolt">
-          命盘数据本地实时计算，AI 解读以流式卡片呈现，无需等待，即看即分享。
+        <GlowCard :title="$t('home.feature3Title')" icon="i-heroicons-bolt">
+          {{ $t('home.feature3Desc') }}
         </GlowCard>
-        <GlowCard title="多人档案管理" icon="i-heroicons-users">
-          为自己、家人、朋友保存多份生辰档案，推演时一键切换，数据仅存本地。
+        <GlowCard :title="$t('home.feature4Title')" icon="i-heroicons-users">
+          {{ $t('home.feature4Desc') }}
         </GlowCard>
       </div>
     </section>
@@ -111,35 +119,35 @@
       <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </div>
 
-    <!-- ========== 算命工具 ========== -->
+    <!-- ========== 推演工具 ========== -->
     <section class="max-w-6xl mx-auto px-6 py-20">
       <div class="text-center mb-14">
-        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">Tools</span>
+        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">{{ $t('home.toolsSubtitle') }}</span>
         <h2 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-          算命工具
+          {{ $t('home.toolsTitle') }}
         </h2>
         <div class="w-12 h-px bg-[#c9a227]/30 mx-auto mt-4" />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- 四柱八字 -->
         <div class="group relative rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[#c9a227]/30 hover:bg-white/[0.04] hover:-translate-y-1">
           <div class="p-7">
             <div class="w-12 h-12 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] mb-5 transition-transform duration-500 group-hover:scale-110">
               <UIcon name="i-heroicons-calendar-days" class="w-6 h-6" />
             </div>
-            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">四柱八字</h3>
+            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">{{ $t('home.toolBaziTitle') }}</h3>
             <p class="text-sm text-[#e8e0d0]/50 leading-relaxed mb-6">
-              输入出生年月日时，自动排定四柱、十神、大运与流年。AI 从格局、用神、刑冲合害等维度给出结构化解读。
+              {{ $t('home.toolBaziDesc') }}
             </p>
             <UButton
               color="warning"
               variant="soft"
               size="sm"
-              to="/tools/bazi"
+              :to="localePath('/tools/bazi')"
               class="group/btn"
             >
-              立即推演
+              {{ $t('home.toolBaziCta') }}
               <template #trailing>
                 <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
               </template>
@@ -154,18 +162,18 @@
             <div class="w-12 h-12 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] mb-5 transition-transform duration-500 group-hover:scale-110">
               <UIcon name="i-heroicons-swatch" class="w-6 h-6" />
             </div>
-            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">梅花易数</h3>
+            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">{{ $t('home.toolZhouyiTitle') }}</h3>
             <p class="text-sm text-[#e8e0d0]/50 leading-relaxed mb-6">
-              一事一占，心诚则灵。支持时间起卦、数字起卦、测字起卦三种方式，AI 解析本卦、互卦、变卦的象义与趋势。
+              {{ $t('home.toolZhouyiDesc') }}
             </p>
             <UButton
               color="warning"
               variant="soft"
               size="sm"
-              to="/tools/zhouyi"
+              :to="localePath('/tools/zhouyi')"
               class="group/btn"
             >
-              立即起卦
+              {{ $t('home.toolZhouyiCta') }}
               <template #trailing>
                 <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
               </template>
@@ -180,18 +188,44 @@
             <div class="w-12 h-12 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] mb-5 transition-transform duration-500 group-hover:scale-110">
               <UIcon name="i-heroicons-star" class="w-6 h-6" />
             </div>
-            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">紫微斗数</h3>
+            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">{{ $t('home.toolZwdsTitle') }}</h3>
             <p class="text-sm text-[#e8e0d0]/50 leading-relaxed mb-6">
-              以出生时辰定命宫，排布十二宫位与十四正曜。AI 解读本命格局、大限走势与流年变化，指明人生方向。
+              {{ $t('home.toolZwdsDesc') }}
             </p>
             <UButton
               color="warning"
               variant="soft"
               size="sm"
-              to="/tools/zwds"
+              :to="localePath('/tools/zwds')"
               class="group/btn"
             >
-              立即排盘
+              {{ $t('home.toolZwdsCta') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
+        <!-- 六爻世界杯 -->
+        <div class="group relative rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[#c9a227]/30 hover:bg-white/[0.04] hover:-translate-y-1">
+          <div class="p-7">
+            <div class="w-12 h-12 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] mb-5 transition-transform duration-500 group-hover:scale-110">
+              <UIcon name="i-heroicons-trophy" class="w-6 h-6" />
+            </div>
+            <h3 class="text-lg font-semibold text-[#f5e6c0] mb-2">{{ $t('home.toolLiuyaoTitle') }}</h3>
+            <p class="text-sm text-[#e8e0d0]/50 leading-relaxed mb-6">
+              {{ $t('home.toolLiuyaoDesc') }}
+            </p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="sm"
+              :to="localePath('/tools/liu-yao')"
+              class="group/btn"
+            >
+              {{ $t('home.toolLiuyaoCta') }}
               <template #trailing>
                 <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
               </template>
@@ -208,15 +242,15 @@
     </div>
 
     <!-- ========== 流年速览 ========== -->
-    <section v-if="liuNianText" class="max-w-4xl mx-auto px-6 py-20">
+    <section v-if="liuNianData" class="max-w-4xl mx-auto px-6 py-20">
       <div class="relative rounded-2xl border border-[#c9a227]/20 bg-[#c9a227]/[0.03] backdrop-blur-sm p-8 md:p-10 text-center">
         <div class="w-12 h-12 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] mx-auto mb-5">
           <UIcon name="i-heroicons-eye" class="w-6 h-6" />
         </div>
-        <h3 class="text-lg font-semibold text-[#f5e6c0] mb-3">流年速览</h3>
-        <p class="text-base text-[#e8e0d0]/70 mb-6">{{ liuNianText }}</p>
-        <UButton color="warning" variant="soft" size="sm" to="/tools/bazi">
-          查看详细推演
+        <h3 class="text-lg font-semibold text-[#f5e6c0] mb-3">{{ $t('home.liuNianTitle') }}</h3>
+        <p class="text-base text-[#e8e0d0]/70 mb-6">{{ $t('home.liuNianText', { name: liuNianData.name, year: liuNianData.year }) }}</p>
+        <UButton color="warning" variant="soft" size="sm" :to="localePath('/tools/bazi')">
+          {{ $t('home.liuNianCta') }}
           <template #trailing>
             <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
           </template>
@@ -227,9 +261,9 @@
     <!-- ========== FAQ ========== -->
     <section class="max-w-3xl mx-auto px-6 py-20">
       <div class="text-center mb-14">
-        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">FAQ</span>
+        <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-3 block">{{ $t('home.faqSubtitle') }}</span>
         <h2 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-          常见问题
+          {{ $t('home.faqTitle') }}
         </h2>
         <div class="w-12 h-px bg-[#c9a227]/30 mx-auto mt-4" />
       </div>
@@ -283,6 +317,8 @@
 <script setup lang="ts">
 import { useProfilesStore } from '~/stores/profiles'
 
+const { t } = useI18n()
+const localePath = useLocalePath()
 const store = useProfilesStore()
 const guideDismissed = ref(false)
 const openFaqIndex = ref<number | null>(null)
@@ -308,50 +344,52 @@ onMounted(() => {
   }
 })
 
-const liuNianText = computed(() => {
+const liuNianData = computed(() => {
   const dp = store.defaultProfile
-  if (!dp || !dp.birthDate) return ''
-  const year = new Date().getFullYear()
-  return `${dp.name || dp.label} 的 ${year} 年运势：八字看流年，紫微看大限，选择上方工具开始推演`
+  if (!dp || !dp.birthDate) return null
+  return {
+    name: dp.name || dp.label,
+    year: new Date().getFullYear(),
+  }
 })
 
-// 随机星点
-const stars = Array.from({ length: 20 }, () => ({
-  size: ['w-0.5 h-0.5', 'w-1 h-1', 'w-1.5 h-1.5'][Math.floor(Math.random() * 3)],
-  top: `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  delay: `${Math.random() * 3}s`,
-}))
+// 确定性星点生成（避免 SSR hydration mismatch）
+// 使用固定 seed 确保 SSR 和客户端生成相同的随机序列
+const stars = Array.from({ length: 20 }, (_, i) => {
+  const s = (n: number) => {
+    const x = Math.sin(n * 9999) * 10000
+    return x - Math.floor(x)
+  }
+  return {
+    size: ['w-0.5 h-0.5', 'w-1 h-1', 'w-1.5 h-1.5'][Math.floor(s(i) * 3)],
+    top: `${s(i + 100) * 100}%`,
+    left: `${s(i + 200) * 100}%`,
+    delay: `${s(i + 300) * 3}s`,
+  }
+})
 
-const faqItems = [
-  {
-    label: '三种工具有什么区别，我该用哪个？',
-    content: '八字命理侧重人生格局与大运走势，适合了解整体命格；梅花易数一事一占，适合针对具体问题（如决策、时机）起卦问卜；紫微斗数以十二宫位解析人生各领域，适合详细审视事业、感情、财运等方向。三种体系可以互补参考。',
-  },
-  {
-    label: '排盘数据准确吗？',
-    content: '所有命盘数据均基于确定性算法本地计算：八字采用标准天干地支与节气交节规则，梅花易数遵循《梅花易数》原著起卦法，紫微斗数依据南北派通用安星诀。AI 解读部分因模型差异每次表述可能略有不同，建议将结果作为自我认知参考，而非绝对预言。',
-  },
-  {
-    label: '我的数据安全吗？',
-    content: '所有档案数据仅存储在您的浏览器本地（localStorage），不会上传到任何服务器。命盘计算完全在本地完成，AI 解读时仅传递结构化命盘数据（如星曜、卦象），不包含任何个人标识信息。您随时可以在设置页删除所有数据。',
-  },
-  {
-    label: '不知道出生时辰怎么办？',
-    content: '八字和紫微斗数需要准确的出生时辰（时柱/命宫定位）。如果不知时辰，可以先用"七字分析"（年月日）查看部分信息，或尝试用梅花易数起卦问事，该工具不依赖生辰。',
-  },
-  {
-    label: '为什么每次 AI 解读的内容不一样？',
-    content: 'AI 解读基于相同的命盘结构数据，但大语言模型在表述上会有自然差异，这类似于不同的命理师对同一命盘会有不同角度的解读。核心命盘信息（格局、用神、星曜分布等）是固定的，AI 提供的是多维度解读视角。',
-  },
-  {
-    label: '出生在节气交界日有影响吗？',
-    content: '八字月柱以节气为界（非农历初一），如果出生在节气前后一天，系统会自动提示"出生于节气交界日"，建议您根据实际出生时间确认月柱，以确保排盘准确。',
-  },
-]
+const faqItems = computed(() => [
+  { label: t('home.faq1Q'), content: t('home.faq1A') },
+  { label: t('home.faq2Q'), content: t('home.faq2A') },
+  { label: t('home.faq3Q'), content: t('home.faq3A') },
+  { label: t('home.faq4Q'), content: t('home.faq4A') },
+  { label: t('home.faq5Q'), content: t('home.faq5A') },
+  { label: t('home.faq6Q'), content: t('home.faq6A') },
+  { label: t('home.faq7Q'), content: t('home.faq7A') },
+])
 
 useSeoMeta({
-  title: 'LuckBuff - 四柱八字 · 梅花易数 · 紫微斗数 | AI 命理解读',
-  description: 'LuckBuff 提供四柱八字排盘、梅花易数起卦、紫微斗数命盘三大命理工具。命盘数据本地计算，AI 白话解读，支持多人档案管理。',
+  title: t('seo.homeTitle'),
+  titleTemplate: '%s',
+  description: t('seo.homeDesc'),
+  ogTitle: t('seo.homeOgTitle'),
+  ogDescription: t('seo.homeOgDesc'),
+  ogImage: 'https://www.ososn.com/og-image.png',
+  ogType: 'website',
+  ogUrl: 'https://www.ososn.com',
+  twitterCard: 'summary_large_image',
+  twitterTitle: t('seo.homeTwitterTitle'),
+  twitterDescription: t('seo.homeTwitterDesc'),
+  twitterImage: 'https://www.ososn.com/og-image.png',
 })
 </script>

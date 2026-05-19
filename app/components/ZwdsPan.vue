@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- 命盘十二宫格 -->
-    <GlowCard title="紫微命盘">
+    <GlowCard :title="$t('zwdsPan.chartTitle')">
       <div class="flex flex-col items-center">
         <!-- 命盘网格：4x4，中间2x2为信息区 -->
         <div
@@ -16,11 +16,11 @@
               class="rounded-xl border border-white/[0.06] bg-white/[0.02] flex flex-col items-center justify-center p-2 text-center"
               style="grid-column: 2 / span 2; grid-row: 2 / span 2;"
             >
-              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">五行局</div>
-              <div class="text-base font-bold text-[#c9a227] mb-1">{{ chart.wuxingJu }}局</div>
-              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">年柱</div>
+              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">{{ $t('zwdsPan.wuxingBureau') }}</div>
+              <div class="text-base font-bold text-[#c9a227] mb-1">{{ chart.wuxingJu }}{{ $t('zwdsPan.wuxingBureau') }}</div>
+              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">{{ $t('zwdsPan.yearPillar') }}</div>
               <div class="text-sm font-semibold text-[#f5e6c0]">{{ chart.yearGan }}{{ chart.yearZhi }}</div>
-              <div class="text-[10px] text-[#e8e0d0]/30 mt-1">{{ chart.gender === 'male' ? '阳男' : '阴女' }} · {{ chart.currentAge }}岁</div>
+              <div class="text-[10px] text-[#e8e0d0]/30 mt-1">{{ chart.gender === 'male' ? $t('zwdsPan.sunSign') : $t('zwdsPan.moonSign') }} · {{ chart.currentAge }}{{ $t('zwdsPan.sui') }}</div>
             </div>
 
             <!-- 宫位格子 -->
@@ -55,7 +55,7 @@
                   v-if="pos.gong?.mainStars.length === 0"
                   class="text-[9px] text-[#e8e0d0]/25 italic leading-none"
                 >
-                  借{{ getJieDuiZhi(pos.zhi) }}
+                  {{ $t('zwdsPan.borrowLabel') }}{{ getJieDuiZhi(pos.zhi) }}
                 </span>
               </div>
 
@@ -78,9 +78,9 @@
 
               <!-- 命宫/身宫/大限标记（非 absolute，避免重叠） -->
               <div class="flex gap-0.5 mt-auto pt-0.5">
-                <span v-if="pos.gong?.isMing" class="text-[8px] px-1 rounded bg-[#c9a227]/20 text-[#c9a227] leading-none">命</span>
-                <span v-if="pos.gong?.isShen" class="text-[8px] px-1 rounded bg-[#8b5cf6]/20 text-[#8b5cf6] leading-none">身</span>
-                <span v-if="pos.gong?.isCurrentDaXian" class="text-[8px] px-1 rounded bg-emerald-500/20 text-emerald-400 leading-none">限</span>
+                <span v-if="pos.gong?.isMing" class="text-[8px] px-1 rounded bg-[#c9a227]/20 text-[#c9a227] leading-none">{{ $t('zwdsPan.lifePalace') }}</span>
+                <span v-if="pos.gong?.isShen" class="text-[8px] px-1 rounded bg-[#8b5cf6]/20 text-[#8b5cf6] leading-none">{{ $t('zwdsPan.bodyPalace') }}</span>
+                <span v-if="pos.gong?.isCurrentDaXian" class="text-[8px] px-1 rounded bg-emerald-500/20 text-emerald-400 leading-none">{{ $t('zwdsPan.limitPalace') }}</span>
               </div>
 
               <!-- 四化标记 -->
@@ -100,7 +100,7 @@
 
         <!-- 时辰未知提示 -->
         <div v-if="!hasHour" class="mt-3 text-xs text-amber-400/80">
-          ⚠ 出生时辰未知，命盘排布可能不完整
+          ⚠ {{ $t('zwdsPan.warningUnknown') }}
         </div>
       </div>
     </GlowCard>

@@ -8,10 +8,10 @@
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">AI 命盘解读</h3>
+        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">{{ $t('zwds.aiInterpretation') }}</h3>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">解读中</span>
+        <span class="text-xs text-[#c9a227]/60">{{ $t('zwds.interpreting') }}</span>
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
           <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />
@@ -22,16 +22,14 @@
     <!-- 免责声明 -->
     <div class="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5">
       <UIcon name="i-heroicons-information-circle" class="w-4 h-4 text-[#c9a227]/50 mt-0.5 shrink-0" />
-      <p class="text-xs text-[#e8e0d0]/30 leading-relaxed">
-        命盘解读基于出生时间的统计性规律，反映概率倾向，不代表确定性预言。人生走向受主观选择影响，命盘仅供参考。
-      </p>
+      <p class="text-xs text-[#e8e0d0]/30 leading-relaxed">{{ $t('zwds.disclaimer') }}</p>
     </div>
 
     <!-- 加载中：命盘预览 + 动画 -->
     <div v-if="!started && streaming">
       <ZwdsPanPreview :chart="chart" class="mb-4 opacity-60" />
       <div class="flex flex-col items-center py-6">
-        <TianganDizhi size="compact" label="AI 正在解读命盘..." />
+        <TianganDizhi size="compact" :label="$t('zwds.aiInterpreting')" />
       </div>
     </div>
 
@@ -78,13 +76,13 @@
 
     <!-- AI 错误 -->
     <div v-if="error" class="text-center py-8">
-      <TianganDizhi size="compact" label="AI 服务暂时繁忙" />
+      <TianganDizhi size="compact" :label="$t('zwds.aiServiceBusy')" />
       <p class="mt-4 text-sm text-red-400">{{ error }}</p>
       <UButton color="warning" class="mt-4" @click="$emit('retry')">
         <template #leading>
           <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
         </template>
-        重试
+        {{ $t('zwds.retry') }}
       </UButton>
     </div>
   </div>
@@ -93,6 +91,8 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import type { ZwdsChart } from '~/types/zwds'
+
+const { t } = useI18n()
 
 interface Props {
   chart: ZwdsChart
@@ -116,7 +116,7 @@ interface SectionMeta {
   iconBg: string
 }
 
-/** 紫微斗数解读章节主题映射 */
+/** 紫微斗数解读章节主题映射（双语键：中文 / English） */
 const sectionMetaMap: Record<string, SectionMeta> = {
   '命格总览': {
     icon: 'i-heroicons-star',
@@ -183,6 +183,8 @@ const sectionMetaMap: Record<string, SectionMeta> = {
   },
 }
 
+const sectionMeta = computed(() => sectionMetaMap)
+
 const sections = computed(() => {
   const text = typeof props.content === 'string' ? props.content : ''
   if (!text) return []
@@ -201,10 +203,14 @@ const sections = computed(() => {
     const content = lines.slice(1).join('\n').trim()
 
     if (titleLine) {
+      // 匹配：AI 输出双语标题如"命格总览 / Life Pattern Overview"
+      // 查找时先尝试完整匹配，再尝试只取中文部分（/ 前面）
+      const meta = sectionMeta.value[titleLine]
+        ?? sectionMeta.value[titleLine.split(' / ')[0]]
       result.push({
         title: titleLine,
         content,
-        meta: sectionMetaMap[titleLine],
+        meta,
       })
     }
   }

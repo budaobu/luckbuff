@@ -1,14 +1,33 @@
 import type { ZwdsChart } from '~/types/zwds'
 import type { UserProfile } from '~/types/user'
 
+// 语言钩子映射
+const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
+  'zh-CN': {
+    system: '请使用简体中文输出。',
+    user: '请使用简体中文输出所有内容。',
+  },
+  'zh-TW': {
+    system: '請使用繁體中文輸出。',
+    user: '請使用繁體中文輸出所有內容。',
+  },
+  en: {
+    system: 'Please output in English.',
+    user: 'Please output all content in English.',
+  },
+}
+
 export function useZwdsPrompt() {
   function build(
     chart: ZwdsChart,
     profile: UserProfile,
     analysisSummary: string,
+    locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
 
     const systemPrompt = `你是一位精通紫微斗数的命理分析师。请根据命盘数据，用现代、理性、温和的语言进行解读。
+${langHook.system}
 
 核心原则：
 - 定位「概率性人生参考工具」，不做命运预言
@@ -71,32 +90,32 @@ ${truncatedSummary}
 
 请按以下章节顺序输出解读（每节 150–300 字）：
 
-## 命格总览
+## 命格总览 / Life Pattern Overview
 结合命宫主星、三方四正（财帛、官禄、迁移）给出整体格局概括。例如「事业导向型」「感情优先型」「财富积累型」等总体判断。
 
-## 命宫解读
+## 命宫解读 / Personality
 性格主调、待人处世风格、外在给人的第一印象。结合主星组合和四化影响。
 
-## 事业与财帛
+## 事业与财帛 / Career & Finance
 工作类型倾向、赚钱方式与财运模式、主动财与被动财的倾向。结合事业宫与财帛宫主星及三方四正。
 
-## 感情与婚姻
+## 感情与婚姻 / Relationships
 感情模式特质、伴侣类型倾向、婚姻中需注意的互动模式。结合夫妻宫与福德宫。
 
-## 健康与抗压
+## 健康与抗压 / Health
 体质倾向、健康注意事项、抗压能力。结合疾厄宫与命宫。
 
-## 六亲与社交
+## 六亲与社交 / Family & Social
 与长辈、兄弟姐妹、子女的关系模式，以及人际关系质量。结合父母宫、兄弟宫、子女宫、交友宫。
 
-## 当前大限
+## 当前大限 / Current Period
 当前大限（${currentDaXianStr}）的整体基调（发展期/调整期/收获期/困难期），这十年各领域（感情、事业、财运、健康）的方向性判断。如有重要时间节点转折请提示。
 
-## 流年提示
+## 流年提示 / Yearly Forecast
 ${currentYear}年流年太岁入宫影响、流年四化叠盘分析、当年各领域（感情、事业、财运、健康）具体方向性建议。用「顺遂 / 平稳 / 留意 / 谨慎」之一做吉凶评级，附一句话总结。
 
-## 综合建议
-基于命盘特征的 3–5 条实用指引，语言落地，避免过于抽象。`
+## 综合建议 / Recommendations
+基于命盘特征的 3–5 条实用指引，语言落地，避免过于抽象。${langHook.user}`
 
     return { systemPrompt, userPrompt }
   }

@@ -1,7 +1,7 @@
 import { toCanvas } from 'html-to-image'
 
 export interface ShareOptions {
-  tool: 'bazi' | 'zhouyi'
+  tool: 'bazi' | 'zhouyi' | 'liuyao'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -9,6 +9,8 @@ export interface ShareOptions {
   /** CSS 选择器（兼容旧用法，但如果目标在隐藏 tab 中会找不到） */
   shareTargetSelector?: string
   filename: string
+  /** i18n 的 t 函数，必须从组件 setup 中传入 */
+  t: (key: string, ...args: unknown[]) => string
 }
 
 export interface ShareResult {
@@ -20,25 +22,31 @@ export interface ShareResult {
 
 export function useShare() {
   async function share(options: ShareOptions): Promise<ShareResult> {
-    const { tool, name, summary, shareTarget, shareTargetSelector, filename } = options
+    const { t, tool, name, summary, shareTarget, shareTargetSelector, filename } = options
 
-    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微' }
+    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻' }
     const toolName = toolNameMap[tool] ?? '命理'
-    const nameStr = name ? `${name}的` : '我的'
+
     const hookLines: Record<string, string> = {
       bazi: summary
-        ? `AI 算出我：${summary}，你的命格是什么？`
-        : `五千年前就写好的我，今天 AI 读给我听了`,
+        ? t('share.hookBazi', { summary })
+        : t('share.hookBaziDefault'),
       zhouyi: summary
-        ? `卦象说：${summary}。你也来问一卦？`
-        : `刚用周易问了一卦，结果让我细思极恐`,
+        ? t('share.hookZhouyi', { summary })
+        : t('share.hookZhouyiDefault'),
       zwds: summary
-        ? `紫微斗数算出我：${summary}，你的命盘如何？`
-        : `输入生辰，看古人如何描述今天的我`,
+        ? t('share.hookZwds', { summary })
+        : t('share.hookZwdsDefault'),
+      liuyao: summary
+        ? t('share.hookLiuyao', { summary })
+        : t('share.hookLiuyaoDefault'),
     }
-    const hook = hookLines[tool] ?? `刚用${toolName}推演了一盘，结果让我细思极恐`
+    const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
-    const copyText = `${hook}\n\n👉 ${url}\n（${nameStr}${toolName}推演结果，由 LuckBuff 生成）`
+    const suffix = tool === 'liuyao'
+      ? t('share.suffixLiuyao')
+      : t('share.suffix', { name: name || t('common.unknown'), tool: toolName })
+    const copyText = `${hook}\n\n👉 ${url}\n${suffix}`
 
     // 生成分享图
     const el = shareTarget ?? (shareTargetSelector ? document.querySelector(shareTargetSelector) as HTMLElement | null : null)
@@ -100,7 +108,7 @@ export function useShare() {
         ctx.font = `${24 * 2}px sans-serif`
         ctx.fillStyle = 'rgba(201,162,39,0.35)'
         ctx.textAlign = 'right'
-        ctx.fillText('LuckBuff', canvas.width - 32, canvas.height - 32)
+        ctx.fillText('ososn', canvas.width - 32, canvas.height - 32)
 
         screenshotDataUrl = canvas.toDataURL('image/png')
       } catch (e: any) {
@@ -117,7 +125,7 @@ export function useShare() {
         })
       }
     } else {
-      screenshotError = '未找到截图目标元素'
+      screenshotError = t('share.screenshotError')
     }
 
     return { copyText, screenshotDataUrl, filename, screenshotError }

@@ -13,10 +13,10 @@
         <div class="mb-8">
           <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Ziwei Doushu</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-            紫微斗数
+            {{ $t('zwds.title') }}
           </h1>
           <p class="text-sm text-[#e8e0d0]/40 mt-2">
-            输入生辰，推演十二宫命盘
+            {{ $t('zwds.subtitle') }}
           </p>
           <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
         </div>
@@ -37,21 +37,21 @@
 
       <!-- 阶段 2：动画 -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <TianganDizhi size="full" label="天机推演中..." />
+        <TianganDizhi size="full" :label="$t('zwds.calculating')" />
       </div>
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && chart">
         <!-- 隐藏截图目标（综合分析 > 流年 > 当前年份的流年概览卡片） -->
         <div ref="shareTargetRef" v-show="false" class="p-6">
-          <GlowCard title="流年概览">
+          <GlowCard :title="$t('zwdsAnalysis.liuNianOverviewTitle')">
             <div class="space-y-2">
               <div class="flex items-center gap-3">
-                <div class="text-sm text-[#e8e0d0]/60">年柱</div>
+                <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
                 <div class="text-base font-bold text-[#f5e6c0]">{{ currentLiunianGanZhi }}</div>
               </div>
               <div class="flex items-center gap-3">
-                <div class="text-sm text-[#e8e0d0]/60">太岁入宫</div>
+                <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
                 <div class="text-sm text-[#f5e6c0]">{{ currentLiunianTaiSuiGong }}宫（{{ currentLiunianTaiSuiZhi }}）</div>
               </div>
               <div class="flex flex-wrap gap-2 pt-1">
@@ -70,7 +70,7 @@
                   class="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold border"
                   :class="ratingClass(currentLiunianRating)"
                 >
-                  {{ currentLiunianRating }}
+                  {{ ratingLabel(currentLiunianRating) }}
                 </div>
                 <div class="flex-1">
                   <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ ratingText(currentLiunianRating) }}</p>
@@ -84,10 +84,10 @@
         <div class="mb-8">
           <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Result</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
-            {{ formValues.name || '命盘' }}的紫微
+            {{ $t('zwds.chartTitle', { name: formValues.name || '' }) }}
           </h1>
           <p class="text-sm text-[#e8e0d0]/40 mt-2">
-            命宫{{ chart.mingGong.zhi }}（{{ chart.mingGong.mainStars.join('、') || '借对宫' }}）| {{ chart.wuxingJu }}局
+            {{ chartSubtitleText }}
           </p>
           <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
         </div>
@@ -132,7 +132,7 @@
             <template #leading>
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
-            重新推演
+            {{ $t('common.retry') }}
           </UButton>
           <UButton
             color="warning"
@@ -143,7 +143,7 @@
             <template #leading>
               <UIcon name="i-heroicons-share" class="w-4 h-4" />
             </template>
-            一键分享
+            {{ $t('common.shareResult') }}
           </UButton>
           <UButton
             color="neutral"
@@ -154,7 +154,7 @@
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
             </template>
-            工具首页
+            {{ $t('zwds.backHome') }}
           </UButton>
         </div>
       </div>
@@ -176,7 +176,7 @@
                 <div class="w-8 h-8 rounded-lg bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
                   <UIcon name="i-heroicons-share" class="w-4 h-4" />
                 </div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0]">分享结果</h3>
+                <h3 class="text-sm font-semibold text-[#f5e6c0]">{{ $t('share.title') }}</h3>
               </div>
               <UButton
                 color="neutral"
@@ -189,7 +189,7 @@
             </div>
             <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
               <div>
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">分享文案</p>
+                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
                 <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3 text-sm text-[#e8e0d0]/80 leading-relaxed whitespace-pre-wrap">
                   {{ shareData?.copyText }}
                 </div>
@@ -197,31 +197,31 @@
                   <template #leading>
                     <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
                   </template>
-                  复制文案
+                  {{ $t('share.copyText') }}
                 </UButton>
               </div>
               <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">分享截图</p>
+                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
                 <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-2 overflow-hidden">
-                  <img :src="shareData.screenshotDataUrl" alt="分享截图" class="w-full rounded-lg">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
                   <template #leading>
                     <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
                   </template>
-                  下载图片
+                  {{ $t('share.downloadImage') }}
                 </UButton>
               </div>
               <div v-else class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-6 text-center">
                 <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[#e8e0d0]/20 mx-auto mb-2" />
-                <p class="text-xs text-[#e8e0d0]/40">截图生成失败，请复制文案后手动截图</p>
+                <p class="text-xs text-[#e8e0d0]/40">{{ $t('share.screenshotFailed') }}</p>
                 <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
                   {{ shareData.screenshotError }}
                 </p>
               </div>
             </div>
             <div class="px-5 py-3 border-t border-white/[0.06] text-center">
-              <p class="text-[10px] text-[#e8e0d0]/30">由 LuckBuff 生成 · 仅供娱乐参考</p>
+              <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('share.generatedBy') }}</p>
             </div>
           </div>
         </div>
@@ -235,6 +235,8 @@ import type { ZwdsChart } from '~/types/zwds'
 import type { DiZhi } from '~/types/user'
 import { getLiunianAnalysis } from '~/utils/zwds/analysis'
 
+const { t } = useI18n()
+const { locale } = useI18n()
 const { build: buildZwdsAiPrompt } = useZwdsPrompt()
 const aiStream = useAiStream()
 // 提取独立 ref 用于模板 prop 绑定（Vue 3 对象属性在 prop 绑定中不会自动解包）
@@ -275,7 +277,24 @@ const currentLiunianTaiSuiGong = computed(() => currentLiunian.value?.taiSuiGong
 const currentLiunianTaiSuiZhi = computed(() => currentLiunian.value?.taiSuiZhi ?? '')
 const currentLiunianSiHua = computed(() => currentLiunian.value?.liuNianSiHua ?? [])
 const currentLiunianSummary = computed(() => currentLiunian.value?.summary ?? '')
-const currentLiunianRating = computed(() => currentLiunian.value?.rating ?? '平稳')
+const currentLiunianRating = computed(() => currentLiunian.value?.rating ?? 'stable')
+
+const chartSubtitleText = computed(() => {
+  if (!chart.value) return ''
+  const mingGong = chart.value.mingGong.zhi
+  const mainStars = chart.value.mingGong.mainStars
+  const starsText = mainStars.length > 0
+    ? mainStars.join('、')
+    : `${t('zwdsPan.borrowLabel')}${getJieDuiZhi(chart.value.mingGong.zhi)}`
+  const wuxingJu = chart.value.wuxingJu
+  return t('zwds.chartSubtitle', { mingGong, mainStars: starsText, wuxingJu })
+})
+
+function getJieDuiZhi(zhi: DiZhi): DiZhi {
+  const ZHI_ORDER: DiZhi[] = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑']
+  const idx = ZHI_ORDER.indexOf(zhi)
+  return ZHI_ORDER[(idx + 6) % 12]
+}
 
 function sihuaBadgeClass(type: string): string {
   switch (type) {
@@ -289,29 +308,42 @@ function sihuaBadgeClass(type: string): string {
 
 function ratingClass(rating: string): string {
   switch (rating) {
-    case '顺遂': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-    case '平稳': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
-    case '留意': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-    case '谨慎': return 'border-red-500/30 bg-red-500/10 text-red-400'
+    case 'shunSui': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+    case 'stable': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
+    case 'liuYi': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+    case 'jinShen': return 'border-red-500/30 bg-red-500/10 text-red-400'
+    case 'yiBan': return 'border-white/10 bg-white/5 text-[#e8e0d0]'
     default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
   }
 }
 
 function ratingText(rating: string): string {
   switch (rating) {
-    case '顺遂': return '整体运势向好，适合主动推进计划，把握机会。'
-    case '平稳': return '运势平稳，无大起大落，按部就班即可。'
-    case '留意': return '部分领域有波动信号，保持警觉，遇事先观察。'
-    case '谨慎': return '多宫受冲，宜守不宜攻，重大决策建议延后或多方求证。'
-    default: return '运势一般，平常心对待。'
+    case 'shunSui': return t('zwdsAnalysis.ratingShunSui')
+    case 'stable': return t('zwdsAnalysis.ratingPingWen')
+    case 'liuYi': return t('zwdsAnalysis.ratingLiuYi')
+    case 'jinShen': return t('zwdsAnalysis.ratingJinShen')
+    case 'yiBan': return t('zwdsAnalysis.ratingYiBan')
+    default: return t('zwdsAnalysis.ratingPingWen')
   }
 }
 
-const tabItems = [
-  { label: 'AI 解读', slot: 'ai' },
-  { label: '排盘计算', slot: 'pan' },
-  { label: '综合分析', slot: 'analysis' },
-]
+function ratingLabel(rating: string): string {
+  switch (rating) {
+    case 'shunSui': return t('zwdsAnalysis.ratingLabelShunSui')
+    case 'stable': return t('zwdsAnalysis.ratingLabelStable')
+    case 'liuYi': return t('zwdsAnalysis.ratingLabelLiuYi')
+    case 'jinShen': return t('zwdsAnalysis.ratingLabelJinShen')
+    case 'yiBan': return t('zwdsAnalysis.ratingLabelYiBan')
+    default: return t('zwdsAnalysis.ratingLabelStable')
+  }
+}
+
+const tabItems = computed(() => [
+  { label: t('zwds.aiInterpretation'), slot: 'ai' as const },
+  { label: t('zwdsPan.chartTitle'), slot: 'pan' as const },
+  { label: t('zwdsAnalysis.tabsLabelBenMing'), slot: 'analysis' as const },
+])
 
 const store = useProfilesStore()
 const { calc } = useZwdsCalc()
@@ -366,7 +398,7 @@ async function startAiStream() {
     birthHour: formValues.value.birthHour,
   }
 
-  const { systemPrompt, userPrompt } = buildZwdsAiPrompt(chart.value, profile, summary)
+  const { systemPrompt, userPrompt } = buildZwdsAiPrompt(chart.value, profile, summary, locale.value)
 
   // 使用 useAiStream 的 startStream（流式模式）
   await aiStream.startStream(userPrompt, systemPrompt, true)
@@ -410,14 +442,15 @@ async function handleShare() {
       summary: `命宫${chart.value.mingGong.zhi}（${chart.value.mingGong.mainStars.join('、') || '借对宫'}），${chart.value.wuxingJu}局`,
       shareTarget: shareTargetRef.value,
       filename: `zwds-${formValues.value.name || '命盘'}-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
     })
 
     shareData.value = result
     shareDialogOpen.value = true
   } catch (e: any) {
     toast.add({
-      title: '分享失败',
-      description: e?.message || '请重试',
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
       color: 'error',
     })
   }
@@ -426,9 +459,9 @@ async function handleShare() {
 function copyShareText() {
   if (!shareData.value) return
   navigator.clipboard.writeText(shareData.value.copyText).then(() => {
-    toast.add({ title: '文案已复制', color: 'success' })
+    toast.add({ title: t('share.textCopied'), color: 'success' })
   }).catch(() => {
-    toast.add({ title: '复制失败，请手动复制', color: 'error' })
+    toast.add({ title: t('share.copyFail'), color: 'error' })
   })
 }
 
@@ -438,12 +471,19 @@ function downloadShareImage() {
   a.href = shareData.value.screenshotDataUrl
   a.download = shareData.value.filename
   a.click()
-  toast.add({ title: '图片已开始下载', color: 'success' })
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
 useSeoMeta({
-  title: '紫微斗数 - LuckBuff',
-  description: '输入生辰，AI 解读您的紫微斗数命盘',
+  title: t('zwds.seoTitle'),
+  titleTemplate: '%s',
+  description: t('zwds.seoDesc'),
+  ogTitle: t('zwds.seoOgTitle'),
+  ogDescription: t('zwds.seoOgDesc'),
+  ogImage: 'https://www.ososn.com/og-image.png',
+  ogType: 'website',
+  ogUrl: 'https://www.ososn.com/tools/zwds',
+  twitterCard: 'summary_large_image',
 })
 </script>
 

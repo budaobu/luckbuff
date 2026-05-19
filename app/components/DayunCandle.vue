@@ -1,5 +1,5 @@
 <template>
-  <GlowCard title="大运运势图" icon="i-heroicons-chart-bar">
+  <GlowCard :title="$t('bazi.dayunChart')" icon="i-heroicons-chart-bar">
     <div class="h-64">
       <Bar
         v-if="chartData"
@@ -29,6 +29,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const currentYear = new Date().getFullYear()
 const currentAge = computed(() => {
@@ -39,10 +40,10 @@ const currentAge = computed(() => {
 })
 
 const chartData = computed(() => ({
-  labels: props.dayuns.map(d => `${d.ageRange[0]}-${d.ageRange[1]}岁\n${d.gan}${d.zhi}`),
+  labels: props.dayuns.map(d => `${d.ageRange[0]}-${d.ageRange[1]}${t('bazi.chartAgeSuffix')}\n${d.gan}${d.zhi}`),
   datasets: [
     {
-      label: '运势评分',
+      label: t('bazi.fortuneScore'),
       data: props.dayuns.map(d => d.score ?? 0),
       backgroundColor: props.dayuns.map(d => {
         const score = d.score ?? 0
@@ -97,8 +98,8 @@ const options = {
         label: (ctx: any) => {
           const dy = props.dayuns[ctx.dataIndex]
           const score = dy.score ?? 0
-          const fortune = dy.fortune ?? '未评'
-          return `评分：${score}（${fortune}）`
+          const fortune = dy.fortune ?? t('bazi.fortuneUnevaluated')
+          return t('bazi.fortuneTooltip', { score, fortune })
         },
       },
     },

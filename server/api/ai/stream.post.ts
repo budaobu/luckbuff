@@ -13,9 +13,9 @@ export default defineEventHandler(async (event) => {
   const isOpenAiFormat = config.aiProvider === 'openai' || config.aiProvider === 'newapi'
 
   const isGpt5 = config.aiModel?.startsWith('gpt-5')
-  let maxTokens = Number(config.aiMaxTokens) || 8192
+  let maxTokens = Number(config.aiMaxTokens) || 81920
   // 防止 env 里填了过大的值导致上游拒绝
-  if (maxTokens > 32768) maxTokens = 8192
+  if (maxTokens > 327680) maxTokens = 81920
 
   const upstreamBody = isOpenAiFormat
     ? {

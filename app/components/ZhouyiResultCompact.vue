@@ -6,24 +6,24 @@
     <div class="p-6 space-y-5">
       <!-- 标题 -->
       <div class="text-center">
-        <p class="text-xs text-[#c9a227]/60 tracking-wider mb-1">梅花易数 · 卦象结果</p>
+        <p class="text-xs text-[#c9a227]/60 tracking-wider mb-1">{{ $t('zwds.meihuaTitle') }}</p>
         <h2 class="text-xl font-bold text-[#f5e6c0]">{{ benGua?.name }} → {{ bianGua?.name }}</h2>
       </div>
 
       <!-- 本卦 / 互卦 / 变卦 -->
       <div class="flex items-center justify-around">
         <div class="text-center">
-          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">本卦</p>
+          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">{{ $t('zwds.benGua') }}</p>
           <p class="text-lg font-bold text-[#c9a227]">{{ benGua?.name }}</p>
         </div>
         <div class="text-[#e8e0d0]/30">→</div>
         <div class="text-center">
-          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">互卦</p>
+          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">{{ $t('zwds.huGua') }}</p>
           <p class="text-lg font-bold text-[#c9a227]">{{ huGua?.name }}</p>
         </div>
         <div class="text-[#e8e0d0]/30">→</div>
         <div class="text-center">
-          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">变卦</p>
+          <p class="text-[10px] text-[#e8e0d0]/50 mb-1">{{ $t('zwds.bianGua') }}</p>
           <p class="text-lg font-bold text-[#c9a227]">{{ bianGua?.name }}</p>
         </div>
       </div>
@@ -31,7 +31,7 @@
       <!-- 体用 + 生克 -->
       <div class="flex items-center justify-center gap-4">
         <div class="text-center">
-          <p class="text-[10px] text-[#e8e0d0]/50">体卦</p>
+          <p class="text-[10px] text-[#e8e0d0]/50">{{ $t('zwds.tiGua') }}</p>
           <p class="text-sm font-bold text-[#c9a227]">{{ tiGua?.name }}</p>
           <p class="text-[10px] text-[#e8e0d0]/60">{{ result.tiWuxing }}</p>
         </div>
@@ -40,7 +40,7 @@
           <p class="text-[10px]" :class="shengkeTextClass">{{ result.shengkeResult }}</p>
         </div>
         <div class="text-center">
-          <p class="text-[10px] text-[#e8e0d0]/50">用卦</p>
+          <p class="text-[10px] text-[#e8e0d0]/50">{{ $t('zwds.yongGua') }}</p>
           <p class="text-sm font-bold text-[#c9a227]">{{ yongGua?.name }}</p>
           <p class="text-[10px] text-[#e8e0d0]/60">{{ result.yongWuxing }}</p>
         </div>
@@ -66,7 +66,7 @@
             <span
               v-if="result.dongYao === (7 - i)"
               class="text-[10px] text-[#c9a227]"
-            >动</span>
+            >{{ $t('zwds.dongLabel') }}</span>
           </div>
         </div>
       </div>
@@ -74,11 +74,11 @@
       <!-- 卦辞 -->
       <div class="space-y-2 text-xs text-[#e8e0d0]/70 leading-relaxed">
         <p>
-          <span class="text-[#c9a227]">本卦《{{ benGua?.name }}》：</span>
+          <span class="text-[#c9a227]">{{ $t('zwds.benGua') }}《{{ benGua?.name }}》：</span>
           {{ benGua?.meaning }}。{{ benGua?.guaci }}
         </p>
         <p>
-          <span class="text-[#c9a227]">变卦《{{ bianGua?.name }}》：</span>
+          <span class="text-[#c9a227]">{{ $t('zwds.bianGua') }}《{{ bianGua?.name }}》：</span>
           {{ bianGua?.meaning }}。{{ bianGua?.guaci }}
         </p>
       </div>
@@ -86,7 +86,7 @@
 
     <!-- 底部 -->
     <div class="px-5 py-3 border-t border-white/[0.06] text-center">
-      <p class="text-[10px] text-[#e8e0d0]/30">由 LuckBuff 生成 · 仅供娱乐参考</p>
+      <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zwds.disclaimer') }}</p>
     </div>
   </div>
 </template>
@@ -100,6 +100,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const benGua = computed(() => getGuaById(props.result.benGuaId))
 const bianGua = computed(() => getGuaById(props.result.bianGuaId))
