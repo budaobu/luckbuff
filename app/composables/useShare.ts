@@ -1,7 +1,7 @@
 import { toCanvas } from 'html-to-image'
 
 export interface ShareOptions {
-  tool: 'bazi' | 'zhouyi' | 'liuyao'
+  tool: 'bazi' | 'zhouyi' | 'liuyao' | 'zwds' | 'vedic' | 'huangdao' | 'liuyao-divination' | 'qimen'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -24,7 +24,7 @@ export function useShare() {
   async function share(options: ShareOptions): Promise<ShareResult> {
     const { t, tool, name, summary, shareTarget, shareTargetSelector, filename } = options
 
-    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻' }
+    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻', vedic: '吠陀占星', qimen: '奇门遁甲', huangdao: '黄道吉日' }
     const toolName = toolNameMap[tool] ?? '命理'
 
     const hookLines: Record<string, string> = {
@@ -40,12 +40,23 @@ export function useShare() {
       liuyao: summary
         ? t('share.hookLiuyao', { summary })
         : t('share.hookLiuyaoDefault'),
+      vedic: summary
+        ? t('share.hookVedic', { summary })
+        : t('share.hookVedicDefault'),
+      qimen: summary
+        ? t('share.hookQimen', { summary })
+        : t('share.hookQimenDefault'),
+      huangdao: summary
+        ? t('share.hookHuangdao', { summary })
+        : t('share.hookHuangdaoDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
     const suffix = tool === 'liuyao'
       ? t('share.suffixLiuyao')
-      : t('share.suffix', { name: name || t('common.unknown'), tool: toolName })
+      : tool === 'vedic'
+        ? t('share.suffixVedic')
+        : t('share.suffix', { name: name || t('common.unknown'), tool: toolName })
     const copyText = `${hook}\n\n👉 ${url}\n${suffix}`
 
     // 生成分享图
@@ -97,8 +108,10 @@ export function useShare() {
         // 4. 等待 Chart.js 默认动画完成（1000ms）
         await new Promise(resolve => setTimeout(resolve, 1200))
 
+        const bgColor = window.getComputedStyle(document.documentElement).getPropertyValue('--surface-page').trim()
+          || (window.matchMedia('(prefers-color-scheme: dark)').matches ? '#0a0a0f' : '#f5f0e8')
         const canvas = await toCanvas(el, {
-          backgroundColor: '#0a0a0f',
+          backgroundColor: bgColor || '#0a0a0f',
           pixelRatio: 2,
           cacheBust: true,
         })
