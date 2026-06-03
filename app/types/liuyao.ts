@@ -129,8 +129,7 @@ export interface BracketData {
 /** 赛事选择器 Props */
 export interface TournamentPickerProps {
   groups: Record<string, WorldCupTeam[]>
-  bracket?: BracketData
-  disabledMatches?: string[] // 已结束的 match id
+  eliminated?: string[] // 已淘汰的队伍 ID 列表
 }
 
 /** 摇卦工作台 Props */

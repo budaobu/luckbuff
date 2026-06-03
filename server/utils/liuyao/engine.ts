@@ -116,7 +116,7 @@ export async function runLiuYaoEngine(payload: EnginePayload): Promise<EngineRes
       cwd: PROJECT_ROOT,
       env: {
         ...process.env,
-        PYTHONPATH: CACHE_DIR,
+        PYTHONPATH: VENDOR_PATH,
       },
     })
 

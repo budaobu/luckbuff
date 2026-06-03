@@ -12,13 +12,13 @@
 
       <!-- 外层虚线装饰环（极慢速旋转） -->
       <div
-        class="absolute rounded-full border border-dashed border-[#c9a227]/8 coin-outer-dashed"
+        class="absolute rounded-full border border-dashed border-[var(--accent-faint)] coin-outer-dashed"
         :style="{ width: outerSize, height: outerSize }"
       />
 
       <!-- 铜钱轨道环 -->
       <div
-        class="absolute rounded-full border border-[#c9a227]/10 coin-orbit-ring"
+        class="absolute rounded-full border border-[var(--accent-faint)] coin-orbit-ring"
         :style="{ width: orbitSize, height: orbitSize }"
       />
 
@@ -45,7 +45,7 @@
         >
           <!-- 铜钱外圈 -->
           <div
-            class="absolute inset-[3px] rounded-full border border-[#c9a227]/30"
+            class="absolute inset-[3px] rounded-full border border-[var(--accent-border-hover)]"
             :style="{ borderColor: 'rgba(201, 162, 39, 0.3)' }"
           />
           <!-- 方孔 -->
@@ -76,7 +76,7 @@
       <!-- 中心光圈 -->
       <div
         class="absolute rounded-full flex items-center justify-center coin-center-glow"
-        :class="isTiny ? 'border border-[#c9a227]/15' : 'border border-[#c9a227]/20'"
+        :class="isTiny ? 'border border-[var(--accent-faint)]' : 'border border-[var(--accent-border)]'"
         :style="{
           width: centerSize,
           height: centerSize,
@@ -85,7 +85,7 @@
       >
         <span
           v-if="!isTiny"
-          class="text-[#c9a227] font-bold"
+          class="text-[var(--accent)] font-bold"
           :style="{ fontSize: centerFontSize }"
         >卦</span>
       </div>
@@ -93,7 +93,7 @@
 
     <p
       v-if="label"
-      class="text-[#c9a227]/80 tracking-wider font-medium"
+      class="text-[var(--accent)] tracking-wider font-medium"
       :class="isTiny ? 'mt-2 text-xs' : 'mt-5 text-sm'"
     >
       {{ label }}

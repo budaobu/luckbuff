@@ -3,19 +3,19 @@
     <!-- 顶部主标题区 -->
     <div class="flex items-center gap-3">
       <div
-        class="w-10 h-10 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227] transition-transform duration-500 hover:scale-110"
+        class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-500 hover:scale-110"
       >
         <UIcon :name="icon || 'i-heroicons-sparkles'" class="w-5 h-5" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">{{ title }}</h3>
-        <p v-if="subtitle" class="text-xs text-[#e8e0d0]/40 mt-0.5 truncate">{{ subtitle }}</p>
+        <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ title }}</h3>
+        <p v-if="subtitle" class="text-xs text-[var(--text-faint)] mt-0.5 truncate">{{ subtitle }}</p>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">{{ $t('bazi.interpreting') }}</span>
+        <span class="text-xs text-[var(--accent-muted)]">{{ $t('bazi.interpreting') }}</span>
         <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
         </span>
       </div>
     </div>
@@ -25,43 +25,43 @@
       <div
         v-for="(section, index) in sections"
         :key="index"
-        class="group relative rounded-xl bg-white/[0.03] backdrop-blur-sm overflow-hidden transition-all duration-500"
+        class="group relative rounded-xl bg-[var(--surface-input)] backdrop-blur-sm overflow-hidden transition-all duration-500"
       >
-        <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
+        <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border)] to-transparent" />
         <div class="relative z-10 p-5">
           <h4
             v-if="section.title"
-            class="text-sm font-semibold text-[#c9a227] tracking-wide mb-3 flex items-center gap-2"
+            class="text-sm font-semibold text-[var(--accent)] tracking-wide mb-3 flex items-center gap-2"
           >
-            <span class="w-1.5 h-1.5 rounded-sm bg-[#c9a227] rotate-45 opacity-80" />
+            <span class="w-1.5 h-1.5 rounded-sm bg-[var(--accent)] rotate-45 opacity-80" />
             {{ section.title }}
           </h4>
           <div class="ai-content prose prose-invert prose-sm max-w-none">
             <div v-html="section.rendered" />
           </div>
         </div>
-        <div class="absolute inset-0 rounded-xl border border-white/[0.06] pointer-events-none" />
-        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/10 to-transparent" />
+        <div class="absolute inset-0 rounded-xl border border-[var(--border-light)] pointer-events-none" />
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-faint)] to-transparent" />
       </div>
     </div>
 
     <!-- 无分段时兜底 -->
     <div
       v-else
-      class="group relative rounded-2xl bg-white/[0.03] backdrop-blur-sm overflow-hidden transition-all duration-500"
+      class="group relative rounded-2xl bg-[var(--surface-input)] backdrop-blur-sm overflow-hidden transition-all duration-500"
     >
-      <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent" />
+      <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
       <div class="relative z-10 p-6">
         <div class="ai-content prose prose-invert prose-sm max-w-none">
           <div v-html="renderedContent" />
           <span
             v-if="streaming"
-            class="inline-block w-[2px] h-5 bg-[#c9a227] ml-0.5 align-middle animate-pulse"
+            class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse"
           />
         </div>
       </div>
-      <div class="absolute inset-0 rounded-2xl border border-white/[0.06] pointer-events-none" />
-      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/15 to-transparent" />
+      <div class="absolute inset-0 rounded-2xl border border-[var(--border-light)] pointer-events-none" />
+      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-faint)] to-transparent" />
     </div>
   </div>
 </template>

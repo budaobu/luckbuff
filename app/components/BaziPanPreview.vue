@@ -4,11 +4,11 @@
     <GlowCard :title="$t('bazi.panPreview')">
       <div class="flex justify-between text-center">
         <div v-for="(label, idx) in pillarLabels" :key="label" class="flex-1">
-          <p class="text-xs text-[#e8e0d0]/50 mb-1">{{ label }}</p>
-          <p class="text-lg font-bold" :class="idx === 2 ? 'text-[#c9a227]' : 'text-[#e8e0d0]'">
+          <p class="text-xs text-[var(--text-muted)] mb-1">{{ label }}</p>
+          <p class="text-lg font-bold" :class="idx === 2 ? 'text-[var(--accent)]' : 'text-[var(--text-body)]'">
             {{ getPillarText(idx) }}
           </p>
-          <p class="text-xs text-[#c9a227]/60 mt-1">{{ getShiShenText(idx) }}</p>
+          <p class="text-xs text-[var(--accent-muted)] mt-1">{{ getShiShenText(idx) }}</p>
         </div>
       </div>
     </GlowCard>
@@ -17,18 +17,18 @@
     <GlowCard v-if="chart.currentDaYun" :title="$t('bazi.currentDayun')">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-2xl font-bold text-[#c9a227]">
+          <p class="text-2xl font-bold text-[var(--accent)]">
             {{ chart.currentDaYun.gan }}{{ chart.currentDaYun.zhi }}
           </p>
-          <p class="text-sm text-[#e8e0d0]/60">
+          <p class="text-sm text-[var(--text-muted)]">
             {{ $t('bazi.stepOfDaYun', { index: chart.currentDaYun.index }) }}
           </p>
         </div>
         <div class="text-right">
-          <p class="text-lg text-[#e8e0d0]">
+          <p class="text-lg text-[var(--text-body)]">
             {{ chart.currentDaYun.ageRange[0] }}-{{ chart.currentDaYun.ageRange[1] }}{{ $t('bazi.ageUnit') }}
           </p>
-          <p class="text-xs text-[#e8e0d0]/50">{{ $t('bazi.currentAgeLabel', { age: chart.currentAge }) }}</p>
+          <p class="text-xs text-[var(--text-muted)]">{{ $t('bazi.currentAgeLabel', { age: chart.currentAge }) }}</p>
         </div>
       </div>
     </GlowCard>

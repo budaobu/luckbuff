@@ -1,9 +1,9 @@
 <template>
-  <div class="relative min-h-screen overflow-hidden">
+  <div class="relative overflow-hidden">
     <!-- 氛围背景光晕 -->
     <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-[#c9a227]/[0.05] blur-[120px]" />
-      <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[#8b5cf6]/[0.04] blur-[100px]" />
+      <div class="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-[var(--accent)]/[0.05] blur-[120px]" />
+      <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
     <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
@@ -11,20 +11,20 @@
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
         <div class="mb-8">
-          <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Bazi</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Bazi</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
             {{ $t('bazi.title') }}
           </h1>
-          <p class="text-sm text-[#e8e0d0]/40 mt-2">
+          <p class="text-sm text-[var(--text-faint)] mt-2">
             {{ $t('bazi.subtitle') }}
           </p>
-          <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
         <!-- 表单卡片 -->
-        <div class="rounded-2xl border border-white/8 bg-[#1a1612] overflow-hidden">
+        <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] overflow-hidden">
           <!-- 顶部金色渐变线 -->
-          <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/60 to-transparent" />
+          <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
           <div class="p-6">
             <BaziForm
               :initial-values="lastFormValues"
@@ -58,21 +58,21 @@
         </div>
         <!-- Section 标题 -->
         <div class="mb-8">
-          <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
             {{ formValues.name ? $t('bazi.chartTitle', { name: formValues.name }) : $t('bazi.chartTitleNoName') }}
           </h1>
-          <p class="text-sm text-[#e8e0d0]/40 mt-2">
+          <p class="text-sm text-[var(--text-faint)] mt-2">
             {{ $t('bazi.chartSubtitle', { riZhu: chart.riZhu, strength: chart.riZhuStrength, geju: chart.geju }) }}
           </p>
-          <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
         <UTabs
           :items="tabItems"
           :ui="{
-            list: 'bg-[#1a1612] rounded-xl p-1 border border-white/[0.08] gap-1',
-            trigger: 'text-[#e8e0d0]/50 data-[active]:text-[#f5e6c0] data-[active]:bg-[#c9a227]/15 data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[#e8e0d0]/80',
+            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
+            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
             indicator: 'bg-transparent',
             content: 'pt-5',
           }"
@@ -122,7 +122,7 @@
           <UButton
             color="neutral"
             variant="ghost"
-            class="text-[#e8e0d0]/50 hover:text-[#e8e0d0]/80 hover:bg-white/5"
+            class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
             @click="navigateTo('/')"
           >
             <template #leading>
@@ -143,24 +143,24 @@
           @click.self="shareDialogOpen = false"
         >
           <!-- 遮罩 -->
-          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
 
           <!-- 弹窗卡片 -->
-          <div class="relative rounded-2xl border border-white/[0.08] bg-[#1a1612] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
             <!-- 顶部渐变线 -->
-            <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/60 to-transparent" />
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
             <!-- 标题 -->
-            <div class="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
               <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
                   <UIcon name="i-heroicons-share" class="w-4 h-4" />
                 </div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0]">{{ $t('share.title') }}</h3>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
               </div>
               <UButton
                 color="neutral"
                 variant="ghost"
-                class="text-[#e8e0d0]/40 hover:text-[#e8e0d0]/80 hover:bg-white/5"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
                 @click="shareDialogOpen = false"
               >
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
@@ -171,8 +171,8 @@
             <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
               <!-- 文案 -->
               <div>
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
-                <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3 text-sm text-[#e8e0d0]/80 leading-relaxed whitespace-pre-wrap">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
                   {{ shareData?.copyText }}
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
@@ -185,8 +185,8 @@
 
               <!-- 截图预览 -->
               <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
-                <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-2 overflow-hidden">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
                   <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
@@ -198,9 +198,9 @@
               </div>
 
               <!-- 截图失败提示 -->
-              <div v-else class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-6 text-center">
-                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[#e8e0d0]/20 mx-auto mb-2" />
-                <p class="text-xs text-[#e8e0d0]/40">{{ $t('share.screenshotFailed') }}</p>
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
                 <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
                   {{ shareData.screenshotError }}
                 </p>
@@ -208,8 +208,8 @@
             </div>
 
             <!-- 底部 -->
-            <div class="px-5 py-3 border-t border-white/[0.06] text-center">
-              <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('share.generatedBy') }}</p>
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
             </div>
           </div>
         </div>
@@ -223,7 +223,6 @@ import type { BaziChart, BaziAiResult } from '~/types/bazi'
 import type { DiZhi } from '~/types/user'
 const { t } = useI18n()
 const { locale } = useI18n()
-const { build: buildBaziAiPrompt } = useBaziPrompt()
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -324,46 +323,30 @@ async function startAiStream() {
     birthHour: formValues.value.birthHour,
   }
 
-  const { systemPrompt, userPrompt } = buildBaziAiPrompt(chart.value, profile, summary, locale.value)
-
   try {
-    const res = await fetch('/api/ai/stream', {
+    const result = await $fetch<BaziAiResult>('/api/bazi/interpret', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: userPrompt, systemPrompt }),
+      body: {
+        chart: chart.value,
+        profile,
+        summary,
+        locale: locale.value,
+      },
     })
 
-    if (!res.ok) {
-      let errMsg = `HTTP ${res.status}`
-      try {
-        const errData = await res.json()
-        errMsg = errData.message || errData.statusMessage || JSON.stringify(errData)
-      } catch { /* ignore */ }
-      throw new Error(errMsg)
+    aiResult.value = {
+      overview: result.overview ?? '',
+      personality: result.personality ?? { summary: '', detail: '', tags: [] },
+      career: result.career ?? { summary: '', detail: '', tags: [], wealthTrend: '' },
+      relationship: result.relationship ?? { summary: '', detail: '', tags: [], timing: '' },
+      health: result.health ?? { summary: '', detail: '', tags: [], seasons: '' },
+      dimensionScores: result.dimensionScores ?? {},
+      dayunScores: result.dayunScores ?? [],
+      historicalPredictions: result.historicalPredictions ?? [],
+      comprehensiveAdvice: result.comprehensiveAdvice ?? [],
     }
-
-    const data = await res.json()
-    // OpenAI 兼容格式：choices[0].message.content
-    const aiContent = data.choices?.[0]?.message?.content || data.content || ''
-
-    const parsed = extractJsonFromText(aiContent)
-    if (parsed) {
-      aiResult.value = {
-        overview: parsed.overview ?? '',
-        personality: parsed.personality ?? { summary: '', detail: '', tags: [] },
-        career: parsed.career ?? { summary: '', detail: '', tags: [], wealthTrend: '' },
-        relationship: parsed.relationship ?? { summary: '', detail: '', tags: [], timing: '' },
-        health: parsed.health ?? { summary: '', detail: '', tags: [], seasons: '' },
-        dimensionScores: parsed.dimensionScores ?? {},
-        dayunScores: parsed.dayunScores ?? [],
-        historicalPredictions: parsed.historicalPredictions ?? [],
-        comprehensiveAdvice: parsed.comprehensiveAdvice ?? [],
-      }
-    } else {
-      aiError.value = t('bazi.aiResponseFormatError')
-    }
-  } catch (e) {
-    aiError.value = e instanceof Error ? e.message : t('bazi.aiRequestFailed')
+  } catch (e: any) {
+    aiError.value = e?.data?.statusMessage || e?.message || t('bazi.aiRequestFailed')
   } finally {
     aiLoading.value = false
   }
@@ -424,15 +407,45 @@ function downloadShareImage() {
   toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
+const siteName = 'ososn'
+
 useSeoMeta({
-  title: t('seo.baziTitle'),
-  titleTemplate: '%s',
+  title: () => `${t('seo.baziTitle')} - ${siteName}`,
   description: t('seo.baziDesc'),
-  ogTitle: t('seo.baziOgTitle'),
+  keywords: t('seo.baziKeywords'),
+  ogTitle: () => `${t('seo.baziOgTitle')} - ${siteName}`,
   ogDescription: t('seo.baziOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
   ogUrl: 'https://www.ososn.com/tools/bazi',
   twitterCard: 'summary_large_image',
 })
+
+useHead(() => ({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${t('seo.baziTitle')} - ${siteName}`,
+        url: 'https://www.ososn.com/tools/bazi',
+        description: t('seo.baziDesc'),
+        mainEntity: {
+          '@type': 'SoftwareApplication',
+          name: t('home.toolBaziTitle'),
+          applicationCategory: 'LifestyleApplication',
+          operatingSystem: 'Any',
+          url: 'https://www.ososn.com/tools/bazi',
+          description: t('home.toolBaziDesc'),
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'CNY',
+          },
+        },
+      }),
+    },
+  ],
+}))
 </script>

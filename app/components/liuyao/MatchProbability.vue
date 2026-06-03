@@ -24,7 +24,7 @@
       >
         <span
           v-if="probability.home >= 10"
-          class="text-xs font-bold text-[#0f0c09] drop-shadow-sm"
+          class="text-xs font-bold text-[var(--surface-bg)] drop-shadow-sm"
         >
           {{ probability.home.toFixed(1) }}%
         </span>
@@ -36,7 +36,7 @@
       >
         <span
           v-if="probability.draw >= 10"
-          class="text-xs font-bold text-white/90 drop-shadow-sm"
+          class="text-xs font-bold text-[var(--surface-bg)] drop-shadow-sm"
         >
           {{ probability.draw.toFixed(1) }}%
         </span>
@@ -48,7 +48,7 @@
       >
         <span
           v-if="probability.away >= 10"
-          class="text-xs font-bold text-white/90 drop-shadow-sm"
+          class="text-xs font-bold text-[var(--surface-bg)] drop-shadow-sm"
         >
           {{ probability.away.toFixed(1) }}%
         </span>
@@ -59,18 +59,18 @@
     <div class="flex items-center justify-between text-[11px]">
       <div class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-sm" style="background-color: #c9a227" />
-        <span class="text-[#e8e0d0]/60">{{ homeLabel }}</span>
-        <span v-if="probability.home < 10" class="text-[#c9a227] font-semibold">{{ probability.home.toFixed(1) }}%</span>
+        <span class="text-[var(--text-muted)]">{{ homeLabel }}</span>
+        <span v-if="probability.home < 10" class="text-[var(--accent)] font-semibold">{{ probability.home.toFixed(1) }}%</span>
       </div>
       <div class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-sm" style="background-color: #6b7280" />
-        <span class="text-[#e8e0d0]/60">{{ $t('matchProbability.drawLabel') }}</span>
-        <span v-if="probability.draw < 10" class="text-[#e8e0d0]/70 font-semibold">{{ probability.draw.toFixed(1) }}%</span>
+        <span class="text-[var(--text-muted)]">{{ $t('matchProbability.drawLabel') }}</span>
+        <span v-if="probability.draw < 10" class="text-[var(--text-muted)] font-semibold">{{ probability.draw.toFixed(1) }}%</span>
       </div>
       <div class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-sm" style="background-color: #ef4444" />
-        <span class="text-[#e8e0d0]/60">{{ awayLabel }}</span>
-        <span v-if="probability.away < 10" class="text-[#ef4444] font-semibold">{{ probability.away.toFixed(1) }}%</span>
+        <span class="text-[var(--text-muted)]">{{ awayLabel }}</span>
+        <span v-if="probability.away < 10" class="text-red-500 font-semibold">{{ probability.away.toFixed(1) }}%</span>
       </div>
     </div>
   </div>

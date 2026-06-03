@@ -45,3 +45,9 @@ app/hardcoded-chinese-ui-strings.md
 
 # Liu-yao engine skill payload (rsynced separately by scripts/deploy.sh)
 liuyao-three-coin-physical-core-SKILL-contract-v2.md
+
+# Qimen engine (rsynced separately by scripts/deploy.sh)
+qimen-engine.py
+
+# Pre-generated World Cup prediction markdown files
+content/worldcup-predictions/

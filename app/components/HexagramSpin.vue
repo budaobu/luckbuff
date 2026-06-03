@@ -6,32 +6,32 @@
     >
       <!-- 背景光晕 -->
       <div
-        class="absolute rounded-full bg-[#c9a227]/[0.04]"
+        class="absolute rounded-full bg-[var(--accent-faint)]"
         :style="{ width: glowSize, height: glowSize, filter: 'blur(24px)' }"
       />
 
       <!-- 最外层虚线装饰环（极慢速旋转） -->
       <div
-        class="absolute rounded-full border border-dashed border-[#c9a227]/10 outer-dashed-ring"
+        class="absolute rounded-full border border-dashed border-[var(--accent-faint)] outer-dashed-ring"
         :style="{ width: outerSize, height: outerSize }"
       />
 
       <!-- 外层实线环（慢速反向旋转） -->
       <div
-        class="absolute rounded-full border border-[#c9a227]/15 outer-solid-ring"
+        class="absolute rounded-full border border-[var(--accent-faint)] outer-solid-ring"
         :style="{ width: solidRingSize, height: solidRingSize }"
       />
 
       <!-- 八卦主旋转环 -->
       <div
-        class="absolute rounded-full border border-[#c9a227]/20 bagua-ring"
+        class="absolute rounded-full border border-[var(--accent-border)] bagua-ring"
         :style="{ width: baguaRingSize, height: baguaRingSize }"
       >
         <!-- 8 个方位小圆点装饰 -->
         <div
           v-for="i in 8"
           :key="`dot-${i}`"
-          class="absolute w-1 h-1 rounded-full bg-[#c9a227]/30"
+          class="absolute w-1 h-1 rounded-full bg-[var(--accent-faint)]"
           :style="{
             left: `calc(50% + ${Math.cos((i * 45 - 90) * Math.PI / 180) * 50}% - 2px)`,
             top: `calc(50% + ${Math.sin((i * 45 - 90) * Math.PI / 180) * 50}% - 2px)`,
@@ -51,11 +51,11 @@
           }"
         >
           <span
-            class="font-bold text-[#c9a227] leading-none"
+            class="font-bold text-[var(--accent)] leading-none"
             :style="{ fontSize: symbolFontSize }"
           >{{ gua.symbol }}</span>
           <span
-            class="text-[#e8e0d0]/50 leading-none mt-0.5"
+            class="text-[var(--text-muted)] leading-none mt-0.5"
             :style="{ fontSize: nameFontSize }"
           >{{ gua.name }}</span>
         </div>
@@ -63,14 +63,14 @@
 
       <!-- 内圈细环 -->
       <div
-        class="absolute rounded-full border border-[#c9a227]/8 inner-ring"
+        class="absolute rounded-full border border-[var(--accent-faint)] inner-ring"
         :style="{ width: innerRingSize, height: innerRingSize }"
       />
 
       <!-- 中心太极圆盘 -->
       <div
         class="absolute rounded-full flex items-center justify-center center-glow"
-        :class="isTiny ? 'border border-[#c9a227]/20' : 'border-2 border-[#c9a227]/25'"
+        :class="isTiny ? 'border border-[var(--accent-border)]' : 'border-2 border-[var(--accent-border)]'"
         :style="{
           width: centerSize,
           height: centerSize,
@@ -90,7 +90,7 @@
           <circle cx="50" cy="74" r="6" fill="#c9a227" opacity="0.5" />
         </svg>
         <span
-          class="relative z-10 text-[#c9a227] font-bold"
+          class="relative z-10 text-[var(--accent)] font-bold"
           :style="{ fontSize: centerFontSize }"
         >易</span>
       </div>
@@ -98,7 +98,7 @@
 
     <p
       v-if="label"
-      class="text-[#c9a227]/80 tracking-wider font-medium"
+      class="text-[var(--accent)] tracking-wider font-medium"
       :class="isTiny ? 'mt-2 text-xs' : 'mt-5 text-sm'"
     >
       {{ label }}

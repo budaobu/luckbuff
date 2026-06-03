@@ -2,7 +2,7 @@
   <div class="space-y-5">
     <!-- 档案快选区 -->
     <div v-if="profiles.length > 0" class="space-y-2">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('baziForm.selectProfile') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('baziForm.selectProfile') }}</label>
       <div class="flex flex-wrap gap-2">
         <button
           v-for="profile in profiles"
@@ -10,8 +10,8 @@
           type="button"
           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all duration-200"
           :class="selectedProfileId === profile.id
-            ? 'border-[#c9a227]/40 bg-[#c9a227]/10 text-[#c9a227]'
-            : 'border-white/8 bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/15 hover:text-[#e8e0d0]/70'"
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)] hover:text-[var(--text-muted)]'"
           @click="selectProfile(profile)"
         >
           <UIcon name="i-heroicons-user" class="w-3 h-3" />
@@ -20,25 +20,25 @@
         </button>
       </div>
     </div>
-    <div v-else class="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
-      <p class="text-sm text-[#e8e0d0]/40">
-        {{ $t('baziForm.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[#c9a227] hover:underline">{{ $t('baziForm.goSettings') }}</NuxtLink>{{ $t('baziForm.createSuffix') }}
+    <div v-else class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+      <p class="text-sm text-[var(--text-faint)]">
+        {{ $t('baziForm.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[var(--accent)] hover:underline">{{ $t('baziForm.goSettings') }}</NuxtLink>{{ $t('baziForm.createSuffix') }}
       </p>
     </div>
 
     <!-- 性别 -->
     <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.gender') }}
-        <span class="text-[#c9a227]">*</span>
+        <span class="text-[var(--accent)]">*</span>
       </label>
       <div class="flex gap-2">
         <button
           type="button"
           class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-200"
           :class="form.gender === 'male'
-            ? 'border-[#c9a227]/40 bg-[#c9a227]/10 text-[#c9a227]'
-            : 'border-white/8 bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/15 hover:text-[#e8e0d0]/70'"
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)] hover:text-[var(--text-muted)]'"
           @click="form.gender = 'male'"
         >
           <UIcon name="i-heroicons-user" class="w-4 h-4" />
@@ -48,8 +48,8 @@
           type="button"
           class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border text-sm font-medium transition-all duration-200"
           :class="form.gender === 'female'
-            ? 'border-[#c9a227]/40 bg-[#c9a227]/10 text-[#c9a227]'
-            : 'border-white/8 bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/15 hover:text-[#e8e0d0]/70'"
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)] hover:text-[var(--text-muted)]'"
           @click="form.gender = 'female'"
         >
           <UIcon name="i-heroicons-user" class="w-4 h-4" />
@@ -60,18 +60,18 @@
 
     <!-- 阳历生日 -->
     <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.birthDate') }}
-        <span class="text-[#c9a227]">*</span>
+        <span class="text-[var(--accent)]">*</span>
       </label>
       <UPopover>
         <UButton
           color="neutral"
           variant="outline"
-          class="w-full justify-start bg-white/[0.03] border-white/8 text-[#f5e6c0] hover:bg-white/[0.05] hover:border-white/15"
-          :class="{ 'text-[#e8e0d0]/25': !form.birthDate }"
+          class="w-full justify-start bg-[var(--surface-input)] border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] hover:border-[var(--border-medium)]"
+          :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
         >
-          <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[#e8e0d0]/40" />
+          <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
           {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
@@ -82,7 +82,7 @@
           />
         </template>
       </UPopover>
-      <p v-if="birthGanZhi" class="text-xs text-[#c9a227]/80 flex items-center gap-1">
+      <p v-if="birthGanZhi" class="text-xs text-[var(--accent)] flex items-center gap-1">
         <UIcon name="i-heroicons-sparkles" class="w-3 h-3" />
         {{ birthGanZhi }}
       </p>
@@ -90,7 +90,7 @@
 
     <!-- 出生时辰 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthHour') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthHour') }}</label>
       <USelect
         v-model="form.birthHour"
         :items="hourOptions"
@@ -98,45 +98,45 @@
         color="warning"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0]',
-          placeholder: 'text-[#e8e0d0]/25',
-          content: 'bg-[#1a1612] border border-white/8 rounded-xl shadow-2xl',
-          item: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[state=checked]:bg-[#c9a227]/10 data-[state=checked]:text-[#c9a227]',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+          placeholder: 'text-[var(--text-placeholder)]',
+          content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+          item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
         }"
       />
     </div>
 
     <!-- 姓名 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.name') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.name') }}</label>
       <UInput
         v-model="form.name"
         :placeholder="$t('profileForm.namePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
         }"
       />
     </div>
 
     <!-- 曾用名 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.formerName') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.formerName') }}</label>
       <UInput
         v-model="form.formerName"
         :placeholder="$t('profileForm.formerNamePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
         }"
       />
     </div>
 
     <!-- 改名年份 -->
     <div v-if="form.formerName" class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.changedYear') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.changedYear') }}</label>
       <UInput
         v-model.number="form.formerNameChangedYear"
         type="number"
@@ -144,21 +144,21 @@
         color="warning"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
         }"
       />
     </div>
 
     <!-- 出生地点 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('profileForm.birthProvince') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
       <UInput
         v-model="form.birthProvince"
         :placeholder="$t('profileForm.birthProvincePlaceholder')"
         color="warning"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
         }"
       />
     </div>
@@ -169,7 +169,7 @@
         color="neutral"
         variant="ghost"
         size="sm"
-        class="text-[#e8e0d0]/40 hover:text-[#c9a227] hover:bg-[#c9a227]/5"
+        class="text-[var(--text-faint)] hover:text-[var(--accent)] hover:bg-[var(--accent-faint)]"
         @click="saveToProfile"
       >
         <template #leading>

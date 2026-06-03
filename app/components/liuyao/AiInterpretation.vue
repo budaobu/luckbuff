@@ -3,26 +3,26 @@
     <!-- 标题区 -->
     <div class="flex items-center gap-3">
       <div
-        class="w-10 h-10 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]"
+        class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]"
       >
         <UIcon name="i-heroicons-trophy" class="w-5 h-5" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">{{ $t('liuyao.aiTitle') }}</h3>
-        <p class="text-[11px] text-[#e8e0d0]/30 mt-0.5">{{ $t('liuyao.aiSubtitle') }}</p>
+        <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('liuyao.aiTitle') }}</h3>
+        <p class="text-[11px] text-[var(--text-placeholder)] mt-0.5">{{ $t('liuyao.aiSubtitle') }}</p>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">{{ $t('liuyao.calculating') }}</span>
+        <span class="text-xs text-[var(--accent-muted)]">{{ $t('liuyao.calculating') }}</span>
         <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
         </span>
       </div>
     </div>
 
     <!-- 胜率卡片 —— 始终在最上方 -->
-    <div v-if="parsedProbability" class="rounded-xl border border-[#c9a227]/15 bg-[#c9a227]/[0.03] p-4">
-      <p class="text-[11px] text-[#c9a227]/50 mb-2.5 tracking-wide">{{ $t('matchProbability.winRate') }}</p>
+    <div v-if="parsedProbability" class="rounded-xl border border-[var(--accent-faint)] bg-[var(--accent-faint)] p-4">
+      <p class="text-[11px] text-[var(--accent-muted)] mb-2.5 tracking-wide">{{ $t('matchProbability.winRate') }}</p>
       <LiuyaoMatchProbability
         :probability="parsedProbability"
         :home-label="homeLabel"
@@ -35,7 +35,7 @@
       <div
         v-for="(section, idx) in parsedSections"
         :key="idx"
-        class="rounded-xl border bg-white/[0.015] p-4 transition-all duration-300"
+        class="rounded-xl border bg-[var(--surface-card)] p-4 transition-all duration-300"
         :class="sectionClass(section)"
       >
         <!-- 段落标题 -->
@@ -50,7 +50,7 @@
           </h4>
         </div>
         <!-- 段落内容 -->
-        <p class="text-[13px] text-[#e8e0d0]/65 leading-relaxed">
+        <p class="text-[13px] text-[var(--text-body)]/65 leading-relaxed">
           {{ section.content }}
         </p>
       </div>
@@ -59,9 +59,9 @@
     <!-- 流式输出中的纯文本（尚未解析为段落的临时展示） -->
     <div
       v-if="streaming && rawAnalysisText && !parsedSections.length"
-      class="rounded-xl border border-white/[0.06] bg-white/[0.015] p-4"
+      class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4"
     >
-      <p class="text-[13px] text-[#e8e0d0]/65 leading-relaxed whitespace-pre-wrap">{{ rawAnalysisText }}</p>
+      <p class="text-[13px] text-[var(--text-body)]/65 leading-relaxed whitespace-pre-wrap">{{ rawAnalysisText }}</p>
     </div>
 
     <!-- 加载中 -->
@@ -77,10 +77,6 @@
       </div>
     </div>
 
-    <!-- 免责声明 -->
-    <p v-if="parsedProbability && !streaming" class="text-[10px] text-[#e8e0d0]/20 text-center">
-      {{ $t('liuyao.disclaimer') }}
-    </p>
   </div>
 </template>
 
@@ -206,30 +202,30 @@ const parsedSections = computed<Section[]>(() => {
 // ===== 段落样式映射 =====
 const SECTION_STYLES: Record<string, { icon: string; iconColor: string; titleColor: string; border: string }> = {
   // 中文标题
-  '综合判断': { icon: 'i-heroicons-scale', iconColor: 'text-[#c9a227]', titleColor: 'text-[#c9a227]', border: 'border-[#c9a227]/15' },
-  '世应分析': { icon: 'i-heroicons-users', iconColor: 'text-amber-400/80', titleColor: 'text-[#f5e6c0]', border: 'border-amber-400/10' },
-  '世应旺衰': { icon: 'i-heroicons-arrow-trending-up', iconColor: 'text-amber-400/80', titleColor: 'text-[#f5e6c0]', border: 'border-amber-400/10' },
-  '动爻分析': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[#f5e6c0]/80', border: 'border-orange-400/10' },
-  '动爻生克': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[#f5e6c0]/80', border: 'border-orange-400/10' },
-  '官鬼分析': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-red-400/10' },
-  '官鬼爻': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-red-400/10' },
-  '时间参与': { icon: 'i-heroicons-clock', iconColor: 'text-sky-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-sky-400/10' },
-  '月建日辰': { icon: 'i-heroicons-calendar', iconColor: 'text-sky-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-sky-400/10' },
-  '卦象意象': { icon: 'i-heroicons-sparkles', iconColor: 'text-violet-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-violet-400/10' },
-  '本卦解读': { icon: 'i-heroicons-book-open', iconColor: 'text-emerald-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-emerald-400/10' },
-  '结论': { icon: 'i-heroicons-flag', iconColor: 'text-[#c9a227]', titleColor: 'text-[#c9a227]', border: 'border-[#c9a227]/15' },
-  '最终结论': { icon: 'i-heroicons-flag', iconColor: 'text-[#c9a227]', titleColor: 'text-[#c9a227]', border: 'border-[#c9a227]/15' },
+  '综合判断': { icon: 'i-heroicons-scale', iconColor: 'text-[var(--accent)]', titleColor: 'text-[var(--accent)]', border: 'border-[var(--accent-faint)]' },
+  '世应分析': { icon: 'i-heroicons-users', iconColor: 'text-amber-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-amber-400/10' },
+  '世应旺衰': { icon: 'i-heroicons-arrow-trending-up', iconColor: 'text-amber-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-amber-400/10' },
+  '动爻分析': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-orange-400/10' },
+  '动爻生克': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-orange-400/10' },
+  '官鬼分析': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-red-400/10' },
+  '官鬼爻': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-red-400/10' },
+  '时间参与': { icon: 'i-heroicons-clock', iconColor: 'text-sky-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-sky-400/10' },
+  '月建日辰': { icon: 'i-heroicons-calendar', iconColor: 'text-sky-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-sky-400/10' },
+  '卦象意象': { icon: 'i-heroicons-sparkles', iconColor: 'text-violet-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-violet-400/10' },
+  '本卦解读': { icon: 'i-heroicons-book-open', iconColor: 'text-emerald-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-emerald-400/10' },
+  '结论': { icon: 'i-heroicons-flag', iconColor: 'text-[var(--accent)]', titleColor: 'text-[var(--accent)]', border: 'border-[var(--accent-faint)]' },
+  '最终结论': { icon: 'i-heroicons-flag', iconColor: 'text-[var(--accent)]', titleColor: 'text-[var(--accent)]', border: 'border-[var(--accent-faint)]' },
   // 英文标题（AI 输出英文时使用）
-  'Self-Response Strength': { icon: 'i-heroicons-arrow-trending-up', iconColor: 'text-amber-400/80', titleColor: 'text-[#f5e6c0]', border: 'border-amber-400/10' },
-  'Moving Line Interactions': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[#f5e6c0]/80', border: 'border-orange-400/10' },
-  'Moving lines and mutual control': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[#f5e6c0]/80', border: 'border-orange-400/10' },
-  'Official-Ghost Direction': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-red-400/10' },
-  'Officer (Guān-Guǐ)': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[#f5e6c0]/80', border: 'border-red-400/10' },
-  'Synthesis': { icon: 'i-heroicons-scale', iconColor: 'text-[#c9a227]', titleColor: 'text-[#c9a227]', border: 'border-[#c9a227]/15' },
-  'Conclusion': { icon: 'i-heroicons-flag', iconColor: 'text-[#c9a227]', titleColor: 'text-[#c9a227]', border: 'border-[#c9a227]/15' },
+  'Self-Response Strength': { icon: 'i-heroicons-arrow-trending-up', iconColor: 'text-amber-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-amber-400/10' },
+  'Moving Line Interactions': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-orange-400/10' },
+  'Moving lines and mutual control': { icon: 'i-heroicons-bolt', iconColor: 'text-orange-400/80', titleColor: 'text-[var(--text-primary)]', border: 'border-orange-400/10' },
+  'Official-Ghost Direction': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-red-400/10' },
+  'Officer (Guān-Guǐ)': { icon: 'i-heroicons-fire', iconColor: 'text-red-400/70', titleColor: 'text-[var(--text-primary)]', border: 'border-red-400/10' },
+  'Synthesis': { icon: 'i-heroicons-scale', iconColor: 'text-[var(--accent)]', titleColor: 'text-[var(--accent)]', border: 'border-[var(--accent-faint)]' },
+  'Conclusion': { icon: 'i-heroicons-flag', iconColor: 'text-[var(--accent)]', titleColor: 'text-[var(--accent)]', border: 'border-[var(--accent-faint)]' },
 }
 
-const DEFAULT_STYLE = { icon: 'i-heroicons-document-text', iconColor: 'text-[#e8e0d0]/40', titleColor: 'text-[#e8e0d0]/60', border: 'border-white/[0.06]' }
+const DEFAULT_STYLE = { icon: 'i-heroicons-document-text', iconColor: 'text-[var(--text-faint)]', titleColor: 'text-[var(--text-muted)]', border: 'border-[var(--border-light)]' }
 
 function getStyle(title: string) {
   // 模糊匹配：标题包含关键词

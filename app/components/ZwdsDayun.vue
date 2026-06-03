@@ -3,7 +3,7 @@
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-[#e8e0d0]/50 border-b border-white/10">
+          <tr class="text-[var(--text-muted)] border-b border-[var(--border-light)]">
             <th class="text-left py-2 px-2">{{ $t('zwds.stepNumber') }}</th>
             <th class="py-2 px-2">{{ $t('zwds.gongWei') }}</th>
             <th class="py-2 px-2">{{ $t('zwds.age') }}</th>
@@ -14,17 +14,17 @@
           <tr
             v-for="dx in daXians"
             :key="dx.index"
-            class="border-b border-white/5 transition-colors"
-            :class="isCurrent(dx) ? 'bg-[#c9a227]/10' : 'hover:bg-white/[0.02]'"
+            class="border-b border-[var(--border-subtle)] transition-colors"
+            :class="isCurrent(dx) ? 'bg-[var(--accent-bg)]' : 'hover:bg-[var(--surface-card)]'"
           >
-            <td class="py-2 px-2 text-[#e8e0d0]/60">{{ dx.index }}</td>
+            <td class="py-2 px-2 text-[var(--text-muted)]">{{ dx.index }}</td>
             <td class="py-2 px-2">
-              <span :class="isCurrent(dx) ? 'text-[#c9a227] font-medium' : 'text-[#e8e0d0]'">
+              <span :class="isCurrent(dx) ? 'text-[var(--accent)] font-medium' : 'text-[var(--text-body)]'">
                 {{ dx.gongName }}（{{ dx.gongZhi }}）
               </span>
             </td>
             <td class="py-2 px-2">{{ dx.ageRange[0] }}-{{ dx.ageRange[1] }}{{ $t('zwds.ageSuffix') }}</td>
-            <td class="py-2 px-2 text-[#e8e0d0]/70">
+            <td class="py-2 px-2 text-[var(--text-muted)]">
               {{ dx.mainStars.join($t('zwds.starJoin')) || $t('zwds.borrowPalace') }}
             </td>
           </tr>

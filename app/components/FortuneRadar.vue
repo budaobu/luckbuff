@@ -1,15 +1,15 @@
 <template>
-  <div class="relative rounded-2xl bg-white/[0.03] backdrop-blur-sm overflow-hidden">
-    <div class="h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/40 to-transparent" />
+  <div class="relative rounded-2xl bg-[var(--surface-input)] backdrop-blur-sm overflow-hidden">
+    <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-purple-border)] to-transparent" />
     <div class="relative z-10 p-6">
       <!-- 标题 -->
       <div class="flex items-center gap-3 mb-5">
-        <div class="w-10 h-10 rounded-xl bg-[#8b5cf6]/10 border border-[#8b5cf6]/20 flex items-center justify-center text-[#8b5cf6]">
+        <div class="w-10 h-10 rounded-xl bg-[var(--accent-purple-faint)] border border-[var(--accent-purple-border)] flex items-center justify-center text-[var(--accent-purple-text)]">
           <UIcon name="i-heroicons-chart-pie" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('fortuneRadar.title') }}</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('fortuneRadar.subtitle') }}</p>
+          <h3 class="text-sm font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('fortuneRadar.title') }}</h3>
+          <p class="text-[11px] text-[var(--text-faint)] mt-0.5">{{ $t('fortuneRadar.subtitle') }}</p>
         </div>
       </div>
 
@@ -29,7 +29,7 @@
           <div
             v-for="(label, idx) in labels"
             :key="label"
-            class="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5 transition-colors hover:bg-white/[0.04]"
+            class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3.5 py-2.5 transition-colors hover:bg-[var(--surface-card-hover)]"
           >
             <div class="flex items-center gap-2.5 mb-1">
               <!-- 维度颜色点 -->
@@ -38,9 +38,9 @@
                 :style="{ background: colors[idx] }"
               />
               <!-- 维度名 -->
-              <span class="text-xs text-[#e8e0d0]/60 w-12 shrink-0">{{ label }}</span>
+              <span class="text-xs text-[var(--text-muted)] w-12 shrink-0">{{ label }}</span>
               <!-- 进度条 -->
-              <div class="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+              <div class="flex-1 h-1.5 rounded-full bg-[var(--border-light)] overflow-hidden">
                 <div
                   class="h-full rounded-full transition-all duration-700 ease-out"
                   :style="{ width: `${props.scores[label] ?? 50}%`, background: colors[idx] }"
@@ -54,20 +54,20 @@
                 {{ props.scores[label] ?? 50 }}
               </span>
               <!-- 评级 -->
-              <span class="text-[10px] px-1.5 py-0.5 rounded text-[#e8e0d0]/40 bg-white/[0.04] shrink-0">
+              <span class="text-[10px] px-1.5 py-0.5 rounded text-[var(--text-faint)] bg-[var(--surface-card-hover)] shrink-0">
                 {{ getLevel(props.scores[label] ?? 50) }}
               </span>
             </div>
             <!-- 维度解读 -->
-            <p class="text-xs text-[#e8e0d0]/50 leading-relaxed pl-4.5">
+            <p class="text-xs text-[var(--text-muted)] leading-relaxed pl-4.5">
               {{ getTip(label, props.scores[label] ?? 50) }}
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="absolute inset-0 rounded-2xl border border-white/[0.06] pointer-events-none" />
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/10 to-transparent" />
+    <div class="absolute inset-0 rounded-2xl border border-[var(--border-light)] pointer-events-none" />
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-purple-faint)] to-transparent" />
   </div>
 </template>
 

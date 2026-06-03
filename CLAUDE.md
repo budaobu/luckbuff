@@ -36,6 +36,23 @@ Target host and key are overridable via `LUCKBUFF_DEPLOY_HOST` and
   `/dev/stdin`. The stdin path races with `child.stdin.end()` on Linux and
   fails with `ENXIO`.
 
+## Vedic chart microservice
+
+- Code lives in `vedic-service/` (own venv, own PM2 process at
+  `127.0.0.1:8765`). Pinned to `pyswisseph` because Swiss Ephemeris has no
+  JS equivalent — bundle is C-extension, must run in Python.
+- Nuxt server API at `server/api/vedic/{chart,analyze}.post.ts` reads
+  `process.env.VEDIC_SERVICE_URL` (default `http://127.0.0.1:8765`) — set in
+  PM2 `env` block of `ecosystem.config.cjs`.
+- `scripts/deploy.sh` rsyncs `vedic-service/` (without `.venv/`/`.ephe/`) to
+  `/opt/vedic-service`, then runs `pip install -r requirements.txt` and warms
+  up Swiss Ephemeris `.se1` download to `/opt/ephe`. Without warmup the first
+  prod request stalls 30s+ pulling the ephemeris from ftp.astro.com.
+- SSE flow: `analyze.post.ts` writes `data: {"type":"chart",...}` first, then
+  parses the upstream OpenAI-compatible stream and re-emits each delta as
+  `{"type":"text",...}`. Sets `X-Accel-Buffering: no` so Nginx does not
+  buffer the stream — production Nginx already has `proxy_buffering off`.
+
 ## Production env vars
 
 Server `.env` lives at `/home/deploy/envs/luckbuff.env` and is sourced into

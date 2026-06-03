@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-5">
     <!-- 投掷按钮区 -->
-    <div class="rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm p-6">
+    <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-6">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0]">{{ $t('tossWorkbench.title') }}</h3>
-          <p class="text-[11px] text-[#e8e0d0]/30 mt-0.5">
+          <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('tossWorkbench.title') }}</h3>
+          <p class="text-[11px] text-[var(--text-placeholder)] mt-0.5">
             {{ completed ? $t('tossWorkbench.tossComplete') : $t('tossWorkbench.tossProgress', { n: currentToss }) }}
           </p>
         </div>
@@ -14,7 +14,7 @@
             v-for="i in 6"
             :key="i"
             class="w-2 h-2 rounded-full transition-all duration-300"
-            :class="i <= currentToss - 1 ? 'bg-[#c9a227]' : 'bg-white/10'"
+            :class="i <= currentToss - 1 ? 'bg-[var(--accent)]' : 'bg-[var(--surface-card-hover)]'"
           />
         </div>
       </div>
@@ -56,7 +56,7 @@
       <div v-if="tossRecords.length > 0 && !tossing" class="flex justify-center mt-3">
         <button
           type="button"
-          class="text-[11px] text-[#e8e0d0]/30 hover:text-red-400 transition-colors"
+          class="text-[11px] text-[var(--text-placeholder)] hover:text-red-400 transition-colors"
           @click="reset"
         >
           {{ $t('tossWorkbench.resetBtn') }}
@@ -67,8 +67,8 @@
     <!-- 爻象展示区 —— 自下而上堆叠 -->
     <div v-if="tossRecords.length > 0" class="space-y-1">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-[11px] text-[#e8e0d0]/30">{{ $t('tossWorkbench.recordLabel') }}</span>
-        <span class="text-[10px] text-[#e8e0d0]/20">{{ $t('tossWorkbench.recordHint') }}</span>
+        <span class="text-[11px] text-[var(--text-placeholder)]">{{ $t('tossWorkbench.recordLabel') }}</span>
+        <span class="text-[10px] text-[var(--text-placeholder)]">{{ $t('tossWorkbench.recordHint') }}</span>
       </div>
 
       <div class="space-y-1.5">
@@ -80,8 +80,8 @@
         >
           <!-- 爻位标签 -->
           <div class="shrink-0 w-12 text-center">
-            <span class="text-[10px] text-[#e8e0d0]/40 block">{{ $t('tossWorkbench.tossLabel', { n: record.tossIndex }) }}</span>
-            <span class="text-xs font-medium" :class="record.isMoving ? 'text-[#c9a227]' : 'text-[#e8e0d0]/60'">
+            <span class="text-[10px] text-[var(--text-faint)] block">{{ $t('tossWorkbench.tossLabel', { n: record.tossIndex }) }}</span>
+            <span class="text-xs font-medium" :class="record.isMoving ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">
               {{ record.label }}
             </span>
           </div>
@@ -97,17 +97,17 @@
                 <LiuyaoCopperCoin :is-back="coin.isBack" :size="40" />
                 <span
                   class="text-[9px] leading-none"
-                  :class="coin.isBack ? 'text-[#c9a227]/60' : 'text-[#e8e0d0]/25'"
+                  :class="coin.isBack ? 'text-[var(--accent-muted)]' : 'text-[var(--text-placeholder)]'"
                 >
                   {{ coin.isBack ? '3' : '2' }}
                 </span>
               </div>
               <!-- 等号与爻值 -->
               <div class="flex flex-col items-center ml-2">
-                <span class="text-[#e8e0d0]/20 text-xs leading-none">=</span>
+                <span class="text-[var(--text-placeholder)] text-xs leading-none">=</span>
                 <span
                   class="text-sm font-bold mt-1"
-                  :class="record.isMoving ? 'text-[#c9a227]' : 'text-[#e8e0d0]/50'"
+                  :class="record.isMoving ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'"
                 >
                   {{ record.value }}
                 </span>
@@ -117,7 +117,7 @@
 
           <!-- 动爻标记 -->
           <div class="shrink-0 w-10 text-center">
-            <span v-if="record.isMoving" class="text-[10px] text-[#c9a227]/60">
+            <span v-if="record.isMoving" class="text-[10px] text-[var(--accent-muted)]">
               {{ record.value === 6 ? $t('tossWorkbench.yinOld') : $t('tossWorkbench.yangOld') }}
             </span>
           </div>
@@ -172,7 +172,7 @@ const displayLines = computed((): TossRecord[] => {
 })
 
 function lineCardClass(record: TossRecord): string {
-  const base = 'bg-white/[0.02] border-white/[0.06]'
+  const base = 'bg-[var(--surface-card)] border-[var(--border-light)]'
   if (record.isMoving) {
     return `${base} border-l-2 border-l-[#c9a227]/40`
   }

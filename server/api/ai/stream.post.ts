@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const config = useRuntimeConfig()
 
-  const isOpenAiFormat = config.aiProvider === 'openai' || config.aiProvider === 'newapi'
+  const isOpenAiFormat = config.aiProvider === 'openai' || config.aiProvider === 'newapi' || config.aiProvider === 'gptniux'
 
   const isGpt5 = config.aiModel?.startsWith('gpt-5')
   let maxTokens = Number(config.aiMaxTokens) || 81920

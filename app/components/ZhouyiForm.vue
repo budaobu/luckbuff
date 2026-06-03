@@ -2,9 +2,9 @@
   <div class="space-y-5">
     <!-- 起卦方式选择 -->
     <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('zhouyiForm.method') }}
-        <span class="text-[#c9a227]">*</span>
+        <span class="text-[var(--accent)]">*</span>
       </label>
       <div class="grid grid-cols-3 gap-2">
         <button
@@ -13,8 +13,8 @@
           type="button"
           class="flex items-center justify-center gap-1.5 py-2.5 rounded-lg border text-xs font-medium transition-all duration-200"
           :class="method === m.key
-            ? 'border-[#c9a227]/40 bg-[#c9a227]/10 text-[#c9a227]'
-            : 'border-white/8 bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/15 hover:text-[#e8e0d0]/70'"
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)] hover:text-[var(--text-muted)]'"
           @click="method = m.key"
         >
           <UIcon :name="m.icon" class="w-3.5 h-3.5" />
@@ -25,58 +25,15 @@
 
     <!-- ========== 时间起卦 ========== -->
     <template v-if="method === 'time'">
-      <!-- 起卦日期 -->
-      <div class="space-y-1.5">
-        <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-          {{ $t('zhouyiForm.date') }}
-          <span class="text-[#c9a227]">*</span>
-        </label>
-        <UPopover>
-          <UButton
-            color="neutral"
-            variant="outline"
-            class="w-full justify-start bg-white/[0.03] border-white/8 text-[#f5e6c0] hover:bg-white/[0.05] hover:border-white/15"
-            :class="{ 'text-[#e8e0d0]/25': !timeForm.date }"
-          >
-            <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[#e8e0d0]/40" />
-            {{ timeForm.date && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('zhouyiForm.datePlaceholder') }}
-          </UButton>
-          <template #content>
-            <AppCalendar
-              v-model="calendarDate"
-              color="warning"
-              class="p-2"
-            />
-          </template>
-        </UPopover>
-        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.lunarNote') }}</p>
-      </div>
-
-      <!-- 起卦时辰 -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('zhouyiForm.hourLabel') }}</label>
-        <USelect
-          v-model="timeForm.hour"
-          :items="hourOptions"
-          :placeholder="$t('zhouyiForm.hourPlaceholder')"
-          color="warning"
-          class="w-full"
-          :ui="{
-            base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0]',
-            placeholder: 'text-[#e8e0d0]/25',
-            content: 'bg-[#1a1612] border border-white/8 rounded-xl shadow-2xl',
-            item: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[state=checked]:bg-[#c9a227]/10 data-[state=checked]:text-[#c9a227]',
-          }"
-        />
-      </div>
+      <DivinationTimeCard ref="timeCardRef" />
     </template>
 
     <!-- ========== 数字起卦 ========== -->
     <template v-if="method === 'numbers'">
       <div class="space-y-1.5">
-        <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+        <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
           {{ $t('zhouyiForm.firstNumber') }}
-          <span class="text-[#c9a227]">*</span>
+          <span class="text-[var(--accent)]">*</span>
         </label>
         <UInput
           v-model.number="numbersForm.num1"
@@ -84,15 +41,15 @@
           :placeholder="$t('zhouyiForm.firstNumberPlaceholder')"
           color="warning"
           class="w-full"
-          :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
+          :ui="{ base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.upperGuaHint') }}</p>
+        <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('zhouyiForm.upperGuaHint') }}</p>
       </div>
 
       <div class="space-y-1.5">
-        <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+        <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
           {{ $t('zhouyiForm.secondNumber') }}
-          <span class="text-[#c9a227]">*</span>
+          <span class="text-[var(--accent)]">*</span>
         </label>
         <UInput
           v-model.number="numbersForm.num2"
@@ -100,31 +57,31 @@
           :placeholder="$t('zhouyiForm.secondNumberPlaceholder')"
           color="warning"
           class="w-full"
-          :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
+          :ui="{ base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.lowerGuaHint') }}</p>
+        <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('zhouyiForm.lowerGuaHint') }}</p>
       </div>
 
       <div class="space-y-1.5">
-        <label class="text-xs font-medium text-[#e8e0d0]/60">{{ $t('zhouyiForm.thirdNumber') }}</label>
+        <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('zhouyiForm.thirdNumber') }}</label>
         <UInput
           v-model.number="numbersForm.num3"
           type="number"
           :placeholder="$t('zhouyiForm.thirdNumberPlaceholder')"
           color="warning"
           class="w-full"
-          :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
+          :ui="{ base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.dongYaoHint') }}</p>
+        <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('zhouyiForm.dongYaoHint') }}</p>
       </div>
     </template>
 
     <!-- ========== 测字起卦 ========== -->
     <template v-if="method === 'character'">
       <div class="space-y-1.5">
-        <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+        <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
           {{ $t('zhouyiForm.charLabel') }}
-          <span class="text-[#c9a227]">*</span>
+          <span class="text-[var(--accent)]">*</span>
         </label>
         <UInput
           v-model="charForm.char"
@@ -132,9 +89,9 @@
           color="warning"
           class="w-full"
           maxlength="2"
-          :ui="{ base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25' }"
+          :ui="{ base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]' }"
         />
-        <p class="text-[10px] text-[#e8e0d0]/30">
+        <p class="text-[10px] text-[var(--text-placeholder)]">
           {{ $t('zhouyiForm.charHint') }}
         </p>
       </div>
@@ -142,9 +99,9 @@
 
     <!-- 具体问题 -->
     <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
+      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('zhouyiForm.queryLabel') }}
-        <span class="text-[#c9a227]">*</span>
+        <span class="text-[var(--accent)]">*</span>
       </label>
       <UTextarea
         v-model="query"
@@ -153,10 +110,10 @@
         :rows="3"
         class="w-full"
         :ui="{
-          base: 'w-full bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0] placeholder:text-[#e8e0d0]/25',
+          base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
         }"
       />
-      <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('zhouyiForm.queryHint') }}</p>
+      <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('zhouyiForm.queryHint') }}</p>
     </div>
 
     <UButton
@@ -177,14 +134,12 @@
 
 <script setup lang="ts">
 import type { QiguaInput } from '~/types/zhouyi'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, now } from '@internationalized/date'
 
 const emit = defineEmits<{
   submit: [values: QiguaInput]
 }>()
 
 const { t } = useI18n()
-const localePath = useLocalePath()
 
 const methods = [
   { key: 'time' as const, label: t('zhouyiForm.methodTime'), icon: 'i-heroicons-clock' },
@@ -193,12 +148,7 @@ const methods = [
 ]
 
 const method = ref<'time' | 'numbers' | 'character'>('time')
-
-// 时间起卦表单
-const timeForm = reactive({
-  date: '',
-  hour: undefined as number | undefined,
-})
+const timeCardRef = ref<{ year: Ref<number>; month: Ref<number>; day: Ref<number>; hour: Ref<number> } | null>(null)
 
 // 数字起卦表单
 const numbersForm = reactive({
@@ -214,48 +164,13 @@ const charForm = reactive({
 
 const query = ref('')
 
-// 日历相关
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
-
-// 默认选中今天
-onMounted(() => {
-  const today = now(tz)
-  calendarDate.value = new CalendarDate(today.year, today.month, today.day)
-})
-
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    timeForm.date = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    timeForm.date = ''
-  }
-})
-
-// 时辰选项
-const hourOptions = [
-  { label: '子时（23:00-00:59）', value: 0 },
-  { label: '丑时（01:00-02:59）', value: 2 },
-  { label: '寅时（03:00-04:59）', value: 4 },
-  { label: '卯时（05:00-06:59）', value: 6 },
-  { label: '辰时（07:00-08:59）', value: 8 },
-  { label: '巳时（09:00-10:59）', value: 10 },
-  { label: '午时（11:00-12:59）', value: 12 },
-  { label: '未时（13:00-14:59）', value: 14 },
-  { label: '申时（15:00-16:59）', value: 16 },
-  { label: '酉时（17:00-18:59）', value: 18 },
-  { label: '戌时（19:00-20:59）', value: 20 },
-  { label: '亥时（21:00-22:59）', value: 22 },
-]
-
 // 验证
 const isValid = computed(() => {
   if (!query.value.trim()) return false
 
   switch (method.value) {
     case 'time':
-      return !!timeForm.date
+      return true
     case 'numbers':
       return numbersForm.num1 !== undefined && numbersForm.num2 !== undefined
     case 'character':
@@ -270,13 +185,13 @@ function handleSubmit() {
 
   switch (method.value) {
     case 'time': {
-      const [y, m, d] = timeForm.date.split('-').map(Number)
+      const card = timeCardRef.value
       input = {
         method: 'time',
-        year: y,
-        month: m,
-        day: d,
-        hour: timeForm.hour ?? new Date().getHours(),
+        year: card?.year.value ?? new Date().getFullYear(),
+        month: card?.month.value ?? new Date().getMonth() + 1,
+        day: card?.day.value ?? new Date().getDate(),
+        hour: card?.hour.value ?? new Date().getHours(),
         query: query.value,
       }
       break

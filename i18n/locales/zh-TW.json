@@ -2,6 +2,7 @@
   "nav": {
     "home": "首頁",
     "tools": "推演工具",
+    "prophet": "賽事預測",
     "profiles": "我的檔案",
     "openMenu": "打開選單",
     "closeMenu": "關閉選單",
@@ -76,6 +77,15 @@
     "toolLiuyaoTitle": "六爻世界杯",
     "toolLiuyaoDesc": "為 2026 FIFA 世界盃專門設計。選擇對陣搖卦六次，為你從世應旺衰、動爻生克斷卦預測賽事勝負。",
     "toolLiuyaoCta": "起卦預測",
+    "toolQimenWorldcupTitle": "奇門世界盃",
+    "toolQimenWorldcupDesc": "選擇2026世界盃比賽，以奇門遁甲推演賽果，預測勝負概率",
+    "toolQimenWorldcupCta": "開始預測",
+    "toolLiurenTitle": "大六壬",
+    "toolLiurenDesc": "適合詳細推演具體事項的發展過程與最終結果。一事一問，以四課三傳斷吉凶，為你解讀事情的來龍去脈與最終走向。",
+    "toolLiurenCta": "開始起課",
+    "toolLiurenWorldcupTitle": "大六壬世界盃",
+    "toolLiurenWorldcupDesc": "選擇2026世界盃比賽，以大六壬四課三傳推演賽果，預測勝負概率",
+    "toolLiurenWorldcupCta": "起課預測",
     "toolLiuyaoDivinationTitle": "六爻占卜",
     "toolLiuyaoDivinationDesc": "適合判斷能不能、會不會、該不該。一事一佔，為你從世應旺衰、動爻變卦洞察事態變化與最終走向。",
     "toolLiuyaoDivinationCta": "開始占卜",
@@ -107,6 +117,36 @@
     "faq7Q": "這些在線算命工具是免費的嗎？",
     "faq7A": "是的，ososn 所有在線排盤與命理解讀工具均可免費使用。我們不設付費門檻，也不限制使用次數。您隨時可以為自己、家人、朋友進行多次推演，所有功能無差別開放。",
     "liuNianText": "{name} 的 {year} 年運勢：八字看流年，紫微看大限，選擇上方工具開始推演"
+  },
+  "prophet": {
+    "title": "賽事預測",
+    "subtitle": "2026 FIFA 世界盃預測專題，奇門遁甲推演全部 104 場比賽",
+    "toolsSection": "預測工具",
+    "fixturesSection": "賽程列表",
+    "matchesCount": "場",
+    "predicted": "已預測",
+    "noPrediction": "待預測",
+    "noFixtures": "暫無賽程數據",
+    "match": {
+      "badge": "Qimen Prediction",
+      "titlePrefix": "2026世界盃",
+      "scorePrediction": "比分預測",
+      "aiPrediction": "AI 預測結果",
+      "noPrediction": "預測內容尚未生成",
+      "noPredictionDesc": "這場比賽的奇門遁甲預測正在準備中，你可以使用互動式工具自行推演。",
+      "goPredict": "前往預測",
+      "backToList": "返回賽程",
+      "allMatches": "全部賽程",
+      "customPredict": "自行推演",
+      "fallbackTitle": "比賽預測 - ososn",
+      "juUnit": "局",
+      "matchTimeLabel": "比賽時間",
+      "matchVenueLabel": "比賽地點",
+      "predictionMethodLabel": "預測方法",
+      "qimenPredictionMethod": "奇門遁甲 AI 預測",
+      "seoDesc": "{home} vs {away}，2026世界盃比賽奇門遁甲AI預測。勝負概率、比分預測、盤面分析。",
+      "seoKeywords": "{home},{away},世界盃預測,比分預測,奇門遁甲,足球預測,2026世界盃"
+    }
   },
   "tools": {
     "title": "推演工具",
@@ -319,7 +359,22 @@
     "huangdaoDesc": "免費黃道吉日查詢工具，輸入生辰與擇日事項，結合傳統黃曆宜忌為你篩選搬家、結婚、開業、簽約等最佳良辰吉日。",
     "huangdaoKeywords": "黃道吉日,擇日,黃曆查詢,搬家吉日,結婚吉日,開業吉日,良辰吉日,免費擇日,在線黃曆",
     "huangdaoOgTitle": "黃道吉日查詢_免費擇日工具",
-    "huangdaoOgDesc": "輸入生辰與事項，AI 結合黃曆宜忌為你挑選最佳吉日良辰，免費使用。"
+    "huangdaoOgDesc": "輸入生辰與事項，AI 結合黃曆宜忌為你挑選最佳吉日良辰，免費使用。",
+    "liurenTitle": "大六壬在線排盤_四課三傳占卜解讀",
+    "liurenDesc": "免費大六壬在線排盤，輸入問事內容與出生信息自動生成四課三傳，AI 深度解讀事情吉凶、發展過程與最終結果。",
+    "liurenKeywords": "大六壬,四課三傳,大六壬排盤,在線占卜,大六壬預測,占卜工具,AI解讀",
+    "liurenOgTitle": "大六壬在線排盤_四課三傳占卜",
+    "liurenOgDesc": "免費大六壬排盤，輸入問事與出生信息，AI 解讀四課三傳與事情吉凶。",
+    "prophetTitle": "2026世界盃比分預測_每場比賽結果推演",
+    "prophetDesc": "2026 FIFA世界盃預測專題。用六爻古法占卜世界盃足球比賽勝負，傳統易學遇見現代足球。",
+    "prophetKeywords": "世界盃預測,足球預測,2026世界盃,六爻預測足球,賽事預測",
+    "prophetOgTitle": "2026世界盃比分預測_每場比賽結果推演",
+    "prophetOgDesc": "用六爻古法預測2026世界盃足球比賽勝負，傳統易學遇見現代足球。",
+    "championOddsTitle": "2026世界盃奪冠機率_冠軍預測_各隊晉級可能性分析",
+    "championOddsDesc": "Opta超級電腦與六爻占卜雙軌預測2026年FIFA世界盃48支參賽球隊的奪冠機率，包含各階段晉級機率與卦象解讀。",
+    "championOddsKeywords": "2026世界盃奪冠機率,世界盃冠軍預測,FIFA World Cup 2026,Opta預測,六爻占卜,世界盃48強",
+    "championOddsOgTitle": "2026世界盃奪冠機率_冠軍預測_各隊晉級可能性分析",
+    "championOddsOgDesc": "48支球隊各階段晉級機率與六爻卦象解讀，理性與玄學的碰撞。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -512,7 +567,7 @@
     "seoOgDesc": "輸入生辰，排布十二宮位與十四正曜。AI 解讀本命格局、大限走勢與流年變化。"
   },
   "liuyao": {
-    "title": "六爻預測",
+    "title": "六爻世界盃預測",
     "subtitle": "選擇 FIFA 2026 世界杯對陣，搖六次銅錢，AI 六爻斷卦預測賽事勝負",
     "castingBtn": "起卦",
     "calculating": "銅錢落定，排盤中...",
@@ -523,6 +578,7 @@
     "shareTextDefault": "基於六爻（三幣法）預測世界杯賽事勝負。選擇對陣、搖卦六次，AI 解讀世應旺衰、動爻生克、官鬼向背。",
     "backHome": "回到首頁",
     "physicalBlowout": "物理層熔斷",
+    "disclaimerTop": "本工具僅供娛樂參考，預測結果不構成任何投注建議。請理性看待，切勿沉迷。",
     "disclaimer": "本功能基於術數模型模擬推演，結果僅供娛樂，嚴禁用於任何形式的非法體育博彩",
     "fail": "起卦失敗",
     "reinterpret": "重新解讀",
@@ -636,21 +692,10 @@
       "questionTypePlaceholder": "請選擇所問事項類型",
       "questionLabel": "具體描述（可選）",
       "questionGoals": "判斷目標（可多選）",
-      "timeMode": "問事時間",
-      "timeModeNow": "現在",
-      "timeModeCustom": "自定義",
-      "calendarType": "曆法",
-      "calendarSolar": "公曆（陽曆）",
-      "calendarLunar": "農曆（陰曆）",
-      "isLeapMonth": "閏月",
       "location": "地點",
       "locationPlaceholder": "如：中國廣州 或 New York, USA",
       "locationHint": "國內可直接輸入城市名；海外建議填寫 城市,國家（如：New York, USA）",
-      "pickDate": "選擇日期",
-      "pickTime": "選擇時間",
-      "hourPlaceholder": "時",
-      "minutePlaceholder": "分",
-      "timezone": "時區",
+      "timeHint": "使用您設備的當前時間與所在時區起局",
       "outputStyle": "輸出風格",
       "outputBrief": "簡明扼要",
       "outputDetailed": "詳細解讀",
@@ -712,6 +757,179 @@
       "7": "西",
       "8": "東北",
       "9": "南"
+    },
+    "dunTypeMap": {
+      "阳遁": "陽遁",
+      "阴遁": "陰遁"
+    }
+  },
+  "qimenWorldcup": {
+    "badge": "Qimen Dunjia · World Cup 2026",
+    "title": "奇門世界盃預測",
+    "subtitle": "選擇一場2026世界盃比賽，以奇門遁甲推演賽果",
+    "disclaimer": "本工具僅供娛樂參考，預測結果不構成任何投注建議。請理性看待，切勿沉迷。",
+    "form": {
+      "selectMatch": "選擇比賽",
+      "matchPlaceholder": "搜尋或選擇一場比賽",
+      "divinationTime": "起卦時間",
+      "timeHint": "使用您設備的當前時間與所在時區起卦",
+      "submit": "開始預測"
+    },
+    "animating": "正在排盤推演...",
+    "result": {
+      "badge": "Qimen World Cup 2026",
+      "title": "奇門世界盃預測",
+      "homeTeam": "主隊",
+      "awayTeam": "客隊",
+      "predictionTitle": "預測結果",
+      "aiAnalyzing": "AI 正在分析盤面...",
+      "winProbability": "勝負概率",
+      "homeWin": "{team} 勝",
+      "awayWin": "{team} 勝",
+      "draw": "平局"
+    },
+    "actions": {
+      "shareResult": "分享結果",
+      "predictAgain": "再測一場"
+    },
+    "shareDialog": {
+      "posterLabel": "預測海報",
+      "downloadPoster": "下載海報"
+    },
+    "error": {
+      "chartFail": "排盤失敗",
+      "aiUnavailable": "AI 服務暫時不可用"
+    },
+    "seo": {
+      "title": "奇門遁甲預測2026世界盃_奇門排盤預測賽果_古法占卜足球 - ososn",
+      "description": "使用奇門遁甲預測2026世界盃比賽結果",
+      "keywords": "奇門遁甲,世界盃,2026,足球預測",
+      "ogTitle": "奇門遁甲預測2026世界盃_奇門排盤預測賽果_古法占卜足球 - ososn",
+      "ogDescription": "使用奇門遁甲預測2026世界盃比賽結果"
+    },
+    "share": {
+      "hookQimen": "我用奇門遁甲預測了 {summary}",
+      "hookQimenDefault": "我在 ososn 用奇門遁甲做了一次預測",
+      "suffix": "來自 ososn 奇門世界盃預測"
+    },
+    "placeholders": {
+      "roundOf16": "16強賽{n}勝者",
+      "roundOf32Winner": "32強賽勝者",
+      "groupRank": "{group}組第{rank}",
+      "quarterFinal": "四分之一決賽{n}勝者",
+      "semiFinalWinner": "半決賽{n}勝者",
+      "semiFinalLoser": "半決賽{n}負者",
+      "thirdPlace": "小組第三",
+      "matchWinner": "第{n}場勝者",
+      "matchLoser": "第{n}場敗者"
+    }
+  },
+  "liurenWorldcup": {
+    "badge": "Da Liu Ren · World Cup 2026",
+    "title": "大六壬世界盃預測",
+    "subtitle": "選擇一場2026世界盃比賽，以大六壬四課三傳推演賽果",
+    "disclaimer": "本工具僅供娛樂參考，預測結果不構成任何投注建議。請理性看待，切勿沉迷。",
+    "form": {
+      "selectMatch": "選擇比賽",
+      "matchPlaceholder": "搜尋或選擇一場比賽",
+      "birthYear": "出生年份",
+      "birthYearPlaceholder": "如：1990",
+      "birthYearHint": "大六壬斷事需要占者年命，系統將根據您的出生年份自動推算",
+      "divinationTime": "起課時間",
+      "timeHint": "使用您設備的當前時間與所在時區起課",
+      "submit": "開始預測"
+    },
+    "animating": "正在起課推演...",
+    "result": {
+      "badge": "Da Liu Ren World Cup 2026",
+      "title": "大六壬世界盃預測",
+      "homeTeam": "主隊",
+      "awayTeam": "客隊",
+      "chartTitle": "課圖資訊",
+      "yearPillar": "年柱",
+      "monthPillar": "月柱",
+      "dayPillar": "日柱",
+      "hourPillar": "時柱",
+      "yuejiang": "月將",
+      "shichen": "占時",
+      "birthYear": "占者年命",
+      "predictionTitle": "預測結果",
+      "aiAnalyzing": "AI 正在分析課圖...",
+      "winProbability": "勝負概率",
+      "homeWin": "{team} 勝",
+      "awayWin": "{team} 勝",
+      "draw": "平局"
+    },
+    "actions": {
+      "shareResult": "分享結果",
+      "predictAgain": "再測一場"
+    },
+    "shareDialog": {
+      "posterLabel": "預測海報",
+      "downloadPoster": "下載海報"
+    },
+    "error": {
+      "chartFail": "起課失敗",
+      "aiUnavailable": "AI 服務暫時不可用",
+      "unknown": "未知錯誤"
+    },
+    "seo": {
+      "title": "大六壬預測2026世界盃_六壬排課預測賽果_古法占卜足球 - ososn",
+      "description": "使用大六壬預測2026世界盃比賽結果",
+      "keywords": "大六壬,世界盃,2026,足球預測",
+      "ogTitle": "大六壬預測2026世界盃_六壬排課預測賽果_古法占卜足球 - ososn",
+      "ogDescription": "使用大六壬預測2026世界盃比賽結果"
+    },
+    "share": {
+      "hookLiuren": "我用大六壬預測了 {summary}",
+      "hookLiurenDefault": "我在 ososn 用大六壬做了一次預測",
+      "suffix": "來自 ososn 大六壬世界盃預測"
+    }
+  },
+  "liuren": {
+    "title": "大六壬",
+    "subtitle": "一事一問，四課三傳推演事情吉凶與走向",
+    "calculating": "正在起課排盤…",
+    "resultTitle": "排盤結果",
+    "disclaimer": "大六壬源於中國古代術數，結果僅供學習參考，不構成任何專業建議。",
+    "form": {
+      "question": "所問事項",
+      "questionPlaceholder": "如：這次面試能否成功？如：這段感情未來如何發展？",
+      "birthYear": "出生年份",
+      "birthYearPlaceholder": "如：1990",
+      "birthYearHint": "大六壬斷事需要占者年命，系統將根據您的出生年份自動推算",
+      "divinationTime": "起課時間",
+      "timeHint": "使用您設備的當前時間與所在時區起課",
+      "location": "地點",
+      "locationPlaceholder": "如：中國廣州 或 New York, USA",
+      "locationHint": "國內可直接輸入城市名；海外建議填寫 城市,國家（如：New York, USA）",
+      "submitBtn": "開始起課",
+      "validation": {
+        "questionRequired": "請填寫所問事項",
+        "birthYearRequired": "請填寫有效的出生年份（1900-2100）",
+        "locationRequired": "請填寫地點"
+      }
+    },
+    "result": {
+      "questionLabel": "所問事項",
+      "yearPillar": "年柱",
+      "monthPillar": "月柱",
+      "dayPillar": "日柱",
+      "hourPillar": "時柱",
+      "yuejiang": "月將",
+      "shichen": "占時",
+      "birthYear": "占者年命",
+      "interpretTitle": "AI 深度解讀",
+      "aiAnalyzing": "AI 正在分析課圖…"
+    },
+    "error": {
+      "chartFail": "起課失敗",
+      "unknown": "未知錯誤",
+      "aiUnavailable": "AI 解讀服務暫不可用"
+    },
+    "share": {
+      "hook": "大六壬 · {summary}",
+      "hookDefault": "剛用大六壬起了一課，結果讓我細思極恐"
     }
   },
   "geolocation": {
@@ -741,11 +959,6 @@
     "methodTime": "時間起卦",
     "methodNumbers": "數字起卦",
     "methodCharacter": "測字起卦",
-    "date": "日期時間",
-    "datePlaceholder": "選擇起卦時間",
-    "lunarNote": "以北京時間為準",
-    "hourLabel": "時辰",
-    "hourPlaceholder": "選擇時辰",
     "firstNumber": "第一個數字",
     "firstNumberPlaceholder": "輸入第一個數字",
     "upperGuaHint": "用於生成上卦",
@@ -885,7 +1098,7 @@
     "KOR": "南韓",
     "CZE": "捷克",
     "CAN": "加拿大",
-    "BIH": "波斯尼亞和黑塞哥維那",
+    "BIH": "波黑",
     "QAT": "卡塔爾",
     "SUI": "瑞士",
     "BRA": "巴西",
@@ -1365,5 +1578,94 @@
     "yearPillar": "年柱",
     "monthPillar": "月柱",
     "dayPillar": "日柱"
+  },
+  "championOdds": {
+    "title": "2026 世界盃奪冠機率",
+    "subtitle": "Opta 超級電腦 × 六爻占卜雙軌預測。左邊是數據模型的理性推演，右邊是東方玄學的氣數判斷——兩種智慧，同一屆世界盃。",
+    "method": "六爻起卦方法",
+    "methodNote": "以世爻為本隊氣數，用神取官鬼（榮譽/冠軍），兼看父母爻（實力根基）。48 隊於開賽前統一起卦，結論固定儲存。",
+    "filter": {
+      "all": "全部",
+      "continent": "大洲",
+      "group": "組別"
+    },
+    "table": {
+      "rank": "排名",
+      "team": "球隊",
+      "champ": "奪冠",
+      "liuyao": "六爻",
+      "liuyaoBrief": "卦象解讀",
+      "topGroup": "小組第一",
+      "l32": "32強",
+      "l16": "16強",
+      "qf": "八強",
+      "sf": "四強",
+      "final": "決賽"
+    },
+    "verdict": {
+      "great": "大吉",
+      "good": "小吉",
+      "neutral": "平",
+      "bad": "凶",
+      "terrible": "大凶"
+    },
+    "noResults": "沒有符合條件的球隊",
+    "dataSource": "資料來源",
+    "liuyaoSource": "六爻結論",
+    "link": {
+      "matchPrediction": "單場比分預測",
+      "championOdds": "冠軍預測",
+      "championOddsDesc": "Opta × 六爻雙軌預測48隊奪冠機率"
+    },
+    "readings": {
+      "ESP": "世爻临日辰旺相，官鬼发动化进神，冠军气数正盛。",
+      "FRA": "用神官鬼得月令生扶，世爻合日建，夺冠之机不可失。",
+      "ENG": "世爻虽旺但官鬼伏藏，需待时机出伏，后劲可期。",
+      "ARG": "世爻临青龙旺地，官鬼持世且动化回头生，卫冕气象。",
+      "POR": "世爻得日生，官鬼暗动，有夺冠之心但需防劲敌相克。",
+      "BRA": "世爻旬空出空有力，官鬼逢合待冲，关键战见分晓。",
+      "GER": "父母爻旺相根基厚，官鬼受制待时而发，稳扎稳打之象。",
+      "NED": "世爻平相，官鬼休囚，晋级有望但夺冠气数不足。",
+      "NOR": "世爻临月破，用神受克，黑马之姿但难以登顶。",
+      "BEL": "世爻虽有根但官鬼墓于日辰，黄金一代余晖难照金杯。",
+      "COL": "世爻动化回头克，官鬼空亡，南美劲旅此番气数平平。",
+      "MAR": "世爻临朱雀得位，官鬼临月建，非洲之星或有惊喜。",
+      "SUI": "世爻安静，官鬼不现，防守见长而夺冠难求。",
+      "URU": "世爻逢冲，官鬼伏藏，老迈劲旅难复昔日荣光。",
+      "ECU": "世爻受月克日冲，用神休囚，高原勇士此次气运低迷。",
+      "JPN": "世爻临日辰有气，但官鬼受制，突破十六强已是极限。",
+      "CRO": "世爻衰而受生，官鬼旬空，格子军团余勇可贾难登顶。",
+      "USA": "世爻得地利但官鬼受克，东道主之利止步八强之象。",
+      "TUR": "世爻月破日克，用神入墓，星月军团此次运势不佳。",
+      "MEX": "世爻旺相但官鬼伏吟，东道国之一晋级可期夺冠无望。",
+      "SEN": "世爻休囚无根，官鬼受冲克，特兰加雄狮气数暗淡。",
+      "AUT": "世爻入墓，用神空亡，阿尔卑斯山国难创奇迹。",
+      "PAR": "世爻受克，官鬼化退神，南美传统劲旅此次凶多吉少。",
+      "SWE": "世爻逢空，官鬼受月建克制，北欧海盗难破浪前行。",
+      "KOR": "世爻日冲月克，用神休囚，太极虎此番夺冠无望。",
+      "CAN": "世爻临青龙有气，但官鬼受制，东道国之一小组突围即是胜利。",
+      "AUS": "世爻衰弱，官鬼入墓，袋鼠军团此次气数最低迷。",
+      "EGY": "世爻动化回头克，用神逢冲，法老军团难过小组赛。",
+      "BIH": "世爻月破日克又逢空，官鬼绝于日辰，晋级已是万幸。",
+      "IRN": "世爻休囚入墓，官鬼受克，波斯铁骑难破宿命。",
+      "ALG": "世爻临白虎受克，用神空亡，沙漠之狐此次运势极差。",
+      "CZE": "世爻虽得日生但官鬼伏藏难出，东欧铁骑难复当年勇。",
+      "CIV": "世爻衰弱无气，官鬼化鬼，非洲大象此番步履维艰。",
+      "GHA": "世爻日破月克，用神入墓，黑星军团小组难出线。",
+      "SCO": "世爻安静受克，官鬼不现，风笛之师难奏凯歌。",
+      "PAN": "世爻逢空又入墓，官鬼绝处，运河军团此次陪跑之象。",
+      "RSA": "世爻月破日克，用神化退，南非之旅凶多吉少。",
+      "TUN": "世爻休囚受制，官鬼伏藏，迦太基雄鹰难振翅高飞。",
+      "QAT": "世爻衰弱逢空，官鬼受月建冲克，卡塔尔难逃小组厄运。",
+      "IRQ": "世爻入墓又逢日破，用神空亡，美索不达米亚难现奇迹。",
+      "JOR": "世爻临白虎受克，官鬼化退，纳沙特此役难造冷门。",
+      "COD": "世爻月破入墓，官鬼受冲，刚果金此番陪跑已定。",
+      "UZB": "世爻休囚无根，官鬼伏吟，中亚狼难咬出一片天。",
+      "KSA": "世爻受日冲月克，用神入墓，沙漠绿鹰难再现奇迹。",
+      "NZL": "世爻逢空又受克，官鬼绝处，大洋洲独苗难逃厄运。",
+      "CPV": "世爻衰弱入墓，官鬼化鬼，蓝鲨首次参赛凶多吉少。",
+      "HAI": "世爻日破月克，用神空亡，海地黑马此次难续奇迹。",
+      "CUW": "世爻临绝地，官鬼伏藏，库拉索首秀即是终点。"
+    }
   }
 }

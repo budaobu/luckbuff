@@ -1,9 +1,9 @@
 <template>
-  <div class="relative min-h-screen overflow-hidden">
+  <div class="relative overflow-hidden">
     <!-- 氛围背景光晕 -->
     <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-[#c9a227]/[0.05] blur-[120px]" />
-      <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[#8b5cf6]/[0.04] blur-[100px]" />
+      <div class="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-[var(--accent)]/[0.05] blur-[120px]" />
+      <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
     <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
@@ -11,20 +11,20 @@
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
         <div class="mb-8">
-          <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Ziwei Doushu</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Ziwei Doushu</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
             {{ $t('zwds.title') }}
           </h1>
-          <p class="text-sm text-[#e8e0d0]/40 mt-2">
+          <p class="text-sm text-[var(--text-faint)] mt-2">
             {{ $t('zwds.subtitle') }}
           </p>
-          <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
         <!-- 表单卡片 -->
-        <div class="rounded-2xl border border-white/8 bg-[#1a1612] overflow-hidden">
+        <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] overflow-hidden">
           <!-- 顶部金色渐变线 -->
-          <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/60 to-transparent" />
+          <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
           <div class="p-6">
             <ZwdsForm
               :initial-values="lastFormValues"
@@ -47,12 +47,12 @@
           <GlowCard :title="$t('zwdsAnalysis.liuNianOverviewTitle')">
             <div class="space-y-2">
               <div class="flex items-center gap-3">
-                <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
-                <div class="text-base font-bold text-[#f5e6c0]">{{ currentLiunianGanZhi }}</div>
+                <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
+                <div class="text-base font-bold text-[var(--text-primary)]">{{ currentLiunianGanZhi }}</div>
               </div>
               <div class="flex items-center gap-3">
-                <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
-                <div class="text-sm text-[#f5e6c0]">{{ currentLiunianTaiSuiGong }}宫（{{ currentLiunianTaiSuiZhi }}）</div>
+                <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
+                <div class="text-sm text-[var(--text-primary)]">{{ currentLiunianTaiSuiGong }}宫（{{ currentLiunianTaiSuiZhi }}）</div>
               </div>
               <div class="flex flex-wrap gap-2 pt-1">
                 <span
@@ -64,7 +64,7 @@
                   {{ s.star }}化{{ s.type }}
                 </span>
               </div>
-              <p class="text-xs text-[#e8e0d0]/50 leading-relaxed">{{ currentLiunianSummary }}</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ currentLiunianSummary }}</p>
               <div class="flex items-center gap-4 pt-2">
                 <div
                   class="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold border"
@@ -73,7 +73,7 @@
                   {{ ratingLabel(currentLiunianRating) }}
                 </div>
                 <div class="flex-1">
-                  <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ ratingText(currentLiunianRating) }}</p>
+                  <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ ratingText(currentLiunianRating) }}</p>
                 </div>
               </div>
             </div>
@@ -82,21 +82,21 @@
 
         <!-- Section 标题 -->
         <div class="mb-8">
-          <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
             {{ $t('zwds.chartTitle', { name: formValues.name || '' }) }}
           </h1>
-          <p class="text-sm text-[#e8e0d0]/40 mt-2">
+          <p class="text-sm text-[var(--text-faint)] mt-2">
             {{ chartSubtitleText }}
           </p>
-          <div class="w-12 h-px bg-[#c9a227]/30 mt-4" />
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
         <UTabs
           :items="tabItems"
           :ui="{
-            list: 'bg-[#1a1612] rounded-xl p-1 border border-white/[0.08] gap-1',
-            trigger: 'text-[#e8e0d0]/50 data-[active]:text-[#f5e6c0] data-[active]:bg-[#c9a227]/15 data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[#e8e0d0]/80',
+            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
+            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
             indicator: 'bg-transparent',
             content: 'pt-5',
           }"
@@ -148,7 +148,7 @@
           <UButton
             color="neutral"
             variant="ghost"
-            class="text-[#e8e0d0]/50 hover:text-[#e8e0d0]/80 hover:bg-white/5"
+            class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
             @click="navigateTo('/tools')"
           >
             <template #leading>
@@ -168,20 +168,20 @@
           class="fixed inset-0 z-50 flex items-center justify-center"
           @click.self="shareDialogOpen = false"
         >
-          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div class="relative rounded-2xl border border-white/[0.08] bg-[#1a1612] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
-            <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/60 to-transparent" />
-            <div class="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
               <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
                   <UIcon name="i-heroicons-share" class="w-4 h-4" />
                 </div>
-                <h3 class="text-sm font-semibold text-[#f5e6c0]">{{ $t('share.title') }}</h3>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
               </div>
               <UButton
                 color="neutral"
                 variant="ghost"
-                class="text-[#e8e0d0]/40 hover:text-[#e8e0d0]/80 hover:bg-white/5"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
                 @click="shareDialogOpen = false"
               >
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
@@ -189,8 +189,8 @@
             </div>
             <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
               <div>
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
-                <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-3 text-sm text-[#e8e0d0]/80 leading-relaxed whitespace-pre-wrap">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
                   {{ shareData?.copyText }}
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
@@ -201,8 +201,8 @@
                 </UButton>
               </div>
               <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[#e8e0d0]/40 mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
-                <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-2 overflow-hidden">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
                   <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
                 </div>
                 <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
@@ -212,16 +212,16 @@
                   {{ $t('share.downloadImage') }}
                 </UButton>
               </div>
-              <div v-else class="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-6 text-center">
-                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[#e8e0d0]/20 mx-auto mb-2" />
-                <p class="text-xs text-[#e8e0d0]/40">{{ $t('share.screenshotFailed') }}</p>
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
                 <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
                   {{ shareData.screenshotError }}
                 </p>
               </div>
             </div>
-            <div class="px-5 py-3 border-t border-white/[0.06] text-center">
-              <p class="text-[10px] text-[#e8e0d0]/30">{{ $t('share.generatedBy') }}</p>
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
             </div>
           </div>
         </div>
@@ -237,13 +237,12 @@ import { getLiunianAnalysis } from '~/utils/zwds/analysis'
 
 const { t } = useI18n()
 const { locale } = useI18n()
-const { build: buildZwdsAiPrompt } = useZwdsPrompt()
-const aiStream = useAiStream()
-// 提取独立 ref 用于模板 prop 绑定（Vue 3 对象属性在 prop 绑定中不会自动解包）
-const aiContent = aiStream.content
-const aiStreaming = aiStream.streaming
-const aiStarted = aiStream.started
-const aiError = aiStream.error
+
+// AI 解读状态（本地管理，替代 useAiStream）
+const aiContent = ref('')
+const aiStreaming = ref(false)
+const aiStarted = ref(false)
+const aiError = ref<string | null>(null)
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -298,11 +297,11 @@ function getJieDuiZhi(zhi: DiZhi): DiZhi {
 
 function sihuaBadgeClass(type: string): string {
   switch (type) {
-    case '禄': return 'border-[#c9a227]/20 bg-[#c9a227]/10 text-[#c9a227]'
+    case '禄': return 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]'
     case '权': return 'border-red-500/20 bg-red-500/10 text-red-400'
-    case '科': return 'border-[#8b5cf6]/20 bg-[#8b5cf6]/10 text-[#8b5cf6]'
-    case '忌': return 'border-gray-500/20 bg-gray-500/10 text-gray-400'
-    default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
+    case '科': return 'border-[var(--accent-purple-border)] bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
+    case '忌': return 'border-[var(--text-faint)]/20 bg-[var(--text-faint)]/10 text-[var(--text-muted)]'
+    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
   }
 }
 
@@ -312,8 +311,8 @@ function ratingClass(rating: string): string {
     case 'stable': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
     case 'liuYi': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
     case 'jinShen': return 'border-red-500/30 bg-red-500/10 text-red-400'
-    case 'yiBan': return 'border-white/10 bg-white/5 text-[#e8e0d0]'
-    default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
+    case 'yiBan': return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
+    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
   }
 }
 
@@ -384,7 +383,10 @@ function handleSaveProfile(id: string, values: FormValues) {
 async function startAiStream() {
   if (!chart.value) return
 
-  aiStream.reset()
+  aiContent.value = ''
+  aiStreaming.value = true
+  aiStarted.value = false
+  aiError.value = null
 
   await nextTick()
 
@@ -398,16 +400,67 @@ async function startAiStream() {
     birthHour: formValues.value.birthHour,
   }
 
-  const { systemPrompt, userPrompt } = buildZwdsAiPrompt(chart.value, profile, summary, locale.value)
+  try {
+    const response = await fetch('/api/zwds/interpret', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chart: chart.value,
+        profile,
+        summary,
+        locale: locale.value,
+      }),
+    })
 
-  // 使用 useAiStream 的 startStream（流式模式）
-  await aiStream.startStream(userPrompt, systemPrompt, true)
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+
+    const reader = response.body!.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ''
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() ?? ''
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim()
+        if (!line || !line.startsWith('data:')) continue
+        const payload = line.slice(5).trim()
+        if (!payload || payload === '[DONE]') continue
+
+        try {
+          const data = JSON.parse(payload)
+          if (data.type === 'text' && data.text) {
+            if (!aiStarted.value) aiStarted.value = true
+            aiContent.value += data.text
+          } else if (data.type === 'error') {
+            aiError.value = data.message || t('zwds.aiRequestFailed')
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+  } catch (e: any) {
+    aiError.value = e?.message || t('zwds.aiRequestFailed')
+  } finally {
+    aiStreaming.value = false
+  }
 }
 
 function resetToForm() {
   phase.value = 'form'
   chart.value = null
-  aiStream.reset()
+  aiContent.value = ''
+  aiStreaming.value = false
+  aiStarted.value = false
+  aiError.value = null
 }
 
 // 回访流程：URL 带 ?profile=id 时自动加载档案并排盘
@@ -474,17 +527,47 @@ function downloadShareImage() {
   toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
+const siteName = 'ososn'
+
 useSeoMeta({
-  title: t('zwds.seoTitle'),
-  titleTemplate: '%s',
-  description: t('zwds.seoDesc'),
-  ogTitle: t('zwds.seoOgTitle'),
-  ogDescription: t('zwds.seoOgDesc'),
+  title: () => `${t('seo.zwdsTitle')} - ${siteName}`,
+  description: t('seo.zwdsDesc'),
+  keywords: t('seo.zwdsKeywords'),
+  ogTitle: () => `${t('seo.zwdsOgTitle')} - ${siteName}`,
+  ogDescription: t('seo.zwdsOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
   ogUrl: 'https://www.ososn.com/tools/zwds',
   twitterCard: 'summary_large_image',
 })
+
+useHead(() => ({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${t('seo.zwdsTitle')} - ${siteName}`,
+        url: 'https://www.ososn.com/tools/zwds',
+        description: t('seo.zwdsDesc'),
+        mainEntity: {
+          '@type': 'SoftwareApplication',
+          name: t('home.toolZwdsTitle'),
+          applicationCategory: 'LifestyleApplication',
+          operatingSystem: 'Any',
+          url: 'https://www.ososn.com/tools/zwds',
+          description: t('home.toolZwdsDesc'),
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'CNY',
+          },
+        },
+      }),
+    },
+  ],
+}))
 </script>
 
 <style scoped>

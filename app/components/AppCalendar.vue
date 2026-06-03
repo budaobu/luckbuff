@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { CalendarValue } from '@nuxt/ui'
 import { CalendarDate } from '@internationalized/date'
 
@@ -55,10 +55,13 @@ const currentMonth = computed(() => {
 })
 
 const years = computed(() => {
-  const start = currentYear.value - 100
-  const end = currentYear.value + 50
+  const now = new Date().getFullYear()
+  const start = now - 150
+  const end = now + 50
   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
 })
+
+const yearOptions = computed(() => years.value.map(y => ({ label: String(y), value: y })))
 
 const months = computed(() => [
   { label: t('common.month1'), value: 1 },
@@ -75,46 +78,73 @@ const months = computed(() => [
   { label: t('common.month12'), value: 12 }
 ])
 
-const selectedYear = computed({
-  get: () => currentYear.value,
-  set: (year: number) => {
-    if (!props.modelValue) return
-    const current = Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue
-    const newDate = new CalendarDate(year, current.month, current.day)
-    emit('update:modelValue', newDate as CalendarValue)
-  }
-})
+const selectedYear = ref(currentYear.value)
+const selectedMonth = ref(currentMonth.value)
 
-const selectedMonth = computed({
-  get: () => currentMonth.value,
-  set: (month: number) => {
-    if (!props.modelValue) return
-    const current = Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue
-    const newDate = new CalendarDate(current.year, month, current.day)
-    emit('update:modelValue', newDate as CalendarValue)
+watch(() => props.modelValue, (newVal) => {
+  if (newVal) {
+    const current = Array.isArray(newVal) ? newVal[0] : newVal
+    selectedYear.value = current.year
+    selectedMonth.value = current.month
   }
-})
+}, { immediate: true })
+
+function handleYearChange(year: number) {
+  selectedYear.value = year
+  const hasValue = !!props.modelValue
+  const current = hasValue
+    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue)
+    : null
+  const month = current ? current.month : selectedMonth.value
+  const day = current ? current.day : 1
+  const newDate = new CalendarDate(year, month, day)
+  emit('update:modelValue', newDate as CalendarValue)
+}
+
+function handleMonthChange(month: number) {
+  selectedMonth.value = month
+  const hasValue = !!props.modelValue
+  const current = hasValue
+    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue)
+    : null
+  const year = current ? current.year : selectedYear.value
+  const day = current ? current.day : 1
+  const newDate = new CalendarDate(year, month, day)
+  emit('update:modelValue', newDate as CalendarValue)
+}
+
+function onPlaceholderUpdate(value: CalendarDate) {
+  selectedYear.value = value.year
+  selectedMonth.value = value.month
+}
+
+const selectUi = {
+  base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] text-sm',
+  placeholder: 'text-[var(--text-placeholder)]',
+  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-[240px]',
+  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
+}
 </script>
 
 <template>
-  <div class="bg-[#0f0c09] border border-white/8 rounded-xl shadow-2xl p-2">
+  <div class="bg-[var(--surface-elevated)] border border-[var(--border-light)] rounded-xl shadow-2xl p-2">
     <div class="flex items-center gap-2 mb-2">
-      <select
-        v-model="selectedYear"
-        class="bg-[#1a1612] border border-white/10 text-[#f5e6c0] text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#c9a227]/50 cursor-pointer"
-      >
-        <option v-for="year in years" :key="year" :value="year">
-          {{ year }}
-        </option>
-      </select>
-      <select
-        v-model="selectedMonth"
-        class="bg-[#1a1612] border border-white/10 text-[#f5e6c0] text-sm rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#c9a227]/50 cursor-pointer"
-      >
-        <option v-for="month in months" :key="month.value" :value="month.value">
-          {{ month.label }}
-        </option>
-      </select>
+      <USelect
+        :model-value="selectedYear"
+        :items="yearOptions"
+        color="warning"
+        class="w-24"
+        :ui="selectUi"
+        @update:model-value="handleYearChange($event)"
+      />
+      <USelect
+        :model-value="selectedMonth"
+        :items="months"
+        color="warning"
+        class="w-24"
+        :ui="selectUi"
+        @update:model-value="handleMonthChange($event)"
+      />
     </div>
     <UCalendar
       :model-value="modelValue"
@@ -140,13 +170,14 @@ const selectedMonth = computed({
         body: '',
         grid: '',
         gridBody: '',
-        heading: 'text-[#f5e6c0] font-medium',
-        headCell: 'text-[#e8e0d0]/40',
-        cellWeek: 'text-[#e8e0d0]/40',
+        heading: 'text-[var(--text-primary)] font-medium',
+        headCell: 'text-[var(--text-faint)]',
+        cellWeek: 'text-[var(--text-faint)]',
         cell: '',
-        cellTrigger: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[selected]:bg-[#c9a227] data-[selected]:text-[#1a1612]',
+        cellTrigger: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[selected]:bg-[var(--accent)] data-[selected]:text-[var(--surface-bg)]',
       }"
       :class="class"
+      @update:placeholder="onPlaceholderUpdate($event)"
       @update:model-value="emit('update:modelValue', $event)"
     />
   </div>

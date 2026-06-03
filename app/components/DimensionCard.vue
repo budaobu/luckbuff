@@ -1,5 +1,5 @@
 <template>
-  <div class="group relative rounded-2xl bg-white/[0.03] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-white/[0.05]">
+  <div class="group relative rounded-2xl bg-[var(--surface-input)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-[var(--surface-card-hover)]">
     <!-- 顶部装饰线 -->
     <div
       class="h-px bg-gradient-to-r from-transparent to-transparent"
@@ -16,8 +16,8 @@
           <UIcon :name="icon" class="w-5 h-5" />
         </div>
         <div class="flex-1 min-w-0">
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ title }}</h3>
-          <p class="text-xs text-[#e8e0d0]/40 mt-0.5 truncate">{{ data.summary }}</p>
+          <h3 class="text-sm font-semibold text-[var(--text-primary)] tracking-wide">{{ title }}</h3>
+          <p class="text-xs text-[var(--text-faint)] mt-0.5 truncate">{{ data.summary }}</p>
         </div>
       </div>
 
@@ -34,22 +34,22 @@
       </div>
 
       <!-- 详细解读 -->
-      <p class="text-sm text-[#e8e0d0]/70 leading-relaxed mb-4">
+      <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-4">
         {{ data.detail }}
       </p>
 
       <!-- 额外字段 -->
-      <div v-if="extraField" class="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5">
+      <div v-if="extraField" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3.5 py-2.5">
         <div class="flex items-center gap-2">
           <UIcon :name="extraField.icon" class="w-3.5 h-3.5" :style="{ color: accentColor }" />
-          <span class="text-xs text-[#e8e0d0]/50">{{ extraField.label }}</span>
+          <span class="text-xs text-[var(--text-muted)]">{{ extraField.label }}</span>
         </div>
-        <p class="text-sm text-[#e8e0d0]/80 mt-1">{{ extraField.value }}</p>
+        <p class="text-sm text-[var(--text-body)] mt-1">{{ extraField.value }}</p>
       </div>
     </div>
 
     <!-- 边框 -->
-    <div class="absolute inset-0 rounded-2xl border border-white/[0.06] pointer-events-none" />
+    <div class="absolute inset-0 rounded-2xl border border-[var(--border-light)] pointer-events-none" />
     <div
       class="absolute bottom-0 left-0 right-0 h-px"
       :style="{ backgroundImage: `linear-gradient(to right, transparent, ${accentColor}26, transparent)` }"

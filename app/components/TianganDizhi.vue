@@ -6,13 +6,13 @@
     >
       <!-- 外圆：地支 -->
       <div
-        class="outer-ring absolute rounded-full border border-[#c9a227]/30"
+        class="outer-ring absolute rounded-full border border-[var(--accent-border-hover)]"
         :style="{ width: outerSize, height: outerSize }"
       >
         <div
           v-for="(zhi, i) in DI_ZHI"
           :key="zhi"
-          class="zhi-char absolute text-[#c9a227] font-bold flex items-center justify-center"
+          class="zhi-char absolute text-[var(--accent)] font-bold flex items-center justify-center"
           :style="{
             width: charSize,
             height: charSize,
@@ -27,13 +27,13 @@
 
       <!-- 内圆：天干 -->
       <div
-        class="inner-ring absolute rounded-full border border-[#c9a227]/20"
+        class="inner-ring absolute rounded-full border border-[var(--accent-border)]"
         :style="{ width: innerSize, height: innerSize }"
       >
         <div
           v-for="(gan, i) in TIAN_GAN"
           :key="gan"
-          class="gan-char absolute text-[#f5e6c0] font-medium flex items-center justify-center"
+          class="gan-char absolute text-[var(--text-primary)] font-medium flex items-center justify-center"
           :style="{
             width: innerCharSize,
             height: innerCharSize,
@@ -48,7 +48,7 @@
 
       <!-- 中心太极 -->
       <div
-        class="absolute rounded-full bg-gradient-to-br from-[#c9a227]/20 to-[#8b5cf6]/20 flex items-center justify-center"
+        class="absolute rounded-full bg-gradient-to-br from-[var(--accent-bg-hover)] to-[var(--accent-purple-faint)] flex items-center justify-center"
         :style="{ width: centerSize, height: centerSize }"
       >
         <svg viewBox="0 0 100 100" class="w-3/4 h-3/4 opacity-60">
@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    <p v-if="computedLabel" class="mt-4 text-sm text-[#c9a227]/80 tracking-wider">
+    <p v-if="computedLabel" class="mt-4 text-sm text-[var(--accent)] tracking-wider">
       {{ computedLabel }}
     </p>
   </div>

@@ -1,30 +1,30 @@
 <template>
-  <div class="relative rounded-2xl bg-white/[0.03] backdrop-blur-sm">
-    <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/40 to-transparent" />
+  <div class="relative rounded-2xl bg-[var(--surface-input)] backdrop-blur-sm">
+    <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
     <div class="relative z-10 p-6">
       <!-- 标题 -->
       <div class="flex items-center gap-3 mb-5">
-        <div class="w-10 h-10 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
+        <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
           <UIcon name="i-heroicons-chart-bar" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.dayunChart') }}</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.dayunChartSubtitle') }}</p>
+          <h3 class="text-sm font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('bazi.dayunChart') }}</h3>
+          <p class="text-[11px] text-[var(--text-faint)] mt-0.5">{{ $t('bazi.dayunChartSubtitle') }}</p>
         </div>
       </div>
 
       <!-- 图例 -->
-      <div class="flex items-center gap-5 mb-4 text-[11px] text-[#e8e0d0]/40">
+      <div class="flex items-center gap-5 mb-4 text-[11px] text-[var(--text-faint)]">
         <div class="flex items-center gap-1.5">
-          <span class="w-2.5 h-3.5 rounded-sm bg-[#c9a227]" />
+          <span class="w-2.5 h-3.5 rounded-sm bg-[var(--accent)]" />
           <span>{{ $t('bazi.risingTrend') }}</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <span class="w-2.5 h-3.5 rounded-sm bg-[#e8e0d0]/50 border border-[#e8e0d0]/30" />
+          <span class="w-2.5 h-3.5 rounded-sm bg-[var(--text-muted)] border border-[var(--text-faint)]" />
           <span>{{ $t('bazi.fallingTrend') }}</span>
         </div>
         <div class="flex items-center gap-1.5">
-          <span class="w-2.5 h-3.5 rounded-sm border-2 border-[#c9a227]" />
+          <span class="w-2.5 h-3.5 rounded-sm border-2 border-[var(--accent)]" />
           <span>{{ $t('bazi.currentDayun') }}</span>
         </div>
       </div>
@@ -36,7 +36,7 @@
           <span
             v-for="(tick, i) in chartData.yTicks"
             :key="i"
-            class="absolute right-1.5 text-[10px] text-[#e8e0d0]/30 leading-none"
+            class="absolute right-1.5 text-[10px] text-[var(--text-placeholder)] leading-none"
             :style="{ top: `${tick.pos}%`, transform: 'translateY(-50%)' }"
           >
             {{ tick.value }}
@@ -50,7 +50,7 @@
             <div
               v-for="(tick, i) in chartData.yTicks"
               :key="`grid-${i}`"
-              class="absolute left-0 right-0 border-t border-white/[0.04]"
+              class="absolute left-0 right-0 border-t border-[var(--border-subtle)]"
               :style="{ top: `${tick.pos}%` }"
             />
           </div>
@@ -66,48 +66,48 @@
               <div
                 class="absolute -top-2 left-1/2 -translate-x-1/2 z-[100] w-52 opacity-0 invisible group-hover/dy:opacity-100 group-hover/dy:visible transition-all duration-200 pointer-events-none"
               >
-                <div class="rounded-xl border border-white/[0.08] bg-[#1a1612]/95 backdrop-blur-md shadow-2xl px-3.5 py-3 mb-2">
-                  <div class="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[#1a1612] border-b border-r border-white/[0.08] rotate-45" />
+                <div class="rounded-xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)]/95 backdrop-blur-md shadow-2xl px-3.5 py-3 mb-2">
+                  <div class="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[var(--surface-dropdown)] border-b border-r border-[var(--border-medium)] rotate-45" />
                   <div class="flex items-center gap-2 mb-2">
-                    <span class="text-sm font-bold" :class="d.isCurrent ? 'text-[#c9a227]' : 'text-[#f5e6c0]'">
+                    <span class="text-sm font-bold" :class="d.isCurrent ? 'text-[var(--accent)]' : 'text-[var(--text-primary)]'">
                       {{ d.gan }}{{ d.zhi }}{{ $t('bazi.daYunLabel') }}
                     </span>
                     <span
                       v-if="d.isCurrent"
-                      class="text-[9px] px-1.5 py-0.5 rounded bg-[#c9a227]/15 text-[#c9a227] border border-[#c9a227]/20"
+                      class="text-[9px] px-1.5 py-0.5 rounded bg-[var(--accent-bg-hover)] text-[var(--accent)] border border-[var(--accent-border)]"
                     >
                       {{ $t('bazi.currentLabel') }}
                     </span>
                   </div>
                   <div class="space-y-1.5">
                     <div class="flex items-center justify-between text-[11px]">
-                      <span class="text-[#e8e0d0]/40">{{ $t('bazi.ageRangeLabel') }}</span>
-                      <span class="text-[#e8e0d0]/80">{{ d.ageRange[0] }}-{{ d.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}</span>
+                      <span class="text-[var(--text-faint)]">{{ $t('bazi.ageRangeLabel') }}</span>
+                      <span class="text-[var(--text-body)]">{{ d.ageRange[0] }}-{{ d.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}</span>
                     </div>
-                    <div class="grid grid-cols-4 gap-1 pt-1 border-t border-white/[0.06]">
+                    <div class="grid grid-cols-4 gap-1 pt-1 border-t border-[var(--border-light)]">
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcOpen') }}</p>
-                        <p class="text-[11px] font-bold text-[#e8e0d0]/70">{{ d.open }}</p>
+                        <p class="text-[9px] text-[var(--text-placeholder)]">{{ $t('bazi.ohlcOpen') }}</p>
+                        <p class="text-[11px] font-bold text-[var(--text-muted)]">{{ d.open }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcHigh') }}</p>
-                        <p class="text-[11px] font-bold text-[#c9a227]">{{ d.high }}</p>
+                        <p class="text-[9px] text-[var(--text-placeholder)]">{{ $t('bazi.ohlcHigh') }}</p>
+                        <p class="text-[11px] font-bold text-[var(--accent)]">{{ d.high }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcLow') }}</p>
+                        <p class="text-[9px] text-[var(--text-placeholder)]">{{ $t('bazi.ohlcLow') }}</p>
                         <p class="text-[11px] font-bold text-red-400/80">{{ d.low }}</p>
                       </div>
                       <div class="text-center">
-                        <p class="text-[9px] text-[#e8e0d0]/30">{{ $t('bazi.ohlcClose') }}</p>
-                        <p class="text-[11px] font-bold" :class="d.close >= d.open ? 'text-[#c9a227]' : 'text-[#e8e0d0]/70'">{{ d.close }}</p>
+                        <p class="text-[9px] text-[var(--text-placeholder)]">{{ $t('bazi.ohlcClose') }}</p>
+                        <p class="text-[11px] font-bold" :class="d.close >= d.open ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">{{ d.close }}</p>
                       </div>
                     </div>
                     <div class="flex items-center justify-between text-[11px]">
-                      <span class="text-[#e8e0d0]/40">{{ $t('bazi.fortuneLevelLabel') }}</span>
-                      <span class="text-[#e8e0d0]/80">{{ d.fortune || $t('bazi.fortuneUnevaluated') }}</span>
+                      <span class="text-[var(--text-faint)]">{{ $t('bazi.fortuneLevelLabel') }}</span>
+                      <span class="text-[var(--text-body)]">{{ d.fortune || $t('bazi.fortuneUnevaluated') }}</span>
                     </div>
-                    <div v-if="d.analysis" class="pt-1.5 border-t border-white/[0.06]">
-                      <p class="text-[11px] text-[#e8e0d0]/60 leading-relaxed">{{ d.analysis }}</p>
+                    <div v-if="d.analysis" class="pt-1.5 border-t border-[var(--border-light)]">
+                      <p class="text-[11px] text-[var(--text-muted)] leading-relaxed">{{ d.analysis }}</p>
                     </div>
                   </div>
                 </div>
@@ -169,24 +169,24 @@
             <span
               class="text-[10px] font-bold px-1.5 py-0.5 rounded mb-1"
               :class="d.isRising
-                ? (d.isCurrent ? 'bg-[#c9a227]/15 text-[#c9a227]' : 'bg-[#e8e0d0]/8 text-[#e8e0d0]/50')
+                ? (d.isCurrent ? 'bg-[var(--accent-bg-hover)] text-[var(--accent)]' : 'bg-[var(--text-placeholder)] text-[var(--text-muted)]')
                 : 'bg-red-500/10 text-red-400/70'"
             >
               {{ d.change >= 0 ? '+' : '' }}{{ d.change }}
             </span>
             <!-- 干支 + 年龄段 -->
-            <p class="text-[11px] font-bold" :class="d.isCurrent ? 'text-[#c9a227]' : 'text-[#e8e0d0]/60'">
+            <p class="text-[11px] font-bold" :class="d.isCurrent ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">
               {{ d.gan }}{{ d.zhi }}
             </p>
-            <p class="text-[9px] text-[#e8e0d0]/30 mt-0.5">
+            <p class="text-[9px] text-[var(--text-placeholder)] mt-0.5">
               {{ d.ageRange[0] }}-{{ d.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}
             </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="absolute inset-0 rounded-2xl border border-white/[0.06] pointer-events-none" />
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/10 to-transparent" />
+    <div class="absolute inset-0 rounded-2xl border border-[var(--border-light)] pointer-events-none" />
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-faint)] to-transparent" />
   </div>
 </template>
 

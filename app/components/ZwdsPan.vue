@@ -13,14 +13,14 @@
             <!-- 中间信息区（2x2） -->
             <div
               v-if="pos.isCenter"
-              class="rounded-xl border border-white/[0.06] bg-white/[0.02] flex flex-col items-center justify-center p-2 text-center"
+              class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] flex flex-col items-center justify-center p-2 text-center"
               style="grid-column: 2 / span 2; grid-row: 2 / span 2;"
             >
-              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">{{ $t('zwdsPan.wuxingBureau') }}</div>
-              <div class="text-base font-bold text-[#c9a227] mb-1">{{ chart.wuxingJu }}{{ $t('zwdsPan.wuxingBureau') }}</div>
-              <div class="text-[10px] text-[#e8e0d0]/40 mb-0.5">{{ $t('zwdsPan.yearPillar') }}</div>
-              <div class="text-sm font-semibold text-[#f5e6c0]">{{ chart.yearGan }}{{ chart.yearZhi }}</div>
-              <div class="text-[10px] text-[#e8e0d0]/30 mt-1">{{ chart.gender === 'male' ? $t('zwdsPan.sunSign') : $t('zwdsPan.moonSign') }} · {{ chart.currentAge }}{{ $t('zwdsPan.sui') }}</div>
+              <div class="text-[10px] text-[var(--text-faint)] mb-0.5">{{ $t('zwdsPan.wuxingBureau') }}</div>
+              <div class="text-base font-bold text-[var(--accent)] mb-1">{{ chart.wuxingJu }}{{ $t('zwdsPan.wuxingBureau') }}</div>
+              <div class="text-[10px] text-[var(--text-faint)] mb-0.5">{{ $t('zwdsPan.yearPillar') }}</div>
+              <div class="text-sm font-semibold text-[var(--text-primary)]">{{ chart.yearGan }}{{ chart.yearZhi }}</div>
+              <div class="text-[10px] text-[var(--text-placeholder)] mt-1">{{ chart.gender === 'male' ? $t('zwdsPan.sunSign') : $t('zwdsPan.moonSign') }} · {{ chart.currentAge }}{{ $t('zwdsPan.sui') }}</div>
             </div>
 
             <!-- 宫位格子 -->
@@ -34,11 +34,11 @@
               <div class="flex items-center gap-1 pr-4">
                 <span
                   class="text-[10px] font-bold truncate"
-                  :class="pos.gong?.isMing ? 'text-[#c9a227]' : 'text-[#e8e0d0]/70'"
+                  :class="pos.gong?.isMing ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'"
                 >
                   {{ pos.gong?.name }}
                 </span>
-                <span class="text-[9px] text-[#e8e0d0]/40 shrink-0">{{ pos.zhi }}</span>
+                <span class="text-[9px] text-[var(--text-faint)] shrink-0">{{ pos.zhi }}</span>
               </div>
 
               <!-- 主星 -->
@@ -47,13 +47,13 @@
                   v-for="star in pos.gong?.mainStars"
                   :key="star"
                   class="text-[9px] px-1 py-0.5 rounded font-medium leading-none"
-                  :class="isEmperorStar(star) ? 'bg-[#c9a227]/15 text-[#c9a227]' : 'bg-white/[0.04] text-[#f5e6c0]/80'"
+                  :class="isEmperorStar(star) ? 'bg-[var(--accent-bg-hover)] text-[var(--accent)]' : 'bg-[var(--surface-card-hover)] text-[var(--text-primary)]'"
                 >
                   {{ star }}
                 </span>
                 <span
                   v-if="pos.gong?.mainStars.length === 0"
-                  class="text-[9px] text-[#e8e0d0]/25 italic leading-none"
+                  class="text-[9px] text-[var(--text-placeholder)] italic leading-none"
                 >
                   {{ $t('zwdsPan.borrowLabel') }}{{ getJieDuiZhi(pos.zhi) }}
                 </span>
@@ -64,13 +64,13 @@
                 <span
                   v-for="star in pos.gong?.auxStars.slice(0, 2)"
                   :key="star"
-                  class="text-[8px] px-0.5 py-0.5 rounded text-[#e8e0d0]/50 bg-white/[0.02] leading-none"
+                  class="text-[8px] px-0.5 py-0.5 rounded text-[var(--text-muted)] bg-[var(--surface-card)] leading-none"
                 >
                   {{ star }}
                 </span>
                 <span
                   v-if="(pos.gong?.auxStars.length ?? 0) > 2"
-                  class="text-[8px] text-[#e8e0d0]/30 leading-none"
+                  class="text-[8px] text-[var(--text-placeholder)] leading-none"
                 >
                   +{{ (pos.gong?.auxStars.length ?? 0) - 2 }}
                 </span>
@@ -78,8 +78,8 @@
 
               <!-- 命宫/身宫/大限标记（非 absolute，避免重叠） -->
               <div class="flex gap-0.5 mt-auto pt-0.5">
-                <span v-if="pos.gong?.isMing" class="text-[8px] px-1 rounded bg-[#c9a227]/20 text-[#c9a227] leading-none">{{ $t('zwdsPan.lifePalace') }}</span>
-                <span v-if="pos.gong?.isShen" class="text-[8px] px-1 rounded bg-[#8b5cf6]/20 text-[#8b5cf6] leading-none">{{ $t('zwdsPan.bodyPalace') }}</span>
+                <span v-if="pos.gong?.isMing" class="text-[8px] px-1 rounded bg-[var(--accent-bg-hover)] text-[var(--accent)] leading-none">{{ $t('zwdsPan.lifePalace') }}</span>
+                <span v-if="pos.gong?.isShen" class="text-[8px] px-1 rounded bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)] leading-none">{{ $t('zwdsPan.bodyPalace') }}</span>
                 <span v-if="pos.gong?.isCurrentDaXian" class="text-[8px] px-1 rounded bg-emerald-500/20 text-emerald-400 leading-none">{{ $t('zwdsPan.limitPalace') }}</span>
               </div>
 
@@ -157,10 +157,10 @@ const panPositions = computed(() => {
 })
 
 function gongClass(gong: ZwdsGong | null): string {
-  if (!gong) return 'border-white/[0.04] bg-white/[0.01]'
-  if (gong.isMing) return 'border-[#c9a227]/30 bg-[#c9a227]/[0.04]'
+  if (!gong) return 'border-[var(--border-subtle)] bg-[var(--surface-card)]'
+  if (gong.isMing) return 'border-[var(--accent-border-hover)] bg-[var(--accent-faint)]'
   if (gong.isCurrentDaXian) return 'border-emerald-500/20 bg-emerald-500/[0.02]'
-  return 'border-white/[0.04] bg-white/[0.02] hover:border-white/[0.08]'
+  return 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)]'
 }
 
 function isEmperorStar(star: string): boolean {
@@ -169,11 +169,11 @@ function isEmperorStar(star: string): boolean {
 
 function sihuaClass(type: string): string {
   switch (type) {
-    case '禄': return 'bg-[#c9a227]/20 text-[#c9a227]'
+    case '禄': return 'bg-[var(--accent-bg-hover)] text-[var(--accent)]'
     case '权': return 'bg-red-500/20 text-red-400'
-    case '科': return 'bg-[#8b5cf6]/20 text-[#8b5cf6]'
-    case '忌': return 'bg-gray-500/20 text-gray-400'
-    default: return 'bg-white/10 text-[#e8e0d0]'
+    case '科': return 'bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
+    case '忌': return 'bg-[var(--text-faint)]/20 text-[var(--text-muted)]'
+    default: return 'bg-[var(--border-light)] text-[var(--text-body)]'
   }
 }
 

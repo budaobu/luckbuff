@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "tools": "Tools",
+    "prophet": "Prophet",
     "profiles": "My Profiles",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
@@ -76,6 +77,15 @@
     "toolLiuyaoTitle": "World Cup Liu Yao",
     "toolLiuyaoDesc": "Built for FIFA 2026 World Cup. Pick a matchup, cast six coins, and divine the outcome from line strength and moving-line interactions.",
     "toolLiuyaoCta": "Cast & Predict",
+    "toolQimenWorldcupTitle": "Qimen World Cup",
+    "toolQimenWorldcupDesc": "Select a 2026 World Cup match, predict the outcome with Qimen Dunjia, and see win probability",
+    "toolQimenWorldcupCta": "Start Prediction",
+    "toolLiurenTitle": "Da Liu Ren",
+    "toolLiurenDesc": "Best for detailed analysis of how specific matters unfold and end. One question at a time. Uses the Four Pillars and Three Transmissions to read fortune and misfortune, revealing the full story and final outcome.",
+    "toolLiurenCta": "Start Divination",
+    "toolLiurenWorldcupTitle": "Da Liu Ren World Cup",
+    "toolLiurenWorldcupDesc": "Select a 2026 World Cup match, predict the outcome with Da Liu Ren four-pillar three-transmission divination",
+    "toolLiurenWorldcupCta": "Start Prediction",
     "toolLiuyaoDivinationTitle": "Liu Yao Divination",
     "toolLiuyaoDivinationDesc": "Best for \"can I, will it, should I\" questions. One question at a time. Reads self-response strength and moving lines to reveal how events unfold.",
     "toolLiuyaoDivinationCta": "Start Divination",
@@ -107,6 +117,36 @@
     "faq7Q": "Are these online divination tools free?",
     "faq7A": "Yes, all online charting and interpretation tools on ososn are completely free to use. There are no paywalls and no usage limits. You can perform unlimited readings for yourself, family, and friends anytime, with all features equally available.",
     "liuNianText": "{name}'s {year} fortune: Bazi reveals annual trends, Ziwei shows decade patterns. Select a tool above to start."
+  },
+  "prophet": {
+    "title": "Match Predictions",
+    "subtitle": "2026 FIFA World Cup predictions using Qimen Dunjia for all 104 matches",
+    "toolsSection": "Prediction Tools",
+    "fixturesSection": "Match Schedule",
+    "matchesCount": " matches",
+    "predicted": "Predicted",
+    "noPrediction": "Pending",
+    "noFixtures": "No fixtures available",
+    "match": {
+      "badge": "Qimen Prediction",
+      "titlePrefix": "2026 World Cup ",
+      "scorePrediction": "Score Prediction",
+      "aiPrediction": "AI Prediction",
+      "noPrediction": "Prediction not yet generated",
+      "noPredictionDesc": "The Qimen Dunjia prediction for this match is being prepared. You can use the interactive tool to generate one now.",
+      "goPredict": "Go Predict",
+      "backToList": "Back to Schedule",
+      "allMatches": "All Matches",
+      "customPredict": "Custom Prediction",
+      "fallbackTitle": "Match Prediction - ososn",
+      "juUnit": "Ju",
+      "matchTimeLabel": "Match Time",
+      "matchVenueLabel": "Venue",
+      "predictionMethodLabel": "Method",
+      "qimenPredictionMethod": "Qimen Dunjia AI Prediction",
+      "seoDesc": "{home} vs {away} — 2026 World Cup Qimen Dunjia AI prediction. Win probability, score prediction, chart analysis.",
+      "seoKeywords": "{home},{away},World Cup prediction,score prediction,Qimen Dunjia,football prediction,2026 World Cup"
+    }
   },
   "tools": {
     "title": "Divination Tools",
@@ -319,7 +359,22 @@
     "huangdaoDesc": "Free online auspicious day selector. Enter your birth info and event details to find the best dates for moving, weddings, business launches, and more using the traditional Chinese almanac.",
     "huangdaoKeywords": "auspicious day,date picker,Chinese almanac,moving day,wedding date,business launch,free divination",
     "huangdaoOgTitle": "Auspicious Day Selector_Free Date Picker",
-    "huangdaoOgDesc": "Enter your birth info and event details. AI combines the traditional almanac to pick the best auspicious dates for you."
+    "huangdaoOgDesc": "Enter your birth info and event details. AI combines the traditional almanac to pick the best auspicious dates for you.",
+    "liurenTitle": "Da Liu Ren Online Charting_Four Pillars Divination",
+    "liurenDesc": "Free Da Liu Ren online charting. Enter your question and birth info to generate Four Pillars and Three Transmissions. AI deeply interprets fortune, development process, and final outcome.",
+    "liurenKeywords": "Da Liu Ren,Four Pillars,Three Transmissions,online divination,Da Liu Ren prediction,divination tool,AI interpretation",
+    "liurenOgTitle": "Da Liu Ren Online Charting_Four Pillars Divination",
+    "liurenOgDesc": "Free Da Liu Ren charting. Enter your question and birth info. AI interprets Four Pillars, Three Transmissions, and fortune.",
+    "prophetTitle": "2026 World Cup Score Prediction_Match by Match Analysis",
+    "prophetDesc": "2026 FIFA World Cup prediction. Predict match outcomes using ancient Liu Yao divination. Traditional wisdom meets modern football.",
+    "prophetKeywords": "World Cup prediction,football prediction,2026 World Cup,Liu Yao football,match prediction",
+    "prophetOgTitle": "2026 World Cup Score Prediction_Match by Match Analysis",
+    "prophetOgDesc": "Ancient Liu Yao divination applied to 2026 World Cup matches. Traditional wisdom meets modern football.",
+    "championOddsTitle": "2026 World Cup Champion Odds_Champion Prediction_Team Advancement Analysis",
+    "championOddsDesc": "Dual-track prediction of 2026 FIFA World Cup champion odds combining Opta Supercomputer data with Liuyao divination hexagrams for all 48 teams.",
+    "championOddsKeywords": "World Cup 2026 champion odds,FIFA World Cup prediction,Opta prediction,Liuyao divination,World Cup 48 teams",
+    "championOddsOgTitle": "2026 World Cup Champion Odds_Champion Prediction_Team Advancement Analysis",
+    "championOddsOgDesc": "48 teams' stage-by-stage advancement probabilities and Liuyao hexagram readings — where data meets divination."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -560,7 +615,7 @@
     "liuNianTrendTitle": "Annual Trend"
   },
   "liuyao": {
-    "title": "Liu Yao Prediction",
+    "title": "World Cup Liu Yao Prediction",
     "subtitle": "Select FIFA 2026 World Cup matchups and cast six coins for AI-powered predictions",
     "castingBtn": "Cast Hexagram",
     "calculating": "Coins are falling, casting...",
@@ -571,6 +626,7 @@
     "shareTextDefault": "Liu Yao (three-coin method) World Cup predictions. Select matchups, cast six coins, AI interprets self-response strength, moving line interactions, and official-ghost direction.",
     "backHome": "Back to Home",
     "physicalBlowout": "Physical Layer Trip",
+    "disclaimerTop": "This tool is for entertainment only. Predictions do not constitute betting advice. Please view rationally and avoid obsession.",
     "disclaimer": "This feature uses a numerology model for simulation. Results are for entertainment only. Using for any illegal sports betting is strictly prohibited.",
     "fail": "Divination failed",
     "reinterpret": "Re-interpret",
@@ -684,21 +740,10 @@
       "questionTypePlaceholder": "Select a subject type",
       "questionLabel": "Details (optional)",
       "questionGoals": "Goals (multi-select)",
-      "timeMode": "Time",
-      "timeModeNow": "Now",
-      "timeModeCustom": "Custom",
-      "calendarType": "Calendar",
-      "calendarSolar": "Gregorian (Solar)",
-      "calendarLunar": "Lunar",
-      "isLeapMonth": "Leap Month",
       "location": "Location",
       "locationPlaceholder": "e.g. Guangzhou, China or New York, USA",
       "locationHint": "Format: City or City, Country (e.g. New York, USA)",
-      "pickDate": "Select date",
-      "pickTime": "Select time",
-      "hourPlaceholder": "Hour",
-      "minutePlaceholder": "Min",
-      "timezone": "Timezone",
+      "timeHint": "Using your device's current time and timezone for divination",
       "outputStyle": "Output Style",
       "outputBrief": "Brief",
       "outputDetailed": "Detailed",
@@ -760,6 +805,179 @@
       "7": "West",
       "8": "Northeast",
       "9": "South"
+    },
+    "dunTypeMap": {
+      "阳遁": "Yang Dun",
+      "阴遁": "Yin Dun"
+    }
+  },
+  "qimenWorldcup": {
+    "badge": "Qimen Dunjia · World Cup 2026",
+    "title": "Qimen World Cup Prediction",
+    "subtitle": "Select a 2026 World Cup match and predict the outcome with Qimen Dunjia",
+    "disclaimer": "This tool is for entertainment only. Predictions do not constitute betting advice. Please view rationally and avoid obsession.",
+    "form": {
+      "selectMatch": "Select Match",
+      "matchPlaceholder": "Search or select a match",
+      "divinationTime": "Divination Time",
+      "timeHint": "Using your device's current time and timezone for divination",
+      "submit": "Start Prediction"
+    },
+    "animating": "Casting chart and divining...",
+    "result": {
+      "badge": "Qimen World Cup 2026",
+      "title": "Qimen World Cup Prediction",
+      "homeTeam": "Home",
+      "awayTeam": "Away",
+      "predictionTitle": "Prediction Result",
+      "aiAnalyzing": "AI is analyzing the chart...",
+      "winProbability": "Win Probability",
+      "homeWin": "{team} Win",
+      "awayWin": "{team} Win",
+      "draw": "Draw"
+    },
+    "actions": {
+      "shareResult": "Share Result",
+      "predictAgain": "Predict Another"
+    },
+    "shareDialog": {
+      "posterLabel": "Prediction Poster",
+      "downloadPoster": "Download Poster"
+    },
+    "error": {
+      "chartFail": "Chart calculation failed",
+      "aiUnavailable": "AI service temporarily unavailable"
+    },
+    "seo": {
+      "title": "Qimen Dunjia Predicts 2026 World Cup_Qimen Chart Match Prediction_Ancient Chinese Divination Football - ososn",
+      "description": "Predict 2026 World Cup match outcomes with Qimen Dunjia",
+      "keywords": "Qimen Dunjia,World Cup,2026,football prediction",
+      "ogTitle": "Qimen Dunjia Predicts 2026 World Cup_Qimen Chart Match Prediction_Ancient Chinese Divination Football - ososn",
+      "ogDescription": "Predict 2026 World Cup match outcomes with Qimen Dunjia"
+    },
+    "share": {
+      "hookQimen": "I predicted with Qimen Dunjia: {summary}",
+      "hookQimenDefault": "I made a Qimen Dunjia prediction on ososn",
+      "suffix": "From ososn Qimen World Cup Prediction"
+    },
+    "placeholders": {
+      "roundOf16": "Round of 16 Match {n} Winner",
+      "roundOf32Winner": "Round of 32 Winner",
+      "groupRank": "Group {group} Rank {rank}",
+      "quarterFinal": "Quarter Final {n} Winner",
+      "semiFinalWinner": "Semi Final {n} Winner",
+      "semiFinalLoser": "Semi Final {n} Loser",
+      "thirdPlace": "3rd Place Group",
+      "matchWinner": "Match {n} Winner",
+      "matchLoser": "Match {n} Loser"
+    }
+  },
+  "liurenWorldcup": {
+    "badge": "Da Liu Ren · World Cup 2026",
+    "title": "Da Liu Ren World Cup Prediction",
+    "subtitle": "Select a 2026 World Cup match and predict the outcome with Da Liu Ren divination",
+    "disclaimer": "This tool is for entertainment only. Predictions do not constitute betting advice. Please view rationally and avoid obsession.",
+    "form": {
+      "selectMatch": "Select Match",
+      "matchPlaceholder": "Search or select a match",
+      "birthYear": "Birth Year",
+      "birthYearPlaceholder": "e.g. 1990",
+      "birthYearHint": "Da Liu Ren requires the diviner's birth year. The system will automatically calculate your earthly branch.",
+      "divinationTime": "Divination Time",
+      "timeHint": "Using your device's current time and timezone for divination",
+      "submit": "Start Prediction"
+    },
+    "animating": "Casting chart and divining...",
+    "result": {
+      "badge": "Da Liu Ren World Cup 2026",
+      "title": "Da Liu Ren World Cup Prediction",
+      "homeTeam": "Home",
+      "awayTeam": "Away",
+      "chartTitle": "Chart Information",
+      "yearPillar": "Year Pillar",
+      "monthPillar": "Month Pillar",
+      "dayPillar": "Day Pillar",
+      "hourPillar": "Hour Pillar",
+      "yuejiang": "Yue Jiang",
+      "shichen": "Shi Chen",
+      "birthYear": "Birth Year Branch",
+      "predictionTitle": "Prediction Result",
+      "aiAnalyzing": "AI is analyzing the chart...",
+      "winProbability": "Win Probability",
+      "homeWin": "{team} Win",
+      "awayWin": "{team} Win",
+      "draw": "Draw"
+    },
+    "actions": {
+      "shareResult": "Share Result",
+      "predictAgain": "Predict Another"
+    },
+    "shareDialog": {
+      "posterLabel": "Prediction Poster",
+      "downloadPoster": "Download Poster"
+    },
+    "error": {
+      "chartFail": "Chart calculation failed",
+      "aiUnavailable": "AI service temporarily unavailable",
+      "unknown": "Unknown error"
+    },
+    "seo": {
+      "title": "Da Liu Ren Predicts 2026 World Cup_Liu Ren Chart Match Prediction_Ancient Chinese Divination Football - ososn",
+      "description": "Predict 2026 World Cup match outcomes with Da Liu Ren divination",
+      "keywords": "Da Liu Ren,World Cup,2026,football prediction",
+      "ogTitle": "Da Liu Ren Predicts 2026 World Cup_Liu Ren Chart Match Prediction_Ancient Chinese Divination Football - ososn",
+      "ogDescription": "Predict 2026 World Cup match outcomes with Da Liu Ren divination"
+    },
+    "share": {
+      "hookLiuren": "I predicted with Da Liu Ren: {summary}",
+      "hookLiurenDefault": "I made a Da Liu Ren prediction on ososn",
+      "suffix": "From ososn Da Liu Ren World Cup Prediction"
+    }
+  },
+  "liuren": {
+    "title": "Da Liu Ren",
+    "subtitle": "One question at a time. Read fortune and outcome with Four Pillars and Three Transmissions.",
+    "calculating": "Casting chart and divining...",
+    "resultTitle": "Chart Result",
+    "disclaimer": "Da Liu Ren is an ancient Chinese divination art. Results are for reference only and do not constitute professional advice.",
+    "form": {
+      "question": "Your Question",
+      "questionPlaceholder": "e.g. Will this interview be successful? e.g. How will this relationship develop?",
+      "birthYear": "Birth Year",
+      "birthYearPlaceholder": "e.g. 1990",
+      "birthYearHint": "Da Liu Ren requires the diviner's birth year. The system will automatically calculate your earthly branch.",
+      "divinationTime": "Divination Time",
+      "timeHint": "Using your device's current time and timezone for divination",
+      "location": "Location",
+      "locationPlaceholder": "e.g. Guangzhou, China or New York, USA",
+      "locationHint": "For domestic locations, city name is sufficient. For overseas, use City, Country (e.g. New York, USA).",
+      "submitBtn": "Start Divination",
+      "validation": {
+        "questionRequired": "Please enter your question",
+        "birthYearRequired": "Please enter a valid birth year (1900-2100)",
+        "locationRequired": "Please enter a location"
+      }
+    },
+    "result": {
+      "questionLabel": "Question",
+      "yearPillar": "Year Pillar",
+      "monthPillar": "Month Pillar",
+      "dayPillar": "Day Pillar",
+      "hourPillar": "Hour Pillar",
+      "yuejiang": "Yue Jiang",
+      "shichen": "Shi Chen",
+      "birthYear": "Birth Year Branch",
+      "interpretTitle": "AI Deep Interpretation",
+      "aiAnalyzing": "AI is analyzing the chart..."
+    },
+    "error": {
+      "chartFail": "Chart calculation failed",
+      "unknown": "Unknown error",
+      "aiUnavailable": "AI interpretation service temporarily unavailable"
+    },
+    "share": {
+      "hook": "Da Liu Ren · {summary}",
+      "hookDefault": "Just cast a Da Liu Ren chart. The result is mind-blowing."
     }
   },
   "geolocation": {
@@ -789,11 +1007,6 @@
     "methodTime": "Time-based",
     "methodNumbers": "Number-based",
     "methodCharacter": "Character-based",
-    "date": "Date & Time",
-    "datePlaceholder": "Select divination time",
-    "lunarNote": "Beijing time",
-    "hourLabel": "Hour",
-    "hourPlaceholder": "Select hour",
     "firstNumber": "First Number",
     "firstNumberPlaceholder": "Enter first number",
     "upperGuaHint": "Used to generate upper trigram",
@@ -1340,5 +1553,94 @@
     "yearPillar": "Year",
     "monthPillar": "Month",
     "dayPillar": "Day"
+  },
+  "championOdds": {
+    "title": "World Cup 2026 Champion Odds",
+    "subtitle": "Opta Supercomputer × Liuyao Divination dual-track prediction. Data-driven probability on the left, Eastern metaphysical fate reading on the right — two forms of wisdom, one World Cup.",
+    "method": "Liuyao Method",
+    "methodNote": "Using the self-line as the team's destiny, the official-spirit as the honor/championship, and the parent-line as the foundation. All 48 teams were divined before the tournament.",
+    "filter": {
+      "all": "All",
+      "continent": "Continent",
+      "group": "Group"
+    },
+    "table": {
+      "rank": "Rank",
+      "team": "Team",
+      "champ": "Champ",
+      "liuyao": "Liuyao",
+      "liuyaoBrief": "Hexagram",
+      "topGroup": "Top Grp",
+      "l32": "R32",
+      "l16": "R16",
+      "qf": "QF",
+      "sf": "SF",
+      "final": "Final"
+    },
+    "verdict": {
+      "great": "Great",
+      "good": "Good",
+      "neutral": "Neutral",
+      "bad": "Poor",
+      "terrible": "Bleak"
+    },
+    "noResults": "No teams match the filters",
+    "dataSource": "Data Source",
+    "liuyaoSource": "Liuyao Reading",
+    "link": {
+      "matchPrediction": "Match Predictions",
+      "championOdds": "Champion Odds",
+      "championOddsDesc": "Opta × Liuyao dual-track odds for 48 teams"
+    },
+    "readings": {
+      "ESP": "The self-line rests strong on the day branch, the official-spirit moves forward into advancement — championship destiny is at its peak.",
+      "FRA": "The official-spirit receives strength from the monthly branch, the self-line joins the day stem — the title moment must not be missed.",
+      "ENG": "The self-line is strong yet the official-spirit remains hidden, awaiting its emergence — late momentum is promising.",
+      "ARG": "The self-line rests in the Azure Dragon's ground, the official-spirit holds the self and receives returning life — the aura of a title defense.",
+      "POR": "The self-line gains strength from the day, the official-spirit moves secretly — title hunger burns but strong rivals loom.",
+      "BRA": "The self-line emerges powerfully from emptiness, the official-spirit awaits clash after combination — key battles will decide all.",
+      "GER": "The parent-line is strong with deep foundation, the official-spirit restrained but ready to rise — steady and methodical progress.",
+      "NED": "The self-line is neutral, the official-spirit weak — advancement is possible but championship destiny falls short.",
+      "NOR": "The self-line meets monthly breakage, the spirit is restricted — dark-horse potential but the summit remains unreachable.",
+      "BEL": "The self-line has roots but the official-spirit lies in the tomb — the golden generation's afterglow cannot light the trophy.",
+      "COL": "The self-line transforms into receiving restriction, the official-spirit is empty — this South American force has ordinary fortune.",
+      "MAR": "The self-line rests in the Vermilion Bird's proper place, the official-spirit sits on the monthly stem — Africa's star may bring surprises.",
+      "SUI": "The self-line is quiet, the official-spirit does not appear — defense is their strength but the title is elusive.",
+      "URU": "The self-line meets clash, the official-spirit is hidden — this aging force cannot reclaim past glory.",
+      "ECU": "The self-line is restricted by month and clashed by day, the spirit is weak — the highland warriors' fortune is low.",
+      "JPN": "The self-line gains energy from the day branch, but the official-spirit is restricted — the round of 16 is the ceiling.",
+      "CRO": "The self-line is weak yet receives life, the official-spirit is empty — the checkered legion has courage but cannot reach the peak.",
+      "USA": "The self-line gains host advantage but the official-spirit is restricted — the home benefit stops at the quarterfinals.",
+      "TUR": "The self-line is broken by month and restricted by day, the spirit enters the tomb — the crescent army's fortune is poor.",
+      "MEX": "The self-line is strong but the official-spirit chants in hiding — as a host, advancing is expected but the title is out of reach.",
+      "SEN": "The self-line is weak without roots, the official-spirit is clashed — the Lions of Teranga face dim destiny.",
+      "AUT": "The self-line enters the tomb, the spirit is empty — the Alpine nation cannot create miracles.",
+      "PAR": "The self-line is restricted, the official-spirit transforms into retreat — this traditional force faces more danger than fortune.",
+      "SWE": "The self-line meets emptiness, the official-spirit is restricted by the monthly stem — the Nordic force cannot break through.",
+      "KOR": "The self-line is clashed by day and restricted by month, the spirit is weak — the Taeguk Warriors have no title hope.",
+      "CAN": "The self-line rests in the Azure Dragon with energy, but the official-spirit is restricted — escaping the group is already victory.",
+      "AUS": "The self-line is weak, the official-spirit enters the tomb — the Socceroos' fortune is at its lowest ebb.",
+      "EGY": "The self-line transforms into receiving restriction, the spirit meets clash — the Pharaohs will struggle past the group stage.",
+      "BIH": "The self-line is broken by month, restricted by day, and meets emptiness — the official-spirit is extinct, advancing would be a miracle.",
+      "IRN": "The self-line is weak and enters the tomb, the official-spirit is restricted — the Persian cavalry cannot break their fate.",
+      "ALG": "The self-line rests in the White Tiger and is restricted, the spirit is empty — the Desert Foxes' fortune is extremely poor.",
+      "CZE": "The self-line gains from the day but the official-spirit remains hidden — the Eastern European force cannot regain former glory.",
+      "CIV": "The self-line is weak and without energy, the official-spirit transforms into ghost — the Elephants' path is arduous.",
+      "GHA": "The self-line is broken by day and restricted by month, the spirit enters the tomb — the Black Stars cannot escape the group.",
+      "SCO": "The self-line is quiet and restricted, the official-spirit does not appear — the Tartan Army cannot play the victory song.",
+      "PAN": "The self-line meets emptiness and enters the tomb, the official-spirit is at extinction — destined to be mere participants.",
+      "RSA": "The self-line is broken by month and restricted by day, the spirit transforms into retreat — South Africa's journey holds more danger.",
+      "TUN": "The self-line is weak and restricted, the official-spirit is hidden — the Carthage Eagles cannot spread their wings.",
+      "QAT": "The self-line is weak and meets emptiness, the official-spirit is clashed — Qatar cannot escape group-stage misfortune.",
+      "IRQ": "The self-line enters the tomb and meets daily breakage, the spirit is empty — Mesopotamia cannot produce miracles.",
+      "JOR": "The self-line rests in the White Tiger and is restricted, the official-spirit transforms into retreat — no upset this time.",
+      "COD": "The self-line is broken by month and enters the tomb, the official-spirit is clashed — a participant's fate is sealed.",
+      "UZB": "The self-line is weak without roots, the official-spirit chants in hiding — the Central Asian wolves cannot break through.",
+      "KSA": "The self-line is clashed by day and restricted by month, the spirit enters the tomb — the Green Falcons cannot recreate miracles.",
+      "NZL": "The self-line meets emptiness and is restricted, the official-spirit is at extinction — Oceania's sole hope faces doom.",
+      "CPV": "The self-line is weak and enters the tomb, the official-spirit transforms into ghost — the Blue Sharks' debut holds danger.",
+      "HAI": "The self-line is broken by day and restricted by month, the spirit is empty — Haiti's magic cannot continue.",
+      "CUW": "The self-line rests at the extreme of extinction, the official-spirit is hidden — debut and endpoint are one."
+    }
   }
 }

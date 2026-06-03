@@ -9,7 +9,7 @@
     />
 
     <!-- 列表状态 -->
-    <div v-else class="relative min-h-screen overflow-hidden">
+    <div v-else class="relative overflow-hidden">
       <!-- 氛围背景光晕 -->
       <div class="absolute inset-0 pointer-events-none">
         <div class="absolute top-[10%] right-[15%] w-[500px] h-[500px] rounded-full bg-[#c9a227]/[0.05] blur-[120px]" />
@@ -20,11 +20,11 @@
         <!-- Section 标题 -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-12">
           <div>
-            <span class="text-xs text-[#c9a227]/60 tracking-[0.2em] uppercase mb-2 block">Profiles</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[#f5e6c0] tracking-tight">
+            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Profiles</span>
+            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
               {{ $t('settings.title') }}
             </h1>
-            <p class="text-sm text-[#e8e0d0]/40 mt-2">
+            <p class="text-sm text-[var(--text-faint)] mt-2">
               {{ $t('settings.subtitle') }}
             </p>
           </div>
@@ -48,11 +48,11 @@
 
         <!-- 空状态 -->
         <div v-if="profiles.length === 0" class="text-center py-24">
-          <div class="w-16 h-16 rounded-2xl bg-[#c9a227]/5 border border-[#c9a227]/10 flex items-center justify-center mx-auto mb-5">
-            <UIcon name="i-heroicons-user-group" class="w-8 h-8 text-[#c9a227]/30" />
+          <div class="w-16 h-16 rounded-2xl bg-[var(--accent-faint)] border border-[var(--accent-border)] flex items-center justify-center mx-auto mb-5">
+            <UIcon name="i-heroicons-user-group" class="w-8 h-8 text-[var(--accent-muted)]" />
           </div>
-          <h3 class="text-lg font-medium text-[#f5e6c0]/60 mb-2">{{ $t('settings.emptyTitle') }}</h3>
-          <p class="text-sm text-[#e8e0d0]/30 mb-6 max-w-sm mx-auto">
+          <h3 class="text-lg font-medium text-[var(--text-muted)] mb-2">{{ $t('settings.emptyTitle') }}</h3>
+          <p class="text-sm text-[var(--text-faint)] mb-6 max-w-sm mx-auto">
             {{ $t('settings.emptyDesc') }}
           </p>
           <UButton color="warning" variant="soft" size="md" @click="openCreate">
@@ -75,9 +75,9 @@
           />
         </div>
 
-        <!-- 提示 -->
+        <!-- 隐私提示 -->
         <div class="mt-12 text-center">
-          <p class="text-xs text-[#e8e0d0]/20 inline-flex items-center gap-2">
+          <p class="text-xs inline-flex items-center gap-2" style="color: var(--text-placeholder);">
             <UIcon name="i-heroicons-shield-check" class="w-3.5 h-3.5" />
             {{ $t('settings.privacyNote') }}
           </p>
@@ -142,7 +142,6 @@ function handleFormSubmit(data: Omit<UserProfile, 'id'>) {
 
 useSeoMeta({
   title: t('settings.seoTitle'),
-  titleTemplate: '%s',
   description: t('settings.seoDesc'),
   ogTitle: t('settings.seoTitle'),
   ogDescription: t('settings.seoDesc'),
@@ -150,5 +149,9 @@ useSeoMeta({
   ogType: 'website',
   ogUrl: 'https://www.ososn.com/settings',
   twitterCard: 'summary_large_image',
+})
+
+useHead({
+  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
 </script>

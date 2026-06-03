@@ -1,201 +1,116 @@
 <template>
   <div class="space-y-5">
-    <!-- 当前赛事阶段提示 -->
-    <div class="flex items-center justify-between">
-      <p class="text-xs text-[#e8e0d0]/40">
-        {{ currentPhaseLabel }}
-      </p>
-      <button
-        v-if="subject.home || subject.away"
-        type="button"
-        class="text-[10px] text-[#e8e0d0]/30 hover:text-red-400 transition-colors"
-        @click="clearSelection"
-      >
-        {{ $t('tournamentPicker.reset') }}
-      </button>
-    </div>
-
-    <!-- 已选队伍确认（取代世/应绑定状态） -->
-    <div v-if="isComplete" class="rounded-xl border border-[#c9a227]/20 bg-[#c9a227]/[0.03] p-4">
+    <!-- 已选队伍确认 -->
+    <div v-if="isComplete" class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-faint)] p-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <span class="text-base">{{ getFlag(subject.home!.id) }}</span>
           <div>
-            <p class="text-sm font-semibold text-[#f5e6c0]">
-              <span class="text-[10px] text-[#c9a227] mr-1">{{ $t('tournamentPicker.homeTeam') }}</span>
+            <p class="text-sm font-semibold text-[var(--text-primary)]">
+              <span class="text-[10px] text-[var(--accent)] mr-1">{{ $t('tournamentPicker.homeTeam') }}</span>
               {{ getTeamName(subject.home!.id, subject.home!.name) }}
             </p>
+            <p class="text-[10px] text-[var(--text-faint)]">{{ getGroupLabel(subject.home!.id) }}</p>
           </div>
         </div>
-        <span class="text-xs text-[#e8e0d0]/30 font-medium">{{ $t('tournamentPicker.VS') }}</span>
+        <span class="text-xs text-[var(--text-placeholder)] font-medium">{{ $t('tournamentPicker.VS') }}</span>
         <div class="flex items-center gap-3">
           <div class="text-right">
-            <p class="text-sm font-semibold text-[#f5e6c0]">
-              <span class="text-[10px] text-[#e8e0d0]/40 mr-1">{{ $t('tournamentPicker.awayTeam') }}</span>
+            <p class="text-sm font-semibold text-[var(--text-primary)]">
+              <span class="text-[10px] text-[var(--text-faint)] mr-1">{{ $t('tournamentPicker.awayTeam') }}</span>
               {{ getTeamName(subject.away!.id, subject.away!.name) }}
             </p>
+            <p class="text-[10px] text-[var(--text-faint)]">{{ getGroupLabel(subject.away!.id) }}</p>
           </div>
           <span class="text-base">{{ getFlag(subject.away!.id) }}</span>
         </div>
       </div>
+      <div class="flex justify-center mt-3">
+        <button
+          type="button"
+          class="text-[10px] text-[var(--text-placeholder)] hover:text-red-400 transition-colors"
+          @click="clearSelection"
+        >
+          {{ $t('tournamentPicker.reset') }}
+        </button>
+      </div>
     </div>
 
-    <!-- 未选或未选完时显示选择器 -->
+    <!-- 选择器 -->
     <template v-if="!isComplete">
-      <!-- ========== 小组赛选择器 ========== -->
-      <template v-if="activeTab === 'group'">
+      <div class="grid grid-cols-[1fr_auto_1fr] gap-2 items-end">
+        <!-- 主队 -->
         <div class="space-y-1.5">
-          <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-            {{ $t('tournamentPicker.selectGroup') }}
-          </label>
-          <div class="grid grid-cols-6 gap-1.5">
-            <button
-              v-for="groupName in groupNames"
-              :key="groupName"
-              type="button"
-              class="py-2 rounded-lg text-xs font-medium transition-all duration-200"
-              :class="selectedGroup === groupName
-                ? 'bg-[#c9a227]/10 border border-[#c9a227]/20 text-[#c9a227]'
-                : 'bg-white/[0.02] border border-white/5 text-[#e8e0d0]/50 hover:text-[#e8e0d0]/70'"
-              @click="selectedGroup = groupName"
-            >
-              {{ getGroupName(groupName, groupName) }}
-            </button>
-          </div>
+          <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('tournamentPicker.homeTeam') }}</label>
+          <USelectMenu
+            v-model="homeId"
+            :items="homeItems"
+            :placeholder="$t('tournamentPicker.selectHome')"
+            class="w-full"
+            :ui="selectMenuUi"
+          />
         </div>
 
-        <div v-if="selectedGroup" class="space-y-1.5">
-          <label class="flex items-center gap-1 text-xs font-medium text-[#e8e0d0]/60">
-            {{ $t('tournamentPicker.selectTeam', { group: getGroupName(selectedGroup, selectedGroup) }) }}
-            <span class="text-[#e8e0d0]/30 font-normal">
-              ({{ selectionHint }})
-            </span>
-          </label>
-          <div class="grid grid-cols-2 gap-2">
-            <button
-              v-for="team in currentGroupTeams"
-              :key="team.id"
-              type="button"
-              class="flex items-center gap-2 py-2.5 px-3 rounded-lg text-sm transition-all duration-200"
-              :class="teamButtonClass(team)"
-              @click="selectTeam(team)"
-            >
-              <span class="text-base">{{ getFlag(team.id) }}</span>
-              <span class="truncate">{{ getTeamName(team.id, team.name) }}</span>
-              <span v-if="isTeamSelected(team)" class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full"
-                :class="subject.home?.id === team.id
-                  ? 'bg-[#c9a227]/20 text-[#c9a227]'
-                  : 'bg-white/10 text-[#e8e0d0]/50'"
-              >
-                {{ subject.home?.id === team.id ? $t('tournamentPicker.homeTeam').charAt(0) : $t('tournamentPicker.awayTeam').charAt(0) }}
-              </span>
-            </button>
-          </div>
-        </div>
-      </template>
+        <div class="pb-2 text-xs text-[var(--text-placeholder)] font-medium">VS</div>
 
-      <!-- ========== 淘汰赛选择器 ========== -->
-      <template v-if="activeTab === 'knockout'">
-        <div v-if="bracketMatches.length === 0" class="text-center py-8">
-          <UIcon name="i-heroicons-calendar" class="w-8 h-8 text-[#e8e0d0]/15 mx-auto mb-2" />
-          <p class="text-xs text-[#e8e0d0]/30">{{ $t('tournamentPicker.noKnockoutData') }}</p>
-          <p class="text-[10px] text-[#e8e0d0]/20 mt-1">{{ $t('tournamentPicker.knockoutNote') }}</p>
+        <!-- 客队 -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('tournamentPicker.awayTeam') }}</label>
+          <USelectMenu
+            v-model="awayId"
+            :items="awayItems"
+            :placeholder="$t('tournamentPicker.selectAway')"
+            class="w-full"
+            :ui="selectMenuUi"
+          />
         </div>
-        <div v-else class="space-y-2">
-          <div
-            v-for="match in availableKnockoutMatches"
-            :key="match.id"
-            class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-all duration-200 cursor-pointer hover:border-[#c9a227]/20"
-            :class="{ 'opacity-40 pointer-events-none': match.finished }"
-            @click="selectKnockoutMatch(match)"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="text-base">{{ getFlag(match.home.id) }}</span>
-                <span class="text-sm text-[#f5e6c0]">{{ getTeamName(match.home.id, match.home.name) }}</span>
-              </div>
-              <span class="text-xs text-[#e8e0d0]/30">{{ $t('tournamentPicker.VS') }}</span>
-              <div class="flex items-center gap-2">
-                <span class="text-sm text-[#f5e6c0]">{{ getTeamName(match.away.id, match.away.name) }}</span>
-                <span class="text-base">{{ getFlag(match.away.id) }}</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between mt-2">
-              <span class="text-[10px] text-[#e8e0d0]/25">{{ match.stage }}</span>
-              <span v-if="match.finished && match.winner" class="text-[10px] text-emerald-400/60">
-                {{ $t('tournamentPicker.advancement') }}: {{ match.winner === match.home.id ? match.home.name : match.away.name }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </template>
+      </div>
+
+      <!-- 提示 -->
+      <p class="text-[10px] text-[var(--text-placeholder)] text-center">
+        {{ selectionHint }}
+      </p>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { WorldCupTeam, KnockoutMatch } from '~/types/liuyao'
+import type { WorldCupTeam } from '~/types/liuyao'
 
 const { t } = useI18n()
 
-// 翻译队伍名称
-function getTeamName(id: string, fallbackName: string): string {
-  const key = `teams.${id}`
-  const translated = t(key)
-  return translated === key ? fallbackName : translated
-}
-
-// 翻译组别名称
-function getGroupName(groupKey: string, fallbackName: string): string {
-  const key = `groups.${groupKey}`
-  const translated = t(key)
-  return translated === key ? fallbackName : translated
-}
-
 const props = defineProps<{
   groups: Record<string, WorldCupTeam[]>
-  bracket?: { matches: KnockoutMatch[] }
+  eliminated?: string[]
 }>()
 
 const emit = defineEmits<{
   update: [value: { home: WorldCupTeam | null; away: WorldCupTeam | null }]
 }>()
 
-const activeTab = ref<'group' | 'knockout'>('group')
-const selectedGroup = ref<string>('')
-const subject = reactive<{ home: WorldCupTeam | null; away: WorldCupTeam | null }>({
-  home: null,
-  away: null,
+// 构建带 group 信息的平铺队伍列表
+interface TeamWithGroup extends WorldCupTeam {
+  group: string
+}
+
+const allTeams = computed<TeamWithGroup[]>(() => {
+  const teams: TeamWithGroup[] = []
+  for (const [groupName, groupTeams] of Object.entries(props.groups)) {
+    for (const team of groupTeams) {
+      teams.push({ ...team, group: groupName })
+    }
+  }
+  return teams
 })
 
-const groupNames = computed(() => Object.keys(props.groups))
-
-const currentPhaseLabel = computed(() => {
-  if (activeTab.value === 'group') return t('liuyaoPage.phaseGroup')
-  return t('liuyaoPage.phaseKnockout')
+// 过滤掉已淘汰的队伍
+const availableTeams = computed<TeamWithGroup[]>(() => {
+  if (!props.eliminated?.length) return allTeams.value
+  const eliminatedSet = new Set(props.eliminated)
+  return allTeams.value.filter(t => !eliminatedSet.has(t.id))
 })
 
-const currentGroupTeams = computed(() => {
-  if (!selectedGroup.value) return []
-  return props.groups[selectedGroup.value] || []
-})
-
-const bracketMatches = computed(() => props.bracket?.matches || [])
-
-const availableKnockoutMatches = computed(() => {
-  return bracketMatches.value.filter(m => !m.finished)
-})
-
-const selectionHint = computed(() => {
-  if (!subject.home && !subject.away) return t('tournamentPicker.selectHint.none')
-  if (subject.home && !subject.away) return t('tournamentPicker.selectHint.homeOnly')
-  if (!subject.home && subject.away) return t('tournamentPicker.selectHint.awayOnly')
-  return t('tournamentPicker.selectHint.complete')
-})
-
-const isComplete = computed(() => !!subject.home && !!subject.away)
-
-// 国旗 emoji 映射（简化版，覆盖 48 队）
+// 国旗 emoji 映射
 const FLAG_MAP: Record<string, string> = {
   MEX: '🇲🇽', RSA: '🇿🇦', KOR: '🇰🇷', CZE: '🇨🇿',
   CAN: '🇨🇦', BIH: '🇧🇦', QAT: '🇶🇦', SUI: '🇨🇭',
@@ -215,48 +130,109 @@ function getFlag(id: string): string {
   return FLAG_MAP[id] || '🏳️'
 }
 
-function isTeamSelected(team: WorldCupTeam): boolean {
-  return subject.home?.id === team.id || subject.away?.id === team.id
+function getTeamName(id: string, fallbackName: string): string {
+  const key = `teams.${id}`
+  const translated = t(key)
+  return translated === key ? fallbackName : translated
 }
 
-function teamButtonClass(team: WorldCupTeam): string {
-  if (subject.home?.id === team.id) {
-    return 'bg-[#c9a227]/10 border border-[#c9a227]/20 text-[#c9a227]'
-  }
-  if (subject.away?.id === team.id) {
-    return 'bg-white/[0.04] border border-white/10 text-[#e8e0d0]/70'
-  }
-  return 'bg-white/[0.02] border border-white/5 text-[#e8e0d0]/50 hover:bg-white/[0.04] hover:text-[#e8e0d0]/70'
+function getGroupLabel(id: string): string {
+  const team = allTeams.value.find(t => t.id === id)
+  if (!team) return ''
+  const key = `groups.${team.group}`
+  const translated = t(key)
+  return translated === key ? team.group : translated
 }
 
-function selectTeam(team: WorldCupTeam) {
-  if (subject.home?.id === team.id) {
-    subject.home = null
-  } else if (subject.away?.id === team.id) {
-    subject.away = null
-  } else if (!subject.home) {
-    subject.home = team
-  } else if (!subject.away && subject.home.id !== team.id) {
-    subject.away = team
-  }
-  emit('update', { home: subject.home, away: subject.away })
+const homeId = ref('')
+const awayId = ref('')
+
+const subject = reactive<{ home: WorldCupTeam | null; away: WorldCupTeam | null }>({
+  home: null,
+  away: null,
+})
+
+const isComplete = computed(() => !!subject.home && !!subject.away)
+
+// 从 USelectMenu v-model 中提取选中值（可能是 string 或 { label, value } 对象）
+function extractId(val: unknown): string {
+  if (typeof val === 'string') return val
+  if (val && typeof val === 'object' && 'value' in val) return (val as { value: string }).value
+  return ''
 }
 
-function selectKnockoutMatch(match: KnockoutMatch) {
-  if (match.finished) return
-  subject.home = match.home
-  subject.away = match.away
+// 构建 USelectMenu 的分组 items
+const homeItems = computed(() => {
+  const excludeId = extractId(awayId.value)
+  return buildGroupItems(availableTeams.value.filter(t => t.id !== excludeId))
+})
+
+const awayItems = computed(() => {
+  const excludeId = extractId(homeId.value)
+  return buildGroupItems(availableTeams.value.filter(t => t.id !== excludeId))
+})
+
+function buildGroupItems(teams: TeamWithGroup[]) {
+  const groups: Record<string, TeamWithGroup[]> = {}
+  for (const team of teams) {
+    if (!groups[team.group]) groups[team.group] = []
+    groups[team.group].push(team)
+  }
+
+  const result: any[] = []
+  for (const groupName of Object.keys(groups).sort((a, b) => a.localeCompare(b, 'zh'))) {
+    const groupTeams = groups[groupName]
+    const groupLabel = t(`groups.${groupName}`) === `groups.${groupName}` ? groupName : t(`groups.${groupName}`)
+    result.push({ type: 'label', label: groupLabel })
+    for (const team of groupTeams) {
+      result.push({
+        label: `${getFlag(team.id)} ${getTeamName(team.id, team.name)}`,
+        value: team.id,
+      })
+    }
+  }
+  return [result]
+}
+
+function emitUpdate() {
   emit('update', { home: subject.home, away: subject.away })
 }
 
 function clearSelection() {
+  homeId.value = ''
+  awayId.value = ''
   subject.home = null
   subject.away = null
-  selectedGroup.value = ''
-  emit('update', { home: null, away: null })
+  emitUpdate()
 }
 
-watch(activeTab, () => {
-  clearSelection()
+watch(homeId, (val) => {
+  const id = typeof val === 'string' ? val : val?.value
+  const team = availableTeams.value.find(t => t.id === id)
+  subject.home = team || null
+  emitUpdate()
 })
+
+watch(awayId, (val) => {
+  const id = typeof val === 'string' ? val : val?.value
+  const team = availableTeams.value.find(t => t.id === id)
+  subject.away = team || null
+  emitUpdate()
+})
+
+const selectionHint = computed(() => {
+  if (!subject.home && !subject.away) return t('tournamentPicker.selectHint.none')
+  if (subject.home && !subject.away) return t('tournamentPicker.selectHint.homeOnly')
+  if (!subject.home && subject.away) return t('tournamentPicker.selectHint.awayOnly')
+  return t('tournamentPicker.selectHint.complete')
+})
+
+const selectMenuUi = {
+  base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+  placeholder: 'text-[var(--text-placeholder)]',
+  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
+  label: 'text-[var(--text-faint)] text-[10px] uppercase tracking-wider px-3 py-1',
+  viewport: 'max-h-64 overflow-y-auto',
+}
 </script>

@@ -3,26 +3,26 @@
     <!-- 标题区 -->
     <div class="flex items-center gap-3">
       <div
-        class="w-10 h-10 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]"
+        class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]"
       >
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-[#f5e6c0] tracking-wide">{{ $t('zwds.aiInterpretation') }}</h3>
+        <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('zwds.aiInterpretation') }}</h3>
       </div>
       <div v-if="streaming" class="flex items-center gap-1.5">
-        <span class="text-xs text-[#c9a227]/60">{{ $t('zwds.interpreting') }}</span>
+        <span class="text-xs text-[var(--accent-muted)]">{{ $t('zwds.interpreting') }}</span>
         <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c9a227] opacity-75" />
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-[#c9a227]" />
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
         </span>
       </div>
     </div>
 
     <!-- 免责声明 -->
-    <div class="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-3.5 py-2.5">
-      <UIcon name="i-heroicons-information-circle" class="w-4 h-4 text-[#c9a227]/50 mt-0.5 shrink-0" />
-      <p class="text-xs text-[#e8e0d0]/30 leading-relaxed">{{ $t('zwds.disclaimer') }}</p>
+    <div class="flex items-start gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3.5 py-2.5">
+      <UIcon name="i-heroicons-information-circle" class="w-4 h-4 text-[var(--accent-muted)] mt-0.5 shrink-0" />
+      <p class="text-xs text-[var(--text-placeholder)] leading-relaxed">{{ $t('zwds.disclaimer') }}</p>
     </div>
 
     <!-- 加载中：命盘预览 + 动画 -->
@@ -40,8 +40,8 @@
         :key="section.title"
         class="group relative rounded-xl backdrop-blur-sm overflow-hidden border transition-all duration-300"
         :class="[
-          section.meta?.borderColor || 'border-white/[0.06]',
-          section.meta?.bgGradient || 'from-white/[0.02]',
+          section.meta?.borderColor || 'border-[var(--border-light)]',
+          section.meta?.bgGradient || 'from-[var(--card-gradient-from)]',
         ]"
         :style="{ background: `linear-gradient(to bottom right, var(--tw-gradient-from), transparent)` }"
       >
@@ -49,17 +49,17 @@
           <div class="flex items-center gap-2.5 mb-3">
             <div
               class="w-7 h-7 rounded-lg flex items-center justify-center"
-              :class="section.meta?.iconBg || 'bg-white/5'"
+              :class="section.meta?.iconBg || 'bg-[var(--surface-card-hover)]'"
             >
               <UIcon
                 :name="section.meta?.icon || 'i-heroicons-document-text'"
                 class="w-4 h-4"
-                :class="section.meta?.color || 'text-[#e8e0d0]/50'"
+                :class="section.meta?.color || 'text-[var(--text-muted)]'"
               />
             </div>
             <h4
               class="text-sm font-semibold"
-              :class="section.meta?.color || 'text-[#e8e0d0]/70'"
+              :class="section.meta?.color || 'text-[var(--text-muted)]'"
             >
               {{ section.title }}
             </h4>
@@ -68,7 +68,7 @@
           <!-- 流式闪烁光标：只在最后一个 section 且正在流式时显示 -->
           <span
             v-if="streaming && index === sections.length - 1"
-            class="inline-block w-[2px] h-5 bg-[#c9a227] ml-0.5 align-middle animate-pulse mt-1"
+            class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
           />
         </div>
       </div>
@@ -120,17 +120,17 @@ interface SectionMeta {
 const sectionMetaMap: Record<string, SectionMeta> = {
   '命格总览': {
     icon: 'i-heroicons-star',
-    color: 'text-[#c9a227]',
-    borderColor: 'border-[#c9a227]/15',
-    bgGradient: 'from-[#c9a227]/[0.06]',
-    iconBg: 'bg-[#c9a227]/10',
+    color: 'text-[var(--accent)]',
+    borderColor: 'border-[var(--accent-faint)]',
+    bgGradient: 'from-[var(--accent-faint)]',
+    iconBg: 'bg-[var(--accent-bg)]',
   },
   '命宫解读': {
     icon: 'i-heroicons-user',
-    color: 'text-[#8b5cf6]',
-    borderColor: 'border-[#8b5cf6]/15',
-    bgGradient: 'from-[#8b5cf6]/[0.05]',
-    iconBg: 'bg-[#8b5cf6]/10',
+    color: 'text-[var(--accent-purple-text)]',
+    borderColor: 'border-[var(--accent-purple-border)]',
+    bgGradient: 'from-[var(--accent-purple-faint)]',
+    iconBg: 'bg-[var(--accent-purple-faint)]',
   },
   '事业与财帛': {
     icon: 'i-heroicons-briefcase',
@@ -176,10 +176,10 @@ const sectionMetaMap: Record<string, SectionMeta> = {
   },
   '综合建议': {
     icon: 'i-heroicons-light-bulb',
-    color: 'text-[#c9a227]',
-    borderColor: 'border-[#c9a227]/15',
-    bgGradient: 'from-[#c9a227]/[0.06]',
-    iconBg: 'bg-[#c9a227]/15',
+    color: 'text-[var(--accent)]',
+    borderColor: 'border-[var(--accent-faint)]',
+    bgGradient: 'from-[var(--accent-faint)]',
+    iconBg: 'bg-[var(--accent-bg-hover)]',
   },
 }
 
@@ -229,13 +229,13 @@ function renderSection(text: string): string {
 .ai-section-content :deep(p) {
   margin-bottom: 0.6em;
   line-height: 1.75;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 .ai-section-content :deep(p:last-child) {
   margin-bottom: 0;
 }
 .ai-section-content :deep(strong) {
-  color: #f5e6c0;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .ai-section-content :deep(ul) {
@@ -249,14 +249,14 @@ function renderSection(text: string): string {
   padding-left: 1.1rem;
   margin-bottom: 0.3rem;
   line-height: 1.65;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 .ai-section-content :deep(ul li::before) {
   content: '•';
   position: absolute;
   left: 0;
   top: 0;
-  color: #c9a227;
+  color: var(--accent);
   font-size: 0.8rem;
   opacity: 0.7;
 }
@@ -272,7 +272,7 @@ function renderSection(text: string): string {
   padding-left: 1.5rem;
   margin-bottom: 0.3rem;
   line-height: 1.65;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 .ai-section-content :deep(ol li::before) {
   counter-increment: item;
@@ -288,41 +288,41 @@ function renderSection(text: string): string {
   font-size: 0.6rem;
   font-weight: 700;
   color: #1a1612;
-  background: #c9a227;
+  background: var(--accent);
   border-radius: 3px;
   opacity: 0.8;
 }
 .ai-section-content :deep(blockquote) {
   margin: 0.5rem 0;
   padding: 0.6rem 0.8rem;
-  background: rgba(201, 162, 39, 0.04);
-  border-left: 2px solid rgba(201, 162, 39, 0.3);
+  background: var(--accent-bg);
+  border-left: 2px solid var(--accent-border);
   border-radius: 0 6px 6px 0;
   font-style: italic;
 }
 .ai-section-content :deep(h3) {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f5e6c0;
+  color: var(--text-primary);
   margin-top: 0.75rem;
   margin-bottom: 0.4rem;
 }
 .ai-section-content :deep(h4) {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #e8e0d0;
+  color: var(--text-body);
   margin-top: 0.5rem;
   margin-bottom: 0.3rem;
 }
 .ai-section-content :deep(code) {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-card-hover);
   padding: 0.1rem 0.35rem;
   border-radius: 3px;
   font-size: 0.85em;
-  color: #c9a227;
+  color: var(--accent);
 }
 .ai-section-content :deep(pre) {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-card);
   padding: 0.75rem;
   border-radius: 6px;
   overflow-x: auto;
@@ -331,6 +331,6 @@ function renderSection(text: string): string {
 .ai-section-content :deep(pre code) {
   background: none;
   padding: 0;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 </style>

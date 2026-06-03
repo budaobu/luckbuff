@@ -3,7 +3,7 @@
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-[#e8e0d0]/50 border-b border-white/10">
+          <tr class="text-[var(--text-muted)] border-b border-[var(--border-light)]">
             <th class="text-left py-2 px-2">{{ $t('bazi.stepNumber') }}</th>
             <th class="py-2 px-2">{{ $t('bazi.age') }}</th>
             <th class="py-2 px-2">{{ $t('bazi.ganZhi') }}</th>
@@ -13,12 +13,12 @@
           <tr
             v-for="dy in dayuns"
             :key="dy.index"
-            class="border-b border-white/5"
-            :class="{ 'bg-[#c9a227]/10': isCurrent(dy) }"
+            class="border-b border-[var(--border-subtle)]"
+            :class="{ 'bg-[var(--accent-bg)]': isCurrent(dy) }"
           >
             <td class="py-2 px-2">{{ dy.index }}</td>
             <td class="py-2 px-2">{{ dy.ageRange[0] }}-{{ dy.ageRange[1] }}{{ $t('bazi.ageUnit') }}</td>
-            <td class="py-2 px-2" :class="isCurrent(dy) ? 'text-[#c9a227] font-bold' : 'text-[#e8e0d0]'">
+            <td class="py-2 px-2" :class="isCurrent(dy) ? 'text-[var(--accent)] font-bold' : 'text-[var(--text-body)]'">
               {{ dy.gan }}{{ dy.zhi }}
             </td>
           </tr>

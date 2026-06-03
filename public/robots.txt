@@ -1,27 +1,5 @@
 User-agent: *
 Allow: /
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
-
-# AI Bots - 允许主流 AI 机器人抓取
-User-agent: GPTBot
-User-agent: ChatGPT-User
-User-agent: Google-Extended
-User-agent: CCBot
-User-agent: Anthropic-AI
-User-agent: Bytespider
-Allow: /
-
 Disallow: /api/
 
-# AI 机器人专属规则（更精细控制）
-User-agent: GPTBot
-Crawl-delay: 1
-
-User-agent: Google-Extended
-Crawl-delay: 1
-
-Sitemap: https://www.ososn.com/sitemap.xml
-Sitemap: https://www.ososn.com/llms.txt
-
-# LLMs.txt - AI 友好文档
-LLM-Info: https://www.ososn.com/llms.txt
+Sitemap: https://www.ososn.com/sitemap_index.xml

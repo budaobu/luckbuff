@@ -86,8 +86,8 @@ export function useGeolocation() {
           timezone: first.timezone,
         }
       }
-    } catch (e) {
-      console.warn('[Geolocation] Failed to resolve city coords via Open-Meteo:', e)
+    } catch {
+      // Silently fail — user can still enter coordinates manually
     }
     return null
   }
@@ -110,8 +110,8 @@ export function useGeolocation() {
           latitude: parseFloat(data[0].lat),
         }
       }
-    } catch (e) {
-      console.warn('[Geolocation] Failed to resolve city coords via Nominatim:', e)
+    } catch {
+      // Silently fail — fallback already exhausted
     }
     return null
   }

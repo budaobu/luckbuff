@@ -6,7 +6,7 @@
       :key="title"
       :title="$t('bazi.' + titleKey(title))"
     >
-      <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ text }}</p>
+      <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ text }}</p>
     </GlowCard>
 
     <!-- 五行力量分布 -->

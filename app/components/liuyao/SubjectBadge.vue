@@ -4,7 +4,7 @@
   >
     <span class="shrink-0">{{ label }}</span>
     <span v-if="team" class="truncate">{{ team.name }}</span>
-    <span v-else class="text-[#e8e0d0]/30">{{ $t('liuyaoPage.noTeamSelected') }}</span>
+    <span v-else class="text-[var(--text-placeholder)]">{{ $t('liuyaoPage.noTeamSelected') }}</span>
   </div>
 </template>
 
@@ -18,8 +18,8 @@ const props = defineProps<{
 
 const badgeClass = computed(() => {
   if (props.label === '世') {
-    return 'bg-[#c9a227]/10 border border-[#c9a227]/20 text-[#c9a227]'
+    return 'bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]'
   }
-  return 'bg-white/[0.03] border border-white/8 text-[#e8e0d0]/60'
+  return 'bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-muted)]'
 })
 </script>

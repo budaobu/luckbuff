@@ -1,14 +1,14 @@
 <template>
-  <div class="relative rounded-2xl bg-white/[0.03] backdrop-blur-sm overflow-hidden">
-    <div class="h-px bg-gradient-to-r from-transparent via-[#c9a227]/30 to-transparent" />
+  <div class="relative rounded-2xl bg-[var(--surface-input)] backdrop-blur-sm overflow-hidden">
+    <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border)] to-transparent" />
     <div class="relative z-10 p-6">
       <div class="flex items-center gap-3 mb-5">
-        <div class="w-10 h-10 rounded-xl bg-[#c9a227]/10 border border-[#c9a227]/20 flex items-center justify-center text-[#c9a227]">
+        <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
           <UIcon name="i-heroicons-circle-stack" class="w-5 h-5" />
         </div>
         <div>
-          <h3 class="text-sm font-semibold text-[#f5e6c0] tracking-wide">{{ $t('bazi.wuxingTitle') }}</h3>
-          <p class="text-[11px] text-[#e8e0d0]/40 mt-0.5">{{ $t('bazi.wuxingSubtitle') }}</p>
+          <h3 class="text-sm font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('bazi.wuxingTitle') }}</h3>
+          <p class="text-[11px] text-[var(--text-faint)] mt-0.5">{{ $t('bazi.wuxingSubtitle') }}</p>
         </div>
       </div>
 
@@ -23,7 +23,7 @@
         </div>
         <!-- 右侧文字说明 -->
         <div class="w-full md:w-1/2">
-          <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ analysisText }}</p>
+          <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ analysisText }}</p>
           <!-- 五行图例 -->
           <div class="mt-4 flex flex-wrap gap-2">
             <div
@@ -35,15 +35,15 @@
                 class="w-2.5 h-2.5 rounded-full"
                 :style="{ background: wuxingColors[i] }"
               />
-              <span class="text-[#e8e0d0]/50">{{ wx }}</span>
-              <span class="text-[#e8e0d0]/70 font-medium">{{ wuxingScore[wuxingKeys[i] as keyof WuxingScore] }}%</span>
+              <span class="text-[var(--text-muted)]">{{ wx }}</span>
+              <span class="text-[var(--text-muted)] font-medium">{{ wuxingScore[wuxingKeys[i] as keyof WuxingScore] }}%</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="absolute inset-0 rounded-2xl border border-white/[0.06] pointer-events-none" />
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a227]/10 to-transparent" />
+    <div class="absolute inset-0 rounded-2xl border border-[var(--border-light)] pointer-events-none" />
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-faint)] to-transparent" />
   </div>
 </template>
 

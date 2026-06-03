@@ -1,7 +1,7 @@
 import { toCanvas } from 'html-to-image'
 
 export interface ShareOptions {
-  tool: 'bazi' | 'zhouyi' | 'liuyao' | 'zwds' | 'vedic' | 'huangdao' | 'liuyao-divination' | 'qimen'
+  tool: 'bazi' | 'zhouyi' | 'liuyao' | 'zwds' | 'vedic' | 'huangdao' | 'liuyao-divination' | 'qimen' | 'liuren'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -24,7 +24,7 @@ export function useShare() {
   async function share(options: ShareOptions): Promise<ShareResult> {
     const { t, tool, name, summary, shareTarget, shareTargetSelector, filename } = options
 
-    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻', vedic: '吠陀占星', qimen: '奇门遁甲', huangdao: '黄道吉日' }
+    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻', vedic: '吠陀占星', qimen: '奇门遁甲', huangdao: '黄道吉日', liuren: '大六壬' }
     const toolName = toolNameMap[tool] ?? '命理'
 
     const hookLines: Record<string, string> = {
@@ -49,6 +49,9 @@ export function useShare() {
       huangdao: summary
         ? t('share.hookHuangdao', { summary })
         : t('share.hookHuangdaoDefault'),
+      liuren: summary
+        ? t('share.hookLiuren', { summary })
+        : t('share.hookLiurenDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href

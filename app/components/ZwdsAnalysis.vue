@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-4">
     <!-- 顶部三层切换 -->
-    <div class="flex gap-1 p-1 rounded-xl bg-[#1a1612] border border-white/[0.08]">
+    <div class="flex gap-1 p-1 rounded-xl bg-[var(--surface-dropdown)] border border-[var(--border-medium)]">
       <button
         v-for="tab in tabs"
         :key="tab.key"
         class="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
         :class="activeTab === tab.key
-          ? 'bg-[#c9a227]/15 text-[#f5e6c0]'
-          : 'text-[#e8e0d0]/40 hover:text-[#e8e0d0]/70 hover:bg-white/[0.02]'"
+          ? 'bg-[var(--accent-bg-hover)] text-[var(--text-primary)]'
+          : 'text-[var(--text-faint)] hover:text-[var(--text-muted)] hover:bg-[var(--surface-card)]'"
         @click="activeTab = tab.key"
       >
         {{ tab.label }}
@@ -21,23 +21,23 @@
       <GlowCard :title="$t('zwdsAnalysis.lifePalaceLabel') + ' ' + $t('zwdsAi.命格总览')">
         <div class="space-y-2">
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.lifePalaceLabel') }}</div>
-            <div class="text-base font-bold text-[#c9a227]">
+            <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.lifePalaceLabel') }}</div>
+            <div class="text-base font-bold text-[var(--accent)]">
               {{ chart.mingGong.zhi }}宫 · {{ chart.mingGong.mainStars.join('、') || $t('zwdsAnalysis.borrow') + $t('zwdsAnalysis.referenceLabel') }}
             </div>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#c9a227]/10 text-[#c9a227]">{{ chart.wuxingJu }}{{ $t('zwds.wuxingBureau') }}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] text-[var(--accent)]">{{ chart.wuxingJu }}{{ $t('zwds.wuxingBureau') }}</span>
           </div>
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.bodyPalaceLabel') }}</div>
-            <div class="text-sm text-[#f5e6c0]">
+            <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.bodyPalaceLabel') }}</div>
+            <div class="text-sm text-[var(--text-primary)]">
               {{ chart.shenGong.zhi }}宫 · {{ chart.shenGong.mainStars.join('、') || $t('zwdsAnalysis.borrow') + $t('zwdsAnalysis.referenceLabel') }}
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.yearPillarLabel') }}</div>
-            <div class="text-sm text-[#f5e6c0]">{{ chart.yearGan }}{{ chart.yearZhi }} · {{ chart.gender === 'male' ? $t('zwdsAnalysis.sunSign') : $t('zwdsAnalysis.moonSign') }}</div>
+            <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.yearPillarLabel') }}</div>
+            <div class="text-sm text-[var(--text-primary)]">{{ chart.yearGan }}{{ chart.yearZhi }} · {{ chart.gender === 'male' ? $t('zwdsAnalysis.sunSign') : $t('zwdsAnalysis.moonSign') }}</div>
           </div>
-          <p class="text-xs text-[#e8e0d0]/50 leading-relaxed pt-1">
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed pt-1">
             {{ $t('zwdsAnalysis.benMingIntro', { minggong: chart.mingGong.zhi, mainStars: chart.mingGong.mainStars.join('、') || $t('zwdsAnalysis.borrow'), secondaryStars: '', tianJi: chart.wuxingJu }) }}
           </p>
         </div>
@@ -54,7 +54,7 @@
           >
             {{ s.star }}化{{ s.type }} → {{ s.gongName }}宫
           </span>
-          <span v-if="benmingSiHua.length === 0" class="text-xs text-[#e8e0d0]/30">{{ $t('zwdsAnalysis.sihuaPeace') }}</span>
+          <span v-if="benmingSiHua.length === 0" class="text-xs text-[var(--text-placeholder)]">{{ $t('zwdsAnalysis.sihuaPeace') }}</span>
         </div>
       </GlowCard>
 
@@ -71,18 +71,18 @@
               v-for="star in item.gong.mainStars"
               :key="star"
               class="text-xs px-1.5 py-0.5 rounded font-medium"
-              :class="star === '紫微' || star === '天府' ? 'bg-[#c9a227]/10 text-[#c9a227]' : 'bg-white/[0.04] text-[#f5e6c0]/80'"
+              :class="star === '紫微' || star === '天府' ? 'bg-[var(--accent-bg)] text-[var(--accent)]' : 'bg-[var(--surface-card-hover)] text-[var(--text-primary)]'"
             >
               {{ star }}
             </span>
-            <span v-if="item.gong.mainStars.length === 0" class="text-xs text-[#e8e0d0]/30 italic">{{ $t('zwdsAnalysis.borrowLabel') }}{{ getJieDuiZhi(item.gong.zhi) }}{{ $t('zwdsAnalysis.referenceLabel') }}</span>
+            <span v-if="item.gong.mainStars.length === 0" class="text-xs text-[var(--text-placeholder)] italic">{{ $t('zwdsAnalysis.borrowLabel') }}{{ getJieDuiZhi(item.gong.zhi) }}{{ $t('zwdsAnalysis.referenceLabel') }}</span>
           </div>
           <!-- 辅星 -->
           <div v-if="item.gong.auxStars.length" class="flex flex-wrap gap-1">
             <span
               v-for="star in item.gong.auxStars"
               :key="star"
-              class="text-[10px] px-1 py-0.5 rounded text-[#e8e0d0]/50 bg-white/[0.02]"
+              class="text-[10px] px-1 py-0.5 rounded text-[var(--text-muted)] bg-[var(--surface-card)]"
             >
               {{ star }}
             </span>
@@ -99,7 +99,7 @@
             </span>
           </div>
           <!-- 解读 -->
-          <p class="text-xs text-[#e8e0d0]/60 leading-relaxed">{{ item.brief }}</p>
+          <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ item.brief }}</p>
         </div>
       </GlowCard>
     </div>
@@ -113,10 +113,10 @@
           :key="dx.index"
           class="shrink-0 px-3 py-2 rounded-lg border text-xs font-medium transition-all duration-200"
           :class="selectedDaxianIndex === idx
-            ? 'border-[#c9a227]/40 bg-[#c9a227]/10 text-[#c9a227]'
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
             : dx.ageRange[0] <= chart.currentAge && dx.ageRange[1] >= chart.currentAge
               ? 'border-emerald-500/20 bg-emerald-500/[0.03] text-emerald-400'
-              : 'border-white/[0.06] bg-white/[0.02] text-[#e8e0d0]/50 hover:border-white/10'"
+              : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-light)]'"
           @click="selectedDaxianIndex = idx"
         >
           <div class="text-[10px] opacity-60">{{ $t('zwds.currentDaXian') }}{{ dx.index }}</div>
@@ -130,9 +130,9 @@
           <div class="space-y-2">
             <div class="flex items-center gap-2">
               <span v-if="currentDaxianAnalysis.isCurrent" class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">{{ $t('zwdsAnalysis.currentDaXian') }}</span>
-              <span class="text-xs text-[#e8e0d0]/50">{{ $t('zwdsAnalysis.interpretation') }}：{{ currentDaxianAnalysis.daxian.mainStars.join('、') || $t('zwdsAnalysis.borrowLabel') + $t('zwdsAnalysis.referenceLabel') }}</span>
+              <span class="text-xs text-[var(--text-muted)]">{{ $t('zwdsAnalysis.interpretation') }}：{{ currentDaxianAnalysis.daxian.mainStars.join('、') || $t('zwdsAnalysis.borrowLabel') + $t('zwdsAnalysis.referenceLabel') }}</span>
             </div>
-            <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">{{ currentDaxianAnalysis.overview }}</p>
+            <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ currentDaxianAnalysis.overview }}</p>
           </div>
         </GlowCard>
 
@@ -142,10 +142,10 @@
             <div
               v-for="dim in currentDaxianAnalysis.dimensions"
               :key="dim.name"
-              class="rounded-lg border border-white/[0.04] bg-white/[0.02] p-3"
+              class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3"
             >
               <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs font-medium text-[#e8e0d0]/70">{{ dim.name }}</span>
+                <span class="text-xs font-medium text-[var(--text-muted)]">{{ dim.name }}</span>
                 <span
                   class="text-[10px] px-1.5 py-0.5 rounded font-medium"
                   :class="trendClass(dim.trend)"
@@ -153,14 +153,14 @@
                   {{ getTrendLabel(dim.trend) }}
                 </span>
               </div>
-              <p class="text-[11px] text-[#e8e0d0]/50 leading-relaxed">{{ dim.text }}</p>
+              <p class="text-[11px] text-[var(--text-muted)] leading-relaxed">{{ dim.text }}</p>
             </div>
           </div>
         </GlowCard>
 
         <!-- 时间节点 -->
         <GlowCard :title="$t('zwdsAnalysis.timeNodeTitle')">
-          <p class="text-sm text-[#e8e0d0]/70 leading-relaxed">{{ currentDaxianAnalysis.timeHint }}</p>
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed">{{ currentDaxianAnalysis.timeHint }}</p>
         </GlowCard>
       </template>
     </div>
@@ -175,12 +175,12 @@
           color="warning"
           class="w-32"
           :ui="{
-            base: 'bg-white/[0.03] ring-1 ring-inset ring-white/8 focus:ring-[#c9a227]/50 text-[#f5e6c0]',
-            content: 'bg-[#1a1612] border border-white/8 rounded-xl shadow-2xl',
-            item: 'text-[#f5e6c0] hover:bg-white/[0.04] data-[state=checked]:bg-[#c9a227]/10 data-[state=checked]:text-[#c9a227]',
+            base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+            content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+            item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
           }"
         />
-        <span class="text-xs text-[#e8e0d0]/40">{{ $t('zwdsAnalysis.selectYearHint') }}</span>
+        <span class="text-xs text-[var(--text-faint)]">{{ $t('zwdsAnalysis.selectYearHint') }}</span>
       </div>
 
       <template v-if="currentLiunianAnalysis">
@@ -188,12 +188,12 @@
         <GlowCard :title="$t('zwdsAnalysis.liuNianOverviewTitle')" ref="liunianOverviewRef">
           <div class="space-y-2">
             <div class="flex items-center gap-3">
-              <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
-              <div class="text-base font-bold text-[#f5e6c0]">{{ currentLiunianAnalysis.yearGanZhi }}</div>
+              <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
+              <div class="text-base font-bold text-[var(--text-primary)]">{{ currentLiunianAnalysis.yearGanZhi }}</div>
             </div>
             <div class="flex items-center gap-3">
-              <div class="text-sm text-[#e8e0d0]/60">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
-              <div class="text-sm text-[#f5e6c0]">{{ currentLiunianAnalysis.taiSuiGong }}宫（{{ currentLiunianAnalysis.taiSuiZhi }}）</div>
+              <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
+              <div class="text-sm text-[var(--text-primary)]">{{ currentLiunianAnalysis.taiSuiGong }}宫（{{ currentLiunianAnalysis.taiSuiZhi }}）</div>
             </div>
             <div class="flex flex-wrap gap-2 pt-1">
               <span
@@ -205,7 +205,7 @@
                 {{ s.star }}化{{ s.type }}
               </span>
             </div>
-            <p class="text-xs text-[#e8e0d0]/50 leading-relaxed">{{ currentLiunianAnalysis.summary }}</p>
+            <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ currentLiunianAnalysis.summary }}</p>
           </div>
         </GlowCard>
 
@@ -219,7 +219,7 @@
               {{ ratingLabel(currentLiunianAnalysis.rating) }}
             </div>
             <div class="flex-1">
-              <p class="text-sm text-[#e8e0d0]/80 leading-relaxed">
+              <p class="text-sm text-[var(--text-body)] leading-relaxed">
                 {{ ratingText(currentLiunianAnalysis.rating) }}
               </p>
             </div>
@@ -234,8 +234,8 @@
               :key="dim.name"
               class="flex items-start gap-2"
             >
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.04] text-[#e8e0d0]/50 shrink-0 mt-0.5">{{ dim.name }}</span>
-              <p class="text-xs text-[#e8e0d0]/60 leading-relaxed">{{ dim.text }}</p>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--surface-card-hover)] text-[var(--text-muted)] shrink-0 mt-0.5">{{ dim.name }}</span>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ dim.text }}</p>
             </div>
           </div>
         </GlowCard>
@@ -285,21 +285,21 @@ const benmingSiHua = computed(() => {
 
 function sihuaBadgeClass(type: string): string {
   switch (type) {
-    case '禄': return 'border-[#c9a227]/20 bg-[#c9a227]/10 text-[#c9a227]'
+    case '禄': return 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]'
     case '权': return 'border-red-500/20 bg-red-500/10 text-red-400'
-    case '科': return 'border-[#8b5cf6]/20 bg-[#8b5cf6]/10 text-[#8b5cf6]'
-    case '忌': return 'border-gray-500/20 bg-gray-500/10 text-gray-400'
-    default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
+    case '科': return 'border-[var(--accent-purple-border)] bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
+    case '忌': return 'border-[var(--text-faint)]/20 bg-[var(--text-faint)]/10 text-[var(--text-muted)]'
+    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
   }
 }
 
 function sihuaDotClass(type: string): string {
   switch (type) {
-    case '禄': return 'bg-[#c9a227]/20 text-[#c9a227]'
+    case '禄': return 'bg-[var(--accent-bg-hover)] text-[var(--accent)]'
     case '权': return 'bg-red-500/20 text-red-400'
-    case '科': return 'bg-[#8b5cf6]/20 text-[#8b5cf6]'
-    case '忌': return 'bg-gray-500/20 text-gray-400'
-    default: return 'bg-white/10 text-[#e8e0d0]'
+    case '科': return 'bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
+    case '忌': return 'bg-[var(--text-faint)]/20 text-[var(--text-muted)]'
+    default: return 'bg-[var(--border-light)] text-[var(--text-body)]'
   }
 }
 
@@ -330,8 +330,8 @@ function trendClass(trend: string): string {
     case '上升': return 'bg-emerald-500/15 text-emerald-400'
     case '平稳': return 'bg-blue-500/15 text-blue-400'
     case '波动': return 'bg-amber-500/15 text-amber-400'
-    case '调整': return 'bg-[#8b5cf6]/15 text-[#8b5cf6]'
-    default: return 'bg-white/5 text-[#e8e0d0]'
+    case '调整': return 'bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
+    default: return 'bg-[var(--surface-card-hover)] text-[var(--text-body)]'
   }
 }
 
@@ -364,8 +364,8 @@ function ratingClass(rating: string): string {
     case 'stable': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
     case 'liuYi': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
     case 'jinShen': return 'border-red-500/30 bg-red-500/10 text-red-400'
-    case 'yiBan': return 'border-white/10 bg-white/5 text-[#e8e0d0]'
-    default: return 'border-white/10 bg-white/5 text-[#e8e0d0]'
+    case 'yiBan': return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
+    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
   }
 }
 
