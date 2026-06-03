@@ -84,7 +84,6 @@ export default defineNuxtConfig({
 
   sitemap: {
     sitemapsPathPrefix: '/',
-    xsl: false,
     autoI18n: {
       differentDomains: false,
       defaultLocale: 'zh-CN',
