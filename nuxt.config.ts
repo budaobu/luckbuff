@@ -83,10 +83,17 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    i18n: {
-      strategy: 'prefix_except_default',
+    sitemapsPathPrefix: '/',
+    xsl: false,
+    autoI18n: {
+      differentDomains: false,
       defaultLocale: 'zh-CN',
-      locales: ['zh-CN', 'zh-TW', 'en'],
+      strategy: 'prefix_except_default',
+      locales: [
+        { code: 'zh-CN', language: 'zh-CN', _sitemap: 'sitemap-zh-CN', _hreflang: 'zh-CN' },
+        { code: 'zh-TW', language: 'zh-TW', _sitemap: 'sitemap-zh-TW', _hreflang: 'zh-TW' },
+        { code: 'en', language: 'en', _sitemap: 'sitemap-en', _hreflang: 'en' },
+      ],
     },
     defaults: {
       changefreq: 'weekly',
