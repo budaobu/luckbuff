@@ -98,13 +98,18 @@ export default defineNuxtConfig({
       changefreq: 'weekly',
       priority: 0.8,
     },
-    urls: contentItems.map(item => ({
-      loc: `/prophet/match/${item.slug}`,
-      lastmod: item.generatedAt || undefined,
-      changefreq: 'weekly' as const,
-      priority: 0.6,
-      _i18nTransform: true,
-    })),
+    urls: [
+      ...contentItems.map(item => ({
+        loc: `/prophet/match/${item.slug}`,
+        lastmod: item.generatedAt || undefined,
+        changefreq: 'weekly' as const,
+        priority: 0.6,
+        _i18nTransform: true,
+      })),
+      { loc: '/settings', changefreq: 'monthly' as const, priority: 0.5, _i18nTransform: true },
+      { loc: '/terms', changefreq: 'yearly' as const, priority: 0.3, _i18nTransform: true },
+      { loc: '/privacy', changefreq: 'yearly' as const, priority: 0.3, _i18nTransform: true },
+    ],
   },
 
   colorMode: {
@@ -165,9 +170,9 @@ export default defineNuxtConfig({
       '/': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' }, sitemap: { priority: 1.0 } },
       '/en': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/zh-TW': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
-      '/settings': { sitemap: { priority: 0.5, changefreq: 'monthly' } },
-      '/terms': { sitemap: { priority: 0.3, changefreq: 'yearly' } },
-      '/privacy': { sitemap: { priority: 0.3, changefreq: 'yearly' } },
+      '/settings': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
+      '/terms': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
+      '/privacy': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
     },
     compressPublicAssets: { gzip: true, brotli: true },
   },
