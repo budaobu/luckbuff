@@ -152,9 +152,10 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- 四柱八字 -->
         <div
-          class="group relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
+          v-for="topic in topics"
+          :key="topic.path"
+          class="group arc-card relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
           style="border-color: var(--border-subtle); background-color: var(--surface-card);"
           :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
         >
@@ -163,128 +164,20 @@
               class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
               style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
             >
-              <UIcon name="i-heroicons-calendar-days" class="w-6 h-6" />
+              <UIcon :name="topic.icon" class="w-6 h-6" />
             </div>
-            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t('home.toolBaziTitle') }}</h3>
+            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t(topic.titleKey) }}</h3>
             <p class="text-sm leading-relaxed flex-1 line-clamp-4 overflow-hidden" style="color: var(--text-faint);">
-              {{ $t('home.toolBaziDesc') }}
+              {{ $t(topic.descKey) }}
             </p>
             <UButton
               color="warning"
               variant="soft"
               size="sm"
-              :to="localePath('/tools/bazi')"
+              :to="localePath(topic.path)"
               class="group/btn mt-4"
             >
-              {{ $t('home.toolBaziCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div
-            class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style="--tw-gradient-stops: transparent, var(--accent-muted), transparent;"
-          />
-        </div>
-
-        <!-- 梅花易数 -->
-        <div
-          class="group relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
-          style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
-        >
-          <div class="p-7 flex flex-col flex-1">
-            <div
-              class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
-              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
-            >
-              <UIcon name="i-heroicons-swatch" class="w-6 h-6" />
-            </div>
-            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t('home.toolZhouyiTitle') }}</h3>
-            <p class="text-sm leading-relaxed flex-1 line-clamp-4 overflow-hidden" style="color: var(--text-faint);">
-              {{ $t('home.toolZhouyiDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              :to="localePath('/tools/zhouyi')"
-              class="group/btn mt-4"
-            >
-              {{ $t('home.toolZhouyiCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div
-            class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style="--tw-gradient-stops: transparent, var(--accent-muted), transparent;"
-          />
-        </div>
-
-        <!-- 六爻占卜 -->
-        <div
-          class="group relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
-          style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
-        >
-          <div class="p-7 flex flex-col flex-1">
-            <div
-              class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
-              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
-            >
-              <UIcon name="i-heroicons-circle-stack" class="w-6 h-6" />
-            </div>
-            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t('home.toolLiuyaoDivinationTitle') }}</h3>
-            <p class="text-sm leading-relaxed flex-1 line-clamp-4 overflow-hidden" style="color: var(--text-faint);">
-              {{ $t('home.toolLiuyaoDivinationDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              :to="localePath('/tools/liuyao-divination')"
-              class="group/btn mt-4"
-            >
-              {{ $t('home.toolLiuyaoDivinationCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div
-            class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style="--tw-gradient-stops: transparent, var(--accent-muted), transparent;"
-          />
-        </div>
-
-        <!-- 奇门遁甲 -->
-        <div
-          class="group relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
-          style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
-        >
-          <div class="p-7 flex flex-col flex-1">
-            <div
-              class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
-              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
-            >
-              <UIcon name="i-heroicons-map" class="w-6 h-6" />
-            </div>
-            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t('home.toolQimenTitle') }}</h3>
-            <p class="text-sm leading-relaxed flex-1 line-clamp-4 overflow-hidden" style="color: var(--text-faint);">
-              {{ $t('home.toolQimenDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              :to="localePath('/tools/qimen')"
-              class="group/btn mt-4"
-            >
-              {{ $t('home.toolQimenCta') }}
+              {{ $t('home.topicCta') }}
               <template #trailing>
                 <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
               </template>
@@ -427,6 +320,51 @@ const liuNianData = computed(() => {
     year: new Date().getFullYear(),
   }
 })
+
+const topics = [
+  {
+    icon: 'i-heroicons-sparkles',
+    titleKey: 'home.topicFortuneTellingTitle',
+    descKey: 'home.topicFortuneTellingDesc',
+    path: '/fortune-telling',
+  },
+  {
+    icon: 'i-heroicons-calendar',
+    titleKey: 'home.topicAuspiciousDatetimeTitle',
+    descKey: 'home.topicAuspiciousDatetimeDesc',
+    path: '/auspicious-datetime',
+  },
+  {
+    icon: 'i-heroicons-magnifying-glass',
+    titleKey: 'home.topicSeekingTitle',
+    descKey: 'home.topicSeekingDesc',
+    path: '/seeking',
+  },
+  {
+    icon: 'i-heroicons-pencil-square',
+    titleKey: 'home.topicNamingTitle',
+    descKey: 'home.topicNamingDesc',
+    path: '/naming',
+  },
+  {
+    icon: 'i-heroicons-pencil',
+    titleKey: 'home.topicCeziTitle',
+    descKey: 'home.topicCeziDesc',
+    path: '/cezi',
+  },
+  {
+    icon: 'i-heroicons-gift-top',
+    titleKey: 'home.topicDrawALotTitle',
+    descKey: 'home.topicDrawALotDesc',
+    path: '/draw-a-lot',
+  },
+  {
+    icon: 'i-heroicons-trophy',
+    titleKey: 'home.topicProphetTitle',
+    descKey: 'home.topicProphetDesc',
+    path: '/prophet',
+  },
+]
 
 const faqItems = computed(() => [
   { label: t('home.faq1Q'), content: t('home.faq1A') },
