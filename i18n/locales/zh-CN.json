@@ -845,7 +845,12 @@
     "sbtiDesc": "免费在线 SBTI 沙雕人格测试，30 道趣味题目从五大模型十五维度测出你的搞笑人格代码，包含 CTRL、BOSS、LOVE-R、酒鬼等 27 种沙雕人格。仅供娱乐。",
     "sbtiKeywords": "SBTI,SBTI人格测试,SBTI沙雕人格测试,沙雕人格测试,趣味性格测试,搞笑人格测试,免费人格测试,在线测人格,ososn",
     "sbtiOgTitle": "SBTI沙雕人格测试_测出你的隐藏搞笑人格",
-    "sbtiOgDesc": "免费在线 SBTI 沙雕人格测试，30 题测出 27 种沙雕人格之一。结果仅供娱乐。"
+    "sbtiOgDesc": "免费在线 SBTI 沙雕人格测试，30 题测出 27 种沙雕人格之一。结果仅供娱乐。",
+    "baziFortuneTuneTitle": "八字改运指南_喜用神定制材质颜色佩戴建议",
+    "baziFortuneTuneDesc": "免费八字改运指南，基于日主强弱与喜用神推导适合你的材质、颜色、佩戴手位与时机，非缺什么补什么的简单计数。",
+    "baziFortuneTuneKeywords": "八字改运,喜用神,五行饰品,改运材质,佩戴手位,八字改运指南,运势提升,五行颜色",
+    "baziFortuneTuneOgTitle": "八字改运指南 - 基于喜用神的个性化建议",
+    "baziFortuneTuneOgDesc": "输入生辰，根据八字日主强弱与喜用神，获取材质、颜色、佩戴手位与时机的参考建议。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -4999,5 +5004,27 @@
     "raritySSR": "超稀有",
     "shareName": "我",
     "footerDisclaimer": "仅供娱乐 · ososn SBTI"
+  },
+  "baziFortuneTune": {
+    "title": "八字改运指南",
+    "subtitle": "基于日主强弱与喜用神，定制材质、颜色、佩戴手位与时机",
+    "calculating": "喜用神推演中...",
+    "resultTitle": "{name}的改运指南",
+    "resultTitleNoName": "改运指南",
+    "resultSubtitle": "日主{riZhu}（{strength}）{'|'} 喜用{xiyong}",
+    "logicTitle": "为什么这样建议",
+    "xiyongLabel": "喜用神：",
+    "jishenLabel": "忌神：",
+    "materialsTitle": "推荐材质",
+    "colorsTitle": "推荐颜色",
+    "handTitle": "佩戴手位",
+    "timingTitle": "佩戴时机",
+    "stylingTitle": "日常搭配提示",
+    "yearlyTitle": "逐年调整参考（可选）",
+    "directionEnhance": "宜加强",
+    "directionReduce": "宜收敛",
+    "directionStable": "保持",
+    "requestFailed": "改运指南请求失败",
+    "backTools": "返回工具列表"
   }
 }

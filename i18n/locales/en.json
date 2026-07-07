@@ -845,7 +845,12 @@
     "sbtiDesc": "Free online SBTI meme personality test. 30 fun questions across five models and fifteen dimensions reveal your funny personality code among 27 types including CTRL, BOSS, LOVE-R and Drunk. For entertainment only.",
     "sbtiKeywords": "SBTI,SBTI personality test,SBTI meme personality test,fun personality test,funny personality test,free personality test,online personality test,ososn",
     "sbtiOgTitle": "SBTI Meme Personality Test_Discover Your Hidden Funny Self",
-    "sbtiOgDesc": "Free online SBTI meme personality test: 30 questions match one of 27 meme personality types. For entertainment only."
+    "sbtiOgDesc": "Free online SBTI meme personality test: 30 questions match one of 27 meme personality types. For entertainment only.",
+    "baziFortuneTuneTitle": "Bazi Fortune Tune Guide_Favorable Element Jewelry & Color Recommendations",
+    "baziFortuneTuneDesc": "Free Bazi fortune tune guide. Get personalized material, color, hand position and timing suggestions based on Day Master strength and favorable elements—not simple missing-element counting.",
+    "baziFortuneTuneKeywords": "Bazi fortune tune,favorable elements,five element jewelry,lucky material,wear hand position,Bazi guide,energy balance,five element colors",
+    "baziFortuneTuneOgTitle": "Bazi Fortune Tune Guide - Personalized by Favorable Elements",
+    "baziFortuneTuneOgDesc": "Enter your birth date to get material, color, hand position and timing suggestions based on your Bazi Day Master strength and favorable elements."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -4977,5 +4982,27 @@
     "raritySSR": "Ultra Rare",
     "shareName": "me",
     "footerDisclaimer": "For entertainment only · ososn SBTI"
+  },
+  "baziFortuneTune": {
+    "title": "Bazi Fortune Tune",
+    "subtitle": "Get material, color, hand position and timing suggestions based on Day Master strength and favorable elements",
+    "calculating": "Analyzing favorable elements...",
+    "resultTitle": "{name}'s Fortune Tune Guide",
+    "resultTitleNoName": "Fortune Tune Guide",
+    "resultSubtitle": "Day Master {riZhu} ({strength}) {'|'} Favorable {xiyong}",
+    "logicTitle": "Why these recommendations",
+    "xiyongLabel": "Favorable: ",
+    "jishenLabel": "Unfavorable: ",
+    "materialsTitle": "Recommended Materials",
+    "colorsTitle": "Recommended Colors",
+    "handTitle": "Which Hand to Wear",
+    "timingTitle": "When to Wear",
+    "stylingTitle": "Daily Styling Tips",
+    "yearlyTitle": "Yearly Adjustments (Optional)",
+    "directionEnhance": "Enhance",
+    "directionReduce": "Reduce",
+    "directionStable": "Stable",
+    "requestFailed": "Failed to load fortune tune guide",
+    "backTools": "Back to Tools"
   }
 }
