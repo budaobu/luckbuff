@@ -235,7 +235,7 @@
             </template>
             {{ t('qimenWorldcup.actions.predictAgain') }}
           </UButton>
-          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="navigateTo(localePath('/prophet'))">
+          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo(localePath('/prophet')) }">
             <template #leading>
               <UIcon name="i-heroicons-cube" class="w-4 h-4" />
             </template>
@@ -259,7 +259,7 @@
                 </div>
                 <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ t('common.share') }}</h3>
               </div>
-              <UButton color="neutral" variant="ghost" class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="shareDialogOpen = false">
+              <UButton color="neutral" variant="ghost" class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { shareDialogOpen = false }">
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
               </UButton>
             </div>
@@ -383,7 +383,7 @@ const matchItems = computed(() => {
 })
 
 // ============ 表单状态 ============
-const selectedMatchUid = ref<string | null>(null)
+const selectedMatchUid = ref<{ label: string; value: string } | undefined>(undefined)
 const selectedMatch = ref<WorldCupFixture | null>(null)
 const timeCardRef = ref<{ timezone: Ref<string> } | null>(null)
 
@@ -393,14 +393,12 @@ function onMatchSelect(uid: string) {
 }
 
 // 监听 selectedMatchUid 变化，自动更新 selectedMatch
-// Nuxt UI v4 USelectMenu 单选模式下 v-model 返回的是整个 item 对象 { label, value }
 watch(selectedMatchUid, (uid) => {
   if (!uid) {
     selectedMatch.value = null
     return
   }
-  const uidValue = typeof uid === 'object' && uid !== null ? (uid as any).value : uid
-  const match = fixtures.value.find(f => f.uid === uidValue)
+  const match = fixtures.value.find(f => f.uid === uid.value)
   selectedMatch.value = match || null
 })
 
@@ -460,7 +458,7 @@ async function handleSubmit() {
         awayTeam: selectedMatch.value.awayTeam,
         matchTime: selectedMatch.value.startTime,
         venue: selectedMatch.value.venue,
-        timezone: timeCardRef.value?.timezone.value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
+        timezone: (timeCardRef.value?.timezone as any).value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
       },
     })
     result.value = res
@@ -496,7 +494,7 @@ async function startInterpretStream() {
           awayTeam: result.value.match.awayTeam,
           matchTime: result.value.match.matchTime,
           venue: result.value.match.venue,
-          timezone: timeCardRef.value?.timezone.value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
+          timezone: (timeCardRef.value?.timezone as any).value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
         },
         chartJson: result.value.chart,
         locale: locale.value,
@@ -576,23 +574,23 @@ const parsedProbabilities = computed<ProbItem[] | null>(() => {
   function extractProb(name: string): number | null {
     // 中文："name 胜：65.3%"
     const m1 = text.match(new RegExp(`${esc(name)}\\s*胜[:：]\\s*(\\d+(?:\\.\\d+)?)\\s*%`))
-    if (m1) return parseFloat(m1[1])
+    if (m1) return parseFloat(m1[1]!)
     // 繁体中文："name 勝：65.3%"
     const m2 = text.match(new RegExp(`${esc(name)}\\s*勝[:：]\\s*(\\d+(?:\\.\\d+)?)\\s*%`))
-    if (m2) return parseFloat(m2[1])
+    if (m2) return parseFloat(m2[1]!)
     // 英文："name Win: 65.3%"
     const m3 = text.match(new RegExp(`${esc(name)}\\s+Win[:：]\\s*(\\d+(?:\\.\\d+)?)\\s*%`, 'i'))
-    if (m3) return parseFloat(m3[1])
+    if (m3) return parseFloat(m3[1]!)
     return null
   }
 
   function extractDraw(): number | null {
     const m1 = text.match(/平局[:：]\s*(\d+(?:\.\d+)?)\s*%/)
-    if (m1) return parseFloat(m1[1])
+    if (m1) return parseFloat(m1[1]!)
     const m2 = text.match(/Draw[:：]\s*(\d+(?:\.\d+)?)\s*%/i)
-    if (m2) return parseFloat(m2[1])
+    if (m2) return parseFloat(m2[1]!)
     const m3 = text.match(/和局[:：]\s*(\d+(?:\.\d+)?)\s*%/)
-    if (m3) return parseFloat(m3[1])
+    if (m3) return parseFloat(m3[1]!)
     return null
   }
 
@@ -697,7 +695,7 @@ function resetForm() {
   interpretContent.value = ''
   interpretStarted.value = false
   interpretError.value = null
-  selectedMatchUid.value = ''
+  selectedMatchUid.value = undefined
   selectedMatch.value = null
 }
 

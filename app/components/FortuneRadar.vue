@@ -126,7 +126,7 @@ const chartData = computed(() => ({
   datasets: [
     {
       label: t('fortuneRadar.title'),
-      data: labelKeys.map(k => props.scores[chineseKeyMap[k]] ?? 50),
+      data: labelKeys.map(k => props.scores[chineseKeyMap[k]!] ?? 50),
       backgroundColor: 'rgba(139, 92, 246, 0.15)',
       borderColor: '#8b5cf6',
       pointBackgroundColor: colors,
@@ -155,7 +155,7 @@ const options = {
       },
       pointLabels: {
         color: '#e8e0d0',
-        font: { size: 11, weight: '500' },
+        font: { size: 11, weight: 500 },
       },
     },
   },

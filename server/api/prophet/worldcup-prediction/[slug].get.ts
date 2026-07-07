@@ -2,6 +2,32 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { resolve, join } from 'node:path'
 
 const PREDICTIONS_DIR = resolve(process.cwd(), 'content', 'worldcup-predictions')
+const FIXTURES_PATH = resolve(process.cwd(), 'public', 'worldcup-2026-fixtures.json')
+
+interface FixtureMeta {
+  slug: string
+  startTime: string
+  endTime: string
+  venue: string
+}
+
+let fixturesCache: FixtureMeta[] | null = null
+function getFixtures(): FixtureMeta[] | null {
+  if (fixturesCache) return fixturesCache
+  try {
+    const raw = readFileSync(FIXTURES_PATH, 'utf-8')
+    const data = JSON.parse(raw)
+    fixturesCache = (data.events || []).map((e: any) => ({
+      slug: e.slug,
+      startTime: e.startTime,
+      endTime: e.endTime,
+      venue: e.venue,
+    }))
+  } catch {
+    fixturesCache = []
+  }
+  return fixturesCache
+}
 
 interface PredictionDetail {
   uid: string
@@ -10,6 +36,7 @@ interface PredictionDetail {
   awayTeam: string
   summary: string
   matchTime: string
+  endTime: string
   venue: string
   dunType: string
   juNumber: number
@@ -35,7 +62,7 @@ function parseFrontmatter(raw: string): { meta: Record<string, any>; content: st
   const match = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
   if (!match) return { meta: {}, content: raw }
 
-  const lines = match[1].split('\n')
+  const lines = match[1]!.split('\n')
   const meta: Record<string, any> = {}
   for (const line of lines) {
     const idx = line.indexOf(':')
@@ -52,7 +79,7 @@ function parseFrontmatter(raw: string): { meta: Record<string, any>; content: st
     }
   }
 
-  return { meta, content: match[2].trim() }
+  return { meta, content: match[2]!.trim() }
 }
 
 function resolveLangSuffix(lang: string): string {
@@ -86,6 +113,9 @@ export default defineEventHandler(async (event) => {
   const raw = readFileSync(filePath, 'utf-8')
   const { meta, content } = parseFrontmatter(raw)
 
+  const fixtures = getFixtures()
+  const fixture = fixtures?.find(f => f.slug === slug)
+
   return {
     uid: meta.uid || '',
     slug,
@@ -94,6 +124,7 @@ export default defineEventHandler(async (event) => {
     awayTeam: meta.awayTeam || '',
     summary: meta.summary || '',
     matchTime: meta.matchTime || '',
+    endTime: fixture?.endTime || '',
     venue: meta.venue || '',
     dunType: meta.dunType || '',
     juNumber: meta.juNumber ?? 0,

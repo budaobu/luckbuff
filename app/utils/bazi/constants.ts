@@ -45,8 +45,8 @@ export const WUXING_KE: Record<string, string> = {
 }
 
 export function getShiShen(riGan: string, targetGan: string): string {
-  const riWx = GAN_WUXING[riGan]
-  const tgWx = GAN_WUXING[targetGan]
+  const riWx = GAN_WUXING[riGan]!
+  const tgWx = GAN_WUXING[targetGan]!
   const same = GAN_YANG[riGan] === GAN_YANG[targetGan]
   if (riWx === tgWx) return same ? '比肩' : '劫财'
   if (WUXING_SHENG[riWx] === tgWx) return same ? '食神' : '伤官'

@@ -51,3 +51,30 @@ qimen-engine.py
 
 # Pre-generated World Cup prediction markdown files
 content/worldcup-predictions/
+
+# Development screenshots and scratch files at repo root
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.webp
+/cezi-battle-verify.mjs
+/dns-aid-config.md
+/qimen-SKILL-contract.md
+/prd-*.md
+/qimen-form-filled.md
+/qimen-form-snapshot.md
+/qimen-result.md
+/qimen-snapshot.md
+/remixed-*.html
+/screenshot-*.mjs
+/test-i18n.mjs
+/verify-screenshots/
+/妈祖灵签_完整60签.json
+/掷筊杯卦辞大全.json
+
+# External reference implementations copied for local comparison
+app/pages/tools/cezi-battle/reference/
+
+# macOS metadata (anywhere in repo)
+**/.DS_Store

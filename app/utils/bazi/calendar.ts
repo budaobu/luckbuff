@@ -9,7 +9,7 @@ export function isLeapYear(year: number): boolean {
 export function getDaysInMonth(year: number, month: number): number {
   const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if (month === 2 && isLeapYear(year)) return 29
-  return days[month]
+  return days[month]!
 }
 
 // 计算日期是一年中的第几天
@@ -17,7 +17,7 @@ export function dayOfYear(year: number, month: number, day: number): number {
   const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   if (isLeapYear(year)) days[2] = 29
   let result = 0
-  for (let m = 1; m < month; m++) result += days[m]
+  for (let m = 1; m < month; m++) result += days[m]!
   return result + day
 }
 
@@ -57,7 +57,7 @@ export function getJieDayOfYear(year: number, jieIndex: number): number {
     else offset = 0
   }
 
-  const base = dayOfYear(year, jieMonth, jieDay)
+  const base = dayOfYear(year, jieMonth!, jieDay!)
   return base + offset
 }
 
@@ -112,8 +112,8 @@ export function getYearPillar(year: number, month: number, day: number): {
   const zhiIndex = (effectiveYear - 4) % 12
 
   return {
-    gan: TIAN_GAN[ganIndex < 0 ? ganIndex + 10 : ganIndex],
-    zhi: DI_ZHI[zhiIndex < 0 ? zhiIndex + 12 : zhiIndex],
+    gan: TIAN_GAN[ganIndex < 0 ? ganIndex + 10 : ganIndex]!,
+    zhi: DI_ZHI[zhiIndex < 0 ? zhiIndex + 12 : zhiIndex]!,
     isLiChunBorder: Math.abs(currentDay - lichenDay) <= 1,
   }
 }
@@ -130,7 +130,7 @@ export function getMonthPillar(
   isJieBorder: boolean
 } {
   const { index: jieIndex, isJieBorder } = getMonthZhiIndex(year, month, day)
-  const zhi = MONTH_ZHI[jieIndex]
+  const zhi = MONTH_ZHI[jieIndex]!
 
   // 年上起月法（五虎遁）
   const ganStartIndex =
@@ -139,7 +139,7 @@ export function getMonthPillar(
     }[yearGan] ?? 0
 
   const ganIndex = (ganStartIndex + jieIndex) % 10
-  const gan = TIAN_GAN[ganIndex]
+  const gan = TIAN_GAN[ganIndex]!
 
   return { gan, zhi, isJieBorder }
 }
@@ -159,8 +159,8 @@ export function getDayPillar(year: number, month: number, day: number): {
   const zhiIndex = g % 12
 
   return {
-    gan: TIAN_GAN[ganIndex],
-    zhi: DI_ZHI[zhiIndex],
+    gan: TIAN_GAN[ganIndex]!,
+    zhi: DI_ZHI[zhiIndex]!,
   }
 }
 
@@ -188,7 +188,7 @@ export function getHourPillar(
     zhiIndex = 0 // 0:00-1:00 早子时
   }
 
-  const zhi = DI_ZHI[zhiIndex]
+  const zhi = DI_ZHI[zhiIndex]!
 
   // 日上起时法（五鼠遁）
   const ganStartIndex =
@@ -197,7 +197,7 @@ export function getHourPillar(
     }[dayGan] ?? 0
 
   const ganIndex = (ganStartIndex + zhiIndex) % 10
-  const gan = TIAN_GAN[ganIndex]
+  const gan = TIAN_GAN[ganIndex]!
 
   return { gan, zhi, isZiShiBorder }
 }
@@ -227,7 +227,7 @@ export function solarToGanZhi(
       // 日柱进一
       const dayGanIdx = TIAN_GAN.indexOf(dayPillar.gan as never)
       const dayZhiIdx = DI_ZHI.indexOf(dayPillar.zhi as never)
-      effectiveDayGan = TIAN_GAN[(dayGanIdx + 1) % 10]
+      effectiveDayGan = TIAN_GAN[(dayGanIdx + 1) % 10]!
     }
     hourPillar = getHourPillar(effectiveDayGan, hour)
   }

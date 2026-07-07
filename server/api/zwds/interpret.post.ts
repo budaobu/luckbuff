@@ -18,11 +18,11 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 
 function getZodiacForYear(year: number): string {
   const zhi = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未']
-  return zhi[year % 12]
+  return zhi[year % 12]!
 }
 
 function buildSystemPrompt(locale: string): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   return `你是一位精通紫微斗数的命理分析师。请根据命盘数据，用现代、理性、温和的语言进行解读。
 ${langHook.system}
 
@@ -47,7 +47,7 @@ function buildUserPrompt(
   analysisSummary: string,
   locale: string,
 ): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
   const currentDaXianStr = chart.currentDaXian
     ? `第${chart.currentDaXian.index}大限 ${chart.currentDaXian.gongName}宫（${chart.currentDaXian.gongZhi}）${chart.currentDaXian.ageRange[0]}-${chart.currentDaXian.ageRange[1]}岁`

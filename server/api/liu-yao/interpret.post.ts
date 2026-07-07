@@ -16,7 +16,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 }
 
 function buildSystemPrompt(locale: string): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   return `你是一位精通《周易》六爻纳甲法的资深预测师，擅长以六爻断卦预测体育赛事胜负。
 ${langHook.system}
 
@@ -54,7 +54,7 @@ function buildUserPrompt(
   awayTeam: WorldCupTeam | null,
   locale: string,
 ): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
   const linesText = result.lines_top_down
     ?.map((line, idx) => {

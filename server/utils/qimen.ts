@@ -19,7 +19,7 @@ function readBlob(text: string, tag: string): string {
   if (!match) {
     throw new Error(`missing embedded payload: ${tag}`)
   }
-  return match[1].replace(/\s+/g, '')
+  return match[1]!.replace(/\s+/g, '')
 }
 
 function decodeBase64Gz(blob: string): Buffer {

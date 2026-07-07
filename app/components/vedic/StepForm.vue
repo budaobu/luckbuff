@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VedicFormData } from '~/types/vedic'
 import type { DiZhi, UserProfile } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, type DateValue } from '@internationalized/date'
 
 const DIZHI_TO_TIME: Record<DiZhi, string> = {
   '子': '00:00',
@@ -38,7 +38,7 @@ const selectedProfileId = ref<string | null>(null)
 
 const tz = getLocalTimeZone()
 const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
+const calendarDate = shallowRef<DateValue | undefined>(undefined)
 
 function syncBirthDateFromCalendar() {
   if (calendarDate.value) {
@@ -160,7 +160,7 @@ function selectProfile(profile: UserProfile, autoSubmit = false) {
 function saveToProfile() {
   if (!selectedProfileId.value) return
   emit('save-profile', selectedProfileId.value, {
-    gender: local.gender,
+    gender: local.gender || undefined,
     birthDate: local.birthDate,
     birthProvince: local.city,
   })

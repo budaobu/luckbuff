@@ -58,3 +58,15 @@ Target host and key are overridable via `LUCKBUFF_DEPLOY_HOST` and
 Server `.env` lives at `/home/deploy/envs/luckbuff.env` and is sourced into
 PM2 by `scripts/deploy.sh`. `NUXT_PUBLIC_*` keys must be declared in
 `runtimeConfig.public` in `nuxt.config.ts` or Nuxt won't pick them up from env.
+
+## i18n Locale 文件铁律
+
+- **禁止修改任何已存在 key 的 namespace 结构**，包括但不限于：重命名 key、
+  调整嵌套层级、合并/拆分 namespace、删除任何现有 key。
+- 新增功能只允许：
+  1. 在对应语言文件中**新增**一个独立 namespace（以功能名命名，如 `parentChildTest`）
+  2. 或在已有 namespace 内**追加**新 key，不得修改已有 key 的 value 结构或路径
+- 修改前必须先 `git diff` 确认改动范围只包含新增行，不包含删除行或路径变更。
+  如果 diff 中出现对已有 key 的删除或重命名，视为违反规则，必须回滚重做。
+- 每次涉及 locale 文件的改动，必须在完成后跑一遍 i18n 完整性检查（见下方脚本），
+  确认所有语言文件 key 集合一致，且相比改动前只增不减。

@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import type { CalendarValue } from '@nuxt/ui'
 import { CalendarDate } from '@internationalized/date'
+import type { CalendarDate as CalendarDateType } from '@internationalized/date'
 
 interface AppCalendarProps {
-  modelValue?: CalendarValue
+  modelValue?: any
   color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
   variant?: 'solid' | 'outline' | 'soft' | 'subtle'
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  placeholder?: string
-  defaultPlaceholder?: string
+  placeholder?: any
+  defaultPlaceholder?: any
   disabled?: boolean
   readonly?: boolean
   range?: boolean
@@ -18,8 +18,8 @@ interface AppCalendarProps {
   pagedNavigation?: boolean
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
   fixedWeeks?: boolean
-  minValue?: Date
-  maxValue?: Date
+  minValue?: any
+  maxValue?: any
   modelType?: 'date' | 'iso'
   ui?: Record<string, string>
   class?: string
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<AppCalendarProps>(), {
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [value: CalendarValue]
+  'update:modelValue': [value: any]
 }>()
 
 const { t } = useI18n()
@@ -98,7 +98,7 @@ function handleYearChange(year: number) {
   const month = current ? current.month : selectedMonth.value
   const day = current ? current.day : 1
   const newDate = new CalendarDate(year, month, day)
-  emit('update:modelValue', newDate as CalendarValue)
+  emit('update:modelValue', newDate)
 }
 
 function handleMonthChange(month: number) {
@@ -110,12 +110,22 @@ function handleMonthChange(month: number) {
   const year = current ? current.year : selectedYear.value
   const day = current ? current.day : 1
   const newDate = new CalendarDate(year, month, day)
-  emit('update:modelValue', newDate as CalendarValue)
+  emit('update:modelValue', newDate)
 }
 
-function onPlaceholderUpdate(value: CalendarDate) {
+function onPlaceholderUpdate(value: CalendarDateType) {
   selectedYear.value = value.year
   selectedMonth.value = value.month
+}
+
+function handlePlaceholderUpdate(value: unknown) {
+  if (value) {
+    onPlaceholderUpdate(value as CalendarDateType)
+  }
+}
+
+function handleModelValueUpdate(value: unknown) {
+  emit('update:modelValue', value as CalendarDateType)
 }
 
 const selectUi = {
@@ -177,8 +187,8 @@ const selectUi = {
         cellTrigger: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[selected]:bg-[var(--accent)] data-[selected]:text-[var(--surface-bg)]',
       }"
       :class="class"
-      @update:placeholder="onPlaceholderUpdate($event)"
-      @update:model-value="emit('update:modelValue', $event)"
+      @update:placeholder="handlePlaceholderUpdate($event)"
+      @update:model-value="handleModelValueUpdate($event)"
     />
   </div>
 </template>

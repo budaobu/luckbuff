@@ -31,13 +31,15 @@ export const useProfilesStore = defineStore('profiles', {
         return { ok: false, error: 'profileForm.labelExists' }
       }
       if (data.isDefault) this._clearDefault()
-      this.list[idx] = { ...this.list[idx], ...data }
+      const existing = this.list[idx]
+      if (!existing) return { ok: false, error: 'profileForm.profileNotFound' }
+      this.list[idx] = { ...existing, ...data }
       return { ok: true }
     },
     remove(id: string) {
       this.list = this.list.filter(p => p.id !== id)
       if (this.list.length > 0 && !this.list.some(p => p.isDefault)) {
-        this.list[0].isDefault = true
+        this.list[0]!.isDefault = true
       }
     },
     _clearDefault() {

@@ -14,7 +14,7 @@
           variant="ghost"
           size="sm"
           class="text-[var(--text-muted)] hover:text-[var(--text-body)]"
-          @click="navigateTo(localePath('/prophet'))"
+          @click="goBack"
         >
           <template #leading>
             <UIcon name="i-heroicons-arrow-left" class="w-4 h-4" />
@@ -41,7 +41,7 @@
               </template>
               {{ $t('prophet.match.goPredict') }}
             </UButton>
-            <UButton color="neutral" variant="soft" @click="navigateTo(localePath('/prophet'))">
+            <UButton color="neutral" variant="soft" @click="goBack">
               {{ $t('prophet.match.backToList') }}
             </UButton>
           </div>
@@ -153,11 +153,45 @@
 import { marked } from 'marked'
 import type { QimenChartResponse } from '~/types/qimen'
 
+interface WorldcupPrediction {
+  uid: string
+  slug: string
+  index: number
+  homeTeam: string
+  awayTeam: string
+  summary: string
+  matchTime: string
+  endTime: string
+  venue: string
+  dunType: string
+  juNumber: number
+  yuan: string
+  zhifuStar: string
+  zhifuPalace: number
+  zhishiDoor: string
+  zhishiPalace: number
+  xunshou: string
+  hiddenYi: string
+  jieqi: string
+  yearGanzhi: string
+  monthGanzhi: string
+  dayGanzhi: string
+  timeGanzhi: string
+  kongwang: string
+  generatedAt: string
+  model: string
+  content: string
+}
+
 const route = useRoute()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
 const slug = computed(() => route.params.slug as string)
+
+function goBack() {
+  navigateTo(localePath('/prophet'))
+}
 
 // ── Team name translation (fixtures store Chinese names) ──
 const teamNameToCode: Record<string, string> = {
@@ -197,7 +231,7 @@ const awayTeamName = computed(() => prediction.value ? translateTeamName(predict
 
 const { data: prediction, pending, error } = await useAsyncData(
   () => `match-prediction-${slug.value}-${locale.value}`,
-  () => $fetch(`/api/prophet/worldcup-prediction/${slug.value}?lang=${locale.value}`),
+  () => $fetch<WorldcupPrediction>(`/api/prophet/worldcup-prediction/${slug.value}?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
 
@@ -315,39 +349,100 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-useHead(() => ({
-  link: [
-    {
-      rel: 'canonical',
-      href: `https://www.ososn.com/prophet/match/${slug.value}`,
+function parseVenueAddress(venue: string): { city: string; country: string } | null {
+  if (!venue) return null
+  const parts = venue.split('·').map(s => s.trim())
+  const city = parts[1] || ''
+  if (!city) return null
+
+  const cityToCountry: Record<string, string> = {
+    '墨西哥城': 'MX', '瓜达拉哈拉': 'MX', '蒙特雷': 'MX',
+    '多伦多': 'CA', '温哥华': 'CA',
+    '洛杉矶': 'US', '旧金山': 'US', '纽约': 'US', '波士顿': 'US',
+    '休斯顿': 'US', '达拉斯': 'US', '费城': 'US', '亚特兰大': 'US',
+    '西雅图': 'US', '迈阿密': 'US', '堪萨斯城': 'US',
+  }
+
+  return {
+    city,
+    country: cityToCountry[city] || '',
+  }
+}
+
+const addressInfo = computed(() => {
+  if (!prediction.value?.venue) return null
+  return parseVenueAddress(prediction.value.venue)
+})
+
+useHead(() => {
+  const p = prediction.value
+  const schema: Record<string, any> = {
+    '@context': 'https://schema.org',
+    '@type': 'SportsEvent',
+    name: p
+      ? `${homeTeamName.value} vs ${awayTeamName.value} ${t('prophet.match.scorePrediction')}`
+      : t('prophet.match.fallbackTitle'),
+    startDate: p?.matchTime || '',
+    endDate: p?.endTime || '',
+    eventStatus: 'https://schema.org/EventScheduled',
+    organizer: {
+      '@type': 'Organization',
+      name: 'FIFA',
+      url: 'https://www.fifa.com',
     },
-  ],
-  script: [
-    {
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'SportsEvent',
-        name: prediction.value
-          ? `${homeTeamName.value} vs ${awayTeamName.value} ${t('prophet.match.scorePrediction')}`
-          : t('prophet.match.fallbackTitle'),
-        startDate: prediction.value?.matchTime || '',
-        location: prediction.value?.venue
-          ? {
-              '@type': 'Place',
-              name: prediction.value.venue,
-            }
-          : undefined,
-        competitor: [
-          { '@type': 'SportsTeam', name: homeTeamName.value || '' },
-          { '@type': 'SportsTeam', name: awayTeamName.value || '' },
-        ],
-        description: pageDesc.value,
-        url: `https://www.ososn.com/prophet/match/${slug.value}`,
-      }),
-    },
-  ],
-}))
+    location: p?.venue
+      ? {
+          '@type': 'Place',
+          name: p.venue,
+          address: addressInfo.value
+            ? {
+                '@type': 'PostalAddress',
+                addressLocality: addressInfo.value.city,
+                addressCountry: addressInfo.value.country,
+              }
+            : undefined,
+        }
+      : undefined,
+    performer: [
+      { '@type': 'SportsTeam', name: homeTeamName.value || '' },
+      { '@type': 'SportsTeam', name: awayTeamName.value || '' },
+    ],
+    competitor: [
+      { '@type': 'SportsTeam', name: homeTeamName.value || '' },
+      { '@type': 'SportsTeam', name: awayTeamName.value || '' },
+    ],
+    description: pageDesc.value,
+    url: `https://www.ososn.com/prophet/match/${slug.value}`,
+  }
+
+  // Remove undefined values to keep JSON clean
+  const clean = (obj: any): any => {
+    if (Array.isArray(obj)) return obj.map(clean)
+    if (obj && typeof obj === 'object') {
+      const result: any = {}
+      for (const [k, v] of Object.entries(obj)) {
+        if (v !== undefined) result[k] = clean(v)
+      }
+      return result
+    }
+    return obj
+  }
+
+  return {
+    link: [
+      {
+        rel: 'canonical',
+        href: `https://www.ososn.com/prophet/match/${slug.value}`,
+      },
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(clean(schema)),
+      },
+    ],
+  }
+})
 </script>
 
 <style scoped>

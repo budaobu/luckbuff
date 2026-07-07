@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-03T09:00:55.926Z",
+  "updatedAt": "2026-07-07T06:57:59.883Z",
   "source": "https://jys66.top/calendars/worldcup2026.ics",
   "total": 104,
   "events": [
@@ -798,266 +798,266 @@
     {
       "uid": "worldcup2026-match-073@jys66.top",
       "slug": "worldcup2026-match-073",
-      "homeTeam": "A组第二名",
-      "awayTeam": "B组第二名",
-      "summary": "A组第二名 vs B组第二名",
+      "homeTeam": "南非",
+      "awayTeam": "加拿大",
+      "summary": "🇿🇦 南非 vs 🇨🇦 加拿大",
       "startTime": "2026-06-28T19:00:00.000Z",
       "endTime": "2026-06-28T20:45:00.000Z",
       "venue": "索菲体育场 · 洛杉矶",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-074@jys66.top",
       "slug": "worldcup2026-match-074",
-      "homeTeam": "E组第一名",
-      "awayTeam": "A/B/C/D/F组第三名",
-      "summary": "E组第一名 vs A/B/C/D/F组第三名",
+      "homeTeam": "德国",
+      "awayTeam": "巴拉圭",
+      "summary": "🇩🇪 德国 vs 🇵🇾 巴拉圭",
       "startTime": "2026-06-29T20:30:00.000Z",
       "endTime": "2026-06-29T22:15:00.000Z",
       "venue": "吉列体育场 · 波士顿",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-075@jys66.top",
       "slug": "worldcup2026-match-075",
-      "homeTeam": "F组第一名",
-      "awayTeam": "C组第二名",
-      "summary": "F组第一名 vs C组第二名",
+      "homeTeam": "荷兰",
+      "awayTeam": "摩洛哥",
+      "summary": "🇳🇱 荷兰 vs 🇲🇦 摩洛哥",
       "startTime": "2026-06-30T01:00:00.000Z",
       "endTime": "2026-06-30T02:45:00.000Z",
       "venue": "BBVA体育场 · 蒙特雷",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-076@jys66.top",
       "slug": "worldcup2026-match-076",
-      "homeTeam": "C组第一名",
-      "awayTeam": "F组第二名",
-      "summary": "C组第一名 vs F组第二名",
+      "homeTeam": "巴西",
+      "awayTeam": "日本",
+      "summary": "🇧🇷 巴西 vs 🇯🇵 日本",
       "startTime": "2026-06-29T17:00:00.000Z",
       "endTime": "2026-06-29T18:45:00.000Z",
       "venue": "NRG体育场 · 休斯顿",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-077@jys66.top",
       "slug": "worldcup2026-match-077",
-      "homeTeam": "I组第一名",
-      "awayTeam": "C/D/F/G/H组第三名",
-      "summary": "I组第一名 vs C/D/F/G/H组第三名",
+      "homeTeam": "法国",
+      "awayTeam": "瑞典",
+      "summary": "🇫🇷 法国 vs 🇸🇪 瑞典",
       "startTime": "2026-06-30T21:00:00.000Z",
       "endTime": "2026-06-30T22:45:00.000Z",
       "venue": "大都会人寿体育场 · 纽约",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-078@jys66.top",
       "slug": "worldcup2026-match-078",
-      "homeTeam": "E组第二名",
-      "awayTeam": "I组第二名",
-      "summary": "E组第二名 vs I组第二名",
+      "homeTeam": "科特迪瓦",
+      "awayTeam": "挪威",
+      "summary": "🇨🇮 科特迪瓦 vs 🇳🇴 挪威",
       "startTime": "2026-06-30T17:00:00.000Z",
       "endTime": "2026-06-30T18:45:00.000Z",
       "venue": "AT&T体育场 · 达拉斯",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-079@jys66.top",
       "slug": "worldcup2026-match-079",
-      "homeTeam": "A组第一名",
-      "awayTeam": "C/E/F/H/I组第三名",
-      "summary": "A组第一名 vs C/E/F/H/I组第三名",
+      "homeTeam": "墨西哥",
+      "awayTeam": "厄瓜多尔",
+      "summary": "🇲🇽 墨西哥 vs 🇪🇨 厄瓜多尔",
       "startTime": "2026-07-01T01:00:00.000Z",
       "endTime": "2026-07-01T02:45:00.000Z",
       "venue": "阿兹特克体育场 · 墨西哥城",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-080@jys66.top",
       "slug": "worldcup2026-match-080",
-      "homeTeam": "L组第一名",
-      "awayTeam": "E/H/I/J/K组第三名",
-      "summary": "L组第一名 vs E/H/I/J/K组第三名",
+      "homeTeam": "英格兰",
+      "awayTeam": "刚果民主共和国",
+      "summary": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰 vs 🇨🇩 刚果民主共和国",
       "startTime": "2026-07-01T16:00:00.000Z",
       "endTime": "2026-07-01T17:45:00.000Z",
       "venue": "梅赛德斯-奔驰体育场 · 亚特兰大",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-081@jys66.top",
       "slug": "worldcup2026-match-081",
-      "homeTeam": "D组第一名",
-      "awayTeam": "B/E/F/I/J组第三名",
-      "summary": "D组第一名 vs B/E/F/I/J组第三名",
+      "homeTeam": "美国",
+      "awayTeam": "波黑",
+      "summary": "🇺🇸 美国 vs 🇧🇦 波黑",
       "startTime": "2026-07-02T00:00:00.000Z",
       "endTime": "2026-07-02T01:45:00.000Z",
       "venue": "李维斯体育场 · 旧金山",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-082@jys66.top",
       "slug": "worldcup2026-match-082",
-      "homeTeam": "G组第一名",
-      "awayTeam": "A/E/H/I/J组第三名",
-      "summary": "G组第一名 vs A/E/H/I/J组第三名",
+      "homeTeam": "比利时",
+      "awayTeam": "塞内加尔",
+      "summary": "🇧🇪 比利时 vs 🇸🇳 塞内加尔",
       "startTime": "2026-07-01T20:00:00.000Z",
       "endTime": "2026-07-01T21:45:00.000Z",
       "venue": "卢米恩球场 · 西雅图",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-083@jys66.top",
       "slug": "worldcup2026-match-083",
-      "homeTeam": "K组第二名",
-      "awayTeam": "L组第二名",
-      "summary": "K组第二名 vs L组第二名",
+      "homeTeam": "葡萄牙",
+      "awayTeam": "克罗地亚",
+      "summary": "🇵🇹 葡萄牙 vs 🇭🇷 克罗地亚",
       "startTime": "2026-07-02T23:00:00.000Z",
       "endTime": "2026-07-03T00:45:00.000Z",
       "venue": "BMO球场 · 多伦多",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-084@jys66.top",
       "slug": "worldcup2026-match-084",
-      "homeTeam": "H组第一名",
-      "awayTeam": "J组第二名",
-      "summary": "H组第一名 vs J组第二名",
+      "homeTeam": "西班牙",
+      "awayTeam": "奥地利",
+      "summary": "🇪🇸 西班牙 vs 🇦🇹 奥地利",
       "startTime": "2026-07-02T19:00:00.000Z",
       "endTime": "2026-07-02T20:45:00.000Z",
       "venue": "索菲体育场 · 洛杉矶",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-085@jys66.top",
       "slug": "worldcup2026-match-085",
-      "homeTeam": "B组第一名",
-      "awayTeam": "E/F/G/I/J组第三名",
-      "summary": "B组第一名 vs E/F/G/I/J组第三名",
+      "homeTeam": "瑞士",
+      "awayTeam": "阿尔及利亚",
+      "summary": "🇨🇭 瑞士 vs 🇩🇿 阿尔及利亚",
       "startTime": "2026-07-03T03:00:00.000Z",
       "endTime": "2026-07-03T04:45:00.000Z",
       "venue": "BC体育馆 · 温哥华",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-086@jys66.top",
       "slug": "worldcup2026-match-086",
-      "homeTeam": "J组第一名",
-      "awayTeam": "H组第二名",
-      "summary": "J组第一名 vs H组第二名",
+      "homeTeam": "阿根廷",
+      "awayTeam": "佛得角",
+      "summary": "🇦🇷 阿根廷 vs 🇨🇻 佛得角",
       "startTime": "2026-07-03T22:00:00.000Z",
       "endTime": "2026-07-03T23:45:00.000Z",
       "venue": "硬石体育场 · 迈阿密",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-087@jys66.top",
       "slug": "worldcup2026-match-087",
-      "homeTeam": "K组第一名",
-      "awayTeam": "D/E/I/J/L组第三名",
-      "summary": "K组第一名 vs D/E/I/J/L组第三名",
+      "homeTeam": "哥伦比亚",
+      "awayTeam": "加纳",
+      "summary": "🇨🇴 哥伦比亚 vs 🇬🇭 加纳",
       "startTime": "2026-07-04T01:30:00.000Z",
       "endTime": "2026-07-04T03:15:00.000Z",
       "venue": "箭头体育场 · 堪萨斯城",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-088@jys66.top",
       "slug": "worldcup2026-match-088",
-      "homeTeam": "D组第二名",
-      "awayTeam": "G组第二名",
-      "summary": "D组第二名 vs G组第二名",
+      "homeTeam": "澳大利亚",
+      "awayTeam": "埃及",
+      "summary": "🇦🇺 澳大利亚 vs 🇪🇬 埃及",
       "startTime": "2026-07-03T18:00:00.000Z",
       "endTime": "2026-07-03T19:45:00.000Z",
       "venue": "AT&T体育场 · 达拉斯",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-089@jys66.top",
       "slug": "worldcup2026-match-089",
-      "homeTeam": "第74场胜者",
-      "awayTeam": "第77场胜者",
-      "summary": "第74场胜者 vs 第77场胜者",
+      "homeTeam": "巴拉圭",
+      "awayTeam": "法国",
+      "summary": "🇵🇾 巴拉圭 vs 🇫🇷 法国",
       "startTime": "2026-07-04T21:00:00.000Z",
       "endTime": "2026-07-04T22:45:00.000Z",
       "venue": "林肯金融球场 · 费城",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-090@jys66.top",
       "slug": "worldcup2026-match-090",
-      "homeTeam": "第73场胜者",
-      "awayTeam": "第75场胜者",
-      "summary": "第73场胜者 vs 第75场胜者",
+      "homeTeam": "加拿大",
+      "awayTeam": "摩洛哥",
+      "summary": "🇨🇦 加拿大 vs 🇲🇦 摩洛哥",
       "startTime": "2026-07-04T17:00:00.000Z",
       "endTime": "2026-07-04T18:45:00.000Z",
       "venue": "NRG体育场 · 休斯顿",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-091@jys66.top",
       "slug": "worldcup2026-match-091",
-      "homeTeam": "第76场胜者",
-      "awayTeam": "第78场胜者",
-      "summary": "第76场胜者 vs 第78场胜者",
+      "homeTeam": "巴西",
+      "awayTeam": "挪威",
+      "summary": "🇧🇷 巴西 vs 🇳🇴 挪威",
       "startTime": "2026-07-05T20:00:00.000Z",
       "endTime": "2026-07-05T21:45:00.000Z",
       "venue": "大都会人寿体育场 · 纽约",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-092@jys66.top",
       "slug": "worldcup2026-match-092",
-      "homeTeam": "第79场胜者",
-      "awayTeam": "第80场胜者",
-      "summary": "第79场胜者 vs 第80场胜者",
+      "homeTeam": "墨西哥",
+      "awayTeam": "英格兰",
+      "summary": "🇲🇽 墨西哥 vs 🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
       "startTime": "2026-07-06T00:00:00.000Z",
       "endTime": "2026-07-06T01:45:00.000Z",
       "venue": "阿兹特克体育场 · 墨西哥城",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-093@jys66.top",
       "slug": "worldcup2026-match-093",
-      "homeTeam": "第83场胜者",
-      "awayTeam": "第84场胜者",
-      "summary": "第83场胜者 vs 第84场胜者",
+      "homeTeam": "葡萄牙",
+      "awayTeam": "西班牙",
+      "summary": "🇵🇹 葡萄牙 vs 🇪🇸 西班牙",
       "startTime": "2026-07-06T19:00:00.000Z",
       "endTime": "2026-07-06T20:45:00.000Z",
       "venue": "AT&T体育场 · 达拉斯",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-094@jys66.top",
       "slug": "worldcup2026-match-094",
-      "homeTeam": "第81场胜者",
-      "awayTeam": "第82场胜者",
-      "summary": "第81场胜者 vs 第82场胜者",
+      "homeTeam": "美国",
+      "awayTeam": "比利时",
+      "summary": "🇺🇸 美国 vs 🇧🇪 比利时",
       "startTime": "2026-07-07T00:00:00.000Z",
       "endTime": "2026-07-07T01:45:00.000Z",
       "venue": "卢米恩球场 · 西雅图",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-095@jys66.top",
       "slug": "worldcup2026-match-095",
-      "homeTeam": "第86场胜者",
-      "awayTeam": "第88场胜者",
-      "summary": "第86场胜者 vs 第88场胜者",
+      "homeTeam": "阿根廷",
+      "awayTeam": "埃及",
+      "summary": "🇦🇷 阿根廷 vs 🇪🇬 埃及",
       "startTime": "2026-07-07T16:00:00.000Z",
       "endTime": "2026-07-07T17:45:00.000Z",
       "venue": "梅赛德斯-奔驰体育场 · 亚特兰大",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-096@jys66.top",
       "slug": "worldcup2026-match-096",
-      "homeTeam": "第85场胜者",
-      "awayTeam": "第87场胜者",
-      "summary": "第85场胜者 vs 第87场胜者",
+      "homeTeam": "瑞士",
+      "awayTeam": "哥伦比亚",
+      "summary": "🇨🇭 瑞士 vs 🇨🇴 哥伦比亚",
       "startTime": "2026-07-07T20:00:00.000Z",
       "endTime": "2026-07-07T21:45:00.000Z",
       "venue": "BC体育馆 · 温哥华",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-097@jys66.top",

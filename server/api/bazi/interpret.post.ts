@@ -17,7 +17,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 }
 
 function buildSystemPrompt(locale: string): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   return `你是一个 JSON 生成器。你的唯一任务是把八字分析结果转换成严格有效的 JSON。
 ${langHook.system}
 
@@ -35,7 +35,7 @@ function buildUserPrompt(
   summary: string,
   locale: string,
 ): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
   const currentDaYunStr = chart.currentDaYun
     ? `${chart.currentDaYun.gan}${chart.currentDaYun.zhi}（${chart.currentDaYun.ageRange[0]}-${chart.currentDaYun.ageRange[1]}岁）`

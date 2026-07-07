@@ -100,12 +100,12 @@ const sections = computed((): Section[] => {
     const h2Match = line.match(/^##\s+(.+)$/)
     if (h2Match) {
       if (current) result.push(current)
-      current = { title: h2Match[1].trim(), content: '', rendered: '' }
+      current = { title: h2Match[1]!.trim(), content: '', rendered: '' }
     } else if (current) {
       current.content += line + '\n'
     } else {
       if (!result.length) result.push({ title: '', content: '', rendered: '' })
-      result[0].content += line + '\n'
+      result[0]!.content += line + '\n'
     }
   }
   if (current) result.push(current)

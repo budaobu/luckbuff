@@ -209,6 +209,38 @@
             </UButton>
           </div>
         </div>
+
+        <!-- 知识卡片 -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-book-open" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('huangdao.knowledgeCard1Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('huangdao.knowledgeCard1Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-square-3-stack-3d" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('huangdao.knowledgeCard2Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('huangdao.knowledgeCard2Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('huangdao.knowledgeCard3Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('huangdao.knowledgeCard3Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('huangdao.knowledgeCard4Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('huangdao.knowledgeCard4Desc') }}</p>
+          </div>
+        </div>
       </div>
 
       <!-- 阶段 2：加载 -->
@@ -402,7 +434,7 @@
             </template>
             {{ $t('common.shareResult') }}
           </UButton>
-          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="navigateTo('/')">
+          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"  @click="() => { navigateTo('/') }">
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
             </template>
@@ -426,7 +458,7 @@
                 </div>
                 <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
               </div>
-              <UButton color="neutral" variant="ghost" class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="shareDialogOpen = false">
+              <UButton color="neutral" variant="ghost" class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { shareDialogOpen = false }">
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
               </UButton>
             </div>
@@ -637,8 +669,9 @@ const posterAiSummary = computed(() => {
   const sections = text.split(/\n(?=##\s)/)
   for (const section of sections) {
     const lines = section.split('\n')
-    const titleMatch = lines[0].match(/^##\s*(.+)$/)
-    const title = titleMatch ? titleMatch[1].trim() : ''
+    const firstLine = lines[0] ?? ''
+    const titleMatch = firstLine.match(/^##\s*(.+)$/)
+    const title = titleMatch?.[1]?.trim() ?? ''
     if (title.includes('总论') || title.includes('总结') || title.includes('Overview') || title.includes('Conclusion')) {
       const body = lines.slice(titleMatch ? 1 : 0).join('\n').trim()
       return body.replace(/[#*_`]/g, '').slice(0, 220)

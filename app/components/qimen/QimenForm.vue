@@ -1,35 +1,23 @@
 <template>
   <div class="space-y-5">
-    <!-- 所问事项（合并后的必填文本框） -->
+    <!-- 事件类型 -->
     <div>
       <label class="block text-sm text-[var(--text-muted)] mb-2">
-        {{ $t('qimen.form.questionLabel') }}
+        {{ $t('qimen.form.eventType') }}
         <span class="text-[var(--accent)]">*</span>
       </label>
-      <UTextarea
-        v-model="form.question_label"
-        :placeholder="$t('qimen.form.questionLabel')"
-        class="w-full"
-        :ui="inputUi"
-        :rows="3"
-      />
-    </div>
-
-    <!-- 判断目标（按钮组，修复 checkbox 全选 bug） -->
-    <div>
-      <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.questionGoals') }}</label>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
         <button
-          v-for="g in goalOptions"
-          :key="g.value"
+          v-for="t in eventTypes"
+          :key="t.value"
           type="button"
-          class="py-2 rounded-lg border text-xs font-medium transition-all duration-200"
-          :class="form.question_goals.includes(g.value)
+          class="py-2.5 px-3 rounded-xl border text-xs font-medium transition-all duration-200 text-center"
+          :class="form.eventType === t.value
             ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
             : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)]'"
-          @click="toggleGoal(g.value)"
+          @click="form.eventType = t.value"
         >
-          {{ g.label }}
+          {{ t.label }}
         </button>
       </div>
     </div>
@@ -37,22 +25,75 @@
     <!-- 起课时间 -->
     <DivinationTimeCard
       ref="timeCardRef"
-      :hint="$t('qimen.form.timeHint')"
+      :label="$t('qimen.form.time')"
+      :hint="timeHint"
+      required
     />
 
-    <!-- 地点 -->
+    <!-- 描述 -->
     <div>
-      <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.location') }}</label>
-      <UInput
-        v-model="form.location"
-        :placeholder="$t('qimen.form.locationPlaceholder')"
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-sm text-[var(--text-muted)]">
+          {{ $t('qimen.form.description') }}
+        </label>
+        <QuestionInspiration :extra-categories="qimenExtraCategories" @select="q => form.description = q" />
+      </div>
+      <UTextarea
+        v-model="form.description"
+        :placeholder="descriptionPlaceholder"
         class="w-full"
         :ui="inputUi"
+        :rows="3"
       />
-      <p class="mt-1.5 text-[11px] text-[var(--text-placeholder)] leading-relaxed">
-        {{ $t('qimen.form.locationHint') }}
-      </p>
     </div>
+
+    <!-- competition 额外字段 -->
+    <template v-if="form.eventType === 'competition'">
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.opponentDesc') }}</label>
+        <UInput v-model="form.extra.opponentDesc" :placeholder="$t('qimen.form.opponentDescPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.myGoal') }}</label>
+        <UInput v-model="form.extra.myGoal" :placeholder="$t('qimen.form.myGoalPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+    </template>
+
+    <!-- seeking 额外字段 -->
+    <template v-if="form.eventType === 'seeking'">
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.lastSeenTime') }}</label>
+        <UInput v-model="form.extra.lastSeenTime" :placeholder="$t('qimen.form.lastSeenTimePlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.lastSeenPlace') }}</label>
+        <UInput v-model="form.extra.lastSeenPlace" :placeholder="$t('qimen.form.lastSeenPlacePlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.targetDesc') }}</label>
+        <UInput v-model="form.extra.targetDesc" :placeholder="$t('qimen.form.targetDescPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.relationship') }}</label>
+        <UInput v-model="form.extra.relationship" :placeholder="$t('qimen.form.relationshipPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+    </template>
+
+    <!-- timing 额外字段 -->
+    <template v-if="form.eventType === 'timing'">
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.eventKind') }}</label>
+        <UInput v-model="form.extra.eventKind" :placeholder="$t('qimen.form.eventKindPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.timeRange') }}</label>
+        <UInput v-model="form.extra.timeRange" :placeholder="$t('qimen.form.timeRangePlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+      <div>
+        <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('qimen.form.targetDirection') }}</label>
+        <UInput v-model="form.extra.targetDirection" :placeholder="$t('qimen.form.targetDirectionPlaceholder')" class="w-full" :ui="inputUi" />
+      </div>
+    </template>
 
     <!-- 提交按钮 -->
     <UButton
@@ -68,56 +109,67 @@
       </template>
       {{ $t('qimen.form.submitBtn') }}
     </UButton>
-
-    <p v-if="!canSubmit" class="text-center text-[10px] text-[var(--text-placeholder)]">
-      {{ submitHint }}
-    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { QimenChartRequest, QimenGoal } from '~/types/qimen'
+import type { EventType } from '~~/server/utils/qimen/types'
 
 const emit = defineEmits<{
-  submit: [payload: QimenChartRequest]
+  submit: [payload: { eventType: EventType; description?: string; extra?: Record<string, any>; questionTime: string }]
 }>()
 
 const { t } = useI18n()
 
-const timeCardRef = ref<{ timezone: Ref<string> } | null>(null)
+const timeCardRef = ref<{ iso: Ref<string> } | null>(null)
 
-const form = reactive<QimenChartRequest>({
-  question_type: 'other',
-  question_label: '',
-  question_goals: [],
-  location: '',
+const form = reactive({
+  eventType: 'general' as EventType,
+  description: '',
+  extra: {} as Record<string, any>,
 })
 
-function toggleGoal(value: QimenGoal) {
-  const idx = form.question_goals.indexOf(value)
-  if (idx >= 0) {
-    form.question_goals.splice(idx, 1)
-  } else {
-    form.question_goals.push(value)
-  }
-}
-
-const goalOptions = computed(() => [
-  { value: 'can_succeed' as QimenGoal, label: t('qimen.form.goalCanSucceed') },
-  { value: 'when_to_act' as QimenGoal, label: t('qimen.form.goalWhenToAct') },
-  { value: 'which_direction' as QimenGoal, label: t('qimen.form.goalWhichDirection') },
-  { value: 'what_to_avoid' as QimenGoal, label: t('qimen.form.goalWhatToAvoid') },
+const eventTypes = computed(() => [
+  { value: 'competition' as EventType, label: t('qimen.eventType.competition') },
+  { value: 'decision' as EventType, label: t('qimen.eventType.decision') },
+  { value: 'seeking' as EventType, label: t('qimen.eventType.seeking') },
+  { value: 'timing' as EventType, label: t('qimen.eventType.timing') },
+  { value: 'general' as EventType, label: t('qimen.eventType.general') },
 ])
 
-const canSubmit = computed(() => {
-  return !!form.question_label.trim() && !!form.location.trim()
+const timeHint = computed(() => {
+  if (form.eventType === 'seeking') {
+    return t('qimen.form.timeHintSeeking')
+  }
+  return t('qimen.form.timeHint')
 })
 
-const submitHint = computed(() => {
-  if (!form.question_label.trim()) return t('qimen.form.validation.questionRequired')
-  if (!form.location.trim()) return t('qimen.form.validation.locationRequired')
-  return ''
+const descriptionPlaceholder = computed(() => {
+  const map: Record<string, string> = {
+    competition: t('qimen.form.descriptionPlaceholderCompetition'),
+    decision: t('qimen.form.descriptionPlaceholderDecision'),
+    seeking: t('qimen.form.descriptionPlaceholderSeeking'),
+    timing: t('qimen.form.descriptionPlaceholderTiming'),
+    general: t('qimen.form.descriptionPlaceholderGeneral'),
+  }
+  return map[form.eventType] || ''
 })
+
+const canSubmit = computed(() => {
+  return !!form.eventType
+})
+
+const qimenExtraCategories = [
+  {
+    key: 'decision',
+    groups: [
+      { key: 'decisionTiming', questions: ['decisionTiming1', 'decisionTiming2', 'decisionTiming3', 'decisionTiming4', 'decisionTiming5', 'decisionTiming6'] },
+      { key: 'decisionLayout', questions: ['decisionLayout1', 'decisionLayout2', 'decisionLayout3', 'decisionLayout4', 'decisionLayout5', 'decisionLayout6'] },
+      { key: 'decisionGame', questions: ['decisionGame1', 'decisionGame2', 'decisionGame3', 'decisionGame4', 'decisionGame5', 'decisionGame6'] },
+      { key: 'decisionDirection', questions: ['decisionDirection1', 'decisionDirection2', 'decisionDirection3', 'decisionDirection4', 'decisionDirection5', 'decisionDirection6'] },
+    ],
+  },
+]
 
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -126,12 +178,13 @@ const inputUi = {
 function handleSubmit() {
   if (!canSubmit.value) return
 
-  const payload: QimenChartRequest = {
-    ...form,
-    question_goals: [...form.question_goals],
-    timezone: timeCardRef.value?.timezone.value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
-  }
+  const extra = Object.keys(form.extra).length > 0 ? { ...form.extra } : undefined
 
-  emit('submit', payload)
+  emit('submit', {
+    eventType: form.eventType,
+    description: form.description || undefined,
+    extra,
+    questionTime: (timeCardRef.value?.iso as unknown as Ref<string>).value || new Date().toISOString(),
+  })
 }
 </script>

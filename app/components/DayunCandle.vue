@@ -35,7 +35,7 @@ const currentYear = new Date().getFullYear()
 const currentAge = computed(() => {
   // 简化：从第一个大运推算出生年
   if (props.dayuns.length === 0) return 30
-  const firstDy = props.dayuns[0]
+  const firstDy = props.dayuns[0]!
   return currentYear - (currentYear - firstDy.ageRange[0] + firstDy.index * 10 - firstDy.ageRange[0])
 })
 
@@ -96,7 +96,7 @@ const options = {
       borderWidth: 1,
       callbacks: {
         label: (ctx: any) => {
-          const dy = props.dayuns[ctx.dataIndex]
+          const dy = props.dayuns[ctx.dataIndex]!
           const score = dy.score ?? 0
           const fortune = dy.fortune ?? t('bazi.fortuneUnevaluated')
           return t('bazi.fortuneTooltip', { score, fortune })

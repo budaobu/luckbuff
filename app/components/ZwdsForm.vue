@@ -170,7 +170,7 @@
 <script setup lang="ts">
 import type { DiZhi, UserProfile } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, type DateValue } from '@internationalized/date'
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -218,7 +218,7 @@ const { dateToGanZhi } = useZwdsCalc()
 
 const tz = getLocalTimeZone()
 const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
+const calendarDate = shallowRef<DateValue | undefined>(undefined)
 
 function syncBirthDateFromCalendar() {
   if (calendarDate.value) {
@@ -240,7 +240,7 @@ function onBirthDateChange() {
   }
   const [year, month, day] = form.birthDate.split('-').map(Number)
   try {
-    birthGanZhi.value = dateToGanZhi(year, month, day)
+    birthGanZhi.value = dateToGanZhi(year!, month!, day!)
   } catch {
     birthGanZhi.value = ''
   }

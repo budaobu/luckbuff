@@ -1,8 +1,8 @@
 import { GAN_WUXING, GAN_YANG, WUXING_SHENG, WUXING_KE, ZHI_CANGGAN } from './constants'
 
 export function getShiShenFull(riGan: string, targetGan: string): string {
-  const riWx = GAN_WUXING[riGan]
-  const tgWx = GAN_WUXING[targetGan]
+  const riWx = GAN_WUXING[riGan]!
+  const tgWx = GAN_WUXING[targetGan]!
   const same = GAN_YANG[riGan] === GAN_YANG[targetGan]
   if (riWx === tgWx) return same ? '比肩' : '劫财'
   if (WUXING_SHENG[riWx] === tgWx) return same ? '食神' : '伤官'

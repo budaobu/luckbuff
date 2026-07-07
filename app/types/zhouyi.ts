@@ -125,6 +125,8 @@ export interface TimeQiguaInput {
   day: number
   hour: number
   query: string
+  gender?: 'male' | 'female'
+  birthYear?: number
 }
 
 export interface NumbersQiguaInput {
@@ -133,12 +135,16 @@ export interface NumbersQiguaInput {
   num2: number
   num3?: number
   query: string
+  gender?: 'male' | 'female'
+  birthYear?: number
 }
 
 export interface CharacterQiguaInput {
   method: 'character'
   char: string
   query: string
+  gender?: 'male' | 'female'
+  birthYear?: number
 }
 
 export type QiguaInput = TimeQiguaInput | NumbersQiguaInput | CharacterQiguaInput

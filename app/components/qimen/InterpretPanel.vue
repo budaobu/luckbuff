@@ -69,8 +69,9 @@ const parsedSections = computed(() => {
   const parts = raw.split(/\n(?=##\s)/)
   return parts.map((part) => {
     const lines = part.split('\n')
-    const titleMatch = lines[0].match(/^##\s*(.+)$/)
-    const title = titleMatch ? titleMatch[1].trim() : ''
+    const firstLine = lines[0] ?? ''
+    const titleMatch = firstLine.match(/^##\s*(.+)$/)
+    const title = titleMatch?.[1]?.trim() ?? ''
     const content = lines.slice(titleMatch ? 1 : 0).join('\n').trim()
     return { title, content }
   }).filter(s => s.title || s.content)

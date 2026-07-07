@@ -13,37 +13,37 @@ export function calcWuxingScore(chart: BaziChart): WuxingScore {
 
   for (const p of pillars) {
     // 天干力量
-    const ganWx = GAN_WUXING[p.gan]
-    if (ganWx) scores[ganWx] += 15
+    const ganWx = GAN_WUXING[p.gan]!
+    if (ganWx) scores[ganWx] = (scores[ganWx] || 0) + 15
 
     // 地支本气力量
-    const zhiWx = ZHI_WUXING[p.zhi]
-    if (zhiWx) scores[zhiWx] += 10
+    const zhiWx = ZHI_WUXING[p.zhi]!
+    if (zhiWx) scores[zhiWx] = (scores[zhiWx] || 0) + 10
 
     // 藏干力量
     for (const cg of p.canggan) {
-      const cgWx = GAN_WUXING[cg.gan]
+      const cgWx = GAN_WUXING[cg.gan]!
       if (!cgWx) continue
-      if (cg.type === '本气') scores[cgWx] += 8
-      else if (cg.type === '中气') scores[cgWx] += 4
-      else if (cg.type === '余气') scores[cgWx] += 2
+      if (cg.type === '本气') scores[cgWx] = (scores[cgWx] || 0) + 8
+      else if (cg.type === '中气') scores[cgWx] = (scores[cgWx] || 0) + 4
+      else if (cg.type === '余气') scores[cgWx] = (scores[cgWx] || 0) + 2
     }
   }
 
   // 月支权重加倍（月令最重要）
-  const monthZhiWx = ZHI_WUXING[chart.month.zhi]
-  if (monthZhiWx) scores[monthZhiWx] += 15
+  const monthZhiWx = ZHI_WUXING[chart.month.zhi]!
+  if (monthZhiWx) scores[monthZhiWx] = (scores[monthZhiWx] || 0) + 15
 
   // 归一化到百分比
   const total = Object.values(scores).reduce((a, b) => a + b, 0)
   if (total === 0) return { 木: 20, 火: 20, 土: 20, 金: 20, 水: 20 }
 
   return {
-    木: Math.round((scores['木'] / total) * 100),
-    火: Math.round((scores['火'] / total) * 100),
-    土: Math.round((scores['土'] / total) * 100),
-    金: Math.round((scores['金'] / total) * 100),
-    水: Math.round((scores['水'] / total) * 100),
+    木: Math.round((scores['木']! / total) * 100),
+    火: Math.round((scores['火']! / total) * 100),
+    土: Math.round((scores['土']! / total) * 100),
+    金: Math.round((scores['金']! / total) * 100),
+    水: Math.round((scores['水']! / total) * 100),
   }
 }
 
@@ -53,11 +53,11 @@ export function calcRiZhuStrength(
   monthZhi: string,
   wuxingScore: WuxingScore,
 ): '身旺' | '身弱' | '从强' | '从弱' {
-  const riWx = GAN_WUXING[riGan]
-  const monthWx = ZHI_WUXING[monthZhi]
+  const riWx = GAN_WUXING[riGan]!
+  const monthWx = ZHI_WUXING[monthZhi]!
 
   // 得令判断：日主五行与月支五行相同，或月支生助日主
-  const deLing = riWx === monthWx || WUXING_SHENG[monthWx] === riWx
+  const deLing = riWx === monthWx || WUXING_SHENG[monthWx]! === riWx
 
   // 得地判断：日主五行在四柱地支中有根（本气相同）
   // 简化：看五行分数中自身五行是否占比较高
@@ -93,14 +93,14 @@ export function calcXiYongJiShen(
   riZhuStrength: string,
   wuxingScore: WuxingScore,
 ): { xiyong: string; jishen: string } {
-  const riWx = GAN_WUXING[riGan]
+  const riWx = GAN_WUXING[riGan]!
 
   if (riZhuStrength === '从强') {
     // 从强：喜生扶，忌克泄耗
-    const sheng = WUXING_SHENG[riWx]
+    const sheng = WUXING_SHENG[riWx]!
     const xiyong = `${riWx}、${sheng}`
     const ke = Object.entries(WUXING_KE).find(([, v]) => v === riWx)?.[0] || ''
-    const beiKe = WUXING_KE[riWx]
+    const beiKe = WUXING_KE[riWx]!
     const jishen = `${ke}、${beiKe}`
     return { xiyong, jishen }
   }
@@ -108,9 +108,9 @@ export function calcXiYongJiShen(
   if (riZhuStrength === '从弱') {
     // 从弱：喜克泄耗，忌生扶
     const ke = Object.entries(WUXING_KE).find(([, v]) => v === riWx)?.[0] || ''
-    const beiKe = WUXING_KE[riWx]
+    const beiKe = WUXING_KE[riWx]!
     const xiyong = `${ke}、${beiKe}`
-    const sheng = WUXING_SHENG[riWx]
+    const sheng = WUXING_SHENG[riWx]!
     const jishen = `${riWx}、${sheng}`
     return { xiyong, jishen }
   }
@@ -118,18 +118,18 @@ export function calcXiYongJiShen(
   if (riZhuStrength === '身旺') {
     // 身旺：喜克泄耗，忌生扶
     const ke = Object.entries(WUXING_KE).find(([, v]) => v === riWx)?.[0] || ''
-    const beiKe = WUXING_KE[riWx]
+    const beiKe = WUXING_KE[riWx]!
     const xiyong = `${ke}、${beiKe}`
-    const sheng = WUXING_SHENG[riWx]
+    const sheng = WUXING_SHENG[riWx]!
     const jishen = `${riWx}、${sheng}`
     return { xiyong, jishen }
   }
 
   // 身弱：喜生扶，忌克泄耗
-  const sheng = WUXING_SHENG[riWx]
+  const sheng = WUXING_SHENG[riWx]!
   const xiyong = `${riWx}、${sheng}`
   const ke = Object.entries(WUXING_KE).find(([, v]) => v === riWx)?.[0] || ''
-  const beiKe = WUXING_KE[riWx]
+  const beiKe = WUXING_KE[riWx]!
   const jishen = `${ke}、${beiKe}`
   return { xiyong, jishen }
 }
@@ -184,13 +184,13 @@ export function calcGeJu(chart: BaziChart): string {
 }
 
 function getShiShenFromRelation(riGan: string, targetGan: string): string {
-  const riWx = GAN_WUXING[riGan]
-  const tgWx = GAN_WUXING[targetGan]
+  const riWx = GAN_WUXING[riGan]!
+  const tgWx = GAN_WUXING[targetGan]!
   const same = GAN_YANG[riGan] === GAN_YANG[targetGan]
   if (riWx === tgWx) return same ? '比肩' : '劫财'
-  if (WUXING_SHENG[riWx] === tgWx) return same ? '食神' : '伤官'
-  if (WUXING_KE[riWx] === tgWx) return same ? '偏财' : '正财'
-  if (WUXING_SHENG[tgWx] === riWx) return same ? '偏印' : '正印'
-  if (WUXING_KE[tgWx] === riWx) return same ? '七杀' : '正官'
+  if (WUXING_SHENG[riWx]! === tgWx) return same ? '食神' : '伤官'
+  if (WUXING_KE[riWx]! === tgWx) return same ? '偏财' : '正财'
+  if (WUXING_SHENG[tgWx]! === riWx) return same ? '偏印' : '正印'
+  if (WUXING_KE[tgWx]! === riWx) return same ? '七杀' : '正官'
   return ''
 }

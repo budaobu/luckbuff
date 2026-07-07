@@ -2,10 +2,13 @@
   <div class="space-y-5">
     <!-- 所问事项 -->
     <div>
-      <label class="block text-sm text-[var(--text-muted)] mb-2">
-        {{ $t('liuren.form.question') }}
-        <span class="text-[var(--accent)]">*</span>
-      </label>
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-sm text-[var(--text-muted)]">
+          {{ $t('liuren.form.question') }}
+          <span class="text-[var(--accent)]">*</span>
+        </label>
+        <QuestionInspiration @select="q => form.question = q" />
+      </div>
       <UTextarea
         v-model="form.question"
         :placeholder="$t('liuren.form.questionPlaceholder')"
@@ -87,7 +90,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const timeCardRef = ref<{ timezone: Ref<string> } | null>(null)
+const timeCardRef = ref<{ timezone: Ref<string>; iso: Ref<string> } | null>(null)
 
 const form = reactive<LiurenChartRequest>({
   question: '',
@@ -122,7 +125,8 @@ function handleSubmit() {
     question: form.question.trim(),
     birthYear: parseInt(birthYearInput.value, 10),
     location: form.location.trim(),
-    timezone: timeCardRef.value?.timezone.value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
+    timezone: (timeCardRef.value?.timezone as unknown as Ref<string>).value || Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
+    datetime: (timeCardRef.value?.iso as unknown as Ref<string>).value,
   }
 
   emit('submit', payload)

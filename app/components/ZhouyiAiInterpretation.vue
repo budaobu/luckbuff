@@ -181,7 +181,7 @@ const sections = computed(() => {
     if (!trimmed || !trimmed.startsWith('##')) continue
 
     const lines = trimmed.split('\n')
-    const titleLine = lines[0].replace(/^##\s*/, '').trim()
+    const titleLine = lines[0]?.replace(/^##\s*/, '').trim() ?? ''
     const content = lines.slice(1).join('\n').trim()
 
     if (titleLine) {

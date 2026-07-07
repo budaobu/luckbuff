@@ -111,6 +111,38 @@
           <p class="text-[10px] text-[var(--text-placeholder)] mt-1 font-mono">code: {{ errorInfo.code }}</p>
         </div>
 
+        <!-- 知识卡片 -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-book-open" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyao.knowledgeCard1Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyao.knowledgeCard1Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-square-3-stack-3d" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyao.knowledgeCard2Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyao.knowledgeCard2Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyao.knowledgeCard3Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyao.knowledgeCard3Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyao.knowledgeCard4Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyao.knowledgeCard4Desc') }}</p>
+          </div>
+        </div>
+
       </div>
 
       <!-- ============ 阶段 2：动画 ============ -->
@@ -277,7 +309,7 @@
             color="neutral"
             variant="ghost"
             class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-            @click="navigateTo('/tools')"
+             @click="() => { navigateTo('/tools') }"
           >
             <template #leading>
               <UIcon name="i-heroicons-cube" class="w-4 h-4" />
@@ -403,7 +435,7 @@
                 color="neutral"
                 variant="ghost"
                 class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-                @click="shareDialogOpen = false"
+                @click="() => { shareDialogOpen = false }"
               >
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
               </UButton>
@@ -548,7 +580,7 @@ const matchItems = computed(() => {
   }))
 })
 
-const selectedMatchUid = ref<string | null>(null)
+const selectedMatchUid = ref<{ label: string; value: string } | undefined>(undefined)
 const selectedMatch = ref<WorldCupFixture | null>(null)
 
 // Nuxt UI v4 USelectMenu 单选模式下 v-model 返回的是整个 item 对象 { label, value }
@@ -726,11 +758,11 @@ async function doPredict() {
       if (result.error_code === 'CITY_NOT_RECOGNIZED') {
         // 城市名无法解析为经纬度，重新打开弹窗并显示具体错误
         showTimeGuard.value = true
-        cityNotRecognized.value = result.message || t('liuyaoPage.cityNotRecognizedMsg')
+        cityNotRecognized.value = (result as any).message || t('liuyaoPage.cityNotRecognizedMsg')
         pendingSubmit.value = true
         toast.add({
           title: t('liuyaoPage.cityNotRecognized'),
-          description: result.message || t('liuyaoPage.cityNotRecognizedDesc'),
+          description: (result as any).message || t('liuyaoPage.cityNotRecognizedDesc'),
           color: 'warning',
         })
       } else {
@@ -819,7 +851,7 @@ async function startAiStream() {
             if (!aiStarted.value) aiStarted.value = true
             aiContent.value += data.text
           } else if (data.type === 'error') {
-            aiError.value = data.message || t('liuyaoPage.aiRequestFailed')
+            aiError.value = (data as any).message || t('liuyaoPage.aiRequestFailed')
           }
         } catch {
           // ignore
@@ -847,7 +879,7 @@ function resetForm() {
   tossWorkbenchRef.value?.reset()
   pendingSubmit.value = false
   manualCity.value = ''
-  selectedMatchUid.value = null
+  selectedMatchUid.value = undefined
   selectedMatch.value = null
 }
 

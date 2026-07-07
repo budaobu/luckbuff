@@ -24,7 +24,7 @@ export function useZhouyiPrompt() {
     query: string,
     locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
-    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
     const benGua = getGuaById(result.benGuaId)
     const bianGua = getGuaById(result.bianGuaId)
     const huGua = getGuaById(result.huGuaId)

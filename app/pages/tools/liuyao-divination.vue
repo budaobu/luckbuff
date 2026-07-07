@@ -26,7 +26,10 @@
           <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
           <div class="p-6 space-y-4">
             <div>
-              <label class="text-xs font-medium text-[var(--text-muted)] block mb-1.5">{{ $t('liuyaoDivination.questionLabel') }}</label>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('liuyaoDivination.questionLabel') }}</label>
+                <QuestionInspiration @select="q => question = q" />
+              </div>
               <UTextarea
                 v-model="question"
                 :placeholder="$t('liuyaoDivination.questionPlaceholder')"
@@ -40,16 +43,20 @@
           </div>
         </div>
 
-        <!-- 摇卦工作台卡片 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden mb-5">
-          <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
-          <div class="p-6">
-            <LiuyaoTossWorkbench
-              ref="tossWorkbenchRef"
-              @update="handleLineValuesUpdate"
-            />
-          </div>
-        </div>
+        <!-- 起卦时间 -->
+        <DivinationTimeCard
+          ref="timeCardRef"
+          :label="$t('liuyaoDivination.castTime')"
+          :hint="$t('liuyaoDivination.castTimeHint')"
+          class="mb-5"
+        />
+
+        <!-- 摇卦工作台 -->
+        <LiuyaoTossWorkbench
+          ref="tossWorkbenchRef"
+          class="mb-5"
+          @update="handleLineValuesUpdate"
+        />
 
         <!-- 起卦按钮 -->
         <UButton
@@ -87,6 +94,38 @@
         <p class="text-center text-[10px] text-[var(--text-placeholder)] mt-6 leading-relaxed">
           {{ $t('liuyaoDivination.disclaimer') }}
         </p>
+
+        <!-- 知识卡片 -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-question-mark-circle" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoDivination.knowledgeCard1Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyaoDivination.knowledgeCard1Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-circle-stack" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoDivination.knowledgeCard2Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyaoDivination.knowledgeCard2Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-arrows-right-left" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoDivination.knowledgeCard3Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyaoDivination.knowledgeCard3Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-scale" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoDivination.knowledgeCard4Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('liuyaoDivination.knowledgeCard4Desc') }}</p>
+          </div>
+        </div>
       </div>
 
       <!-- ============ 阶段 2：动画 ============ -->
@@ -240,7 +279,7 @@
             color="neutral"
             variant="ghost"
             class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-            @click="navigateTo('/tools')"
+             @click="() => { navigateTo('/tools') }"
           >
             <template #leading>
               <UIcon name="i-heroicons-cube" class="w-4 h-4" />
@@ -366,7 +405,7 @@
                 color="neutral"
                 variant="ghost"
                 class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-                @click="shareDialogOpen = false"
+                @click="() => { shareDialogOpen = false }"
               >
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
               </UButton>
@@ -435,6 +474,8 @@ const question = ref('')
 const lineValues = ref<LineValue[]>([])
 const tossWorkbenchRef = ref()
 
+const timeCardRef = ref<{ date: Ref<Date>; iso: Ref<string> } | null>(null)
+
 const { location: geo, requestLocation, setCity } = useGeolocation()
 const showTimeGuard = ref(false)
 const manualCity = ref('')
@@ -492,13 +533,15 @@ function handleLineValuesUpdate(values: LineValue[]) {
 async function handleSubmit() {
   if (!canSubmit.value) return
 
-  if (isZiHourBoundary() && !hasLocation()) {
+  const castDate = (timeCardRef.value?.date as any).value || new Date()
+
+  if (isZiHourBoundary(castDate) && !hasLocation()) {
     showTimeGuard.value = true
     pendingSubmit.value = true
     return
   }
 
-  await doPredict()
+  await doPredict(castDate)
 }
 
 async function requestGeoAndSubmit() {
@@ -535,14 +578,16 @@ function dismissTimeGuard() {
   cityNotRecognized.value = ''
 }
 
-async function doPredict() {
+async function doPredict(castDate?: Date) {
   phase.value = 'animating'
   errorInfo.value = null
+
+  const date = castDate || (timeCardRef.value?.date as any).value || new Date()
 
   try {
     const payload = {
       line_values: lineValues.value,
-      cast_datetime: new Date().toISOString(),
+      cast_datetime: date.toISOString(),
       location: geo.longitude ? {
         longitude: geo.longitude,
         latitude: geo.latitude,
@@ -569,11 +614,11 @@ async function doPredict() {
       phase.value = 'form'
       if (chartResult.error_code === 'CITY_NOT_RECOGNIZED') {
         showTimeGuard.value = true
-        cityNotRecognized.value = chartResult.message || t('liuyaoDivination.cityNotRecognizedMsg')
+        cityNotRecognized.value = (chartResult as any).message || t('liuyaoDivination.cityNotRecognizedMsg')
         pendingSubmit.value = true
         toast.add({
           title: t('liuyaoDivination.cityNotRecognized'),
-          description: chartResult.message || t('liuyaoDivination.cityNotRecognizedDesc'),
+          description: (chartResult as any).message || t('liuyaoDivination.cityNotRecognizedDesc'),
           color: 'warning',
         })
       } else {
@@ -660,7 +705,7 @@ async function startAiStream() {
             if (!aiStarted.value) aiStarted.value = true
             aiContent.value += data.text
           } else if (data.type === 'error') {
-            aiError.value = data.message || t('liuyaoDivination.aiRequestFailed')
+            aiError.value = (data as any).message || t('liuyaoDivination.aiRequestFailed')
           }
         } catch {
           // ignore

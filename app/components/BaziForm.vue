@@ -27,7 +27,7 @@
     </div>
 
     <!-- 性别 -->
-    <div class="space-y-1.5">
+    <div v-if="!minimal" class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.gender') }}
         <span class="text-[var(--accent)]">*</span>
@@ -107,7 +107,7 @@
     </div>
 
     <!-- 姓名 -->
-    <div class="space-y-1.5">
+    <div v-if="!minimal" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.name') }}</label>
       <UInput
         v-model="form.name"
@@ -121,7 +121,7 @@
     </div>
 
     <!-- 曾用名 -->
-    <div class="space-y-1.5">
+    <div v-if="!minimal" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.formerName') }}</label>
       <UInput
         v-model="form.formerName"
@@ -135,7 +135,7 @@
     </div>
 
     <!-- 改名年份 -->
-    <div v-if="form.formerName" class="space-y-1.5">
+    <div v-if="!minimal && form.formerName" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.changedYear') }}</label>
       <UInput
         v-model.number="form.formerNameChangedYear"
@@ -150,7 +150,7 @@
     </div>
 
     <!-- 出生地点 -->
-    <div class="space-y-1.5">
+    <div v-if="!minimal" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
       <UInput
         v-model="form.birthProvince"
@@ -164,7 +164,7 @@
     </div>
 
     <!-- 保存到当前档案 -->
-    <div v-if="selectedProfileId && hasFormChanges" class="pt-1">
+    <div v-if="!minimal && selectedProfileId && hasFormChanges" class="pt-1">
       <UButton
         color="neutral"
         variant="ghost"
@@ -180,6 +180,7 @@
     </div>
 
     <UButton
+      v-if="!minimal"
       color="warning"
       size="lg"
       block
@@ -212,10 +213,12 @@ interface FormValues {
 
 interface Props {
   initialValues?: Partial<FormValues>
+  minimal?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   initialValues: () => ({}),
+  minimal: false,
 })
 
 const emit = defineEmits<{
@@ -271,6 +274,10 @@ function onBirthDateChange() {
     return
   }
   const [year, month, day] = form.birthDate.split('-').map(Number)
+  if (!year || !month || !day) {
+    birthGanZhi.value = ''
+    return
+  }
   try {
     birthGanZhi.value = dateToGanZhi(year, month, day)
   } catch {
@@ -279,6 +286,7 @@ function onBirthDateChange() {
 }
 
 const isValid = computed(() => {
+  if (props.minimal) return !!(form.birthDate)
   return !!(form.gender && form.birthDate)
 })
 
@@ -344,4 +352,6 @@ onMounted(() => {
     selectProfile(defaultProfile.value)
   }
 })
+
+defineExpose({ form })
 </script>

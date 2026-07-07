@@ -199,14 +199,14 @@ const sections = computed(() => {
     if (!trimmed || !trimmed.startsWith('##')) continue
 
     const lines = trimmed.split('\n')
-    const titleLine = lines[0].replace(/^##\s*/, '').trim()
+    const titleLine = lines[0]?.replace(/^##\s*/, '').trim() ?? ''
     const content = lines.slice(1).join('\n').trim()
 
     if (titleLine) {
       // 匹配：AI 输出双语标题如"命格总览 / Life Pattern Overview"
       // 查找时先尝试完整匹配，再尝试只取中文部分（/ 前面）
       const meta = sectionMeta.value[titleLine]
-        ?? sectionMeta.value[titleLine.split(' / ')[0]]
+        ?? sectionMeta.value[titleLine.split(' / ')[0] ?? '']
       result.push({
         title: titleLine,
         content,

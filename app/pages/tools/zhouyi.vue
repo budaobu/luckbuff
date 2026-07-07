@@ -28,6 +28,38 @@
             <ZhouyiForm @submit="handleSubmit" />
           </div>
         </div>
+
+        <!-- 知识卡片 -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-book-open" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('zhouyi.knowledgeCard1Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('zhouyi.knowledgeCard1Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-square-3-stack-3d" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('zhouyi.knowledgeCard2Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('zhouyi.knowledgeCard2Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-scale" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('zhouyi.knowledgeCard3Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('zhouyi.knowledgeCard3Desc') }}</p>
+          </div>
+          <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('zhouyi.knowledgeCard4Title') }}</h4>
+            </div>
+            <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('zhouyi.knowledgeCard4Desc') }}</p>
+          </div>
+        </div>
       </div>
 
       <!-- 阶段 2：动画 -->
@@ -84,7 +116,7 @@
             color="neutral"
             variant="ghost"
             class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-            @click="navigateTo('/')"
+             @click="() => { navigateTo('/') }"
           >
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
@@ -117,7 +149,7 @@
                 color="neutral"
                 variant="ghost"
                 class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-                @click="shareDialogOpen = false"
+                @click="() => { shareDialogOpen = false }"
               >
                 <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
               </UButton>

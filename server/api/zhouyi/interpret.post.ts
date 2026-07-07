@@ -18,7 +18,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 }
 
 function buildSystemPrompt(locale: string): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   return `你是一位精通《梅花易数》的解卦师。请使用 Markdown 格式返回解卦结果，严格按照以下分段结构，每段以 ## 中文标题 开头：
 ${langHook.system}
 
@@ -62,7 +62,7 @@ ${langHook.system}
 }
 
 function buildUserPrompt(result: MeihuaResult, query: string, locale: string): string {
-  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+  const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   const benGua = getGuaById(result.benGuaId)
   const bianGua = getGuaById(result.bianGuaId)
   const huGua = getGuaById(result.huGuaId)

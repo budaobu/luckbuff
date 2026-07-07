@@ -3,6 +3,7 @@ export interface LiurenChartRequest {
   birthYear: number
   location: string
   timezone: string
+  datetime?: string
 }
 
 export interface LiurenGanzhi {

@@ -24,7 +24,7 @@ export function useZwdsPrompt() {
     analysisSummary: string,
     locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
-    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
     const systemPrompt = `你是一位精通紫微斗数的命理分析师。请根据命盘数据，用现代、理性、温和的语言进行解读。
 ${langHook.system}
@@ -126,5 +126,5 @@ ${currentYear}年流年太岁入宫影响、流年四化叠盘分析、当年各
 /** 获取年份对应地支（太岁） */
 function getZodiacForYear(year: number): string {
   const zhi = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未']
-  return zhi[year % 12]
+  return zhi[year % 12] ?? '申'
 }

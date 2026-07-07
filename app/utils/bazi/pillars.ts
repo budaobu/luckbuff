@@ -40,7 +40,7 @@ export function calcPillars(
     gan: yPillar.gan as TianGan,
     zhi: yPillar.zhi as DiZhi,
     shishen: getShiShen(dPillar.gan, yPillar.gan),
-    canggan: ZHI_CANGGAN[yPillar.zhi].map(c => ({
+    canggan: ZHI_CANGGAN[yPillar.zhi]!.map(c => ({
       gan: c.gan as TianGan,
       type: c.type,
     })),
@@ -50,7 +50,7 @@ export function calcPillars(
     gan: mPillar.gan as TianGan,
     zhi: mPillar.zhi as DiZhi,
     shishen: getShiShen(dPillar.gan, mPillar.gan),
-    canggan: ZHI_CANGGAN[mPillar.zhi].map(c => ({
+    canggan: ZHI_CANGGAN[mPillar.zhi]!.map(c => ({
       gan: c.gan as TianGan,
       type: c.type,
     })),
@@ -60,7 +60,7 @@ export function calcPillars(
     gan: dPillar.gan as TianGan,
     zhi: dPillar.zhi as DiZhi,
     shishen: '日主',
-    canggan: ZHI_CANGGAN[dPillar.zhi].map(c => ({
+    canggan: ZHI_CANGGAN[dPillar.zhi]!.map(c => ({
       gan: c.gan as TianGan,
       type: c.type,
     })),
@@ -72,7 +72,7 @@ export function calcPillars(
     let effectiveDayGan = dPillar.gan
     if (hour >= 23) {
       const dayGanIdx = TIAN_GAN.indexOf(dPillar.gan as never)
-      effectiveDayGan = TIAN_GAN[(dayGanIdx + 1) % 10]
+      effectiveDayGan = TIAN_GAN[(dayGanIdx + 1) % 10]!
     }
     const hPillar = getHourPillar(effectiveDayGan, hour)
     ziShiBorder = hPillar.isZiShiBorder
@@ -81,7 +81,7 @@ export function calcPillars(
       gan: hPillar.gan as TianGan,
       zhi: hPillar.zhi as DiZhi,
       shishen: getShiShen(dPillar.gan, hPillar.gan),
-      canggan: ZHI_CANGGAN[hPillar.zhi].map(c => ({
+      canggan: ZHI_CANGGAN[hPillar.zhi]!.map(c => ({
         gan: c.gan as TianGan,
         type: c.type,
       })),

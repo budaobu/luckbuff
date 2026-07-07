@@ -27,66 +27,22 @@
           <span class="w-4 h-px bg-[var(--accent-border)]" />
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <!-- 六爻世界杯 -->
-          <NuxtLink
-            :to="localePath('/tools/liu-yao')"
-            class="group flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
-          >
-            <div class="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-sm font-semibold text-[var(--text-primary)] truncate">{{ $t('home.toolLiuyaoTitle') }}</div>
-              <div class="text-[11px] text-[var(--text-faint)] truncate">{{ $t('liuyao.subtitle') }}</div>
-            </div>
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-[var(--text-faint)] transition-transform duration-300 group-hover:translate-x-0.5" />
-          </NuxtLink>
-
-          <!-- 奇门世界杯 -->
-          <NuxtLink
-            :to="localePath('/prophet/qimen-worldcup')"
-            class="group flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
-          >
-            <div class="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110">
-              <UIcon name="i-heroicons-squares-2x2" class="w-5 h-5" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-sm font-semibold text-[var(--text-primary)] truncate">{{ $t('home.toolQimenWorldcupTitle') }}</div>
-              <div class="text-[11px] text-[var(--text-faint)] truncate">{{ $t('home.toolQimenWorldcupDesc') }}</div>
-            </div>
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-[var(--text-faint)] transition-transform duration-300 group-hover:translate-x-0.5" />
-          </NuxtLink>
-
-          <!-- 大六壬世界杯 -->
-          <NuxtLink
-            :to="localePath('/prophet/liuren-worldcup')"
-            class="group flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
-          >
-            <div class="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110">
-              <UIcon name="i-heroicons-cube-transparent" class="w-5 h-5" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-sm font-semibold text-[var(--text-primary)] truncate">{{ $t('home.toolLiurenWorldcupTitle') }}</div>
-              <div class="text-[11px] text-[var(--text-faint)] truncate">{{ $t('home.toolLiurenWorldcupDesc') }}</div>
-            </div>
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-[var(--text-faint)] transition-transform duration-300 group-hover:translate-x-0.5" />
-          </NuxtLink>
-
-          <!-- 冠军预测 -->
-          <NuxtLink
-            :to="localePath('/prophet/worldcup-champion-odds-2026')"
-            class="group flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
-          >
-            <div class="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110">
-              <UIcon name="i-heroicons-chart-bar" class="w-5 h-5" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-sm font-semibold text-[var(--text-primary)] truncate">{{ $t('championOdds.link.championOdds') }}</div>
-              <div class="text-[11px] text-[var(--text-faint)] truncate">{{ $t('championOdds.link.championOddsDesc') }}</div>
-            </div>
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-[var(--text-faint)] transition-transform duration-300 group-hover:translate-x-0.5" />
-          </NuxtLink>
-        </div>
+        <NuxtLink
+          v-for="tool in prophetTools"
+          :key="tool.path"
+          :to="localePath(tool.path)"
+          class="group flex items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
+        >
+          <div class="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110">
+            <UIcon :name="tool.icon" class="w-5 h-5" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-semibold text-[var(--text-primary)] truncate">{{ $t(tool.titleKey) }}</div>
+            <div class="text-[11px] text-[var(--text-faint)] truncate">{{ $t(tool.descKey) }}</div>
+          </div>
+          <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-[var(--text-faint)] transition-transform duration-300 group-hover:translate-x-0.5" />
+        </NuxtLink>
+      </div>
       </div>
 
       <!-- ====== 赛程列表：按时间顺序 ====== -->
@@ -172,6 +128,21 @@
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
+interface ProphetTool {
+  icon: string
+  path: string
+  titleKey: string
+  descKey: string
+}
+
+const prophetTools: ProphetTool[] = [
+  { icon: 'i-heroicons-sparkles', path: '/tools/liu-yao', titleKey: 'home.toolLiuyaoTitle', descKey: 'liuyao.subtitle' },
+  { icon: 'i-heroicons-squares-2x2', path: '/prophet/qimen-worldcup', titleKey: 'home.toolQimenWorldcupTitle', descKey: 'home.toolQimenWorldcupDesc' },
+  { icon: 'i-heroicons-cube-transparent', path: '/prophet/liuren-worldcup', titleKey: 'home.toolLiurenWorldcupTitle', descKey: 'home.toolLiurenWorldcupDesc' },
+  { icon: 'i-heroicons-chart-bar', path: '/prophet/worldcup-champion-odds-2026', titleKey: 'championOdds.link.championOdds', descKey: 'championOdds.link.championOddsDesc' },
+  { icon: 'i-heroicons-user-group', path: '/tools/fbti', titleKey: 'home.toolFbtiTitle', descKey: 'home.toolFbtiDesc' },
+]
+
 // ── 赛程数据 ──
 const { data: fixturesData, status: fixturesStatus, refresh: refreshFixtures } = await useAsyncData('prophet-fixtures', () =>
   $fetch('/api/prophet/worldcup-fixtures', { query: { lang: locale.value } })
@@ -199,6 +170,7 @@ const predictionMap = computed(() => {
 })
 
 interface FixtureItem {
+  uid: string
   slug: string
   homeTeam: string
   awayTeam: string
@@ -214,14 +186,16 @@ const sortedFixtures = computed<FixtureItem[]>(() => {
     .filter((f: any) => !f.isPlaceholder)
     .map((f: any) => {
       const d = new Date(f.startTime)
+      const slug = f.slug || f.uid.replace(/@(worldcup-calendar|jys66\.top)$/, '')
       return {
-        slug: f.slug || f.uid.replace(/@(worldcup-calendar|jys66\.top)$/, ''),
+        uid: f.uid,
+        slug,
         homeTeam: f.homeTeam,
         awayTeam: f.awayTeam,
         startTime: f.startTime,
         timeStr: d.toLocaleTimeString(locale.value === 'en' ? 'en-US' : locale.value, { hour: '2-digit', minute: '2-digit', hour12: false }),
         timezoneOffset: formatTimezoneOffset(d),
-        hasPrediction: predictionMap.value.get(f.slug || f.uid.replace(/@(worldcup-calendar|jys66\.top)$/, '')) || false,
+        hasPrediction: predictionMap.value.get(slug) || false,
       }
     })
     .sort((a: FixtureItem, b: FixtureItem) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())

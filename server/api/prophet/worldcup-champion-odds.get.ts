@@ -70,19 +70,19 @@ function parseCsv(raw: string): OptaRow[] {
   const lines = raw.trim().split('\n')
   const rows: OptaRow[] = []
   for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim()
+    const line = lines[i]!.trim()
     if (!line) continue
     const parts = line.split(',')
     if (parts.length < 8) continue
     rows.push({
-      team: parts[0],
-      topGroup: parsePercent(parts[1]),
-      l32: parsePercent(parts[2]),
-      l16: parsePercent(parts[3]),
-      qf: parsePercent(parts[4]),
-      sf: parsePercent(parts[5]),
-      final: parsePercent(parts[6]),
-      champ: parsePercent(parts[7]),
+      team: parts[0]!,
+      topGroup: parsePercent(parts[1]!),
+      l32: parsePercent(parts[2]!),
+      l16: parsePercent(parts[3]!),
+      qf: parsePercent(parts[4]!),
+      sf: parsePercent(parts[5]!),
+      final: parsePercent(parts[6]!),
+      champ: parsePercent(parts[7]!),
     })
   }
   return rows

@@ -1,7 +1,56 @@
-import { toCanvas } from 'html-to-image'
-
 export interface ShareOptions {
-  tool: 'bazi' | 'zhouyi' | 'liuyao' | 'zwds' | 'vedic' | 'huangdao' | 'liuyao-divination' | 'qimen' | 'liuren'
+  tool:
+    | 'bazi'
+    | 'zhouyi'
+    | 'liuyao'
+    | 'zwds'
+    | 'vedic'
+    | 'huangdao'
+    | 'liuyao-divination'
+    | 'qimen'
+    | 'liuren'
+    | 'liuren-seeking'
+    | 'liuyao-seeking'
+    | 'bazi-ziwei'
+    | 'fengshui'
+    | 'guanyin-lot'
+    | 'wealth-god-lot'
+    | 'bazi-hunpan'
+    | 'bazi-naming'
+    | 'bazi-wealth'
+    | 'sancai-wuge'
+    | 'cezi-yishu'
+    | 'liuyao-cezi'
+    | 'jiaobei'
+    | 'qimen-seeking'
+    | 'numerology'
+    | 'zhuge-cezi'
+    | 'xiao-liuren'
+    | 'tarot'
+    | 'ziwei-hunpan'
+    | 'wuge'
+    | 'cezi-zhouyi'
+    | '3shanwang-lot'
+    | 'jinkoujue'
+    | 'xiao-liuren-seeking'
+    | 'mazu-lot'
+    | 'chenggu'
+    | 'cezi-battle'
+    | 'lenormand'
+    | 'xuankong-fengshui'
+    | 'jinri-yunshi'
+    | 'jishi'
+    | 'wuxing-chuanyi'
+    | 'chong-shengxiao'
+    | 'shengxiao-piancaiyun'
+    | 'bazi-personality-map'
+    | 'name-score'
+    | 'shengxiao-peidui'
+    | 'parent-child-bazi'
+    | 'marriage-xiangxing'
+    | 'parenting-style'
+    | 'child-activity-interest'
+    | 'sbti'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -22,9 +71,59 @@ export interface ShareResult {
 
 export function useShare() {
   async function share(options: ShareOptions): Promise<ShareResult> {
+    const { toCanvas } = await import('html-to-image')
     const { t, tool, name, summary, shareTarget, shareTargetSelector, filename } = options
 
-    const toolNameMap: Record<string, string> = { bazi: '八字', zhouyi: '卦象', zwds: '紫微', liuyao: '六爻', vedic: '吠陀占星', qimen: '奇门遁甲', huangdao: '黄道吉日', liuren: '大六壬' }
+    const toolNameMap: Record<string, string> = {
+      bazi: '八字',
+      zhouyi: '卦象',
+      zwds: '紫微',
+      liuyao: '六爻',
+      vedic: '吠陀占星',
+      qimen: '奇门遁甲',
+      huangdao: '黄道吉日',
+      liuren: '大六壬',
+      'bazi-ziwei': '八字紫微综合',
+      fengshui: '风水',
+      'guanyin-lot': '观音灵签',
+      'wealth-god-lot': '五路财神签',
+      'bazi-hunpan': '八字合盘',
+      'bazi-naming': '八字起名',
+      'bazi-wealth': '八字算财富',
+      'sancai-wuge': '三才五格起名',
+      'cezi-yishu': '测字（易数）',
+      'liuyao-cezi': '六爻测字',
+      jiaobei: '掷筊杯',
+      'qimen-seeking': '奇门遁甲寻物',
+      numerology: '姓名灵数',
+      'zhuge-cezi': '诸葛神数测字',
+      'xiao-liuren': '小六壬',
+      tarot: '塔罗牌',
+      'ziwei-hunpan': '紫微斗数合盘',
+      wuge: '五格剖象法',
+      'cezi-zhouyi': '周易测字',
+      '3shanwang-lot': '三山国王灵签',
+      jinkoujue: '金口诀',
+      'xiao-liuren-seeking': '小六壬寻物',
+      'mazu-lot': '妈祖灵签',
+      chenggu: '称骨算命',
+      'cezi-battle': '测字战斗',
+      lenormand: '雷诺曼',
+      'xuankong-fengshui': '玄空风水',
+      'jinri-yunshi': '今日运势',
+      jishi: '今日吉时',
+      'wuxing-chuanyi': '五行穿衣指南',
+      'chong-shengxiao': '今日冲生肖',
+      'shengxiao-piancaiyun': '生肖偏财运',
+      'bazi-personality-map': '八字人格图谱',
+      'name-score': '姓名测试打分',
+      'shengxiao-peidui': '生肖配对',
+      'parent-child-bazi': '亲子八字合盘',
+      'marriage-xiangxing': '婚姻相性测试',
+      'parenting-style': '家庭教育风格测试',
+      'child-activity-interest': '孩子活动兴趣测试',
+      sbti: 'SBTI 沙雕人格测试',
+    }
     const toolName = toolNameMap[tool] ?? '命理'
 
     const hookLines: Record<string, string> = {
@@ -37,6 +136,9 @@ export function useShare() {
       zwds: summary
         ? t('share.hookZwds', { summary })
         : t('share.hookZwdsDefault'),
+      'bazi-ziwei': summary
+        ? t('share.hookBaziZiwei', { summary })
+        : t('share.hookBaziZiweiDefault'),
       liuyao: summary
         ? t('share.hookLiuyao', { summary })
         : t('share.hookLiuyaoDefault'),
@@ -52,6 +154,120 @@ export function useShare() {
       liuren: summary
         ? t('share.hookLiuren', { summary })
         : t('share.hookLiurenDefault'),
+      fengshui: summary
+        ? t('share.hookFengshui', { summary })
+        : t('share.hookFengshuiDefault'),
+      'guanyin-lot': summary
+        ? t('share.hookGuanyinLot', { summary })
+        : t('share.hookGuanyinLotDefault'),
+      'wealth-god-lot': summary
+        ? t('share.hookWealthGodLot', { summary })
+        : t('share.hookWealthGodLotDefault'),
+      'bazi-hunpan': summary
+        ? t('share.hookBaziHunpan', { summary })
+        : t('share.hookBaziHunpanDefault'),
+      'bazi-naming': summary
+        ? t('share.hookBaziNaming', { summary })
+        : t('share.hookBaziNamingDefault'),
+      'bazi-wealth': summary
+        ? t('share.hookBaziWealth', { summary })
+        : t('share.hookBaziWealthDefault'),
+      'sancai-wuge': summary
+        ? t('share.hookSancaiWuge', { summary })
+        : t('share.hookSancaiWugeDefault'),
+      'cezi-yishu': summary
+        ? t('share.hookCeziYishu', { summary })
+        : t('share.hookCeziYishuDefault'),
+      'liuyao-cezi': summary
+        ? t('share.hookLiuyaoCezi', { summary })
+        : t('share.hookLiuyaoCeziDefault'),
+      jiaobei: summary
+        ? t('share.hookJiaobei', { summary })
+        : t('share.hookJiaobeiDefault'),
+      'qimen-seeking': summary
+        ? t('share.hookQimenSeeking', { summary })
+        : t('share.hookQimenSeekingDefault'),
+      numerology: summary
+        ? t('share.hookNumerology', { summary })
+        : t('share.hookNumerologyDefault'),
+      'zhuge-cezi': summary
+        ? t('share.hookZhugeCezi', { summary })
+        : t('share.hookZhugeCeziDefault'),
+      'xiao-liuren': summary
+        ? t('share.hookXiaoLiuren', { summary })
+        : t('share.hookXiaoLiurenDefault'),
+      tarot: summary
+        ? t('share.hookTarot', { summary })
+        : t('share.hookTarotDefault'),
+      'ziwei-hunpan': summary
+        ? t('share.hookZiweiHunpan', { summary })
+        : t('share.hookZiweiHunpanDefault'),
+      wuge: summary
+        ? t('share.hookWuge', { summary })
+        : t('share.hookWugeDefault'),
+      'cezi-zhouyi': summary
+        ? t('share.hookCeziZhouyi', { summary })
+        : t('share.hookCeziZhouyiDefault'),
+      '3shanwang-lot': summary
+        ? t('share.hook3ShanwangLot', { summary })
+        : t('share.hook3ShanwangLotDefault'),
+      jinkoujue: summary
+        ? t('share.hookJinkoujue', { summary })
+        : t('share.hookJinkoujueDefault'),
+      'xiao-liuren-seeking': summary
+        ? t('share.hookXiaoLiurenSeeking', { summary })
+        : t('share.hookXiaoLiurenSeekingDefault'),
+      'mazu-lot': summary
+        ? t('share.hookMazuLot', { summary })
+        : t('share.hookMazuLotDefault'),
+      chenggu: summary
+        ? t('share.hookChenggu', { summary })
+        : t('share.hookChengguDefault'),
+      'cezi-battle': summary
+        ? t('share.hookCeziBattle', { summary })
+        : t('share.hookCeziBattleDefault'),
+      lenormand: summary
+        ? t('share.hookLenormand', { summary })
+        : t('share.hookLenormandDefault'),
+      'jinri-yunshi': summary
+        ? t('share.hookJinriYunshi', { summary })
+        : t('share.hookJinriYunshiDefault'),
+      jishi: summary
+        ? t('share.hookJishi', { summary })
+        : t('share.hookJishiDefault'),
+      'wuxing-chuanyi': summary
+        ? t('share.hookWuxingChuanyi', { summary })
+        : t('share.hookWuxingChuanyiDefault'),
+      'chong-shengxiao': summary
+        ? t('share.hookChongShengxiao', { summary })
+        : t('share.hookChongShengxiaoDefault'),
+      'shengxiao-piancaiyun': summary
+        ? t('share.hookShengxiaoPiancaiyun', { summary })
+        : t('share.hookShengxiaoPiancaiyunDefault'),
+      'bazi-personality-map': summary
+        ? t('share.hookBaziPersonalityMap', { summary })
+        : t('share.hookBaziPersonalityMapDefault'),
+      'name-score': summary
+        ? t('share.hookNameScore', { summary })
+        : t('share.hookNameScoreDefault'),
+      'shengxiao-peidui': summary
+        ? t('share.hookShengxiaoPeidui', { summary })
+        : t('share.hookShengxiaoPeiduiDefault'),
+      'parent-child-bazi': summary
+        ? t('share.hookParentChildBazi', { summary })
+        : t('share.hookParentChildBaziDefault'),
+      'marriage-xiangxing': summary
+        ? t('share.hookMarriageXiangxing', { summary })
+        : t('share.hookMarriageXiangxingDefault'),
+      'parenting-style': summary
+        ? t('share.hookParentingStyle', { summary })
+        : t('share.hookParentingStyleDefault'),
+      'child-activity-interest': summary
+        ? t('share.hookChildActivityInterest', { summary })
+        : t('share.hookChildActivityInterestDefault'),
+      sbti: summary
+        ? t('share.hookSbti', { summary })
+        : t('share.hookSbtiDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href

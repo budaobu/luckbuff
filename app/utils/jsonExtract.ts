@@ -17,7 +17,7 @@ export function extractJsonFromText(text: string): Record<string, any> | null {
   try {
     const codeMatch = trimmed.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
     if (codeMatch) {
-      const parsed = JSON.parse(codeMatch[1].trim())
+      const parsed = JSON.parse(codeMatch[1]!.trim())
       if (parsed && typeof parsed === 'object') return parsed
     }
   } catch { /* ignore */ }
@@ -43,7 +43,7 @@ export function extractJsonFromText(text: string): Record<string, any> | null {
     // 再试一次代码块提取
     const codeMatch = cleaned.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
     if (codeMatch) {
-      const parsed = JSON.parse(codeMatch[1].trim())
+      const parsed = JSON.parse(codeMatch[1]!.trim())
       if (parsed && typeof parsed === 'object') return parsed
     }
 

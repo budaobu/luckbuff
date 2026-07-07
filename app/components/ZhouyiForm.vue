@@ -23,10 +23,51 @@
       </div>
     </div>
 
-    <!-- ========== 时间起卦 ========== -->
+    <!-- ========== 时间起卦（紧跟起卦方式） ========== -->
     <template v-if="method === 'time'">
-      <DivinationTimeCard ref="timeCardRef" />
+      <DivinationTimeCard
+        ref="timeCardRef"
+        :label="$t('zhouyiForm.timeLabel')"
+        :hint="$t('zhouyiForm.timeHint')"
+      />
     </template>
+
+    <!-- 性别 -->
+    <div class="space-y-1.5">
+      <label class="text-xs font-medium text-[var(--text-muted)]">
+        {{ $t('zhouyiForm.genderLabel') }}
+      </label>
+      <div class="grid grid-cols-2 gap-2">
+        <button
+          v-for="g in genders"
+          :key="g.key"
+          type="button"
+          class="flex items-center justify-center gap-1.5 py-2.5 rounded-lg border text-xs font-medium transition-all duration-200"
+          :class="gender === g.key
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--border-medium)] hover:text-[var(--text-muted)]'"
+          @click="gender = g.key"
+        >
+          <UIcon :name="g.icon" class="w-3.5 h-3.5" />
+          {{ g.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 出生年份 -->
+    <div class="space-y-1.5">
+      <label class="text-xs font-medium text-[var(--text-muted)]">
+        {{ $t('zhouyiForm.birthYearLabel') }}
+      </label>
+      <UInput
+        v-model.number="birthYear"
+        type="number"
+        :placeholder="$t('zhouyiForm.birthYearPlaceholder')"
+        color="warning"
+        class="w-full"
+        :ui="{ base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]' }"
+      />
+    </div>
 
     <!-- ========== 数字起卦 ========== -->
     <template v-if="method === 'numbers'">
@@ -99,10 +140,13 @@
 
     <!-- 具体问题 -->
     <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
-        {{ $t('zhouyiForm.queryLabel') }}
-        <span class="text-[var(--accent)]">*</span>
-      </label>
+      <div class="flex items-center justify-between">
+        <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
+          {{ $t('zhouyiForm.queryLabel') }}
+          <span class="text-[var(--accent)]">*</span>
+        </label>
+        <QuestionInspiration @select="q => query = q" />
+      </div>
       <UTextarea
         v-model="query"
         :placeholder="$t('zhouyiForm.queryPlaceholder')"
@@ -150,6 +194,13 @@ const methods = [
 const method = ref<'time' | 'numbers' | 'character'>('time')
 const timeCardRef = ref<{ year: Ref<number>; month: Ref<number>; day: Ref<number>; hour: Ref<number> } | null>(null)
 
+const genders = [
+  { key: 'male' as const, label: t('zhouyiForm.genderMale'), icon: 'i-heroicons-user' },
+  { key: 'female' as const, label: t('zhouyiForm.genderFemale'), icon: 'i-heroicons-user-circle' },
+]
+const gender = ref<'male' | 'female' | undefined>(undefined)
+const birthYear = ref<number | undefined>(undefined)
+
 // 数字起卦表单
 const numbersForm = reactive({
   num1: undefined as number | undefined,
@@ -188,11 +239,13 @@ function handleSubmit() {
       const card = timeCardRef.value
       input = {
         method: 'time',
-        year: card?.year.value ?? new Date().getFullYear(),
-        month: card?.month.value ?? new Date().getMonth() + 1,
-        day: card?.day.value ?? new Date().getDate(),
-        hour: card?.hour.value ?? new Date().getHours(),
+        year: (card?.year as unknown as Ref<number>).value ?? new Date().getFullYear(),
+        month: (card?.month as unknown as Ref<number>).value ?? new Date().getMonth() + 1,
+        day: (card?.day as unknown as Ref<number>).value ?? new Date().getDate(),
+        hour: (card?.hour as unknown as Ref<number>).value ?? new Date().getHours(),
         query: query.value,
+        gender: gender.value,
+        birthYear: birthYear.value,
       }
       break
     }
@@ -203,6 +256,8 @@ function handleSubmit() {
         num2: numbersForm.num2!,
         num3: numbersForm.num3,
         query: query.value,
+        gender: gender.value,
+        birthYear: birthYear.value,
       }
       break
     }
@@ -211,6 +266,8 @@ function handleSubmit() {
         method: 'character',
         char: charForm.char.trim(),
         query: query.value,
+        gender: gender.value,
+        birthYear: birthYear.value,
       }
       break
     }

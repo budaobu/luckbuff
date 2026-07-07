@@ -1,17 +1,8 @@
-import { defineEventHandler, getHeader, setHeader } from 'h3'
-import { parseURL, withQuery } from 'ufo'
+import { defineEventHandler, setHeader } from 'h3'
 
 export default defineEventHandler(async (event) => {
   setHeader(event, 'Content-Type', 'application/xslt+xml')
   setHeader(event, 'Cache-Control', 'public, max-age=600, must-revalidate')
-
-  const siteUrl = 'https://www.ososn.com'
-  const referrer = getHeader(event, 'Referer') || '/'
-  const referrerPath = parseURL(referrer).pathname
-  const sitemapName = referrerPath.split('/').pop()?.replace('.xml', '') || 'sitemap'
-  const isIndex = referrerPath === '/sitemap.xml' || referrerPath === '/sitemap_index.xml'
-
-  const title = `XML Sitemap${sitemapName !== 'sitemap' ? ` - ${sitemapName}` : ''}`
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
@@ -25,7 +16,7 @@ export default defineEventHandler(async (event) => {
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title>${title}</title>
+        <title>XML Sitemap</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <style type="text/css">
           :root {
@@ -73,42 +64,51 @@ export default defineEventHandler(async (event) => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>${title}</h1>
+            <h1>XML Sitemap</h1>
             <div class="header-meta">
-              ${isIndex ? '<xsl:value-of select="count(sitemap:sitemapindex/sitemap:sitemap)"/> sitemaps' : '<xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs'}
+              <xsl:choose>
+                <xsl:when test="local-name(/*) = 'sitemapindex'">
+                  <xsl:value-of select="count(/*[local-name()='sitemapindex']/*[local-name()='sitemap'])"/> sitemaps
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="count(/*[local-name()='urlset']/*[local-name()='url'])"/> URLs
+                </xsl:otherwise>
+              </xsl:choose>
             </div>
           </div>
-          <xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &gt; 0">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th style="width:70%">Sitemap</th><th style="width:30%">Last Modified</th></tr></thead>
-                <tbody>
-                  <xsl:for-each select="sitemap:sitemapindex/sitemap:sitemap">
-                    <tr>
-                      <td><a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a></td>
-                      <td><xsl:value-of select="concat(substring(sitemap:lastmod,0,11),' ',substring(sitemap:lastmod,12,5))"/></td>
-                    </tr>
-                  </xsl:for-each>
-                </tbody>
-              </table>
-            </div>
-          </xsl:if>
-          <xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &lt; 1">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th style="width:50%">URL</th><th style="width:25%">Images</th><th style="width:25%">Last Updated</th></tr></thead>
-                <tbody>
-                  <xsl:for-each select="sitemap:urlset/sitemap:url">
-                    <tr>
-                      <td><a href="{sitemap:loc}"><xsl:value-of select="sitemap:loc"/></a></td>
-                      <td><xsl:value-of select="count(image:image)"/></td>
-                      <td><xsl:value-of select="concat(substring(sitemap:lastmod,0,11),' ',substring(sitemap:lastmod,12,5))"/></td>
-                    </tr>
-                  </xsl:for-each>
-                </tbody>
-              </table>
-            </div>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="local-name(/*) = 'sitemapindex'">
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th style="width:70%">Sitemap</th><th style="width:30%">Last Modified</th></tr></thead>
+                  <tbody>
+                    <xsl:for-each select="/*[local-name()='sitemapindex']/*[local-name()='sitemap']">
+                      <tr>
+                        <td><a href="{*[local-name()='loc']}"><xsl:value-of select="*[local-name()='loc']"/></a></td>
+                        <td><xsl:value-of select="concat(substring(*[local-name()='lastmod'],0,11),' ',substring(*[local-name()='lastmod'],12,5))"/></td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </div>
+            </xsl:when>
+            <xsl:otherwise>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th style="width:50%">URL</th><th style="width:25%">Images</th><th style="width:25%">Last Updated</th></tr></thead>
+                  <tbody>
+                    <xsl:for-each select="/*[local-name()='urlset']/*[local-name()='url']">
+                      <tr>
+                        <td><a href="{*[local-name()='loc']}"><xsl:value-of select="*[local-name()='loc']"/></a></td>
+                        <td><xsl:value-of select="count(*[local-name()='image'])"/></td>
+                        <td><xsl:value-of select="concat(substring(*[local-name()='lastmod'],0,11),' ',substring(*[local-name()='lastmod'],12,5))"/></td>
+                      </tr>
+                    </xsl:for-each>
+                  </tbody>
+                </table>
+              </div>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
       </body>
     </html>

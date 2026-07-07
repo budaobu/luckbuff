@@ -165,7 +165,7 @@ const YAO_KEYS = ['tossWorkbench.yao1', 'tossWorkbench.yao2', 'tossWorkbench.yao
 const displayLines = computed((): TossRecord[] => {
   const lines: TossRecord[] = []
   for (let i = 0; i < tossRecords.length; i++) {
-    const record = { ...tossRecords[i] }
+    const record = { ...tossRecords[i] } as TossRecord
     lines.unshift(record)
   }
   return lines
@@ -216,7 +216,7 @@ function doToss() {
 
     tossRecords.push({
       tossIndex: tossRecords.length + 1,
-      label: t(YAO_KEYS[tossRecords.length]),
+      label: t(YAO_KEYS[tossRecords.length]!),
       value,
       isMoving,
       coins,

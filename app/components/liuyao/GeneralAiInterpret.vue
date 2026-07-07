@@ -107,13 +107,13 @@ const parsedSummary = computed<string | null>(() => {
       if (line.includes('summary:')) {
         const m = line.match(/summary:\s*(.+)/)
         if (m) {
-          match = [line, m[1].trim()]
+          match = [line, m[1]?.trim() ?? '']
           break
         }
       }
     }
   }
-  return match ? match[1].trim() : null
+  return match?.[1]?.trim() ?? null
 })
 
 // ===== 分析文本段落解析 =====
@@ -131,7 +131,7 @@ const parsedSections = computed<Section[]>(() => {
   // 方法 1：先尝试标准 ## 标题格式
   const parts = text.split(/^(##\s+.+)$/m)
   for (let i = 0; i < parts.length; i++) {
-    const part = parts[i].trim()
+    const part = (parts[i] || '').trim()
     if (!part) continue
     if (part.startsWith('## ')) {
       const title = part.slice(3).trim()

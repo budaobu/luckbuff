@@ -12,7 +12,7 @@
     <!-- 五行力量分布 -->
     <WuxingAnalysis
       :wuxing-score="props.chart.wuxingScore"
-      :analysis-text="analysis['五行平衡']"
+      :analysis-text="analysis['五行平衡'] ?? ''"
     />
   </div>
 </template>

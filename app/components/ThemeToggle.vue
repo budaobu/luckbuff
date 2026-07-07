@@ -45,6 +45,6 @@ function toggleTheme() {
   const modes: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
   const currentIndex = modes.indexOf(colorMode.preference as 'light' | 'dark' | 'system')
   const nextIndex = (currentIndex + 1) % modes.length
-  colorMode.preference = modes[nextIndex]
+  colorMode.preference = modes[nextIndex]!
 }
 </script>

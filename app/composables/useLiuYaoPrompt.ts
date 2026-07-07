@@ -23,7 +23,7 @@ export function useLiuYaoPrompt() {
     awayTeam: WorldCupTeam | null,
     locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
-    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
     const systemPrompt = `你是一位精通《周易》六爻纳甲法的资深预测师，擅长以六爻断卦预测体育赛事胜负。
 ${langHook.system}

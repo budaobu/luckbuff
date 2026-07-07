@@ -144,8 +144,8 @@ function getGroupLabel(id: string): string {
   return translated === key ? team.group : translated
 }
 
-const homeId = ref('')
-const awayId = ref('')
+const homeId = ref<string | { value: string }>('')
+const awayId = ref<string | { value: string }>('')
 
 const subject = reactive<{ home: WorldCupTeam | null; away: WorldCupTeam | null }>({
   home: null,
@@ -176,12 +176,12 @@ function buildGroupItems(teams: TeamWithGroup[]) {
   const groups: Record<string, TeamWithGroup[]> = {}
   for (const team of teams) {
     if (!groups[team.group]) groups[team.group] = []
-    groups[team.group].push(team)
+    groups[team.group]!.push(team)
   }
 
   const result: any[] = []
   for (const groupName of Object.keys(groups).sort((a, b) => a.localeCompare(b, 'zh'))) {
-    const groupTeams = groups[groupName]
+    const groupTeams = groups[groupName]!
     const groupLabel = t(`groups.${groupName}`) === `groups.${groupName}` ? groupName : t(`groups.${groupName}`)
     result.push({ type: 'label', label: groupLabel })
     for (const team of groupTeams) {

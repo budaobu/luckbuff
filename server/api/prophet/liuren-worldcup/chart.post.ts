@@ -8,7 +8,7 @@ const DI_ZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '
 function getGanZhiYear(year: number): string {
   const ganIndex = (year - 4) % 10
   const zhiIndex = (year - 4) % 12
-  return TIAN_GAN[ganIndex] + DI_ZHI[zhiIndex]
+  return TIAN_GAN[ganIndex]! + DI_ZHI[zhiIndex]!
 }
 
 // 简化月干支计算：以节气为界（简化版，按农历月近似）
@@ -16,9 +16,9 @@ function getGanZhiMonth(year: number, month: number): string {
   const yearGanIndex = (year - 4) % 10
   // 年干决定月干起始：甲己年起丙寅，乙庚年起戊寅，丙辛年起庚寅，丁壬年起壬寅，戊癸年起甲寅
   const monthGanStartMap = [2, 4, 6, 8, 0] // 丙戊庚壬甲的索引
-  const startGan = monthGanStartMap[yearGanIndex % 5]
-  const monthGan = TIAN_GAN[(startGan + month - 1) % 10]
-  const monthZhi = DI_ZHI[(month + 1) % 12] // 寅月为正月
+  const startGan = monthGanStartMap[yearGanIndex % 5]!
+  const monthGan = TIAN_GAN[(startGan + month - 1) % 10]!
+  const monthZhi = DI_ZHI[(month + 1) % 12]! // 寅月为正月
   return monthGan + monthZhi
 }
 
@@ -28,22 +28,22 @@ function getGanZhiDay(date: Date): string {
   const diffDays = Math.floor((date.getTime() - baseDate.getTime()) / (24 * 60 * 60 * 1000))
   const ganIndex = (diffDays % 10 + 10) % 10
   const zhiIndex = (diffDays % 12 + 12) % 12
-  return TIAN_GAN[ganIndex] + DI_ZHI[zhiIndex]
+  return TIAN_GAN[ganIndex]! + DI_ZHI[zhiIndex]!
 }
 
 function getShiChenHour(h: number): string {
   if (h >= 23 || h < 1) return '子'
   const idx = Math.floor((h - 1) / 2) + 1
-  return DI_ZHI[idx]
+  return DI_ZHI[idx]!
 }
 
 function getDayHourGanZhi(dayGan: string, hourZhi: string): string {
   // 日干定子时天干：甲己日起甲子，乙庚日起丙子，丙辛日起戊子，丁壬日起庚子，戊癸日起壬子
   const dayGanIndex = TIAN_GAN.indexOf(dayGan)
   const startGanMap = [0, 2, 4, 6, 8, 0, 2, 4, 6, 8]
-  const startGan = startGanMap[dayGanIndex]
+  const startGan = startGanMap[dayGanIndex]!
   const hourZhiIndex = DI_ZHI.indexOf(hourZhi)
-  const hourGan = TIAN_GAN[(startGan + hourZhiIndex) % 10]
+  const hourGan = TIAN_GAN[(startGan + hourZhiIndex) % 10]!
   return hourGan + hourZhi
 }
 
@@ -52,7 +52,7 @@ function getYueJiang(month: number, day: number): string {
   // 简化：按月份对应月将（实际应以中气为界）
   // 正月建寅，月将在亥（登明）
   const yueJiangMap = ['亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌']
-  return yueJiangMap[(month - 1 + 12) % 12]
+  return yueJiangMap[(month - 1 + 12) % 12]!
 }
 
 export default defineEventHandler(async (event) => {
@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // 根据出生年份计算年支
-  const birthYearBranch = DI_ZHI[(body.birthYear - 4) % 12]
+  const birthYearBranch = DI_ZHI[(body.birthYear - 4) % 12]!
 
   const dt = new Date(body.matchTime)
   if (isNaN(dt.getTime())) {
@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
   const monthGz = getGanZhiMonth(dt.getFullYear(), dt.getMonth() + 1)
   const dayGz = getGanZhiDay(dt)
   const hourZhi = getShiChenHour(dt.getHours())
-  const hourGz = getDayHourGanZhi(dayGz[0], hourZhi)
+  const hourGz = getDayHourGanZhi(dayGz.slice(0, 1), hourZhi)
   const yueJiang = getYueJiang(dt.getMonth() + 1, dt.getDate())
 
   // 农历简化表示

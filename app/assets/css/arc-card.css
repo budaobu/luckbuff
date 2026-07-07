@@ -1,0 +1,28 @@
+.arc-card {
+  -webkit-mask-image: url(#arcCardMask);
+  mask-image: url(#arcCardMask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.arc-card > :not(.absolute) {
+  position: relative;
+  z-index: 10;
+}
+
+.arc-card::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in oklab, var(--accent-border) 45%, transparent);
+  pointer-events: none;
+  z-index: 10;
+  transition: border-color 0.5s ease;
+}
+
+.arc-card:hover::after {
+  border-color: color-mix(in oklab, var(--accent-border-hover) 55%, transparent);
+}

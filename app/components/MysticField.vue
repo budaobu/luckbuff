@@ -105,7 +105,7 @@ onMounted(() => {
       symbols.push({
         x: Math.random() * w,
         y: Math.random() * h,
-        text: MYSTIC_SYMBOLS[Math.floor(Math.random() * MYSTIC_SYMBOLS.length)],
+        text: MYSTIC_SYMBOLS[Math.floor(Math.random() * MYSTIC_SYMBOLS.length)] ?? '☯',
         size: Math.random() * 16 + 16,
         alpha: Math.random() * 0.06 + 0.08,
         targetAlpha: Math.random() * 0.06 + 0.07,
@@ -134,7 +134,7 @@ onMounted(() => {
         lastShootingStar = now
       }
       for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i]
+        const s = shootingStars[i]!
         s.x += Math.cos(s.angle) * s.speed
         s.y += Math.sin(s.angle) * s.speed
         s.life++

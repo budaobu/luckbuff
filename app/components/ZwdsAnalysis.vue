@@ -245,7 +245,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ZwdsChart, DiZhi } from '~/types/zwds'
+import type { ZwdsChart } from '~/types/zwds'
+import type { DiZhi } from '~/types/user'
 import {
   generateBenmingAnalysis,
   getDaxianAnalysis,
@@ -306,7 +307,7 @@ function sihuaDotClass(type: string): string {
 function getJieDuiZhi(zhi: DiZhi): DiZhi {
   const ZHI_ORDER: DiZhi[] = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑']
   const idx = ZHI_ORDER.indexOf(zhi)
-  return ZHI_ORDER[(idx + 6) % 12]
+  return ZHI_ORDER[(idx + 6) % 12]!
 }
 
 // 大限

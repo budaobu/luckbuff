@@ -39,13 +39,13 @@ function scanContent(dir: string): Array<{ slug: string; summary: string; genera
     let summary = ''
     let generatedAt = ''
     if (fmMatch) {
-      const summaryMatch = fmMatch[1].match(/^summary:\s*(.+)$/m)
+      const summaryMatch = fmMatch[1]!.match(/^summary:\s*(.+)$/m)
       if (summaryMatch) {
-        summary = summaryMatch[1].trim().replace(/^["']|["']$/g, '')
+        summary = summaryMatch[1]!.trim().replace(/^["']|["']$/g, '')
       }
-      const genMatch = fmMatch[1].match(/^generatedAt:\s*(.+)$/m)
+      const genMatch = fmMatch[1]!.match(/^generatedAt:\s*(.+)$/m)
       if (genMatch) {
-        generatedAt = genMatch[1].trim().replace(/^["']|["']$/g, '')
+        generatedAt = genMatch[1]!.trim().replace(/^["']|["']$/g, '')
       }
     }
     results.push({ slug, summary, generatedAt })
@@ -55,6 +55,42 @@ function scanContent(dir: string): Array<{ slug: string; summary: string; genera
 const contentItems = scanContent(join(__dirname, 'content', 'worldcup-predictions'))
 
 const autoRoutes = scanPages(join(__dirname, 'app', 'pages'), join(__dirname, 'app', 'pages'))
+
+const SITEMAP_EXCLUDE_ROUTES = new Set<string>([
+  // Add internal/utility pages here that should not be indexed
+])
+
+const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily' | 'monthly' | 'yearly'; priority: number; _i18nTransform: boolean }>> = {
+  '/': { priority: 1.0 },
+  '/tools': { priority: 0.9 },
+  '/prophet': { changefreq: 'daily', priority: 0.9 },
+  '/prophet/liuren-worldcup': { changefreq: 'daily', priority: 0.8 },
+  '/prophet/qimen-worldcup': { changefreq: 'daily', priority: 0.8 },
+  '/prophet/worldcup-champion-odds-2026': { changefreq: 'daily', priority: 0.8 },
+  '/settings': { changefreq: 'monthly', priority: 0.5 },
+  '/terms': { changefreq: 'yearly', priority: 0.3 },
+  '/privacy': { changefreq: 'yearly', priority: 0.3 },
+}
+
+const sitemapUrls = [
+  ...contentItems.map(item => ({
+    loc: `/prophet/match/${item.slug}`,
+    lastmod: item.generatedAt || undefined,
+    changefreq: 'weekly' as const,
+    priority: 0.6,
+    _i18nTransform: true,
+  })),
+  ...autoRoutes
+    .filter((route: string) => !route.includes('['))
+    .filter((route: string) => !SITEMAP_EXCLUDE_ROUTES.has(route))
+    .map((loc: string) => ({
+      loc,
+      changefreq: 'weekly' as const,
+      priority: 0.8,
+      _i18nTransform: true,
+      ...SITEMAP_OVERRIDES[loc],
+    })),
+]
 
 export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
@@ -85,6 +121,8 @@ export default defineNuxtConfig({
   sitemap: {
     sitemapsPathPrefix: '/',
     xsl: '/sitemap-style.xsl',
+    excludeAppSources: true,
+    cacheMaxAgeSeconds: 60,
     autoI18n: {
       differentDomains: false,
       defaultLocale: 'zh-CN',
@@ -99,18 +137,7 @@ export default defineNuxtConfig({
       changefreq: 'weekly',
       priority: 0.8,
     },
-    urls: [
-      ...contentItems.map(item => ({
-        loc: `/prophet/match/${item.slug}`,
-        lastmod: item.generatedAt || undefined,
-        changefreq: 'weekly' as const,
-        priority: 0.6,
-        _i18nTransform: true,
-      })),
-      { loc: '/settings', changefreq: 'monthly' as const, priority: 0.5, _i18nTransform: true },
-      { loc: '/terms', changefreq: 'yearly' as const, priority: 0.3, _i18nTransform: true },
-      { loc: '/privacy', changefreq: 'yearly' as const, priority: 0.3, _i18nTransform: true },
-    ],
+    urls: sitemapUrls as any,
   },
 
   colorMode: {
@@ -128,24 +155,15 @@ export default defineNuxtConfig({
       { code: 'en', name: 'English', file: 'en.json', language: 'en' },
     ],
     defaultLocale: 'zh-CN',
-    lazy: true,
-    bundle: {
-      commonJs: false,
-    },
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-    head: {
-      addSeoAttributes: {
-        canonicalQueries: [],
-      },
-    },
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/arc-card.css'],
 
   alias: {
     pinia: piniaEsmPath,
@@ -174,6 +192,7 @@ export default defineNuxtConfig({
       '/settings': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/terms': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/privacy': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
+      '/zibaifeixing': { redirect: { to: '/tools/zibaifeixing', statusCode: 301 } },
     },
     compressPublicAssets: { gzip: true, brotli: true },
   },
@@ -207,6 +226,7 @@ export default defineNuxtConfig({
     aiProvider: 'gptniux',
     public: {
       siteUrl: '',
+      siteName: 'ososn',
       googleSiteVerification: '',
       baiduAnalyticsId: '',
     },

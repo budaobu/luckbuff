@@ -271,7 +271,7 @@ function getDimensionText(gongName: string, mainStars: MainStar[]): string {
 }
 
 export function getDaxianAnalysis(chart: ZwdsChart, daxianIndex: number): DaxianAnalysis {
-  const dx = chart.daXians[daxianIndex]
+  const dx = chart.daXians[daxianIndex]!
   const isCurrent = dx.ageRange[0] <= chart.currentAge && dx.ageRange[1] >= chart.currentAge
 
   // 找到该大限对应的本命宫位
@@ -290,21 +290,21 @@ export function getDaxianAnalysis(chart: ZwdsChart, daxianIndex: number): Daxian
   // 感情参考夫妻宫/福德宫的主星，如果大限宫位正好是这两个，直接用；否则混合
   const fuqiGong = chart.gongs.find(g => g.name === '夫妻')!
   const fudeGong = chart.gongs.find(g => g.name === '福德')!
-  dimensions[0].text = getDimensionText('感情', dx.gongName === '夫妻' || dx.gongName === '福德' ? dx.mainStars : [...fuqiGong.mainStars, ...fudeGong.mainStars])
+  dimensions[0]!.text = getDimensionText('感情', dx.gongName === '夫妻' || dx.gongName === '福德' ? dx.mainStars : [...fuqiGong.mainStars, ...fudeGong.mainStars])
 
   // 事业参考事业宫/迁移宫
   const shiyeGong = chart.gongs.find(g => g.name === '事业')!
   const qianyiGong = chart.gongs.find(g => g.name === '迁移')!
-  dimensions[1].text = getDimensionText('事业', dx.gongName === '事业' || dx.gongName === '迁移' ? dx.mainStars : [...shiyeGong.mainStars, ...qianyiGong.mainStars])
+  dimensions[1]!.text = getDimensionText('事业', dx.gongName === '事业' || dx.gongName === '迁移' ? dx.mainStars : [...shiyeGong.mainStars, ...qianyiGong.mainStars])
 
   // 财运参考财帛宫/田宅宫
   const caiboGong = chart.gongs.find(g => g.name === '财帛')!
   const tianzhaiGong = chart.gongs.find(g => g.name === '田宅')!
-  dimensions[2].text = getDimensionText('财运', dx.gongName === '财帛' || dx.gongName === '田宅' ? dx.mainStars : [...caiboGong.mainStars, ...tianzhaiGong.mainStars])
+  dimensions[2]!.text = getDimensionText('财运', dx.gongName === '财帛' || dx.gongName === '田宅' ? dx.mainStars : [...caiboGong.mainStars, ...tianzhaiGong.mainStars])
 
   // 健康参考疾厄宫/命宫
   const jieGong = chart.gongs.find(g => g.name === '疾厄')!
-  dimensions[3].text = getDimensionText('健康', dx.gongName === '疾厄' || dx.gongName === '命宫' ? dx.mainStars : [...jieGong.mainStars, ...chart.mingGong.mainStars])
+  dimensions[3]!.text = getDimensionText('健康', dx.gongName === '疾厄' || dx.gongName === '命宫' ? dx.mainStars : [...jieGong.mainStars, ...chart.mingGong.mainStars])
 
   // 时间节点提示
   const midAge = Math.floor((dx.ageRange[0] + dx.ageRange[1]) / 2)
@@ -334,7 +334,7 @@ function getYearGanZhi(year: number): { gan: TianGan; zhi: DiZhi } {
   const zhiList: DiZhi[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
   const ganIdx = (year - 4) % 10
   const zhiIdx = (year - 4) % 12
-  return { gan: ganList[ganIdx], zhi: zhiList[zhiIdx] }
+  return { gan: ganList[ganIdx]!, zhi: zhiList[zhiIdx]! }
 }
 
 export function getLiunianAnalysis(chart: ZwdsChart, year: number): LiunianAnalysis {

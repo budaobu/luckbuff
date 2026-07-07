@@ -383,8 +383,8 @@ const parsedSections = computed(() => {
   const parts = raw.split(/\n(?=##\s)/)
   return parts.map((part) => {
     const lines = part.split('\n')
-    const titleMatch = lines[0].match(/^##\s*(.+)$/)
-    const title = titleMatch ? titleMatch[1].trim() : ''
+    const titleMatch = lines[0]?.match(/^##\s*(.+)$/)
+    const title = titleMatch?.[1]?.trim() ?? ''
     const content = lines.slice(titleMatch ? 1 : 0).join('\n').trim()
     return { title, content }
   }).filter(s => s.title || s.content)
@@ -467,9 +467,9 @@ const parsedAiDateDetails = computed(() => {
 
   let m: RegExpExecArray | null
   while ((m = entryPattern.exec(content)) !== null) {
-    const rank = m[1]
-    const dateStr = m[2]
-    const text = m[4].trim()
+    const rank = m[1] ?? ''
+    const dateStr = m[2] ?? ''
+    const text = m[4]?.trim() ?? ''
 
     const reasonMatch = text.match(/^(.+?)(?:推荐(?:时辰|吉时)\s*[：:](.+))?$/s)
     const reason = reasonMatch?.[1]?.trim() || ''

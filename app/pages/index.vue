@@ -329,6 +329,12 @@ const topics = [
     path: '/fortune-telling',
   },
   {
+    icon: 'i-heroicons-heart',
+    titleKey: 'home.topicDoubleChartTitle',
+    descKey: 'home.topicDoubleChartDesc',
+    path: '/shuangren-hepan',
+  },
+  {
     icon: 'i-heroicons-calendar',
     titleKey: 'home.topicAuspiciousDatetimeTitle',
     descKey: 'home.topicAuspiciousDatetimeDesc',
@@ -359,10 +365,10 @@ const topics = [
     path: '/draw-a-lot',
   },
   {
-    icon: 'i-heroicons-trophy',
-    titleKey: 'home.topicProphetTitle',
-    descKey: 'home.topicProphetDesc',
-    path: '/prophet',
+    icon: 'i-heroicons-beaker',
+    titleKey: 'home.topicPsychologicalTestTitle',
+    descKey: 'home.topicPsychologicalTestDesc',
+    path: '/psychological-test',
   },
 ]
 

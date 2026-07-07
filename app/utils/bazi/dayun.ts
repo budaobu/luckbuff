@@ -1,4 +1,5 @@
-import type { DaYun, TianGan, DiZhi } from '~/types/bazi'
+import type { DaYun } from '~/types/bazi'
+import type { TianGan, DiZhi } from '~/types/user'
 import { TIAN_GAN, DI_ZHI, GAN_YANG } from './constants'
 import { getJieDayOfYear, dayOfYear, isLeapYear } from './calendar'
 
@@ -15,22 +16,22 @@ import { getJieDayOfYear, dayOfYear, isLeapYear } from './calendar'
 
 function nextGan(gan: string): string {
   const idx = TIAN_GAN.indexOf(gan as never)
-  return TIAN_GAN[(idx + 1) % 10]
+  return TIAN_GAN[(idx + 1) % 10]!
 }
 
 function prevGan(gan: string): string {
   const idx = TIAN_GAN.indexOf(gan as never)
-  return TIAN_GAN[(idx - 1 + 10) % 10]
+  return TIAN_GAN[(idx - 1 + 10) % 10]!
 }
 
 function nextZhi(zhi: string): string {
   const idx = DI_ZHI.indexOf(zhi as never)
-  return DI_ZHI[(idx + 1) % 12]
+  return DI_ZHI[(idx + 1) % 12]!
 }
 
 function prevZhi(zhi: string): string {
   const idx = DI_ZHI.indexOf(zhi as never)
-  return DI_ZHI[(idx - 1 + 12) % 12]
+  return DI_ZHI[(idx - 1 + 12) % 12]!
 }
 
 // 判断年干阴阳

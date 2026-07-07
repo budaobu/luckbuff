@@ -45,7 +45,7 @@
           color="neutral"
           variant="ghost"
           class="text-[#e8e0d0]/50 hover:text-[#e8e0d0]/80 hover:bg-white/5"
-          @click="navigateTo('/tools')"
+          @click="goTools"
         >
           <template #leading>
             <UIcon name="i-heroicons-sparkles" class="w-4 h-4" />
@@ -78,6 +78,10 @@ const handleError = () => {
     clearError()
     reloadNuxtApp()
   }
+}
+
+function goTools() {
+  navigateTo('/tools')
 }
 
 useSeoMeta({

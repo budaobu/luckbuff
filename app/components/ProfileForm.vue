@@ -314,7 +314,7 @@ function onBirthDateChange() {
     birthGanZhi.value = ''
     return
   }
-  const [year, month, day] = form.birthDate.split('-').map(Number)
+  const [year = 0, month = 0, day = 0] = form.birthDate.split('-').map(Number)
   try {
     birthGanZhi.value = dateToGanZhi(year, month, day)
   } catch {

@@ -128,7 +128,7 @@ const parsedProbability = computed<ProbabilityData | null>(() => {
   }
   if (!match) return null
   try {
-    const data = JSON.parse(match[1])
+    const data = JSON.parse(match[1]!)
     const home = typeof data.home === 'number' ? data.home : parseFloat(data.home) || 0
     const draw = typeof data.draw === 'number' ? data.draw : parseFloat(data.draw) || 0
     const away = typeof data.away === 'number' ? data.away : parseFloat(data.away) || 0
@@ -157,7 +157,7 @@ const parsedSections = computed<Section[]>(() => {
   // 方法 1：先尝试标准 ## 标题格式
   const parts = text.split(/^(##\s+.+)$/m)
   for (let i = 0; i < parts.length; i++) {
-    const part = parts[i].trim()
+    const part = (parts[i] || '').trim()
     if (!part) continue
     if (part.startsWith('## ')) {
       const title = part.slice(3).trim()

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
   let locationCity = body.location || ''
   if (locationCity.includes(',')) {
     const parts = locationCity.split(',').map(s => s.trim())
-    locationCity = parts[0]
+    locationCity = parts[0] || ''
     locationCountry = parts[1] || ''
   }
 

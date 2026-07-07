@@ -24,7 +24,7 @@ export function useBaziPrompt() {
     analysisSummary: string,
     locale: string = 'zh-CN',
   ): { systemPrompt: string; userPrompt: string } {
-    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']
+    const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
 
     const systemPrompt = `你是一个 JSON 生成器。你的唯一任务是把八字分析结果转换成严格有效的 JSON。
 ${langHook.system}

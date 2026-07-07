@@ -1,5 +1,7 @@
 import type { QimenChartResponse } from './qimen'
 
+export type { QimenChartResponse }
+
 export interface WorldCupFixture {
   uid: string
   slug: string

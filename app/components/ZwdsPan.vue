@@ -28,7 +28,7 @@
               v-else
               class="relative rounded-lg border p-1.5 flex flex-col gap-0.5 overflow-hidden"
               :class="gongClass(pos.gong!)"
-              :style="{ gridColumn: pos.col + 1, gridRow: pos.row + 1 }"
+              :style="{ gridColumn: pos.col! + 1, gridRow: pos.row! + 1 }"
             >
               <!-- 宫名 + 地支（紧凑靠左，避免与右上角四化标记重叠） -->
               <div class="flex items-center gap-1 pr-4">
@@ -55,7 +55,7 @@
                   v-if="pos.gong?.mainStars.length === 0"
                   class="text-[9px] text-[var(--text-placeholder)] italic leading-none"
                 >
-                  {{ $t('zwdsPan.borrowLabel') }}{{ getJieDuiZhi(pos.zhi) }}
+                  {{ $t('zwdsPan.borrowLabel') }}{{ getJieDuiZhi(pos.zhi!) }}
                 </span>
               </div>
 
@@ -111,7 +111,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ZwdsChart, ZwdsGong, DiZhi } from '~/types/zwds'
+import type { ZwdsChart, ZwdsGong } from '~/types/zwds'
+import type { DiZhi } from '~/types/user'
 
 interface Props {
   chart: ZwdsChart
@@ -179,6 +180,6 @@ function sihuaClass(type: string): string {
 
 function getJieDuiZhi(zhi: DiZhi): DiZhi {
   const idx = ZHI_ORDER.indexOf(zhi)
-  return ZHI_ORDER[(idx + 6) % 12]
+  return ZHI_ORDER[(idx + 6) % 12]!
 }
 </script>

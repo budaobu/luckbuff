@@ -106,3 +106,55 @@ echo "==> verify"
 ssh -i "$SSH_KEY" "$SERVER" "pm2 status --no-color | tail -10"
 ssh -i "$SSH_KEY" "$SERVER" "curl -s -m 3 http://127.0.0.1:8765/health || echo '!! vedic-service health UNREACHABLE'"
 curl -s -o /dev/null -w "homepage HTTPS %{http_code} (%{time_total}s)\n" https://www.ososn.com/
+
+echo "==> verify sitemap"
+SITEMAP_OK=true
+REQUIRED_ROUTES=(
+  /tools/wuxing-chuanyi
+  /tools/jinri-yunshi
+  /tools/jishi
+  /tools/jinri-yiji
+  /tools/huangdao
+  /tools/chong-shengxiao
+  /auspicious-datetime
+  /fortune-telling
+  /tools
+)
+for locale_path in sitemap-zh-CN.xml sitemap-zh-TW.xml sitemap-en.xml; do
+  case "$locale_path" in
+    sitemap-zh-CN.xml) prefix="" ;;
+    sitemap-zh-TW.xml) prefix="/zh-TW" ;;
+    sitemap-en.xml) prefix="/en" ;;
+  esac
+  sm_url="https://www.ososn.com/${locale_path}"
+  sm_body=""
+  for attempt in 1 2 3 4 5; do
+    sm_body=$(curl -s -m 10 "$sm_url")
+    missing_in_attempt=false
+    for route in "${REQUIRED_ROUTES[@]}"; do
+      if [ "$(echo "$sm_body" | grep -c "<loc>https://www.ososn.com${prefix}${route}</loc>" || true)" -eq 0 ]; then
+        missing_in_attempt=true
+        break
+      fi
+    done
+    if [ "$missing_in_attempt" = false ]; then
+      break
+    fi
+    if [ "$attempt" -lt 5 ]; then
+      echo "  sitemap ${locale_path} incomplete (${attempt}/5), retrying in 3s..."
+      sleep 3
+    fi
+  done
+  for route in "${REQUIRED_ROUTES[@]}"; do
+    if [ "$(echo "$sm_body" | grep -c "<loc>https://www.ososn.com${prefix}${route}</loc>" || true)" -eq 0 ]; then
+      echo "!! sitemap ${locale_path} missing ${prefix}${route}"
+      SITEMAP_OK=false
+    fi
+  done
+done
+if $SITEMAP_OK; then
+  echo "sitemap OK (key routes present in all locales)"
+else
+  echo "!! sitemap verification failed"
+  exit 1
+fi

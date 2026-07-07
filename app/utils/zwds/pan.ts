@@ -33,7 +33,7 @@ function zhiIdx(zhi: DiZhi): number {
 
 /** 从索引取地支 */
 function idxZhi(idx: number): DiZhi {
-  return ZHI_ORDER[(idx + 12) % 12]
+  return ZHI_ORDER[(idx + 12) % 12]!
 }
 
 /** 时辰地支转索引（子=0） */
@@ -99,7 +99,7 @@ export function calcZwdsPan(
   for (let i = 0; i < 12; i++) {
     const zhiIdxVal = (mingIdx - i + 12) % 12
     gongs.push({
-      name: GONG_ORDER[i],
+      name: GONG_ORDER[i]!,
       zhi: idxZhi(zhiIdxVal),
       mainStars: [],
       auxStars: [],
@@ -127,7 +127,7 @@ export function calcZwdsPan(
     甲: 2, 己: 2, 乙: 4, 庚: 4, 丙: 6, 辛: 6, 丁: 8, 壬: 8, 戊: 0, 癸: 0,
   }
   const mingGanIdx = (ganStartMap[yearGan] + mingZhiIdx) % 10
-  const mingGan = (['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'] as TianGan[])[mingGanIdx]
+  const mingGan = (['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'] as TianGan[])[mingGanIdx]!
 
   // 五行局
   const wuxingJu = getWuXingJu(mingGan)

@@ -112,7 +112,7 @@ function numToYao(n: number): number {
 function getYearDizhi(lunarYear: number): { num: number; name: string } {
   let num = ((lunarYear - 1900) % 12) + 1
   if (num === 13) num = 1
-  return { num, name: DIZHI_LIST[num - 1] }
+  return { num, name: DIZHI_LIST[num - 1]! }
 }
 
 function getShichen(hour: number): { num: number; name: string } {
@@ -134,17 +134,17 @@ function getWangshuai(wuxing: string, seasonWuxing: string): string {
   if (wuxing === seasonWuxing) return '旺'
   const shengWuxing = Object.entries(WUXING_SHENG).find(([, v]) => v === wuxing)?.[0]
   if (shengWuxing === seasonWuxing) return '相'
-  if (WUXING_SHENG[wuxing] === seasonWuxing) return '休'
-  if (WUXING_KE[seasonWuxing] === wuxing) return '囚'
+  if (WUXING_SHENG[wuxing]! === seasonWuxing) return '休'
+  if (WUXING_KE[seasonWuxing]! === wuxing) return '囚'
   return '死'
 }
 
 function analyzeWuxing(tiElement: string, yongElement: string): { relation: string; result: string } {
   if (tiElement === yongElement) return { relation: '比和', result: '吉' }
-  if (WUXING_SHENG[yongElement] === tiElement) return { relation: '用生体', result: '大吉' }
-  if (WUXING_SHENG[tiElement] === yongElement) return { relation: '体生用', result: '泄耗' }
-  if (WUXING_KE[tiElement] === yongElement) return { relation: '体克用', result: '吉' }
-  if (WUXING_KE[yongElement] === tiElement) return { relation: '用克体', result: '凶' }
+  if (WUXING_SHENG[yongElement]! === tiElement) return { relation: '用生体', result: '大吉' }
+  if (WUXING_SHENG[tiElement]! === yongElement) return { relation: '体生用', result: '泄耗' }
+  if (WUXING_KE[tiElement]! === yongElement) return { relation: '体克用', result: '吉' }
+  if (WUXING_KE[yongElement]! === tiElement) return { relation: '用克体', result: '凶' }
   return { relation: '未知', result: '平' }
 }
 
@@ -167,7 +167,7 @@ function analyzeHexagram(
   upperGua: number,
   lowerGua: number,
   dongYao: number,
-): Omit<MeihuaResult, 'methodName' | 'calcDetail' | 'lunarDate'> {
+): MeihuaResult {
   const benGua = LIUSHISI_GUA.find(g => g.shangGua === upperGua && g.xiaGua === lowerGua)
   if (!benGua) throw new Error(`无法找到对应卦象：上卦${upperGua} 下卦${lowerGua}`)
 
@@ -180,8 +180,8 @@ function analyzeHexagram(
   if (!bianGua) throw new Error('无法找到变卦')
 
   // 互卦（2-3-4爻为下互，3-4-5爻为上互）
-  const huXia = [benYao[1], benYao[2], benYao[3]]
-  const huShang = [benYao[2], benYao[3], benYao[4]]
+  const huXia = [benYao[1]!, benYao[2]!, benYao[3]!]
+  const huShang = [benYao[2]!, benYao[3]!, benYao[4]!]
   const huGua = findGuaByYao([...huXia, ...huShang])
   if (!huGua) throw new Error('无法找到互卦')
 
@@ -205,8 +205,8 @@ function analyzeHexagram(
     yongPos = '下卦'
   }
 
-  const tiWuxing = BAGUA_WUXING[tiGuaId]
-  const yongWuxing = BAGUA_WUXING[yongGuaId]
+  const tiWuxing = BAGUA_WUXING[tiGuaId]!
+  const yongWuxing = BAGUA_WUXING[yongGuaId]!
   const sk = analyzeWuxing(tiWuxing, yongWuxing)
 
   // 季节旺衰（用公历月份判断）
@@ -226,8 +226,8 @@ function analyzeHexagram(
     benGuaId: benGua.id,
     bianGuaId: bianGua.id,
     dongYao,
-    calcDetail: '',
     methodName: '',
+    calcDetail: '',
 
     shangGuaId: upperGua,
     xiaGuaId: lowerGua,
@@ -291,8 +291,8 @@ export function calcMeihuaByTime(
     `农历 ${lunar.year}年${lunar.isLeapMonth ? '闰' : ''}${lunar.month}月${lunar.day}日\n` +
     `年支：${yearDizhi.name}（${yearDizhi.num}）` +
     ` 月：${lunar.month} 日：${lunar.day} 时辰：${shichen.name}（${shichen.num}）\n` +
-    `上卦：${upperSum} ÷ 8 余 ${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]}）\n` +
-    `下卦：${lowerSum} ÷ 8 余 ${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]}）\n` +
+    `上卦：${upperSum} ÷ 8 余 ${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]!}）\n` +
+    `下卦：${lowerSum} ÷ 8 余 ${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]!}）\n` +
     `动爻：${lowerSum} ÷ 6 余 ${dongYao}（第${dongYao}爻）\n` +
     `体用：${result.shengkeRelation}（${result.shengkeResult}）`
 
@@ -323,8 +323,8 @@ export function calcMeihuaByNumbers(
 
   result.methodName = '梅花易数·数字起卦'
   result.calcDetail =
-    `第一数：${num1} ÷ 8 余 ${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]}）\n` +
-    `第二数：${num2} ÷ 8 余 ${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]}）\n` +
+    `第一数：${num1} ÷ 8 余 ${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]!}）\n` +
+    `第二数：${num2} ÷ 8 余 ${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]!}）\n` +
     `动爻：${num3 !== undefined ? `${num3} ÷ 6 余 ${dongYao}` : `(${num1}+${num2})=${num1 + num2} ÷ 6 余 ${dongYao}`}（第${dongYao}爻）\n` +
     `体用：${result.shengkeRelation}（${result.shengkeResult}）`
 
@@ -369,8 +369,8 @@ export function calcMeihuaByCharacter(
   result.calcDetail =
     `汉字：${char}\n` +
     `笔画数：${firstCharStrokes}${char.length > 1 ? `, ${Array.isArray(strokeCount) ? strokeCount[1] : firstCharStrokes}` : ''}\n` +
-    `上卦：${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]}）\n` +
-    `下卦：${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]}）\n` +
+    `上卦：${upperGua}（${BAGUA_NAMES[upperGua - 1]}·${BAGUA_WUXING[upperGua]!}）\n` +
+    `下卦：${lowerGua}（${BAGUA_NAMES[lowerGua - 1]}·${BAGUA_WUXING[lowerGua]!}）\n` +
     `动爻：第${dongYao}爻\n` +
     `体用：${result.shengkeRelation}（${result.shengkeResult}）`
 

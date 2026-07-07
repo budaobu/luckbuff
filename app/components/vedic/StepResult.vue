@@ -45,6 +45,10 @@ function toggle(i: number) {
   openSections.value = new Set(openSections.value)
 }
 
+function goHome() {
+  navigateTo('/')
+}
+
 const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
 </script>
 
@@ -114,7 +118,7 @@ const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
         </template>
         {{ $t('vedic.result.restart') }}
       </UButton>
-      <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="navigateTo('/')">
+      <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="goHome">
         <template #leading>
           <UIcon name="i-heroicons-home" class="w-4 h-4" />
         </template>

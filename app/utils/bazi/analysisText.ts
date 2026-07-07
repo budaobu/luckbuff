@@ -104,7 +104,7 @@ const ZHI_XING: Record<string, string[]> = {
 }
 
 function getLiuNianGanZhi(year: number): [string, string] {
-  return [TIAN_GAN[(year - 4) % 10], DI_ZHI[(year - 4) % 12]]
+  return [TIAN_GAN[(year - 4) % 10]!, DI_ZHI[(year - 4) % 12]!]
 }
 
 function getZhiRelations(zhi1: string, zhi2: string): string[] {
@@ -120,9 +120,9 @@ function buildLiuNianText(chart: BaziChart): string {
   const currentYear = new Date().getFullYear()
   const [liuNianGan, liuNianZhi] = getLiuNianGanZhi(currentYear)
   const riZhi = chart.day.zhi
-  const riWx = GAN_WUXING[chart.riZhu]
-  const liuNianGanWx = GAN_WUXING[liuNianGan]
-  const liuNianZhiWx = ZHI_WUXING[liuNianZhi]
+  const riWx = GAN_WUXING[chart.riZhu]!
+  const liuNianGanWx = GAN_WUXING[liuNianGan]!
+  const liuNianZhiWx = ZHI_WUXING[liuNianZhi]!
   const liuNianGanShen = getShiShen(chart.riZhu, liuNianGan)
 
   // 流年天干五行生克关系
@@ -156,8 +156,8 @@ function buildLiuNianText(chart: BaziChart): string {
   }
 
   // 喜忌判断
-  const isXiYong = chart.xiyong.includes(liuNianGanWx) || chart.xiyong.includes(liuNianZhiWx)
-  const isJiShen = chart.jishen.includes(liuNianGanWx) || chart.jishen.includes(liuNianZhiWx)
+  const isXiYong = chart.xiyong.includes(liuNianGanWx!) || chart.xiyong.includes(liuNianZhiWx!)
+  const isJiShen = chart.jishen.includes(liuNianGanWx!) || chart.jishen.includes(liuNianZhiWx!)
 
   let fortuneText = ''
   if (isXiYong) {
@@ -172,7 +172,7 @@ function buildLiuNianText(chart: BaziChart): string {
 }
 
 export function generateAnalysis(chart: BaziChart): Record<string, string> {
-  const riWx = GAN_WUXING[chart.riZhu]
+  const riWx = GAN_WUXING[chart.riZhu]!
 
   // 1. 日主分析
   const riZhuText = `${chart.riZhu}属${riWx}，${chart.riZhuStrength}。${RIZHU_PERSONALITY[chart.riZhu] ?? ''}${WUXING_DESC[chart.riZhuStrength]?.[riWx] ?? ''}`

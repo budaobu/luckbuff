@@ -21,7 +21,7 @@ interface PredictionMeta {
 function parseFrontmatter(raw: string): Record<string, any> {
   const match = raw.match(/^---\n([\s\S]*?)\n---/)
   if (!match) return {}
-  const lines = match[1].split('\n')
+  const lines = match[1]!.split('\n')
   const result: Record<string, any> = {}
   for (const line of lines) {
     const idx = line.indexOf(':')

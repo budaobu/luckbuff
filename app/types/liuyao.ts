@@ -65,9 +65,16 @@ export interface LiuYaoResult {
   temporal_context?: TemporalContext
   temporal_summary?: string
   hexagram?: HexagramSummary
-  subject_home: string
-  subject_away: string
+  subject_home?: string
+  subject_away?: string
   analysis_brief?: string
+  seeking_context?: {
+    description?: string
+    lastSeenTime?: string
+    lastSeenPlace?: string
+    lostItemDesc?: string
+    relationship?: string
+  }
 }
 
 // ============================================================
