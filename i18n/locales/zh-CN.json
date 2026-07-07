@@ -750,7 +750,12 @@
     "ziweiHunpanDesc": "在 ososn 使用紫微合盘工具，在线排盘、智能解读，获取详细的命理分析与参考建议。",
     "ziweiHunpanKeywords": "紫微合盘,在线测算,命理,ososn",
     "ziweiHunpanOgTitle": "紫微合盘 - ososn 在线命理",
-    "ziweiHunpanOgDesc": "在 ososn 使用紫微合盘工具，在线排盘、智能解读，获取详细的命理分析与参考建议。"
+    "ziweiHunpanOgDesc": "在 ososn 使用紫微合盘工具，在线排盘、智能解读，获取详细的命理分析与参考建议。",
+    "baziFortuneTuneTitle": "八字改运指南_喜用神定制材质颜色佩戴建议",
+    "baziFortuneTuneDesc": "免费八字改运指南，基于日主强弱与喜用神推导适合你的材质、颜色、佩戴手位与时机，非缺什么补什么的简单计数。",
+    "baziFortuneTuneKeywords": "八字改运,喜用神,五行饰品,改运材质,佩戴手位,八字改运指南,运势提升,五行颜色",
+    "baziFortuneTuneOgTitle": "八字改运指南 - 基于喜用神的个性化建议",
+    "baziFortuneTuneOgDesc": "输入生辰，根据八字日主强弱与喜用神，获取材质、颜色、佩戴手位与时机的参考建议。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -4336,5 +4341,27 @@
     "drawFail": "draw失败",
     "checkInput": "check输入",
     "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
+  },
+  "baziFortuneTune": {
+    "title": "八字改运指南",
+    "subtitle": "基于日主强弱与喜用神，定制材质、颜色、佩戴手位与时机",
+    "calculating": "喜用神推演中...",
+    "resultTitle": "{name}的改运指南",
+    "resultTitleNoName": "改运指南",
+    "resultSubtitle": "日主{riZhu}（{strength}）{'|'} 喜用{xiyong}",
+    "logicTitle": "为什么这样建议",
+    "xiyongLabel": "喜用神：",
+    "jishenLabel": "忌神：",
+    "materialsTitle": "推荐材质",
+    "colorsTitle": "推荐颜色",
+    "handTitle": "佩戴手位",
+    "timingTitle": "佩戴时机",
+    "stylingTitle": "日常搭配提示",
+    "yearlyTitle": "逐年调整参考（可选）",
+    "directionEnhance": "宜加强",
+    "directionReduce": "宜收敛",
+    "directionStable": "保持",
+    "requestFailed": "改运指南请求失败",
+    "backTools": "返回工具列表"
   }
 }
