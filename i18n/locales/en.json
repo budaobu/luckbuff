@@ -750,7 +750,12 @@
     "ziweiHunpanDesc": "Use ososn Ziwei Compatibility tool for online charting and AI interpretation.",
     "ziweiHunpanKeywords": "Ziwei Compatibility,online divination,astrology,ososn",
     "ziweiHunpanOgTitle": "Ziwei Compatibility - ososn Online Astrology",
-    "ziweiHunpanOgDesc": "Use ososn Ziwei Compatibility tool for online charting and AI interpretation."
+    "ziweiHunpanOgDesc": "Use ososn Ziwei Compatibility tool for online charting and AI interpretation.",
+    "baziFortuneTuneTitle": "Bazi Fortune Tune Guide_Favorable Element Jewelry & Color Recommendations",
+    "baziFortuneTuneDesc": "Free Bazi fortune tune guide. Get personalized material, color, hand position and timing suggestions based on Day Master strength and favorable elements—not simple missing-element counting.",
+    "baziFortuneTuneKeywords": "Bazi fortune tune,favorable elements,five element jewelry,lucky material,wear hand position,Bazi guide,energy balance,five element colors",
+    "baziFortuneTuneOgTitle": "Bazi Fortune Tune Guide - Personalized by Favorable Elements",
+    "baziFortuneTuneOgDesc": "Enter your birth date to get material, color, hand position and timing suggestions based on your Bazi Day Master strength and favorable elements."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -4314,5 +4319,27 @@
     "drawFail": "Draw Fail",
     "checkInput": "Check Input",
     "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+  },
+  "baziFortuneTune": {
+    "title": "Bazi Fortune Tune",
+    "subtitle": "Get material, color, hand position and timing suggestions based on Day Master strength and favorable elements",
+    "calculating": "Analyzing favorable elements...",
+    "resultTitle": "{name}'s Fortune Tune Guide",
+    "resultTitleNoName": "Fortune Tune Guide",
+    "resultSubtitle": "Day Master {riZhu} ({strength}) {'|'} Favorable {xiyong}",
+    "logicTitle": "Why these recommendations",
+    "xiyongLabel": "Favorable: ",
+    "jishenLabel": "Unfavorable: ",
+    "materialsTitle": "Recommended Materials",
+    "colorsTitle": "Recommended Colors",
+    "handTitle": "Which Hand to Wear",
+    "timingTitle": "When to Wear",
+    "stylingTitle": "Daily Styling Tips",
+    "yearlyTitle": "Yearly Adjustments (Optional)",
+    "directionEnhance": "Enhance",
+    "directionReduce": "Reduce",
+    "directionStable": "Stable",
+    "requestFailed": "Failed to load fortune tune guide",
+    "backTools": "Back to Tools"
   }
 }
