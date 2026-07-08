@@ -123,11 +123,11 @@ const hasSections = computed(() => sections.value.length > 1)
 .ai-content :deep(p) {
   margin-bottom: 0.875em;
   line-height: 1.8;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 
 .ai-content :deep(strong) {
-  color: #f5e6c0;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -139,7 +139,7 @@ const hasSections = computed(() => sections.value.length > 1)
   margin-bottom: 0.75rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #c9a227;
+  color: var(--accent);
   letter-spacing: 0.05em;
 }
 
@@ -150,7 +150,7 @@ const hasSections = computed(() => sections.value.length > 1)
   top: 0.4rem;
   width: 0.5rem;
   height: 0.5rem;
-  background: #c9a227;
+  background: var(--accent);
   transform: rotate(45deg);
   border-radius: 1px;
   opacity: 0.8;
@@ -164,7 +164,7 @@ const hasSections = computed(() => sections.value.length > 1)
   margin-bottom: 0.5rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f5e6c0;
+  color: var(--text-primary);
 }
 
 .ai-content :deep(h3)::before {
@@ -174,7 +174,7 @@ const hasSections = computed(() => sections.value.length > 1)
   top: 0.55rem;
   width: 0.35rem;
   height: 0.35rem;
-  background: #c9a227;
+  background: var(--accent);
   border-radius: 50%;
   opacity: 0.7;
 }
@@ -184,15 +184,15 @@ const hasSections = computed(() => sections.value.length > 1)
   position: relative;
   margin: 1rem 0;
   padding: 1rem 1.25rem;
-  background: rgba(201, 162, 39, 0.05);
-  border-left: 2px solid rgba(201, 162, 39, 0.4);
+  background: var(--accent-bg);
+  border-left: 2px solid var(--accent-border);
   border-radius: 0 8px 8px 0;
   font-style: italic;
 }
 
 .ai-content :deep(blockquote p) {
   margin-bottom: 0;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 
 /* === 列表：自定义图标 === */
@@ -208,7 +208,7 @@ const hasSections = computed(() => sections.value.length > 1)
   padding-left: 1.25rem;
   margin-bottom: 0.5rem;
   line-height: 1.7;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 
 .ai-content :deep(ul li::before) {
@@ -216,7 +216,7 @@ const hasSections = computed(() => sections.value.length > 1)
   position: absolute;
   left: 0;
   top: -0.05rem;
-  color: #c9a227;
+  color: var(--accent);
   font-size: 1.1rem;
   font-weight: 700;
   opacity: 0.8;
@@ -236,7 +236,7 @@ const hasSections = computed(() => sections.value.length > 1)
   padding-left: 1.75rem;
   margin-bottom: 0.5rem;
   line-height: 1.7;
-  color: #e8e0d0;
+  color: var(--text-body);
 }
 
 .ai-content :deep(ol li::before) {
@@ -252,8 +252,8 @@ const hasSections = computed(() => sections.value.length > 1)
   justify-content: center;
   font-size: 0.65rem;
   font-weight: 700;
-  color: #1a1612;
-  background: #c9a227;
+  color: var(--surface-bg);
+  background: var(--accent);
   border-radius: 4px;
   opacity: 0.85;
 }
@@ -269,8 +269,8 @@ const hasSections = computed(() => sections.value.length > 1)
 }
 
 .ai-content :deep(code) {
-  background: rgba(201, 162, 39, 0.1);
-  color: #c9a227;
+  background: var(--accent-bg);
+  color: var(--accent);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
   font-size: 0.85em;
@@ -285,20 +285,20 @@ const hasSections = computed(() => sections.value.length > 1)
 .ai-content :deep(hr) {
   border: none;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(201, 162, 39, 0.2), transparent);
+  background: linear-gradient(to right, transparent, var(--accent-faint), transparent);
   margin: 1.5rem 0;
 }
 
 /* === 链接 === */
 .ai-content :deep(a) {
-  color: #c9a227;
+  color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px dashed rgba(201, 162, 39, 0.3);
+  border-bottom: 1px dashed var(--accent-border);
   transition: border-color 0.2s;
 }
 
 .ai-content :deep(a:hover) {
-  border-bottom-color: #c9a227;
+  border-bottom-color: var(--accent);
 }
 
 /* === 流式光标动画 === */

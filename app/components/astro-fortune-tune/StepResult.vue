@@ -60,9 +60,14 @@ const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
     </div>
 
     <!-- 计算口径说明 -->
-    <div class="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3 text-xs text-amber-200/80">
-      <UIcon name="i-heroicons-information-circle" class="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5" />
-      {{ result.methodNote }}
+    <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
+      <div class="flex items-start gap-3">
+        <UIcon name="i-heroicons-information-circle" class="w-4 h-4 text-[var(--accent-muted)] mt-0.5 shrink-0" />
+        <div>
+          <p class="text-xs font-medium text-[var(--text-muted)] mb-1">{{ $t('astroFortuneTune.methodNoteTitle') }}</p>
+          <p class="text-[11px] text-[var(--text-faint)] leading-relaxed">{{ result.methodNote }}</p>
+        </div>
+      </div>
     </div>
 
     <!-- 出生地 vs 候选城市摘要 -->
@@ -103,7 +108,7 @@ const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
           </div>
         </div>
       </div>
-      <div v-if="result.hasUnresolvedCities" class="text-[11px] text-amber-200/70">
+      <div v-if="result.hasUnresolvedCities" class="text-[11px] text-[var(--text-faint)]">
         {{ $t('astroFortuneTune.unresolvedCitiesHint') }}
       </div>
     </div>
@@ -128,7 +133,7 @@ const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
     <!-- fallback：流式中尚未形成 ## 标题，直接显示原始 markdown -->
     <div
       v-else-if="analysis"
-      class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 vedic-markdown text-[13px] leading-relaxed text-[var(--text-body)]/75"
+      class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 ai-content text-[13px] leading-relaxed text-[var(--text-body)]/75"
       v-html="rawHtml"
     />
 
@@ -172,19 +177,19 @@ const rawHtml = computed(() => marked.parse(props.analysis || '') as string)
 </template>
 
 <style scoped>
-.vedic-markdown :deep(h1),
-.vedic-markdown :deep(h2),
-.vedic-markdown :deep(h3) {
-  color: #f5e6c0;
+.ai-content :deep(h1),
+.ai-content :deep(h2),
+.ai-content :deep(h3) {
+  color: var(--text-primary);
   font-weight: 600;
   margin: 0.8em 0 0.3em;
   font-size: 0.95em;
 }
-.vedic-markdown :deep(p) {
+.ai-content :deep(p) {
   margin: 0.4em 0;
 }
-.vedic-markdown :deep(strong) {
-  color: #c9a227;
+.ai-content :deep(strong) {
+  color: var(--text-primary);
   font-weight: 600;
 }
 </style>

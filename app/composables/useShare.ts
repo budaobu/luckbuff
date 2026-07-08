@@ -51,6 +51,7 @@ export interface ShareOptions {
     | 'parenting-style'
     | 'child-activity-interest'
     | 'sbti'
+    | 'qizheng-siyu'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -123,6 +124,7 @@ export function useShare() {
       'parenting-style': '家庭教育风格测试',
       'child-activity-interest': '孩子活动兴趣测试',
       sbti: 'SBTI 沙雕人格测试',
+      'qizheng-siyu': '七政四余',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -268,6 +270,9 @@ export function useShare() {
       sbti: summary
         ? t('share.hookSbti', { summary })
         : t('share.hookSbtiDefault'),
+      'qizheng-siyu': summary
+        ? t('share.hookQizhengSiyu', { summary })
+        : t('share.hookQizhengSiyuDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href

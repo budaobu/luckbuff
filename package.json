@@ -17,6 +17,7 @@
     "@nuxtjs/color-mode": "^4.0.0",
     "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
     "@pinia/nuxt": "^0.11.3",
+    "celestine": "^0.2.1",
     "chart.js": "^4.4.8",
     "cnchar": "^3.2.6",
     "cnchar-trad": "^3.2.6",

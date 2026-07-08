@@ -34,6 +34,9 @@ importers:
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))
+      celestine:
+        specifier: ^0.2.1
+        version: 0.2.1
       chart.js:
         specifier: ^4.4.8
         version: 4.5.1
@@ -2885,6 +2888,10 @@ packages:
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
+
+  celestine@0.2.1:
+    resolution: {integrity: sha512-+AXIi4mPRTgK1n3TxUPf+UUiNyjeAmUR8FAKLb+ZQGN7O7vqv+vinFt/KzIKLg2DslMXJdLef2NeIsEL8zPhqA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   centra@2.7.0:
     resolution: {integrity: sha512-PbFMgMSrmgx6uxCdm57RUos9Tc3fclMvhLSATYN39XsDV29B89zZ3KA89jmY0vwSGazyU+uerqwa6t+KaodPcg==}
@@ -8521,6 +8528,8 @@ snapshots:
   caniuse-lite@1.0.30001790: {}
 
   caseless@0.12.0: {}
+
+  celestine@0.2.1: {}
 
   centra@2.7.0:
     dependencies:

@@ -36,7 +36,7 @@ defineEmits<{ toggle: [] }>()
 .vedic-markdown :deep(h1),
 .vedic-markdown :deep(h2),
 .vedic-markdown :deep(h3) {
-  color: #f5e6c0;
+  color: var(--text-primary);
   font-weight: 600;
   margin: 0.8em 0 0.3em;
   font-size: 0.95em;
@@ -45,7 +45,7 @@ defineEmits<{ toggle: [] }>()
   margin: 0.4em 0;
 }
 .vedic-markdown :deep(strong) {
-  color: #c9a227;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .vedic-markdown :deep(ul) {
