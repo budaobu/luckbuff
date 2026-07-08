@@ -1,4 +1,5 @@
 import type { BaziChart, WuxingScore } from '~/types/bazi'
+import type { BaziFortuneTuneReading } from '~/types/bazi-fortune-tune'
 import { GAN_WUXING, WUXING_SHENG, WUXING_KE, GAN_YANG } from '~/utils/bazi/constants'
 
 const WUXING_MATERIALS: Record<string, string[]> = {
@@ -105,9 +106,10 @@ function buildYearlyTips(chart: BaziChart): { year: number; ganZhi: string; wuxi
 
   for (let i = 0; i < 5; i++) {
     const year = startYear + i
-    const gan = ganCycle[(baseGanIdx + offset + i) % 10]
-    const zhi = zhiCycle[(baseZhiIdx + offset + i) % 12]
+    const gan = ganCycle[(baseGanIdx + offset + i) % 10]!
+    const zhi = zhiCycle[(baseZhiIdx + offset + i) % 12]!
     const yearWx = GAN_WUXING[gan]
+    if (!yearWx) continue
     let direction: 'enhance' | 'reduce' | 'stable' = 'stable'
     if (xiyongList.includes(yearWx)) direction = 'enhance'
     else if (jishenList.includes(yearWx)) direction = 'reduce'
@@ -152,7 +154,11 @@ export default defineEventHandler(async (event) => {
   }
 
   // 取最缺的五行用于解释（仅作说明，不影响建议主路径）
-  const minWuxing = Object.entries(chart.wuxingScore).sort((a, b) => a[1] - b[1])[0][0]
+  const wuxingEntries = Object.entries(chart.wuxingScore)
+  if (wuxingEntries.length === 0) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid chart: missing wuxingScore' })
+  }
+  const minWuxing = wuxingEntries.sort((a, b) => a[1] - b[1])[0]![0]
 
   const materials = [...new Set(xiyongList.flatMap(wx => WUXING_MATERIALS[wx] || []))].slice(0, 6)
   const colors = [...new Set(xiyongList.flatMap(wx => WUXING_COLORS[wx] || []))].slice(0, 5)
