@@ -521,7 +521,9 @@
     "hookSbti": "我刚完成 SBTI 沙雕人格测试：{summary}，快来看看你的人格代码！",
     "hookSbtiDefault": "我刚完成一次 SBTI 沙雕人格测试，测出了隐藏人格代码。",
     "hookQizhengSiyu": "我的七政四余命盘：{summary}",
-    "hookQizhengSiyuDefault": "我刚完成七政四余星命排盘，来看看上升星座与七政四余分布。"
+    "hookQizhengSiyuDefault": "我刚完成七政四余星命排盘，来看看上升星座与七政四余分布。",
+    "hookZiweiShiyeHepan": "我刚完成紫微事业合盘：{summary}，快来看看我俩合伙搞钱合不合拍！",
+    "hookZiweiShiyeHepanDefault": "我刚完成一次紫微事业合盘，看看合伙搞钱合不合拍。"
   },
   "seo": {
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
@@ -878,7 +880,12 @@
     "baziShiyeHepanDesc": "免费在线事业八字合盘，专为合伙人、创业搭档设计。输入双方生辰，分析事业相性、角色分工与合伙风险，结果仅供文化娱乐参考。",
     "baziShiyeHepanKeywords": "事业八字合盘,双人事业合盘,合伙人合盘分析,事业相性,合伙人八字,八字合伙,创业搭档合盘,事业合盘算命",
     "baziShiyeHepanOgTitle": "事业八字合盘_双人事业合盘算命_合伙人合盘分析",
-    "baziShiyeHepanOgDesc": "免费在线事业八字合盘，输入两位合伙人或创业搭档的生辰，从事业相性角度解读合作潜力、分工与风险。"
+    "baziShiyeHepanOgDesc": "免费在线事业八字合盘，输入两位合伙人或创业搭档的生辰，从事业相性角度解读合作潜力、分工与风险。",
+    "ziweiShiyeHepanTitle": "事业紫薇合盘_双人事业紫薇合盘_合伙人命理分析",
+    "ziweiShiyeHepanDesc": "免费在线事业紫薇合盘，专为合伙人、创业搭档设计。输入双方生辰，从紫微斗数事业宫、财帛宫、命宫等维度分析事业相性、角色分工与合伙风险，仅供文化娱乐参考。",
+    "ziweiShiyeHepanKeywords": "事业紫薇合盘,双人事业紫薇合盘,合伙人命理分析,紫薇看事业合伙,合伙人紫薇合盘,紫微斗数事业合盘,创业搭档合盘,事业合盘分析",
+    "ziweiShiyeHepanOgTitle": "事业紫薇合盘_双人事业紫薇合盘_合伙人命理分析",
+    "ziweiShiyeHepanOgDesc": "免费在线事业紫薇合盘，输入两位合伙人或创业搭档的生辰，从紫微斗数事业宫、财帛宫、命宫等维度解读合作潜力、分工与风险。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -5140,6 +5147,8 @@
     "knowledgeCard4Desc": "事业合盘提供合作参考，重大商业决策仍需合同、财务与信任机制兜底。",
     "title": "事业八字合盘",
     "subtitle": "输入两位合伙人的生辰信息，从事业相性角度解读合作潜力与风险。",
+    "toolDesc": "以紫微斗数双盘合参，分析合伙人、创业搭档的事业相性、角色分工与风险。",
+    "toolCta": "开始合盘",
     "personA": "合伙人A",
     "selectProfile": "选择档案",
     "genderLabel": "性别",
@@ -5165,5 +5174,44 @@
     "backToTools": "返回工具列表",
     "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
     "disclaimer": "本工具基于传统八字命理原理生成事业合伙参考，仅供文化娱乐与学习参考，不构成任何投资、合伙或专业商业建议。请理性看待，重大商业决策请结合现实情况独立判断。"
+  },
+  "ziweiShiyeHepan": {
+    "knowledgeCard1Title": "事业紫微合盘",
+    "knowledgeCard1Desc": "将两人紫微斗数命盘并列为事业视角，分析合作中的互补、摩擦与分工趋势。",
+    "knowledgeCard2Title": "命宫与事业宫",
+    "knowledgeCard2Desc": "双方命宫主星与事业宫星曜组合，决定谁更适合定战略、谁更适合冲执行。",
+    "knowledgeCard3Title": "财帛与迁移互补",
+    "knowledgeCard3Desc": "财帛宫看搞钱能力，迁移宫看外拓气场，互补则合伙更容易把蛋糕做大。",
+    "knowledgeCard4Title": "合伙参考建议",
+    "knowledgeCard4Desc": "事业紫微合盘提供合作参考，重大商业决策仍需合同、财务与信任机制兜底。",
+    "title": "事业紫微合盘",
+    "subtitle": "输入两位合伙人的生辰信息，从紫微斗数事业相性角度解读合作潜力与风险。",
+    "toolDesc": "以紫微斗数双盘合参，分析合伙人、创业搭档的事业相性、角色分工与风险。",
+    "toolCta": "开始合盘",
+    "personA": "合伙人A",
+    "selectProfile": "选择档案",
+    "genderLabel": "性别",
+    "birthDateLabel": "出生日期",
+    "birthDatePlaceholder": "请选择出生日期",
+    "birthHourLabel": "出生时辰",
+    "birthHourPlaceholder": "请选择出生时辰",
+    "nameLabel": "姓名",
+    "namePlaceholder": "请输入姓名",
+    "birthProvinceLabel": "出生省市",
+    "birthProvincePlaceholder": "请输入出生省市",
+    "personB": "合伙人B",
+    "submitBtn": "开始合盘",
+    "knowledgeTitle": "相关知识",
+    "calculating": "排盘中...",
+    "resultTitle": "事业紫微合盘结果",
+    "interpretation": "AI 合伙解读",
+    "interpreting": "解读中...",
+    "generatingInterpretation": "正在生成事业紫微合盘解读...",
+    "reinterpret": "重新解读",
+    "copyResult": "复制结果",
+    "recalculate": "重新测算",
+    "backToTools": "返回工具列表",
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
+    "disclaimer": "本工具基于紫微斗数传统命理原理生成事业合伙参考，仅供文化娱乐与学习参考，不构成任何投资、合伙或专业商业建议。请理性看待，重大商业决策请结合现实情况独立判断。"
   }
 }

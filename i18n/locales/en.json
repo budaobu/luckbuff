@@ -521,7 +521,9 @@
     "hookSbti": "I just completed the SBTI meme personality test: {summary}, check out your personality code!",
     "hookSbtiDefault": "I just completed the SBTI meme personality test and discovered my hidden personality code.",
     "hookQizhengSiyu": "My Qizheng Siyu chart: {summary}",
-    "hookQizhengSiyuDefault": "I just generated my Qizheng Siyu chart. Check out the ascendant and planetary distribution."
+    "hookQizhengSiyuDefault": "I just generated my Qizheng Siyu chart. Check out the ascendant and planetary distribution.",
+    "hookZiweiShiyeHepan": "I just completed a Career Ziwei Compatibility reading: {summary}. See if we make good business partners!",
+    "hookZiweiShiyeHepanDefault": "I just completed a Career Ziwei Compatibility reading to see if we'd make good business partners."
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
@@ -878,7 +880,12 @@
     "baziShiyeHepanDesc": "Free online career Bazi compatibility for business partners and co-founders. Enter both birth dates to analyze career synergy, role division, and partnership risks. For cultural entertainment only.",
     "baziShiyeHepanKeywords": "career bazi compatibility,business partner bazi,partnership chart analysis,career synergy,bazi for co-founders,business compatibility reading",
     "baziShiyeHepanOgTitle": "Career Bazi Compatibility_Partnership Chart Analysis_Business Partner Bazi",
-    "baziShiyeHepanOgDesc": "Free online career Bazi compatibility. Enter two partners' birth details to explore business synergy, roles, and risks from a Bazi perspective."
+    "baziShiyeHepanOgDesc": "Free online career Bazi compatibility. Enter two partners' birth details to explore business synergy, roles, and risks from a Bazi perspective.",
+    "ziweiShiyeHepanTitle": "Career Ziwei Compatibility_Dual Career Ziwei Chart_Business Partner Destiny Analysis",
+    "ziweiShiyeHepanDesc": "Free online career Ziwei Dou Shu compatibility for business partners and co-founders. Enter both birth dates to analyze career synergy, role division, and partnership risks from the Career, Wealth, and Life palaces. For cultural entertainment only.",
+    "ziweiShiyeHepanKeywords": "career ziwei compatibility,dual career ziwei chart,business partner destiny analysis,ziwei for business partnership,ziwei partnership chart,career palace compatibility,business partner ziwei",
+    "ziweiShiyeHepanOgTitle": "Career Ziwei Compatibility_Dual Career Ziwei Chart_Business Partner Destiny Analysis",
+    "ziweiShiyeHepanOgDesc": "Free online career Ziwei Dou Shu compatibility. Enter two partners' birth details to explore business synergy, roles, and risks from the Career, Wealth, and Life palaces."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -5118,6 +5125,8 @@
     "knowledgeCard4Desc": "The career compatibility chart offers reference only; major business decisions still need contracts, finances, and trust mechanisms.",
     "title": "Career Bazi Compatibility",
     "subtitle": "Enter two partners' birth details to explore business synergy and risks from a Bazi perspective.",
+    "toolDesc": "Compares two Bazi charts from a business lens to analyze complementarity, friction, and role division.",
+    "toolCta": "Start Compatibility",
     "personA": "Partner A",
     "selectProfile": "Select Profile",
     "genderLabel": "Gender",
@@ -5143,5 +5152,44 @@
     "backToTools": "Back to Tools",
     "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
     "disclaimer": "This tool generates business partnership references based on traditional Bazi principles for cultural and educational reference only. It is not investment, partnership, or professional business advice. Please view results rationally and make major commercial decisions based on real-world circumstances."
+  },
+  "ziweiShiyeHepan": {
+    "knowledgeCard1Title": "Career Ziwei Compatibility",
+    "knowledgeCard1Desc": "Compares two Ziwei Dou Shu charts from a business lens to analyze complementarity, friction, and role division.",
+    "knowledgeCard2Title": "Life & Career Palaces",
+    "knowledgeCard2Desc": "The Life palace stars set the strategic style; the Career palace stars show who is better at execution and ambition.",
+    "knowledgeCard3Title": "Wealth & Travel Palaces",
+    "knowledgeCard3Desc": "The Wealth palace shows money-making ability, while the Travel palace reflects outward expansion aura.",
+    "knowledgeCard4Title": "Partnership Guidance",
+    "knowledgeCard4Desc": "The career compatibility chart offers reference only; major business decisions still need contracts, finances, and trust mechanisms.",
+    "title": "Career Ziwei Compatibility",
+    "subtitle": "Enter two partners' birth details to explore business synergy and risks from a Ziwei Dou Shu perspective.",
+    "toolDesc": "Compares two Ziwei Dou Shu charts from a business lens to analyze complementarity, friction, and role division.",
+    "toolCta": "Start Compatibility",
+    "personA": "Partner A",
+    "selectProfile": "Select Profile",
+    "genderLabel": "Gender",
+    "birthDateLabel": "Birth Date",
+    "birthDatePlaceholder": "Select birth date",
+    "birthHourLabel": "Birth Hour",
+    "birthHourPlaceholder": "Select birth hour",
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter name",
+    "birthProvinceLabel": "Birth Province",
+    "birthProvincePlaceholder": "Enter birth province",
+    "personB": "Partner B",
+    "submitBtn": "Start Compatibility",
+    "knowledgeTitle": "Related Knowledge",
+    "calculating": "Calculating chart...",
+    "resultTitle": "Career Ziwei Compatibility Result",
+    "interpretation": "AI Partnership Reading",
+    "interpreting": "Interpreting...",
+    "generatingInterpretation": "Generating career Ziwei compatibility reading...",
+    "reinterpret": "Reinterpret",
+    "copyResult": "Copy Result",
+    "recalculate": "Recalculate",
+    "backToTools": "Back to Tools",
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "disclaimer": "This tool generates business partnership references based on traditional Ziwei Dou Shu principles for cultural and educational reference only. It is not investment, partnership, or professional business advice. Please view results rationally and make major commercial decisions based on real-world circumstances."
   }
 }

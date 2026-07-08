@@ -521,7 +521,9 @@
     "hookSbti": "我剛完成 SBTI 沙雕人格測試：{summary}，快來看看你的人格代碼！",
     "hookSbtiDefault": "我剛完成一次 SBTI 沙雕人格測試，測出了隱藏人格代碼。",
     "hookQizhengSiyu": "我的七政四餘命盤：{summary}",
-    "hookQizhengSiyuDefault": "我剛完成七政四餘星命排盤，來看看上升星座與七政四餘分布。"
+    "hookQizhengSiyuDefault": "我剛完成七政四餘星命排盤，來看看上升星座與七政四餘分布。",
+    "hookZiweiShiyeHepan": "我剛完成紫微事業合盤：{summary}，快來看看我俩合夥搞錢合不合拍！",
+    "hookZiweiShiyeHepanDefault": "我剛完成一次紫微事業合盤，看看合夥搞錢合不合拍。"
   },
   "seo": {
     "homeTitle": "在線命理排盤算命_紫微斗數·八字·吠陀占星·梅花易數",
@@ -878,7 +880,12 @@
     "baziShiyeHepanDesc": "免費在線事業八字合盤，專為合夥人、創業搭檔設計。輸入雙方生辰，分析事業相性、角色分工與合夥風險，結果僅供文化娛樂參考。",
     "baziShiyeHepanKeywords": "事業八字合盤,雙人事業合盤,合夥人合盤分析,事業相性,合夥人八字,八字合夥,創業搭檔合盤,事業合盤算命",
     "baziShiyeHepanOgTitle": "事業八字合盤_雙人事業合盤算命_合夥人合盤分析",
-    "baziShiyeHepanOgDesc": "免費在線事業八字合盤，輸入兩位合夥人或創業搭檔的生辰，從事業相性角度解讀合作潛力、分工與風險。"
+    "baziShiyeHepanOgDesc": "免費在線事業八字合盤，輸入兩位合夥人或創業搭檔的生辰，從事業相性角度解讀合作潛力、分工與風險。",
+    "ziweiShiyeHepanTitle": "事業紫薇合盤_雙人事業紫薇合盤_合夥人命理分析",
+    "ziweiShiyeHepanDesc": "免費在線事業紫薇合盤，專為合夥人、創業搭檔設計。輸入雙方生辰，從紫微斗數事業宮、財帛宮、命宮等維度分析事業相性、角色分工與合夥風險，僅供文化娛樂參考。",
+    "ziweiShiyeHepanKeywords": "事業紫薇合盤,雙人事業紫薇合盤,合夥人命理分析,紫薇看事業合夥,合夥人紫薇合盤,紫微斗數事業合盤,創業搭檔合盤,事業合盤分析",
+    "ziweiShiyeHepanOgTitle": "事業紫薇合盤_雙人事業紫薇合盤_合夥人命理分析",
+    "ziweiShiyeHepanOgDesc": "免費在線事業紫薇合盤，輸入兩位合夥人或創業搭檔的生辰，從紫微斗數事業宮、財帛宮、命宮等維度解讀合作潛力、分工與風險。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -5143,6 +5150,8 @@
     "knowledgeCard4Desc": "事業合盤提供合作參考，重大商業決策仍需合約、財務與信任機制兜底。",
     "title": "事業八字合盤",
     "subtitle": "輸入兩位合夥人的生辰信息，從事業相性角度解讀合作潛力與風險。",
+    "toolDesc": "以紫微斗數雙盤合參，分析合夥人、創業搭檔的事業相性、角色分工與風險。",
+    "toolCta": "開始合盤",
     "personA": "合夥人A",
     "selectProfile": "選擇檔案",
     "genderLabel": "性別",
@@ -5168,5 +5177,44 @@
     "backToTools": "返回工具列表",
     "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
     "disclaimer": "本工具基於傳統八字命理原理生成事業合夥參考，僅供文化娛樂與學習參考，不構成任何投資、合夥或專業商業建議。請理性看待，重大商業決策請結合現實情況獨立判斷。"
+  },
+  "ziweiShiyeHepan": {
+    "knowledgeCard1Title": "事業紫微合盤",
+    "knowledgeCard1Desc": "將兩人紫微斗數命盤並列為事業視角，分析合作中的互補、摩擦與分工趨勢。",
+    "knowledgeCard2Title": "命宮與事業宮",
+    "knowledgeCard2Desc": "雙方命宮主星與事業宮星曜組合，決定誰更適合定戰略、誰更適合衝執行。",
+    "knowledgeCard3Title": "財帛與遷移互補",
+    "knowledgeCard3Desc": "財帛宮看搞錢能力，遷移宮看外拓氣場，互補則合夥更容易把蛋糕做大。",
+    "knowledgeCard4Title": "合夥參考建議",
+    "knowledgeCard4Desc": "事業紫微合盤提供合作參考，重大商業決策仍需合約、財務與信任機制兜底。",
+    "title": "事業紫微合盤",
+    "subtitle": "輸入兩位合夥人的生辰信息，從紫微斗數事業相性角度解讀合作潛力與風險。",
+    "toolDesc": "以紫微斗數雙盤合參，分析合夥人、創業搭檔的事業相性、角色分工與風險。",
+    "toolCta": "開始合盤",
+    "personA": "合夥人A",
+    "selectProfile": "選擇檔案",
+    "genderLabel": "性別",
+    "birthDateLabel": "出生日期",
+    "birthDatePlaceholder": "請選擇出生日期",
+    "birthHourLabel": "出生時辰",
+    "birthHourPlaceholder": "請選擇出生時辰",
+    "nameLabel": "姓名",
+    "namePlaceholder": "請輸入姓名",
+    "birthProvinceLabel": "出生省市",
+    "birthProvincePlaceholder": "請輸入出生省市",
+    "personB": "合夥人B",
+    "submitBtn": "開始合盤",
+    "knowledgeTitle": "相關知識",
+    "calculating": "排盤中...",
+    "resultTitle": "事業紫微合盤結果",
+    "interpretation": "AI 合夥解讀",
+    "interpreting": "解讀中...",
+    "generatingInterpretation": "正在生成事業紫微合盤解讀...",
+    "reinterpret": "重新解讀",
+    "copyResult": "複製結果",
+    "recalculate": "重新測算",
+    "backToTools": "返回工具列表",
+    "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
+    "disclaimer": "本工具基於紫微斗數傳統命理原理生成事業合夥參考，僅供文化娛樂與學習參考，不構成任何投資、合夥或專業商業建議。請理性看待，重大商業決策請結合現實情況獨立判斷。"
   }
 }
