@@ -186,13 +186,13 @@
             </template>
             {{ $t('common.retry') }}
           </UButton>
-          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="navigateTo('/tools')">
+          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo('/tools') }">
             <template #leading>
               <UIcon name="i-heroicons-list-bullet" class="w-4 h-4" />
             </template>
             {{ $t('baziFortuneTune.backTools') }}
           </UButton>
-          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="navigateTo('/')">
+          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo('/') }">
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
             </template>
@@ -244,7 +244,12 @@ function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   lastFormValues.value = { ...values }
 
-  const [year, month, day] = values.birthDate.split('-').map(Number)
+  const [yearStr, monthStr, dayStr] = values.birthDate.split('-')
+  if (!yearStr || !monthStr || !dayStr) return
+  const year = Number(yearStr)
+  const month = Number(monthStr)
+  const day = Number(dayStr)
+  if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) return
 
   chart.value = calc(year, month, day, values.birthHour ?? null, values.gender)
   phase.value = 'animating'
