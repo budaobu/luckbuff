@@ -224,7 +224,10 @@
     "toolZibaifeixingTitle": "Zi Bai Fei Xing",
     "toolZibaifeixingDesc": "Analyze the yearly auspicious and inauspicious directions of a space using Zi Bai flying stars.",
     "toolLuckyPlantTitle": "Lucky Plant",
-    "toolLuckyPlantDesc": "Get lucky plant recommendations based on your birth season and five-element balance."
+    "toolLuckyPlantDesc": "Get lucky plant recommendations based on your birth season and five-element balance.",
+    "toolQizhengSiyuTitle": "Qizheng Siyu",
+    "toolQizhengSiyuDesc": "Calculate the Seven Governors and Four Remainders from real astronomical positions and explore life themes and self-adjustment guidance.",
+    "toolQizhengSiyuCta": "Generate Chart"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -516,7 +519,9 @@
     "hookChildActivityInterest": "I just completed a Child Activity Interest test: {summary}, see what activities engage her most!",
     "hookChildActivityInterestDefault": "I just completed a Child Activity Interest test and discovered the daily activity types that engage her most.",
     "hookSbti": "I just completed the SBTI meme personality test: {summary}, check out your personality code!",
-    "hookSbtiDefault": "I just completed the SBTI meme personality test and discovered my hidden personality code."
+    "hookSbtiDefault": "I just completed the SBTI meme personality test and discovered my hidden personality code.",
+    "hookQizhengSiyu": "My Qizheng Siyu chart: {summary}",
+    "hookQizhengSiyuDefault": "I just generated my Qizheng Siyu chart. Check out the ascendant and planetary distribution."
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
@@ -863,7 +868,12 @@
     "astroFortuneTuneDesc": "Free astro fortune tune tool: enter your birth city and 1-3 candidate cities. We recalculate sidereal chart angles for each location using Swiss Ephemeris and Lahiri ayanamsha, then compare ascendant and major aspect shifts to give relocation guidance.",
     "astroFortuneTuneKeywords": "astro fortune tune,relocation astrology,move city astrology,ascendant change,city comparison,astrocartography,choose city by astrology,ososn",
     "astroFortuneTuneOgTitle": "Astro Fortune Tune - Birth City vs Candidate Cities",
-    "astroFortuneTuneOgDesc": "Enter your birth city and candidate cities to compare ascendant and major aspect changes, and get relocation guidance."
+    "astroFortuneTuneOgDesc": "Enter your birth city and candidate cities to compare ascendant and major aspect changes, and get relocation guidance.",
+    "qizhengSiyuTitle": "Qizheng Siyu Astrology_Chinese Horoscope Chart Online Reading",
+    "qizhengSiyuDesc": "Free online Qizheng Siyu chart calculator. Enter birth date, time and place to compute the Seven Governors and Four Remainders positions and receive an AI-generated interpretation.",
+    "qizhengSiyuKeywords": "Qizheng Siyu,Seven Governors Four Remainders,Chinese astrology,horoscope chart,online chart,birth chart interpretation",
+    "qizhengSiyuOgTitle": "Qizheng Siyu Astrology - Chinese Horoscope Chart Reading",
+    "qizhengSiyuOgDesc": "Enter your birth details to get a Qizheng Siyu chart with planetary positions and AI interpretation."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -5038,6 +5048,7 @@
     "baseAscendant": "Birth Ascendant",
     "candidateLabel": "Candidate {index}",
     "unresolvedCitiesHint": "Some cities could not be resolved; their results fall back to the birth chart. Please check the city names.",
+    "methodNoteTitle": "Calculation Note",
     "streaming": "AI is generating relocation guidance...",
     "disclaimer": "Astro fortune tune results are based on statistical patterns of birth time, location and relocated chart differences. They reflect probabilistic tendencies, not deterministic predictions. Life direction is shaped by personal choices; this guidance is for reference only.",
     "restart": "Start over",
@@ -5051,5 +5062,44 @@
     "knowledgeCard3Desc": "After relocation, major aspects (conjunction, sextile, square, trine, opposition) may tighten or loosen, suggesting which life themes are amplified or softened in the new location.",
     "knowledgeCard4Title": "For reference only",
     "knowledgeCard4Desc": "Astrological relocation is just one reference dimension. City choice should also consider career, family, healthcare, cost of living and other practical factors."
+  },
+  "qizhengSiyu": {
+    "title": "Qizheng Siyu",
+    "subtitle": "Enter birth time and place to cast the Seven Governors and Four Remainders chart from real astronomical positions",
+    "calculating": "Calculating Qizheng Siyu chart...",
+    "resultTitle": "Qizheng Siyu Chart",
+    "resultSubtitle": "Seven Governors and Four Remainders distribution computed with the celestine ephemeris",
+    "selectProfile": "Select a profile to auto-fill",
+    "baseCityLabel": "Birth / Current City",
+    "baseCityPlaceholder": "e.g. Beijing, Shanghai, Taipei, New York",
+    "saveToProfile": "Save to current profile",
+    "submit": "Generate Chart",
+    "ascendant": "Ascendant",
+    "midheaven": "Midheaven",
+    "housesTitle": "Twelve Houses",
+    "houseSuffix": "House",
+    "planetsTitle": "Seven Governors",
+    "tableBody": "Body",
+    "tableSign": "Sign",
+    "tableHouse": "House",
+    "tableState": "State",
+    "remaindersTitle": "Four Remainders",
+    "retrograde": "Retrograde",
+    "direct": "Direct",
+    "aspectsTitle": "Major Aspects",
+    "methodNoteTitle": "Calculation Note",
+    "analysisTitle": "AI Chart Interpretation",
+    "streaming": "AI is generating interpretation...",
+    "disclaimer": "Qizheng Siyu interpretations are based on astronomical positions at birth and astrological symbolism. They reflect thematic tendencies, not deterministic predictions. Life direction is shaped by personal choice; this guidance is for reference only.",
+    "restart": "Start over",
+    "shareTitle": "Qizheng Siyu Chart Result",
+    "knowledgeCard1Title": "What is Qizheng Siyu",
+    "knowledgeCard1Desc": "Qizheng Siyu observes the Seven Governors (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn) plus the Four Remainders (Rahu, Ketu, Lilith, Perigee) to map the natal chart structure.",
+    "knowledgeCard2Title": "What are the Four Remainders",
+    "knowledgeCard2Desc": "Rahu and Ketu are the lunar nodes, Lilith is the mean lunar apogee, and the Perigee point is its opposite, adding hidden themes and life lessons.",
+    "knowledgeCard3Title": "How to read the houses",
+    "knowledgeCard3Desc": "This tool uses Whole Sign houses: the ascendant sign becomes the first house, and the twelve houses follow in zodiacal order.",
+    "knowledgeCard4Title": "For reference only",
+    "knowledgeCard4Desc": "Chart readings provide tendency and theme references; they should not replace personal judgment, professional advice, or real-world decisions."
   }
 }

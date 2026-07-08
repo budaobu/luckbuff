@@ -224,7 +224,10 @@
     "toolZibaifeixingTitle": "紫白飞星",
     "toolZibaifeixingDesc": "根据流年紫白飞星，分析居家或办公空间的吉凶方位与布局建议。",
     "toolLuckyPlantTitle": "幸运植物",
-    "toolLuckyPlantDesc": "根据出生季节与八字五行喜忌，推荐适合你的幸运植物与摆放建议。"
+    "toolLuckyPlantDesc": "根据出生季节与八字五行喜忌，推荐适合你的幸运植物与摆放建议。",
+    "toolQizhengSiyuTitle": "七政四余",
+    "toolQizhengSiyuDesc": "以真实天文位置排布七政四余，解读性格底色、人生主题与自我调适方向。",
+    "toolQizhengSiyuCta": "立即排盘"
   },
   "prophet": {
     "title": "赛事预测",
@@ -516,7 +519,9 @@
     "hookChildActivityInterest": "我刚完成孩子活动兴趣测试：{summary}，快来看看她做什么最投入！",
     "hookChildActivityInterestDefault": "我刚完成一次孩子活动兴趣测试，发现了她更容易投入的日常活动类型。",
     "hookSbti": "我刚完成 SBTI 沙雕人格测试：{summary}，快来看看你的人格代码！",
-    "hookSbtiDefault": "我刚完成一次 SBTI 沙雕人格测试，测出了隐藏人格代码。"
+    "hookSbtiDefault": "我刚完成一次 SBTI 沙雕人格测试，测出了隐藏人格代码。",
+    "hookQizhengSiyu": "我的七政四余命盘：{summary}",
+    "hookQizhengSiyuDefault": "我刚完成七政四余星命排盘，来看看上升星座与七政四余分布。"
   },
   "seo": {
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
@@ -863,7 +868,12 @@
     "astroFortuneTuneDesc": "免费占星改运工具，输入出生地与1-3个候选城市，基于瑞士星历与Lahiri岁差重新计算各城市上升星座与主要相位差异，给出迁居/择地参考建议。",
     "astroFortuneTuneKeywords": "占星改运,迁居择地,出生地与候选城市星盘对比,占星选城市,上升星座变化,占星择地,搬迁运势,astrocartography",
     "astroFortuneTuneOgTitle": "占星改运 - 出生地与候选城市星盘对比",
-    "astroFortuneTuneOgDesc": "输入出生地与候选城市，比较各城市上升星座与主要相位变化，获取迁居/择地的参考建议。"
+    "astroFortuneTuneOgDesc": "输入出生地与候选城市，比较各城市上升星座与主要相位变化，获取迁居/择地的参考建议。",
+    "qizhengSiyuTitle": "七政四余算命_星命排盘_七政四余在线排盘解析",
+    "qizhengSiyuDesc": "免费七政四余在线排盘，输入出生年月日时辰与出生地，计算日、月、水、金、火、木、土七政与罗睺、计都、月孛、紫炁四余位置，获取 AI 生成的星命解读。",
+    "qizhengSiyuKeywords": "七政四余,七政四余排盘,七政四余算命,星命排盘,在线排盘,七政四余解析,果老星宗,命宫,上升星座",
+    "qizhengSiyuOgTitle": "七政四余算命 - 星命排盘与在线解析",
+    "qizhengSiyuOgDesc": "输入生辰与出生地，按七政四余排盘获取七政四余落宫、相位与 AI 解读。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -5060,6 +5070,7 @@
     "baseAscendant": "出生地上升",
     "candidateLabel": "候选 {index}",
     "unresolvedCitiesHint": "部分城市未解析成功，结果中已用出生地星盘占位，请检查城市名称。",
+    "methodNoteTitle": "计算口径说明",
     "streaming": "AI 正在生成改运建议...",
     "disclaimer": "占星改运结果基于出生时间、地点的统计性规律与 relocated 星盘差异，反映概率倾向，不代表确定性预言。人生走向受主观选择影响，建议仅供参考。",
     "restart": "重新填写",
@@ -5073,5 +5084,44 @@
     "knowledgeCard3Desc": " relocated 后，行星之间的主要相位（合、六合、刑、拱、冲）可能变紧或变松，暗示某些人生主题在新环境中被放大或缓和。",
     "knowledgeCard4Title": "结果仅供参考",
     "knowledgeCard4Desc": "占星择地是众多参考维度之一，城市选择还应结合实际工作、家庭、医疗、生活成本等综合决策，不建议单凭星盘搬迁。"
+  },
+  "qizhengSiyu": {
+    "title": "七政四余",
+    "subtitle": "输入出生时间、地点，按真实天文位置排布七政四余，解读星命结构",
+    "calculating": "七政四余排盘中...",
+    "resultTitle": "七政四余命盘",
+    "resultSubtitle": "基于 celestine 天文算法计算的七政四余分布",
+    "selectProfile": "选择档案快速填充",
+    "baseCityLabel": "出生/现居城市",
+    "baseCityPlaceholder": "如：北京、上海、台北、New York",
+    "saveToProfile": "保存到当前档案",
+    "submit": "开始排盘",
+    "ascendant": "上升",
+    "midheaven": "天顶",
+    "housesTitle": "十二宫位",
+    "houseSuffix": "宫",
+    "planetsTitle": "七政",
+    "tableBody": "星体",
+    "tableSign": "星座",
+    "tableHouse": "宫位",
+    "tableState": "状态",
+    "remaindersTitle": "四余",
+    "retrograde": "逆行",
+    "direct": "顺行",
+    "aspectsTitle": "主要相位",
+    "methodNoteTitle": "计算口径说明",
+    "analysisTitle": "AI 星命解读",
+    "streaming": "AI 正在生成解读...",
+    "disclaimer": "七政四余解读基于出生时间、地点的天文位置与占星象征体系，反映概率倾向与主题分布，不代表确定性预言。人生走向受主观选择影响，建议仅供参考。",
+    "restart": "重新填写",
+    "shareTitle": "七政四余命盘结果",
+    "knowledgeCard1Title": "什么是七政四余",
+    "knowledgeCard1Desc": "七政四余以日、月、水、金、火、木、土七颗真实星体，加上罗睺、计都、月孛、紫炁四个虚点，观察本命星盘结构。",
+    "knowledgeCard2Title": "四余是什么",
+    "knowledgeCard2Desc": "罗睺、计都为月球南北交点，月孛为平均月球远地点，紫炁为其对宫点，用以补充命运暗线与人生课题。",
+    "knowledgeCard3Title": "宫位怎么看",
+    "knowledgeCard3Desc": "本工具采用整宫制，以上升星座为第一宫，依次排布十二宫位，观察各领域的人生主题。",
+    "knowledgeCard4Title": "结果仅供参考",
+    "knowledgeCard4Desc": "星盘解读提供的是倾向与主题参考，不应替代个人判断、专业咨询或现实决策。"
   }
 }
