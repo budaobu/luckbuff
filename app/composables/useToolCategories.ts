@@ -93,6 +93,20 @@ const toolCategories: ToolCategory[] = [
     sectionPath: '/shuangren-hepan',
     tools: [
       {
+        icon: 'i-heroicons-briefcase',
+        titleKey: 'baziShiyeHepan.title',
+        descKey: 'baziShiyeHepan.toolDesc',
+        ctaKey: 'baziShiyeHepan.toolCta',
+        path: '/tools/bazi-shiye-hepan',
+      },
+      {
+        icon: 'i-heroicons-briefcase',
+        titleKey: 'ziweiShiyeHepan.title',
+        descKey: 'ziweiShiyeHepan.toolDesc',
+        ctaKey: 'ziweiShiyeHepan.toolCta',
+        path: '/tools/ziwei-shiye-hepan',
+      },
+      {
         icon: 'i-heroicons-heart',
         titleKey: 'home.toolBaziHunpanTitle',
         descKey: 'home.toolBaziHunpanDesc',
