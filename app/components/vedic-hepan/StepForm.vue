@@ -6,6 +6,7 @@ import { SHICHEN_OPTIONS } from '~/types/user'
 interface Props {
   modelValue: VedicHepanFormData
   errorMsg?: string
+  submitLabel?: string
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{
@@ -276,7 +277,7 @@ const selectUi = {
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </template>
-      {{ $t('vedicHepan.submitBtn') }}
+      {{ submitLabel || $t('vedicHepan.submitBtn') }}
     </UButton>
   </div>
 </template>

@@ -54,6 +54,32 @@
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
+        <!-- 星盘事业合盘 -->
+        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
+          <div class="p-8 flex flex-col flex-1">
+            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <UIcon name="i-heroicons-briefcase" class="w-7 h-7" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('vedicHepanCareer.title') }}</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
+              {{ $t('vedicHepanCareer.subtitle') }}
+            </p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="md"
+              :to="localePath('/tools/vedic-hepan-career')"
+              class="group/btn w-full justify-center mt-4"
+            >
+              {{ $t('vedicHepanCareer.submitBtn') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
         <!-- 事业八字合盘 -->
         <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="p-8 flex flex-col flex-1">
@@ -271,11 +297,12 @@ useHead(() => ({
           '@type': 'ItemList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: t('vedicHepan.title'), url: 'https://www.ososn.com/tools/vedic-hepan' },
-            { '@type': 'ListItem', position: 2, name: t('baziShiyeHepan.title'), url: 'https://www.ososn.com/tools/bazi-shiye-hepan' },
-            { '@type': 'ListItem', position: 3, name: t('ziweiShiyeHepan.title'), url: 'https://www.ososn.com/tools/ziwei-shiye-hepan' },
-            { '@type': 'ListItem', position: 4, name: t('home.toolBaziHunpanTitle'), url: 'https://www.ososn.com/tools/bazi-hunpan' },
-            { '@type': 'ListItem', position: 5, name: t('ziweiHunpan.title'), url: 'https://www.ososn.com/tools/ziwei-hunpan' },
-            { '@type': 'ListItem', position: 6, name: t('home.toolShengxiaoPeiduiTitle'), url: 'https://www.ososn.com/tools/shengxiao-peidui' },
+            { '@type': 'ListItem', position: 2, name: t('vedicHepanCareer.title'), url: 'https://www.ososn.com/tools/vedic-hepan-career' },
+            { '@type': 'ListItem', position: 3, name: t('baziShiyeHepan.title'), url: 'https://www.ososn.com/tools/bazi-shiye-hepan' },
+            { '@type': 'ListItem', position: 4, name: t('ziweiShiyeHepan.title'), url: 'https://www.ososn.com/tools/ziwei-shiye-hepan' },
+            { '@type': 'ListItem', position: 5, name: t('home.toolBaziHunpanTitle'), url: 'https://www.ososn.com/tools/bazi-hunpan' },
+            { '@type': 'ListItem', position: 6, name: t('ziweiHunpan.title'), url: 'https://www.ososn.com/tools/ziwei-hunpan' },
+            { '@type': 'ListItem', position: 7, name: t('home.toolShengxiaoPeiduiTitle'), url: 'https://www.ososn.com/tools/shengxiao-peidui' },
           ],
         },
       }),
