@@ -523,7 +523,11 @@
     "hookQizhengSiyu": "我的七政四余命盘：{summary}",
     "hookQizhengSiyuDefault": "我刚完成七政四余星命排盘，来看看上升星座与七政四余分布。",
     "hookZiweiShiyeHepan": "我刚完成紫微事业合盘：{summary}，快来看看我俩合伙搞钱合不合拍！",
-    "hookZiweiShiyeHepanDefault": "我刚完成一次紫微事业合盘，看看合伙搞钱合不合拍。"
+    "hookZiweiShiyeHepanDefault": "我刚完成一次紫微事业合盘，看看合伙搞钱合不合拍。",
+    "hookBaziShiyeHepan": "我刚完成事业八字合盘：{summary}，快来看看我俩合伙搞钱合不合拍！",
+    "hookBaziShiyeHepanDefault": "我刚完成一次事业八字合盘，看看合伙搞钱合不合拍。",
+    "hookVedicHepan": "星盘合婚：{summary}，快来看看我俩的星盘配不配！",
+    "hookVedicHepanDefault": "我刚完成一次星盘合婚，AI 解读了我俩的缘分基调与潜在雷区。"
   },
   "seo": {
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
@@ -885,7 +889,12 @@
     "ziweiShiyeHepanDesc": "免费在线事业紫薇合盘，专为合伙人、创业搭档设计。输入双方生辰，从紫微斗数事业宫、财帛宫、命宫等维度分析事业相性、角色分工与合伙风险，仅供文化娱乐参考。",
     "ziweiShiyeHepanKeywords": "事业紫薇合盘,双人事业紫薇合盘,合伙人命理分析,紫薇看事业合伙,合伙人紫薇合盘,紫微斗数事业合盘,创业搭档合盘,事业合盘分析",
     "ziweiShiyeHepanOgTitle": "事业紫薇合盘_双人事业紫薇合盘_合伙人命理分析",
-    "ziweiShiyeHepanOgDesc": "免费在线事业紫薇合盘，输入两位合伙人或创业搭档的生辰，从紫微斗数事业宫、财帛宫、命宫等维度解读合作潜力、分工与风险。"
+    "ziweiShiyeHepanOgDesc": "免费在线事业紫薇合盘，输入两位合伙人或创业搭档的生辰，从紫微斗数事业宫、财帛宫、命宫等维度解读合作潜力、分工与风险。",
+    "vedicHepanTitle": "星盘合婚配对_情侣星盘合盘分析",
+    "vedicHepanDesc": "免费在线星盘合婚配对，输入情侣双方出生时间地点，基于吠陀占星 Swiss Ephemeris 计算双人本命盘、跨盘相位与宫位叠加，AI 解读缘分基调、性格化学反应、情感相处模式与潜在雷区，仅供文化娱乐参考。",
+    "vedicHepanKeywords": "星盘合婚,情侣星盘合盘,星盘配对,吠陀占星合盘,双人星盘分析,星座合婚,相位合盘,宫位叠加,ososn",
+    "vedicHepanOgTitle": "星盘合婚配对_情侣星盘合盘分析",
+    "vedicHepanOgDesc": "输入情侣双方出生信息，基于吠陀占星计算双人星盘、跨盘相位与宫位叠加，生成五张卡片式 AI 合婚解读。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -5213,5 +5222,46 @@
     "backToTools": "返回工具列表",
     "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
     "disclaimer": "本工具基于紫微斗数传统命理原理生成事业合伙参考，仅供文化娱乐与学习参考，不构成任何投资、合伙或专业商业建议。请理性看待，重大商业决策请结合现实情况独立判断。"
+  },
+  "vedicHepan": {
+    "title": "星盘合婚",
+    "subtitle": "输入情侣双方出生时间地点，基于吠陀占星计算双人星盘、相位与宫位叠加，生成 AI 合婚解读",
+    "selectProfile": "选择档案快速填充",
+    "personA": "甲方",
+    "personB": "乙方",
+    "nameLabel": "姓名",
+    "namePlaceholder": "请输入姓名（选填）",
+    "genderLabel": "性别",
+    "birthDateLabel": "出生日期",
+    "birthTimeLabel": "出生时间",
+    "birthCityLabel": "出生城市",
+    "birthCityPlaceholder": "如：北京、上海、New York",
+    "timeUncertain": "出生时间不确定",
+    "submitBtn": "开始星盘合婚",
+    "calculating": "星盘合婚计算中...",
+    "resultLabel": "Result",
+    "resultTitle": "星盘合婚结果",
+    "ascendantComparison": "上升星座对比",
+    "aspectsTitle": "主要跨盘相位",
+    "noAspects": "无显著跨盘相位。",
+    "aPlanetsInB": "{a} 的行星落在 {b} 的宫位",
+    "bPlanetsInA": "{b} 的行星落在 {a} 的宫位",
+    "houseLabel": "第 {n} 宫",
+    "interpretation": "AI 合婚解读",
+    "interpreting": "解读中...",
+    "generatingInterpretation": "正在生成合婚解读...",
+    "reinterpret": "重新解读",
+    "recalculate": "重新测算",
+    "untitledSection": "合婚解读",
+    "shareTitle": "星盘合婚结果",
+    "disclaimer": "本工具基于吠陀占星象征体系与 AI 生成双人合婚参考，仅供文化娱乐与学习参考，不构成任何专业心理、婚姻咨询或命理建议。请理性看待。",
+    "knowledgeCard1Title": "什么是星盘合婚",
+    "knowledgeCard1Desc": "星盘合婚通过对比两人本命盘的上升星座、行星宫位、跨盘相位与宫位叠加，观察双方在关系中的互补与张力。",
+    "knowledgeCard2Title": "跨盘相位看什么",
+    "knowledgeCard2Desc": "合相、六合、刑克、拱相、冲相等主要相位，揭示两人在沟通、情感、行动力与价值观上的互动模式。",
+    "knowledgeCard3Title": "宫位叠加的意义",
+    "knowledgeCard3Desc": "一方的行星落在另一方的重要宫位（如第1宫、第7宫、第10宫），说明这段关系在自我认知、伴侣关系、事业发展等层面的具体影响。",
+    "knowledgeCard4Title": "结果仅供参考",
+    "knowledgeCard4Desc": "星盘合婚提供关系倾向与互动主题参考，感情经营仍需双方用心沟通与共同成长。"
   }
 }
