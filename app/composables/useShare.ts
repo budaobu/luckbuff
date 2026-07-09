@@ -53,6 +53,8 @@ export interface ShareOptions {
     | 'sbti'
     | 'qizheng-siyu'
     | 'ziwei-shiye-hepan'
+    | 'bazi-shiye-hepan'
+    | 'vedic-hepan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -127,6 +129,8 @@ export function useShare() {
       sbti: 'SBTI 沙雕人格测试',
       'qizheng-siyu': '七政四余',
       'ziwei-shiye-hepan': '紫微事业合盘',
+      'bazi-shiye-hepan': '事业八字合盘',
+      'vedic-hepan': '星盘合婚',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -278,6 +282,12 @@ export function useShare() {
       'ziwei-shiye-hepan': summary
         ? t('share.hookZiweiShiyeHepan', { summary })
         : t('share.hookZiweiShiyeHepanDefault'),
+      'bazi-shiye-hepan': summary
+        ? t('share.hookBaziShiyeHepan', { summary })
+        : t('share.hookBaziShiyeHepanDefault'),
+      'vedic-hepan': summary
+        ? t('share.hookVedicHepan', { summary })
+        : t('share.hookVedicHepanDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href

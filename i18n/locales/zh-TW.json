@@ -523,7 +523,11 @@
     "hookQizhengSiyu": "我的七政四餘命盤：{summary}",
     "hookQizhengSiyuDefault": "我剛完成七政四餘星命排盤，來看看上升星座與七政四餘分布。",
     "hookZiweiShiyeHepan": "我剛完成紫微事業合盤：{summary}，快來看看我俩合夥搞錢合不合拍！",
-    "hookZiweiShiyeHepanDefault": "我剛完成一次紫微事業合盤，看看合夥搞錢合不合拍。"
+    "hookZiweiShiyeHepanDefault": "我剛完成一次紫微事業合盤，看看合夥搞錢合不合拍。",
+    "hookVedicHepan": "星盤合婚：{summary}，快來看看我倆的星盤配不配！",
+    "hookVedicHepanDefault": "我剛完成一次星盤合婚，AI 解讀了我倆的緣分基調與潛在雷區。",
+    "hookBaziShiyeHepan": "我剛完成事業八字合盤：{summary}，快來看看我倆合夥搞錢合不合拍！",
+    "hookBaziShiyeHepanDefault": "我剛完成一次事業八字合盤，看看合夥搞錢合不合拍。"
   },
   "seo": {
     "homeTitle": "在線命理排盤算命_紫微斗數·八字·吠陀占星·梅花易數",
@@ -885,7 +889,12 @@
     "ziweiShiyeHepanDesc": "免費在線事業紫薇合盤，專為合夥人、創業搭檔設計。輸入雙方生辰，從紫微斗數事業宮、財帛宮、命宮等維度分析事業相性、角色分工與合夥風險，僅供文化娛樂參考。",
     "ziweiShiyeHepanKeywords": "事業紫薇合盤,雙人事業紫薇合盤,合夥人命理分析,紫薇看事業合夥,合夥人紫薇合盤,紫微斗數事業合盤,創業搭檔合盤,事業合盤分析",
     "ziweiShiyeHepanOgTitle": "事業紫薇合盤_雙人事業紫薇合盤_合夥人命理分析",
-    "ziweiShiyeHepanOgDesc": "免費在線事業紫薇合盤，輸入兩位合夥人或創業搭檔的生辰，從紫微斗數事業宮、財帛宮、命宮等維度解讀合作潛力、分工與風險。"
+    "ziweiShiyeHepanOgDesc": "免費在線事業紫薇合盤，輸入兩位合夥人或創業搭檔的生辰，從紫微斗數事業宮、財帛宮、命宮等維度解讀合作潛力、分工與風險。",
+    "vedicHepanTitle": "星盤合婚配對_情侶星盤合盤分析",
+    "vedicHepanDesc": "免費在線星盤合婚配對，輸入情侶雙方出生時間地點，基於吠陀占星 Swiss Ephemeris 計算雙人本命盤、跨盤相位與宮位疊加，AI 解讀緣分基調、性格化學反應、情感相處模式與潛在雷區，僅供文化娛樂參考。",
+    "vedicHepanKeywords": "星盤合婚,情侶星盤合盤,星盤配對,吠陀占星合盤,雙人星盤分析,星座合婚,相位合盤,宮位疊加,ososn",
+    "vedicHepanOgTitle": "星盤合婚配對_情侶星盤合盤分析",
+    "vedicHepanOgDesc": "輸入情侶雙方出生信息，基於吠陀占星計算雙人星盤、跨盤相位與宮位疊加，生成五張卡片式 AI 合婚解讀。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -5216,5 +5225,46 @@
     "backToTools": "返回工具列表",
     "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
     "disclaimer": "本工具基於紫微斗數傳統命理原理生成事業合夥參考，僅供文化娛樂與學習參考，不構成任何投資、合夥或專業商業建議。請理性看待，重大商業決策請結合現實情況獨立判斷。"
+  },
+  "vedicHepan": {
+    "title": "星盤合婚",
+    "subtitle": "輸入情侶雙方出生時間地點，基於吠陀占星計算雙人星盤、相位與宮位疊加，生成 AI 合婚解讀",
+    "selectProfile": "選擇檔案快速填充",
+    "personA": "甲方",
+    "personB": "乙方",
+    "nameLabel": "姓名",
+    "namePlaceholder": "請輸入姓名（選填）",
+    "genderLabel": "性別",
+    "birthDateLabel": "出生日期",
+    "birthTimeLabel": "出生時間",
+    "birthCityLabel": "出生城市",
+    "birthCityPlaceholder": "如：北京、上海、New York",
+    "timeUncertain": "出生時間不確定",
+    "submitBtn": "開始星盤合婚",
+    "calculating": "星盤合婚計算中...",
+    "resultLabel": "Result",
+    "resultTitle": "星盤合婚結果",
+    "ascendantComparison": "上升星座對比",
+    "aspectsTitle": "主要跨盤相位",
+    "noAspects": "無顯著跨盤相位。",
+    "aPlanetsInB": "{a} 的行星落在 {b} 的宮位",
+    "bPlanetsInA": "{b} 的行星落在 {a} 的宮位",
+    "houseLabel": "第 {n} 宮",
+    "interpretation": "AI 合婚解讀",
+    "interpreting": "解讀中...",
+    "generatingInterpretation": "正在生成合婚解讀...",
+    "reinterpret": "重新解讀",
+    "recalculate": "重新測算",
+    "untitledSection": "合婚解讀",
+    "shareTitle": "星盤合婚結果",
+    "disclaimer": "本工具基於吠陀占星象徵體系與 AI 生成雙人合婚參考，僅供文化娛樂與學習參考，不構成任何專業心理、婚姻諮詢或命理建議。請理性看待。",
+    "knowledgeCard1Title": "什麼是星盤合婚",
+    "knowledgeCard1Desc": "星盤合婚通過對比兩人本命盤的上升星座、行星宮位、跨盤相位與宮位疊加，觀察雙方在關係中的互補與張力。",
+    "knowledgeCard2Title": "跨盤相位看什麼",
+    "knowledgeCard2Desc": "合相、六合、刑剋、拱相、衝相等主要相位，揭示兩人在溝通、情感、行動力與價值觀上的互動模式。",
+    "knowledgeCard3Title": "宮位疊加的意義",
+    "knowledgeCard3Desc": "一方的行星落在另一方的重要宮位（如第1宮、第7宮、第10宮），說明這段關係在自我認知、伴侶關係、事業發展等層面的具體影響。",
+    "knowledgeCard4Title": "結果僅供參考",
+    "knowledgeCard4Desc": "星盤合婚提供關係傾向與互動主題參考，感情經營仍需雙方用心溝通與共同成長。"
   }
 }

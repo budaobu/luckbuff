@@ -523,7 +523,11 @@
     "hookQizhengSiyu": "My Qizheng Siyu chart: {summary}",
     "hookQizhengSiyuDefault": "I just generated my Qizheng Siyu chart. Check out the ascendant and planetary distribution.",
     "hookZiweiShiyeHepan": "I just completed a Career Ziwei Compatibility reading: {summary}. See if we make good business partners!",
-    "hookZiweiShiyeHepanDefault": "I just completed a Career Ziwei Compatibility reading to see if we'd make good business partners."
+    "hookZiweiShiyeHepanDefault": "I just completed a Career Ziwei Compatibility reading to see if we'd make good business partners.",
+    "hookVedicHepan": "Vedic Compatibility reading: {summary}. See if our stars align!",
+    "hookVedicHepanDefault": "I just completed a Vedic Compatibility reading and discovered our relationship themes and friction points.",
+    "hookBaziShiyeHepan": "I just completed a Career Bazi Compatibility reading: {summary}. See if we make good business partners!",
+    "hookBaziShiyeHepanDefault": "I just completed a Career Bazi Compatibility reading to see if we'd make good business partners."
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
@@ -885,7 +889,12 @@
     "ziweiShiyeHepanDesc": "Free online career Ziwei Dou Shu compatibility for business partners and co-founders. Enter both birth dates to analyze career synergy, role division, and partnership risks from the Career, Wealth, and Life palaces. For cultural entertainment only.",
     "ziweiShiyeHepanKeywords": "career ziwei compatibility,dual career ziwei chart,business partner destiny analysis,ziwei for business partnership,ziwei partnership chart,career palace compatibility,business partner ziwei",
     "ziweiShiyeHepanOgTitle": "Career Ziwei Compatibility_Dual Career Ziwei Chart_Business Partner Destiny Analysis",
-    "ziweiShiyeHepanOgDesc": "Free online career Ziwei Dou Shu compatibility. Enter two partners' birth details to explore business synergy, roles, and risks from the Career, Wealth, and Life palaces."
+    "ziweiShiyeHepanOgDesc": "Free online career Ziwei Dou Shu compatibility. Enter two partners' birth details to explore business synergy, roles, and risks from the Career, Wealth, and Life palaces.",
+    "vedicHepanTitle": "Vedic Compatibility Chart_ Couple Synastry Analysis",
+    "vedicHepanDesc": "Free online Vedic compatibility chart. Enter both partners' birth details to calculate dual natal charts, cross-chart aspects and house overlays, then get AI-powered five-card relationship insights. For entertainment only.",
+    "vedicHepanKeywords": "vedic compatibility,couple synastry,relationship astrology,house overlays,planetary aspects,vedic chart matching,ososn",
+    "vedicHepanOgTitle": "Vedic Compatibility Chart_ Couple Synastry Analysis",
+    "vedicHepanOgDesc": "Enter both partners' birth details to generate a Vedic synastry report with aspects, house overlays and five-card AI interpretation."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -5191,5 +5200,46 @@
     "backToTools": "Back to Tools",
     "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
     "disclaimer": "This tool generates business partnership references based on traditional Ziwei Dou Shu principles for cultural and educational reference only. It is not investment, partnership, or professional business advice. Please view results rationally and make major commercial decisions based on real-world circumstances."
+  },
+  "vedicHepan": {
+    "title": "Vedic Compatibility",
+    "subtitle": "Enter both partners' birth details to calculate Vedic charts, synastry aspects and house overlays, then get an AI relationship reading",
+    "selectProfile": "Select profile to auto-fill",
+    "personA": "Person A",
+    "personB": "Person B",
+    "nameLabel": "Name",
+    "namePlaceholder": "Optional name",
+    "genderLabel": "Gender",
+    "birthDateLabel": "Birth date",
+    "birthTimeLabel": "Birth time",
+    "birthCityLabel": "Birth city",
+    "birthCityPlaceholder": "e.g. Beijing, Shanghai, New York",
+    "timeUncertain": "Birth time is uncertain",
+    "submitBtn": "Start Compatibility Reading",
+    "calculating": "Calculating synastry...",
+    "resultLabel": "Result",
+    "resultTitle": "Compatibility Result",
+    "ascendantComparison": "Ascendant Comparison",
+    "aspectsTitle": "Major Cross-Chart Aspects",
+    "noAspects": "No major cross-chart aspects.",
+    "aPlanetsInB": "{a}'s planets in {b}'s houses",
+    "bPlanetsInA": "{b}'s planets in {a}'s houses",
+    "houseLabel": "House {n}",
+    "interpretation": "AI Relationship Reading",
+    "interpreting": "Interpreting...",
+    "generatingInterpretation": "Generating compatibility reading...",
+    "reinterpret": "Reinterpret",
+    "recalculate": "Recalculate",
+    "untitledSection": "Compatibility Reading",
+    "shareTitle": "Vedic Compatibility Result",
+    "disclaimer": "This tool generates relationship insights based on Vedic astrology symbolism and AI. It is for entertainment and learning only, not professional psychological, marital or astrological advice. Please use your own judgment.",
+    "knowledgeCard1Title": "What is Vedic Compatibility",
+    "knowledgeCard1Desc": "Vedic compatibility compares two natal charts by ascendant, planetary positions, cross-chart aspects and house overlays to reveal harmony and tension.",
+    "knowledgeCard2Title": "What Cross-Chart Aspects Show",
+    "knowledgeCard2Desc": "Conjunctions, sextiles, squares, trines and oppositions between two charts reveal how partners communicate, feel, act and value things.",
+    "knowledgeCard3Title": "Meaning of House Overlays",
+    "knowledgeCard3Desc": "When one person's planets fall into another's key houses (1st, 7th, 10th), the relationship touches self-image, partnership and career themes.",
+    "knowledgeCard4Title": "For Reference Only",
+    "knowledgeCard4Desc": "Astrology offers themes and tendencies; real relationships still require communication, empathy and mutual growth."
   }
 }
