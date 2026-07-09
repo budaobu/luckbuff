@@ -899,7 +899,12 @@
     "vedicHepanCareerDesc": "Free online Vedic career partnership chart. Enter two business partners' or co-founders' birth details to calculate dual natal charts, cross-chart aspects and house overlays, then get AI-powered five-card career partnership insights. For entertainment only.",
     "vedicHepanCareerKeywords": "vedic career compatibility,business partner synastry,career partnership chart,vedic business compatibility,co-founder astrology,career horoscope overlay,ososn",
     "vedicHepanCareerOgTitle": "Vedic Career Partnership Chart_Dual Career Horoscope Analysis",
-    "vedicHepanCareerOgDesc": "Enter two business partners' birth details to generate a Vedic career synastry report with aspects, house overlays and five-card AI interpretation."
+    "vedicHepanCareerOgDesc": "Enter two business partners' birth details to generate a Vedic career synastry report with aspects, house overlays and five-card AI interpretation.",
+    "baziPoxiHepanTitle": "Mother-in-law & Daughter-in-law Bazi Compatibility_Dual Bazi Chart Analysis",
+    "baziPoxiHepanDesc": "Free online mother-in-law and daughter-in-law Bazi compatibility. Enter both birth details to analyze relationship dynamics, daily interaction patterns and practical advice. For entertainment only.",
+    "baziPoxiHepanKeywords": "mother-in-law daughter-in-law bazi,bazi compatibility,in-law relationship analysis,ba zi harmony,family bazi chart,ososn",
+    "baziPoxiHepanOgTitle": "Mother-in-law & Daughter-in-law Bazi Compatibility_Dual Bazi Chart Analysis",
+    "baziPoxiHepanOgDesc": "Enter both mother-in-law and daughter-in-law birth details to generate a Bazi compatibility report with relationship insights and practical getting-along advice."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -5245,7 +5250,8 @@
     "knowledgeCard3Title": "Meaning of House Overlays",
     "knowledgeCard3Desc": "When one person's planets fall into another's key houses (1st, 7th, 10th), the relationship touches self-image, partnership and career themes.",
     "knowledgeCard4Title": "For Reference Only",
-    "knowledgeCard4Desc": "Astrology offers themes and tendencies; real relationships still require communication, empathy and mutual growth."
+    "knowledgeCard4Desc": "Astrology offers themes and tendencies; real relationships still require communication, empathy and mutual growth.",
+    "birthDatePlaceholder": "Select birth date"
   },
   "vedicHepanCareer": {
     "title": "Vedic Career Partnership",
@@ -5286,6 +5292,46 @@
     "knowledgeCard3Title": "Meaning of House Overlays",
     "knowledgeCard3Desc": "When one person's planets fall into another's key houses (2nd, 7th, 10th, 11th), the partnership touches wealth, cooperation, career direction and social network themes.",
     "knowledgeCard4Title": "For Reference Only",
-    "knowledgeCard4Desc": "Vedic career synastry offers themes and tendencies; real business success still requires clear communication, due diligence and legal agreements."
+    "knowledgeCard4Desc": "Vedic career synastry offers themes and tendencies; real business success still requires clear communication, due diligence and legal agreements.",
+    "birthDatePlaceholder": "Select birth date"
+  },
+  "baziPoxiHepan": {
+    "knowledgeCard1Title": "Mother-in-law & Daughter-in-law Bazi",
+    "knowledgeCard1Desc": "Compare both Bazi charts side-by-side to observe harmony and tension in the mother-in-law and daughter-in-law relationship.",
+    "knowledgeCard2Title": "Day Pillar Interaction",
+    "knowledgeCard2Desc": "The compatibility and clashes between the two day pillars shape who tends to lead and who tends to accommodate in daily communication.",
+    "knowledgeCard3Title": "Five-Element Balance",
+    "knowledgeCard3Desc": "When one chart's strong element can balance the other's weakness, the relationship is more likely to complement than conflict.",
+    "knowledgeCard4Title": "Practical Advice",
+    "knowledgeCard4Desc": "The reading offers relationship references; real harmony still depends on empathy, clear boundaries and kind communication.",
+    "title": "Mother-in-law & Daughter-in-law Bazi",
+    "subtitle": "Enter both birth details to explore the relationship dynamics and practical getting-along advice.",
+    "toolDesc": "Compare both Bazi charts to analyze compatibility, friction points and practical ways for mothers-in-law and daughters-in-law to get along.",
+    "toolCta": "Start Compatibility Reading",
+    "personA": "Mother-in-law",
+    "selectProfile": "Select profile",
+    "genderLabel": "Gender",
+    "birthDateLabel": "Birth date",
+    "birthDatePlaceholder": "Select birth date",
+    "birthHourLabel": "Birth hour",
+    "birthHourPlaceholder": "Select birth hour",
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter name",
+    "birthProvinceLabel": "Birth province/city",
+    "birthProvincePlaceholder": "Enter birth province/city",
+    "personB": "Daughter-in-law",
+    "submitBtn": "Start Compatibility Reading",
+    "knowledgeTitle": "Related Knowledge",
+    "calculating": "Calculating chart...",
+    "resultTitle": "Compatibility Result",
+    "interpretation": "AI Relationship Reading",
+    "interpreting": "Interpreting...",
+    "generatingInterpretation": "Generating compatibility reading...",
+    "reinterpret": "Reinterpret",
+    "copyResult": "Copy result",
+    "recalculate": "Recalculate",
+    "backToTools": "Back to tools",
+    "aiUnavailable": "AI interpretation is temporarily unavailable. Please try again later.",
+    "disclaimer": "This tool generates relationship insights based on traditional Bazi principles. It is for entertainment and learning only, not family counseling, psychological or professional advice. Please use your own judgment and make major family decisions based on real-world circumstances."
   }
 }

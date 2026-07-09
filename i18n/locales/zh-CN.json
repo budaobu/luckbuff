@@ -899,7 +899,12 @@
     "vedicHepanCareerDesc": "免费在线星盘事业合伙人合盘，输入两位合伙人或创业搭档的出生时间地点，基于吠陀占星 Swiss Ephemeris 计算双人本命盘、跨盘相位与宫位叠加，AI 解读合伙气场、优势互补、决策分工与资源整合潜力，仅供文化娱乐参考。",
     "vedicHepanCareerKeywords": "星盘事业合盘,双人星盘事业分析,合伙人星盘合盘,事业合伙人合盘,创业搭档星盘,吠陀占星事业合盘,星盘看合伙,ososn",
     "vedicHepanCareerOgTitle": "星盘事业合伙人合盘_双人星盘事业前景分析",
-    "vedicHepanCareerOgDesc": "输入两位合伙人或创业搭档的出生信息，基于吠陀占星计算双人星盘、跨盘相位与宫位叠加，生成五张卡片式 AI 事业合伙解读。"
+    "vedicHepanCareerOgDesc": "输入两位合伙人或创业搭档的出生信息，基于吠陀占星计算双人星盘、跨盘相位与宫位叠加，生成五张卡片式 AI 事业合伙解读。",
+    "baziPoxiHepanTitle": "婆媳八字合盘_双人婆媳合盘算命_婆媳关系相性分析",
+    "baziPoxiHepanDesc": "免费在线婆媳八字合盘，输入婆婆与媳妇双方生辰，从八字相性角度分析婆媳关系、相处模式与化解建议，结果仅供文化娱乐参考。",
+    "baziPoxiHepanKeywords": "婆媳八字合盘,双人婆媳合盘,婆媳关系相性分析,婆媳八字相合,婆媳相处测算,婆媳合盘算命,八字看婆媳,ososn",
+    "baziPoxiHepanOgTitle": "婆媳八字合盘_双人婆媳合盘算命_婆媳关系相性分析",
+    "baziPoxiHepanOgDesc": "免费在线婆媳八字合盘，输入婆婆与媳妇的生辰，从八字相性角度解读婆媳关系、相处模式与具体可行的相处建议。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -5267,7 +5272,8 @@
     "knowledgeCard3Title": "宫位叠加的意义",
     "knowledgeCard3Desc": "一方的行星落在另一方的重要宫位（如第1宫、第7宫、第10宫），说明这段关系在自我认知、伴侣关系、事业发展等层面的具体影响。",
     "knowledgeCard4Title": "结果仅供参考",
-    "knowledgeCard4Desc": "星盘合婚提供关系倾向与互动主题参考，感情经营仍需双方用心沟通与共同成长。"
+    "knowledgeCard4Desc": "星盘合婚提供关系倾向与互动主题参考，感情经营仍需双方用心沟通与共同成长。",
+    "birthDatePlaceholder": "请选择出生日期"
   },
   "vedicHepanCareer": {
     "title": "星盘事业合盘",
@@ -5308,6 +5314,46 @@
     "knowledgeCard3Title": "宫位叠加的意义",
     "knowledgeCard3Desc": "一方的行星落在另一方的重要宫位（如第2宫、第7宫、第10宫、第11宫），说明双方在财务、合作关系、事业方向、人脉资源等层面的具体影响。",
     "knowledgeCard4Title": "结果仅供参考",
-    "knowledgeCard4Desc": "星盘事业合盘提供合伙倾向与互动主题参考，事业发展仍需双方理性沟通、充分尽调与法律协议保障。"
+    "knowledgeCard4Desc": "星盘事业合盘提供合伙倾向与互动主题参考，事业发展仍需双方理性沟通、充分尽调与法律协议保障。",
+    "birthDatePlaceholder": "请选择出生日期"
+  },
+  "baziPoxiHepan": {
+    "knowledgeCard1Title": "婆媳八字合盘",
+    "knowledgeCard1Desc": "将婆婆与媳妇的四柱八字并列比较，从五行、十神、日主互动等角度观察婆媳相处的契合与张力。",
+    "knowledgeCard2Title": "日柱互动看相处",
+    "knowledgeCard2Desc": "双方日柱天干地支的生克合冲，影响日常沟通中谁更容易主导、谁更愿意配合。",
+    "knowledgeCard3Title": "五行互补与磨合",
+    "knowledgeCard3Desc": "一方命局所旺五行若能调和另一方短板，婆媳之间更容易形成互补而非互顶。",
+    "knowledgeCard4Title": "相处参考建议",
+    "knowledgeCard4Desc": "合盘提供关系参考，真实相处仍需双方换位思考、明确边界与善意沟通。",
+    "title": "婆媳八字合盘",
+    "subtitle": "输入婆婆与媳妇的生辰信息，从八字相性角度解读婆媳关系与相处建议。",
+    "toolDesc": "以八字双盘合参，分析婆婆与媳妇的相性、日常摩擦点与具体可行的相处之道。",
+    "toolCta": "开始合盘",
+    "personA": "婆婆",
+    "selectProfile": "选择档案",
+    "genderLabel": "性别",
+    "birthDateLabel": "出生日期",
+    "birthDatePlaceholder": "请选择出生日期",
+    "birthHourLabel": "出生时辰",
+    "birthHourPlaceholder": "请选择出生时辰",
+    "nameLabel": "姓名",
+    "namePlaceholder": "请输入姓名",
+    "birthProvinceLabel": "出生省市",
+    "birthProvincePlaceholder": "请输入出生省市",
+    "personB": "媳妇",
+    "submitBtn": "开始合盘",
+    "knowledgeTitle": "相关知识",
+    "calculating": "排盘中...",
+    "resultTitle": "婆媳合盘结果",
+    "interpretation": "AI 婆媳解读",
+    "interpreting": "解读中...",
+    "generatingInterpretation": "正在生成婆媳合盘解读...",
+    "reinterpret": "重新解读",
+    "copyResult": "复制结果",
+    "recalculate": "重新测算",
+    "backToTools": "返回工具列表",
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
+    "disclaimer": "本工具基于传统八字命理原理生成婆媳关系参考，仅供文化娱乐与学习参考，不构成任何家庭关系、心理咨询或专业建议。请理性看待，重大家庭决策请结合现实情况独立判断。"
   }
 }
