@@ -55,6 +55,7 @@ export interface ShareOptions {
     | 'ziwei-shiye-hepan'
     | 'bazi-shiye-hepan'
     | 'vedic-hepan'
+    | 'vedic-hepan-career'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -131,6 +132,7 @@ export function useShare() {
       'ziwei-shiye-hepan': '紫微事业合盘',
       'bazi-shiye-hepan': '事业八字合盘',
       'vedic-hepan': '星盘合婚',
+      'vedic-hepan-career': '星盘事业合盘',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 

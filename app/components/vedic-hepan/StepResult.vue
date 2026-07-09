@@ -8,6 +8,8 @@ interface Props {
   analysis: string
   streaming: boolean
   errorMsg?: string
+  interpretationTitle?: string
+  resultTitle?: string
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{ restart: []; retry: []; share: [] }>()
@@ -99,7 +101,7 @@ const bInAGrouped = computed(() => {
     <div class="mb-2">
       <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">{{ $t('vedicHepan.resultLabel') }}</span>
       <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight">
-        {{ $t('vedicHepan.resultTitle') }}
+        {{ resultTitle || $t('vedicHepan.resultTitle') }}
       </h1>
       <p class="text-sm text-[var(--text-faint)] mt-2">
         {{ result.personA.name }} · {{ result.personB.name }}
@@ -196,7 +198,7 @@ const bInAGrouped = computed(() => {
           <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
         </div>
         <div class="flex-1 min-w-0">
-          <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('vedicHepan.interpretation') }}</h3>
+          <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ interpretationTitle || $t('vedicHepan.interpretation') }}</h3>
         </div>
         <div v-if="streaming" class="flex items-center gap-1.5">
           <span class="text-xs text-[var(--accent-muted)]">{{ $t('vedicHepan.interpreting') }}</span>
