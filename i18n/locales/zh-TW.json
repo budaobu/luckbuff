@@ -527,7 +527,11 @@
     "hookVedicHepan": "星盤合婚：{summary}，快來看看我倆的星盤配不配！",
     "hookVedicHepanDefault": "我剛完成一次星盤合婚，AI 解讀了我倆的緣分基調與潛在雷區。",
     "hookBaziShiyeHepan": "我剛完成事業八字合盤：{summary}，快來看看我倆合夥搞錢合不合拍！",
-    "hookBaziShiyeHepanDefault": "我剛完成一次事業八字合盤，看看合夥搞錢合不合拍。"
+    "hookBaziShiyeHepanDefault": "我剛完成一次事業八字合盤，看看合夥搞錢合不合拍。",
+    "hookBaziPoxiHepan": "婆媳八字合盤：{summary}",
+    "hookBaziPoxiHepanDefault": "我剛完成一次婆媳八字合盤，看看婆媳關係與相處建議。",
+    "hookBztiBirthdayPersonality": "我的 BZTI 生日人格：{summary}，快來查查你的生日出廠設定！",
+    "hookBztiBirthdayPersonalityDefault": "我剛完成 BZTI 生日人格測試，發現了一個隱藏型人格。"
   },
   "seo": {
     "homeTitle": "在線命理排盤算命_紫微斗數·八字·吠陀占星·梅花易數",
@@ -904,7 +908,12 @@
     "baziPoxiHepanDesc": "免費線上婆媳八字合盤，輸入婆婆與媳婦雙方生辰，從八字相性角度分析婆媳關係、相處模式與化解建議，結果僅供文化娛樂參考。",
     "baziPoxiHepanKeywords": "婆媳八字合盤,雙人婆媳合盤,婆媳關係相性分析,婆媳八字相合,婆媳相處測算,婆媳合盤算命,八字看婆媳,ososn",
     "baziPoxiHepanOgTitle": "婆媳八字合盤_雙人婆媳合盤算命_婆媳關係相性分析",
-    "baziPoxiHepanOgDesc": "免費線上婆媳八字合盤，輸入婆婆與媳婦的生辰，從八字相性角度解讀婆媳關係、相處模式與具體可行的相處建議。"
+    "baziPoxiHepanOgDesc": "免費線上婆媳八字合盤，輸入婆婆與媳婦的生辰，從八字相性角度解讀婆媳關係、相處模式與具體可行的相處建議。",
+    "bztiBirthdayPersonalityTitle": "BZTI生日人格測試_生辰性格測試",
+    "bztiBirthdayPersonalityDesc": "免費線上 BZTI 生日人格測試，輸入生日、出生時辰、出生城市與性別，將八字結構信號映射為 28 種原創生日人格類型（含 4 種隱藏稀有型），生成可分享的測試結果卡片與流式 AI 解讀，僅供文化娛樂參考。",
+    "bztiBirthdayPersonalityKeywords": "BZTI生日人格測試,生日性格測試,BZTI人格,八字性格測試,生日人格,隱藏人格類型,稀有人格類型,免費性格測試,ososn",
+    "bztiBirthdayPersonalityOgTitle": "BZTI生日人格測試_生辰性格測試",
+    "bztiBirthdayPersonalityOgDesc": "輸入生日、出生時辰與性別，生成你的原創 BZTI 生日人格類型與流式 AI 解讀，包含隱藏稀有型。僅供文化娛樂參考。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -5358,5 +5367,38 @@
     "backToTools": "返回工具列表",
     "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
     "disclaimer": "本工具基於傳統八字命理原理生成婆媳關係參考，僅供文化娛樂與學習參考，不構成任何家庭關係、心理諮詢或專業建議。請理性看待，重大家庭決策請結合現實情況獨立判斷。"
+  },
+  "bztiBirthdayPersonality": {
+    "title": "BZTI生日人格測試",
+    "subtitle": "輸入生日、出生時辰、出生城市與性別，生成你的原創 BZTI 生日人格類型與流式 AI 解讀",
+    "formTag": "BZTI · 生日人格",
+    "disclaimer": "本工具基於八字結構信號與 AI 生成生日人格參考。該類型體系為 luckbuff 原創娛樂型人格系統，僅供文化娛樂與自我探索參考，不構成任何專業心理、命理或職業建議。請輕鬆對待。",
+    "calculating": "正在解析你的生日結構信號...",
+    "calculatingHint": "根據十神、五行、日主強弱與格局映射人格類型",
+    "resultLabel": "測試結果",
+    "resultTitle": "你的 BZTI 生日人格",
+    "resultTitleWithName": "{name} 的 BZTI 生日人格",
+    "rarityCommon": "常見型",
+    "rarityRare": "隱藏稀有型",
+    "estimatedPercent": "約占人群的 {percent}%",
+    "typeCodeLabel": "類型代碼",
+    "shiShenCountsTitle": "十神分布",
+    "wuxingTitle": "五行強弱",
+    "interpretation": "AI 個性化解讀",
+    "interpreting": "解讀生成中...",
+    "generatingInterpretation": "AI 正在根據你的八字結構寫人格筆記...",
+    "aiUnavailable": "解讀服務暫不可用，請稍後重試。",
+    "reinterpret": "重新解讀",
+    "recalculate": "重新測算",
+    "copyResult": "複製結果",
+    "backToTools": "返回工具列表",
+    "knowledgeCard1Title": "什麼是 BZTI",
+    "knowledgeCard1Desc": "BZTI 是 luckbuff 原創的生日人格體系。它根據生日資訊中的十神、五行、日主強弱與格局等八字結構信號，映射為 28 種人格類型（含 4 種隱藏稀有型）。",
+    "knowledgeCard2Title": "需要什麼資訊",
+    "knowledgeCard2Desc": "只需生日、出生時辰、出生城市與性別。出生時辰越準確，時柱與十神分布越完整；也可以不填時辰進行測試，只是部分結構信號會被簡化。",
+    "knowledgeCard3Title": "隱藏型如何觸發",
+    "knowledgeCard3Desc": "當八字出現特定結構組合——如多組天干地支合會、官殺極強、印星獨旺，或沒有時辰但印星明顯——就可能觸發 4 種隱藏稀有型之一。分享機率 +1。",
+    "knowledgeCard4Title": "僅供娛樂參考",
+    "knowledgeCard4Desc": "BZTI 不是專業心理測評，而是基於命理結構信號的趣味人格畫像。把它當作自我覺察的一個角度，而不是標籤。"
   }
 }

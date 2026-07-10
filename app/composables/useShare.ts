@@ -54,8 +54,10 @@ export interface ShareOptions {
     | 'qizheng-siyu'
     | 'ziwei-shiye-hepan'
     | 'bazi-shiye-hepan'
+    | 'bazi-poxi-hepan'
     | 'vedic-hepan'
     | 'vedic-hepan-career'
+    | 'bzti-birthday-personality'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -131,8 +133,10 @@ export function useShare() {
       'qizheng-siyu': '七政四余',
       'ziwei-shiye-hepan': '紫微事业合盘',
       'bazi-shiye-hepan': '事业八字合盘',
+      'bazi-poxi-hepan': '婆媳八字合盘',
       'vedic-hepan': '星盘合婚',
       'vedic-hepan-career': '星盘事业合盘',
+      'bzti-birthday-personality': 'BZTI 生日人格测试',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -287,9 +291,15 @@ export function useShare() {
       'bazi-shiye-hepan': summary
         ? t('share.hookBaziShiyeHepan', { summary })
         : t('share.hookBaziShiyeHepanDefault'),
+      'bazi-poxi-hepan': summary
+        ? t('share.hookBaziPoxiHepan', { summary })
+        : t('share.hookBaziPoxiHepanDefault'),
       'vedic-hepan': summary
         ? t('share.hookVedicHepan', { summary })
         : t('share.hookVedicHepanDefault'),
+      'bzti-birthday-personality': summary
+        ? t('share.hookBztiBirthdayPersonality', { summary })
+        : t('share.hookBztiBirthdayPersonalityDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
