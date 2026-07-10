@@ -121,7 +121,7 @@
     </div>
 
     <!-- 曾用名 -->
-    <div v-if="!minimal" class="space-y-1.5">
+    <div v-if="!minimal && showFormerName" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.formerName') }}</label>
       <UInput
         v-model="form.formerName"
@@ -135,7 +135,7 @@
     </div>
 
     <!-- 改名年份 -->
-    <div v-if="!minimal && form.formerName" class="space-y-1.5">
+    <div v-if="!minimal && showFormerName && form.formerName" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.changedYear') }}</label>
       <UInput
         v-model.number="form.formerNameChangedYear"
@@ -214,11 +214,13 @@ interface FormValues {
 interface Props {
   initialValues?: Partial<FormValues>
   minimal?: boolean
+  showFormerName?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   initialValues: () => ({}),
   minimal: false,
+  showFormerName: true,
 })
 
 const emit = defineEmits<{

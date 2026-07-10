@@ -420,6 +420,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/sbti',
       },
       {
+        icon: 'i-heroicons-cake',
+        titleKey: 'bztiBirthdayPersonality.title',
+        descKey: 'bztiBirthdayPersonality.subtitle',
+        ctaKey: 'common.start',
+        path: '/tools/bzti-birthday-personality',
+      },
+      {
         icon: 'i-heroicons-shield-exclamation',
         titleKey: 'fuckClaude.toolTitle',
         descKey: 'fuckClaude.toolDesc',
