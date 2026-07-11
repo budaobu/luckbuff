@@ -59,6 +59,7 @@ export interface ShareOptions {
     | 'vedic-hepan'
     | 'vedic-hepan-career'
     | 'bzti-birthday-personality'
+    | 'astro-zhichang-hepan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -139,6 +140,7 @@ export function useShare() {
       'vedic-hepan': '星盘合婚',
       'vedic-hepan-career': '星盘事业合盘',
       'bzti-birthday-personality': 'BZTI 生日人格测试',
+      'astro-zhichang-hepan': '职场占星合盘',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
