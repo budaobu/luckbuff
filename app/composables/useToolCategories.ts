@@ -434,6 +434,14 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/sbti',
       },
       {
+        icon: 'i-heroicons-trophy',
+        titleKey: 'psychologicalTest.toolLifeAchievementTitle',
+        descKey: 'psychologicalTest.toolLifeAchievementDesc',
+        ctaKey: 'psychologicalTest.toolLifeAchievementCta',
+        path: '/tools/life-achievement-generator',
+        recommended: true,
+      },
+      {
         icon: 'i-heroicons-cake',
         titleKey: 'bztiBirthdayPersonality.title',
         descKey: 'bztiBirthdayPersonality.subtitle',
