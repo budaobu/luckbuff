@@ -100,6 +100,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/bazi-shiye-hepan',
       },
       {
+        icon: 'i-heroicons-users',
+        titleKey: 'baziZhichangHepan.title',
+        descKey: 'baziZhichangHepan.toolDesc',
+        ctaKey: 'baziZhichangHepan.toolCta',
+        path: '/tools/bazi-zhichang-hepan',
+      },
+      {
         icon: 'i-heroicons-briefcase',
         titleKey: 'ziweiShiyeHepan.title',
         descKey: 'ziweiShiyeHepan.toolDesc',
