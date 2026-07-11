@@ -53,6 +53,7 @@ export interface ShareOptions {
     | 'sbti'
     | 'qizheng-siyu'
     | 'ziwei-shiye-hepan'
+    | 'ziwei-zhichang-hepan'
     | 'bazi-shiye-hepan'
     | 'bazi-poxi-hepan'
     | 'vedic-hepan'
@@ -132,6 +133,7 @@ export function useShare() {
       sbti: 'SBTI 沙雕人格测试',
       'qizheng-siyu': '七政四余',
       'ziwei-shiye-hepan': '紫微事业合盘',
+      'ziwei-zhichang-hepan': '职场紫微合盘',
       'bazi-shiye-hepan': '事业八字合盘',
       'bazi-poxi-hepan': '婆媳八字合盘',
       'vedic-hepan': '星盘合婚',
@@ -288,6 +290,9 @@ export function useShare() {
       'ziwei-shiye-hepan': summary
         ? t('share.hookZiweiShiyeHepan', { summary })
         : t('share.hookZiweiShiyeHepanDefault'),
+      'ziwei-zhichang-hepan': summary
+        ? t('share.hookZiweiZhichangHepan', { summary })
+        : t('share.hookZiweiZhichangHepanDefault'),
       'bazi-shiye-hepan': summary
         ? t('share.hookBaziShiyeHepan', { summary })
         : t('share.hookBaziShiyeHepanDefault'),
