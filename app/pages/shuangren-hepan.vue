@@ -158,6 +158,32 @@
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
+        <!-- 职场紫薇合盘 -->
+        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
+          <div class="p-8 flex flex-col flex-1">
+            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <UIcon name="i-heroicons-users" class="w-7 h-7" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('ziweiZhichangHepan.title') }}</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
+              {{ $t('ziweiZhichangHepan.toolDesc') }}
+            </p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="md"
+              :to="localePath('/tools/ziwei-zhichang-hepan')"
+              class="group/btn w-full justify-center mt-4"
+            >
+              {{ $t('ziweiZhichangHepan.toolCta') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
         <!-- 婆媳八字合盘 -->
         <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="p-8 flex flex-col flex-1">
@@ -353,10 +379,11 @@ useHead(() => ({
             { '@type': 'ListItem', position: 3, name: t('baziShiyeHepan.title'), url: 'https://www.ososn.com/tools/bazi-shiye-hepan' },
             { '@type': 'ListItem', position: 4, name: t('baziZhichangHepan.title'), url: 'https://www.ososn.com/tools/bazi-zhichang-hepan' },
             { '@type': 'ListItem', position: 5, name: t('ziweiShiyeHepan.title'), url: 'https://www.ososn.com/tools/ziwei-shiye-hepan' },
-            { '@type': 'ListItem', position: 6, name: t('baziPoxiHepan.title'), url: 'https://www.ososn.com/tools/bazi-poxi-hepan' },
-            { '@type': 'ListItem', position: 7, name: t('home.toolBaziHunpanTitle'), url: 'https://www.ososn.com/tools/bazi-hunpan' },
-            { '@type': 'ListItem', position: 8, name: t('ziweiHunpan.title'), url: 'https://www.ososn.com/tools/ziwei-hunpan' },
-            { '@type': 'ListItem', position: 9, name: t('home.toolShengxiaoPeiduiTitle'), url: 'https://www.ososn.com/tools/shengxiao-peidui' },
+            { '@type': 'ListItem', position: 6, name: t('ziweiZhichangHepan.title'), url: 'https://www.ososn.com/tools/ziwei-zhichang-hepan' },
+            { '@type': 'ListItem', position: 7, name: t('baziPoxiHepan.title'), url: 'https://www.ososn.com/tools/bazi-poxi-hepan' },
+            { '@type': 'ListItem', position: 8, name: t('home.toolBaziHunpanTitle'), url: 'https://www.ososn.com/tools/bazi-hunpan' },
+            { '@type': 'ListItem', position: 9, name: t('ziweiHunpan.title'), url: 'https://www.ososn.com/tools/ziwei-hunpan' },
+            { '@type': 'ListItem', position: 10, name: t('home.toolShengxiaoPeiduiTitle'), url: 'https://www.ososn.com/tools/shengxiao-peidui' },
           ],
         },
       }),

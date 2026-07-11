@@ -114,6 +114,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/ziwei-shiye-hepan',
       },
       {
+        icon: 'i-heroicons-users',
+        titleKey: 'ziweiZhichangHepan.title',
+        descKey: 'ziweiZhichangHepan.toolDesc',
+        ctaKey: 'ziweiZhichangHepan.toolCta',
+        path: '/tools/ziwei-zhichang-hepan',
+      },
+      {
         icon: 'i-heroicons-heart',
         titleKey: 'home.toolBaziHunpanTitle',
         descKey: 'home.toolBaziHunpanDesc',
