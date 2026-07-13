@@ -455,6 +455,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'fuckClaude.toolCta',
         path: '/tools/fuckclaude',
       },
+      {
+        icon: 'i-heroicons-queue-list',
+        titleKey: 'psychologicalTest.toolJapanPriorityTestTitle',
+        descKey: 'psychologicalTest.toolJapanPriorityTestDesc',
+        ctaKey: 'psychologicalTest.toolJapanPriorityTestCta',
+        path: '/tools/japan-priority-test',
+      },
     ],
   },
   {

@@ -533,7 +533,9 @@
     "hookBaziPoxiHepan": "My mother-in-law & daughter-in-law Bazi compatibility: {summary}",
     "hookBaziPoxiHepanDefault": "I just ran a mother-in-law & daughter-in-law Bazi compatibility reading.",
     "hookBztiBirthdayPersonality": "My BZTI birthday personality: {summary}. Check your birthday factory settings!",
-    "hookBztiBirthdayPersonalityDefault": "I just took the BZTI birthday personality test and discovered my hidden type."
+    "hookBztiBirthdayPersonalityDefault": "I just took the BZTI birthday personality test and discovered my hidden type.",
+    "hookJapanPriorityTest": "My emergency priority order: {summary} — try it yourself!",
+    "hookJapanPriorityTestDefault": "I just took the viral Japanese priority test and my order surprised even me."
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
@@ -935,7 +937,12 @@
     "astroZhichangHepanDesc": "Free online workplace astrology synastry. Enter the birth time and place of a leader and subordinate or two colleagues; based on the tropical zodiac and Placidus houses, it computes both natal charts, cross-chart aspects and house overlays, then AI reads workplace chemistry, power dynamics and collaboration in a witty 'hermit friend' voice with concrete, actionable relationship advice. For entertainment only.",
     "astroZhichangHepanKeywords": "workplace astrology synastry,dual career chart reading,relationship optimization,leader subordinate sign synastry,colleague sign synastry,workplace chart synastry,manager report astrology,peer coworker chart,Placidus synastry,astrology for work,ososn",
     "astroZhichangHepanOgTitle": "Workplace Astrology Synastry_Dual Career Chart Reading_Relationship Optimization",
-    "astroZhichangHepanOgDesc": "Enter birth info for a leader/subordinate or two colleagues; based on the tropical zodiac and Placidus houses, it computes both charts, cross aspects and overlays, generating an AI workplace synastry reading with a dedicated, actionable relationship-advice section."
+    "astroZhichangHepanOgDesc": "Enter birth info for a leader/subordinate or two colleagues; based on the tropical zodiac and Placidus houses, it computes both charts, cross aspects and overlays, generating an AI workplace synastry reading with a dedicated, actionable relationship-advice section.",
+    "japanPriorityTestTitle": "Viral Japanese Priority Test_Emergency Order Personality Quiz",
+    "japanPriorityTestDesc": "Japan's viral emergency-priority personality test: a crying baby, an urgent bathroom, a ringing phone, a doorbell, and a running tap — which do you handle first? Rank the 5 items and get a witty streaming AI reading of your values and hidden traits, for fun only.",
+    "japanPriorityTestKeywords": "japanese personality test,emergency priority quiz,viral japanese psychology test,priority order personality test,fun personality quiz,subconscious test,values ranking test,ososn",
+    "japanPriorityTestOgTitle": "Viral Japanese Priority Test_Emergency Order Personality Quiz",
+    "japanPriorityTestOgDesc": "5 things happen at once — which do you handle first? Submit your ranking and get a witty streaming AI reading of your values and hidden traits."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -4847,7 +4854,10 @@
     "faq3Q": "Can I take the test multiple times?",
     "faq3A": "Yes. Your mood and state may vary, so your choices may differ. Consider multiple results together instead of relying on a single answer.",
     "faq4Q": "Can fun personality tests replace psychological counseling?",
-    "faq4A": "No. If you are experiencing emotional or psychological distress, please seek help from a professional counselor or medical institution."
+    "faq4A": "No. If you are experiencing emotional or psychological distress, please seek help from a professional counselor or medical institution.",
+    "toolJapanPriorityTestTitle": "Viral Japanese Priority Test",
+    "toolJapanPriorityTestDesc": "5 emergencies at once — rank your priorities and get a witty streaming AI reading of your values and hidden traits.",
+    "toolJapanPriorityTestCta": "Start test"
   },
   "fortuneTelling": {
     "title": "Fortune Telling & Divination",
@@ -5601,5 +5611,49 @@
       "ink": { "name": "Ink Wash", "desc": "Sumi-e bleed on rice paper, meaning in the blank." },
       "crystal": { "name": "Crystal", "desc": "Low-poly crystalline mosaic, refracted shards." }
     }
+  },
+  "japanPriorityTest": {
+    "title": "Viral Japanese Priority Test",
+    "subtitle": "Japan's classic emergency-priority personality quiz: 5 things happen at once — which do you handle first? Rank them and get a streaming AI reading in the voice of a witty hermit",
+    "formTag": "Emergency · Priorities",
+    "scenarioIntro": "You're at home when 5 things happen at the same time:",
+    "baby": "A baby starts crying",
+    "toilet": "You desperately need the bathroom (can't hold it)",
+    "phone": "The phone rings",
+    "doorbell": "The doorbell rings at the same time (someone's knocking)",
+    "tap": "You notice the bathroom tap was left running",
+    "scenarioQuestion": "Which do you deal with first? Put these 5 things in order.",
+    "rankTitle": "Your priority order",
+    "rankHint": "#1 = handled first, use ↑ ↓ to adjust",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "shuffle": "Shuffle",
+    "submitBtn": "Submit & get your reading",
+    "disclaimer": "This quiz comes from a fun Japanese personality test. It's for entertainment and self-exploration only — not a professional psychological assessment. Take it lightly.",
+    "resultLabel": "Test Result",
+    "resultTitle": "Your Priorities, Decoded",
+    "yourOrderTitle": "Your order",
+    "symbolBaby": "Love & close relationships",
+    "symbolToilet": "Self & money",
+    "symbolPhone": "Work & career",
+    "symbolDoorbell": "Friends & social life",
+    "symbolTap": "Quality of life & enjoyment",
+    "interpretation": "AI Hermit Reading",
+    "interpreting": "Generating reading...",
+    "generatingInterpretation": "The hermit is studying your order, grinding ink...",
+    "aiUnavailable": "Reading service temporarily unavailable. Please try again later.",
+    "reinterpret": "Read again",
+    "retest": "Rank again",
+    "copyResult": "Copy result",
+    "backToCategory": "Back to personality tests",
+    "knowledgeCard1Title": "Where it comes from",
+    "knowledgeCard1Desc": "This '5 things at once' priority quiz has circulated on Japanese social networks for years, used as a quick peek at what someone instinctively cares about most.",
+    "knowledgeCard2Title": "How to answer",
+    "knowledgeCard2Desc": "Just go with your gut: baby, bathroom, phone, doorbell, running tap — what would you handle first? There's no right answer.",
+    "knowledgeCard3Title": "What each item means",
+    "knowledgeCard3Desc": "In the classic reading: the baby symbolizes love, the bathroom self & money, the phone work, the doorbell friends, and the tap quality of life.",
+    "knowledgeCard4Title": "For fun only",
+    "knowledgeCard4Desc": "A fun quiz reflects in-the-moment instinct, not your true personality, and can never replace a professional psychological assessment."
   }
+
 }

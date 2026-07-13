@@ -533,7 +533,9 @@
     "hookBaziPoxiHepan": "婆媳八字合盘：{summary}",
     "hookBaziPoxiHepanDefault": "我刚完成一次婆媳八字合盘，看看婆媳关系与相处建议。",
     "hookBztiBirthdayPersonality": "我的 BZTI 生日人格：{summary}，快来查查你的生日出厂设置！",
-    "hookBztiBirthdayPersonalityDefault": "我刚完成 BZTI 生日人格测试，发现了一个隐藏型人格。"
+    "hookBztiBirthdayPersonalityDefault": "我刚完成 BZTI 生日人格测试，发现了一个隐藏型人格。",
+    "hookJapanPriorityTest": "我的紧急状况优先顺序：{summary}，快来测测你的！",
+    "hookJapanPriorityTestDefault": "我刚做完日本很火的心理测试，排了个自己都没想到的顺序。"
   },
   "seo": {
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
@@ -935,7 +937,12 @@
     "astroZhichangHepanDesc": "免费在线职场占星合盘，输入领导与下属或两位同事的出生时间地点，基于回归黄道与 Placidus 宫位计算双人本命盘、跨盘相位与宫位叠加，AI 以「幽默隐士」口吻解读职场相性、权力位差与协作竞争，并给出具体可执行的关系优化建议，仅供文化娱乐参考。",
     "astroZhichangHepanKeywords": "职场占星合盘,双人职场星座合盘,职场关系优化,领导下属星座合盘,同事星座合盘,职场星盘合盘,上下级星座相性,平级同事星盘,Placidus合盘,星座看职场,ososn",
     "astroZhichangHepanOgTitle": "职场占星合盘_双人职场星座合盘_职场关系优化",
-    "astroZhichangHepanOgDesc": "输入领导与下属或两位同事的出生信息，基于回归黄道与 Placidus 宫位计算双人星盘、跨盘相位与宫位叠加，生成含独立关系优化建议的 AI 职场占星合盘解读。"
+    "astroZhichangHepanOgDesc": "输入领导与下属或两位同事的出生信息，基于回归黄道与 Placidus 宫位计算双人星盘、跨盘相位与宫位叠加，生成含独立关系优化建议的 AI 职场占星合盘解读。",
+    "japanPriorityTestTitle": "日本很火的心理测试_紧急状况优先顺序心理测验",
+    "japanPriorityTestDesc": "日本超火的紧急状况优先顺序心理测试：婴儿哭、想上厕所、电话响、门铃响、水龙头没关，5 件事同时发生你会先处理哪件？排序后 AI 以幽默隐士口吻流式解读你的价值观排序与隐藏性格，仅供娱乐参考。",
+    "japanPriorityTestKeywords": "日本很火的心理测试,紧急状况心理测验,优先顺序心理测试,五件事排序心理测试,日本心理测验,趣味性格测试,潜意识测试,价值观排序测试,ososn",
+    "japanPriorityTestOgTitle": "日本很火的心理测试_紧急状况优先顺序心理测验",
+    "japanPriorityTestOgDesc": "5 件事同时发生，你会先处理哪一件？提交你的排序，AI 隐士流式解读你的价值观与隐藏性格，仅供娱乐参考。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -4869,7 +4876,10 @@
     "faq3Q": "可以多次测试吗？",
     "faq3A": "可以。心情、状态不同，选择可能不同。建议将多次结果结合起来看，不必过度依赖单次答案。",
     "faq4Q": "趣味性格测试可以替代心理咨询吗？",
-    "faq4A": "不可以。如果你遇到情绪困扰或心理困扰，建议寻求专业心理咨询师或医疗机构的帮助。"
+    "faq4A": "不可以。如果你遇到情绪困扰或心理困扰，建议寻求专业心理咨询师或医疗机构的帮助。",
+    "toolJapanPriorityTestTitle": "日本很火的心理测试",
+    "toolJapanPriorityTestDesc": "5 件事同时发生的紧急状况，排个优先顺序，AI 隐士流式解读你的价值观与隐藏性格。",
+    "toolJapanPriorityTestCta": "开始测试"
   },
   "fortuneTelling": {
     "title": "算命占卜",
@@ -5623,5 +5633,49 @@
       "ink": { "name": "墨迹", "desc": "宣纸晕染的水墨笔触，留白即意境。" },
       "crystal": { "name": "晶格", "desc": "低多边形晶格拼贴，折射的几何碎片。" }
     }
+  },
+  "japanPriorityTest": {
+    "title": "日本很火的心理测试",
+    "subtitle": "日本超经典的紧急状况优先顺序心理测验：5 件事同时发生，你会先处理哪一件？排序提交后，AI 以「幽默隐士」口吻流式解读你的选择",
+    "formTag": "紧急状况 · 优先顺序",
+    "scenarioIntro": "你现在在家，这个时候，5 件事同时发生：",
+    "baby": "婴儿开始哭了",
+    "toilet": "你非常想上厕所（憋不住的那种）",
+    "phone": "电话响了",
+    "doorbell": "同时门铃响了（有人在敲门）",
+    "tap": "你发现浴室的水龙头没关",
+    "scenarioQuestion": "你会优先做哪件事？请把上面 5 件事情，排个顺序。",
+    "rankTitle": "你的优先顺序",
+    "rankHint": "第 1 名 = 最先处理，用 ↑ ↓ 调整",
+    "moveUp": "上移",
+    "moveDown": "下移",
+    "shuffle": "随机打乱",
+    "submitBtn": "提交排序，查看解读",
+    "disclaimer": "本测试源自日本流行的趣味心理测试，仅供娱乐与自我探索参考，不构成任何专业心理评估或建议，请轻松对待。",
+    "resultLabel": "测试结果",
+    "resultTitle": "你的优先顺序与解读",
+    "yourOrderTitle": "你的排序",
+    "symbolBaby": "感情与亲密关系",
+    "symbolToilet": "自我与金钱",
+    "symbolPhone": "工作与事业",
+    "symbolDoorbell": "朋友与人际交往",
+    "symbolTap": "生活品质与享受",
+    "interpretation": "AI 隐士解读",
+    "interpreting": "解读生成中...",
+    "generatingInterpretation": "隐士正在端详你的排序，磨墨提笔中...",
+    "aiUnavailable": "解读服务暂不可用，请稍后重试。",
+    "reinterpret": "重新解读",
+    "retest": "重新排序",
+    "copyResult": "复制结果",
+    "backToCategory": "返回趣味性格测试",
+    "knowledgeCard1Title": "测试怎么来的",
+    "knowledgeCard1Desc": "这个「5 件事优先顺序」测试在日本社交网络流传多年，常被用来快速窥探一个人下意识里最在意的事情排序。",
+    "knowledgeCard2Title": "怎么作答",
+    "knowledgeCard2Desc": "凭第一直觉排序即可：婴儿、厕所、电话、门铃、水龙头，先处理哪一件、后处理哪一件，没有标准答案。",
+    "knowledgeCard3Title": "每件事象征什么",
+    "knowledgeCard3Desc": "经典解读中：婴儿象征感情，上厕所象征自我与金钱，电话象征工作，门铃象征朋友人际，水龙头象征生活品质。",
+    "knowledgeCard4Title": "仅供娱乐参考",
+    "knowledgeCard4Desc": "趣味心理测试反映的只是当下情境中的直觉偏好，不能代表真实人格，更不能替代专业心理评估。"
   }
+
 }
