@@ -28,6 +28,36 @@
 
       <!-- 工具卡片 -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+        <!-- 新生儿智能起名（推荐） -->
+        <div class="group arc-card relative rounded-2xl border border-[var(--accent-border)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
+          <div class="absolute top-3 right-3">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)] font-medium">
+              {{ $t('naming.recommended') }}
+            </span>
+          </div>
+          <div class="p-5 flex flex-col flex-1">
+            <div class="w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <UIcon name="i-heroicons-gift" class="w-5 h-5" />
+            </div>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">{{ $t('babyNaming.title') }}</h3>
+            <p class="text-xs text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-3 overflow-hidden">
+              {{ $t('naming.toolBabyNamingDesc') }}
+            </p>
+            <UButton
+              color="warning"
+              size="sm"
+              :to="localePath('/tools/baby-naming')"
+              class="group/btn w-full justify-center mt-3"
+            >
+              {{ $t('naming.toolBabyNamingCta') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
         <!-- 三才五格起名（推荐） -->
         <div class="group arc-card relative rounded-2xl border border-[var(--accent-border)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="absolute top-3 right-3">

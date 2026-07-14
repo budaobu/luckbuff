@@ -249,6 +249,14 @@ const toolCategories: ToolCategory[] = [
     sectionPath: '/naming',
     tools: [
       {
+        icon: 'i-heroicons-gift',
+        titleKey: 'babyNaming.title',
+        descKey: 'naming.toolBabyNamingDesc',
+        ctaKey: 'naming.toolBabyNamingCta',
+        path: '/tools/baby-naming',
+        recommended: true,
+      },
+      {
         icon: 'i-heroicons-sparkles',
         titleKey: 'home.toolSancaiWugeTitle',
         descKey: 'home.toolSancaiWugeDesc',
