@@ -35,6 +35,13 @@ const toolCategories: ToolCategory[] = [
         recommended: true,
       },
       {
+        icon: 'i-heroicons-scale',
+        titleKey: 'home.toolZipingBaziTitle',
+        descKey: 'home.toolZipingBaziDesc',
+        ctaKey: 'home.toolZipingBaziCta',
+        path: '/tools/ziping-bazi',
+      },
+      {
         icon: 'i-heroicons-squares-plus',
         titleKey: 'home.toolBaziZiweiTitle',
         descKey: 'home.toolBaziZiweiDesc',

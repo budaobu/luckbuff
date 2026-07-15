@@ -230,7 +230,10 @@
     "toolLuckyPlantDesc": "根據出生季節與八字五行喜忌，推薦適合你的幸運植物與擺放建議。",
     "toolQizhengSiyuTitle": "七政四餘",
     "toolQizhengSiyuDesc": "以真實天文位置排布七政四餘，解讀性格底色、人生主題與自我調適方向。",
-    "toolQizhengSiyuCta": "立即排盤"
+    "toolQizhengSiyuCta": "立即排盤",
+    "toolZipingBaziTitle": "子平八字",
+    "toolZipingBaziDesc": "以子平法為核心，排定四柱、格局、喜用與十年大運，適合想深入理解八字命局結構的愛好者。",
+    "toolZipingBaziCta": "立即排盤"
   },
   "prophet": {
     "title": "賽事預測",
@@ -950,7 +953,12 @@
     "baziZhengyuanDesc": "免費在線八字算正緣出現時間，輸入生辰即可查看正緣什麼時候出現、正緣怎麼看、正緣性格畫像與相遇場景參考，僅供文化娛樂參考。",
     "baziZhengyuanKeywords": "我的正緣什麼時候出現,正緣怎麼看,八字算正緣出現時間測試,八字正緣,正緣測試,八字看姻緣,正緣出現時間,在線測算,ososn",
     "baziZhengyuanOgTitle": "我的正緣什麼時候出現_正緣怎麼看_八字算正緣出現時間測試",
-    "baziZhengyuanOgDesc": "輸入生辰，免費在線八字算正緣出現時間，查看正緣性格畫像、相遇場景與當下可做的事，僅供文化娛樂參考。"
+    "baziZhengyuanOgDesc": "輸入生辰，免費在線八字算正緣出現時間，查看正緣性格畫像、相遇場景與當下可做的事，僅供文化娛樂參考。",
+    "zipingBaziTitle": "子平八字算命_子平八字命理免費排盤",
+    "zipingBaziDesc": "免費子平八字在線排盤，輸入出生年月日時即可生成四柱、十神、格局、喜用神與十年大運，用正宗子平法解讀你的八字命局與運勢趨勢。",
+    "zipingBaziKeywords": "子平八字,子平法,子平八字算命,子平八字排盤,子平命理,四柱八字,八字免費測算,喜用神,大運流年",
+    "zipingBaziOgTitle": "子平八字算命_子平八字命理免費排盤",
+    "zipingBaziOgDesc": "在線生成子平八字命盤，解析四柱、格局、喜用神與大運，免費使用。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -5842,5 +5850,47 @@
     "nameLabel": "姓名",
     "birthDateLabel": "出生日期",
     "submit": "立即查詢"
+  },
+  "zipingBazi": {
+    "title": "子平八字",
+    "subtitle": "以子平法排定四柱、格局、喜用與大運，解讀先天命局與人生運勢",
+    "genderLabel": "性別",
+    "birthDateLabel": "陽曆生日",
+    "birthDatePlaceholder": "選擇陽曆生日",
+    "birthHourLabel": "出生時辰",
+    "birthHourPlaceholder": "未知時辰",
+    "nameLabel": "姓名",
+    "namePlaceholder": "可選",
+    "submit": "立即排盤",
+    "calculating": "正在推演子平命盤...",
+    "chartTitle": "{name}的子平八字命盤",
+    "chartTitleNoName": "子平八字命盤",
+    "chartSubtitle": "日主{riZhu}（{strength}）· {geju}",
+    "fourPillars": "四柱排盤",
+    "yearPillar": "年柱",
+    "monthPillar": "月柱",
+    "dayPillar": "日柱",
+    "hourPillar": "時柱",
+    "dayunTitle": "十年大運",
+    "ageUnit": "歲",
+    "qiyunAge": "起運年齡：{age}歲",
+    "wuxingTitle": "五行力量",
+    "panCalculation": "命盤",
+    "aiInterpret": "AI 解讀",
+    "aiLoading": "正在生成子平法 AI 解讀...",
+    "aiEmpty": "點擊開始排盤即可獲取 AI 解讀",
+    "aiOverview": "命局總論",
+    "aiRequestFailed": "AI 解讀請求失敗，請稍後重試",
+    "methodologyTitle": "子平術溯源",
+    "methodologyIntro": "子平術，又稱四柱命理，以出生年月日時的天干地支為四柱，以日干為命主，結合月令、五行生克與十神關係推斷人生格局。其法以宋代徐子平為宗，後世奉為八字推命的正統體系。",
+    "methodologyCard1Title": "以日干為太極",
+    "methodologyCard1Desc": "子平法以日柱天干為日主，代表命主自身，其餘三柱圍繞日主展開十神關係，形成六親、事業、財富等象徵系統。",
+    "methodologyCard2Title": "月令定格局",
+    "methodologyCard2Desc": "月支為提綱，主宰五行旺衰；月支本氣透干者為格局，決定命局層次與喜忌方向。",
+    "methodologyCard3Title": "大運順逆排",
+    "methodologyCard3Desc": "大運以月柱為起點，陽男陰女順排、陰男陽女逆排，每十年一運，配合流年推斷人生階段。",
+    "methodologyCard4Title": "五行平衡取用",
+    "methodologyCard4Desc": "分析日主強弱後，扶抑日干、平衡五行者為喜用神，克洩耗過甚或生扶太過者為忌神。",
+    "methodologySource": "以上內容整理自《淵海子平》《三命通會》《子平真詮》等子平命理經典，僅供文化研究與命理愛好者參考。"
   }
 }

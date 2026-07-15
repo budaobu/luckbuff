@@ -54,6 +54,32 @@
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
+        <!-- 子平八字 -->
+        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
+          <div class="p-8 flex flex-col flex-1">
+            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <UIcon name="i-heroicons-scale" class="w-7 h-7" />
+            </div>
+            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('home.toolZipingBaziTitle') }}</h3>
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
+              {{ $t('home.toolZipingBaziDesc') }}
+            </p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="md"
+              :to="localePath('/tools/ziping-bazi')"
+              class="group/btn w-full justify-center mt-4"
+            >
+              {{ $t('home.toolZipingBaziCta') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
         <!-- 八字+紫微综合 -->
         <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="p-8 flex flex-col flex-1">
@@ -765,29 +791,30 @@ useHead(() => ({
           '@type': 'ItemList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: t('home.toolBaziTitle'), url: 'https://www.ososn.com/tools/bazi' },
-            { '@type': 'ListItem', position: 2, name: t('home.toolBaziZiweiTitle'), url: 'https://www.ososn.com/tools/bazi-ziwei' },
-            { '@type': 'ListItem', position: 3, name: t('home.toolZwdsTitle'), url: 'https://www.ososn.com/tools/zwds' },
-            { '@type': 'ListItem', position: 4, name: t('home.toolZhouyiTitle'), url: 'https://www.ososn.com/tools/zhouyi' },
-            { '@type': 'ListItem', position: 5, name: t('home.toolLiuyaoDivinationTitle'), url: 'https://www.ososn.com/tools/liuyao-divination' },
-            { '@type': 'ListItem', position: 6, name: t('home.toolQimenTitle'), url: 'https://www.ososn.com/tools/qimen' },
-            { '@type': 'ListItem', position: 7, name: t('home.toolTaiyiTitle'), url: 'https://www.ososn.com/tools/taiyi' },
-            { '@type': 'ListItem', position: 8, name: t('home.toolLiurenTitle'), url: 'https://www.ososn.com/tools/liuren' },
-            { '@type': 'ListItem', position: 9, name: t('home.toolXiaoLiurenTitle'), url: 'https://www.ososn.com/tools/xiao-liuren' },
-            { '@type': 'ListItem', position: 10, name: t('home.toolJinkoujueTitle'), url: 'https://www.ososn.com/tools/jinkoujue' },
-            { '@type': 'ListItem', position: 11, name: t('home.toolTarotTitle'), url: 'https://www.ososn.com/tools/tarot' },
-            { '@type': 'ListItem', position: 12, name: t('home.toolLenormandTitle'), url: 'https://www.ososn.com/tools/lenormand' },
-            { '@type': 'ListItem', position: 13, name: t('home.toolNumerologyTitle'), url: 'https://www.ososn.com/tools/numerology' },
-            { '@type': 'ListItem', position: 14, name: t('home.toolWugeTitle'), url: 'https://www.ososn.com/tools/wuge' },
-            { '@type': 'ListItem', position: 15, name: t('home.toolChengguTitle'), url: 'https://www.ososn.com/tools/chenggu' },
-            { '@type': 'ListItem', position: 16, name: t('home.toolBaziWealthTitle'), url: 'https://www.ososn.com/tools/bazi-wealth' },
-            { '@type': 'ListItem', position: 17, name: t('home.toolBaziZhengyuanTitle'), url: 'https://www.ososn.com/tools/bazi-zhengyuan' },
-            { '@type': 'ListItem', position: 18, name: t('home.toolBaziFortuneTuneTitle'), url: 'https://www.ososn.com/tools/bazi-fortune-tune' },
-            { '@type': 'ListItem', position: 18, name: t('home.toolAstroFortuneTuneTitle'), url: 'https://www.ososn.com/tools/astro-fortune-tune' },
-            { '@type': 'ListItem', position: 19, name: t('home.toolFengshuiTitle'), url: 'https://www.ososn.com/tools/fengshui' },
-            { '@type': 'ListItem', position: 19, name: t('home.toolXuankongFengshuiTitle'), url: 'https://www.ososn.com/tools/xuankong-fengshui' },
-            { '@type': 'ListItem', position: 20, name: t('home.toolZibaifeixingTitle'), url: 'https://www.ososn.com/tools/zibaifeixing' },
-            { '@type': 'ListItem', position: 21, name: t('home.toolVedicTitle'), url: 'https://www.ososn.com/tools/vedic-astro' },
-            { '@type': 'ListItem', position: 22, name: t('home.toolLuckyPlantTitle'), url: 'https://www.ososn.com/tools/lucky-plant' },
+            { '@type': 'ListItem', position: 2, name: t('home.toolZipingBaziTitle'), url: 'https://www.ososn.com/tools/ziping-bazi' },
+            { '@type': 'ListItem', position: 3, name: t('home.toolBaziZiweiTitle'), url: 'https://www.ososn.com/tools/bazi-ziwei' },
+            { '@type': 'ListItem', position: 4, name: t('home.toolZwdsTitle'), url: 'https://www.ososn.com/tools/zwds' },
+            { '@type': 'ListItem', position: 5, name: t('home.toolZhouyiTitle'), url: 'https://www.ososn.com/tools/zhouyi' },
+            { '@type': 'ListItem', position: 6, name: t('home.toolLiuyaoDivinationTitle'), url: 'https://www.ososn.com/tools/liuyao-divination' },
+            { '@type': 'ListItem', position: 7, name: t('home.toolQimenTitle'), url: 'https://www.ososn.com/tools/qimen' },
+            { '@type': 'ListItem', position: 8, name: t('home.toolTaiyiTitle'), url: 'https://www.ososn.com/tools/taiyi' },
+            { '@type': 'ListItem', position: 9, name: t('home.toolLiurenTitle'), url: 'https://www.ososn.com/tools/liuren' },
+            { '@type': 'ListItem', position: 10, name: t('home.toolXiaoLiurenTitle'), url: 'https://www.ososn.com/tools/xiao-liuren' },
+            { '@type': 'ListItem', position: 11, name: t('home.toolJinkoujueTitle'), url: 'https://www.ososn.com/tools/jinkoujue' },
+            { '@type': 'ListItem', position: 12, name: t('home.toolTarotTitle'), url: 'https://www.ososn.com/tools/tarot' },
+            { '@type': 'ListItem', position: 13, name: t('home.toolLenormandTitle'), url: 'https://www.ososn.com/tools/lenormand' },
+            { '@type': 'ListItem', position: 14, name: t('home.toolNumerologyTitle'), url: 'https://www.ososn.com/tools/numerology' },
+            { '@type': 'ListItem', position: 15, name: t('home.toolWugeTitle'), url: 'https://www.ososn.com/tools/wuge' },
+            { '@type': 'ListItem', position: 16, name: t('home.toolChengguTitle'), url: 'https://www.ososn.com/tools/chenggu' },
+            { '@type': 'ListItem', position: 17, name: t('home.toolBaziWealthTitle'), url: 'https://www.ososn.com/tools/bazi-wealth' },
+            { '@type': 'ListItem', position: 18, name: t('home.toolBaziZhengyuanTitle'), url: 'https://www.ososn.com/tools/bazi-zhengyuan' },
+            { '@type': 'ListItem', position: 19, name: t('home.toolBaziFortuneTuneTitle'), url: 'https://www.ososn.com/tools/bazi-fortune-tune' },
+            { '@type': 'ListItem', position: 20, name: t('home.toolAstroFortuneTuneTitle'), url: 'https://www.ososn.com/tools/astro-fortune-tune' },
+            { '@type': 'ListItem', position: 21, name: t('home.toolFengshuiTitle'), url: 'https://www.ososn.com/tools/fengshui' },
+            { '@type': 'ListItem', position: 22, name: t('home.toolXuankongFengshuiTitle'), url: 'https://www.ososn.com/tools/xuankong-fengshui' },
+            { '@type': 'ListItem', position: 23, name: t('home.toolZibaifeixingTitle'), url: 'https://www.ososn.com/tools/zibaifeixing' },
+            { '@type': 'ListItem', position: 24, name: t('home.toolVedicTitle'), url: 'https://www.ososn.com/tools/vedic-astro' },
+            { '@type': 'ListItem', position: 25, name: t('home.toolLuckyPlantTitle'), url: 'https://www.ososn.com/tools/lucky-plant' },
           ],
         },
       }),
