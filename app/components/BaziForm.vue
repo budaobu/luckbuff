@@ -27,7 +27,7 @@
     </div>
 
     <!-- 性别 -->
-    <div v-if="!minimal" class="space-y-1.5">
+    <div v-if="!minimal && showGender" class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.gender') }}
         <span class="text-[var(--accent)]">*</span>
@@ -107,7 +107,7 @@
     </div>
 
     <!-- 姓名 -->
-    <div v-if="!minimal" class="space-y-1.5">
+    <div v-if="!minimal && showName" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.name') }}</label>
       <UInput
         v-model="form.name"
@@ -150,7 +150,7 @@
     </div>
 
     <!-- 出生地点 -->
-    <div v-if="!minimal" class="space-y-1.5">
+    <div v-if="!minimal && showBirthProvince" class="space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
       <UInput
         v-model="form.birthProvince"
@@ -191,7 +191,7 @@
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
       </template>
-      {{ $t('baziForm.submit') }}
+      {{ submitLabel || $t('baziForm.submit') }}
     </UButton>
   </div>
 </template>
@@ -214,13 +214,21 @@ interface FormValues {
 interface Props {
   initialValues?: Partial<FormValues>
   minimal?: boolean
+  showGender?: boolean
+  showName?: boolean
   showFormerName?: boolean
+  showBirthProvince?: boolean
+  submitLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   initialValues: () => ({}),
   minimal: false,
+  showGender: true,
+  showName: true,
   showFormerName: true,
+  showBirthProvince: true,
+  submitLabel: undefined,
 })
 
 const emit = defineEmits<{
@@ -296,15 +304,20 @@ const hasFormChanges = computed(() => {
   if (!selectedProfileId.value) return false
   const p = store.list.find(x => x.id === selectedProfileId.value)
   if (!p) return false
-  return (
-    p.gender !== form.gender ||
-    p.birthDate !== form.birthDate ||
-    p.birthHour !== form.birthHour ||
-    p.name !== form.name ||
-    p.formerName !== form.formerName ||
-    p.formerNameChangedYear !== form.formerNameChangedYear ||
-    p.birthProvince !== form.birthProvince
-  )
+  const checks: boolean[] = [
+    p.birthDate !== form.birthDate,
+    p.birthHour !== form.birthHour,
+  ]
+  if (props.showGender) checks.push(p.gender !== form.gender)
+  if (props.showName) checks.push(p.name !== form.name)
+  if (props.showFormerName && !props.minimal) {
+    checks.push(
+      p.formerName !== form.formerName,
+      p.formerNameChangedYear !== form.formerNameChangedYear,
+    )
+  }
+  if (props.showBirthProvince && !props.minimal) checks.push(p.birthProvince !== form.birthProvince)
+  return checks.some(Boolean)
 })
 
 function selectProfile(profile: UserProfile) {
