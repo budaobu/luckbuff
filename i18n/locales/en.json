@@ -958,7 +958,12 @@
     "zipingBaziDesc": "Free online Zi Ping Bazi charting. Enter your birth date and time to generate the four pillars, ten gods, pattern, favorable elements and ten-year luck cycles, interpreted by the orthodox Zi Ping method.",
     "zipingBaziKeywords": "Zi Ping Bazi,Zi Ping method,Zi Ping fortune telling,Zi Ping chart,Zi Ping metaphysics,Four Pillars Bazi,free Bazi reading,favorable elements,luck cycles",
     "zipingBaziOgTitle": "Zi Ping Bazi Fortune Telling_Free Zi Ping Chart",
-    "zipingBaziOgDesc": "Generate your Zi Ping Bazi chart online: four pillars, pattern, favorable elements and major luck cycles. Free to use."
+    "zipingBaziOgDesc": "Generate your Zi Ping Bazi chart online: four pillars, pattern, favorable elements and major luck cycles. Free to use.",
+    "bazhaiTitle": "八宅风水吉凶方位解析_八宅风水问题如何布局化解",
+    "bazhaiDesc": "免费在线八宅风水吉凶方位解析，输入出生年份、性别与房屋朝向，按八宅明镜法排定命卦与八方吉凶，获取每个凶方的化解建议与布局参考。仅供文化娱乐参考。",
+    "bazhaiKeywords": "八宅风水,八宅明镜,命卦,东西四命,大游年,吉凶方位,风水化解,阳宅风水,在线排盘,ososn",
+    "bazhaiOgTitle": "八宅风水吉凶方位解析_八宅风水问题如何布局化解",
+    "bazhaiOgDesc": "免费在线八宅风水吉凶方位解析，输入出生年份、性别与房屋朝向，按八宅明镜法排定命卦与八方吉凶，获取每个凶方的化解建议与布局参考。仅供文化娱乐参考。"
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -5603,31 +5608,118 @@
       "fun": "Chaotic"
     },
     "items": {
-      "career": ["Left work on time 3 months straight", "Said one sentence in a meeting and got it approved", "Passed the scapegoat title to someone else", "Didn't want to quit on Monday morning"],
-      "wealth": ["Savings interest beat a bubble tea", "Survived a sale without buying", "Snagged a coupon and actually used it", "Read the paycheck text three times"],
-      "love": ["Crush texted first", "Apologized first but still won", "Listened to all their nonsense", "Escaped a blind date intact"],
-      "health": ["Slept before midnight 7 days running", "Walked a whole year's steps", "Zero arrows on the checkup report", "Quit milk tea for three days"],
-      "study": ["Finished a book bought 3 years ago", "Guessed a big exam question right", "Learned a useless but cool skill", "Got past 'abandon' in the word list"],
-      "social": ["Said something everyone agreed with", "Declined a pointless hangout", "A new friend added me first", "No awkward silence over 3 seconds"],
-      "growth": ["Slept 10 min earlier than yesterday", "Admitted I was wrong once", "Did the thing I delayed a week", "Didn't argue with a fool"],
-      "life": ["Kept a plant alive 3 months", "Cooked a post-worthy meal", "Watched a whole movie alone", "Cleaned the room to walkable"],
-      "fun": ["Blamed it on Monday", "Rehearsed an acceptance speech in the mirror", "Saved the boss's meme sticker", "Used astrology to excuse being late"]
+      "career": [
+        "Left work on time 3 months straight",
+        "Said one sentence in a meeting and got it approved",
+        "Passed the scapegoat title to someone else",
+        "Didn't want to quit on Monday morning"
+      ],
+      "wealth": [
+        "Savings interest beat a bubble tea",
+        "Survived a sale without buying",
+        "Snagged a coupon and actually used it",
+        "Read the paycheck text three times"
+      ],
+      "love": [
+        "Crush texted first",
+        "Apologized first but still won",
+        "Listened to all their nonsense",
+        "Escaped a blind date intact"
+      ],
+      "health": [
+        "Slept before midnight 7 days running",
+        "Walked a whole year's steps",
+        "Zero arrows on the checkup report",
+        "Quit milk tea for three days"
+      ],
+      "study": [
+        "Finished a book bought 3 years ago",
+        "Guessed a big exam question right",
+        "Learned a useless but cool skill",
+        "Got past 'abandon' in the word list"
+      ],
+      "social": [
+        "Said something everyone agreed with",
+        "Declined a pointless hangout",
+        "A new friend added me first",
+        "No awkward silence over 3 seconds"
+      ],
+      "growth": [
+        "Slept 10 min earlier than yesterday",
+        "Admitted I was wrong once",
+        "Did the thing I delayed a week",
+        "Didn't argue with a fool"
+      ],
+      "life": [
+        "Kept a plant alive 3 months",
+        "Cooked a post-worthy meal",
+        "Watched a whole movie alone",
+        "Cleaned the room to walkable"
+      ],
+      "fun": [
+        "Blamed it on Monday",
+        "Rehearsed an acceptance speech in the mirror",
+        "Saved the boss's meme sticker",
+        "Used astrology to excuse being late"
+      ]
     },
     "filters": {
-      "ascii": { "name": "ASCII", "desc": "Redraw with character luminance — old-school geek." },
-      "dots": { "name": "Dots", "desc": "Halftone dot matrix, newsprint retro." },
-      "voxel": { "name": "Voxel", "desc": "Isometric cubes, a world built of blocks." },
-      "ancient": { "name": "Ancient", "desc": "Glyphs of dragons & mountains form the image." },
-      "terminal": { "name": "Terminal", "desc": "Green scanline console, Matrix vibes." },
-      "arcade": { "name": "Arcade", "desc": "Arcade-cabinet palette, neon pixel nostalgia." },
-      "bit16": { "name": "16-BIT", "desc": "16-color retro console, hard-edged pixels." },
-      "glitch": { "name": "Glitch", "desc": "Channel shift & horizontal tears, cyber-decay." },
-      "static": { "name": "Static", "desc": "Snow noise + scanlines, a failing old TV." },
-      "prism": { "name": "Prism", "desc": "RGB channel split, the world through a prism." },
-      "acid": { "name": "Acid Rain", "desc": "Wave warp + toxic-green drips, psychedelic." },
-      "phantom": { "name": "Phantom", "desc": "Multi-exposure afterimages, cold astral double." },
-      "ink": { "name": "Ink Wash", "desc": "Sumi-e bleed on rice paper, meaning in the blank." },
-      "crystal": { "name": "Crystal", "desc": "Low-poly crystalline mosaic, refracted shards." }
+      "ascii": {
+        "name": "ASCII",
+        "desc": "Redraw with character luminance — old-school geek."
+      },
+      "dots": {
+        "name": "Dots",
+        "desc": "Halftone dot matrix, newsprint retro."
+      },
+      "voxel": {
+        "name": "Voxel",
+        "desc": "Isometric cubes, a world built of blocks."
+      },
+      "ancient": {
+        "name": "Ancient",
+        "desc": "Glyphs of dragons & mountains form the image."
+      },
+      "terminal": {
+        "name": "Terminal",
+        "desc": "Green scanline console, Matrix vibes."
+      },
+      "arcade": {
+        "name": "Arcade",
+        "desc": "Arcade-cabinet palette, neon pixel nostalgia."
+      },
+      "bit16": {
+        "name": "16-BIT",
+        "desc": "16-color retro console, hard-edged pixels."
+      },
+      "glitch": {
+        "name": "Glitch",
+        "desc": "Channel shift & horizontal tears, cyber-decay."
+      },
+      "static": {
+        "name": "Static",
+        "desc": "Snow noise + scanlines, a failing old TV."
+      },
+      "prism": {
+        "name": "Prism",
+        "desc": "RGB channel split, the world through a prism."
+      },
+      "acid": {
+        "name": "Acid Rain",
+        "desc": "Wave warp + toxic-green drips, psychedelic."
+      },
+      "phantom": {
+        "name": "Phantom",
+        "desc": "Multi-exposure afterimages, cold astral double."
+      },
+      "ink": {
+        "name": "Ink Wash",
+        "desc": "Sumi-e bleed on rice paper, meaning in the blank."
+      },
+      "crystal": {
+        "name": "Crystal",
+        "desc": "Low-poly crystalline mosaic, refracted shards."
+      }
     }
   },
   "japanPriorityTest": {
@@ -5871,5 +5963,81 @@
     "noProfiles": "No saved profiles yet, ",
     "goSettings": "go to settings",
     "createSuffix": "to create one"
+  },
+  "bazhai": {
+    "title": "Eight House Feng Shui Direction Analysis",
+    "subtitle": "Calculate your Ming Gua based on birth year and gender, combine with house facing direction, and get AI interpretations and remedy suggestions.",
+    "disclaimer": "This tool generates reference results based on traditional Eight House (Ba Zhai) Feng Shui. It is for cultural entertainment and study only, and does not constitute Feng Shui layout, real estate, renovation, or professional advice.",
+    "genderLabel": "Gender",
+    "birthYearLabel": "Birth Year",
+    "birthYearPlaceholder": "Enter birth year",
+    "birthYearHint": "Use the year after Li Chun; if born before Li Chun, count as the previous year.",
+    "directionLabel": "House Facing Direction",
+    "directionPlaceholder": "0–360°",
+    "mountainPlaceholder": "24 Mountains",
+    "directionHint": "Enter precise degrees or choose from the 24 mountains; North is 0° and increases clockwise.",
+    "submitBtn": "Calculate Now",
+    "calculating": "Calculating chart...",
+    "resultTitle": "Eight House Feng Shui Result",
+    "inputSummary": "Input Summary",
+    "mingGua": "Ming Gua",
+    "sitting": "Sitting Mountain",
+    "chartTitle": "Eight Directions Chart",
+    "remedyTitle": "Remedy Suggestions",
+    "interpretation": "AI Interpretation",
+    "interpreting": "Interpreting...",
+    "generatingInterpretation": "Generating interpretation...",
+    "reinterpret": "Reinterpret",
+    "copyResult": "Copy Result",
+    "recalculate": "Recalculate",
+    "backToTools": "Back to Tools",
+    "calcFail": "Calculation Failed",
+    "checkInput": "Please check your input",
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "knowledgeCard1Title": "Ming Gua Calculation",
+    "knowledgeCard1Desc": "Calculate Ming Gua from birth year and gender using the Eight House method, switching year at Li Chun.",
+    "knowledgeCard2Title": "East/West Four Lives",
+    "knowledgeCard2Desc": "Ming Gua divides into East Four and West Four lives; each matches corresponding house directions.",
+    "knowledgeCard3Title": "Da You Nian Song",
+    "knowledgeCard3Desc": "From the Ming Gua palace, clockwise arrange Sheng Qi, Yan Nian, Tian Yi, Fu Wei auspicious stars and Wu Gui, Liu Sha, Huo Hai, Jue Ming inauspicious stars.",
+    "knowledgeCard4Title": "Remedy Layout",
+    "knowledgeCard4Desc": "Inauspicious directions can be harmonized through zoning, colors, materials and furniture placement; auspicious directions suit bedrooms, studies or wealth corners.",
+    "palaceNames": {
+      "kan": "Kan",
+      "kun": "Kun",
+      "zhen": "Zhen",
+      "xun": "Xun",
+      "qian": "Qian",
+      "dui": "Dui",
+      "gen": "Gen",
+      "li": "Li",
+      "zhong": "Center"
+    },
+    "directions": {
+      "n": "North",
+      "ne": "Northeast",
+      "e": "East",
+      "se": "Southeast",
+      "s": "South",
+      "sw": "Southwest",
+      "w": "West",
+      "nw": "Northwest"
+    },
+    "stars": {
+      "shengqi": "Sheng Qi",
+      "yannian": "Yan Nian",
+      "tianyi": "Tian Yi",
+      "fuwei": "Fu Wei",
+      "jueming": "Jue Ming",
+      "wugui": "Wu Gui",
+      "huohai": "Huo Hai",
+      "liusha": "Liu Sha"
+    },
+    "remedy": {
+      "jueming": "Jue Ming in the {direction} direction indicates health drain and strained relationships. Avoid using it as master bedroom, main door or kitchen; use it for storage or bathroom, and soften with warm lighting and round-leaf plants.",
+      "wugui": "Wu Gui in the {direction} direction indicates disputes and sudden changes. Avoid placing desk, bed head or stove here; keep tidy, reduce sharp objects and avoid sitting here for long periods.",
+      "huohai": "Huo Hai in the {direction} direction indicates quarrels, lawsuits and financial loss. Avoid using it as study or negotiation area; use blue or black soft decorations and dim the lighting.",
+      "liusha": "Liu Sha in the {direction} direction indicates emotional disturbance and restlessness. Avoid using it as bedroom or romance corner; use metal decorations, cool style and keep it ventilated and dry."
+    }
   }
 }

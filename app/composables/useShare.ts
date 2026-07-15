@@ -61,6 +61,7 @@ export interface ShareOptions {
     | 'bzti-birthday-personality'
     | 'astro-zhichang-hepan'
     | 'japan-priority-test'
+    | 'bazhai-fengshui'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -143,6 +144,7 @@ export function useShare() {
       'bzti-birthday-personality': 'BZTI 生日人格测试',
       'astro-zhichang-hepan': '职场占星合盘',
       'japan-priority-test': '日本很火的心理测试',
+      'bazhai-fengshui': '八宅风水',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -312,6 +314,9 @@ export function useShare() {
       'japan-priority-test': summary
         ? t('share.hookJapanPriorityTest', { summary })
         : t('share.hookJapanPriorityTestDefault'),
+      'bazhai-fengshui': summary
+        ? t('share.hookGeneric', { tool: '八宅风水', summary })
+        : t('share.hookGeneric', { tool: '八宅风水' }),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
