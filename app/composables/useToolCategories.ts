@@ -104,6 +104,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'officeFengshui.submitBtn',
         path: '/tools/office-fengshui',
       },
+      {
+        icon: 'i-heroicons-moon',
+        titleKey: 'bedroomFengshui.title',
+        descKey: 'seo.bedroomFengshuiDesc',
+        ctaKey: 'bedroomFengshui.submitBtn',
+        path: '/tools/bedroom-fengshui',
+      },
     ],
  },
   {
