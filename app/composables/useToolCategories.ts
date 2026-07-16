@@ -97,6 +97,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'bazhai.submitBtn',
         path: '/tools/bazhai-fengshui',
       },
+      {
+        icon: 'i-heroicons-briefcase',
+        titleKey: 'officeFengshui.title',
+        descKey: 'seo.officeFengshuiDesc',
+        ctaKey: 'officeFengshui.submitBtn',
+        path: '/tools/office-fengshui',
+      },
     ],
  },
   {

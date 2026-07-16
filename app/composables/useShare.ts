@@ -62,6 +62,7 @@ export interface ShareOptions {
     | 'astro-zhichang-hepan'
     | 'japan-priority-test'
     | 'bazhai-fengshui'
+    | 'office-fengshui'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -145,6 +146,7 @@ export function useShare() {
       'astro-zhichang-hepan': '职场占星合盘',
       'japan-priority-test': '日本很火的心理测试',
       'bazhai-fengshui': '八宅风水',
+      'office-fengshui': '办公室风水布局',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
