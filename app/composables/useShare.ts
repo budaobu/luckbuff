@@ -63,6 +63,7 @@ export interface ShareOptions {
     | 'japan-priority-test'
     | 'bazhai-fengshui'
     | 'office-fengshui'
+    | 'bedroom-fengshui'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -147,6 +148,7 @@ export function useShare() {
       'japan-priority-test': '日本很火的心理测试',
       'bazhai-fengshui': '八宅风水',
       'office-fengshui': '办公室风水布局',
+      'bedroom-fengshui': '卧室风水布局',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -319,6 +321,9 @@ export function useShare() {
       'bazhai-fengshui': summary
         ? t('share.hookGeneric', { tool: '八宅风水', summary })
         : t('share.hookGeneric', { tool: '八宅风水' }),
+      'bedroom-fengshui': summary
+        ? t('share.hookGeneric', { tool: '卧室风水布局', summary })
+        : t('share.hookGeneric', { tool: '卧室风水布局' }),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
