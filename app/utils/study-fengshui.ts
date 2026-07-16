@@ -1,5 +1,5 @@
 /**
- * 办公室风水布局计算引擎
+ * 书房风水布局计算引擎
  *
  * 参考资料：
  * - 姜群《八宅风水实用教学篇》（网易）
@@ -30,7 +30,7 @@ import {
 import { getYearPillar } from './bazi/calendar'
 import { TIAN_GAN } from './bazi/constants'
 
-export type RoomType = 'office' | 'study' | 'bedroom' | 'hall'
+export type StudyRoomType = 'independent' | 'withBedroom' | 'withLivingRoom' | 'withDining'
 
 export interface WenchangResult {
   type: '本命文昌' | '固定文昌'
@@ -40,36 +40,34 @@ export interface WenchangResult {
   note: string
 }
 
-export interface SeatSuggestion {
+export interface DeskSuggestion {
   bestDirections: Direction[]
   avoidDirections: Direction[]
   note: string
 }
 
-export interface WealthPosition {
-  direction: Direction
-  star: Star
-  note: string
-}
-
-export interface OfficeFengshuiInput {
-  roomType: RoomType
+export interface StudyFengshuiInput {
   direction: number
+  deskDirection: number
   birthYear: number
   birthMonth: number
   birthDay: number
   gender: Gender
+  roomUsage: StudyRoomType
   locale?: string
 }
 
-export interface OfficeFengshuiResult extends BazhaiResult {
-  roomType: RoomType
+export interface StudyFengshuiResult extends BazhaiResult {
   birthMonth: number
   birthDay: number
   yearGan: string
+  deskDirection: number
+  roomUsage: StudyRoomType
   wenchang: WenchangResult[]
-  seat: SeatSuggestion
-  wealth: WealthPosition
+  desk: DeskSuggestion
+  deskStar: Star
+  deskStarLevel: string
+  deskAuspicious: boolean
 }
 
 // 地支到方位（用于文昌位转换）
@@ -143,117 +141,14 @@ function getWenchangByGan(gan: string): Direction | null {
   return ZHI_DIRECTION[zhi] ?? null
 }
 
-export function calcOfficeFengshui(input: OfficeFengshuiInput): OfficeFengshuiResult {
-  const {
-    roomType,
-    direction,
-    birthYear,
-    birthMonth,
-    birthDay,
-    gender,
-    locale = 'zh-CN',
-  } = input
-
-  const normalizedDir = normalizeDegree(direction)
-  const mountain: Mountain24 | null = findMountain24(normalizedDir)
-    ?? findNearestMountain24Center(normalizedDir)
-  const sittingDeg = normalizeDegree(normalizedDir + 180)
-  const sittingMountain: Mountain24 | null = findMountain24(sittingDeg)
-    ?? findNearestMountain24Center(sittingDeg)
-
-  const yearPillar = getYearPillar(birthYear, birthMonth, birthDay)
-  const yearGan = yearPillar.gan
-
-  // 有效年份按立春调整
-  const effectiveYear = (() => {
-    let y = birthYear
-    // getYearPillar 已按立春调整，若返回的是上一年干支，说明生日在立春前
-    const ganIndex = (birthYear - 4) % 10
-    const expectedGan = TIAN_GAN[ganIndex < 0 ? ganIndex + 10 : ganIndex]!
-    if (yearPillar.gan !== expectedGan) {
-      y = birthYear - 1
-    }
-    return y
-  })()
-
-  // 复用八宅引擎计算命卦、宅卦、八方吉凶
-  const bazhaiResult = calcBazhaiInternal({
-    direction: normalizedDir,
-    mountain,
-    sittingMountain,
-    birthYear: effectiveYear,
-    gender,
-    locale,
-  })
-
-  // 文昌位
-  const wenchang: WenchangResult[] = []
-  const benmingDir = getWenchangByGan(yearGan)
-  if (benmingDir) {
-    wenchang.push({
-      type: '本命文昌',
-      gan: yearGan,
-      direction: benmingDir,
-      directionName: `${benmingDir}方`,
-      note: `以年干「${yearGan}」查文昌贵人，主个人思绪、考运与创意。`,
-    })
-  }
-  const sittingGua = sittingMountain?.palace ?? bazhaiResult.mingGua
-  const fixedDir = SITTING_WENCHANG[sittingGua]
-  if (fixedDir) {
-    wenchang.push({
-      type: '固定文昌',
-      direction: normalizeDirection(fixedDir),
-      directionName: `${normalizeDirection(fixedDir)}方`,
-      note: `以${sittingGua}宅坐山定固定文昌，主空间整体书香、企划与贵人气息。`,
-    })
-  }
-
-  // 座位朝向：优先面向生气/延年，背向五鬼/绝命
-  const shengqi = bazhaiResult.palaces.find(p => p.star === '生气')
-  const yannian = bazhaiResult.palaces.find(p => p.star === '延年')
-  const tianyi = bazhaiResult.palaces.find(p => p.star === '天医')
-  const fuwei = bazhaiResult.palaces.find(p => p.star === '伏位')
-  const wugui = bazhaiResult.palaces.find(p => p.star === '五鬼')
-  const jueming = bazhaiResult.palaces.find(p => p.star === '绝命')
-
-  const bestDirections: Direction[] = []
-  if (shengqi) bestDirections.push(shengqi.direction)
-  if (yannian) bestDirections.push(yannian.direction)
-  if (tianyi && bestDirections.length < 2) bestDirections.push(tianyi.direction)
-  if (fuwei && bestDirections.length < 2) bestDirections.push(fuwei.direction)
-
-  const avoidDirections: Direction[] = []
-  if (wugui) avoidDirections.push(wugui.direction)
-  if (jueming && !avoidDirections.includes(jueming.direction)) avoidDirections.push(jueming.direction)
-
-  const seat: SeatSuggestion = {
-    bestDirections,
-    avoidDirections,
-    note: '座位宜面向吉方吸纳气场，忌背对或正对大凶方；实际布局以门窗动线与建筑结构为准。',
-  }
-
-  // 财位：办公室以「生气」为 primary 财位，延年为辅
-  const wealthStar = shengqi ?? yannian
-  const wealth: WealthPosition = {
-    direction: wealthStar?.direction ?? (shengqi?.direction ?? '东'),
-    star: wealthStar?.star ?? '生气',
-    note: '办公空间以生气方为动财位，宜保持整洁、光线充足，可放置绿植或流水摆件；若生气方不适合作财位，再以延年方替补。',
-  }
-
-  return {
-    ...bazhaiResult,
-    roomType,
-    birthMonth,
-    birthDay,
-    yearGan,
-    wenchang,
-    seat,
-    wealth,
-  }
-}
-
-function calcBazhaiInternal(params: InternalBazhaiParams): BazhaiResult {
+function calcBazhaiInternal(params: {
+  direction: number
+  mountain: Mountain24 | null
+  sittingMountain: Mountain24 | null
+  birthYear: number
+  gender: Gender
+  locale: string
+}): BazhaiResult {
   const { direction, mountain, sittingMountain, birthYear, gender, locale } = params
   const mingGuaNumber = calcMingGuaNumber(birthYear, gender)
   const mingGua = getGuaByNumber(mingGuaNumber)
@@ -289,11 +184,122 @@ function calcBazhaiInternal(params: InternalBazhaiParams): BazhaiResult {
   }
 }
 
-interface InternalBazhaiParams {
-  direction: number
-  mountain: Mountain24 | null
-  sittingMountain: Mountain24 | null
-  birthYear: number
-  gender: Gender
-  locale: string
+export function calcStudyFengshui(input: StudyFengshuiInput): StudyFengshuiResult {
+  const {
+    direction,
+    deskDirection,
+    birthYear,
+    birthMonth,
+    birthDay,
+    gender,
+    roomUsage,
+    locale = 'zh-CN',
+  } = input
+
+  const normalizedDir = normalizeDegree(direction)
+  const normalizedDeskDir = normalizeDegree(deskDirection)
+  const mountain: Mountain24 | null = findMountain24(normalizedDir)
+    ?? findNearestMountain24Center(normalizedDir)
+  const sittingDeg = normalizeDegree(normalizedDir + 180)
+  const sittingMountain: Mountain24 | null = findMountain24(sittingDeg)
+    ?? findNearestMountain24Center(sittingDeg)
+
+  const yearPillar = getYearPillar(birthYear, birthMonth, birthDay)
+  const yearGan = yearPillar.gan
+
+  // 有效年份按立春调整
+  const effectiveYear = (() => {
+    let y = birthYear
+    const ganIndex = (birthYear - 4) % 10
+    const expectedGan = TIAN_GAN[ganIndex < 0 ? ganIndex + 10 : ganIndex]!
+    if (yearPillar.gan !== expectedGan) {
+      y = birthYear - 1
+    }
+    return y
+  })()
+
+  const bazhaiResult = calcBazhaiInternal({
+    direction: normalizedDir,
+    mountain,
+    sittingMountain,
+    birthYear: effectiveYear,
+    gender,
+    locale,
+  })
+
+  // 文昌位
+  const wenchang: WenchangResult[] = []
+  const benmingDir = getWenchangByGan(yearGan)
+  if (benmingDir) {
+    wenchang.push({
+      type: '本命文昌',
+      gan: yearGan,
+      direction: benmingDir,
+      directionName: `${benmingDir}方`,
+      note: `以年干「${yearGan}」查文昌贵人，主个人思绪、考运与创意。`,
+    })
+  }
+  const sittingGua = sittingMountain?.palace ?? bazhaiResult.mingGua
+  const fixedDir = SITTING_WENCHANG[sittingGua]
+  if (fixedDir) {
+    wenchang.push({
+      type: '固定文昌',
+      direction: normalizeDirection(fixedDir),
+      directionName: `${normalizeDirection(fixedDir)}方`,
+      note: `以${sittingGua}宅坐山定固定文昌，主空间整体书香、企划与贵人气息。`,
+    })
+  }
+
+  // 书桌朝向：优先面向生气/延年/天医/伏位，避开五鬼/绝命
+  const shengqi = bazhaiResult.palaces.find(p => p.star === '生气')
+  const yannian = bazhaiResult.palaces.find(p => p.star === '延年')
+  const tianyi = bazhaiResult.palaces.find(p => p.star === '天医')
+  const fuwei = bazhaiResult.palaces.find(p => p.star === '伏位')
+  const wugui = bazhaiResult.palaces.find(p => p.star === '五鬼')
+  const jueming = bazhaiResult.palaces.find(p => p.star === '绝命')
+
+  const bestDirections: Direction[] = []
+  if (shengqi) bestDirections.push(shengqi.direction)
+  if (yannian) bestDirections.push(yannian.direction)
+  if (tianyi && bestDirections.length < 3) bestDirections.push(tianyi.direction)
+  if (fuwei && bestDirections.length < 3) bestDirections.push(fuwei.direction)
+
+  const avoidDirections: Direction[] = []
+  if (wugui) avoidDirections.push(wugui.direction)
+  if (jueming && !avoidDirections.includes(jueming.direction)) avoidDirections.push(jueming.direction)
+
+  const roomUsageNote = {
+    independent: '独立书房气场最纯粹，宜以文昌位与吉方主导整体布局。',
+    withBedroom: '书房与卧室合用，需注意书桌不宜正对床头，睡眠区与思考区宜有软性分隔。',
+    withLivingRoom: '书房与客厅合用，需避开电视、沙发动线，书桌宜背靠实墙、面向吉方。',
+    withDining: '书房与餐厅合用，需远离餐桌油烟动线，书架与书桌尽量靠墙形成稳定靠山。',
+  }
+
+  const desk: DeskSuggestion = {
+    bestDirections,
+    avoidDirections,
+    note: `书桌宜面向吉方吸纳文昌气场，忌背对或正对大凶方；${roomUsageNote[roomUsage]}实际布局以门窗动线与建筑结构为准。`,
+  }
+
+  // 书桌所在方位的吉凶
+  const deskMountain = findMountain24(normalizedDeskDir)
+    ?? findNearestMountain24Center(normalizedDeskDir)
+  const deskPalace = bazhaiResult.palaces.find(p => p.name === deskMountain?.palace)
+  const deskStar = deskPalace?.star ?? '伏位'
+  const deskStarLevel = deskPalace?.level ?? '小吉'
+  const deskAuspicious = deskPalace?.auspicious ?? true
+
+  return {
+    ...bazhaiResult,
+    birthMonth,
+    birthDay,
+    yearGan,
+    deskDirection: normalizedDeskDir,
+    roomUsage,
+    wenchang,
+    desk,
+    deskStar,
+    deskStarLevel,
+    deskAuspicious,
+  }
 }

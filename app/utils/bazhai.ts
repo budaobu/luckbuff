@@ -113,7 +113,6 @@ const PALACE_META: {
   { name: '离', direction: '南', palaceNumber: 9 },
 ]
 
-// 数字到卦
 const NUMBER_TO_GUA: Record<number, Gua> = {
   1: '坎',
   2: '坤',
@@ -123,6 +122,17 @@ const NUMBER_TO_GUA: Record<number, Gua> = {
   7: '兑',
   8: '艮',
   9: '离',
+}
+
+const STAR_LEVEL: Record<Star, '大吉' | '吉' | '小吉' | '大凶' | '凶'> = {
+  生气: '大吉',
+  延年: '吉',
+  天医: '吉',
+  伏位: '小吉',
+  绝命: '大凶',
+  五鬼: '大凶',
+  祸害: '凶',
+  六煞: '凶',
 }
 
 // 大游年歌诀：以伏位卦为起点，顺时针（北→东北→东→东南→南→西南→西→西北）排列八星
@@ -232,10 +242,6 @@ function directionToIndex(dir: Direction): number {
   return CLOCKWISE_DIRECTIONS.indexOf(dir)
 }
 
-function indexToDirection(idx: number): Direction {
-  return CLOCKWISE_DIRECTIONS[(idx + 8) % 8]!
-}
-
 function getVowelStar(gua: Gua, direction: Direction): Star {
   const guaMeta = PALACE_META.find(p => p.name === gua)!
   const baseIdx = directionToIndex(guaMeta.direction)
@@ -244,15 +250,24 @@ function getVowelStar(gua: Gua, direction: Direction): Star {
   return DAYOU_NIAN[gua][offset]!
 }
 
-const STAR_LEVEL: Record<Star, '大吉' | '吉' | '小吉' | '大凶' | '凶'> = {
-  生气: '大吉',
-  延年: '吉',
-  天医: '吉',
-  伏位: '小吉',
-  绝命: '大凶',
-  五鬼: '大凶',
-  祸害: '凶',
-  六煞: '凶',
+export function getPalaceStar(gua: Gua, direction: Direction): { star: Star; level: '大吉' | '吉' | '小吉' | '大凶' | '凶' } {
+  const star = getVowelStar(gua, direction)
+  return { star, level: STAR_LEVEL[star] }
+}
+
+export function calcBazhaiPalaces(gua: Gua): PalaceResult[] {
+  return PALACE_META.map((meta) => {
+    const star = getVowelStar(gua, meta.direction)
+    const auspicious = ['生气', '延年', '天医', '伏位'].includes(star)
+    return {
+      name: meta.name,
+      direction: meta.direction,
+      palaceNumber: meta.palaceNumber,
+      star,
+      auspicious,
+      level: STAR_LEVEL[star],
+    }
+  })
 }
 
 export function calcBazhai(
@@ -273,18 +288,7 @@ export function calcBazhai(
   const zhaiGua = sittingMountain?.palace ?? mingGua
   const dongSiZhai: '东四宅' | '西四宅' = isDongSi(zhaiGua) ? '东四宅' : '西四宅'
 
-  const palaces: PalaceResult[] = PALACE_META.map((meta) => {
-    const star = getVowelStar(mingGua, meta.direction)
-    const auspicious = ['生气', '延年', '天医', '伏位'].includes(star)
-    return {
-      name: meta.name,
-      direction: meta.direction,
-      palaceNumber: meta.palaceNumber,
-      star,
-      auspicious,
-      level: STAR_LEVEL[star],
-    }
-  })
+  const palaces = calcBazhaiPalaces(mingGua)
 
   const auspicious = palaces
     .filter(p => p.auspicious)
