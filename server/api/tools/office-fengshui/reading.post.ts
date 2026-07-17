@@ -17,6 +17,13 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
   },
 }
 
+const OFFICE_USAGE_TEXT: Record<CalcResult['officeUsage'], string> = {
+  independent: '独立办公室',
+  openPlan: '开放式工位',
+  shared: '共享办公室',
+  homeOffice: '居家办公',
+}
+
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
   return `你是一位隐居山中的风水老顽童，人称「幽默隐士」。精通八宅明镜、东西四宅法与办公室布局，说话风趣但不失专业，能把古籍里的"生气延年"翻译成现代人听得懂的职场建议。
@@ -32,10 +39,11 @@ ${langHook.system}
 1. 先点出用户的命卦与东西四命属性。
 2. 根据办公室朝向（向首）判断坐山与宅卦（东西四宅）。
 3. 按大游年歌诀列出八方吉凶：四吉星（生气、延年、天医、伏位）与四凶星（绝命、五鬼、祸害、六煞）。
-4. 给出座位朝向建议：宜面向哪些吉方、避开哪些凶方。
-5. 给出文昌位建议：结合本命文昌与固定文昌，说明书桌、电脑、文件柜如何摆放。
-6. 给出财位布局建议：明确定位生气/延年方，说明办公桌、保险箱、收款区如何布置。
-7. 最后给出一两句幽默总结。
+4. 给出办公桌朝向建议：宜面向哪些吉方、避开哪些凶方；结合当前办公桌所在方位的星曜做点评。
+5. 给出座位朝向建议：宜面向哪些吉方、避开哪些凶方；结合办公室使用方式给出实际提醒。
+6. 给出文昌位建议：结合本命文昌与固定文昌，说明书桌、电脑、文件柜如何摆放。
+7. 给出财位布局建议：明确定位生气/延年方，说明办公桌、保险箱、收款区如何布置。
+8. 最后给出一两句幽默总结。
 
 ## 输出结构
 请严格按以下结构输出：
@@ -46,10 +54,15 @@ ${langHook.system}
 ### 八方吉凶一览
 按北、东北、东、东南、南、西南、西、西北的顺序，每方一句话：方位 + 星曜 + 吉凶等级。
 
+### 办公桌朝向建议
+- 宜面向：列出最佳方位并简述原因
+- 忌背对/正对：列出需避开的方位并简述原因
+- 当前办公桌方位点评：结合用户填写的办公桌朝向与对应星曜，给一句风趣提醒
+
 ### 座位朝向建议
 - 宜面向：列出最佳方位并简述原因
 - 忌背对/正对：列出需避开的方位并简述原因
-- 实际摆放提醒
+- 实际摆放提醒：结合办公室使用方式（独立/开放式/共享/居家）给出一句提醒
 
 ### 文昌位布局
 结合本命文昌与固定文昌，给出书桌、电脑、文件柜的摆放建议。
@@ -72,7 +85,7 @@ ${langHook.system}
 - 化解建议必须每个凶方单独成段，不能合并。
 - 不做流年、流月、具体日期的时机预测。
 - 不涉及符咒、法事、购买指定商品。
-- 输出只包含上述七段，不要额外总结。`
+- 输出只包含上述八段，不要额外总结。`
 }
 
 function buildUserPrompt(result: CalcResult): string {
@@ -94,6 +107,10 @@ function buildUserPrompt(result: CalcResult): string {
     .map((w) => `${w.type}：${w.directionName}${w.gan ? `（年干 ${w.gan}）` : ''} — ${w.note}`)
     .join('\n')
 
+  const deskMountain = result.mountain
+    ? result.mountain.name + '（' + result.mountain.palace + '）'
+    : '未知'
+
   return `请为以下办公室风水排盘结果做解读：
 
 【办公人信息】
@@ -103,11 +120,17 @@ function buildUserPrompt(result: CalcResult): string {
 - 命卦：${result.mingGua}（${result.mingGuaNumber}） · ${result.dongSiMing}
 
 【办公室信息】
+- 使用方式：${OFFICE_USAGE_TEXT[result.officeUsage]}
 - 房间类型：办公室
 - 朝向角度：${result.direction}°
 - 向山：${result.mountain ? result.mountain.name + '（' + result.mountain.palace + '）' : '未知'}
 - 坐山：${result.sittingMountain ? result.sittingMountain.name + '（' + result.sittingMountain.palace + '）' : '未知'}
 - 宅卦：${result.dongSiZhai}
+
+【办公桌朝向】
+- 当前办公桌朝向角度：${result.deskDirection}°
+- 办公桌所在方位山向：${deskMountain}
+- 办公桌所在方位星曜：${result.deskStar} · ${result.deskStarLevel}
 
 【文昌位】
 ${wenchangLines}
@@ -115,7 +138,7 @@ ${wenchangLines}
 【财位】
 ${result.wealth.direction}方 · ${result.wealth.star} — ${result.wealth.note}
 
-【座位朝向】
+【座位/办公桌朝向】
 宜面向：${result.seat.bestDirections.join('、')}
 忌背对/正对：${result.seat.avoidDirections.join('、')}
 
@@ -125,7 +148,7 @@ ${palaceLines}
 【凶方清单】
 ${inauspiciousLines}
 
-请按"命卦与宅卦速览 → 八方吉凶一览 → 座位朝向建议 → 文昌位布局 → 财位布局 → 凶方化解建议 → 山人小结"的顺序输出。${langHook.user}`
+请按"命卦与宅卦速览 → 八方吉凶一览 → 办公桌朝向建议 → 座位朝向建议 → 文昌位布局 → 财位布局 → 凶方化解建议 → 山人小结"的顺序输出。${langHook.user}`
 }
 
 export default defineEventHandler(async (event) => {
