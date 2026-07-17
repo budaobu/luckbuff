@@ -329,6 +329,12 @@ const topics = [
     path: '/fortune-telling',
   },
   {
+    icon: 'i-heroicons-map',
+    titleKey: 'home.topicFengshuiTitle',
+    descKey: 'home.topicFengshuiDesc',
+    path: '/fengshui',
+  },
+  {
     icon: 'i-heroicons-heart',
     titleKey: 'home.topicDoubleChartTitle',
     descKey: 'home.topicDoubleChartDesc',
