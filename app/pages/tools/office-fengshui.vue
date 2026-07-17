@@ -179,6 +179,94 @@
               </div>
             </div>
 
+            <!-- 办公桌朝向 -->
+            <div>
+              <label class="block text-sm text-[var(--text-muted)] mb-2">
+                {{ $t('officeFengshui.deskDirectionLabel') }} <span class="text-[var(--accent)]">*</span>
+              </label>
+              <div class="flex items-center gap-3">
+                <UInput
+                  v-model.number="form.deskDirection"
+                  type="number"
+                  :min="0"
+                  :max="360"
+                  :placeholder="$t('officeFengshui.deskDirectionPlaceholder')"
+                  class="w-full"
+                  :ui="inputUi"
+                  @update:model-value="onDeskDirectionInput"
+                />
+                <USelectMenu
+                  v-model="selectedDeskMountain"
+                  :items="mountainOptions"
+                  value-key="value"
+                  :placeholder="$t('officeFengshui.mountainPlaceholder')"
+                  class="w-32"
+                  :ui="selectUi"
+                  @update:model-value="onDeskMountainSelect"
+                />
+              </div>
+              <p class="text-[11px] text-[var(--text-faint)] mt-1.5">
+                {{ $t('officeFengshui.deskDirectionHint') }}
+              </p>
+
+              <!-- 办公桌罗盘 -->
+              <div class="mt-4 flex justify-center">
+                <div
+                  ref="deskCompassRef"
+                  class="relative w-32 h-32 rounded-full border-2 border-[var(--border-light)] bg-[var(--surface-card)] cursor-crosshair select-none"
+                  @mousedown="startDeskCompassDrag"
+                  @touchstart.prevent="startDeskCompassDrag"
+                  @mousemove="onDeskCompassDrag"
+                  @touchmove.prevent="onDeskCompassDrag"
+                  @mouseup="stopDeskCompassDrag"
+                  @touchend="stopDeskCompassDrag"
+                  @mouseleave="stopDeskCompassDrag"
+                >
+                  <div class="absolute inset-0 rounded-full">
+                    <div
+                      v-for="deg in [0, 45, 90, 135, 180, 225, 270, 315]"
+                      :key="deg"
+                      class="absolute w-px h-3 bg-[var(--border-medium)] origin-bottom"
+                      :style="compassTickStyle(deg)"
+                    />
+                  </div>
+                  <div class="absolute inset-0 rounded-full text-[10px] font-medium text-[var(--text-muted)]">
+                    <span class="absolute top-1 left-1/2 -translate-x-1/2">N</span>
+                    <span class="absolute bottom-1 left-1/2 -translate-x-1/2">S</span>
+                    <span class="absolute left-1.5 top-1/2 -translate-y-1/2">W</span>
+                    <span class="absolute right-1.5 top-1/2 -translate-y-1/2">E</span>
+                  </div>
+                  <div
+                    class="absolute bottom-1/2 left-1/2 w-0.5 h-[calc(50%-8px)] origin-bottom rounded-full bg-[var(--accent-purple)]"
+                    :style="deskNeedleStyle"
+                  />
+                  <div class="absolute top-1/2 left-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent-purple)]" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 办公室使用方式 -->
+            <div>
+              <label class="block text-sm text-[var(--text-muted)] mb-2">
+                {{ $t('officeFengshui.officeUsageLabel') }} <span class="text-[var(--accent)]">*</span>
+              </label>
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  v-for="usage in officeUsageOptions"
+                  :key="usage.value"
+                  type="button"
+                  class="py-2.5 rounded-lg border text-sm font-medium transition-all duration-200 text-left px-4"
+                  :class="form.officeUsage === usage.value
+                    ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+                    : 'border-[var(--border-light)] bg-[var(--surface-input)] text-[var(--text-muted)] hover:border-[var(--border-medium)]'"
+                  @click="form.officeUsage = usage.value"
+                >
+                  <span class="block font-semibold">{{ usage.label }}</span>
+                  <span class="block text-[10px] opacity-80 mt-0.5">{{ usage.sublabel }}</span>
+                </button>
+              </div>
+            </div>
+
             <!-- 计算按钮 -->
             <UButton
               color="warning"
@@ -214,7 +302,7 @@
           </div>
           <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
             <div class="flex items-center gap-2 mb-2">
-              <UIcon name="i-heroicons-book-open" class="w-4 h-4 text-[var(--accent-muted)]" />
+              <UIcon name="i-heroicons-arrows-pointing-out" class="w-4 h-4 text-[var(--accent-muted)]" />
               <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('officeFengshui.knowledgeCard3Title') }}</h4>
             </div>
             <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('officeFengshui.knowledgeCard3Desc') }}</p>
@@ -271,6 +359,10 @@
             <div class="text-[var(--text-primary)]">{{ form.birthDate }}</div>
             <div class="text-[var(--text-muted)]">{{ $t('officeFengshui.directionLabel') }}</div>
             <div class="text-[var(--text-primary)]">{{ form.direction }}° — {{ calcResult.mountain?.name }}（{{ calcResult.mountain?.palace }}）</div>
+            <div class="text-[var(--text-muted)]">{{ $t('officeFengshui.deskDirectionLabel') }}</div>
+            <div class="text-[var(--text-primary)]">{{ form.deskDirection }}° — {{ deskMountainLabel }}</div>
+            <div class="text-[var(--text-muted)]">{{ $t('officeFengshui.officeUsageLabel') }}</div>
+            <div class="text-[var(--text-primary)]">{{ currentOfficeUsageLabel }}</div>
           </div>
         </div>
 
@@ -313,10 +405,43 @@
             {{ $t('officeFengshui.layoutTitle') }}
           </h3>
           <div class="space-y-3">
-            <!-- 座位朝向 -->
+            <!-- 办公桌朝向 -->
             <div class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)]/30 p-4">
               <div class="flex items-center gap-2 mb-2">
                 <UIcon name="i-heroicons-arrows-pointing-out" class="w-4 h-4 text-[var(--accent)]" />
+                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('officeFengshui.deskTitle') }}</h4>
+              </div>
+              <p class="text-xs text-[var(--text-body)] leading-relaxed mb-2">{{ calcResult.desk.note }}</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs text-[var(--text-muted)]">{{ $t('officeFengshui.deskBest') }}</span>
+                <span
+                  v-for="dir in calcResult.desk.bestDirections"
+                  :key="dir"
+                  class="text-xs px-2 py-0.5 rounded-full bg-[var(--accent-bg)] text-[var(--accent)] border border-[var(--accent-border)]"
+                >
+                  {{ t(`officeFengshui.directions.${directionKey(dir)}`) }}
+                </span>
+              </div>
+              <div v-if="calcResult.desk.avoidDirections.length" class="flex flex-wrap gap-2 mt-2">
+                <span class="text-xs text-[var(--text-muted)]">{{ $t('officeFengshui.deskAvoid') }}</span>
+                <span
+                  v-for="dir in calcResult.desk.avoidDirections"
+                  :key="dir"
+                  class="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20"
+                >
+                  {{ t(`officeFengshui.directions.${directionKey(dir)}`) }}
+                </span>
+              </div>
+              <div class="mt-3 text-xs text-[var(--text-body)] leading-relaxed">
+                <span class="font-medium text-[var(--text-primary)]">{{ $t('officeFengshui.currentDeskStar') }}</span>
+                <span class="text-[var(--accent)]">{{ starLabel(calcResult.deskStar) }} · {{ calcResult.deskStarLevel }}</span>
+              </div>
+            </div>
+
+            <!-- 座位朝向 -->
+            <div class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)]/30 p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent)]" />
                 <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('officeFengshui.seatTitle') }}</h4>
               </div>
               <p class="text-xs text-[var(--text-body)] leading-relaxed mb-2">{{ calcResult.seat.note }}</p>
@@ -508,7 +633,7 @@
 import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { MOUNTAINS_24 } from '~/utils/bazhai'
-import type { OfficeFengshuiResult, RoomType } from '~/utils/office-fengshui'
+import type { OfficeFengshuiResult, OfficeUsageType, RoomType } from '~/utils/office-fengshui'
 import type { Gua, Direction, Star } from '~/utils/bazhai'
 
 interface CalcResult extends OfficeFengshuiResult {}
@@ -521,12 +646,16 @@ const form = reactive({
   gender: '' as 'male' | 'female' | '',
   birthDate: '' as string,
   direction: 0,
+  deskDirection: 0,
+  officeUsage: 'independent' as OfficeUsageType,
 })
 const calcResult = ref<CalcResult | null>(null)
 const resultRef = ref<HTMLDivElement>()
 const toast = useToast()
 const compassRef = ref<HTMLDivElement>()
+const deskCompassRef = ref<HTMLDivElement>()
 const dragging = ref(false)
+const deskDragging = ref(false)
 
 const config = useRuntimeConfig()
 const siteName = computed(() => (config.public.siteName as string) || 'ososn')
@@ -579,6 +708,7 @@ const mountainOptions = computed(() =>
 )
 
 const selectedMountain = ref<string>('')
+const selectedDeskMountain = ref<string>('')
 
 // 方向输入变化时联动 24 山
 function onDirectionInput(val: number | string | undefined) {
@@ -586,6 +716,13 @@ function onDirectionInput(val: number | string | undefined) {
   const deg = num === undefined || Number.isNaN(num) ? 0 : num
   form.direction = deg
   updateMountainFromDirection(deg)
+}
+
+function onDeskDirectionInput(val: number | string | undefined) {
+  const num = typeof val === 'string' ? Number(val) : val
+  const deg = num === undefined || Number.isNaN(num) ? 0 : num
+  form.deskDirection = deg
+  updateDeskMountainFromDirection(deg)
 }
 
 function updateMountainFromDirection(deg: number) {
@@ -608,6 +745,26 @@ function updateMountainFromDirection(deg: number) {
   selectedMountain.value = nearest?.name || ''
 }
 
+function updateDeskMountainFromDirection(deg: number) {
+  let nearest: typeof MOUNTAINS_24[number] | null = null
+  let minDiff = Infinity
+  for (const m of MOUNTAINS_24) {
+    let center: number
+    if (m.start < m.end) {
+      center = (m.start + m.end) / 2
+    }
+    else {
+      center = ((m.start + (m.end + 360)) / 2) % 360
+    }
+    const diff = Math.abs(((deg - center + 540) % 360) - 180)
+    if (diff < minDiff) {
+      minDiff = diff
+      nearest = m
+    }
+  }
+  selectedDeskMountain.value = nearest?.name || ''
+}
+
 // 24 山选择变化时联动角度
 function onMountainSelect(val: string | undefined) {
   if (!val) return
@@ -623,9 +780,27 @@ function onMountainSelect(val: string | undefined) {
   form.direction = Math.round(center)
 }
 
+function onDeskMountainSelect(val: string | undefined) {
+  if (!val) return
+  const m = MOUNTAINS_24.find(x => x.name === val)
+  if (!m) return
+  let center: number
+  if (m.start < m.end) {
+    center = (m.start + m.end) / 2
+  }
+  else {
+    center = ((m.start + (m.end + 360)) / 2) % 360
+  }
+  form.deskDirection = Math.round(center)
+}
+
 // 罗盘交互
 const needleStyle = computed(() => ({
   transform: `rotate(${form.direction}deg) translateX(-50%)`,
+}))
+
+const deskNeedleStyle = computed(() => ({
+  transform: `rotate(${form.deskDirection}deg) translateX(-50%)`,
 }))
 
 function compassTickStyle(deg: number) {
@@ -637,9 +812,10 @@ function compassTickStyle(deg: number) {
   }
 }
 
-function getAngleFromEvent(e: MouseEvent | TouchEvent): number {
-  if (!compassRef.value) return 0
-  const rect = compassRef.value.getBoundingClientRect()
+function getAngleFromEvent(e: MouseEvent | TouchEvent, refEl?: HTMLDivElement): number {
+  const el = refEl || compassRef.value
+  if (!el) return 0
+  const rect = el.getBoundingClientRect()
   const centerX = rect.left + rect.width / 2
   const centerY = rect.top + rect.height / 2
   const clientX = 'touches' in e ? e.touches[0]!.clientX : e.clientX
@@ -668,11 +844,42 @@ function stopCompassDrag() {
   dragging.value = false
 }
 
+function startDeskCompassDrag(e: MouseEvent | TouchEvent) {
+  deskDragging.value = true
+  const deg = getAngleFromEvent(e, deskCompassRef.value)
+  form.deskDirection = deg
+  updateDeskMountainFromDirection(deg)
+}
+
+function onDeskCompassDrag(e: MouseEvent | TouchEvent) {
+  if (!deskDragging.value) return
+  const deg = getAngleFromEvent(e, deskCompassRef.value)
+  form.deskDirection = deg
+  updateDeskMountainFromDirection(deg)
+}
+
+function stopDeskCompassDrag() {
+  deskDragging.value = false
+}
+
+const officeUsageOptions = computed<{ value: OfficeUsageType; label: string; sublabel: string }[]>(() => [
+  { value: 'independent', label: t('officeFengshui.officeUsageIndependent'), sublabel: t('officeFengshui.officeUsageIndependentDesc') },
+  { value: 'openPlan', label: t('officeFengshui.officeUsageOpenPlan'), sublabel: t('officeFengshui.officeUsageOpenPlanDesc') },
+  { value: 'shared', label: t('officeFengshui.officeUsageShared'), sublabel: t('officeFengshui.officeUsageSharedDesc') },
+  { value: 'homeOffice', label: t('officeFengshui.officeUsageHomeOffice'), sublabel: t('officeFengshui.officeUsageHomeOfficeDesc') },
+])
+
+const currentOfficeUsageLabel = computed(() => {
+  return officeUsageOptions.value.find(u => u.value === form.officeUsage)?.label ?? ''
+})
+
 const canSubmit = computed(() => {
   return form.gender
     && form.birthDate
     && form.direction >= 0
     && form.direction <= 360
+    && form.deskDirection >= 0
+    && form.deskDirection <= 360
 })
 
 async function handleSubmit() {
@@ -694,10 +901,12 @@ async function handleSubmit() {
       body: {
         roomType: form.roomType,
         direction: form.direction,
+        deskDirection: form.deskDirection,
         birthYear: year,
         birthMonth: month,
         birthDay: day,
         gender: form.gender,
+        officeUsage: form.officeUsage,
         locale: locale.value,
       },
     })
@@ -800,9 +1009,28 @@ function resetForm() {
   form.gender = ''
   form.birthDate = ''
   form.direction = 0
+  form.deskDirection = 0
+  form.officeUsage = 'independent'
   calendarDate.value = undefined
   selectedMountain.value = ''
+  selectedDeskMountain.value = ''
 }
+
+const deskMountainLabel = computed(() => {
+  if (!calcResult.value) return ''
+  const m = calcResult.value.mountain
+  if (!m) return ''
+  // deskDirection 对应的是办公桌摆放朝向（人面对的方向），其反向为所在方位山向
+  const deskSittingDeg = (calcResult.value.deskDirection + 180) % 360
+  const sitting = MOUNTAINS_24.find((x) => {
+    const normalized = deskSittingDeg
+    if (x.start < x.end) {
+      return normalized >= x.start && normalized < x.end
+    }
+    return normalized >= x.start || normalized < x.end
+  }) || MOUNTAINS_24[0]!
+  return `${sitting.name}（${sitting.palace}）`
+})
 
 function handleCopy() {
   if (!calcResult.value) return
@@ -812,6 +1040,8 @@ ${t('officeFengshui.roomTypeLabel')}：${currentRoomLabel.value}
 ${t('officeFengshui.genderLabel')}：${form.gender === 'male' ? t('common.male') : t('common.female')}
 ${t('officeFengshui.birthDateLabel')}：${form.birthDate}
 ${t('officeFengshui.directionLabel')}：${form.direction}° — ${calcResult.value.mountain?.name}（${calcResult.value.mountain?.palace}）
+${t('officeFengshui.deskDirectionLabel')}：${form.deskDirection}° — ${deskMountainLabel.value}
+${t('officeFengshui.officeUsageLabel')}：${currentOfficeUsageLabel.value}
 ${t('officeFengshui.mingGua')}：${calcResult.value.mingGua}（${calcResult.value.mingGuaNumber}） · ${calcResult.value.dongSiMing}
 ${t('officeFengshui.sitting')}：${calcResult.value.sittingMountain?.name}${calcResult.value.sittingMountain?.palace} · ${calcResult.value.dongSiZhai}
 
@@ -821,6 +1051,10 @@ ${calcResult.value.palaces.map(p => `${p.direction}（${p.name}）：${p.star} �
 【${t('officeFengshui.seatTitle')}】
 ${t('officeFengshui.seatBest')}${calcResult.value.seat.bestDirections.join('、')}
 ${t('officeFengshui.seatAvoid')}${calcResult.value.seat.avoidDirections.join('、')}
+
+【${t('officeFengshui.deskTitle')}】
+${t('officeFengshui.deskBest')}${calcResult.value.desk.bestDirections.join('、')}
+${t('officeFengshui.deskAvoid')}${calcResult.value.desk.avoidDirections.join('、')}
 
 【${t('officeFengshui.wenchangTitle')}】
 ${calcResult.value.wenchang.map(w => `${w.type}：${w.directionName}`).join('\n')}
@@ -932,6 +1166,7 @@ function renderMarkdown(text: string): string {
 // 初始化时同步一次 24 山
 onMounted(() => {
   updateMountainFromDirection(form.direction)
+  updateDeskMountainFromDirection(form.deskDirection)
 })
 
 // SEO

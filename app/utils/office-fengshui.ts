@@ -31,6 +31,7 @@ import { getYearPillar } from './bazi/calendar'
 import { TIAN_GAN } from './bazi/constants'
 
 export type RoomType = 'office' | 'study' | 'bedroom' | 'hall'
+export type OfficeUsageType = 'independent' | 'openPlan' | 'shared' | 'homeOffice'
 
 export interface WenchangResult {
   type: '本命文昌' | '固定文昌'
@@ -55,10 +56,12 @@ export interface WealthPosition {
 export interface OfficeFengshuiInput {
   roomType: RoomType
   direction: number
+  deskDirection: number
   birthYear: number
   birthMonth: number
   birthDay: number
   gender: Gender
+  officeUsage: OfficeUsageType
   locale?: string
 }
 
@@ -67,8 +70,14 @@ export interface OfficeFengshuiResult extends BazhaiResult {
   birthMonth: number
   birthDay: number
   yearGan: string
+  deskDirection: number
+  officeUsage: OfficeUsageType
   wenchang: WenchangResult[]
   seat: SeatSuggestion
+  desk: SeatSuggestion
+  deskStar: Star
+  deskStarLevel: string
+  deskAuspicious: boolean
   wealth: WealthPosition
 }
 
@@ -147,14 +156,17 @@ export function calcOfficeFengshui(input: OfficeFengshuiInput): OfficeFengshuiRe
   const {
     roomType,
     direction,
+    deskDirection,
     birthYear,
     birthMonth,
     birthDay,
     gender,
+    officeUsage,
     locale = 'zh-CN',
   } = input
 
   const normalizedDir = normalizeDegree(direction)
+  const normalizedDeskDir = normalizeDegree(deskDirection)
   const mountain: Mountain24 | null = findMountain24(normalizedDir)
     ?? findNearestMountain24Center(normalizedDir)
   const sittingDeg = normalizeDegree(normalizedDir + 180)
@@ -220,18 +232,39 @@ export function calcOfficeFengshui(input: OfficeFengshuiInput): OfficeFengshuiRe
   const bestDirections: Direction[] = []
   if (shengqi) bestDirections.push(shengqi.direction)
   if (yannian) bestDirections.push(yannian.direction)
-  if (tianyi && bestDirections.length < 2) bestDirections.push(tianyi.direction)
-  if (fuwei && bestDirections.length < 2) bestDirections.push(fuwei.direction)
+  if (tianyi && bestDirections.length < 3) bestDirections.push(tianyi.direction)
+  if (fuwei && bestDirections.length < 3) bestDirections.push(fuwei.direction)
 
   const avoidDirections: Direction[] = []
   if (wugui) avoidDirections.push(wugui.direction)
   if (jueming && !avoidDirections.includes(jueming.direction)) avoidDirections.push(jueming.direction)
 
+  const officeUsageNote = {
+    independent: '独立办公室气场最稳定，宜以生气、延年方主导座位与财位布局。',
+    openPlan: '开放式工位动线较杂，宜尽量背靠实墙，面向吉方，避免背对通道。',
+    shared: '共享办公室人员流动大，座位宜靠墙形成靠山，减少正对门口或背对人流。',
+    homeOffice: '居家办公空间常与其他功能混用，书桌宜与生活动线分隔，面向吉方。',
+  }
+
   const seat: SeatSuggestion = {
     bestDirections,
     avoidDirections,
-    note: '座位宜面向吉方吸纳气场，忌背对或正对大凶方；实际布局以门窗动线与建筑结构为准。',
+    note: `座位宜面向吉方吸纳气场，忌背对或正对大凶方；${officeUsageNote[officeUsage]}实际布局以门窗动线与建筑结构为准。`,
   }
+
+  const desk: SeatSuggestion = {
+    bestDirections,
+    avoidDirections,
+    note: `办公桌宜面向生气、延年等吉方，强化专注与事业运；${officeUsageNote[officeUsage]}实际布局以门窗动线与建筑结构为准。`,
+  }
+
+  // 办公桌所在方位的吉凶
+  const deskMountain = findMountain24(normalizedDeskDir)
+    ?? findNearestMountain24Center(normalizedDeskDir)
+  const deskPalace = bazhaiResult.palaces.find(p => p.name === deskMountain?.palace)
+  const deskStar = deskPalace?.star ?? '伏位'
+  const deskStarLevel = deskPalace?.level ?? '小吉'
+  const deskAuspicious = deskPalace?.auspicious ?? true
 
   // 财位：办公室以「生气」为 primary 财位，延年为辅
   const wealthStar = shengqi ?? yannian
@@ -247,8 +280,14 @@ export function calcOfficeFengshui(input: OfficeFengshuiInput): OfficeFengshuiRe
     birthMonth,
     birthDay,
     yearGan,
+    deskDirection: normalizedDeskDir,
+    officeUsage,
     wenchang,
     seat,
+    desk,
+    deskStar,
+    deskStarLevel,
+    deskAuspicious,
     wealth,
   }
 }
