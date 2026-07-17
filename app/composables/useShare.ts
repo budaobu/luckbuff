@@ -65,6 +65,7 @@ export interface ShareOptions {
     | 'office-fengshui'
     | 'hall-fengshui'
     | 'bedroom-fengshui'
+    | 'fengshui-ornament'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
