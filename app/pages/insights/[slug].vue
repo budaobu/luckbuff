@@ -85,6 +85,11 @@
           />
         </div>
 
+        <!-- 相关工具入口 -->
+        <div v-if="relatedTools.length" class="mt-6 space-y-3">
+          <InsightsToolEntryCard v-for="tool in relatedTools" :key="tool.path" :tool="tool" />
+        </div>
+
         <!-- 标签 -->
         <div v-if="article.tags.length" class="flex items-center gap-2 mt-6 flex-wrap">
           <UIcon name="i-heroicons-tag" class="w-4 h-4 text-[var(--text-faint)]" />
@@ -120,6 +125,7 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
+import type { InsightToolCard } from '~/components/insights/ToolEntryCard.vue'
 
 interface InsightDetail {
   slug: string
@@ -131,6 +137,7 @@ interface InsightDetail {
   updatedAt: string
   author: string
   readingTime: number
+  relatedTools: string[]
   content: string
 }
 
@@ -155,6 +162,24 @@ const renderedContent = computed(() => {
   }
 })
 
+// ── 相关工具入口（由 frontmatter relatedTools 字段驱动） ──
+const TOOL_REGISTRY: Record<string, InsightToolCard> = {
+  'office-fengshui': {
+    path: '/tools/office-fengshui',
+    icon: 'i-heroicons-briefcase',
+    titleKey: 'officeFengshui.title',
+    descKey: 'officeFengshui.subtitle',
+    ctaKey: 'insights.toolCardCta',
+  },
+}
+
+const relatedTools = computed<InsightToolCard[]>(() => {
+  if (!article.value?.relatedTools?.length) return []
+  return article.value.relatedTools
+    .map(slug => TOOL_REGISTRY[slug])
+    .filter((tool): tool is InsightToolCard => Boolean(tool))
+})
+
 function categoryLabel(cat: string): string {
   const key = `insights.categories.${cat}`
   const translated = t(key)
@@ -169,7 +194,7 @@ function formatDate(iso: string): string {
 }
 
 // ── SEO ──
-const siteName = 'ososn'
+const siteName = useRuntimeConfig().public.siteName
 
 const pageTitle = computed(() => {
   if (!article.value) return `${t('insights.title')} - ${siteName}`

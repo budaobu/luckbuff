@@ -13,6 +13,7 @@ export interface InsightFrontmatter {
   author: string
   readingTime: number
   draft: boolean
+  relatedTools: string[]
 }
 
 export interface InsightListItem extends InsightFrontmatter {
@@ -82,6 +83,7 @@ function toInsight(slug: string, meta: Record<string, any>): InsightListItem {
     author: meta.author || '',
     readingTime: typeof meta.readingTime === 'number' ? meta.readingTime : 0,
     draft: meta.draft === true,
+    relatedTools: Array.isArray(meta.relatedTools) ? meta.relatedTools : [],
   }
 }
 
