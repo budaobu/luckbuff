@@ -6,7 +6,8 @@
     "profiles": "我的檔案",
     "openMenu": "打開選單",
     "closeMenu": "關閉選單",
-    "language": "當前語言：{lang}"
+    "language": "當前語言：{lang}",
+    "insights": "命見"
   },
   "common": {
     "start": "立即開始推演",
@@ -992,8 +993,7 @@
     "hallFengshuiDesc": "免費線上廳堂風水佈局，輸入陽曆生日、性別、客廳朝向、沙發朝向與玄關動線，按八宅明鏡法排定命卦、八方吉凶、財位與沙發待客區方位，獲取客廳聚財納氣與待客佈局建議。僅供文化娛樂參考。",
     "hallFengshuiKeywords": "廳堂風水,客廳財位佈局,沙發朝向,財位,八宅風水,命卦,東西四命,客廳風水佈局,ososn",
     "hallFengshuiOgTitle": "廳堂風水佈局_客廳財位佈局",
-    "hallFengshuiOgDesc": "免費線上廳堂風水佈局，輸入陽曆生日、性別、客廳朝向、沙發朝向與玄關動線，按八宅明鏡法排定命卦、八方吉凶、財位與沙發待客區方位，獲取客廳聚財納氣與待客佈局建議。僅供文化娛樂參考。"
-  ,
+    "hallFengshuiOgDesc": "免費線上廳堂風水佈局，輸入陽曆生日、性別、客廳朝向、沙發朝向與玄關動線，按八宅明鏡法排定命卦、八方吉凶、財位與沙發待客區方位，獲取客廳聚財納氣與待客佈局建議。僅供文化娛樂參考。",
     "fengshuiOrnamentTitle": "風水擺件 - 房間八方位擺件佈局建議",
     "fengshuiOrnamentDesc": "輸入房間朝向、尺寸與使用者生辰，按玄空宅飛星、紫白流年煞位與八宅遊星逐方位判定五行缺口，給出具體擺件建議與優先級。",
     "fengshuiOrnamentKeywords": "風水擺件,房間風水,玄空飛星,流年煞位,八宅遊星,文昌位,桃花位,財位擺件",
@@ -3051,47 +3051,28 @@
     }
   },
   "fengshui": {
-    "knowledgeCard1Title": "風水羅盤",
-    "knowledgeCard1Desc": "以住宅或辦公空間的坐向與格局，結合八卦九宮分析氣場吉凶。",
-    "knowledgeCard2Title": "八宮方位",
-    "knowledgeCard2Desc": "後天八卦對應不同方位與家庭成員，找出需要調整的區域。",
-    "knowledgeCard3Title": "形巒與理氣",
-    "knowledgeCard3Desc": "外部環境為形巒，內部格局與飛星為理氣，兩者需配合參看。",
-    "knowledgeCard4Title": "調整建議",
-    "knowledgeCard4Desc": "透過家具擺設、顏色與植物，改善空間氣場與居住舒適度。",
-    "title": "風水工具",
-    "subtitle": "輸入相關信息，獲取風水分析結果。",
-    "selectProfile": "選擇檔案",
-    "noProfiles": "還沒有儲存任何檔案，",
-    "goSettings": "去設定",
-    "createSuffix": "建立一個吧",
-    "genderLabel": "性別",
-    "birthDateLabel": "出生日期",
-    "birthDatePlaceholder": "請輸入出生日期",
-    "birthHourLabel": "出生時辰",
-    "birthHourPlaceholder": "請輸入出生時辰",
-    "directionLabel": "方位標籤",
-    "directionPlaceholder": "請輸入方位",
-    "directionHint": "選擇主要方位",
-    "buildYearLabel": "建築年份",
-    "buildYearPlaceholder": "請輸入build年份佔位符",
-    "moveInYearLabel": "入宅年份",
-    "moveInYearPlaceholder": "請輸入movein年份佔位符",
-    "submitBtn": "提交",
-    "knowledgeTitle": "相關知識",
-    "calculating": "計算中...",
-    "resultTitle": "測算結果",
-    "inputSummary": "輸入摘要",
-    "unknownHour": "未知時辰",
-    "interpretation": "解讀",
-    "interpreting": "解讀中...",
-    "generatingInterpretation": "正在生成解讀...",
-    "disclaimer": "本工具基於傳統風水羅盤與陽宅風水原理生成參考結果，僅供文化娛樂與學習參考，不構成任何房屋買賣、裝修改造或專業建議。請理性看待，重大決策請結合現實情況獨立判斷。",
-    "reinterpret": "重新解讀",
-    "copyResult": "複製結果",
-    "recalculate": "重新測算",
-    "backToTools": "返回工具列表",
-    "aiUnavailable": "AI 解讀暫不可用，請稍後重試。"
+    "title": "風水佈局",
+    "subtitle": "匯聚八宅、玄空、羅盤與辦公、書房、臥室、廳堂風水佈局工具，輸入空間資訊即可獲取 AI 解讀。",
+    "intro": "本頁面匯聚看風水羅盤、玄空飛星、八宅明鏡以及辦公室、書房、臥室、廳堂等空間風水佈局工具。輸入朝向、生辰與空間用途，即可獲得方位吉凶、佈局建議與 AI 解讀。所有結果僅供文化娛樂參考，不構成任何專業決策依據。",
+    "guideTitle": "使用指南",
+    "guide1Title": "確定空間朝向",
+    "guide1Desc": "以房屋或房間主採光面、大門朝向為「向」，反方向為「坐山」，再輸入羅盤度數或選擇二十四山。",
+    "guide2Title": "選擇對應工具",
+    "guide2Desc": "看住宅整體選通用風水羅盤或玄空飛星；看個人命理與宅卦匹配用八宅明鏡；辦公室、書房、臥室、廳堂各有專項佈局工具。",
+    "guide3Title": "理性看待結果",
+    "guide3Desc": "風水結果是傳統文化與 AI 結合的參考建議，實際佈局請結合建築結構、生活習慣與個人判斷，避免過度依賴。",
+    "faqTitle": "常見問題",
+    "faq1Q": "風水佈局需要哪些資訊？",
+    "faq1A": "通常需要空間朝向（度數或二十四山）、建造或入住年份、使用者的出生年月日時。不同工具還會詢問房間用途、傢俱擺放方向等。",
+    "faq2Q": "不同風水流派有什麼區別？",
+    "faq2A": "八宅明鏡以宅卦和命卦匹配為主，適合快速判斷吉凶方位；玄空飛星以元運、流年星盤分析氣場變化；羅盤工具則綜合方位與個人資訊給出參考。",
+    "faq3Q": "風水結果能直接照搬嗎？",
+    "faq3A": "不建議直接照搬。風水佈局受建築結構、採光通風、生活習慣等多重因素影響，結果僅供文化娛樂與思路參考，重大裝修或購房決策請諮詢專業人士。",
+    "faq4Q": "辦公室和臥室風水哪個更重要？",
+    "faq4A": "兩者關注的重點不同：辦公室風水偏向事業、人際與效率；臥室風水偏向休息、健康與情感。可根據當前最關心的領域選擇工具。",
+    "ornamentTitle": "風水擺件",
+    "ornamentDesc": "給定一個房間，結合宅飛星、流年煞位與每位使用者的命理，告訴你哪個角落擺什麼擺件、為什麼、先擺哪個。",
+    "ornamentCta": "開始佈局"
   },
   "jishi": {
     "knowledgeCard1Title": "今日吉時",
@@ -3826,31 +3807,6 @@
     "tossLaugh": "笑筊",
     "tossYin": "陰筊",
     "tossYang": "陽筊"
-  },
-  "fengshui": {
-    "title": "風水佈局",
-    "subtitle": "匯聚八宅、玄空、羅盤與辦公、書房、臥室、廳堂風水佈局工具，輸入空間資訊即可獲取 AI 解讀。",
-    "intro": "本頁面匯聚看風水羅盤、玄空飛星、八宅明鏡以及辦公室、書房、臥室、廳堂等空間風水佈局工具。輸入朝向、生辰與空間用途，即可獲得方位吉凶、佈局建議與 AI 解讀。所有結果僅供文化娛樂參考，不構成任何專業決策依據。",
-    "guideTitle": "使用指南",
-    "guide1Title": "確定空間朝向",
-    "guide1Desc": "以房屋或房間主採光面、大門朝向為「向」，反方向為「坐山」，再輸入羅盤度數或選擇二十四山。",
-    "guide2Title": "選擇對應工具",
-    "guide2Desc": "看住宅整體選通用風水羅盤或玄空飛星；看個人命理與宅卦匹配用八宅明鏡；辦公室、書房、臥室、廳堂各有專項佈局工具。",
-    "guide3Title": "理性看待結果",
-    "guide3Desc": "風水結果是傳統文化與 AI 結合的參考建議，實際佈局請結合建築結構、生活習慣與個人判斷，避免過度依賴。",
-    "faqTitle": "常見問題",
-    "faq1Q": "風水佈局需要哪些資訊？",
-    "faq1A": "通常需要空間朝向（度數或二十四山）、建造或入住年份、使用者的出生年月日時。不同工具還會詢問房間用途、傢俱擺放方向等。",
-    "faq2Q": "不同風水流派有什麼區別？",
-    "faq2A": "八宅明鏡以宅卦和命卦匹配為主，適合快速判斷吉凶方位；玄空飛星以元運、流年星盤分析氣場變化；羅盤工具則綜合方位與個人資訊給出參考。",
-    "faq3Q": "風水結果能直接照搬嗎？",
-    "faq3A": "不建議直接照搬。風水佈局受建築結構、採光通風、生活習慣等多重因素影響，結果僅供文化娛樂與思路參考，重大裝修或購房決策請諮詢專業人士。",
-    "faq4Q": "辦公室和臥室風水哪個更重要？",
-    "faq4A": "兩者關注的重點不同：辦公室風水偏向事業、人際與效率；臥室風水偏向休息、健康與情感。可根據當前最關心的領域選擇工具。"
-  ,
-    "ornamentTitle": "風水擺件",
-    "ornamentDesc": "給定一個房間，結合宅飛星、流年煞位與每位使用者的命理，告訴你哪個角落擺什麼擺件、為什麼、先擺哪個。",
-    "ornamentCta": "開始佈局"
   },
   "fbti": {
     "knowledgeCard1Title": "知識卡片1標題",
@@ -6516,8 +6472,7 @@
       "huohai": "禍害",
       "liusha": "六煞"
     }
-  }
-,
+  },
   "roomTypeSelector": {
     "roomBedroom": "臥室",
     "roomBedroomDesc": "休息睡眠之所",
@@ -6529,8 +6484,7 @@
     "roomHallDesc": "會客聚氣之廳",
     "roomShop": "店鋪",
     "roomShopDesc": "開門迎財之鋪"
-  }
-,
+  },
   "fengshuiOrnament": {
     "title": "風水擺件",
     "subtitle": "輸入房間朝向與尺寸，結合宅飛星、流年煞位與每位使用者的命理，告訴你哪個角落擺什麼、為什麼、先擺哪個。",
@@ -6625,9 +6579,32 @@
       "liusha": "六煞",
       "huohai": "禍害",
       "jueming": "絕命"
-    }
-  ,
+    },
     "birthLabel": "出生時間（陽曆）",
     "birthHint": "用於計算命卦、八宅遊星與文昌/桃花/貴人位；時辰選填，不填按日中起卦，不影響命卦判定。"
+  },
+  "insights": {
+    "title": "命見",
+    "subtitle": "命理科普與深度解讀專欄——以現代視角讀懂傳統命理",
+    "badge": "命見專欄",
+    "allCategories": "全部",
+    "categories": {
+      "metaphysics-basics": "命理入門",
+      "deep-reading": "深度解讀",
+      "fengshui": "風水文化",
+      "astrology": "星象占星",
+      "culture": "術數文化"
+    },
+    "readingTime": "約 {n} 分鐘",
+    "readMore": "閱讀全文",
+    "backToList": "返回專欄",
+    "emptyTitle": "專欄正在籌備中",
+    "emptyDesc": "「命見」將為你帶來命理科普與深度解讀內容，敬請期待第一篇文章。",
+    "notFoundTitle": "文章不存在",
+    "notFoundDesc": "這篇文章可能已被移除，或連結有誤。",
+    "disclaimer": "本專欄內容為命理文化科普與知識分享，僅供閱讀參考，不構成任何人生決策建議。",
+    "seoTitle": "命見 · 命理科普與深度解讀專欄",
+    "seoDesc": "命見是 ososn 的命理科普與深度解讀專欄，以現代視角講清八字、紫微、風水、占星等傳統命理知識。",
+    "seoKeywords": "命見,命理科普,八字,紫微斗數,風水,占星,深度解讀"
   }
 }

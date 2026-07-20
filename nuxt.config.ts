@@ -53,6 +53,7 @@ function scanContent(dir: string): Array<{ slug: string; summary: string; genera
   return results
 }
 const contentItems = scanContent(join(__dirname, 'content', 'worldcup-predictions'))
+const insightItems = scanContent(join(__dirname, 'content', 'insights'))
 
 const autoRoutes = scanPages(join(__dirname, 'app', 'pages'), join(__dirname, 'app', 'pages'))
 
@@ -64,6 +65,7 @@ const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily'
   '/': { priority: 1.0 },
   '/tools': { priority: 0.9 },
   '/prophet': { changefreq: 'daily', priority: 0.9 },
+  '/insights': { changefreq: 'weekly', priority: 0.8 },
   '/prophet/liuren-worldcup': { changefreq: 'daily', priority: 0.8 },
   '/prophet/qimen-worldcup': { changefreq: 'daily', priority: 0.8 },
   '/prophet/worldcup-champion-odds-2026': { changefreq: 'daily', priority: 0.8 },
@@ -77,6 +79,13 @@ const sitemapUrls = [
     loc: `/prophet/match/${item.slug}`,
     lastmod: item.generatedAt || undefined,
     changefreq: 'weekly' as const,
+    priority: 0.6,
+    _i18nTransform: true,
+  })),
+  ...insightItems.map(item => ({
+    loc: `/insights/${item.slug}`,
+    lastmod: item.generatedAt || undefined,
+    changefreq: 'monthly' as const,
     priority: 0.6,
     _i18nTransform: true,
   })),

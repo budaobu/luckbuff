@@ -6,7 +6,8 @@
     "profiles": "My Profiles",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "language": "Current language: {lang}"
+    "language": "Current language: {lang}",
+    "insights": "Insights"
   },
   "common": {
     "start": "Start Reading",
@@ -992,8 +993,7 @@
     "hallFengshuiDesc": "Free online hall (living room) feng shui layout. Enter birth date, gender, hall facing, sofa facing and entryway flow to calculate Ming Gua, eight-direction auspiciousness, wealth corner and seating area advice. For entertainment only.",
     "hallFengshuiKeywords": "hall feng shui,living room wealth corner,sofa direction,wealth position,Ba Zhai feng shui,Ming Gua,East West four house,living room feng shui layout,ososn",
     "hallFengshuiOgTitle": "Hall Feng Shui Layout_Living Room Wealth Corner",
-    "hallFengshuiOgDesc": "Free online hall (living room) feng shui layout. Enter birth date, gender, hall facing, sofa facing and entryway flow to calculate Ming Gua, eight-direction auspiciousness, wealth corner and seating area advice. For entertainment only."
-  ,
+    "hallFengshuiOgDesc": "Free online hall (living room) feng shui layout. Enter birth date, gender, hall facing, sofa facing and entryway flow to calculate Ming Gua, eight-direction auspiciousness, wealth corner and seating area advice. For entertainment only.",
     "fengshuiOrnamentTitle": "Feng Shui Ornaments - Room Layout Advice by Direction",
     "fengshuiOrnamentDesc": "Enter room facing, size and occupants' birth data. Xuan Kong flying stars, annual afflictions and eight-mansion roaming stars judge five-element gaps per direction and suggest concrete ornaments with priorities.",
     "fengshuiOrnamentKeywords": "feng shui ornaments,room feng shui,xuan kong flying stars,annual afflictions,eight mansions,wenchang,taohua,wealth corner",
@@ -3026,47 +3026,28 @@
     }
   },
   "fengshui": {
-    "knowledgeCard1Title": "Feng Shui Compass",
-    "knowledgeCard1Desc": "Analyzes the sitting direction and layout of a home or office with Bagua and nine palaces to assess energy.",
-    "knowledgeCard2Title": "Eight Directions",
-    "knowledgeCard2Desc": "The later-heaven Bagua maps directions and family members, identifying areas to adjust.",
-    "knowledgeCard3Title": "Form & Qi",
-    "knowledgeCard3Desc": "External environment is form; internal layout and flying stars are qi; both must be read together.",
-    "knowledgeCard4Title": "Adjustment Tips",
-    "knowledgeCard4Desc": "Furniture placement, colors, and plants can improve spatial energy and comfort.",
-    "title": "Feng Shui Tool",
-    "subtitle": "Enter your information to get Feng Shui analysis.",
-    "selectProfile": "Select Profile",
-    "noProfiles": "No Profiles",
-    "goSettings": "Go Settings",
-    "createSuffix": "Create Suffix",
-    "genderLabel": "Gender",
-    "birthDateLabel": "Birth Date",
-    "birthDatePlaceholder": "Enter birth date",
-    "birthHourLabel": "Birth Hour",
-    "birthHourPlaceholder": "Enter birth hour",
-    "directionLabel": "Direction Label",
-    "directionPlaceholder": "Enter direction",
-    "directionHint": "Direction Hint",
-    "buildYearLabel": "Build Year Label",
-    "buildYearPlaceholder": "Enter building year",
-    "moveInYearLabel": "Move In Year Label",
-    "moveInYearPlaceholder": "Enter move-in year",
-    "submitBtn": "Submit",
-    "knowledgeTitle": "Related Knowledge",
-    "calculating": "Calculating...",
-    "resultTitle": "Result",
-    "inputSummary": "Input Summary",
-    "unknownHour": "Unknown Hour",
-    "interpretation": "Interpretation",
-    "interpreting": "Interpreting...",
-    "generatingInterpretation": "Generating interpretation...",
-    "disclaimer": "This tool generates reference results based on traditional Feng Shui compass and yang house Feng Shui principles for cultural entertainment and learning only. It does not constitute real estate, renovation, or professional advice. Please view it rationally and make major decisions independently based on real-world circumstances.",
-    "reinterpret": "Reinterpret",
-    "copyResult": "Copy Result",
-    "recalculate": "Recalculate",
-    "backToTools": "Back to Tools",
-    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+    "title": "Feng Shui Layout",
+    "subtitle": "Ba Zhai, Xuan Kong, compass and office, study, bedroom and hall layout tools — enter space info for AI interpretation.",
+    "intro": "This hub brings together feng shui compass, Xuan Kong flying stars, Ba Zhai Ming Jing, and room-specific layout tools for office, study, bedroom and hall. Enter orientation, birth info and room usage to receive directional analysis, layout advice and AI interpretation. All results are for cultural entertainment only and not a basis for professional decisions.",
+    "guideTitle": "Guide",
+    "guide1Title": "Confirm the Space Orientation",
+    "guide1Desc": "Use the main window or entrance as the facing direction; the opposite side is the sitting mountain. Enter the compass degree or pick one of the 24 mountains.",
+    "guide2Title": "Pick the Right Tool",
+    "guide2Desc": "Choose the general compass or Xuan Kong for whole-home analysis; Ba Zhai for matching house and personal Gua; office, study, bedroom and hall tools for room-specific advice.",
+    "guide3Title": "Interpret Results Rationally",
+    "guide3Desc": "Feng shui results combine traditional culture with AI and are intended as reference only. Real layouts should also consider structure, lighting, ventilation and daily habits.",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "What information do I need for a feng shui layout?",
+    "faq1A": "Usually orientation (degree or 24 mountains), construction or move-in year, and the user's birth date and time. Some tools also ask about room usage and furniture direction.",
+    "faq2Q": "How do the different feng shui schools differ?",
+    "faq2A": "Ba Zhai Ming Jing focuses on matching house and personal Gua to find auspicious directions. Xuan Kong Flying Stars analyzes energy changes through time periods and yearly stars. The compass tool gives a general orientation-based reading.",
+    "faq3Q": "Can I apply the layout suggestions directly?",
+    "faq3A": "Not directly. Layout is constrained by building structure, lighting, ventilation and lifestyle. Treat suggestions as cultural inspiration; for major renovations or purchases, consult a professional.",
+    "faq4Q": "Which matters more, office or bedroom feng shui?",
+    "faq4A": "They focus on different areas: office feng shui emphasizes career, relationships and productivity; bedroom feng shui emphasizes rest, health and emotions. Pick based on what matters most to you right now.",
+    "ornamentTitle": "Feng Shui Ornaments",
+    "ornamentDesc": "Given a room, combine house flying stars, annual afflictions and each occupant's chart to learn what ornament goes in which corner, why, and which one first.",
+    "ornamentCta": "Start Layout"
   },
   "jishi": {
     "knowledgeCard1Title": "Auspicious Hours",
@@ -3801,31 +3782,6 @@
     "tossLaugh": "Laugh",
     "tossYin": "Yin",
     "tossYang": "Yang"
-  },
-  "fengshui": {
-    "title": "Feng Shui Layout",
-    "subtitle": "Ba Zhai, Xuan Kong, compass and office, study, bedroom and hall layout tools — enter space info for AI interpretation.",
-    "intro": "This hub brings together feng shui compass, Xuan Kong flying stars, Ba Zhai Ming Jing, and room-specific layout tools for office, study, bedroom and hall. Enter orientation, birth info and room usage to receive directional analysis, layout advice and AI interpretation. All results are for cultural entertainment only and not a basis for professional decisions.",
-    "guideTitle": "Guide",
-    "guide1Title": "Confirm the Space Orientation",
-    "guide1Desc": "Use the main window or entrance as the facing direction; the opposite side is the sitting mountain. Enter the compass degree or pick one of the 24 mountains.",
-    "guide2Title": "Pick the Right Tool",
-    "guide2Desc": "Choose the general compass or Xuan Kong for whole-home analysis; Ba Zhai for matching house and personal Gua; office, study, bedroom and hall tools for room-specific advice.",
-    "guide3Title": "Interpret Results Rationally",
-    "guide3Desc": "Feng shui results combine traditional culture with AI and are intended as reference only. Real layouts should also consider structure, lighting, ventilation and daily habits.",
-    "faqTitle": "Frequently Asked Questions",
-    "faq1Q": "What information do I need for a feng shui layout?",
-    "faq1A": "Usually orientation (degree or 24 mountains), construction or move-in year, and the user's birth date and time. Some tools also ask about room usage and furniture direction.",
-    "faq2Q": "How do the different feng shui schools differ?",
-    "faq2A": "Ba Zhai Ming Jing focuses on matching house and personal Gua to find auspicious directions. Xuan Kong Flying Stars analyzes energy changes through time periods and yearly stars. The compass tool gives a general orientation-based reading.",
-    "faq3Q": "Can I apply the layout suggestions directly?",
-    "faq3A": "Not directly. Layout is constrained by building structure, lighting, ventilation and lifestyle. Treat suggestions as cultural inspiration; for major renovations or purchases, consult a professional.",
-    "faq4Q": "Which matters more, office or bedroom feng shui?",
-    "faq4A": "They focus on different areas: office feng shui emphasizes career, relationships and productivity; bedroom feng shui emphasizes rest, health and emotions. Pick based on what matters most to you right now."
-  ,
-    "ornamentTitle": "Feng Shui Ornaments",
-    "ornamentDesc": "Given a room, combine house flying stars, annual afflictions and each occupant's chart to learn what ornament goes in which corner, why, and which one first.",
-    "ornamentCta": "Start Layout"
   },
   "fbti": {
     "knowledgeCard1Title": "Knowledge Card 1 Title",
@@ -6495,8 +6451,7 @@
       "huohai": "Huo Hai",
       "liusha": "Liu Sha"
     }
-  }
-,
+  },
   "roomTypeSelector": {
     "roomBedroom": "Bedroom",
     "roomBedroomDesc": "Rest and sleep",
@@ -6508,8 +6463,7 @@
     "roomHallDesc": "Gathering space",
     "roomShop": "Shop",
     "roomShopDesc": "Business storefront"
-  }
-,
+  },
   "fengshuiOrnament": {
     "title": "Feng Shui Ornaments",
     "subtitle": "Enter the room facing and size. Combining house flying stars, annual afflictions and each occupant's chart, it tells you what to place in which corner, why, and which one first.",
@@ -6604,9 +6558,32 @@
       "liusha": "Liu Sha",
       "huohai": "Huo Hai",
       "jueming": "Jue Ming"
-    }
-  ,
+    },
     "birthLabel": "Birth Date & Time (Solar)",
     "birthHint": "Used to compute ming gua, eight-mansion roaming stars, and Wenchang/Taohua/noble positions. Hour is optional; omitting it does not affect the ming gua result."
+  },
+  "insights": {
+    "title": "Insights",
+    "subtitle": "A column on Chinese metaphysics — classical wisdom explained from a modern perspective",
+    "badge": "Insights Column",
+    "allCategories": "All",
+    "categories": {
+      "metaphysics-basics": "Metaphysics Basics",
+      "deep-reading": "Deep Reading",
+      "fengshui": "Feng Shui Culture",
+      "astrology": "Astrology",
+      "culture": "Divination Culture"
+    },
+    "readingTime": "~{n} min read",
+    "readMore": "Read more",
+    "backToList": "Back to Insights",
+    "emptyTitle": "Column in preparation",
+    "emptyDesc": "Insights will bring you introductory and in-depth articles on Chinese metaphysics. Stay tuned for the first piece.",
+    "notFoundTitle": "Article not found",
+    "notFoundDesc": "This article may have been removed, or the link is incorrect.",
+    "disclaimer": "Articles in this column are for cultural and educational purposes only and do not constitute life advice.",
+    "seoTitle": "Insights · Chinese Metaphysics Explained",
+    "seoDesc": "Insights is ososn's column on Chinese metaphysics, explaining Bazi, Zi Wei Dou Shu, Feng Shui and astrology from a modern perspective.",
+    "seoKeywords": "insights,chinese metaphysics,bazi,zi wei dou shu,feng shui,astrology"
   }
 }
