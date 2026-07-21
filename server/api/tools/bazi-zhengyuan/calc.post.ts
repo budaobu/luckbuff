@@ -5,6 +5,7 @@ import { calcPillars } from '~/utils/bazi/pillars'
 import { calcWuxingScore, calcRiZhuStrength, calcXiYongJiShen, calcGeJu } from '~/utils/bazi/analysisCalc'
 import { getMonthZhiIndex } from '~/utils/bazi/calendar'
 import { calcDaYun } from '~/utils/bazi/dayun'
+import { deriveMarriageProfile } from '../../../utils/bazi-zhengyuan/derived'
 
 interface CalcInput {
   gender: 'male' | 'female'
@@ -85,6 +86,21 @@ export default defineEventHandler(async (event): Promise<BaziZhengyuanCalcResult
     d => d.ageRange[0] <= currentAge && d.ageRange[1] >= currentAge,
   ) ?? null
 
+  const marriage = deriveMarriageProfile({
+    gender: body.gender,
+    birthYear: year,
+    chart: {
+      year: partialChart.year,
+      month: partialChart.month,
+      day: partialChart.day,
+      hour: partialChart.hour,
+      riZhu: partialChart.riZhu,
+      wuxingScore: partialChart.wuxingScore,
+      xiyong: partialChart.xiyong,
+      jishen: partialChart.jishen,
+    },
+  })
+
   return {
     profile: {
       name: body.name || '',
@@ -98,5 +114,6 @@ export default defineEventHandler(async (event): Promise<BaziZhengyuanCalcResult
     geju,
     xiyong,
     jishen,
+    marriage,
   }
 })
