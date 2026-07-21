@@ -140,7 +140,7 @@ function formatDate(iso: string): string {
 }
 
 // ── SEO ──
-const siteName = 'ososn'
+const siteName = useRuntimeConfig().public.siteName
 
 useSeoMeta({
   title: () => `${t('insights.seoTitle')} - ${siteName}`,
