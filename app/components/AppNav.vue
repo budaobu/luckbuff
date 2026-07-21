@@ -292,7 +292,6 @@ const isToolsActive = computed(() => {
 const navItems = computed(() => [
   { label: t('nav.home'), to: '/', id: 'nav-home' },
   { label: t('nav.tools'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
-  { label: t('nav.prophet'), to: '/prophet', badge: '2026世界杯', id: 'nav-prophet' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
   { label: t('nav.profiles'), to: '/settings', id: 'nav-profiles' },
 ])
