@@ -6000,7 +6000,12 @@
     "selectProfile": "选择档案",
     "noProfiles": "还没有保存任何档案，",
     "goSettings": "去设置",
-    "createSuffix": "创建一个吧"
+    "createSuffix": "创建一个吧",
+    "jingpiTitle": "八字精批 · AI 白话注释",
+    "jingpiSubtitle": "幽默隐士逐段开讲，命局、性格、事业、感情、健康、大运一次说透",
+    "reinterpret": "重新解读",
+    "calcFail": "排盘失败",
+    "checkInput": "请检查输入后重试"
   },
   "bazhai": {
     "title": "八宅风水",

@@ -82,7 +82,7 @@
         <TianganDizhi size="full" :label="$t('zipingBazi.calculating')" />
       </div>
 
-      <!-- 阶段 3：结果 -->
+      <!-- 阶段 3：结果（命盘 + 八字精批 + AI 白话注释，单页连续视图） -->
       <div v-if="phase === 'result' && chart">
         <div class="mb-8">
           <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Zi Ping Result</span>
@@ -95,65 +95,104 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <UTabs
-          :items="tabItems"
-          :ui="{
-            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
-            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
-            indicator: 'bg-transparent',
-            content: 'pt-5',
-          }"
-        >
-          <template #pan>
-            <div class="space-y-6">
-              <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-                <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.fourPillars') }}</h3>
-                <div class="grid grid-cols-4 gap-3 text-center">
-                  <div v-for="(p, key) in { year: chart.year, month: chart.month, day: chart.day, hour: chart.hour }" :key="key" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-                    <div class="text-xs text-[var(--text-faint)] mb-2">{{ $t(`zipingBazi.${key}Pillar`) }}</div>
-                    <div class="text-2xl font-serif text-[var(--text-primary)] mb-1">{{ p ? p.gan + p.zhi : '—' }}</div>
-                    <div v-if="p" class="text-xs text-[var(--accent)]">{{ p.shishen }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-                <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.dayunTitle') }}</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                  <div v-for="dy in chart.dayuns.slice(0, 10)" :key="dy.index" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-2 text-center" :class="{ 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]': chart.currentDaYun?.index === dy.index }">
-                    <div class="text-[10px] text-[var(--text-faint)]">{{ dy.ageRange[0] }}-{{ dy.ageRange[1] }} {{ $t('zipingBazi.ageUnit') }}</div>
-                    <div class="text-sm font-serif text-[var(--text-primary)]">{{ dy.gan }}{{ dy.zhi }}</div>
-                  </div>
-                </div>
-                <p class="text-xs text-[var(--text-faint)] mt-3">{{ $t('zipingBazi.qiyunAge', { age: chart.qiyunAge }) }}</p>
-              </div>
-
-              <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-                <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.wuxingTitle') }}</h3>
-                <div class="grid grid-cols-5 gap-2 text-center">
-                  <div v-for="(value, key) in chart.wuxingScore" :key="key" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-                    <div class="text-xl font-serif text-[var(--text-primary)]">{{ key }}</div>
-                    <div class="text-sm text-[var(--accent)] mt-1">{{ value }}%</div>
-                  </div>
-                </div>
+        <div class="space-y-6">
+          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
+            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.fourPillars') }}</h3>
+            <div class="grid grid-cols-4 gap-3 text-center">
+              <div v-for="(p, key) in { year: chart.year, month: chart.month, day: chart.day, hour: chart.hour }" :key="key" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
+                <div class="text-xs text-[var(--text-faint)] mb-2">{{ $t(`zipingBazi.${key}Pillar`) }}</div>
+                <div class="text-2xl font-serif text-[var(--text-primary)] mb-1">{{ p ? p.gan + p.zhi : '—' }}</div>
+                <div v-if="p" class="text-xs text-[var(--accent)]">{{ p.shishen }}</div>
               </div>
             </div>
-          </template>
+          </div>
 
-          <template #ai>
-            <div class="space-y-4">
-              <div v-if="aiLoading" class="text-sm text-[var(--text-muted)]">{{ $t('zipingBazi.aiLoading') }}</div>
-              <div v-else-if="aiError" class="text-sm text-red-400">{{ aiError }}</div>
-              <div v-else-if="aiResult" class="space-y-4">
-                <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-                  <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">{{ $t('zipingBazi.aiOverview') }}</h4>
-                  <p class="text-sm text-[var(--text-muted)] leading-relaxed">{{ aiResult.overview }}</p>
-                </div>
+          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
+            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.dayunTitle') }}</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              <div v-for="dy in chart.dayuns.slice(0, 10)" :key="dy.index" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-2 text-center" :class="{ 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]': chart.currentDaYun?.index === dy.index }">
+                <div class="text-[10px] text-[var(--text-faint)]">{{ dy.ageRange[0] }}-{{ dy.ageRange[1] }} {{ $t('zipingBazi.ageUnit') }}</div>
+                <div class="text-sm font-serif text-[var(--text-primary)]">{{ dy.gan }}{{ dy.zhi }}</div>
               </div>
-              <div v-else class="text-sm text-[var(--text-muted)]">{{ $t('zipingBazi.aiEmpty') }}</div>
             </div>
-          </template>
-        </UTabs>
+            <p class="text-xs text-[var(--text-faint)] mt-3">{{ $t('zipingBazi.qiyunAge', { age: chart.qiyunAge }) }}</p>
+          </div>
+
+          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
+            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.wuxingTitle') }}</h3>
+            <div class="grid grid-cols-5 gap-2 text-center">
+              <div v-for="(value, key) in chart.wuxingScore" :key="key" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
+                <div class="text-xl font-serif text-[var(--text-primary)]">{{ key }}</div>
+                <div class="text-sm text-[var(--accent)] mt-1">{{ value }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 八字精批：AI 白话注释，流式分段追加 -->
+        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mt-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
+              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('zipingBazi.jingpiTitle') }}</h3>
+              <p class="text-xs text-[var(--text-faint)] mt-0.5">{{ $t('zipingBazi.jingpiSubtitle') }}</p>
+            </div>
+            <div v-if="aiStreaming" class="flex items-center gap-1.5">
+              <span class="text-xs text-[var(--accent-muted)]">{{ $t('zipingBazi.aiLoading') }}</span>
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+              </span>
+            </div>
+          </div>
+
+          <div v-if="aiSections.length > 0" class="space-y-3">
+            <div
+              v-for="(section, index) in aiSections"
+              :key="section.title"
+              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
+              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
+            >
+              <div class="relative z-10 p-4">
+                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
+                  {{ section.title.replace(/^##\s*/, '') }}
+                </h4>
+                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
+                <span
+                  v-if="aiStreaming && index === aiSections.length - 1"
+                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
+            <div class="flex flex-col items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
+                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
+              </div>
+              <p class="text-xs text-[var(--text-muted)]">{{ $t('zipingBazi.aiLoading') }}</p>
+            </div>
+          </div>
+
+          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+              <p class="text-sm text-red-400">{{ aiError }}</p>
+            </div>
+          </div>
+
+          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
+            <UButton color="warning" variant="soft" size="sm" @click="startAiStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+              </template>
+              {{ $t('zipingBazi.reinterpret') }}
+            </UButton>
+          </div>
+        </div>
 
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
           <UButton color="warning" variant="soft" @click="resetToForm">
@@ -175,6 +214,7 @@
 </template>
 
 <script setup lang="ts">
+import { marked } from 'marked'
 import type { ZipingBaziChart } from '~/types/ziping-bazi'
 import type { DiZhi } from '~/types/user'
 
@@ -190,6 +230,7 @@ interface FormValues {
 
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()
+const toast = useToast()
 const siteName = config.public.siteName || 'ososn'
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
 
@@ -205,29 +246,72 @@ const formValues = ref<FormValues>({
 })
 const lastFormValues = ref<Partial<FormValues>>({})
 const chart = ref<ZipingBaziChart | null>(null)
-const aiResult = ref<any>(null)
-const aiLoading = ref(false)
+
+const aiContent = ref('')
+const aiStreaming = ref(false)
 const aiError = ref<string | null>(null)
 
 const store = useProfilesStore()
-const { calc } = useZipingBaziCalc()
 
-const tabItems = [
-  { label: t('zipingBazi.panCalculation'), slot: 'pan' },
-  { label: t('zipingBazi.aiInterpret'), slot: 'ai' },
-]
+const aiSections = computed(() => {
+  if (!aiContent.value) return []
+  const rawSections = aiContent.value.split(/\n(?=##\s)/)
+  const result: { title: string; content: string }[] = []
+  for (const raw of rawSections) {
+    const trimmed = raw.trim()
+    if (!trimmed) continue
+    const lines = trimmed.split('\n')
+    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
+    const content = lines.slice(1).join('\n').trim()
+    if (titleLine || content) {
+      result.push({ title: titleLine || t('zipingBazi.jingpiTitle'), content })
+    }
+  }
+  return result
+})
 
-function handleSubmit(values: FormValues) {
+function renderMarkdown(text: string): string {
+  if (!text) return ''
+  return marked.parse(text, { async: false }) as string
+}
+
+async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   lastFormValues.value = { ...values }
 
-  const [year, month, day] = values.birthDate.split('-').map(Number) as [number, number, number]
-  chart.value = calc(year, month, day, values.birthHour ?? null, values.gender)
   phase.value = 'animating'
-  setTimeout(() => {
-    phase.value = 'result'
-    startAiStream()
-  }, 1500)
+  chart.value = null
+  aiContent.value = ''
+  aiStreaming.value = false
+  aiError.value = null
+
+  try {
+    const result = await $fetch<ZipingBaziChart>('/api/tools/ziping-bazi/calc', {
+      method: 'POST',
+      body: {
+        gender: values.gender,
+        birthDate: values.birthDate,
+        birthHour: values.birthHour || null,
+        name: values.name || '',
+        locale: locale.value,
+      },
+    })
+
+    chart.value = result
+
+    setTimeout(() => {
+      phase.value = 'result'
+      startAiStream()
+    }, 1200)
+  }
+  catch (err: any) {
+    phase.value = 'form'
+    toast.add({
+      title: t('zipingBazi.calcFail'),
+      description: err?.data?.message || err?.message || t('zipingBazi.checkInput'),
+      color: 'error',
+    })
+  }
 }
 
 function handleSaveProfile(id: string, values: FormValues) {
@@ -241,43 +325,74 @@ function handleSaveProfile(id: string, values: FormValues) {
 
 async function startAiStream() {
   if (!chart.value) return
-  aiLoading.value = true
-  aiError.value = null
-  aiResult.value = null
 
-  const summary = `${chart.value.riZhu}日主，${chart.value.riZhuStrength}，${chart.value.geju}，喜用${chart.value.xiyong}，忌${chart.value.jishen}。`
-  const profile = {
-    id: 'temp',
-    label: '临时',
-    name: formValues.value.name,
-    gender: formValues.value.gender,
-    birthDate: formValues.value.birthDate,
-    birthHour: formValues.value.birthHour,
-  }
+  aiContent.value = ''
+  aiStreaming.value = true
+  aiError.value = null
+
+  await nextTick()
 
   try {
-    const result = await $fetch('/api/bazi/interpret', {
+    const response = await fetch('/api/tools/ziping-bazi/reading', {
       method: 'POST',
-      body: {
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         chart: chart.value,
-        profile,
-        summary,
+        name: formValues.value.name || '',
         locale: locale.value,
-      },
+      }),
     })
-    aiResult.value = result
-  } catch (e: any) {
-    aiError.value = e?.data?.statusMessage || e?.message || t('zipingBazi.aiRequestFailed')
-  } finally {
-    aiLoading.value = false
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+
+    const reader = response.body!.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ''
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() ?? ''
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim()
+        if (!line || !line.startsWith('data:')) continue
+        const payload = line.slice(5).trim()
+        if (!payload || payload === '[DONE]') continue
+
+        try {
+          const data = JSON.parse(payload)
+          if (data.type === 'text' && data.text) {
+            aiContent.value += data.text
+          }
+          else if (data.type === 'error') {
+            aiError.value = data.message || t('zipingBazi.aiRequestFailed')
+          }
+        }
+        catch {
+          // ignore
+        }
+      }
+    }
+  }
+  catch (e: any) {
+    aiError.value = e?.message || t('zipingBazi.aiRequestFailed')
+  }
+  finally {
+    aiStreaming.value = false
   }
 }
 
 function resetToForm() {
   phase.value = 'form'
   chart.value = null
-  aiResult.value = null
-  aiLoading.value = false
+  aiContent.value = ''
+  aiStreaming.value = false
   aiError.value = null
 }
 
@@ -324,3 +439,40 @@ useHead(() => ({
   ],
 }))
 </script>
+
+<style scoped>
+.ai-section-content :deep(p) {
+  margin-bottom: 0.6em;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+.ai-section-content :deep(p:last-child) {
+  margin-bottom: 0;
+}
+.ai-section-content :deep(strong) {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.ai-section-content :deep(ul) {
+  margin-left: 0;
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 0.5rem;
+}
+.ai-section-content :deep(ul li) {
+  position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.65;
+  color: var(--text-body);
+}
+.ai-section-content :deep(ul li::before) {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+</style>

@@ -5999,7 +5999,12 @@
     "methodologyCard3Desc": "大運以月柱為起點，陽男陰女順排、陰男陽女逆排，每十年一運，配合流年推斷人生階段。",
     "methodologyCard4Title": "五行平衡取用",
     "methodologyCard4Desc": "分析日主強弱後，扶抑日干、平衡五行者為喜用神，克洩耗過甚或生扶太過者為忌神。",
-    "methodologySource": "以上內容整理自《淵海子平》《三命通會》《子平真詮》等子平命理經典，僅供文化研究與命理愛好者參考。"
+    "methodologySource": "以上內容整理自《淵海子平》《三命通會》《子平真詮》等子平命理經典，僅供文化研究與命理愛好者參考。",
+    "jingpiTitle": "八字精批 · AI 白話註釋",
+    "jingpiSubtitle": "幽默隱士逐段開講，命局、性格、事業、感情、健康、大運一次說透",
+    "reinterpret": "重新解讀",
+    "calcFail": "排盤失敗",
+    "checkInput": "請檢查輸入後重試"
   },
   "bazhai": {
     "title": "八宅風水",
