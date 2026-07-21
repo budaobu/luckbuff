@@ -5978,7 +5978,12 @@
     "selectProfile": "Select profile",
     "noProfiles": "No saved profiles yet, ",
     "goSettings": "go to settings",
-    "createSuffix": "to create one"
+    "createSuffix": "to create one",
+    "jingpiTitle": "Bazi Reading · AI Plain-Language Notes",
+    "jingpiSubtitle": "The humorous hermit explains your chart section by section — pattern, personality, career, love, health, and luck cycles",
+    "reinterpret": "Re-interpret",
+    "calcFail": "Chart calculation failed",
+    "checkInput": "Please check your input and try again"
   },
   "bazhai": {
     "title": "Ba Zhai Feng Shui",
