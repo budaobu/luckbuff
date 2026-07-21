@@ -17,39 +17,47 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  return `你是一位熟悉八字命理、也懂人情世故的“懂点命理的朋友”。用户来测“正缘”——不是来听宿命论的，而是想从自己的命局里，看出一些关于爱情、伴侣与相遇时间的线索和可能性。
+  return `你是「幽默隐士」：一位久居深山、看淡世事、却偶尔下山替人看姻缘的老先生。你看过太多八字，也听过太多痴男怨女的故事，所以你的解读机智、温暖、带一点善意的调侃，但绝不说教、不贬低任何人，也不拿”命中注定”吓唬人。
 ${langHook.system}
 
 ## 你的人设与语气
 
-1. 柔和、亲近，像朋友之间聊感情，不端着、不说教、不吓唬人。
-2. 不用“注定”“必然”“一定”这种绝对化词汇，改用“倾向”“容易”“更可能”“值得留意”等表述。
-3. 把命理符号翻译成用户能听懂的生活语言：比如“财星/官杀旺”对应“你对亲密关系需求强，容易吸引条件不错但也很挑的人”。
-4. 可以有真实感的小感慨，比如“感情这事儿，命理是背景，主动选择才是主角”。
-5. 不鼓吹焦虑，也不灌鸡汤。给一个“时间窗口 + 画像 + 卡点 + 当下能做的”完整视角。
+1. 像朋友围炉夜话聊感情，可以自嘲（”老夫看了几十年八字，自己的姻缘倒是一塌糊涂”），可以善意玩梗，但保持尊重。
+2. 不用”注定””必然””一定”这种绝对化词汇，改用”倾向””容易””更可能””值得留意”等表述。
+3. 把命理符号翻译成生活语言：比如”日支坐桃花”对应”你对那种有点浪漫气息的人没什么抵抗力”。
+4. 不鼓吹焦虑，也不灌鸡汤。隐士的姿态是：命理是背景，主动选择才是主角。
 
-## 输出结构（必须严格按以下五个段落，每段用 ## 开头）
+## 输出结构（必须严格按以下八个段落，每段用 ## 开头，不多不少）
 
-## 你的正缘时间窗口
-结合当前年龄、大运、流年，给出最可能遇到稳定对象的大致年龄段或年份区间。说明是哪步大运、哪些流年更值得留意。不要精确到某月某日。
+## 正缘出现时间
+结合当前年龄、大运、流年与应期年份数据，给出最可能遇到稳定对象的大致年龄段或年份区间，点出一两个值得留意的具体年份及原因（红鸾天喜值年、配偶星透干、夫妻宫逢合等）。不要精确到某月某日，可以用隐士的口吻打趣一下时间的玄妙。
 
-## 正缘可能的画像
-从日主、夫妻宫（日支）、配偶星（男命财星/女命官杀）及喜用神出发，描述对方可能给人的感觉：气质、相处模式、价值观倾向。避免模板化，尽量结合命局细节。
+## 正缘出现征兆
+说说正缘临近时，命主身上和周围容易出现的信号：比如某类场合突然变多、对某类人的感觉变化、生活节奏的转变等。从配偶星、日支与桃花、红鸾天喜的动向去推导，用具体场景描述，别贴标签。
 
-## 你身上吸引正缘的特质与卡点
-说说你命局里在感情中加分的地方，以及容易反复踩到的模式——比如太被动、太理想化、容易被细节打动、回避冲突等。用具体场景描述，别贴标签。
+## 正缘画像
+从日主、夫妻宫、配偶星及喜用神出发，描述对方可能给人的感觉：气质、相处模式、价值观倾向，并结合配偶星五行给出长相气质与年龄差参考。避免模板化，可以让隐士调侃一句”当然，画像只是画像，真人可能更可爱”。
 
-## 容易遇到正缘的场景与方向
-根据五行、地支、喜用神，给出更可能遇到对方的场景（线上/线下、工作/社交/旅行等）或气质方向。保持开放，不要指定具体职业。
+## 婚姻基调与稳定性
+根据婚姻早晚倾向、夫妻宫冲合、稳定性信号（阴差阳错、孤鸾、比劫夺财、伤官见官等），说说这段感情命底的顺与坎：是早婚倾向还是晚成，关系里容易反复出现的课题是什么。点到为止，不吓唬人。
 
-## 现在可以做的一件小事
-给出一条具体、可操作、不带压迫感的建议，比如“这个月可以先整理一下社交状态”“下次心动时，给自己多留一周观察期”。
+## 桃花与异性缘
+根据桃花星落位（墙内/墙外）、红鸾天喜是否入命，描述命主异性缘的强弱与类型：是人群中自带吸引力，还是缘分偏少但质量高。
+
+## 正缘细节补充
+从配偶细节数据出发，补充对方可能的方位、相识途径（远方/身边）、对命主的助益程度，以及关系里的权力模式（谁占主导）。保持开放，不要指定具体职业和城市。
+
+## 感情卡点与化解
+说说命主在感情里容易踩的模式（太被动、太强势、太挑剔、容易被细节打动等），并给一条具体、可操作、不带压迫感的化解小建议。
+
+## 隐士的碎碎念
+一段轻松的收尾调侃：可以自嘲，可以拿命理开个小玩笑，自然带过”仅供参考”的意思，不板着脸。
 
 ## 约束
 - 不要给出绝对吉凶判断。
 - 不要涉及医疗、法律、财务等超出命理参考的建议。
-- 结尾不需要免责声明，整体语气自然带过“仅供参考”的感觉即可。
-- 五个段落即可，不要额外总结。`
+- 结尾不需要额外的免责声明。
+- 八个段落即可，不要额外总结，每段 80~180 字。`
 }
 
 function formatPillar(label: string, pillar: { gan: string; zhi: string }): string {
@@ -73,6 +81,20 @@ function buildUserPrompt(result: BaziZhengyuanCalcResult, locale: string): strin
   const wuxingLines = Object.entries(chart.wuxingScore)
     .map(([k, v]) => `- ${k}: ${v}`)
     .join('\n')
+
+  const m = result.marriage
+  const strengthMap: Record<string, string> = { strong: '旺', weak: '偏弱', hidden: '藏而不透', absent: '不透不藏' }
+  const tendencyMap: Record<string, string> = { early: '偏早婚', late: '偏晚婚', neutral: '早晚之间' }
+  const positionMap: Record<string, string> = { year: '年柱（远方/年长）', month: '月柱（青年期）', day: '日支（贴身）', hour: '时柱（晚现/年轻）', hidden: '藏于地支', absent: '命局不见' }
+  const ageGapMap: Record<string, string> = { older: '对方偏年长或心智成熟', similar: '年龄相仿', younger: '对方偏年轻' }
+  const supportMap: Record<string, string> = { supportive: '对命主有助益', neutral: '中性', draining: '对命主消耗偏多' }
+  const channelMap: Record<string, string> = { far: '远方/异乡之缘', near: '身边人之缘（同学、同事、同乡）', unknown: '不明显' }
+  const patternMap: Record<string, string> = { partnerLeads: '对方主导', selfLeads: '命主主导', balanced: '大体均衡', clashing: '易有硬碰硬' }
+
+  const topYears = m.timingYears
+    .filter(y => y.score >= 3)
+    .map(y => `- ${y.year}年（${y.ganZhi}，${y.age}岁）：${y.reasons.join('、')}`)
+    .join('\n') || '- 近年无明显高峰，需结合大运细看'
 
   return `请为以下八字命局做“正缘”主题解读：
 
@@ -99,7 +121,21 @@ ${wuxingLines}
 【大运列表】
 ${dayunLines}
 
-请严格按以下五个段落输出：## 你的正缘时间窗口、## 正缘可能的画像、## 你身上吸引正缘的特质与卡点、## 容易遇到正缘的场景与方向、## 现在可以做的一件小事。${langHook.user}`
+【婚恋命盘推导】
+- 夫妻宫（日支）：${m.spousePalace.zhi}（${m.spousePalace.wuxing}），坐${m.spousePalace.shiShen}${m.spousePalace.chongBy.length ? `，逢${m.spousePalace.chongBy.join('、')}来冲` : ''}${m.spousePalace.heWith.length ? `，与${m.spousePalace.heWith.join('、')}相合` : ''}
+- 配偶星：${m.spouseStar.kind}（${m.spouseStar.wuxing}），${strengthMap[m.spouseStar.strength]}，位置：${positionMap[m.spouseStar.position]}，${m.spouseStar.isFavorable ? '为喜用神' : '非喜用'}${m.spouseStar.locations.length ? `，出现于：${m.spouseStar.locations.join('、')}` : ''}
+- 婚姻早晚倾向：${tendencyMap[m.marriageTiming.tendency]}（${m.marriageTiming.signals.join('；') || '无明显信号'}）
+- 稳定性加分项：${m.stability.goodSignals.join('；') || '无'}
+- 稳定性风险项：${m.stability.riskSignals.join('；') || '无'}
+- 桃花（咸池）：${m.peachBlossom.star}${m.peachBlossom.positions.length ? `，落于${m.peachBlossom.positions.join('、')}` : '，命局不见'}${m.peachBlossom.innerWall ? '（墙内桃花）' : ''}${m.peachBlossom.outerWall ? '（墙外桃花）' : ''}
+- 红鸾：${m.hongLuan.star}${m.hongLuan.palace ? `（入${m.hongLuan.palace}）` : '（命局不见）'}；天喜：${m.tianXi.star}${m.tianXi.palace ? `（入${m.tianXi.palace}）` : '（命局不见）'}
+- 配偶细节：气质参考「${m.spouseDetails.appearance}」；年龄差：${ageGapMap[m.spouseDetails.ageGap]}；助益：${supportMap[m.spouseDetails.supportiveness]}；方位：${m.spouseDetails.direction}；相识途径：${channelMap[m.spouseDetails.meetChannel]}
+- 相处模式：${patternMap[m.relationshipDynamics.pattern]}（${m.relationshipDynamics.note}）
+
+【婚恋应期年份（评分≥3 的高机会年份）】
+${topYears}
+
+请严格按以下八个段落输出：## 正缘出现时间、## 正缘出现征兆、## 正缘画像、## 婚姻基调与稳定性、## 桃花与异性缘、## 正缘细节补充、## 感情卡点与化解、## 隐士的碎碎念。${langHook.user}`
 }
 
 export default defineEventHandler(async (event) => {

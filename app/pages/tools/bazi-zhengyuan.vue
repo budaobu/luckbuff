@@ -162,6 +162,84 @@
               </span>
             </div>
           </div>
+
+          <!-- 婚姻命盘 -->
+          <div v-if="calcResult.marriage" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
+            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+              <UIcon name="i-heroicons-heart" class="w-4 h-4 text-[var(--accent-muted)]" />
+              {{ $t('baziZhengyuan.marriageCardTitle') }}
+            </h3>
+
+            <div class="space-y-2.5 mb-4">
+              <div class="flex items-start gap-2 text-sm">
+                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.spousePalaceLabel') }}</span>
+                <p class="text-[var(--text-body)] leading-relaxed">
+                  {{ calcResult.marriage.spousePalace.zhi }}（{{ calcResult.marriage.spousePalace.wuxing }}）· {{ $t('baziZhengyuan.sitsOn', { shishen: calcResult.marriage.spousePalace.shiShen }) }}<template v-if="calcResult.marriage.spousePalace.heWith.length"> · {{ $t('baziZhengyuan.heWith', { pillars: calcResult.marriage.spousePalace.heWith.join('、') }) }}</template><template v-if="calcResult.marriage.spousePalace.chongBy.length"> · {{ $t('baziZhengyuan.chongBy', { pillars: calcResult.marriage.spousePalace.chongBy.join('、') }) }}</template>
+                </p>
+              </div>
+              <div class="flex items-start gap-2 text-sm">
+                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.spouseStarLabel') }}</span>
+                <p class="text-[var(--text-body)] leading-relaxed">
+                  {{ calcResult.marriage.spouseStar.kind }}（{{ calcResult.marriage.spouseStar.wuxing }}）· {{ $t(`baziZhengyuan.starStrength.${calcResult.marriage.spouseStar.strength}`) }} · {{ calcResult.marriage.spouseStar.isFavorable ? $t('baziZhengyuan.starFavorable') : $t('baziZhengyuan.starNotFavorable') }}
+                </p>
+              </div>
+              <div class="flex items-start gap-2 text-sm">
+                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.peachLabel') }}</span>
+                <p class="text-[var(--text-body)] leading-relaxed">
+                  {{ calcResult.marriage.peachBlossom.star }}<template v-if="calcResult.marriage.peachBlossom.positions.length"> · {{ $t('baziZhengyuan.peachIn', { pillars: calcResult.marriage.peachBlossom.positions.join('、') }) }}</template><template v-else> · {{ $t('baziZhengyuan.peachAbsent') }}</template><template v-if="calcResult.marriage.peachBlossom.innerWall"> · {{ $t('baziZhengyuan.peachInner') }}</template><template v-if="calcResult.marriage.peachBlossom.outerWall"> · {{ $t('baziZhengyuan.peachOuter') }}</template>
+                </p>
+              </div>
+              <div class="flex items-start gap-2 text-sm">
+                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.hongLuanLabel') }}</span>
+                <p class="text-[var(--text-body)] leading-relaxed">
+                  {{ calcResult.marriage.hongLuan.star }}<template v-if="calcResult.marriage.hongLuan.palace">（{{ $t('baziZhengyuan.starInPalace', { palace: calcResult.marriage.hongLuan.palace }) }}）</template> · {{ $t('baziZhengyuan.tianXiLabel') }} {{ calcResult.marriage.tianXi.star }}<template v-if="calcResult.marriage.tianXi.palace">（{{ $t('baziZhengyuan.starInPalace', { palace: calcResult.marriage.tianXi.palace }) }}）</template>
+                </p>
+              </div>
+              <div class="flex items-start gap-2 text-sm">
+                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.timingLabel') }}</span>
+                <p class="text-[var(--text-body)] leading-relaxed">
+                  {{ $t(`baziZhengyuan.timing.${calcResult.marriage.marriageTiming.tendency}`) }} · {{ $t(`baziZhengyuan.pattern.${calcResult.marriage.relationshipDynamics.pattern}`) }} · {{ $t('baziZhengyuan.directionLabel') }}{{ calcResult.marriage.spouseDetails.direction }}
+                </p>
+              </div>
+            </div>
+
+            <!-- 应期年份 -->
+            <div>
+              <p class="text-xs text-[var(--text-faint)] mb-2">{{ $t('baziZhengyuan.timingYearsTitle') }}</p>
+              <div class="flex items-end gap-1 overflow-x-auto pb-1">
+                <button
+                  v-for="y in calcResult.marriage.timingYears"
+                  :key="y.year"
+                  type="button"
+                  class="flex flex-col items-center gap-1 shrink-0 cursor-pointer"
+                  :aria-pressed="selectedYear?.year === y.year"
+                  @click="selectedYear = selectedYear?.year === y.year ? null : y"
+                >
+                  <div
+                    class="w-6 rounded-t-md transition-all duration-300"
+                    :class="selectedYear?.year === y.year
+                      ? 'bg-[var(--accent)] ring-1 ring-[var(--accent)]'
+                      : y.score >= 4 ? 'bg-[var(--accent)]' : y.score >= 3 ? 'bg-[var(--accent)]/60' : y.score >= 2 ? 'bg-[var(--accent)]/30' : 'bg-[var(--border-light)]'"
+                    :style="{ height: `${8 + y.score * 10}px` }"
+                  />
+                  <span
+                    class="text-[9px]"
+                    :class="selectedYear?.year === y.year ? 'text-[var(--accent-muted)] font-semibold' : 'text-[var(--text-faint)]'"
+                  >{{ String(y.year).slice(2) }}</span>
+                </button>
+              </div>
+              <div v-if="selectedYear" class="mt-3 rounded-xl border border-[var(--border-light)] bg-[var(--surface-input)] p-3">
+                <p class="text-xs font-semibold text-[var(--text-primary)]">
+                  {{ selectedYear.year }}（{{ selectedYear.ganZhi }}）· {{ $t('baziZhengyuan.ageSuffix', { age: selectedYear.age }) }}
+                </p>
+                <p v-if="selectedYear.reasons.length" class="text-[11px] text-[var(--text-muted)] mt-1 leading-relaxed">
+                  {{ selectedYear.reasons.join('、') }}
+                </p>
+                <p v-else class="text-[11px] text-[var(--text-faint)] mt-1">{{ $t('baziZhengyuan.noSignal') }}</p>
+              </div>
+              <p v-else class="text-[10px] text-[var(--text-faint)] mt-2">{{ $t('baziZhengyuan.timingYearsHint') }}</p>
+            </div>
+          </div>
         </div>
 
         <!-- AI 解读 -->
@@ -278,7 +356,7 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import type { DiZhi } from '~/types/user'
-import type { BaziZhengyuanCalcResult } from '~/types/bazi-zhengyuan'
+import type { BaziZhengyuanCalcResult, ZhengyuanTimingYear } from '~/types/bazi-zhengyuan'
 import { getShiShenFull } from '~/utils/bazi/shishen'
 
 interface FormValues {
@@ -309,6 +387,7 @@ const formValues = ref<FormValues>({
 })
 const lastFormValues = ref<Partial<FormValues>>({})
 const calcResult = ref<BaziZhengyuanCalcResult | null>(null)
+const selectedYear = ref<ZhengyuanTimingYear | null>(null)
 
 const aiContent = ref('')
 const aiStreaming = ref(false)
@@ -346,6 +425,7 @@ async function handleSubmit(values: FormValues) {
   calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
+  selectedYear.value = null
   aiStarted.value = false
   aiError.value = null
 
