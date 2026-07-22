@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T06:57:59.883Z",
+  "updatedAt": "2026-07-20T09:42:59.217Z",
   "source": "https://jys66.top/calendars/worldcup2026.ics",
   "total": 104,
   "events": [
@@ -1062,90 +1062,90 @@
     {
       "uid": "worldcup2026-match-097@jys66.top",
       "slug": "worldcup2026-match-097",
-      "homeTeam": "第89场胜者",
-      "awayTeam": "第90场胜者",
-      "summary": "第89场胜者 vs 第90场胜者",
+      "homeTeam": "法国",
+      "awayTeam": "摩洛哥",
+      "summary": "🇫🇷 法国 vs 🇲🇦 摩洛哥",
       "startTime": "2026-07-09T20:00:00.000Z",
       "endTime": "2026-07-09T21:45:00.000Z",
       "venue": "吉列体育场 · 波士顿",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-098@jys66.top",
       "slug": "worldcup2026-match-098",
-      "homeTeam": "第91场胜者",
-      "awayTeam": "第92场胜者",
-      "summary": "第91场胜者 vs 第92场胜者",
+      "homeTeam": "西班牙",
+      "awayTeam": "比利时",
+      "summary": "🇪🇸 西班牙 vs 🇧🇪 比利时",
       "startTime": "2026-07-10T19:00:00.000Z",
       "endTime": "2026-07-10T20:45:00.000Z",
       "venue": "索菲体育场 · 洛杉矶",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-099@jys66.top",
       "slug": "worldcup2026-match-099",
-      "homeTeam": "第93场胜者",
-      "awayTeam": "第94场胜者",
-      "summary": "第93场胜者 vs 第94场胜者",
+      "homeTeam": "挪威",
+      "awayTeam": "英格兰",
+      "summary": "🇳🇴 挪威 vs 🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
       "startTime": "2026-07-11T21:00:00.000Z",
       "endTime": "2026-07-11T22:45:00.000Z",
       "venue": "硬石体育场 · 迈阿密",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-100@jys66.top",
       "slug": "worldcup2026-match-100",
-      "homeTeam": "第95场胜者",
-      "awayTeam": "第96场胜者",
-      "summary": "第95场胜者 vs 第96场胜者",
+      "homeTeam": "阿根廷",
+      "awayTeam": "瑞士",
+      "summary": "🇦🇷 阿根廷 vs 🇨🇭 瑞士",
       "startTime": "2026-07-12T01:00:00.000Z",
       "endTime": "2026-07-12T02:45:00.000Z",
       "venue": "箭头体育场 · 堪萨斯城",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-101@jys66.top",
       "slug": "worldcup2026-match-101",
-      "homeTeam": "第97场胜者",
-      "awayTeam": "第98场胜者",
-      "summary": "第97场胜者 vs 第98场胜者",
+      "homeTeam": "法国",
+      "awayTeam": "西班牙",
+      "summary": "🇫🇷 法国 vs 🇪🇸 西班牙",
       "startTime": "2026-07-14T19:00:00.000Z",
       "endTime": "2026-07-14T20:45:00.000Z",
       "venue": "AT&T体育场 · 达拉斯",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-102@jys66.top",
       "slug": "worldcup2026-match-102",
-      "homeTeam": "第99场胜者",
-      "awayTeam": "第100场胜者",
-      "summary": "第99场胜者 vs 第100场胜者",
+      "homeTeam": "英格兰",
+      "awayTeam": "阿根廷",
+      "summary": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰 vs 🇦🇷 阿根廷",
       "startTime": "2026-07-15T19:00:00.000Z",
       "endTime": "2026-07-15T20:45:00.000Z",
       "venue": "梅赛德斯-奔驰体育场 · 亚特兰大",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-103@jys66.top",
       "slug": "worldcup2026-match-103",
-      "homeTeam": "第101场败者",
-      "awayTeam": "第102场败者",
-      "summary": "第101场败者 vs 第102场败者",
+      "homeTeam": "法国",
+      "awayTeam": "英格兰",
+      "summary": "🇫🇷 法国 vs 🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
       "startTime": "2026-07-18T21:00:00.000Z",
       "endTime": "2026-07-18T22:45:00.000Z",
       "venue": "硬石体育场 · 迈阿密",
-      "isPlaceholder": true
+      "isPlaceholder": false
     },
     {
       "uid": "worldcup2026-match-104@jys66.top",
       "slug": "worldcup2026-match-104",
-      "homeTeam": "第101场胜者",
-      "awayTeam": "第102场胜者",
-      "summary": "第101场胜者 vs 第102场胜者",
+      "homeTeam": "西班牙",
+      "awayTeam": "阿根廷",
+      "summary": "🇪🇸 西班牙 vs 🇦🇷 阿根廷",
       "startTime": "2026-07-19T19:00:00.000Z",
       "endTime": "2026-07-19T20:45:00.000Z",
       "venue": "大都会人寿体育场 · 纽约",
-      "isPlaceholder": true
+      "isPlaceholder": false
     }
   ]
 }
