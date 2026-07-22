@@ -1,6 +1,52 @@
 <template>
   <div class="min-h-screen bg-[var(--surface-page,#0b0d12)] text-[var(--text-body,#c8cdd8)] px-4 py-8">
-    <div class="max-w-5xl mx-auto">
+    <!-- ══════ 登录视图 ══════ -->
+    <div v-if="view === 'login'" class="min-h-[80vh] flex items-center justify-center">
+      <div class="w-full max-w-sm">
+        <div class="text-center mb-8">
+          <h1 class="text-2xl font-bold text-white font-serif">命见 · 内容管理</h1>
+          <p class="text-xs text-neutral-500 mt-2">保存后立即生效，无需部署</p>
+        </div>
+        <form class="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 space-y-4" @submit.prevent="login">
+          <div>
+            <label class="block text-xs text-neutral-400 mb-1.5">用户名</label>
+            <input
+              v-model="loginForm.username"
+              type="text"
+              autocomplete="username"
+              required
+              class="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-700 text-sm text-neutral-100 focus:border-amber-500/60 focus:outline-none transition-colors"
+              placeholder="请输入用户名"
+            >
+          </div>
+          <div>
+            <label class="block text-xs text-neutral-400 mb-1.5">密码</label>
+            <input
+              v-model="loginForm.password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-700 text-sm text-neutral-100 focus:border-amber-500/60 focus:outline-none transition-colors"
+              placeholder="请输入密码"
+            >
+          </div>
+          <label class="flex items-center gap-2 text-xs text-neutral-400 cursor-pointer select-none">
+            <input v-model="loginForm.remember" type="checkbox" class="accent-amber-500 w-3.5 h-3.5">
+            记住我（30 天内自动登录）
+          </label>
+          <p v-if="loginError" class="text-xs text-red-400">{{ loginError }}</p>
+          <button
+            type="submit"
+            :disabled="loginPending"
+            class="w-full py-2.5 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-medium transition-colors disabled:opacity-50"
+          >
+            {{ loginPending ? '登录中…' : '登 录' }}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div v-else class="max-w-5xl mx-auto">
       <!-- 顶栏 -->
       <div class="flex items-center justify-between mb-6">
         <div>
@@ -21,6 +67,13 @@
             @click="startNew"
           >
             ＋ 新建文章
+          </button>
+          <button
+            class="text-sm px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition-colors"
+            title="退出登录"
+            @click="logout"
+          >
+            退出
           </button>
         </div>
       </div>
@@ -240,10 +293,6 @@ import { marked } from 'marked'
 
 definePageMeta({ layout: false, ssr: false })
 
-// In dev, Nuxt auto-loads the local .env, so NUXT_INSIGHTS_ADMIN_PASSWORD from
-// that file is used — same as production. Basic-auth credentials are cached by
-// the browser after the first login prompt, no extra handling needed here.
-
 useHead({
   title: '命见内容管理',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
@@ -272,7 +321,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   'culture': '术数文化',
 }
 
-const view = ref<'list' | 'editor'>('list')
+const view = ref<'login' | 'list' | 'editor'>('login')
 const articles = ref<AdminArticle[]>([])
 const categories = ref<string[]>(Object.keys(CATEGORY_LABELS))
 const listPending = ref(false)
@@ -331,6 +380,31 @@ async function adminFetch<T>(url: string, opts?: any): Promise<T> {
   return await $fetch<T>(url, opts)
 }
 
+// ── 登录 / 登出 ──
+const loginForm = reactive({ username: '', password: '', remember: true })
+const loginPending = ref(false)
+const loginError = ref('')
+
+async function login() {
+  loginPending.value = true
+  loginError.value = ''
+  try {
+    await $fetch('/api/admin/login', { method: 'POST', body: { ...loginForm } })
+    view.value = 'list'
+    loginForm.password = ''
+    await loadList()
+  } catch (e: any) {
+    loginError.value = e?.data?.statusMessage || '登录失败，请稍后再试'
+  } finally {
+    loginPending.value = false
+  }
+}
+
+async function logout() {
+  try { await $fetch('/api/admin/logout', { method: 'POST' }) } catch { /* cookie cleared regardless */ }
+  view.value = 'login'
+}
+
 async function loadList() {
   listPending.value = true
   fatalError.value = ''
@@ -340,7 +414,7 @@ async function loadList() {
     if (data.categories?.length) categories.value = [...data.categories]
   } catch (e: any) {
     if (e?.response?.status === 401) {
-      fatalError.value = '需要登录：请在弹出的对话框中输入管理账号和密码。'
+      view.value = 'login'
     } else if (e?.response?.status === 503) {
       fatalError.value = '服务器未配置管理密码（INSIGHTS_ADMIN_PASSWORD），请联系管理员。'
     } else {
@@ -509,7 +583,16 @@ async function onImagePicked(e: Event) {
   }
 }
 
-onMounted(loadList)
+onMounted(async () => {
+  // Existing session cookie → straight to the list; otherwise show the login form
+  try {
+    await $fetch('/api/admin/session')
+    view.value = 'list'
+    await loadList()
+  } catch {
+    view.value = 'login'
+  }
+})
 </script>
 
 <style>
