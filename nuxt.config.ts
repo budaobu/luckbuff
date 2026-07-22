@@ -53,12 +53,13 @@ function scanContent(dir: string): Array<{ slug: string; summary: string; genera
   return results
 }
 const contentItems = scanContent(join(__dirname, 'content', 'worldcup-predictions'))
-const insightItems = scanContent(join(__dirname, 'content', 'insights'))
+// insights articles are served at runtime (editors publish via /admin);
+// their sitemap URLs come from the runtime source server/api/__sitemap__/insights-urls.ts
 
 const autoRoutes = scanPages(join(__dirname, 'app', 'pages'), join(__dirname, 'app', 'pages'))
 
 const SITEMAP_EXCLUDE_ROUTES = new Set<string>([
-  // Add internal/utility pages here that should not be indexed
+  '/admin',
 ])
 
 const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily' | 'monthly' | 'yearly'; priority: number; _i18nTransform: boolean }>> = {
@@ -79,13 +80,6 @@ const sitemapUrls = [
     loc: `/prophet/match/${item.slug}`,
     lastmod: item.generatedAt || undefined,
     changefreq: 'weekly' as const,
-    priority: 0.6,
-    _i18nTransform: true,
-  })),
-  ...insightItems.map(item => ({
-    loc: `/insights/${item.slug}`,
-    lastmod: item.generatedAt || undefined,
-    changefreq: 'monthly' as const,
     priority: 0.6,
     _i18nTransform: true,
   })),
@@ -147,6 +141,7 @@ export default defineNuxtConfig({
       priority: 0.8,
     },
     urls: sitemapUrls as any,
+    sources: ['/api/__sitemap__/insights-urls'],
   },
 
   colorMode: {
@@ -201,6 +196,7 @@ export default defineNuxtConfig({
       '/settings': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/terms': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/privacy': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
+      '/admin': { robots: false, sitemap: false },
       '/zibaifeixing': { redirect: { to: '/tools/zibaifeixing', statusCode: 301 } },
     },
     compressPublicAssets: { gzip: true, brotli: true },
@@ -233,6 +229,8 @@ export default defineNuxtConfig({
     aiModel: 'claude-opus-4-6',
     aiMaxTokens: 8192,
     aiProvider: 'gptniux',
+    insightsAdminUser: '',
+    insightsAdminPassword: '',
     public: {
       siteUrl: '',
       siteName: 'ososn',
