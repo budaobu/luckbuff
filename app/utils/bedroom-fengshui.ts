@@ -30,8 +30,7 @@ import {
 } from './bazhai'
 import { getYearPillar } from './bazi/calendar'
 import { TIAN_GAN } from './bazi/constants'
-
-export type RoomType = 'office' | 'study' | 'bedroom' | 'hall'
+import type { RoomType } from './office-fengshui'
 
 export interface BedroomTaboos {
   beamOverBed: boolean

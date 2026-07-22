@@ -16,13 +16,13 @@ import { toLunar } from 'lunar'
 import {
   buildXuanKongChart,
   flyForward,
-  normalizeDegree,
   type XuanKongChart,
 } from '~/utils/xuankong-flystar'
 import {
   calcBazhaiPalaces,
   calcMingGuaNumber,
   getGuaByNumber,
+  normalizeDegree,
   type Direction,
   type Gender,
   type Gua,

@@ -29,16 +29,9 @@ import {
 } from './bazhai'
 import { getYearPillar } from './bazi/calendar'
 import { TIAN_GAN } from './bazi/constants'
+import type { WenchangResult } from './office-fengshui'
 
 export type StudyRoomType = 'independent' | 'withBedroom' | 'withLivingRoom' | 'withDining'
-
-export interface WenchangResult {
-  type: '本命文昌' | '固定文昌'
-  gan?: string
-  direction: Direction
-  directionName: string
-  note: string
-}
 
 export interface DeskSuggestion {
   bestDirections: Direction[]

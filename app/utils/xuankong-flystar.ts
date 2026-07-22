@@ -6,6 +6,8 @@
  * 玄空风水工具与风水摆件工具共用同一份起盘逻辑，避免两份实现漂移。
  */
 
+import { normalizeDegree } from './bazhai'
+
 export interface Mountain {
   name: string
   palace: string
@@ -109,12 +111,6 @@ const PALACE_META: Array<{ palaceNumber: number; name: string; direction: string
   { palaceNumber: 1, name: '坎', direction: '北' },
   { palaceNumber: 6, name: '乾', direction: '西北' },
 ]
-
-export function normalizeDegree(d: number): number {
-  let deg = d % 360
-  if (deg < 0) deg += 360
-  return deg
-}
 
 export function findMountain(deg: number): Mountain | null {
   for (const m of MOUNTAINS) {
