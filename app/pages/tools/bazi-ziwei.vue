@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'bz-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -73,53 +73,33 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && baziChart && zwdsChart">
-        <!-- 隐藏截图目标 -->
-        <div ref="shareTargetRef" v-show="false" class="p-6 space-y-4">
-          <BaziPanPreview :chart="baziChart" />
-          <ZwdsPanPreview :chart="zwdsChart" />
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="bzr-share-target">
+          <BaziZiweiReport
+            :bazi-chart="baziChart"
+            :zwds-chart="zwdsChart"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :birth-date="formValues.birthDate"
+            :birth-hour="formValues.birthHour"
+            :gender="formValues.gender"
+            :name="formValues.name"
+          />
         </div>
 
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('baziZiwei.chartTitle', { name: formValues.name || '' }) }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ chartSubtitleText }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-        </div>
-
-        <UTabs
-          :items="tabItems"
-          :ui="{
-            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
-            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
-            indicator: 'bg-transparent',
-            content: 'pt-5',
-          }"
-        >
-          <template #ai>
-            <BaziZiweiAiInterpret
-              :bazi-chart="baziChart"
-              :zwds-chart="zwdsChart"
-              :content="aiContent"
-              :streaming="aiStreaming"
-              :started="aiStarted"
-              :error="aiError"
-              @retry="startAiStream"
-            />
-          </template>
-
-          <template #bazi>
-            <BaziPan :chart="baziChart" />
-          </template>
-
-          <template #ziwei>
-            <ZwdsPan :chart="zwdsChart" :has-hour="!!formValues.birthHour" />
-          </template>
-        </UTabs>
+        <BaziZiweiReport
+          :bazi-chart="baziChart"
+          :zwds-chart="zwdsChart"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :birth-date="formValues.birthDate"
+          :birth-hour="formValues.birthHour"
+          :gender="formValues.gender"
+          :name="formValues.name"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -271,12 +251,6 @@ const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 
-const tabItems = computed(() => [
-  { label: t('baziZiwei.aiInterpret'), slot: 'ai' as const },
-  { label: t('baziZiwei.baziPan'), slot: 'bazi' as const },
-  { label: t('baziZiwei.ziweiPan'), slot: 'ziwei' as const },
-])
-
 const store = useProfilesStore()
 const { calc: calcBazi } = useBaziCalc()
 const { calc: calcZwds } = useZwdsCalc()
@@ -288,13 +262,6 @@ const router = useRouter()
 const shareDialogOpen = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
 const shareTargetRef = ref<HTMLElement>()
-
-const chartSubtitleText = computed(() => {
-  if (!baziChart.value || !zwdsChart.value) return ''
-  const baziSummary = `日主${baziChart.value.riZhu}（${baziChart.value.riZhuStrength}）· ${baziChart.value.geju}`
-  const zwdsSummary = `命宫${zwdsChart.value.mingGong.zhi}（${zwdsChart.value.mingGong.mainStars.join('、') || t('zwds.borrowPalace')}）· ${zwdsChart.value.wuxingJu}${t('zwds.juLabel')}`
-  return `${baziSummary}｜${zwdsSummary}`
-})
 
 function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
@@ -517,10 +484,18 @@ useHead(() => ({
 </script>
 
 <style scoped>
+.bzr-share-target {
+  width: 1080px;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.bz-result-wrap {
+  max-width: 80rem;
 }
 </style>

@@ -397,12 +397,18 @@ export function useShare() {
           cacheBust: true,
         })
 
-        // 3. 添加水印
+        // 3. 添加水印（颜色随目标底色自适应：亮底用深墨、暗底用亮金）
         const ctx = canvas.getContext('2d')!
-        ctx.font = `${24 * 2}px sans-serif`
-        ctx.fillStyle = 'rgba(201,162,39,0.35)'
-        ctx.textAlign = 'right'
-        ctx.fillText('ososn', canvas.width - 32, canvas.height - 32)
+        const isLightBg = (() => {
+          const c = bgColor.replace('#', '')
+          if (c.length < 6) return false
+          const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16)
+          return (r * 299 + g * 587 + b * 114) / 1000 > 128
+        })()
+        ctx.font = `600 ${22 * 2}px 'Noto Serif SC', 'Songti SC', serif`
+        ctx.fillStyle = isLightBg ? 'rgba(46, 42, 36, 0.35)' : 'rgba(201, 162, 39, 0.45)'
+        ctx.textAlign = 'left'
+        ctx.fillText(`ososn · ${toolName}`, 48, canvas.height - 36)
 
         screenshotDataUrl = canvas.toDataURL('image/png')
       } catch (e: any) {
