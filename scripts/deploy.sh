@@ -9,6 +9,7 @@ SSH_KEY="${LUCKBUFF_DEPLOY_KEY:-$HOME/.ssh/id_rsa}"
 REMOTE_DIR="/var/www/luckbuff"
 VEDIC_REMOTE_DIR="/opt/vedic-service"
 ENV_FILE_REMOTE="/home/deploy/envs/luckbuff.env"
+ENV_FILE_LOCAL=".env.production"
 SKILL_MD="liuyao-three-coin-physical-core-SKILL-contract-v2.md"
 QIMEN_ENGINE="qimen-engine.py"
 VEDIC_DIR="vedic-service"
@@ -28,6 +29,15 @@ fi
 if [[ ! -d "$VEDIC_DIR" ]]; then
   echo "FATAL: $VEDIC_DIR/ missing locally; vedic chart microservice cannot deploy." >&2
   exit 1
+fi
+
+if [[ -f "$ENV_FILE_LOCAL" ]]; then
+  echo "==> sync local $ENV_FILE_LOCAL -> $ENV_FILE_REMOTE"
+  rsync -az -e "ssh -i $SSH_KEY" \
+    "$ENV_FILE_LOCAL" \
+    "$SERVER:$ENV_FILE_REMOTE"
+else
+  echo "==> no local $ENV_FILE_LOCAL — keeping existing remote env file"
 fi
 
 echo "==> build"
@@ -58,12 +68,23 @@ rsync -az -e "ssh -i $SSH_KEY" \
   "$SERVER:$REMOTE_DIR/"
 
 echo "==> ensure remote content/ dir exists"
-ssh -i "$SSH_KEY" "$SERVER" "mkdir -p $REMOTE_DIR/content"
+ssh -i "$SSH_KEY" "$SERVER" "mkdir -p $REMOTE_DIR/content $REMOTE_DIR/public/images"
 
 echo "==> rsync content/worldcup-predictions/ (pre-generated match predictions)"
 rsync -az --delete -e "ssh -i $SSH_KEY" \
   "content/worldcup-predictions/" \
   "$SERVER:$REMOTE_DIR/content/worldcup-predictions/"
+
+echo "==> rsync content/insights/ (editor articles — no --delete: editors publish via /admin directly on the server)"
+rsync -az -e "ssh -i $SSH_KEY" \
+  --exclude '.backups/' \
+  "content/insights/" \
+  "$SERVER:$REMOTE_DIR/content/insights/"
+
+echo "==> rsync public/images/ (editor uploads — no --delete, same reason)"
+rsync -az -e "ssh -i $SSH_KEY" \
+  "public/images/" \
+  "$SERVER:$REMOTE_DIR/public/images/"
 
 echo "==> ensure /opt/vedic-service exists with correct ownership"
 ssh -i "$SSH_KEY" "$SERVER" "sudo mkdir -p $VEDIC_REMOTE_DIR /opt/ephe && sudo chown -R deploy:deploy $VEDIC_REMOTE_DIR /opt/ephe"
@@ -98,7 +119,10 @@ export NVM_DIR="\$HOME/.nvm"
 [ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
 cd $REMOTE_DIR
 set -a; source $ENV_FILE_REMOTE; set +a
+# startOrReload does not apply new shell env vars to an already-running app;
+# reload --update-env picks up keys added to the env file since last deploy.
 pm2 startOrReload ecosystem.config.cjs --update-env
+pm2 reload luckbuff --update-env
 pm2 save
 EOF
 
