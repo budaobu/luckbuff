@@ -14,6 +14,37 @@ SKILL_MD="liuyao-three-coin-physical-core-SKILL-contract-v2.md"
 QIMEN_ENGINE="qimen-engine.py"
 VEDIC_DIR="vedic-service"
 
+SSH_CMD="ssh -i $SSH_KEY"
+RSYNC_FLAGS=(-az --partial)
+
+# 链路到这台服务器偶发被对端断连（Connection closed ... port 22），
+# rsync 幂等且 --partial 保留半成品，失败直接整轮重试即可。
+rsync_retry() {
+  local attempt
+  for attempt in 1 2 3 4 5; do
+    if rsync "${RSYNC_FLAGS[@]}" -e "$SSH_CMD" "$@"; then
+      return 0
+    fi
+    echo "  rsync failed (attempt $attempt/5), retrying in 3s..." >&2
+    sleep 3
+  done
+  echo "FATAL: rsync failed after 5 attempts: $*" >&2
+  return 1
+}
+
+ssh_retry() {
+  local attempt
+  for attempt in 1 2 3 4 5; do
+    if $SSH_CMD "$@"; then
+      return 0
+    fi
+    echo "  ssh failed (attempt $attempt/5), retrying in 3s..." >&2
+    sleep 3
+  done
+  echo "FATAL: ssh failed after 5 attempts: $*" >&2
+  return 1
+}
+
 cd "$(dirname "$0")/.."
 
 if [[ ! -f "$SKILL_MD" ]]; then
@@ -33,7 +64,7 @@ fi
 
 if [[ -f "$ENV_FILE_LOCAL" ]]; then
   echo "==> sync local $ENV_FILE_LOCAL -> $ENV_FILE_REMOTE"
-  rsync -az -e "ssh -i $SSH_KEY" \
+  rsync_retry \
     "$ENV_FILE_LOCAL" \
     "$SERVER:$ENV_FILE_REMOTE"
 else
@@ -44,60 +75,59 @@ echo "==> build"
 pnpm build
 
 echo "==> rsync .output + ecosystem.config.cjs"
-rsync -az --delete -e "ssh -i $SSH_KEY" \
+rsync_retry --delete \
   .output \
   ecosystem.config.cjs \
   "$SERVER:$REMOTE_DIR/"
 
 echo "==> ensure remote app/ dir exists"
-ssh -i "$SSH_KEY" "$SERVER" "mkdir -p $REMOTE_DIR/app"
+ssh_retry "$SERVER" "mkdir -p $REMOTE_DIR/app"
 
 echo "==> rsync app/data/ (static data files for APIs)"
-rsync -az --delete -e "ssh -i $SSH_KEY" \
+rsync_retry --delete \
   "app/data/" \
   "$SERVER:$REMOTE_DIR/app/data/"
 
 echo "==> rsync $SKILL_MD (liu-yao engine bundle)"
-rsync -az -e "ssh -i $SSH_KEY" \
+rsync_retry \
   "$SKILL_MD" \
   "$SERVER:$REMOTE_DIR/"
 
 echo "==> rsync $QIMEN_ENGINE (qimen engine script)"
-rsync -az -e "ssh -i $SSH_KEY" \
+rsync_retry \
   "$QIMEN_ENGINE" \
   "$SERVER:$REMOTE_DIR/"
 
 echo "==> ensure remote content/ dir exists"
-ssh -i "$SSH_KEY" "$SERVER" "mkdir -p $REMOTE_DIR/content $REMOTE_DIR/public/images"
+ssh_retry "$SERVER" "mkdir -p $REMOTE_DIR/content $REMOTE_DIR/public/images"
 
 echo "==> rsync content/worldcup-predictions/ (pre-generated match predictions)"
-rsync -az --delete -e "ssh -i $SSH_KEY" \
+rsync_retry --delete \
   "content/worldcup-predictions/" \
   "$SERVER:$REMOTE_DIR/content/worldcup-predictions/"
 
 echo "==> rsync content/insights/ (editor articles — no --delete: editors publish via /admin directly on the server)"
-rsync -az -e "ssh -i $SSH_KEY" \
+rsync_retry \
   --exclude '.backups/' \
   "content/insights/" \
   "$SERVER:$REMOTE_DIR/content/insights/"
 
 echo "==> rsync public/images/ (editor uploads — no --delete, same reason)"
-rsync -az -e "ssh -i $SSH_KEY" \
+rsync_retry \
   "public/images/" \
   "$SERVER:$REMOTE_DIR/public/images/"
 
 echo "==> ensure /opt/vedic-service exists with correct ownership"
-ssh -i "$SSH_KEY" "$SERVER" "sudo mkdir -p $VEDIC_REMOTE_DIR /opt/ephe && sudo chown -R deploy:deploy $VEDIC_REMOTE_DIR /opt/ephe"
+ssh_retry "$SERVER" "sudo mkdir -p $VEDIC_REMOTE_DIR /opt/ephe && sudo chown -R deploy:deploy $VEDIC_REMOTE_DIR /opt/ephe"
 
 echo "==> rsync $VEDIC_DIR/ (vedic chart microservice — code only)"
-rsync -az --delete \
+rsync_retry --delete \
   --exclude '.venv/' --exclude '.ephe/' --exclude '__pycache__/' --exclude '*.pyc' \
-  -e "ssh -i $SSH_KEY" \
   "$VEDIC_DIR/" \
   "$SERVER:$VEDIC_REMOTE_DIR/"
 
 echo "==> ensure vedic-service venv + ephemeris + deps on server"
-ssh -i "$SSH_KEY" "$SERVER" bash <<EOF
+ssh_retry "$SERVER" bash <<EOF
 set -e
 if [ ! -x "$VEDIC_REMOTE_DIR/.venv/bin/python" ]; then
   python3 -m venv "$VEDIC_REMOTE_DIR/.venv"
@@ -113,7 +143,7 @@ PY
 EOF
 
 echo "==> PM2 restart with env injection"
-ssh -i "$SSH_KEY" "$SERVER" bash <<EOF
+ssh_retry "$SERVER" bash <<EOF
 set -e
 export NVM_DIR="\$HOME/.nvm"
 [ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
@@ -127,8 +157,8 @@ pm2 save
 EOF
 
 echo "==> verify"
-ssh -i "$SSH_KEY" "$SERVER" "pm2 status --no-color | tail -10"
-ssh -i "$SSH_KEY" "$SERVER" "curl -s -m 3 http://127.0.0.1:8765/health || echo '!! vedic-service health UNREACHABLE'"
+ssh_retry "$SERVER" "pm2 status --no-color | tail -10"
+ssh_retry "$SERVER" "curl -s -m 3 http://127.0.0.1:8765/health || echo '!! vedic-service health UNREACHABLE'"
 curl -s -o /dev/null -w "homepage HTTPS %{http_code} (%{time_total}s)\n" https://www.ososn.com/
 
 echo "==> verify sitemap"
