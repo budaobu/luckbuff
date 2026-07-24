@@ -1,4 +1,5 @@
 import { timingSafeEqual, createHash, createHmac, randomBytes } from 'node:crypto'
+import type { H3Event } from 'h3'
 
 export const ADMIN_SESSION_COOKIE = 'insights_admin_session'
 const SESSION_TTL_REMEMBER = 30 * 24 * 3600 // 30 days

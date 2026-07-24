@@ -40,6 +40,11 @@ function degreeInSign(longitude: number): number {
   return normalizeLongitude(longitude) % 30
 }
 
+/** 索引取值兜底：signIndex 恒在 0–11，这里只为满足 noUncheckedIndexedAccess */
+function pick<T>(arr: T[], i: number): T {
+  return arr[i] as T
+}
+
 function houseOfSign(signIndex: number, ascendantSignIndex: number): number {
   return ((signIndex - ascendantSignIndex + 12) % 12) + 1
 }
@@ -59,12 +64,15 @@ const GOVERNORS = [
   { key: 'saturn', name: '土', nameEn: 'Saturn', body: ephemeris.CelestialBody.Saturn },
 ]
 
+/** celestine 的 getAllPositions 运行时接受 CelestialBody 键，但 d.ts 只声明 Map<Planet, …>，这里统一一次类型边界 */
+type PositionMap = Map<ephemeris.CelestialBody, ephemeris.PlanetPosition>
+
 const REMAINDERS: {
   key: string
   name: string
   nameEn: string
   body?: ephemeris.CelestialBody
-  derive?: (all: Map<ephemeris.CelestialBody, { longitude: number }>) => number
+  derive?: (all: PositionMap) => number
 }[] = [
   { key: 'rahu', name: '罗睺', nameEn: 'SouthNode', body: ephemeris.CelestialBody.SouthNode },
   { key: 'ketu', name: '计都', nameEn: 'NorthNode', body: ephemeris.CelestialBody.NorthNode },
@@ -105,7 +113,7 @@ export function calculateQizhengSiyu(
   const obliquity = houses.meanObliquity(jc)
 
   const ascendant = houses.calculateAscendant(lst, obliquity, geo.lat)
-  const mc = houses.calculateMidheaven(lst, obliquity, geo.lat)
+  const mc = houses.calculateMidheaven(lst, obliquity)
   const desc = normalizeLongitude(ascendant + 180)
   const ic = normalizeLongitude(mc + 180)
 
@@ -117,7 +125,7 @@ export function calculateQizhengSiyu(
   )
   const cusps = housesResult.cusps.cusps as number[]
 
-  const all = ephemeris.getAllPositions(jd)
+  const all = ephemeris.getAllPositions(jd) as unknown as PositionMap
   const ascendantSign = signIndexOf(ascendant)
 
   const planets: QizhengSiyuPlanet[] = GOVERNORS.map((g) => {
@@ -136,8 +144,8 @@ export function calculateQizhengSiyu(
       speed: pos.longitudeSpeed,
       isRetrograde: pos.isRetrograde,
       signIndex: sign,
-      signNameEn: SIGN_NAMES_EN[sign],
-      signNameZh: SIGN_NAMES_ZH[sign],
+      signNameEn: pick(SIGN_NAMES_EN, sign),
+      signNameZh: pick(SIGN_NAMES_ZH, sign),
       degreeInSign: degreeInSign(pos.longitude),
       house: houseOfSign(sign, ascendantSign),
     }
@@ -155,8 +163,8 @@ export function calculateQizhengSiyu(
       nameEn: r.nameEn,
       longitude: normalizeLongitude(lon),
       signIndex: sign,
-      signNameEn: SIGN_NAMES_EN[sign],
-      signNameZh: SIGN_NAMES_ZH[sign],
+      signNameEn: pick(SIGN_NAMES_EN, sign),
+      signNameZh: pick(SIGN_NAMES_ZH, sign),
       degreeInSign: degreeInSign(lon),
       house: houseOfSign(sign, ascendantSign),
     }
@@ -167,25 +175,28 @@ export function calculateQizhengSiyu(
     return {
       number: i + 1,
       signIndex: sign,
-      signNameEn: SIGN_NAMES_EN[sign],
-      signNameZh: SIGN_NAMES_ZH[sign],
+      signNameEn: pick(SIGN_NAMES_EN, sign),
+      signNameZh: pick(SIGN_NAMES_ZH, sign),
       cusp,
     }
   })
 
+  const mcSign = signIndexOf(mc)
+  const descSign = signIndexOf(desc)
+  const icSign = signIndexOf(ic)
   const angleList: QizhengSiyuAngle[] = [
-    { name: 'Ascendant', nameZh: '上升', longitude: ascendant, signIndex: ascendantSign, signNameEn: SIGN_NAMES_EN[ascendantSign], signNameZh: SIGN_NAMES_ZH[ascendantSign], degreeInSign: degreeInSign(ascendant) },
-    { name: 'Midheaven', nameZh: '天顶', longitude: mc, signIndex: signIndexOf(mc), signNameEn: SIGN_NAMES_EN[signIndexOf(mc)], signNameZh: SIGN_NAMES_ZH[signIndexOf(mc)], degreeInSign: degreeInSign(mc) },
-    { name: 'Descendant', nameZh: '下降', longitude: desc, signIndex: signIndexOf(desc), signNameEn: SIGN_NAMES_EN[signIndexOf(desc)], signNameZh: SIGN_NAMES_ZH[signIndexOf(desc)], degreeInSign: degreeInSign(desc) },
-    { name: 'ImumCoeli', nameZh: '天底', longitude: ic, signIndex: signIndexOf(ic), signNameEn: SIGN_NAMES_EN[signIndexOf(ic)], signNameZh: SIGN_NAMES_ZH[signIndexOf(ic)], degreeInSign: degreeInSign(ic) },
+    { name: 'Ascendant', nameZh: '上升', longitude: ascendant, signIndex: ascendantSign, signNameEn: pick(SIGN_NAMES_EN, ascendantSign), signNameZh: pick(SIGN_NAMES_ZH, ascendantSign), degreeInSign: degreeInSign(ascendant) },
+    { name: 'Midheaven', nameZh: '天顶', longitude: mc, signIndex: mcSign, signNameEn: pick(SIGN_NAMES_EN, mcSign), signNameZh: pick(SIGN_NAMES_ZH, mcSign), degreeInSign: degreeInSign(mc) },
+    { name: 'Descendant', nameZh: '下降', longitude: desc, signIndex: descSign, signNameEn: pick(SIGN_NAMES_EN, descSign), signNameZh: pick(SIGN_NAMES_ZH, descSign), degreeInSign: degreeInSign(desc) },
+    { name: 'ImumCoeli', nameZh: '天底', longitude: ic, signIndex: icSign, signNameEn: pick(SIGN_NAMES_EN, icSign), signNameZh: pick(SIGN_NAMES_ZH, icSign), degreeInSign: degreeInSign(ic) },
   ]
 
   const allBodies = [...planets, ...remainders]
   const aspects: QizhengSiyuAspect[] = []
   for (let i = 0; i < allBodies.length; i++) {
     for (let j = i + 1; j < allBodies.length; j++) {
-      const b1 = allBodies[i]
-      const b2 = allBodies[j]
+      const b1 = allBodies[i]!
+      const b2 = allBodies[j]!
       const sep = distance(b1.longitude, b2.longitude)
       for (const asp of ASPECTS) {
         const orb = Math.abs(sep - asp.angle)

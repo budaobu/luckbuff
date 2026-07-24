@@ -817,7 +817,7 @@ function stopDeskCompassDrag() {
   deskDragging.value = false
 }
 
-const roomUsageOptions = computed(() => [
+const roomUsageOptions = computed<{ value: StudyRoomType; label: string; sublabel: string }[]>(() => [
   { value: 'independent', label: t('studyFengshui.roomUsageIndependent'), sublabel: t('studyFengshui.roomUsageIndependentDesc') },
   { value: 'withBedroom', label: t('studyFengshui.roomUsageWithBedroom'), sublabel: t('studyFengshui.roomUsageWithBedroomDesc') },
   { value: 'withLivingRoom', label: t('studyFengshui.roomUsageWithLivingRoom'), sublabel: t('studyFengshui.roomUsageWithLivingRoomDesc') },

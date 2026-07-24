@@ -289,7 +289,15 @@ const isToolsActive = computed(() => {
   return toolPaths.some(p => route.path === p)
 })
 
-const navItems = computed(() => [
+interface NavItem {
+  label: string
+  to: string
+  id: string
+  dropdown?: boolean
+  badge?: string
+}
+
+const navItems = computed<NavItem[]>(() => [
   { label: t('nav.home'), to: '/', id: 'nav-home' },
   { label: t('nav.tools'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },

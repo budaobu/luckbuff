@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zp-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
@@ -82,117 +82,33 @@
         <TianganDizhi size="full" :label="$t('zipingBazi.calculating')" />
       </div>
 
-      <!-- 阶段 3：结果（命盘 + 八字精批 + AI 白话注释，单页连续视图） -->
+      <!-- 阶段 3：结果（纸质报告：命盘 + AI 白话逐项注解） -->
       <div v-if="phase === 'result' && chart">
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Zi Ping Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ formValues.name ? $t('zipingBazi.chartTitle', { name: formValues.name }) : $t('zipingBazi.chartTitleNoName') }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('zipingBazi.chartSubtitle', { riZhu: chart.riZhu, strength: chart.riZhuStrength, geju: chart.geju }) }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="zpr-share-target">
+          <ZipingBaziReport
+            :chart="chart"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :birth-date="formValues.birthDate"
+            :birth-hour="formValues.birthHour"
+            :gender="formValues.gender"
+            :name="formValues.name"
+          />
         </div>
 
-        <div class="space-y-6">
-          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.fourPillars') }}</h3>
-            <div class="grid grid-cols-4 gap-3 text-center">
-              <div v-for="(p, key) in { year: chart.year, month: chart.month, day: chart.day, hour: chart.hour }" :key="key" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-                <div class="text-xs text-[var(--text-faint)] mb-2">{{ $t(`zipingBazi.${key}Pillar`) }}</div>
-                <div class="text-2xl font-serif text-[var(--text-primary)] mb-1">{{ p ? p.gan + p.zhi : '—' }}</div>
-                <div v-if="p" class="text-xs text-[var(--accent)]">{{ p.shishen }}</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.dayunTitle') }}</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
-              <div v-for="dy in chart.dayuns.slice(0, 10)" :key="dy.index" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-2 text-center" :class="{ 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]': chart.currentDaYun?.index === dy.index }">
-                <div class="text-[10px] text-[var(--text-faint)]">{{ dy.ageRange[0] }}-{{ dy.ageRange[1] }} {{ $t('zipingBazi.ageUnit') }}</div>
-                <div class="text-sm font-serif text-[var(--text-primary)]">{{ dy.gan }}{{ dy.zhi }}</div>
-              </div>
-            </div>
-            <p class="text-xs text-[var(--text-faint)] mt-3">{{ $t('zipingBazi.qiyunAge', { age: chart.qiyunAge }) }}</p>
-          </div>
-
-          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-6">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4">{{ $t('zipingBazi.wuxingTitle') }}</h3>
-            <div class="grid grid-cols-5 gap-2 text-center">
-              <div v-for="(value, key) in chart.wuxingScore" :key="key" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
-                <div class="text-xl font-serif text-[var(--text-primary)]">{{ key }}</div>
-                <div class="text-sm text-[var(--accent)] mt-1">{{ value }}%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 八字精批：AI 白话注释，流式分段追加 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mt-6">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('zipingBazi.jingpiTitle') }}</h3>
-              <p class="text-xs text-[var(--text-faint)] mt-0.5">{{ $t('zipingBazi.jingpiSubtitle') }}</p>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('zipingBazi.aiLoading') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('zipingBazi.aiLoading') }}</p>
-            </div>
-          </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton color="warning" variant="soft" size="sm" @click="startAiStream">
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('zipingBazi.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <ZipingBaziReport
+          :chart="chart"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :birth-date="formValues.birthDate"
+          :birth-hour="formValues.birthHour"
+          :gender="formValues.gender"
+          :name="formValues.name"
+          @retry="startAiStream"
+        />
 
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
           <UButton color="warning" variant="soft" @click="resetToForm">
@@ -201,7 +117,13 @@
             </template>
             {{ $t('common.retry') }}
           </UButton>
-          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="navigateTo('/')">
+          <UButton color="warning" variant="soft" @click="handleShare">
+            <template #leading>
+              <UIcon name="i-heroicons-share" class="w-4 h-4" />
+            </template>
+            {{ $t('common.shareResult') }}
+          </UButton>
+          <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo('/') }">
             <template #leading>
               <UIcon name="i-heroicons-home" class="w-4 h-4" />
             </template>
@@ -210,11 +132,82 @@
         </div>
       </div>
     </div>
+
+    <!-- 分享弹窗 -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="shareDialogOpen"
+          class="fixed inset-0 z-50 flex items-center justify-center"
+          @click.self="shareDialogOpen = false"
+        >
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
+                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
+                </div>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
+              </div>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+                @click="() => { shareDialogOpen = false }"
+              >
+                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
+              </UButton>
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div>
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
+                  {{ shareData?.copyText }}
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
+                  <template #leading>
+                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.copyText') }}
+                </UButton>
+              </div>
+
+              <div v-if="shareData?.screenshotDataUrl">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
+                  <template #leading>
+                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.downloadImage') }}
+                </UButton>
+              </div>
+
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
+                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
+                  {{ shareData.screenshotError }}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { ZipingBaziChart } from '~/types/ziping-bazi'
 import type { DiZhi } from '~/types/user'
 
@@ -253,27 +246,10 @@ const aiError = ref<string | null>(null)
 
 const store = useProfilesStore()
 
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('zipingBazi.jingpiTitle'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
+// 分享弹窗
+const shareDialogOpen = ref(false)
+const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
+const shareTargetRef = ref<HTMLElement>()
 
 async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
@@ -396,6 +372,51 @@ function resetToForm() {
   aiError.value = null
 }
 
+const { share } = useShare()
+
+async function handleShare() {
+  if (!chart.value) return
+
+  try {
+    const result = await share({
+      tool: 'ziping-bazi',
+      name: formValues.value.name,
+      summary: `日主${chart.value.riZhu}（${chart.value.riZhuStrength}）· ${chart.value.geju}`,
+      shareTarget: shareTargetRef.value,
+      filename: `ziping-bazi-${formValues.value.name || '命盘'}-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
+    })
+
+    shareData.value = result
+    shareDialogOpen.value = true
+  }
+  catch (e: any) {
+    toast.add({
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
+      color: 'error',
+    })
+  }
+}
+
+function copyShareText() {
+  if (!shareData.value) return
+  navigator.clipboard.writeText(shareData.value.copyText).then(() => {
+    toast.add({ title: t('share.textCopied'), color: 'success' })
+  }).catch(() => {
+    toast.add({ title: t('share.copyFail'), color: 'error' })
+  })
+}
+
+function downloadShareImage() {
+  if (!shareData.value?.screenshotDataUrl) return
+  const a = document.createElement('a')
+  a.href = shareData.value.screenshotDataUrl
+  a.download = shareData.value.filename
+  a.click()
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
+}
+
 useSeoMeta({
   title: () => `${t('seo.zipingBaziTitle')} - ${siteName}`,
   description: t('seo.zipingBaziDesc'),
@@ -441,38 +462,18 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.zpr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.zp-result-wrap {
+  max-width: 80rem;
 }
 </style>
