@@ -17,6 +17,14 @@ export interface InsightFrontmatter {
   relatedTools: string[]
 }
 
+// Extra keys carried by translation files ({slug}.en.md / {slug}.zh-tw.md)
+export interface TranslationMeta {
+  translated_from?: string
+  translated_at?: string
+  locked?: boolean
+  generator?: string
+}
+
 export interface InsightListItem extends InsightFrontmatter {
   slug: string
 }
@@ -24,6 +32,19 @@ export interface InsightListItem extends InsightFrontmatter {
 export interface InsightDetail extends InsightListItem {
   content: string
 }
+
+// Full-fidelity read result for admin/translation pipelines — keeps translation
+// meta and any unknown frontmatter keys so writes don't silently drop them
+export interface InsightRaw extends InsightDetail, TranslationMeta {
+  extraMeta: Record<string, unknown>
+}
+
+export const TRANSLATION_META_KEYS = ['translated_from', 'translated_at', 'locked', 'generator'] as const
+
+const KNOWN_META_KEYS = new Set<string>([
+  'title', 'description', 'category', 'tags', 'publishedAt', 'updatedAt',
+  'author', 'readingTime', 'draft', 'relatedTools', ...TRANSLATION_META_KEYS,
+])
 
 export const INSIGHT_CATEGORIES = ['metaphysics-basics', 'deep-reading', 'fengshui', 'astrology', 'culture'] as const
 
@@ -86,7 +107,7 @@ function yamlInlineArray(values: string[]): string {
   return `[${values.map(yamlString).join(', ')}]`
 }
 
-export function serializeFrontmatter(meta: InsightFrontmatter, content: string): string {
+export function serializeFrontmatter(meta: InsightFrontmatter & TranslationMeta, content: string, extraMeta?: Record<string, unknown>): string {
   const lines = [
     '---',
     `title: ${yamlString(meta.title)}`,
@@ -102,8 +123,25 @@ export function serializeFrontmatter(meta: InsightFrontmatter, content: string):
   if (meta.relatedTools.length) {
     lines.push(`relatedTools: ${yamlInlineArray(meta.relatedTools)}`)
   }
+  if (meta.translated_from) lines.push(`translated_from: ${yamlString(meta.translated_from)}`)
+  if (meta.translated_at) lines.push(`translated_at: ${yamlString(meta.translated_at)}`)
+  if (meta.locked) lines.push('locked: true')
+  if (meta.generator) lines.push(`generator: ${yamlString(meta.generator)}`)
+  if (extraMeta) {
+    for (const [key, value] of Object.entries(extraMeta)) {
+      if (KNOWN_META_KEYS.has(key)) continue
+      lines.push(`${key}: ${serializeYamlValue(value)}`)
+    }
+  }
   lines.push('---', '')
   return lines.join('\n') + content.trim() + '\n'
+}
+
+function serializeYamlValue(value: unknown): string {
+  if (Array.isArray(value)) return yamlInlineArray(value.map(v => String(v)))
+  if (typeof value === 'boolean') return value ? 'true' : 'false'
+  if (typeof value === 'number') return String(value)
+  return yamlString(String(value ?? ''))
 }
 
 export function resolveLangSuffix(lang: string): string {
@@ -167,6 +205,111 @@ export function readInsight(slug: string, lang: string): InsightDetail | null {
 
 // ── Admin write operations (default-locale files only) ──
 
+export type TranslationLang = 'en' | 'zh-tw'
+
+export const TRANSLATION_LANGS: TranslationLang[] = ['zh-tw', 'en']
+
+export function translationFilePath(slug: string, lang: TranslationLang): string {
+  return join(INSIGHTS_DIR, `${slug}.${lang}.md`)
+}
+
+export function hasTranslationFile(slug: string, lang: TranslationLang): boolean {
+  return existsSync(translationFilePath(slug, lang))
+}
+
+// Strict read of one exact file — no locale fallback. Used by admin & pipelines.
+export function readInsightRaw(slug: string, lang: 'zh-CN' | TranslationLang): InsightRaw | null {
+  const filePath = lang === 'zh-CN'
+    ? join(INSIGHTS_DIR, `${slug}.md`)
+    : translationFilePath(slug, lang as TranslationLang)
+  if (!existsSync(filePath)) return null
+  const raw = readFileSync(filePath, 'utf-8')
+  const { meta, content } = parseFrontmatter(raw)
+  const extraMeta: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(meta)) {
+    if (!KNOWN_META_KEYS.has(key)) extraMeta[key] = value
+  }
+  return {
+    ...toInsight(slug, meta),
+    content,
+    translated_from: typeof meta.translated_from === 'string' ? meta.translated_from : undefined,
+    translated_at: typeof meta.translated_at === 'string' ? meta.translated_at : undefined,
+    locked: meta.locked === true,
+    generator: typeof meta.generator === 'string' ? meta.generator : undefined,
+    extraMeta,
+  }
+}
+
+export interface TranslationWriteInput {
+  slug: string
+  lang: TranslationLang
+  title: string
+  description: string
+  category: string
+  tags: string[]
+  publishedAt: string
+  updatedAt: string
+  author: string
+  readingTime: number
+  draft: boolean
+  relatedTools: string[]
+  content: string
+  translated_from: string
+  generator: string
+  locked?: boolean
+  extraMeta?: Record<string, unknown>
+}
+
+export function writeInsightTranslation(input: TranslationWriteInput): void {
+  const filePath = translationFilePath(input.slug, input.lang)
+  if (existsSync(filePath)) backupInsightFile(filePath, `${input.slug}.${input.lang}`)
+  mkdirSync(INSIGHTS_DIR, { recursive: true })
+  const { slug: _s, lang: _l, extraMeta, locked, ...rest } = input
+  const meta: InsightFrontmatter & TranslationMeta = {
+    ...rest,
+    locked: locked === true,
+    translated_at: new Date().toISOString(),
+  }
+  const tmpPath = `${filePath}.tmp-${process.pid}`
+  writeFileSync(tmpPath, serializeFrontmatter(meta, input.content, extraMeta), 'utf-8')
+  renameSync(tmpPath, filePath)
+}
+
+// Sync metadata-only fields into a translation file without touching its
+// translated content (publishedAt / draft / readingTime / relatedTools / category)
+export function syncTranslationMeta(slug: string, lang: TranslationLang, source: InsightWriteInput): void {
+  const existing = readInsightRaw(slug, lang)
+  if (!existing) return
+  const meta: InsightFrontmatter & TranslationMeta = {
+    title: existing.title,
+    description: existing.description,
+    category: source.category,
+    tags: existing.tags,
+    publishedAt: source.publishedAt,
+    updatedAt: new Date().toISOString(),
+    author: existing.author,
+    readingTime: source.readingTime,
+    draft: source.draft,
+    relatedTools: source.relatedTools,
+    translated_from: existing.translated_from,
+    locked: existing.locked,
+    generator: existing.generator,
+  }
+  const filePath = translationFilePath(slug, lang)
+  backupInsightFile(filePath, `${slug}.${lang}`)
+  const tmpPath = `${filePath}.tmp-${process.pid}`
+  writeFileSync(tmpPath, serializeFrontmatter(meta, existing.content, existing.extraMeta), 'utf-8')
+  renameSync(tmpPath, filePath)
+}
+
+export function validateTranslationInput(input: Partial<TranslationWriteInput>): string | null {
+  if (!input.title?.trim()) return '标题不能为空'
+  if (!input.description?.trim()) return '摘要不能为空'
+  if (!input.content?.trim()) return '正文不能为空'
+  if (input.lang !== 'en' && input.lang !== 'zh-tw') return '不支持的语言'
+  return null
+}
+
 export interface InsightWriteInput {
   slug: string
   title: string
@@ -218,6 +361,13 @@ export function deleteInsight(slug: string): boolean {
   if (!existsSync(filePath)) return false
   backupInsight(slug)
   unlinkSync(filePath)
+  for (const lang of TRANSLATION_LANGS) {
+    const tPath = translationFilePath(slug, lang)
+    if (existsSync(tPath)) {
+      backupInsightFile(tPath, `${slug}.${lang}`)
+      unlinkSync(tPath)
+    }
+  }
   return true
 }
 
@@ -225,6 +375,13 @@ function backupInsight(slug: string): void {
   mkdirSync(BACKUPS_DIR, { recursive: true })
   const stamp = new Date().toISOString().replace(/[:.]/g, '-')
   copyFileSync(join(INSIGHTS_DIR, `${slug}.md`), join(BACKUPS_DIR, `${slug}.${stamp}.md`))
+}
+
+// Same as backupInsight but for an arbitrary insights file (translations, etc.)
+function backupInsightFile(filePath: string, backupPrefix: string): void {
+  mkdirSync(BACKUPS_DIR, { recursive: true })
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+  copyFileSync(filePath, join(BACKUPS_DIR, `${backupPrefix}.${stamp}.md`))
 }
 
 export interface InsightBackup {

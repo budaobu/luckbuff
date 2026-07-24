@@ -1,4 +1,7 @@
 import { writeInsight, validateInsightInput, type InsightWriteInput } from '~~/server/utils/insights'
+import { computeSourceHash } from '~~/server/utils/insights/hash'
+import { runTranslationPipeline } from '~~/server/utils/insights/translate'
+import { getTranslationOverview } from '~~/server/utils/insights/translation-state'
 import { checkInsightsAdminAuth } from '~~/server/utils/insights-admin-auth'
 
 export default defineEventHandler(async (event) => {
@@ -30,5 +33,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 409, statusMessage: e instanceof Error ? e.message : '写入失败' })
   }
 
-  return { ok: true, slug }
+  // zh-TW converts inline (instant); en queues async — the save never blocks on AI
+  const pipeline = runTranslationPipeline(input)
+
+  return {
+    ok: true,
+    slug,
+    pipeline,
+    translations: getTranslationOverview(slug, computeSourceHash(input)),
+  }
 })

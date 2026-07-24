@@ -78,3 +78,6 @@ app/pages/tools/cezi-battle/reference/
 
 # macOS metadata (anywhere in repo)
 **/.DS_Store
+
+# Insights translation runtime state (rebuildable cache; per-environment)
+content/insights/.translations/

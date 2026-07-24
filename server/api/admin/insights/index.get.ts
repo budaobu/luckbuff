@@ -1,4 +1,6 @@
 import { listInsightSlugs, readInsightSafe, INSIGHT_CATEGORIES } from '~~/server/utils/insights'
+import { computeSourceHash } from '~~/server/utils/insights/hash'
+import { getTranslationOverview } from '~~/server/utils/insights/translation-state'
 import { checkInsightsAdminAuth } from '~~/server/utils/insights-admin-auth'
 
 export default defineEventHandler(async (event) => {
@@ -8,8 +10,14 @@ export default defineEventHandler(async (event) => {
   const articles = listInsightSlugs()
     .map(slug => readInsightSafe(slug, 'zh-CN'))
     .filter((a): a is NonNullable<typeof a> => a !== null)
-    .map(({ content: _content, ...meta }) => meta)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .map((article) => {
+      const { content: _content, ...meta } = article
+      return {
+        ...meta,
+        translations: getTranslationOverview(article.slug, computeSourceHash(article)),
+      }
+    })
 
   return {
     total: articles.length,

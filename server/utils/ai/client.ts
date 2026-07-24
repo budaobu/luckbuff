@@ -4,11 +4,16 @@ const isOpenAiProvider = (provider: string) => {
   return provider === 'openai' || provider === 'newapi' || provider === 'gptniux'
 }
 
-export async function callAIJson(system: string, user: string): Promise<unknown> {
+interface CallAIJsonOptions {
+  timeoutMs?: number
+  maxTokens?: number
+}
+
+export async function callAIJson(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
   const config = useRuntimeConfig()
   const provider = (config.aiProvider as string) || 'openai'
   const isOpenAi = isOpenAiProvider(provider)
-  let maxTokens = Number(config.aiMaxTokens) || 8192
+  let maxTokens = opts.maxTokens ?? (Number(config.aiMaxTokens) || 8192)
   if (maxTokens > 327680) maxTokens = 8192
 
   const upstreamBody = isOpenAi
@@ -29,7 +34,7 @@ export async function callAIJson(system: string, user: string): Promise<unknown>
       }
 
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 15000)
+  const timeout = setTimeout(() => controller.abort(), opts.timeoutMs ?? 15000)
 
   let upstream: Response
   try {
