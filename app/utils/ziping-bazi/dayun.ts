@@ -1,4 +1,4 @@
-import type { DaYun } from '~/types/ziping-bazi'
+import type { ZipingDaYun } from '~/types/ziping-bazi'
 import { TIAN_GAN, DI_ZHI, GAN_YANG } from './constants'
 import { getJieDayOfYear, dayOfYear, isLeapYear } from './calendar'
 
@@ -76,11 +76,11 @@ export function calcDaYun(
   birthMonth: number,
   birthDay: number,
   monthZhiIndex: number,
-): { dayuns: DaYun[]; qiyunAge: number } {
+): { dayuns: ZipingDaYun[]; qiyunAge: number } {
   const forward = isForward(yearGan, gender)
   const qiyunAge = calcQiYunAge(birthYear, birthMonth, birthDay, yearGan, gender, monthZhiIndex)
 
-  const dayuns: DaYun[] = []
+  const dayuns: ZipingDaYun[] = []
   let currentGan = monthGan
   let currentZhi = monthZhi
 

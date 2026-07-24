@@ -12,6 +12,7 @@ export interface ShareOptions {
     | 'liuren-seeking'
     | 'liuyao-seeking'
     | 'bazi-ziwei'
+    | 'ziping-bazi'
     | 'fengshui'
     | 'guanyin-lot'
     | 'wealth-god-lot'
@@ -66,6 +67,8 @@ export interface ShareOptions {
     | 'hall-fengshui'
     | 'bedroom-fengshui'
     | 'fengshui-ornament'
+    | 'bazi-zhichang-hepan'
+    | 'study-fengshui'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -99,6 +102,7 @@ export function useShare() {
       huangdao: '黄道吉日',
       liuren: '大六壬',
       'bazi-ziwei': '八字紫微综合',
+      'ziping-bazi': '子平八字',
       fengshui: '风水',
       'guanyin-lot': '观音灵签',
       'wealth-god-lot': '五路财神签',
@@ -152,6 +156,8 @@ export function useShare() {
       'office-fengshui': '办公室风水布局',
       'hall-fengshui': '厅堂风水布局',
       'bedroom-fengshui': '卧室风水布局',
+      'bazi-zhichang-hepan': '职场八字合盘',
+      'study-fengshui': '书房风水布局',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -168,6 +174,9 @@ export function useShare() {
       'bazi-ziwei': summary
         ? t('share.hookBaziZiwei', { summary })
         : t('share.hookBaziZiweiDefault'),
+      'ziping-bazi': summary
+        ? t('share.hookZipingBazi', { summary })
+        : t('share.hookZipingBaziDefault'),
       liuyao: summary
         ? t('share.hookLiuyao', { summary })
         : t('share.hookLiuyaoDefault'),
@@ -330,6 +339,12 @@ export function useShare() {
       'bedroom-fengshui': summary
         ? t('share.hookGeneric', { tool: '卧室风水布局', summary })
         : t('share.hookGeneric', { tool: '卧室风水布局' }),
+      'bazi-zhichang-hepan': summary
+        ? t('share.hookGeneric', { tool: '职场八字合盘', summary })
+        : t('share.hookGeneric', { tool: '职场八字合盘' }),
+      'study-fengshui': summary
+        ? t('share.hookGeneric', { tool: '书房风水布局', summary })
+        : t('share.hookGeneric', { tool: '书房风水布局' }),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
