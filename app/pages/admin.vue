@@ -110,6 +110,17 @@
                 {{ a.slug }} · {{ categoryLabel(a.category) }} · {{ formatDate(a.publishedAt) }}
               </p>
             </div>
+            <div v-if="a.translations" class="shrink-0 flex items-center gap-1.5">
+              <button
+                v-for="lang in (['zh-tw', 'en'] as const)"
+                :key="lang"
+                type="button"
+                class="text-[11px] px-2 py-0.5 rounded-full border transition-colors"
+                :class="langBadgeClass(a.translations[lang])"
+                :title="langBadgeTitle(a.translations[lang], lang)"
+                @click.stop="onLangBadgeClick(a.slug, lang, a.translations[lang])"
+              >{{ lang === 'zh-tw' ? '繁' : 'EN' }} {{ langBadgeText(a.translations[lang]) }}</button>
+            </div>
             <a
               v-if="!a.draft"
               :href="`/insights/${a.slug}`"
@@ -264,6 +275,41 @@
             </p>
           </div>
 
+          <!-- 多语言版本 -->
+          <div v-if="!isNew" class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 space-y-3">
+            <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">多语言版本</h2>
+            <div v-for="lang in (['zh-tw', 'en'] as const)" :key="lang" class="space-y-1.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm text-neutral-300">{{ lang === 'zh-tw' ? '繁體中文' : 'English' }}</span>
+                <span
+                  class="text-[11px] px-2 py-0.5 rounded-full border"
+                  :class="langBadgeClass(translations[lang])"
+                >{{ langBadgeText(translations[lang]) }}</span>
+              </div>
+              <p v-if="translations[lang]?.error" class="text-[11px] text-red-400/80 leading-snug">
+                {{ translations[lang].error }}
+              </p>
+              <div class="flex items-center gap-3">
+                <button
+                  v-if="translations[lang]?.exists"
+                  type="button"
+                  class="text-xs text-amber-400 hover:text-amber-300 transition-colors"
+                  @click="openTranslationEditor(lang)"
+                >查看 / 编辑</button>
+                <button
+                  type="button"
+                  class="text-xs transition-colors disabled:opacity-40"
+                  :class="translations[lang]?.status === 'failed' ? 'text-red-400 hover:text-red-300' : 'text-neutral-400 hover:text-neutral-200'"
+                  :disabled="translations[lang]?.status === 'translating' || regenerating === lang"
+                  @click="regenerate(lang)"
+                >{{ regenerating === lang ? '生成中…' : (translations[lang]?.exists ? '重新生成' : '立即生成') }}</button>
+              </div>
+            </div>
+            <p class="text-[11px] text-neutral-600 leading-snug pt-1 border-t border-neutral-800">
+              手动编辑过的版本会锁定，不再随源文自动更新；点「重新生成」会丢弃人工修改并恢复自动翻译。
+            </p>
+          </div>
+
           <!-- 历史版本 / 删除 -->
           <div v-if="!isNew" class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 space-y-3">
             <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider">历史版本</h2>
@@ -285,6 +331,82 @@
         </div>
       </div>
     </div>
+
+    <!-- ══════ 译文编辑弹层 ══════ -->
+    <div
+      v-if="translationEditor.open"
+      class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-10 px-4"
+      @click.self="closeTranslationEditor"
+    >
+      <div class="w-full max-w-3xl rounded-2xl border border-neutral-700 bg-neutral-900 p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-semibold text-white">
+              {{ translationEditor.lang === 'zh-tw' ? '繁體中文版本' : 'English Version' }}
+            </h2>
+            <p class="text-xs text-neutral-500 mt-1">
+              {{ editingSlug }} · 保存后此版本将锁定，不再随简中源文自动更新
+            </p>
+          </div>
+          <button
+            type="button"
+            class="text-neutral-400 hover:text-neutral-200 text-sm px-2 py-1"
+            @click="closeTranslationEditor"
+          >✕ 关闭</button>
+        </div>
+
+        <div v-if="translationEditor.loading" class="text-sm text-neutral-500 py-8 text-center">加载中…</div>
+        <template v-else>
+          <label class="block">
+            <span class="text-xs text-neutral-500">标题</span>
+            <input
+              v-model="translationEditor.form.title"
+              type="text"
+              class="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm text-neutral-200 focus:outline-none focus:border-amber-500/60"
+            >
+          </label>
+          <label class="block">
+            <span class="text-xs text-neutral-500">摘要（SEO description）</span>
+            <textarea
+              v-model="translationEditor.form.description"
+              rows="2"
+              class="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm text-neutral-200 focus:outline-none focus:border-amber-500/60 resize-none"
+            />
+          </label>
+          <label class="block">
+            <span class="text-xs text-neutral-500">标签（逗号分隔）</span>
+            <input
+              v-model="translationEditor.tagsInput"
+              type="text"
+              class="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm text-neutral-200 focus:outline-none focus:border-amber-500/60"
+            >
+          </label>
+          <label class="block">
+            <span class="text-xs text-neutral-500">正文（Markdown）</span>
+            <textarea
+              v-model="translationEditor.form.content"
+              class="mt-1 w-full h-[320px] bg-neutral-950 border border-neutral-800 rounded-md px-3 py-2 text-sm leading-relaxed text-neutral-200 focus:outline-none focus:border-amber-500/60 resize-y font-mono"
+            />
+          </label>
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <p class="text-[11px] text-neutral-600">
+              {{ translationEditor.form.locked ? '🔒 已锁定（人工修改过）' : '当前为自动生成版本' }}
+            </p>
+            <div class="flex items-center gap-3">
+              <p v-if="translationEditor.message" class="text-xs" :class="translationEditor.ok ? 'text-emerald-400' : 'text-red-400'">
+                {{ translationEditor.message }}
+              </p>
+              <button
+                type="button"
+                class="px-4 py-2 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-semibold transition-colors disabled:opacity-50"
+                :disabled="translationEditor.saving"
+                @click="saveTranslation"
+              >{{ translationEditor.saving ? '保存中…' : '保存此语言版本' }}</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -297,6 +419,20 @@ useHead({
   title: '命见内容管理',
   meta: [{ name: 'robots', content: 'noindex, nofollow' }],
 })
+
+type TranslationStatus = 'translating' | 'done' | 'stale' | 'locked-stale' | 'failed'
+type TranslationLang = 'zh-tw' | 'en'
+
+interface TranslationEntry {
+  status: TranslationStatus
+  hash: string | null
+  locked: boolean
+  updatedAt: string | null
+  error: string | null
+  exists: boolean
+}
+
+type TranslationOverview = Record<TranslationLang, TranslationEntry>
 
 interface AdminArticle {
   slug: string
@@ -311,6 +447,12 @@ interface AdminArticle {
   draft: boolean
   relatedTools: string[]
   content?: string
+  translations?: TranslationOverview
+}
+
+const EMPTY_TRANSLATIONS: TranslationOverview = {
+  'zh-tw': { status: 'translating', hash: null, locked: false, updatedAt: null, error: null, exists: false },
+  'en': { status: 'translating', hash: null, locked: false, updatedAt: null, error: null, exists: false },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -349,6 +491,19 @@ const backups = ref<Array<{ file: string; timestamp: string }>>([])
 const contentArea = ref<HTMLTextAreaElement | null>(null)
 const imageInput = ref<HTMLInputElement | null>(null)
 
+const translations = ref<TranslationOverview>(structuredClone(EMPTY_TRANSLATIONS))
+const regenerating = ref<TranslationLang | ''>('')
+const translationEditor = reactive({
+  open: false,
+  loading: false,
+  saving: false,
+  ok: true,
+  message: '',
+  lang: 'en' as TranslationLang,
+  tagsInput: '',
+  form: { title: '', description: '', content: '', locked: false },
+})
+
 const toolbarButtons = [
   { label: 'B 加粗', before: '**', after: '**', hint: '加粗选中文字' },
   { label: 'H2 标题', before: '\n## ', after: '\n', hint: '二级标题' },
@@ -379,6 +534,76 @@ const previewHtml = computed(() => {
 async function adminFetch<T>(url: string, opts?: any): Promise<T> {
   return await $fetch<T>(url, opts)
 }
+
+// ── 多语言状态徽章 ──
+
+function langBadgeClass(entry?: TranslationEntry): string {
+  switch (entry?.status) {
+    case 'done':
+      return 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
+    case 'translating':
+      return 'border-sky-500/40 bg-sky-500/10 text-sky-400'
+    case 'stale':
+      return 'border-yellow-500/40 bg-yellow-500/10 text-yellow-400'
+    case 'locked-stale':
+      return 'border-orange-500/40 bg-orange-500/10 text-orange-400'
+    case 'failed':
+      return 'border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20'
+    default:
+      return 'border-neutral-700 bg-neutral-800 text-neutral-500'
+  }
+}
+
+function langBadgeText(entry?: TranslationEntry): string {
+  switch (entry?.status) {
+    case 'done': return entry.locked ? '🔒 已锁定' : '✓ 已同步'
+    case 'translating': return '● 翻译中'
+    case 'stale': return '⚠ 已过期'
+    case 'locked-stale': return '🔒 已过期'
+    case 'failed': return '✗ 失败·重试'
+    default: return '未生成'
+  }
+}
+
+function langBadgeTitle(entry: TranslationEntry | undefined, lang: TranslationLang): string {
+  const label = lang === 'zh-tw' ? '繁體中文' : 'English'
+  if (!entry) return `${label}：状态未知`
+  if (entry.status === 'failed') return `${label}翻译失败：${entry.error || '未知错误'}（点击重试）`
+  if (entry.status === 'locked-stale') return `${label}已人工锁定，源文有更新但不会自动覆盖（点击可重新生成）`
+  if (entry.status === 'stale') return `${label}译文落后于源文，保存文章或点击重新生成`
+  if (entry.locked) return `${label}已人工锁定`
+  return `${label}与源文同步`
+}
+
+function onLangBadgeClick(slug: string, lang: TranslationLang, entry?: TranslationEntry) {
+  if (!entry) return
+  if (entry.status === 'failed') {
+    regenerateFor(slug, lang, entry)
+  } else {
+    startEdit(slug)
+  }
+}
+
+let pollTimer: ReturnType<typeof setTimeout> | null = null
+
+function schedulePoll() {
+  if (pollTimer) return
+  pollTimer = setTimeout(async () => {
+    pollTimer = null
+    if (view.value === 'list') {
+      await loadList()
+      if (articles.value.some(a =>
+        a.translations?.en?.status === 'translating' || a.translations?.['zh-tw']?.status === 'translating',
+      )) {
+        schedulePoll()
+      }
+    }
+  }, 5000)
+}
+
+onBeforeUnmount(() => {
+  if (pollTimer) clearTimeout(pollTimer)
+})
 
 // ── 登录 / 登出 ──
 const loginForm = reactive({ username: '', password: '', remember: true })
@@ -423,6 +648,11 @@ async function loadList() {
   } finally {
     listPending.value = false
   }
+  if (articles.value.some(a =>
+    a.translations?.en?.status === 'translating' || a.translations?.['zh-tw']?.status === 'translating',
+  )) {
+    schedulePoll()
+  }
 }
 
 function resetForm() {
@@ -439,6 +669,8 @@ function resetForm() {
   tagsInput.value = ''
   backups.value = []
   saveMessage.value = ''
+  translations.value = structuredClone(EMPTY_TRANSLATIONS)
+  translationEditor.open = false
 }
 
 function startNew() {
@@ -461,6 +693,7 @@ async function startEdit(slug: string) {
     form.readingTime = a.readingTime || 0
     form.content = a.content || ''
     tagsInput.value = (a.tags || []).join(', ')
+    translations.value = a.translations ?? structuredClone(EMPTY_TRANSLATIONS)
     saveMessage.value = ''
     view.value = 'editor'
     loadBackups()
@@ -495,16 +728,19 @@ async function save(asDraft: boolean) {
   }
   saving.value = true
   try {
+    let res: { translations?: TranslationOverview }
     if (isNew.value) {
-      await adminFetch('/api/admin/insights', { method: 'POST', body: payload })
+      res = await adminFetch('/api/admin/insights', { method: 'POST', body: payload })
       isNew.value = false
       editingSlug.value = payload.slug
     } else {
-      await adminFetch(`/api/admin/insights/${editingSlug.value}`, { method: 'PUT', body: payload })
+      res = await adminFetch(`/api/admin/insights/${editingSlug.value}`, { method: 'PUT', body: payload })
     }
+    if (res?.translations) translations.value = res.translations
     saveOk.value = true
     saveMessage.value = asDraft ? '已保存为草稿（前台不可见）' : '已发布，前台立即生效'
     loadBackups()
+    if (!asDraft) pollEditorTranslations()
   } catch (e: any) {
     saveOk.value = false
     saveMessage.value = e?.data?.statusMessage || e?.message || '保存失败'
@@ -540,10 +776,126 @@ async function restore(file: string) {
     await adminFetch(`/api/admin/insights/${editingSlug.value}/restore`, { method: 'POST', body: { file } })
     await startEdit(editingSlug.value)
     saveOk.value = true
-    saveMessage.value = '已恢复历史版本'
+    saveMessage.value = '已恢复历史版本（译文状态将在下次保存时刷新）'
   } catch (e: any) {
     saveOk.value = false
     saveMessage.value = e?.data?.statusMessage || '恢复失败'
+  }
+}
+
+// ── 多语言版本管理 ──
+
+async function refreshTranslations() {
+  if (isNew.value || !editingSlug.value) return
+  try {
+    const a = await adminFetch<AdminArticle>(`/api/admin/insights/${editingSlug.value}`)
+    if (a.translations) translations.value = a.translations
+  } catch { /* keep prior state */ }
+}
+
+let editorPollTimer: ReturnType<typeof setTimeout> | null = null
+
+function pollEditorTranslations() {
+  if (editorPollTimer) clearTimeout(editorPollTimer)
+  editorPollTimer = setTimeout(async () => {
+    editorPollTimer = null
+    if (view.value !== 'editor') return
+    await refreshTranslations()
+    if (translations.value.en?.status === 'translating' || translations.value['zh-tw']?.status === 'translating') {
+      pollEditorTranslations()
+    }
+  }, 5000)
+}
+
+onBeforeUnmount(() => {
+  if (editorPollTimer) clearTimeout(editorPollTimer)
+})
+
+function regenerate(lang: TranslationLang) {
+  regenerateFor(editingSlug.value, lang, translations.value[lang])
+}
+
+async function regenerateFor(slug: string, lang: TranslationLang, entry?: TranslationEntry) {
+  const label = lang === 'zh-tw' ? '繁體中文' : 'English'
+  if (entry?.locked) {
+    if (!confirm(`${label}版本包含人工修改，重新生成会丢弃这些修改并恢复自动翻译。确定继续？`)) return
+  } else if (entry?.exists && entry.status !== 'failed') {
+    if (!confirm(`用当前简中源文重新生成${label}版本？`)) return
+  }
+  regenerating.value = lang
+  try {
+    const res = await adminFetch<{ translations: TranslationOverview }>(
+      `/api/admin/insights/${slug}/translations/${lang}`,
+      { method: 'POST', body: { action: 'regenerate' } },
+    )
+    if (res?.translations) {
+      if (slug === editingSlug.value) translations.value = res.translations
+      const article = articles.value.find(a => a.slug === slug)
+      if (article) article.translations = res.translations
+    }
+    if (view.value === 'editor' && slug === editingSlug.value) pollEditorTranslations()
+    if (view.value === 'list') schedulePoll()
+  } catch (e: any) {
+    saveOk.value = false
+    saveMessage.value = e?.data?.statusMessage || '重新生成失败'
+  } finally {
+    regenerating.value = ''
+  }
+}
+
+async function openTranslationEditor(lang: TranslationLang) {
+  translationEditor.lang = lang
+  translationEditor.open = true
+  translationEditor.loading = true
+  translationEditor.message = ''
+  try {
+    const a = await adminFetch<AdminArticle & { locked?: boolean }>(
+      `/api/admin/insights/${editingSlug.value}/translations/${lang}`,
+    )
+    translationEditor.form.title = a.title
+    translationEditor.form.description = a.description
+    translationEditor.form.content = a.content || ''
+    translationEditor.form.locked = a.locked === true
+    translationEditor.tagsInput = (a.tags || []).join(', ')
+  } catch (e: any) {
+    translationEditor.open = false
+    saveOk.value = false
+    saveMessage.value = e?.data?.statusMessage || '加载译文失败'
+  } finally {
+    translationEditor.loading = false
+  }
+}
+
+function closeTranslationEditor() {
+  translationEditor.open = false
+}
+
+async function saveTranslation() {
+  const lang = translationEditor.lang
+  translationEditor.saving = true
+  translationEditor.message = ''
+  try {
+    const res = await adminFetch<{ translations: TranslationOverview }>(
+      `/api/admin/insights/${editingSlug.value}/translations/${lang}`,
+      {
+        method: 'PUT',
+        body: {
+          title: translationEditor.form.title,
+          description: translationEditor.form.description,
+          tags: translationEditor.tagsInput.split(/[,，]/).map(t => t.trim()).filter(Boolean),
+          content: translationEditor.form.content,
+        },
+      },
+    )
+    if (res?.translations) translations.value = res.translations
+    translationEditor.form.locked = true
+    translationEditor.ok = true
+    translationEditor.message = '已保存，此版本已锁定'
+  } catch (e: any) {
+    translationEditor.ok = false
+    translationEditor.message = e?.data?.statusMessage || '保存失败'
+  } finally {
+    translationEditor.saving = false
   }
 }
 

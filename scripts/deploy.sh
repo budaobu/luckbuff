@@ -109,6 +109,7 @@ rsync_retry --delete \
 echo "==> rsync content/insights/ (editor articles — no --delete: editors publish via /admin directly on the server)"
 rsync_retry \
   --exclude '.backups/' \
+  --exclude '.translations/' \
   "content/insights/" \
   "$SERVER:$REMOTE_DIR/content/insights/"
 
