@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zyr-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -69,22 +69,23 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && guaResult">
-          <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('zhouyi.resultTitle') }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ queryText }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="zyr-share-target">
+          <ZhouyiReport
+            :result="guaResult"
+            :query="queryText"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <ZhouyiResult
-          ref="resultRef"
+        <ZhouyiReport
           :result="guaResult"
-          :ai-stream="aiStreamState"
+          :query="queryText"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
           @retry="startAiStream"
         />
 
@@ -216,16 +217,9 @@ const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 
-const aiStreamState = computed(() => ({
-  content: aiContent.value,
-  streaming: aiStreaming.value,
-  started: aiStarted.value,
-  error: aiError.value,
-}))
-
 const shareDialogOpen = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
-const resultRef = ref<{ shareTarget?: HTMLDivElement }>()
+const shareTargetRef = ref<HTMLElement>()
 
 function handleSubmit(input: QiguaInput) {
   queryText.value = input.query
@@ -330,7 +324,7 @@ async function handleShare() {
       tool: 'zhouyi',
       name: '',
       summary: `${benGua?.name}，${benGua?.meaning}`,
-      shareTarget: resultRef.value?.shareTarget,
+      shareTarget: shareTargetRef.value,
       filename: `zhouyi-${new Date().toISOString().slice(0, 10)}.png`,
       t,
     })
@@ -415,5 +409,15 @@ useHead(() => ({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* 隐藏截图目标：固定宽度渲染完整报告，供 html-to-image 抓取 */
+.zyr-share-target {
+  width: 1080px;
+}
+
+/* 结果阶段放宽容器宽度，纸质报告需要更大版面 */
+.zyr-result-wrap {
+  max-width: 80rem;
 }
 </style>
