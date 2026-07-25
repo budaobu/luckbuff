@@ -2,22 +2,27 @@
   <button
     class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 border"
     :class="buttonClasses"
-    :title="tooltip"
-    :aria-label="tooltip"
+    :title="mounted ? tooltip : ''"
+    :aria-label="mounted ? tooltip : ''"
     @click="toggleTheme"
   >
     <UIcon
+      v-show="mounted"
       :name="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
       class="w-3.5 h-3.5 transition-transform duration-300"
       :class="{ 'rotate-12': !isDark }"
     />
-    <span class="hidden sm:inline">{{ label }}</span>
+    <span class="hidden sm:inline">{{ mounted ? label : '' }}</span>
   </button>
 </template>
 
 <script setup lang="ts">
 const colorMode = useColorMode()
 const { t } = useI18n()
+
+// preference 存于 localStorage，SSR 阶段无法得知；挂载前保持中性渲染避免 hydration 不一致
+const mounted = ref(false)
+onMounted(() => { mounted.value = true })
 
 const isDark = computed(() => colorMode.value === 'dark')
 

@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zw-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -74,84 +74,32 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && chart">
-        <!-- 隐藏截图目标（综合分析 > 流年 > 当前年份的流年概览卡片） -->
-        <div ref="shareTargetRef" v-show="false" class="p-6">
-          <GlowCard :title="$t('zwdsAnalysis.liuNianOverviewTitle')">
-            <div class="space-y-2">
-              <div class="flex items-center gap-3">
-                <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.currentYearLabel') }}</div>
-                <div class="text-base font-bold text-[var(--text-primary)]">{{ currentLiunianGanZhi }}</div>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="text-sm text-[var(--text-muted)]">{{ $t('zwdsAnalysis.taisuiEntryLabel') }}</div>
-                <div class="text-sm text-[var(--text-primary)]">{{ currentLiunianTaiSuiGong }}宫（{{ currentLiunianTaiSuiZhi }}）</div>
-              </div>
-              <div class="flex flex-wrap gap-2 pt-1">
-                <span
-                  v-for="s in currentLiunianSiHua"
-                  :key="s.star + s.type"
-                  class="text-xs px-2 py-1 rounded border"
-                  :class="sihuaBadgeClass(s.type)"
-                >
-                  {{ s.star }}化{{ s.type }}
-                </span>
-              </div>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ currentLiunianSummary }}</p>
-              <div class="flex items-center gap-4 pt-2">
-                <div
-                  class="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold border"
-                  :class="ratingClass(currentLiunianRating)"
-                >
-                  {{ ratingLabel(currentLiunianRating) }}
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ ratingText(currentLiunianRating) }}</p>
-                </div>
-              </div>
-            </div>
-          </GlowCard>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="zwr-share-target">
+          <ZwdsReport
+            :chart="chart"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :birth-date="formValues.birthDate"
+            :birth-hour="formValues.birthHour"
+            :gender="formValues.gender"
+            :name="formValues.name"
+          />
         </div>
 
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('zwds.chartTitle', { name: formValues.name || '' }) }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ chartSubtitleText }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-        </div>
-
-        <UTabs
-          :items="tabItems"
-          :ui="{
-            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
-            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
-            indicator: 'bg-transparent',
-            content: 'pt-5',
-          }"
-        >
-          <template #ai>
-            <ZwdsAiInterpret
-              :chart="chart"
-              :content="aiContent"
-              :streaming="aiStreaming"
-              :started="aiStarted"
-              :error="aiError"
-              @retry="startAiStream"
-            />
-          </template>
-
-          <template #pan>
-            <ZwdsPan :chart="chart" :has-hour="!!formValues.birthHour" />
-          </template>
-
-          <template #analysis>
-            <ZwdsAnalysis ref="analysisRef" :chart="chart" />
-          </template>
-        </UTabs>
+        <ZwdsReport
+          ref="reportRef"
+          :chart="chart"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :birth-date="formValues.birthDate"
+          :birth-hour="formValues.birthHour"
+          :gender="formValues.gender"
+          :name="formValues.name"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -265,7 +213,6 @@
 <script setup lang="ts">
 import type { ZwdsChart } from '~/types/zwds'
 import type { DiZhi } from '~/types/user'
-import { getLiunianAnalysis } from '~/utils/zwds/analysis'
 
 const { t } = useI18n()
 const { locale } = useI18n()
@@ -295,86 +242,7 @@ const formValues = ref<FormValues>({
 const lastFormValues = ref<Partial<FormValues>>({})
 const chart = ref<ZwdsChart | null>(null)
 
-const analysisRef = ref<{ getSummary: () => string; liunianOverviewRef: HTMLElement | null } | null>(null)
-
-// 当前年份流年数据（用于隐藏截图目标）
-const currentYear = new Date().getFullYear()
-const currentLiunian = computed(() => {
-  if (!chart.value) return null
-  return getLiunianAnalysis(chart.value, currentYear)
-})
-const currentLiunianGanZhi = computed(() => currentLiunian.value?.yearGanZhi ?? '')
-const currentLiunianTaiSuiGong = computed(() => currentLiunian.value?.taiSuiGong ?? '')
-const currentLiunianTaiSuiZhi = computed(() => currentLiunian.value?.taiSuiZhi ?? '')
-const currentLiunianSiHua = computed(() => currentLiunian.value?.liuNianSiHua ?? [])
-const currentLiunianSummary = computed(() => currentLiunian.value?.summary ?? '')
-const currentLiunianRating = computed(() => currentLiunian.value?.rating ?? 'stable')
-
-const chartSubtitleText = computed(() => {
-  if (!chart.value) return ''
-  const mingGong = chart.value.mingGong.zhi
-  const mainStars = chart.value.mingGong.mainStars
-  const starsText = mainStars.length > 0
-    ? mainStars.join('、')
-    : `${t('zwdsPan.borrowLabel')}${getJieDuiZhi(chart.value.mingGong.zhi)}`
-  const wuxingJu = chart.value.wuxingJu
-  return t('zwds.chartSubtitle', { mingGong, mainStars: starsText, wuxingJu })
-})
-
-function getJieDuiZhi(zhi: DiZhi): DiZhi {
-  const ZHI_ORDER: DiZhi[] = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑']
-  const idx = ZHI_ORDER.indexOf(zhi)
-  return ZHI_ORDER[(idx + 6) % 12]!
-}
-
-function sihuaBadgeClass(type: string): string {
-  switch (type) {
-    case '禄': return 'border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]'
-    case '权': return 'border-red-500/20 bg-red-500/10 text-red-400'
-    case '科': return 'border-[var(--accent-purple-border)] bg-[var(--accent-purple-faint)] text-[var(--accent-purple-text)]'
-    case '忌': return 'border-[var(--text-faint)]/20 bg-[var(--text-faint)]/10 text-[var(--text-muted)]'
-    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
-  }
-}
-
-function ratingClass(rating: string): string {
-  switch (rating) {
-    case 'shunSui': return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-    case 'stable': return 'border-blue-500/30 bg-blue-500/10 text-blue-400'
-    case 'liuYi': return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-    case 'jinShen': return 'border-red-500/30 bg-red-500/10 text-red-400'
-    case 'yiBan': return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
-    default: return 'border-[var(--border-light)] bg-[var(--surface-card-hover)] text-[var(--text-body)]'
-  }
-}
-
-function ratingText(rating: string): string {
-  switch (rating) {
-    case 'shunSui': return t('zwdsAnalysis.ratingShunSui')
-    case 'stable': return t('zwdsAnalysis.ratingPingWen')
-    case 'liuYi': return t('zwdsAnalysis.ratingLiuYi')
-    case 'jinShen': return t('zwdsAnalysis.ratingJinShen')
-    case 'yiBan': return t('zwdsAnalysis.ratingYiBan')
-    default: return t('zwdsAnalysis.ratingPingWen')
-  }
-}
-
-function ratingLabel(rating: string): string {
-  switch (rating) {
-    case 'shunSui': return t('zwdsAnalysis.ratingLabelShunSui')
-    case 'stable': return t('zwdsAnalysis.ratingLabelStable')
-    case 'liuYi': return t('zwdsAnalysis.ratingLabelLiuYi')
-    case 'jinShen': return t('zwdsAnalysis.ratingLabelJinShen')
-    case 'yiBan': return t('zwdsAnalysis.ratingLabelYiBan')
-    default: return t('zwdsAnalysis.ratingLabelStable')
-  }
-}
-
-const tabItems = computed(() => [
-  { label: t('zwds.aiInterpretation'), slot: 'ai' as const },
-  { label: t('zwdsPan.chartTitle'), slot: 'pan' as const },
-  { label: t('zwdsAnalysis.tabsLabelBenMing'), slot: 'analysis' as const },
-])
+const reportRef = ref<{ getSummary: () => string } | null>(null)
 
 const store = useProfilesStore()
 const { calc } = useZwdsCalc()
@@ -422,7 +290,7 @@ async function startAiStream() {
 
   await nextTick()
 
-  const summary = analysisRef.value?.getSummary() ?? ''
+  const summary = reportRef.value?.getSummary() ?? ''
   const profile = {
     id: 'temp',
     label: '临时',
@@ -603,10 +471,18 @@ useHead(() => ({
 </script>
 
 <style scoped>
+.zwr-share-target {
+  width: 1080px;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.zw-result-wrap {
+  max-width: 80rem;
 }
 </style>
