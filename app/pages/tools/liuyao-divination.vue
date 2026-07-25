@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'lyr-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -135,121 +135,25 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && result">
-        <div ref="shareTargetRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Divination Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('liuyaoDivination.resultTitle') }}
-            </h1>
-            <p v-if="question" class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('liuyaoDivination.questionPrefix') }}：{{ question }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 时空信息 -->
-          <div v-if="result.temporal_context" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('liuyaoDivination.temporalParams') }}
-            </h3>
-            <div class="grid grid-cols-2 gap-3 text-xs">
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.yueJian') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.月建 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.riChen') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.日辰 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.shiChen') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.时辰 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.xunKong') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.旬空 }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 卦象信息 -->
-          <div v-if="result.hexagram" class="grid grid-cols-3 gap-3 mb-5">
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.benGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.本卦 }}</p>
-              <p class="text-[10px] text-[var(--accent-muted)] mt-1">{{ $t('liuyaoDivination.shiYing', { shi: result.hexagram.世爻位, ying: result.hexagram.应爻位 }) }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.bianGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.变卦 }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.huGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.互卦 }}</p>
-            </div>
-          </div>
-
-          <!-- 爻象展示 -->
-          <div v-if="result.lines_top_down" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3">{{ $t('liuyaoDivination.chartTitle') }}</h3>
-            <div class="space-y-1.5">
-              <div
-                v-for="(line, index) in result.lines_top_down"
-                :key="index"
-                class="flex items-center gap-3 rounded-xl border px-3 py-2"
-                :class="line.isMoving ? 'border-l-2 border-l-[#c9a227]/40 bg-[var(--surface-card)]' : 'border-[var(--border-light)] bg-[var(--surface-card)]'"
-              >
-                <span class="text-[10px] text-[var(--text-placeholder)] w-8 text-center">{{ line.label }}</span>
-                <!-- 铜钱可视化 -->
-                <div class="flex-1 flex items-center justify-center">
-                  <div class="flex items-center gap-1.5">
-                    <LiuyaoCopperCoin
-                      v-for="(coin, ci) in inferCoins(line.value)"
-                      :key="ci"
-                      :is-back="coin.isBack"
-                      :size="30"
-                    />
-                    <span class="text-xs text-[var(--text-placeholder)] ml-1">={{ line.value }}</span>
-                  </div>
-                </div>
-                <span class="text-sm font-bold w-8 text-center" :class="line.isMoving ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">
-                  {{ line.value }}
-                </span>
-                <span v-if="line.isMoving" class="text-[10px] text-[var(--accent-muted)]">
-                  {{ line.value === 6 ? '○' : '●' }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI 断语 -->
-        <div ref="aiInterpretationRef" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <LiuyaoGeneralAiInterpret
-            :content="aiContent"
-            :streaming="aiStreaming"
-            :started="aiStarted"
-            :error="aiError"
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="lyr-share-target">
+          <LiuyaoReport
+            :result="result"
+            :query="question"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
           />
-
-          <!-- 重新解读按钮 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('liuyaoDivination.reinterpretBtn') }}
-            </UButton>
-          </div>
         </div>
+
+        <LiuyaoReport
+          :result="result"
+          :query="question"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -493,8 +397,7 @@ const toast = useToast()
 // 分享
 const shareDialogOpen = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
-const shareTargetRef = ref<HTMLDivElement>()
-const aiInterpretationRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 
 // ============================================================
 // 计算属性
@@ -748,15 +651,11 @@ async function handleShare() {
   const summary = `${t('liuyaoDivination.sharePrefix')}${question.value ? '「' + question.value + '」' : ''}${hexSummary ? '，' + hexSummary : ''}`
 
   try {
-    const target = (aiContent.value && aiInterpretationRef.value)
-      ? aiInterpretationRef.value
-      : shareTargetRef.value
-
     const shareResult = await share({
       tool: 'liuyao-divination',
-      name: '',
+      name: hexSummary,
       summary,
-      shareTarget: target,
+      shareTarget: shareTargetRef.value,
       filename: `liuyao-${new Date().toISOString().slice(0, 10)}.png`,
       t,
     })
@@ -791,17 +690,6 @@ function downloadShareImage() {
 
 function unescapeHtml(str: string): string {
   return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-}
-
-// 根据爻值推断 3 枚铜钱正反面
-function inferCoins(value: number): Array<{ isBack: boolean }> {
-  switch (value) {
-    case 6: return [{ isBack: false }, { isBack: false }, { isBack: false }]
-    case 7: return [{ isBack: false }, { isBack: false }, { isBack: true }]
-    case 8: return [{ isBack: false }, { isBack: true }, { isBack: true }]
-    case 9: return [{ isBack: true }, { isBack: true }, { isBack: true }]
-    default: return [{ isBack: false }, { isBack: false }, { isBack: false }]
-  }
 }
 
 // ============================================================
@@ -869,5 +757,15 @@ useHead(() => ({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* 隐藏截图目标：固定宽度渲染完整报告，供 html-to-image 抓取 */
+.lyr-share-target {
+  width: 1080px;
+}
+
+/* 结果阶段放宽容器宽度，纸质报告需要更大版面 */
+.lyr-result-wrap {
+  max-width: 80rem;
 }
 </style>

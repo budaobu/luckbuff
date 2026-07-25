@@ -97,6 +97,7 @@ export function useShare() {
       zhouyi: '卦象',
       zwds: '紫微',
       liuyao: '六爻',
+      'liuyao-divination': '六爻占卜',
       vedic: '吠陀占星',
       qimen: '奇门遁甲',
       huangdao: '黄道吉日',

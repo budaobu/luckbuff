@@ -166,10 +166,38 @@ export default defineEventHandler(async (event) => {
 
     result.hexagram = {
       本卦: primary?.name || '',
-      变卦: transformed?.name || '',
+      // 静卦（六静无动爻）时引擎不产出变卦，保留本卦名称
+      变卦: transformed?.name || primary?.name || '',
       互卦: nuclear?.name || '',
       世爻位: shiYing.shi_label || '',
       应爻位: shiYing.ying_label || '',
+    }
+    // 变卦缺失（静卦）时补齐为本卦爻盘，报告组件据此退化展示
+    if (!transformed) {
+      result.transformed_hexagram = primary || null
+      result.transformed_lines_top_down = result.lines_top_down || []
+    }
+
+    // 前端 LineInfo 契约：isMoving（引擎字段为 moving）
+    const toLineInfo = (l: any) => ({
+      position: l.position,
+      value: l.value,
+      isMoving: !!l.moving,
+      label: l.label,
+    })
+    if (Array.isArray(result.lines_top_down)) {
+      result.lines_detail_top_down = result.lines_top_down
+      result.lines_top_down = result.lines_top_down.map(toLineInfo)
+    }
+    if (Array.isArray(result.transformed_lines_top_down)) {
+      result.transformed_lines_detail_top_down = result.transformed_lines_top_down
+      result.transformed_lines_top_down = result.transformed_lines_top_down.map(toLineInfo)
+    }
+
+    // 六神（页面展示用，自上而下）
+    const sixSpirits = result.temporal_context?.six_spirits_top_down
+    if (Array.isArray(sixSpirits) && result.temporal_context) {
+      result.temporal_context.六神 = sixSpirits
     }
 
     const lunar = result.temporal_context?.lunar || {}

@@ -42,6 +42,70 @@ export interface TemporalContext {
     offset_minutes: number
     adjusted_datetime: string
   }
+  lunar?: {
+    date_text?: string
+    year_ganzhi?: string
+    month_ganzhi?: string
+    day_ganzhi?: string
+    time_ganzhi?: string
+    month_build?: string
+    day_xunkong_text?: string
+    jieqi?: string | null
+  }
+}
+
+/** 引擎单行爻完整信息（纳甲/六亲/六神/旺衰） */
+export interface LiuyaoEngineLine {
+  position: number // 1~6，从下到上
+  label: string
+  value: LineValue
+  state: string // 少阳/少阴/老阳/老阴
+  polarity: 'yin' | 'yang'
+  moving: boolean
+  najia_stem?: string
+  najia_branch?: string
+  najia_ganzhi?: string
+  branch_element?: string // 五行：木火土金水
+  relation?: string // 六亲：父母/兄弟/妻财/官鬼/子孙
+  shi?: boolean
+  ying?: boolean
+  role?: '世' | '应' | null
+  six_spirit?: string
+  temporal?: {
+    month_effect?: { kind: string; label: string; score: number } | null
+    day_effect?: { kind: string; label: string; score: number } | null
+    voided_by_day_xunkong?: boolean
+    score?: number
+    notes?: string[]
+  }
+}
+
+/** 卦宫归属 */
+export interface LiuyaoPalaceAssignment {
+  palace?: string
+  palace_element?: string
+  sequence_label?: string
+  shi_line?: number
+  ying_line?: number
+}
+
+/** 卦象基础信息（引擎原始字段） */
+export interface LiuyaoHexagramInfo {
+  number?: number // 六十四卦序（与 zhouyi LIUSHISI_GUA id 一致）
+  name?: string
+  upper_trigram?: string
+  lower_trigram?: string
+  upper_element?: string
+  lower_element?: string
+}
+
+/** 动爻断卦规则 */
+export interface LiuyaoFocusRule {
+  moving_count?: number
+  strategy?: string
+  primary_targets?: string[]
+  secondary_targets?: string[]
+  guidance?: string
 }
 
 /** 卦象摘要 */
@@ -75,6 +139,16 @@ export interface LiuYaoResult {
     lostItemDesc?: string
     relationship?: string
   }
+  // ===== 引擎原始排盘数据（报告组件用） =====
+  moving_lines?: number[]
+  palace_assignment?: LiuyaoPalaceAssignment
+  focus_rule?: LiuyaoFocusRule
+  primary_hexagram?: LiuyaoHexagramInfo
+  transformed_hexagram?: LiuyaoHexagramInfo
+  nuclear_hexagram?: LiuyaoHexagramInfo
+  /** 带纳甲/六亲/六神/旺衰的完整爻信息（自上而下） */
+  lines_detail_top_down?: LiuyaoEngineLine[]
+  transformed_lines_detail_top_down?: LiuyaoEngineLine[]
 }
 
 // ============================================================
