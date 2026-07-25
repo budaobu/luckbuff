@@ -60,17 +60,15 @@ export function getMonthZhiIndex(year: number, month: number, day: number): {
 } {
   const currentDayOfYear = dayOfYear(year, month, day)
 
-  let jieIndex = 11
-  for (let i = 0; i < 12; i++) {
-    const jieDay = getJieDayOfYear(year, i)
-    if (currentDayOfYear >= jieDay) {
-      jieIndex = i
+  // 按时间顺序排列的节（年内第几天近似值）：
+  // 小寒(1月) → 立春(2月) → 惊蛰(3月) → ... → 大雪(12月)
+  // 注意：索引 11（小寒）在年初，不能和索引 0~10 放在同一轮 doy 递增循环里比较。
+  const jieOrder: number[] = [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  let jieIndex = 10 // 默认：生日在小寒前（1月初）→ 上年大雪后的子月
+  for (const idx of jieOrder) {
+    if (currentDayOfYear >= getJieDayOfYear(year, idx)) {
+      jieIndex = idx
     }
-  }
-
-  const daXueDay = getJieDayOfYear(year, 10)
-  if (jieIndex === 11 && currentDayOfYear > daXueDay) {
-    jieIndex = 10
   }
 
   const currentJieDay = getJieDayOfYear(year, jieIndex)

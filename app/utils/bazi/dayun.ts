@@ -49,16 +49,39 @@ export function isForward(
   return !yang
 }
 
-// 计算从出生日到目标节气的天数
+// 计算从出生日到目标"节"的天数（非负，按方向取最近的那个节）
+// 目标节相对生日的年份由节的月份直接推定，避免年内第几天在跨年时的比较陷阱：
+//   - 小寒(1月)：顺排时对任何生日都是"下一个节"；逆排时只有 1 月生日用得到（必在小寒后）
+//   - 大雪(12月)：顺排时只有 12 月生日用得到（必在大雪后）；逆排时对 1 月生日是"去年12月"
 function daysToJie(
   year: number,
   month: number,
   day: number,
   jieIndex: number,
+  forward: boolean,
 ): number {
-  const birthDayOfYear = dayOfYear(year, month, day)
-  const jieDayOfYear = getJieDayOfYear(year, jieIndex)
-  return jieDayOfYear - birthDayOfYear
+  // 节所在月份：0=立春(2月) ... 10=大雪(12月), 11=小寒(1月)
+  const jieMonth = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1][jieIndex]!
+  const birthDoy = dayOfYear(year, month, day)
+
+  let jieYear: number
+  if (jieMonth === month) {
+    jieYear = year
+  } else if (jieMonth === 1) {
+    // 小寒：顺排=次年1月；逆排=当年1月（仅 1 月生日会走到这里）
+    jieYear = forward ? year + 1 : year
+  } else if (jieMonth === 12 && month === 1) {
+    // 1 月生日逆排到去年 12 月的节
+    jieYear = year - 1
+  } else {
+    // 其余情况节与生日同月（上面已覆盖）或同年
+    jieYear = year
+  }
+
+  const jieDoy = getJieDayOfYear(jieYear, jieIndex)
+  if (jieYear === year) return Math.abs(jieDoy - birthDoy)
+  if (jieYear === year + 1) return (isLeapYear(year) ? 366 : 365) - birthDoy + jieDoy
+  return birthDoy + (isLeapYear(jieYear) ? 366 : 365) - jieDoy
 }
 
 // 计算起运年龄
@@ -71,37 +94,10 @@ export function calcQiYunAge(
   monthZhiIndex: number,
 ): number {
   const forward = isForward(yearGan, gender)
-  const birthDay = dayOfYear(year, month, day)
 
-  let daysDiff: number
-
-  if (forward) {
-    // 顺排：从出生日到下一个节的天数
-    const nextJieIndex = (monthZhiIndex + 1) % 12
-    const nextJieDay = getJieDayOfYear(year, nextJieIndex)
-
-    if (nextJieDay > birthDay) {
-      // 下一个节在今年（日期上在生日之后）
-      daysDiff = nextJieDay - birthDay
-    } else {
-      // 下一个节在明年（跨年了）
-      const daysInYear = isLeapYear(year) ? 366 : 365
-      daysDiff = (daysInYear - birthDay) + nextJieDay
-    }
-  } else {
-    // 逆排：从出生日到上一个节的天数
-    const prevJieIndex = (monthZhiIndex - 1 + 12) % 12
-    const prevJieDay = getJieDayOfYear(year, prevJieIndex)
-
-    if (prevJieDay < birthDay) {
-      // 上一个节在今年（日期上在生日之前）
-      daysDiff = birthDay - prevJieDay
-    } else {
-      // 上一个节在去年（跨年了）
-      const daysInPrevYear = isLeapYear(year - 1) ? 366 : 365
-      daysDiff = birthDay + (daysInPrevYear - prevJieDay)
-    }
-  }
+  // 顺排数到下一个节，逆排数到本月（当前）的节；daysToJie 已处理跨年，结果恒为 [0, 31] 天
+  const targetJieIndex = forward ? (monthZhiIndex + 1) % 12 : monthZhiIndex
+  const daysDiff = daysToJie(year, month, day, targetJieIndex, forward)
 
   // 天数 ÷ 3 = 起运年数（四舍五入）
   // 3天 = 1岁，1天 = 4个月
@@ -110,7 +106,7 @@ export function calcQiYunAge(
 }
 
 // 生成大运列表
-// ageRange 固定为 0~9, 10~19, ..., 90~99，覆盖完整 0~100 岁人生运势
+// 第一步大运从起运年龄开始，每步管 10 年，排 9 步覆盖约 90 年
 export function calcDaYun(
   yearGan: string,
   monthGan: string,
@@ -128,10 +124,9 @@ export function calcDaYun(
   let currentGan = monthGan
   let currentZhi = monthZhi
 
-  // 排10步大运，固定每步10年，从1岁开始，覆盖1~100岁
-  for (let i = 0; i < 10; i++) {
-    const startAge = i * 10 + 1
-    const endAge = (i + 1) * 10
+  for (let i = 0; i < 9; i++) {
+    const startAge = qiyunAge + i * 10
+    const endAge = startAge + 9
 
     if (forward) {
       currentGan = nextGan(currentGan)
