@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'qm-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -76,68 +76,25 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && chart">
-        <!-- 截图目标：只包含核心排盘信息（不含 AI 解读） -->
-        <div ref="shareTargetRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Divination Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('qimen.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- ===== 遁局信息条 ===== -->
-          <QimenChartSummary :chart="chart" />
-
-          <!-- ===== 四柱数据卡片 ===== -->
-          <div class="grid grid-cols-3 gap-2 mt-3">
-            <div
-              v-for="item in ganzhiCards"
-              :key="item.label"
-              class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center"
-            >
-              <div class="text-[10px] text-[var(--text-faint)] mb-1">{{ item.label }}</div>
-              <div class="text-base font-bold text-[var(--text-primary)] tracking-wider">{{ item.value }}</div>
-            </div>
-          </div>
-
-          <!-- ===== 九宫格盘面 ===== -->
-          <div class="mt-5">
-            <div class="flex items-center gap-2 mb-3">
-              <UIcon name="i-heroicons-squares-2x2" class="w-4 h-4 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('qimen.chartTitle') }}</h3>
-            </div>
-            <QimenPalaceGrid
-              :palaces="chart.chart.palaces"
-              :zhifu-palace="chart.chart.zhifu.palace"
-              :zhishi-palace="chart.chart.zhishi.palace"
-              :kongwang-palaces="chart.chart.kongwang_palaces"
-            />
-          </div>
-        </div>
-
-        <!-- ===== AI 解读 ===== -->
-        <div class="mt-5">
-          <QimenInterpretPanel
-            :content="interpretContent"
-            :streaming="interpretStreaming"
-            :started="interpretStarted"
-            :error="interpretError"
-            @retry="startInterpretStream"
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="qmr-share-target">
+          <QimenReport
+            :chart="chart"
+            :user-input="null"
+            :ai-content="interpretContent"
+            :streaming="false"
+            :error="null"
           />
         </div>
 
-        <!-- ===== 警告 ===== -->
-        <div v-if="chart.warnings?.length" class="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/[0.03] p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-amber-400" />
-            <h4 class="text-sm font-semibold text-amber-400">{{ $t('qimen.warningsTitle') }}</h4>
-          </div>
-          <ul class="text-sm text-amber-400/80 space-y-1">
-            <li v-for="(w, i) in chart.warnings" :key="i">{{ w }}</li>
-          </ul>
-        </div>
+        <QimenReport
+          :chart="chart"
+          :user-input="lastFormValues"
+          :ai-content="interpretContent"
+          :streaming="interpretStreaming"
+          :error="interpretError"
+          @retry="startInterpretStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -236,22 +193,32 @@ const shareDialogOpen = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
 const shareTargetRef = ref<HTMLDivElement>()
 
-// 四柱数据卡片
-const ganzhiCards = computed(() => {
-  if (!chart.value?.ganzhi) return []
-  const g = chart.value.ganzhi
-  return [
-    { label: t('qimen.ganzhi.yearLabel') || '年柱', value: g.year },
-    { label: t('qimen.ganzhi.monthLabel') || '月柱', value: g.month },
-    { label: t('qimen.ganzhi.dayLabel') || '日柱', value: g.day },
-    { label: t('qimen.ganzhi.timeLabel') || '时柱', value: g.time },
-    { label: t('qimen.ganzhi.xunshouLabel') || '旬首', value: g.time_xun },
-    { label: t('qimen.ganzhi.xunkongLabel') || '旬空', value: Array.isArray(g.time_xunkong) ? g.time_xunkong.join('、') : g.time_xunkong },
-  ]
-})
+function apiPayloadFromForm(payload: any) {
+  const eventTypeMap: Record<string, string> = {
+    competition: 'other',
+    decision: 'career',
+    seeking: 'other',
+    timing: 'travel',
+    general: 'other',
+  }
+  const goalMap: Record<string, string[]> = {
+    competition: ['can_succeed'],
+    decision: ['can_succeed', 'what_to_avoid'],
+    seeking: ['which_direction'],
+    timing: ['when_to_act'],
+    general: ['can_succeed'],
+  }
+  return {
+    question_type: eventTypeMap[payload?.eventType] || 'other',
+    question_label: payload?.description || '',
+    question_goals: goalMap[payload?.eventType] || ['can_succeed'],
+    location: '北京, 中国',
+  }
+}
 
 async function handleSubmit(payload: any) {
   phase.value = 'animating'
+  const apiPayload = apiPayloadFromForm(payload)
   lastFormValues.value = { ...payload }
   chart.value = null
   interpretContent.value = ''
@@ -261,7 +228,7 @@ async function handleSubmit(payload: any) {
   try {
     const result = await $fetch<QimenChartResponse>('/api/qimen/chart', {
       method: 'POST',
-      body: payload,
+      body: apiPayload,
     })
     chart.value = result
     phase.value = 'result'
@@ -289,7 +256,7 @@ async function startInterpretStream() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        userInput: lastFormValues.value,
+        userInput: apiPayloadFromForm(lastFormValues.value),
         chartJson: chart.value,
         locale: locale.value,
       }),
@@ -436,6 +403,9 @@ useHead(() => ({
 </script>
 
 <style scoped>
+.qmr-share-target {
+  width: 1080px;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -443,5 +413,10 @@ useHead(() => ({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.qm-result-wrap {
+  max-width: 80rem;
 }
 </style>
