@@ -160,8 +160,11 @@ export function generateZwdsAnalysis(chart: ZwdsChart): Record<string, string> {
 
   // 6. 大限分析
   const currentDx = chart.currentDaXian
+  const currentDxGongLabel = currentDx
+    ? (currentDx.gongName.endsWith('宫') ? currentDx.gongName : `${currentDx.gongName}宫`)
+    : ''
   const daXianText = currentDx
-    ? `当前行第${currentDx.index}大限（${currentDx.ageRange[0]}-${currentDx.ageRange[1]}岁），大限走到${currentDx.gongName}宫（${currentDx.gongZhi}），主星为${currentDx.mainStars.join('、') || '借对宫'}。`
+    ? `当前行第${currentDx.index}大限（${currentDx.ageRange[0]}-${currentDx.ageRange[1]}岁），大限走到${currentDxGongLabel}（${currentDx.gongZhi}），主星为${currentDx.mainStars.join('、') || '借对宫'}。`
     : '尚未起运。'
   result['大限分析'] = daXianText
 
@@ -277,7 +280,9 @@ export function getDaxianAnalysis(chart: ZwdsChart, daxianIndex: number): Daxian
   // 找到该大限对应的本命宫位
   const gong = chart.gongs.find(g => g.name === dx.gongName)!
 
-  const overview = `第${dx.index}大限走入${dx.gongName}宫（${dx.gongZhi}），年龄${dx.ageRange[0]}-${dx.ageRange[1]}岁。主星为${dx.mainStars.join('、') || '借对宫'}。此限${isCurrent ? '为当前大限' : '已' + (dx.ageRange[1] < chart.currentAge ? '过' : '未至')}。`
+  // gongName 中「命宫」本身已含「宫」字，拼接时需去重
+  const gongLabel = dx.gongName.endsWith('宫') ? dx.gongName : `${dx.gongName}宫`
+  const overview = `第${dx.index}大限走入${gongLabel}（${dx.gongZhi}），年龄${dx.ageRange[0]}-${dx.ageRange[1]}岁。主星为${dx.mainStars.join('、') || '借对宫'}。此限${isCurrent ? '为当前大限' : '已' + (dx.ageRange[1] < chart.currentAge ? '过' : '未至')}。`
 
   // 四维走势：根据大限宫位的主星推断，同时参考对宫和三合
   const dimensions: DaxianDimension[] = [
