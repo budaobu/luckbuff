@@ -52,6 +52,17 @@
   },
   "home": {
     "badge": "Traditional Divination · Online Charting",
+    "tickerItems": [
+      "BaZi Reading",
+      "Zi Wei Dou Shu",
+      "Qi Men Dun Jia",
+      "Liu Yao Divination",
+      "Character Analysis",
+      "Feng Shui",
+      "Synastry",
+      "Oracle Lots",
+      "AI Insights"
+    ],
     "title1": "You Were Written Five Thousand Years Ago",
     "title2": "Now Decoded in Plain Language",
     "subtitle": "Bazi charts your destiny and fortune cycles, Plum Blossom divines gains and losses, Liu Yao reveals how events unfold, Qimen Dunjia reads timing and direction — five millennia of metaphysical wisdom, retold in language you understand.",

@@ -26,6 +26,7 @@
       <!-- 内容 -->
       <div class="relative z-10 max-w-3xl mx-auto">
         <div
+          data-hero-reveal="1"
           class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs tracking-widest uppercase"
           style="border-color: var(--accent-border); background-color: var(--accent-bg); color: var(--accent);"
         >
@@ -33,16 +34,16 @@
           {{ $t('home.badge') }}
         </div>
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] tracking-tight mb-6 font-serif" style="color: var(--text-primary);">
+        <h1 data-hero-reveal="2" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] tracking-tight mb-6 font-serif" style="color: var(--text-primary);">
           {{ $t('home.title1') }}<br>
           <span style="color: var(--accent);">{{ $t('home.title2') }}</span>
         </h1>
 
-        <p class="text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed" style="color: var(--text-faint);">
+        <p data-hero-reveal="3" class="text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed" style="color: var(--text-faint);">
           {{ $t('home.subtitle') }}
         </p>
 
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div data-hero-reveal="4" class="flex flex-col sm:flex-row items-center justify-center gap-4">
           <UButton
             size="lg"
             color="warning"
@@ -71,10 +72,33 @@
         </div>
       </div>
 
+      <!-- 四角十字标记 -->
+      <span class="cross-mark absolute top-[18%] left-[10%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
+      <span class="cross-mark cross-alt absolute top-[22%] right-[12%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
+      <span class="cross-mark cross-alt absolute bottom-[20%] left-[14%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
+      <span class="cross-mark absolute bottom-[16%] right-[10%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
+
     </section>
 
+    <!-- ========== 跑马灯分隔带 ========== -->
+    <div class="ticker relative border-y py-3 select-none" style="border-color: var(--border-light); background-color: var(--surface-elevated);" aria-hidden="true">
+      <div class="ticker-track gap-0">
+        <span v-for="n in 2" :key="n" class="flex items-center shrink-0">
+          <span
+            v-for="(item, i) in tickerItems"
+            :key="i"
+            class="flex items-center text-xs tracking-[0.25em] uppercase font-medium"
+            style="color: var(--text-faint);"
+          >
+            <span class="px-5">{{ item }}</span>
+            <span style="color: var(--accent-muted);">◆</span>
+          </span>
+        </span>
+      </div>
+    </div>
+
     <!-- 新用户引导 Banner -->
-    <section v-if="showGuideBanner" class="max-w-4xl mx-auto px-6 -mt-12 mb-20 relative z-10">
+    <section v-if="showGuideBanner" class="max-w-4xl mx-auto px-6 mt-10 relative z-10">
       <div
         class="relative rounded-2xl border backdrop-blur-sm p-5 flex items-start justify-between gap-4"
         style="border-color: var(--accent-border); background-color: var(--accent-bg);"
@@ -112,25 +136,25 @@
 
     <!-- ========== 为什么选择 ========== -->
     <section class="max-w-6xl mx-auto px-6 py-20">
-      <div class="text-center mb-14">
-        <span class="text-xs tracking-[0.2em] uppercase mb-3 block" style="color: var(--accent-muted);">Why ososn</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif" style="color: var(--text-primary);">
+      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
+        <span class="sec-index font-mono">01</span>
+        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">Why ososn</span>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
           {{ $t('home.whyTitle') }}
         </h2>
-        <div class="w-12 h-px mx-auto mt-4" style="background-color: var(--accent-faint);" />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <GlowCard :title="$t('home.feature1Title')" icon="i-heroicons-cpu-chip">
+      <div v-reveal.stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <GlowCard data-reveal-child :title="$t('home.feature1Title')" icon="i-heroicons-cpu-chip">
           {{ $t('home.feature1Desc') }}
         </GlowCard>
-        <GlowCard :title="$t('home.feature2Title')" icon="i-heroicons-language">
+        <GlowCard data-reveal-child :title="$t('home.feature2Title')" icon="i-heroicons-language">
           {{ $t('home.feature2Desc') }}
         </GlowCard>
-        <GlowCard :title="$t('home.feature3Title')" icon="i-heroicons-bolt">
+        <GlowCard data-reveal-child :title="$t('home.feature3Title')" icon="i-heroicons-bolt">
           {{ $t('home.feature3Desc') }}
         </GlowCard>
-        <GlowCard :title="$t('home.feature4Title')" icon="i-heroicons-users">
+        <GlowCard data-reveal-child :title="$t('home.feature4Title')" icon="i-heroicons-users">
           {{ $t('home.feature4Desc') }}
         </GlowCard>
       </div>
@@ -143,18 +167,20 @@
 
     <!-- ========== 推演工具 ========== -->
     <section class="max-w-6xl mx-auto px-6 py-20">
-      <div class="text-center mb-14">
-        <span class="text-xs tracking-[0.2em] uppercase mb-3 block" style="color: var(--accent-muted);">{{ $t('home.toolsSubtitle') }}</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif" style="color: var(--text-primary);">
+      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
+        <span class="sec-index font-mono">02</span>
+        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">{{ $t('home.toolsSubtitle') }}</span>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
           {{ $t('home.toolsTitle') }}
         </h2>
-        <div class="w-12 h-px mx-auto mt-4" style="background-color: var(--accent-faint);" />
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- 8 张功能卡：桌面 4×2 -->
+      <div v-reveal.stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div
           v-for="topic in topics"
           :key="topic.path"
+          data-reveal-child
           class="group arc-card relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
           style="border-color: var(--border-subtle); background-color: var(--surface-card);"
           :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
@@ -189,6 +215,33 @@
           />
         </div>
       </div>
+
+      <!-- 第 9 项：通栏条（cindy deck 式长条） -->
+      <NuxtLink
+        v-reveal
+        :to="localePath(psychTopic.path)"
+        class="group relative mt-5 flex items-center gap-5 rounded-2xl border px-7 py-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5"
+        style="border-color: var(--border-subtle); background-color: var(--surface-card);"
+        :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
+      >
+        <div
+          class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-500 group-hover:scale-110"
+          style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
+        >
+          <UIcon :name="psychTopic.icon" class="w-5 h-5" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-semibold mb-0.5" style="color: var(--text-primary);">{{ $t(psychTopic.titleKey) }}</h3>
+          <p class="text-sm truncate" style="color: var(--text-faint);">{{ $t(psychTopic.descKey) }}</p>
+        </div>
+        <span
+          class="hidden sm:flex items-center gap-1.5 text-sm font-medium flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+          style="color: var(--accent);"
+        >
+          {{ $t('home.topicCta') }}
+          <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
+        </span>
+      </NuxtLink>
     </section>
 
     <!-- 分隔装饰 -->
@@ -199,6 +252,7 @@
     <!-- ========== 流年速览 ========== -->
     <section v-if="liuNianData" class="max-w-4xl mx-auto px-6 py-20">
       <div
+        v-reveal
         class="relative rounded-2xl border backdrop-blur-sm p-8 md:p-10 text-center"
         style="border-color: var(--accent-border); background-color: var(--accent-bg);"
       >
@@ -221,18 +275,19 @@
 
     <!-- ========== FAQ ========== -->
     <section class="max-w-3xl mx-auto px-6 py-20">
-      <div class="text-center mb-14">
-        <span class="text-xs tracking-[0.2em] uppercase mb-3 block" style="color: var(--accent-muted);">{{ $t('home.faqSubtitle') }}</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif" style="color: var(--text-primary);">
+      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
+        <span class="sec-index font-mono">03</span>
+        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">{{ $t('home.faqSubtitle') }}</span>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
           {{ $t('home.faqTitle') }}
         </h2>
-        <div class="w-12 h-px mx-auto mt-4" style="background-color: var(--accent-faint);" />
       </div>
 
-      <div class="space-y-3">
+      <div v-reveal.stagger class="space-y-3">
         <div
           v-for="(item, index) in faqItems"
           :key="index"
+          data-reveal-child
           class="group rounded-xl border backdrop-blur-sm overflow-hidden transition-all duration-300"
           style="border-color: var(--border-subtle); background-color: var(--surface-card);"
           :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
@@ -285,7 +340,7 @@
 <script setup lang="ts">
 import { useProfilesStore } from '~/stores/profiles'
 
-const { t } = useI18n()
+const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 const store = useProfilesStore()
 const guideDismissed = ref(false)
@@ -370,13 +425,14 @@ const topics = [
     descKey: 'home.topicDrawALotDesc',
     path: '/draw-a-lot',
   },
-  {
-    icon: 'i-heroicons-beaker',
-    titleKey: 'home.topicPsychologicalTestTitle',
-    descKey: 'home.topicPsychologicalTestDesc',
-    path: '/psychological-test',
-  },
 ]
+
+const psychTopic = {
+  icon: 'i-heroicons-beaker',
+  titleKey: 'home.topicPsychologicalTestTitle',
+  descKey: 'home.topicPsychologicalTestDesc',
+  path: '/psychological-test',
+}
 
 const faqItems = computed(() => [
   { label: t('home.faq1Q'), content: t('home.faq1A') },
@@ -389,6 +445,11 @@ const faqItems = computed(() => [
 ])
 
 const siteName = 'ososn'
+
+const tickerItems = computed<string[]>(() => {
+  const raw = tm('home.tickerItems') as unknown
+  return Array.isArray(raw) ? raw.map((item) => rt(item as never)) : []
+})
 
 useSeoMeta({
   title: () => `${t('seo.homeTitle')} - ${siteName}`,
