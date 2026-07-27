@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { CalendarDate } from '@internationalized/date'
 import type { AstroFortuneTuneFormData } from '~/types/astro-fortune-tune'
 import type { DiZhi } from '~/types/user'
 
@@ -33,6 +34,18 @@ const form = computed({
 })
 
 const selectedProfile = computed(() => profiles.value.find(p => p.id === selectedProfileId.value))
+
+const dateModel = computed({
+  get: () => {
+    if (!form.value.birthDate) return undefined
+    const [y, m, d] = form.value.birthDate.split('-').map(Number)
+    if (!y || !m || !d) return undefined
+    return new CalendarDate(y, m, d)
+  },
+  set: (val) => {
+    form.value.birthDate = val?.toString?.() || ''
+  },
+})
 
 function selectProfile(profile: { id: string; gender?: 'male' | 'female'; birthDate?: string; birthHour?: DiZhi; name?: string; birthProvince?: string }) {
   selectedProfileId.value = profile.id
@@ -183,7 +196,7 @@ watch(() => form.value.birthTime, (v) => {
         </UButton>
         <template #content>
           <AppCalendar
-            v-model="form.birthDate"
+            v-model="dateModel"
             color="warning"
             class="p-2"
           />
