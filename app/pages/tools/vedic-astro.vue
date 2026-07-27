@@ -44,7 +44,7 @@ async function handleShare() {
       name: '',
       summary,
       shareTarget: shareTargetRef.value,
-      filename: `vedic-chart-${new Date().toISOString().slice(0, 10)}.png`,
+      filename: `vedic-report-${new Date().toISOString().slice(0, 10)}.png`,
       t,
     })
 
@@ -156,7 +156,7 @@ useHead(() => ({
       <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'vdr-result-wrap': step === 'result' }">
       <Transition name="step" mode="out-in">
         <!-- Step 1: 表单 -->
         <div v-if="step === 'form'" key="form">
@@ -221,20 +221,51 @@ useHead(() => ({
 
         <!-- Step 3: 结果 -->
         <div v-else-if="step === 'result' && chartData" key="result">
-          <!-- 隐藏截图目标（行星位置卡片） -->
-          <div ref="shareTargetRef" v-show="false" class="p-6">
-            <VedicChartSummary :chart="chartData" />
+          <!-- 隐藏截图目标：完整纸质报告（非流式快照） -->
+          <div ref="shareTargetRef" v-show="false" class="vdr-share-target">
+            <VedicReport
+              :chart="chartData"
+              :ai-content="analysisText"
+              :streaming="false"
+              :error="null"
+            />
           </div>
 
-          <VedicStepResult
+          <VedicReport
             :chart="chartData"
-            :analysis="analysisText"
+            :ai-content="analysisText"
             :streaming="streaming"
-            :error-msg="errorMsg"
-            @restart="reset"
+            :error="errorMsg || null"
             @retry="handleRetry"
-            @share="handleShare"
           />
+
+          <!-- 底部操作 -->
+          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+            <UButton v-if="errorMsg" color="warning" variant="soft" @click="handleRetry">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+              </template>
+              {{ $t('common.retry') }}
+            </UButton>
+            <UButton color="warning" variant="soft" @click="handleShare">
+              <template #leading>
+                <UIcon name="i-heroicons-share" class="w-4 h-4" />
+              </template>
+              {{ $t('common.shareResult') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="reset">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" />
+              </template>
+              {{ $t('vedic.result.restart') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="() => { navigateTo('/') }">
+              <template #leading>
+                <UIcon name="i-heroicons-home" class="w-4 h-4" />
+              </template>
+              {{ $t('common.backHome') }}
+            </UButton>
+          </div>
         </div>
       </Transition>
     </div>
@@ -328,5 +359,14 @@ useHead(() => ({
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.vdr-result-wrap {
+  max-width: 80rem;
+}
+
+.vdr-share-target {
+  width: 1080px;
 }
 </style>
