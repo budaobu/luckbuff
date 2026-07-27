@@ -170,7 +170,7 @@ async function handleShare() {
     .join(' / ') || '占星改运对比'
   try {
     const res = await share({
-      tool: 'vedic',
+      tool: 'astro-fortune-tune',
       name: '',
       summary,
       shareTarget: shareTargetRef.value,
@@ -260,7 +260,7 @@ useHead(() => ({
       <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'aft-result-wrap': step === 'result' }">
       <Transition name="step" mode="out-in">
         <!-- Step 1: 表单 -->
         <div v-if="step === 'form'" key="form">
@@ -330,26 +330,45 @@ useHead(() => ({
 
         <!-- Step 3: 结果 -->
         <div v-else-if="step === 'result' && result" key="result">
-          <!-- 隐藏截图目标 -->
-          <div ref="shareTargetRef" v-show="false" class="p-6">
-            <div class="space-y-4">
-              <h2 class="text-xl font-bold text-[var(--text-primary)]">{{ $t('astroFortuneTune.shareTitle') }}</h2>
-              <div v-for="(c, i) in result.comparisons" :key="i" class="text-sm text-[var(--text-body)]">
-                <strong>{{ c.city.cityName || c.city.name }}</strong>
-                ：{{ c.chart.ascendant.signNameZh }}（{{ c.chart.ascendant.signName }}）
-              </div>
-            </div>
+          <!-- 隐藏截图目标：完整纸质报告 -->
+          <div ref="shareTargetRef" v-show="false" class="aft-share-target">
+            <AstroFortuneTuneReport
+              :result="result"
+              :analysis="analysisText"
+              :streaming="false"
+              :error="null"
+            />
           </div>
 
-          <AstroFortuneTuneStepResult
+          <AstroFortuneTuneReport
             :result="result"
             :analysis="analysisText"
             :streaming="streaming"
-            :error-msg="errorMsg"
-            @restart="reset"
+            :error="errorMsg || null"
             @retry="handleRetry"
-            @share="handleShare"
           />
+
+          <!-- 底部操作 -->
+          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+            <UButton color="warning" variant="soft" @click="handleShare">
+              <template #leading>
+                <UIcon name="i-heroicons-share" class="w-4 h-4" />
+              </template>
+              {{ $t('common.shareResult') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="reset">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" />
+              </template>
+              {{ $t('astroFortuneTune.restart') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="() => { navigateTo('/') }">
+              <template #leading>
+                <UIcon name="i-heroicons-home" class="w-4 h-4" />
+              </template>
+              {{ $t('common.backHome') }}
+            </UButton>
+          </div>
         </div>
       </Transition>
     </div>
@@ -425,6 +444,15 @@ useHead(() => ({
 </template>
 
 <style scoped>
+.aft-share-target {
+  width: 1080px;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.aft-result-wrap {
+  max-width: 80rem;
+}
+
 .step-enter-active,
 .step-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;

@@ -69,6 +69,7 @@ export interface ShareOptions {
     | 'fengshui-ornament'
     | 'bazi-zhichang-hepan'
     | 'study-fengshui'
+    | 'astro-fortune-tune'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -159,6 +160,7 @@ export function useShare() {
       'bedroom-fengshui': '卧室风水布局',
       'bazi-zhichang-hepan': '职场八字合盘',
       'study-fengshui': '书房风水布局',
+      'astro-fortune-tune': '占星改运',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
