@@ -253,7 +253,7 @@ useHead(() => ({
       <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'qsr-result-wrap': step === 'result' }">
       <Transition name="step" mode="out-in">
         <!-- Step 1: 表单 -->
         <div v-if="step === 'form'" key="form">
@@ -322,28 +322,50 @@ useHead(() => ({
 
         <!-- Step 3: 结果 -->
         <div v-else-if="step === 'result' && chart" key="result">
-          <div ref="shareTargetRef" v-show="false" class="p-6">
-            <div class="space-y-4">
-              <h2 class="text-xl font-bold text-[var(--text-primary)]">{{ t('qizhengSiyu.shareTitle') }}</h2>
-              <div class="text-sm text-[var(--text-body)]">
-                <strong>{{ t('qizhengSiyu.ascendant') }}</strong>：{{ chart.angles.find(a => a.name === 'Ascendant')?.signNameZh }}
-              </div>
-              <div class="text-sm text-[var(--text-body)]">
-                <strong>{{ t('qizhengSiyu.planetsTitle') }}</strong>：
-                {{ chart.planets.map(p => `${p.name}${p.signNameZh}`).join(' · ') }}
-              </div>
-            </div>
+          <!-- 隐藏截图目标：完整纸质报告 -->
+          <div ref="shareTargetRef" v-show="false" class="qsr-share-target">
+            <QizhengSiyuReport
+              :chart="chart"
+              :analysis="analysisText"
+              :streaming="false"
+              :error="null"
+            />
           </div>
 
-          <QizhengSiyuStepResult
+          <QizhengSiyuReport
             :chart="chart"
             :analysis="analysisText"
             :streaming="streaming"
-            :error-msg="errorMsg"
-            @restart="reset"
+            :error="errorMsg || null"
             @retry="handleRetry"
-            @share="handleShare"
           />
+
+          <!-- 底部操作 -->
+          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+            <UButton color="warning" variant="soft" @click="reset">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" />
+              </template>
+              {{ t('qizhengSiyu.restart') }}
+            </UButton>
+            <UButton color="warning" variant="soft" @click="handleShare">
+              <template #leading>
+                <UIcon name="i-heroicons-share" class="w-4 h-4" />
+              </template>
+              {{ t('common.shareResult') }}
+            </UButton>
+            <UButton
+              color="neutral"
+              variant="ghost"
+              class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+              @click="() => { navigateTo('/') }"
+            >
+              <template #leading>
+                <UIcon name="i-heroicons-home" class="w-4 h-4" />
+              </template>
+              {{ t('common.backHome') }}
+            </UButton>
+          </div>
         </div>
       </Transition>
     </div>
@@ -419,6 +441,9 @@ useHead(() => ({
 </template>
 
 <style scoped>
+.qsr-share-target {
+  width: 1080px;
+}
 .step-enter-active,
 .step-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -437,5 +462,10 @@ useHead(() => ({
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.qsr-result-wrap {
+  max-width: 80rem;
 }
 </style>

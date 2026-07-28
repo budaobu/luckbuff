@@ -5630,7 +5630,30 @@
     "knowledgeCard3Title": "宮位怎麼看",
     "knowledgeCard3Desc": "本工具採用整宮制，以上升星座為第一宮，依次排布十二宮位，觀察各領域的人生主題。",
     "knowledgeCard4Title": "結果僅供參考",
-    "knowledgeCard4Desc": "星盤解讀提供的是傾向與主題參考，不應替代個人判斷、專業諮詢或現實決策。"
+    "knowledgeCard4Desc": "星盤解讀提供的是傾向與主題參考，不應替代個人判斷、專業諮詢或現實決策。",
+    "report": {
+      "seal": "七政四餘",
+      "sealFoot": "僅供參考",
+      "brandName": "七政四餘 · 本命星盤報告",
+      "generatedAt": "生成時間",
+      "systemLine": "Celestine 天文演算法 · 真實星體位置 · 整宮制",
+      "baseCityLabel": "地點",
+      "longitudeOffsetLabel": "經度偏移",
+      "houseDensityTitle": "宮位能量分佈",
+      "houseDensityNote": "統計各宮位內的七政四餘星體數量，宮位越聚集，對應人生領域的主題越突出。",
+      "colHouse": "宮位",
+      "colBodies": "宮內星體",
+      "colBodies2": "星體",
+      "colAspect": "相位",
+      "colAngle": "角度",
+      "colOrb": "容許度",
+      "pending": "AI 正在推演中，稍後自動填入…",
+      "untitledSection": "AI 星命解讀",
+      "angleAscendant": "上升",
+      "angleMidheaven": "天頂",
+      "angleDescendant": "下降",
+      "angleImumCoeli": "天底"
+    }
   },
   "baziShiyeHepan": {
     "knowledgeCard1Title": "事業八字合盤",
