@@ -5,7 +5,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zy-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
@@ -42,7 +42,7 @@
               block
               :disabled="!baziFormRef?.form?.gender || !baziFormRef?.form?.birthDate"
               class="mt-2 shadow-lg shadow-[#c9a227]/10 hover:shadow-[#c9a227]/20 transition-all duration-300"
-              @click="baziFormRef?.form && handleSubmit({ ...baziFormRef.form })"
+              @click="handleOuterSubmit"
             >
               <template #leading>
                 <UIcon name="i-heroicons-heart" class="w-5 h-5" />
@@ -99,232 +99,26 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && calcResult">
-        <div>
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ calcResult.profile.name ? $t('baziZhengyuan.resultTitleWithName', { name: calcResult.profile.name }) : $t('baziZhengyuan.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('baziZhengyuan.resultSubtitle', { riZhu: calcResult.riZhu, strength: calcResult.riZhuStrength }) }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 四柱简表 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-table-cells" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('baziZhengyuan.pillarsTitle') }}
-            </h3>
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="text-[10px] text-[var(--text-faint)] border-b border-[var(--border-light)]">
-                    <th class="text-left py-2 pr-2 font-medium">{{ $t('baziZhengyuan.pillar') }}</th>
-                    <th class="text-left py-2 px-2 font-medium">{{ $t('baziZhengyuan.ganZhi') }}</th>
-                    <th class="text-left py-2 pl-2 font-medium">{{ $t('baziZhengyuan.shiShen') }}</th>
-                  </tr>
-                </thead>
-                <tbody class="text-[var(--text-body)]">
-                  <tr
-                    v-for="p in pillarRows"
-                    :key="p.label"
-                    class="border-b border-[var(--border-subtle)] last:border-0"
-                  >
-                    <td class="py-2 pr-2 text-[var(--text-muted)]">{{ p.label }}</td>
-                    <td class="py-2 px-2">{{ p.gan }}{{ p.zhi }}</td>
-                    <td class="py-2 pl-2 text-[var(--accent-muted)]">{{ p.shishen }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 命局标签 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('baziZhengyuan.chartInfoTitle') }}
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs px-3 py-1.5 rounded-lg border border-[var(--border-light)] bg-[var(--surface-input)] text-[var(--text-muted)]">
-                {{ $t('baziZhengyuan.riZhuLabel') }}{{ calcResult.riZhu }}
-              </span>
-              <span class="text-xs px-3 py-1.5 rounded-lg border border-[var(--border-light)] bg-[var(--surface-input)] text-[var(--text-muted)]">
-                {{ $t('baziZhengyuan.strengthLabel') }}{{ calcResult.riZhuStrength }}
-              </span>
-              <span class="text-xs px-3 py-1.5 rounded-lg border border-[var(--border-light)] bg-[var(--surface-input)] text-[var(--text-muted)]">
-                {{ $t('baziZhengyuan.gejuLabel') }}{{ calcResult.geju }}
-              </span>
-              <span class="text-xs px-3 py-1.5 rounded-lg border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent-muted)]">
-                {{ $t('baziZhengyuan.xiyongLabel') }}{{ calcResult.xiyong }}
-              </span>
-            </div>
-          </div>
-
-          <!-- 婚姻命盘 -->
-          <div v-if="calcResult.marriage" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-heart" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('baziZhengyuan.marriageCardTitle') }}
-            </h3>
-
-            <div class="space-y-2.5 mb-4">
-              <div class="flex items-start gap-2 text-sm">
-                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.spousePalaceLabel') }}</span>
-                <p class="text-[var(--text-body)] leading-relaxed">
-                  {{ calcResult.marriage.spousePalace.zhi }}（{{ calcResult.marriage.spousePalace.wuxing }}）· {{ $t('baziZhengyuan.sitsOn', { shishen: calcResult.marriage.spousePalace.shiShen }) }}<template v-if="calcResult.marriage.spousePalace.heWith.length"> · {{ $t('baziZhengyuan.heWith', { pillars: calcResult.marriage.spousePalace.heWith.join('、') }) }}</template><template v-if="calcResult.marriage.spousePalace.chongBy.length"> · {{ $t('baziZhengyuan.chongBy', { pillars: calcResult.marriage.spousePalace.chongBy.join('、') }) }}</template>
-                </p>
-              </div>
-              <div class="flex items-start gap-2 text-sm">
-                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.spouseStarLabel') }}</span>
-                <p class="text-[var(--text-body)] leading-relaxed">
-                  {{ calcResult.marriage.spouseStar.kind }}（{{ calcResult.marriage.spouseStar.wuxing }}）· {{ $t(`baziZhengyuan.starStrength.${calcResult.marriage.spouseStar.strength}`) }} · {{ calcResult.marriage.spouseStar.isFavorable ? $t('baziZhengyuan.starFavorable') : $t('baziZhengyuan.starNotFavorable') }}
-                </p>
-              </div>
-              <div class="flex items-start gap-2 text-sm">
-                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.peachLabel') }}</span>
-                <p class="text-[var(--text-body)] leading-relaxed">
-                  {{ calcResult.marriage.peachBlossom.star }}<template v-if="calcResult.marriage.peachBlossom.positions.length"> · {{ $t('baziZhengyuan.peachIn', { pillars: calcResult.marriage.peachBlossom.positions.join('、') }) }}</template><template v-else> · {{ $t('baziZhengyuan.peachAbsent') }}</template><template v-if="calcResult.marriage.peachBlossom.innerWall"> · {{ $t('baziZhengyuan.peachInner') }}</template><template v-if="calcResult.marriage.peachBlossom.outerWall"> · {{ $t('baziZhengyuan.peachOuter') }}</template>
-                </p>
-              </div>
-              <div class="flex items-start gap-2 text-sm">
-                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.hongLuanLabel') }}</span>
-                <p class="text-[var(--text-body)] leading-relaxed">
-                  {{ calcResult.marriage.hongLuan.star }}<template v-if="calcResult.marriage.hongLuan.palace">（{{ $t('baziZhengyuan.starInPalace', { palace: calcResult.marriage.hongLuan.palace }) }}）</template> · {{ $t('baziZhengyuan.tianXiLabel') }} {{ calcResult.marriage.tianXi.star }}<template v-if="calcResult.marriage.tianXi.palace">（{{ $t('baziZhengyuan.starInPalace', { palace: calcResult.marriage.tianXi.palace }) }}）</template>
-                </p>
-              </div>
-              <div class="flex items-start gap-2 text-sm">
-                <span class="shrink-0 text-xs px-2 py-1 rounded-md bg-[var(--surface-input)] border border-[var(--border-light)] text-[var(--text-faint)] mt-0.5">{{ $t('baziZhengyuan.timingLabel') }}</span>
-                <p class="text-[var(--text-body)] leading-relaxed">
-                  {{ $t(`baziZhengyuan.timing.${calcResult.marriage.marriageTiming.tendency}`) }} · {{ $t(`baziZhengyuan.pattern.${calcResult.marriage.relationshipDynamics.pattern}`) }} · {{ $t('baziZhengyuan.directionLabel') }}{{ calcResult.marriage.spouseDetails.direction }}
-                </p>
-              </div>
-            </div>
-
-            <!-- 应期年份 -->
-            <div>
-              <p class="text-xs text-[var(--text-faint)] mb-2">{{ $t('baziZhengyuan.timingYearsTitle') }}</p>
-              <div class="flex items-end gap-1 overflow-x-auto pb-1">
-                <button
-                  v-for="y in calcResult.marriage.timingYears"
-                  :key="y.year"
-                  type="button"
-                  class="flex flex-col items-center gap-1 shrink-0 cursor-pointer"
-                  :aria-pressed="selectedYear?.year === y.year"
-                  @click="selectedYear = selectedYear?.year === y.year ? null : y"
-                >
-                  <div
-                    class="w-6 rounded-t-md transition-all duration-300"
-                    :class="selectedYear?.year === y.year
-                      ? 'bg-[var(--accent)] ring-1 ring-[var(--accent)]'
-                      : y.score >= 4 ? 'bg-[var(--accent)]' : y.score >= 3 ? 'bg-[var(--accent)]/60' : y.score >= 2 ? 'bg-[var(--accent)]/30' : 'bg-[var(--border-light)]'"
-                    :style="{ height: `${8 + y.score * 10}px` }"
-                  />
-                  <span
-                    class="text-[9px]"
-                    :class="selectedYear?.year === y.year ? 'text-[var(--accent-muted)] font-semibold' : 'text-[var(--text-faint)]'"
-                  >{{ String(y.year).slice(2) }}</span>
-                </button>
-              </div>
-              <div v-if="selectedYear" class="mt-3 rounded-xl border border-[var(--border-light)] bg-[var(--surface-input)] p-3">
-                <p class="text-xs font-semibold text-[var(--text-primary)]">
-                  {{ selectedYear.year }}（{{ selectedYear.ganZhi }}）· {{ $t('baziZhengyuan.ageSuffix', { age: selectedYear.age }) }}
-                </p>
-                <p v-if="selectedYear.reasons.length" class="text-[11px] text-[var(--text-muted)] mt-1 leading-relaxed">
-                  {{ selectedYear.reasons.join('、') }}
-                </p>
-                <p v-else class="text-[11px] text-[var(--text-faint)] mt-1">{{ $t('baziZhengyuan.noSignal') }}</p>
-              </div>
-              <p v-else class="text-[10px] text-[var(--text-faint)] mt-2">{{ $t('baziZhengyuan.timingYearsHint') }}</p>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="zyr-share-target">
+          <BaziZhengyuanReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-heart" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('baziZhengyuan.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('baziZhengyuan.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-heart" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('baziZhengyuan.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('baziZhengyuan.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <BaziZhengyuanReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
-          <UButton
-            color="warning"
-            variant="soft"
-            class="group/btn"
-            @click="handleCopy"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-clipboard-document" class="w-4 h-4" />
-            </template>
-            {{ $t('baziZhengyuan.copyResult') }}
-          </UButton>
           <UButton
             color="warning"
             variant="soft"
@@ -335,6 +129,17 @@
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
             {{ $t('baziZhengyuan.recalculate') }}
+          </UButton>
+          <UButton
+            color="warning"
+            variant="soft"
+            class="group/btn"
+            @click="handleShare"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-share" class="w-4 h-4" />
+            </template>
+            {{ $t('common.shareResult') }}
           </UButton>
           <UButton
             color="neutral"
@@ -350,14 +155,84 @@
         </div>
       </div>
     </div>
+
+    <!-- 分享弹窗 -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="shareDialogOpen"
+          class="fixed inset-0 z-50 flex items-center justify-center"
+          @click.self="shareDialogOpen = false"
+        >
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
+                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
+                </div>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
+              </div>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+                @click="() => { shareDialogOpen = false }"
+              >
+                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
+              </UButton>
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div>
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
+                  {{ shareData?.copyText }}
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
+                  <template #leading>
+                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.copyText') }}
+                </UButton>
+              </div>
+
+              <div v-if="shareData?.screenshotDataUrl">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
+                  <template #leading>
+                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.downloadImage') }}
+                </UButton>
+              </div>
+
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
+                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
+                  {{ shareData.screenshotError }}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { DiZhi } from '~/types/user'
-import type { BaziZhengyuanCalcResult, ZhengyuanTimingYear } from '~/types/bazi-zhengyuan'
-import { getShiShenFull } from '~/utils/bazi/shishen'
+import type { BaziZhengyuanCalcResult } from '~/types/bazi-zhengyuan'
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -387,7 +262,6 @@ const formValues = ref<FormValues>({
 })
 const lastFormValues = ref<Partial<FormValues>>({})
 const calcResult = ref<BaziZhengyuanCalcResult | null>(null)
-const selectedYear = ref<ZhengyuanTimingYear | null>(null)
 
 const aiContent = ref('')
 const aiStreaming = ref(false)
@@ -397,25 +271,25 @@ const baziFormRef = ref<any>(null)
 
 const store = useProfilesStore()
 
-const pillarRows = computed(() => {
-  if (!calcResult.value) return []
-  const chart = calcResult.value.chart
-  const labels = {
-    year: t('baziZhengyuan.yearPillar'),
-    month: t('baziZhengyuan.monthPillar'),
-    day: t('baziZhengyuan.dayPillar'),
-    hour: t('baziZhengyuan.hourPillar'),
-  }
-  const rows = [
-    { label: labels.year, ...chart.year, shishen: getShiShenFull(calcResult.value.riZhu, chart.year.gan) },
-    { label: labels.month, ...chart.month, shishen: getShiShenFull(calcResult.value.riZhu, chart.month.gan) },
-    { label: labels.day, ...chart.day, shishen: getShiShenFull(calcResult.value.riZhu, chart.day.gan) },
-  ]
-  if (chart.hour) {
-    rows.push({ label: labels.hour, ...chart.hour, shishen: getShiShenFull(calcResult.value.riZhu, chart.hour.gan) })
-  }
-  return rows
-})
+// 分享弹窗
+const shareDialogOpen = ref(false)
+const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
+const shareTargetRef = ref<HTMLElement>()
+
+function handleOuterSubmit() {
+  const values = baziFormRef.value?.form
+  if (!values) return
+  // reactive 对象跨组件边界传递后 fetch 会无法克隆，取 plain snapshot 再提交
+  handleSubmit({
+    gender: values.gender,
+    birthDate: values.birthDate,
+    birthHour: values.birthHour,
+    name: values.name || '',
+    formerName: values.formerName || '',
+    formerNameChangedYear: values.formerNameChangedYear,
+    birthProvince: values.birthProvince || '',
+  })
+}
 
 async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
@@ -425,7 +299,6 @@ async function handleSubmit(values: FormValues) {
   calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
-  selectedYear.value = null
   aiStarted.value = false
   aiError.value = null
 
@@ -543,44 +416,50 @@ function resetForm() {
   aiError.value = null
 }
 
-function handleCopy() {
+const { share } = useShare()
+
+async function handleShare() {
   if (!calcResult.value) return
-  const text = `${t('baziZhengyuan.resultTitle')}
 
-${calcResult.value.profile.name ? t('baziZhengyuan.nameLabel') + '：' + calcResult.value.profile.name + '\n' : ''}${t('baziZhengyuan.birthDateLabel')}：${calcResult.value.profile.birthDate}
+  try {
+    const m = calcResult.value.marriage
+    const result = await share({
+      tool: 'bazi-zhengyuan',
+      name: formValues.value.name,
+      summary: `日主${calcResult.value.riZhu} · ${t(`baziZhengyuan.timing.${m.marriageTiming.tendency}`)} · ${t('baziZhengyuan.directionLabel')}${m.spouseDetails.direction}`,
+      shareTarget: shareTargetRef.value,
+      filename: `bazi-zhengyuan-${formValues.value.name || '正缘画像'}-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
+    })
 
-【${t('baziZhengyuan.pillarsTitle')}】
-${pillarRows.value.map(p => `${p.label}：${p.gan}${p.zhi}（${p.shishen}）`).join('\n')}
+    shareData.value = result
+    shareDialogOpen.value = true
+  }
+  catch (e: any) {
+    toast.add({
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
+      color: 'error',
+    })
+  }
+}
 
-${aiContent.value ? '【' + t('baziZhengyuan.interpretation') + '】\n' + aiContent.value : ''}
-`
-  navigator.clipboard.writeText(text).then(() => {
+function copyShareText() {
+  if (!shareData.value) return
+  navigator.clipboard.writeText(shareData.value.copyText).then(() => {
     toast.add({ title: t('share.textCopied'), color: 'success' })
   }).catch(() => {
     toast.add({ title: t('share.copyFail'), color: 'error' })
   })
 }
 
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('baziZhengyuan.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
+function downloadShareImage() {
+  if (!shareData.value?.screenshotDataUrl) return
+  const a = document.createElement('a')
+  a.href = shareData.value.screenshotDataUrl
+  a.download = shareData.value.filename
+  a.click()
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
 useSeoMeta({
@@ -625,40 +504,21 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.zyr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.zy-result-wrap {
+  max-width: 80rem;
 }
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
+
 .bazi-form-wrapper :deep(.space-y-5 > button:last-of-type) {
   display: none;
 }
