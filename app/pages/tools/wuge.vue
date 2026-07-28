@@ -138,142 +138,31 @@
       </div>
 
       <!-- ============ 阶段 3：结果 ============ -->
-      <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('wuge.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ calcResult.surname }} · {{ calcResult.givenName }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 各字笔画 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-pencil-square" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('wuge.strokeBreakdown') }}
-            </h3>
-            <div class="flex flex-wrap gap-3">
-              <div
-                v-for="c in calcResult.chars"
-                :key="c.char"
-                class="flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)]"
-              >
-                <span class="text-lg font-bold text-[var(--text-primary)]">{{ c.char }}</span>
-                <span class="text-xs text-[var(--text-faint)]">{{ c.strokes }} {{ $t('wuge.strokeSuffix') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 五格卡片 -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-            <WugeGridCard
-              :grid="calcResult.grids.tiange"
-              :label="$t('wuge.tiange')"
-              :description="$t('wuge.tiangeDesc')"
-            />
-            <WugeGridCard
-              :grid="calcResult.grids.renge"
-              :label="$t('wuge.renge')"
-              :description="$t('wuge.rengeDesc')"
-            />
-            <WugeGridCard
-              :grid="calcResult.grids.dige"
-              :label="$t('wuge.dige')"
-              :description="$t('wuge.digeDesc')"
-            />
-            <WugeGridCard
-              :grid="calcResult.grids.waige"
-              :label="$t('wuge.waige')"
-              :description="$t('wuge.waigeDesc')"
-            />
-            <WugeGridCard
-              :grid="calcResult.grids.zongge"
-              :label="$t('wuge.zongge')"
-              :description="$t('wuge.zonggeDesc')"
-              class="sm:col-span-2"
-            />
-          </div>
+      <div v-if="phase === 'result' && calcResult" class="max-w-none">
+        <div ref="reportRef" class="wuge-report-share">
+          <WugeReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="aiStreaming"
+            :error="aiError"
+            @retry="startAiStream"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('wuge.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('wuge.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('wuge.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('wuge.reinterpret') }}
-            </UButton>
-          </div>
+        <!-- 重新解读 -->
+        <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-5">
+          <UButton
+            color="warning"
+            variant="soft"
+            size="sm"
+            class="group/btn"
+            @click="startAiStream"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+            </template>
+            {{ $t('wuge.reinterpret') }}
+          </UButton>
         </div>
 
         <!-- 底部操作 -->
@@ -293,7 +182,7 @@
             tool="wuge"
             :name="calcResult.input"
             :summary="`${calcResult.surname}${calcResult.givenName} · 天格${calcResult.grids.tiange.value} · 人格${calcResult.grids.renge.value} · 地格${calcResult.grids.dige.value} · 总格${calcResult.grids.zongge.value}`"
-            :share-target="resultRef"
+            :share-target="reportRef"
             :filename="`wuge-${calcResult.input}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -325,7 +214,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { UserProfile } from '~/types/user'
 
 interface WugeGrid {
@@ -379,7 +267,7 @@ const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const reportRef = ref<HTMLDivElement>()
 
 const toast = useToast()
 
@@ -515,29 +403,6 @@ ${aiContent.value ? '【' + t('wuge.interpretation') + '】\n' + aiContent.value
   })
 }
 
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('wuge.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -588,38 +453,15 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 结果阶段报告需要更宽版面，覆盖外层 max-w-2xl 限制 */
+.wuge-report-share {
+  width: min(100%, 960px);
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+@media (min-width: 1024px) {
+  .wuge-report-share {
+    width: min(92vw, 1100px);
+  }
 }
 </style>
