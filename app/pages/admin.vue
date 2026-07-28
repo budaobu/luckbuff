@@ -149,11 +149,13 @@
               <button v-for="btn in toolbarButtons" :key="btn.label" type="button"
                 class="text-xs px-2.5 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
                 :title="btn.hint"
+                @mousedown.prevent
                 @click="insertSnippet(btn.before, btn.after)"
               >{{ btn.label }}</button>
               <span class="w-px h-4 bg-neutral-800 mx-1" />
               <button type="button"
                 class="text-xs px-2.5 py-1.5 rounded-md text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                @mousedown.prevent
                 @click="imageInput?.click()"
               >插入图片</button>
               <input ref="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden" @change="onImagePicked">
@@ -907,12 +909,14 @@ function insertSnippet(before: string, after: string) {
   }
   const start = el.selectionStart
   const end = el.selectionEnd
+  const scrollTop = el.scrollTop
   const selected = form.content.slice(start, end)
   form.content = form.content.slice(0, start) + before + selected + after + form.content.slice(end)
   nextTick(() => {
-    el.focus()
+    el.focus({ preventScroll: true })
     el.selectionStart = start + before.length
     el.selectionEnd = start + before.length + selected.length
+    el.scrollTop = scrollTop
   })
 }
 
