@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-3xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-3xl mx-auto px-6 py-12" :class="{ 'lenormand-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -190,185 +190,38 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && drawResult">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('lenormand.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ drawResult.spread_name }} · {{ drawResult.question || $t('lenormand.noQuestion') }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 抽牌结果卡片 -->
-          <div class="mb-5">
-            <!-- 九宫格特殊布局 -->
-            <div v-if="drawResult.spread === 'nine'" class="grid grid-cols-3 gap-2 max-w-sm mx-auto">
-              <div
-                v-for="(card, index) in drawResult.cards"
-                :key="index"
-                class="group relative rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] overflow-hidden transition-all duration-300 hover:border-[var(--accent-border-hover)] p-2.5"
-              >
-                <div class="relative mb-2 rounded-lg overflow-hidden h-14">
-                  <div class="absolute inset-0 flex items-center justify-center bg-[var(--accent-bg)]/50">
-                    <span class="text-lg font-bold text-[var(--accent)]">{{ card.id }}</span>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <p class="text-[10px] text-[var(--text-faint)] mb-0.5 tracking-wide">{{ card.position }}</p>
-                  <p class="text-xs font-semibold text-[var(--text-primary)]">{{ card.name }}</p>
-                </div>
-              </div>
-            </div>
-            <!-- 大桌牌阵特殊布局 -->
-            <div v-else-if="drawResult.spread === 'grand'" class="grid grid-cols-6 sm:grid-cols-9 gap-1.5">
-              <div
-                v-for="(card, index) in drawResult.cards"
-                :key="index"
-                class="group relative rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)] overflow-hidden transition-all duration-300 hover:border-[var(--accent-border-hover)] p-1.5"
-              >
-                <div class="relative mb-1 rounded overflow-hidden h-8">
-                  <div class="absolute inset-0 flex items-center justify-center bg-[var(--accent-bg)]/50">
-                    <span class="text-sm font-bold text-[var(--accent)]">{{ card.id }}</span>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <p class="text-[9px] font-semibold text-[var(--text-primary)] truncate">{{ card.name }}</p>
-                </div>
-              </div>
-            </div>
-            <!-- 默认横向布局 -->
-            <div v-else class="flex flex-wrap gap-3 justify-center" :class="drawResult.cards.length > 4 ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5' : ''">
-              <div
-                v-for="(card, index) in drawResult.cards"
-                :key="index"
-                class="group relative rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] overflow-hidden transition-all duration-300 hover:border-[var(--accent-border-hover)]"
-                :style="drawResult.cards.length <= 4 ? 'width: calc(25% - 0.75rem); min-width: 140px;' : ''"
-                :class="drawResult.cards.length > 4 ? 'p-3' : 'p-4'"
-              >
-                <!-- 牌面 -->
-                <div class="relative mb-3 rounded-lg overflow-hidden" :class="drawResult.cards.length > 4 ? 'h-20' : 'h-28'">
-                  <div class="absolute inset-0 flex items-center justify-center bg-[var(--accent-bg)]/40">
-                    <span class="text-2xl font-bold text-[var(--accent)]">{{ card.id }}</span>
-                  </div>
-                </div>
-                <!-- 牌名 -->
-                <div class="text-center">
-                  <p class="text-[10px] text-[var(--text-faint)] mb-1 tracking-wide">{{ card.position }}</p>
-                  <p class="font-semibold" :class="drawResult.cards.length > 4 ? 'text-xs' : 'text-sm text-[var(--text-primary)]'">
-                    {{ card.name }}
-                  </p>
-                  <p class="text-[10px] text-[var(--text-muted)] mt-0.5">{{ card.keyword }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 牌阵统计 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-bar" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('lenormand.statsTitle') }}
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div class="text-center rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)] p-3">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('lenormand.spreadLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--accent-purple)]">{{ drawResult.spread_name }}</p>
-              </div>
-              <div class="text-center rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)] p-3">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('lenormand.cardCountLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ drawResult.cards.length }}</p>
-              </div>
-              <div class="text-center rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)] p-3">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('lenormand.genderLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">
-                  {{ drawResult.gender === 'male' ? $t('lenormand.male') : drawResult.gender === 'female' ? $t('lenormand.female') : '-' }}
-                </p>
-              </div>
-              <div class="text-center rounded-lg border border-[var(--border-light)] bg-[var(--surface-card)] p-3">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">Seed</p>
-                <p class="text-xs font-mono text-[var(--text-muted)] truncate">{{ drawResult.seed }}</p>
-              </div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="lenormand-share-target">
+          <LenormandReport
+            :result="drawResult"
+            :analysis="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('lenormand.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('lenormand.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
+        <LenormandReport
+          :result="drawResult"
+          :analysis="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('lenormand.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('lenormand.reinterpret') }}
-            </UButton>
-          </div>
+        <!-- 重新解读 -->
+        <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-5">
+          <UButton
+            color="warning"
+            variant="soft"
+            size="sm"
+            class="group/btn"
+            @click="startAiStream"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+            </template>
+            {{ $t('lenormand.reinterpret') }}
+          </UButton>
         </div>
 
         <!-- 底部操作 -->
@@ -387,7 +240,7 @@
           <AppShareButton
             tool="lenormand"
             :summary="`${drawResult.spread_name} · ${drawResult.cards.map(c => c.name).join(' · ')}`"
-            :share-target="resultRef"
+            :share-target="shareTargetRef"
             :filename="`lenormand-${drawResult.spread}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -419,14 +272,14 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-
 interface LenormandCard {
   position: string
   id: number
   name: string
   nameEn: string
   keyword: string
+  suit: string
+  polarity: string
 }
 
 interface LenormandDrawResult {
@@ -471,7 +324,7 @@ const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 const toast = useToast()
 
 const canSubmit = computed(() => {
@@ -611,29 +464,6 @@ ${aiContent.value ? '【' + t('lenormand.interpretation') + '】\n' + aiContent.
   })
 }
 
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('lenormand.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const textareaUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)] resize-none',
@@ -687,38 +517,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.lenormand-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.lenormand-result-wrap {
+  max-width: 80rem;
 }
 </style>

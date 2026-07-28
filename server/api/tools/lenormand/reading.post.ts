@@ -4,6 +4,8 @@ interface LenormandCard {
   name: string
   nameEn: string
   keyword: string
+  suit: string
+  polarity: string
 }
 
 interface LenormandDrawResult {
