@@ -366,10 +366,12 @@ export function useShare() {
     if (el) {
       const hiddenChain: { el: HTMLElement; display: string; visibility: string; position: string }[] = []
       const originalFilters: { el: HTMLElement; filter: string }[] = []
+      let offscreen: { position: string; left: string; top: string; zIndex: string } | null = null
+      let placeholder: HTMLElement | null = null
 
       try {
         // 1. 保存元素及其所有父节点的原始 display/visibility 值
-        // html-to-image 无法对 display:none 的元素截图
+        // html-to-image 无法对 display:none 的元素截图（量出的尺寸为 0）
         let cur: HTMLElement | null = el
         while (cur) {
           const computed = window.getComputedStyle(cur)
@@ -381,7 +383,7 @@ export function useShare() {
               position: cur.style.position,
             })
             cur.style.display = 'block'
-            cur.style.visibility = 'visible'
+            cur.style.visibility = ''
             if (computed.position === 'fixed') {
               cur.style.position = 'absolute'
             }
@@ -389,7 +391,32 @@ export function useShare() {
           cur = cur.parentElement
         }
 
-        // 2. 临时关闭 backdrop-blur 等 html-to-image 不支持的 CSS
+        // 2. v-show 隐藏目标显示期间会把页面撑高，先用占位兄弟保布局。
+        // 必须保持可见且在视口坐标内：Chrome 对 display:none 或完全在视口外的
+        // 元素不做完整渲染，html-to-image 克隆到的样式快照会缺内容，截出空白图。
+        // 元素高度常超过视口，absolute+scrollIntoView 会受最大滚动距离限制，
+        // 元素顶部被推出视口上方（实测 top:0 的元素在 maxScroll 页面上 rectTop<0）。
+        // 改用 fixed 定位强制进入视口渲染区，与滚动位置无关。
+        if (hiddenChain.length) {
+          const parent = el.parentNode
+          if (parent) {
+            placeholder = document.createElement('div')
+            placeholder.style.cssText = `width:${el.offsetWidth || 1080}px;height:${el.offsetHeight || 0}px;`
+            parent.insertBefore(placeholder, el)
+          }
+          offscreen = {
+            position: el.style.position,
+            left: el.style.left,
+            top: el.style.top,
+            zIndex: el.style.zIndex,
+          }
+          el.style.position = 'fixed'
+          el.style.left = '0px'
+          el.style.top = '0px'
+          el.style.zIndex = '-1'
+        }
+
+        // 3. 临时关闭 backdrop-blur 等 html-to-image 不支持的 CSS
         const blurEls = el.querySelectorAll('[class*="backdrop-blur"]')
         blurEls.forEach((blurEl) => {
           const htmlEl = blurEl as HTMLElement
@@ -415,7 +442,7 @@ export function useShare() {
           cacheBust: true,
         })
 
-        // 3. 添加水印（颜色随目标底色自适应：亮底用深墨、暗底用亮金）
+        // 4. 添加水印（颜色随目标底色自适应：亮底用深墨、暗底用亮金）
         const ctx = canvas.getContext('2d')!
         const isLightBg = (() => {
           const c = bgColor.replace('#', '')
@@ -433,6 +460,13 @@ export function useShare() {
         screenshotError = e?.message || String(e)
       } finally {
         // 无论成功失败，都必须恢复原始样式，否则 v-show="false" 的隐藏元素会永久可见
+        if (offscreen) {
+          el.style.position = offscreen.position
+          el.style.left = offscreen.left
+          el.style.top = offscreen.top
+          el.style.zIndex = offscreen.zIndex
+        }
+        placeholder?.remove()
         hiddenChain.forEach(({ el, display, visibility, position }) => {
           el.style.display = display
           el.style.visibility = visibility
