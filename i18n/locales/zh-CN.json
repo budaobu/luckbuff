@@ -559,7 +559,8 @@
     "hookJapanPriorityTest": "我的紧急状况优先顺序：{summary}，快来测测你的！",
     "hookJapanPriorityTestDefault": "我刚做完日本很火的心理测试，排了个自己都没想到的顺序。",
     "hookZipingBazi": "我刚完成子平八字精批：{summary}，快来看看吧！",
-    "hookZipingBaziDefault": "刚完成一次子平八字精批，结果很有意思。"
+    "hookZipingBaziDefault": "刚完成一次子平八字精批，结果很有意思。",
+    "hookGenericSummary": "我刚完成正缘画像推演：{summary}，快来看看吧！"
   },
   "seo": {
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
@@ -6473,7 +6474,89 @@
     "timingYearsTitle": "未来年份婚恋机会（评分越高机会越明显）",
     "ageSuffix": "{age}岁",
     "noSignal": "无特别信号",
-    "timingYearsHint": "点按年份查看该年的缘分信号"
+    "timingYearsHint": "点按年份查看该年的缘分信号",
+    "report": {
+      "seal": "正缘印证",
+      "sealFoot": "缘簿承运",
+      "brandName": "正缘推演报告",
+      "generatedAt": "生成时间",
+      "verdict": {
+        "early": "婚缘偏早",
+        "late": "婚缘偏晚",
+        "neutral": "婚缘平缓"
+      },
+      "solarLabel": "公历",
+      "genderLabel": "性别",
+      "ageLabel": "年龄",
+      "dayunLabel": "大运",
+      "genderMale": "男",
+      "genderFemale": "女",
+      "ageValue": "{year} 年 {age} 岁",
+      "ageUnit": "岁",
+      "hourSuffix": " {hour}时",
+      "overviewTitle": "婚缘要素速览",
+      "timingLabel": "婚缘基调",
+      "spouseStarLabel": "配偶星",
+      "peachLabel": "桃花",
+      "hongluanLabel": "红鸾天喜",
+      "coreDataTitle": "命局核心数据",
+      "gejuLabel": "格局",
+      "wangshaiLabel": "日主强弱",
+      "yuelingLabel": "月令旺衰",
+      "wuxingLabel": "五行分布",
+      "xiyongPrefix": "喜用：",
+      "weakLabel": "偏弱",
+      "midLabel": "中和",
+      "strongLabel": "偏强",
+      "baziPanTitle": "八字四柱盘",
+      "rizhuTag": "日主",
+      "dayunTitle": "大运（{age} 岁起运）",
+      "liunianTitle": "流年",
+      "marriageTitle": "婚恋命盘详析",
+      "spouseDetailsLabel": "配偶气质参考",
+      "dynamicsLabel": "相处模式",
+      "stabilityLabel": "稳定性信号",
+      "goodSignalsLabel": "加分项",
+      "riskSignalsLabel": "风险项",
+      "noSignal": "暂无明显信号",
+      "peachSeatTag": "坐桃花",
+      "topYearsLabel": "重点年份：",
+      "ageGap": {
+        "older": "对方偏年长",
+        "similar": "年龄相仿",
+        "younger": "对方偏年轻"
+      },
+      "support": {
+        "supportive": "对你有助益",
+        "neutral": "助益中性",
+        "draining": "相处偏消耗"
+      },
+      "channel": {
+        "far": "远方之缘",
+        "near": "身边之缘",
+        "unknown": "渠道不定"
+      },
+      "pattern": {
+        "partnerLeads": "对方主导",
+        "selfLeads": "你占主导",
+        "balanced": "大体均衡",
+        "clashing": "易有硬碰硬"
+      },
+      "secTiming": "正缘出现时间",
+      "secSigns": "正缘出现征兆",
+      "secPortrait": "正缘画像",
+      "secTone": "婚姻基调与稳定性",
+      "secPeach": "桃花与异性缘",
+      "secDetails": "正缘细节补充",
+      "secStuck": "感情卡点与化解",
+      "secMurmur": "隐士的碎碎念",
+      "pending": "AI 解读生成中…",
+      "streamingHint": "AI 正在逐段撰写正缘报告，内容将实时填充…",
+      "footerNote": "正缘分析仅供参考，不构成任何婚恋决策依据。缘分在天，选择在人。",
+      "titleWithStar": "{riZhu}日主·{star}临缘",
+      "titleNoStar": "{riZhu}日主·正缘画像",
+      "subtitle": "有缘方位 {direction} · {timing}，缘来有期"
+    }
   },
   "zipingBazi": {
     "title": "子平八字",

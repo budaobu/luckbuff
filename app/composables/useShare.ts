@@ -70,6 +70,7 @@ export interface ShareOptions {
     | 'bazi-zhichang-hepan'
     | 'study-fengshui'
     | 'astro-fortune-tune'
+    | 'bazi-zhengyuan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -161,6 +162,7 @@ export function useShare() {
       'bazi-zhichang-hepan': '职场八字合盘',
       'study-fengshui': '书房风水布局',
       'astro-fortune-tune': '占星改运',
+      'bazi-zhengyuan': '正缘画像',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -348,6 +350,9 @@ export function useShare() {
       'study-fengshui': summary
         ? t('share.hookGeneric', { tool: '书房风水布局', summary })
         : t('share.hookGeneric', { tool: '书房风水布局' }),
+      'bazi-zhengyuan': summary
+        ? t('share.hookGenericSummary', { tool: '正缘画像', summary })
+        : t('share.hookGeneric', { tool: '正缘画像' }),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href

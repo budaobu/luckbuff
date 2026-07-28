@@ -559,7 +559,8 @@
     "hookJapanPriorityTest": "My emergency priority order: {summary} — try it yourself!",
     "hookJapanPriorityTestDefault": "I just took the viral Japanese priority test and my order surprised even me.",
     "hookZipingBazi": "I just got a Zi Ping Bazi reading: {summary}. Check it out!",
-    "hookZipingBaziDefault": "I just did a Zi Ping Bazi reading. The result is intriguing."
+    "hookZipingBaziDefault": "I just did a Zi Ping Bazi reading. The result is intriguing.",
+    "hookGenericSummary": "I just finished a Destined Partner reading: {summary}. Check it out!"
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
@@ -6451,7 +6452,89 @@
     "timingYearsTitle": "Romance opportunities by year (higher score = stronger signal)",
     "ageSuffix": "age {age}",
     "noSignal": "No notable signal",
-    "timingYearsHint": "Tap a year to see its romance signals"
+    "timingYearsHint": "Tap a year to see its romance signals",
+    "report": {
+      "seal": "True Love",
+      "sealFoot": "Fate Book",
+      "brandName": "Destined Partner Report",
+      "generatedAt": "Generated",
+      "verdict": {
+        "early": "Leans early",
+        "late": "Leans late",
+        "neutral": "Steady pace"
+      },
+      "solarLabel": "Birth",
+      "genderLabel": "Gender",
+      "ageLabel": "Age",
+      "dayunLabel": "Cycle",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "ageValue": "age {age} in {year}",
+      "ageUnit": "yrs",
+      "hourSuffix": ", {hour} hour",
+      "overviewTitle": "Marriage Chart at a Glance",
+      "timingLabel": "Marriage Tone",
+      "spouseStarLabel": "Spouse Star",
+      "peachLabel": "Peach Blossom",
+      "hongluanLabel": "Hong Luan & Tian Xi",
+      "coreDataTitle": "Core Chart Data",
+      "gejuLabel": "Pattern",
+      "wangshaiLabel": "Day Master Strength",
+      "yuelingLabel": "Seasonal Balance",
+      "wuxingLabel": "Five Elements",
+      "xiyongPrefix": "Favorable: ",
+      "weakLabel": "Weak",
+      "midLabel": "Balanced",
+      "strongLabel": "Strong",
+      "baziPanTitle": "Four Pillars Chart",
+      "rizhuTag": "Day Master",
+      "dayunTitle": "Major Cycles (starts at {age})",
+      "liunianTitle": "Annual Years",
+      "marriageTitle": "Marriage Chart in Detail",
+      "spouseDetailsLabel": "Partner Aura Reference",
+      "dynamicsLabel": "Relationship Dynamics",
+      "stabilityLabel": "Stability Signals",
+      "goodSignalsLabel": "Plus Signals",
+      "riskSignalsLabel": "Risk Signals",
+      "noSignal": "No clear signal yet",
+      "peachSeatTag": "Sits on blossom",
+      "topYearsLabel": "Key years: ",
+      "ageGap": {
+        "older": "Partner likely older",
+        "similar": "Similar age",
+        "younger": "Partner likely younger"
+      },
+      "support": {
+        "supportive": "Supportive to you",
+        "neutral": "Neutral support",
+        "draining": "Somewhat draining"
+      },
+      "channel": {
+        "far": "Fate from afar",
+        "near": "Fate nearby",
+        "unknown": "Channel unclear"
+      },
+      "pattern": {
+        "partnerLeads": "Partner leads",
+        "selfLeads": "You lead",
+        "balanced": "Mostly balanced",
+        "clashing": "Prone to clashes"
+      },
+      "secTiming": "When True Love Appears",
+      "secSigns": "Signs of Its Approach",
+      "secPortrait": "Portrait of the Partner",
+      "secTone": "Marriage Tone & Stability",
+      "secPeach": "Peach Blossom & Charm",
+      "secDetails": "Further Details",
+      "secStuck": "Emotional Blocks & Remedies",
+      "secMurmur": "The Hermit's Murmurs",
+      "pending": "AI reading in progress…",
+      "streamingHint": "AI is writing the report section by section…",
+      "footerNote": "This reading is for reference only and is not a basis for relationship decisions. Fate whispers; you choose.",
+      "titleWithStar": "{riZhu} Day Master · {star} in Fate",
+      "titleNoStar": "{riZhu} Day Master · Partner Portrait",
+      "subtitle": "Auspicious direction {direction} · {timing}, love arrives in season"
+    }
   },
   "zipingBazi": {
     "title": "Zi Ping Bazi",
