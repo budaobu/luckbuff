@@ -5605,7 +5605,30 @@
     "knowledgeCard3Title": "How to read the houses",
     "knowledgeCard3Desc": "This tool uses Whole Sign houses: the ascendant sign becomes the first house, and the twelve houses follow in zodiacal order.",
     "knowledgeCard4Title": "For reference only",
-    "knowledgeCard4Desc": "Chart readings provide tendency and theme references; they should not replace personal judgment, professional advice, or real-world decisions."
+    "knowledgeCard4Desc": "Chart readings provide tendency and theme references; they should not replace personal judgment, professional advice, or real-world decisions.",
+    "report": {
+      "seal": "Qizheng",
+      "sealFoot": "Reference",
+      "brandName": "Qizheng Siyu · Natal Star Chart Report",
+      "generatedAt": "Generated at",
+      "systemLine": "Celestine astronomy engine · true body positions · whole-sign houses",
+      "baseCityLabel": "Location",
+      "longitudeOffsetLabel": "Longitude offset",
+      "houseDensityTitle": "House Energy Distribution",
+      "houseDensityNote": "Counts the Seven Governors and Four Remainders in each house; the more crowded a house, the more prominent its life themes.",
+      "colHouse": "House",
+      "colBodies": "Bodies in House",
+      "colBodies2": "Bodies",
+      "colAspect": "Aspect",
+      "colAngle": "Angle",
+      "colOrb": "Orb",
+      "pending": "AI is still generating; this section will fill in shortly…",
+      "untitledSection": "AI Chart Reading",
+      "angleAscendant": "Ascendant",
+      "angleMidheaven": "Midheaven",
+      "angleDescendant": "Descendant",
+      "angleImumCoeli": "Imum Coeli"
+    }
   },
   "baziShiyeHepan": {
     "knowledgeCard1Title": "Career Bazi Compatibility",

@@ -5627,7 +5627,30 @@
     "knowledgeCard3Title": "宫位怎么看",
     "knowledgeCard3Desc": "本工具采用整宫制，以上升星座为第一宫，依次排布十二宫位，观察各领域的人生主题。",
     "knowledgeCard4Title": "结果仅供参考",
-    "knowledgeCard4Desc": "星盘解读提供的是倾向与主题参考，不应替代个人判断、专业咨询或现实决策。"
+    "knowledgeCard4Desc": "星盘解读提供的是倾向与主题参考，不应替代个人判断、专业咨询或现实决策。",
+    "report": {
+      "seal": "七政四余",
+      "sealFoot": "仅供参考",
+      "brandName": "七政四余 · 本命星盘报告",
+      "generatedAt": "生成时间",
+      "systemLine": "Celestine 天文算法 · 真实星体位置 · 整宫制",
+      "baseCityLabel": "地点",
+      "longitudeOffsetLabel": "经度偏移",
+      "houseDensityTitle": "宫位能量分布",
+      "houseDensityNote": "统计各宫位内的七政四余星体数量，宫位越聚集，对应人生领域的主题越突出。",
+      "colHouse": "宫位",
+      "colBodies": "宫内星体",
+      "colBodies2": "星体",
+      "colAspect": "相位",
+      "colAngle": "角度",
+      "colOrb": "容许度",
+      "pending": "AI 正在推演中，稍后自动填充…",
+      "untitledSection": "AI 星命解读",
+      "angleAscendant": "上升",
+      "angleMidheaven": "天顶",
+      "angleDescendant": "下降",
+      "angleImumCoeli": "天底"
+    }
   },
   "baziShiyeHepan": {
     "knowledgeCard1Title": "事业八字合盘",
