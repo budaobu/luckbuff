@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Missing or invalid name' })
   }
 
-  const { result, error } = calcWuge(body.name)
+  const { result, error } = await calcWuge(body.name)
 
   if (error || !result) {
     throw createError({ statusCode: 400, statusMessage: error || 'Calculation failed' })

@@ -6,7 +6,7 @@
 import { calcPillars } from '~/utils/bazi/pillars'
 import { calcWuxingScore, calcRiZhuStrength, calcXiYongJiShen, calcGeJu } from '~/utils/bazi/analysisCalc'
 import type { BaziChart, WuxingScore } from '~/types/bazi'
-import { calcWuge } from '../wuge/calc'
+import { calcWugeLocal } from '../wuge/calc'
 import { getFortune81 } from '../wuge/fortune81'
 import { getStrokeCount } from '../wuge/strokes'
 import { NAMING_CHAR_POOL, type NamingChar, type Wuxing, type GenderLean } from './chars'
@@ -471,7 +471,7 @@ function scoreName(
   const totalScore = baziScore + phoneticScore + structureScore + meaningScore + tabooScore + styleScore
 
   // 五格
-  const wugeCalc = calcWuge(fullName)
+  const wugeCalc = calcWugeLocal(fullName)
   let wuge: NameCandidate['wuge']
   if (wugeCalc.result) {
     const g = wugeCalc.result.grids
