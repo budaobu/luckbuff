@@ -355,8 +355,10 @@ export function useShare() {
       ? t('share.suffixLiuyao')
       : tool === 'vedic'
         ? t('share.suffixVedic')
-        : t('share.suffix', { name: name || t('common.unknown'), tool: toolName })
-    const copyText = `${hook}\n\n👉 ${url}\n${suffix}`
+        : name
+          ? t('share.suffix', { name, tool: toolName })
+          : ''
+    const copyText = `${hook}\n\n👉 ${url}${suffix ? `\n${suffix}` : ''}`
 
     // 生成分享图
     const el = shareTarget ?? (shareTargetSelector ? document.querySelector(shareTargetSelector) as HTMLElement | null : null)

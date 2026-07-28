@@ -97,6 +97,25 @@ const SPREADS: Record<string, { name: string; positions: SpreadPosition[] }> = {
   },
 }
 
+// 花色（按传统雷诺曼扑克花色）与吉凶倾向
+const SUITS = [
+  'heart', 'heart', 'diamond', 'heart', 'heart', 'club', 'club', 'diamond',
+  'spade', 'diamond', 'club', 'diamond', 'spade', 'club', 'club', 'diamond',
+  'diamond', 'heart', 'spade', 'diamond', 'club', 'diamond', 'club', 'heart',
+  'club', 'spade', 'diamond', 'spade', 'spade', 'heart', 'diamond', 'diamond',
+  'diamond', 'diamond', 'heart', 'diamond', 'spade', 'spade', 'club', 'club',
+  'club', 'club', 'club', 'club', 'diamond', 'diamond', 'club', 'club',
+] as const
+
+const NEGATIVE = new Set([6, 7, 8, 10, 11, 14, 21, 23, 36])
+const NEUTRAL = new Set([1, 3, 13, 17, 19, 20, 22, 25, 26, 27, 28, 29, 30, 35])
+
+function polarityOf(id: number): 'positive' | 'neutral' | 'negative' {
+  if (NEGATIVE.has(id)) return 'negative'
+  if (NEUTRAL.has(id)) return 'neutral'
+  return 'positive'
+}
+
 function makeSeed(question: string): number {
   const data = randomBytes(32).toString('hex') + Date.now().toString() + question
   const hash = createHash('sha256').update(data).digest('hex')
@@ -119,6 +138,8 @@ interface LenormandCard {
   name: string
   nameEn: string
   keyword: string
+  suit: string
+  polarity: string
 }
 
 interface LenormandDrawResult {
@@ -165,6 +186,8 @@ export default defineEventHandler(async (event) => {
       name: picked.name,
       nameEn: picked.nameEn,
       keyword: picked.keyword,
+      suit: SUITS[picked.id - 1]!,
+      polarity: polarityOf(picked.id),
     })
   }
 
