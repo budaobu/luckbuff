@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'xk-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -188,156 +188,25 @@
         </div>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
+      <!-- ============ 阶段 3：结果（纸质报告） ============ -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('xuankong.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('xuankong.sittingFacing') }}：{{ calcResult.sittingLabel }}{{ calcResult.facingLabel }} · {{ $t('xuankong.periodLabel') }}：{{ calcResult.period.name }}（{{ calcResult.period.startYear }}–{{ calcResult.period.endYear }}）
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 九宫飞星盘 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-pie" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('xuankong.chartLegend.period') }} / {{ $t('xuankong.chartLegend.mountain') }} / {{ $t('xuankong.chartLegend.facing') }}
-            </h3>
-            <div class="grid grid-cols-3 gap-2">
-              <div
-                v-for="cell in gridCells"
-                :key="cell.palaceNumber"
-                class="relative rounded-xl border p-3 min-h-[96px] flex flex-col justify-between"
-                :class="cellClass(cell)"
-              >
-                <div class="flex items-start justify-between">
-                  <span class="text-[10px] text-[var(--text-faint)]">{{ t(`xuankong.palaceNames.${palaceNameKey(cell.name)}`) }}</span>
-                  <span class="text-[10px] text-[var(--text-faint)]">{{ t(`xuankong.directions.${directionKey(cell.direction)}`) }}</span>
-                </div>
-                <div class="flex items-center justify-center gap-1.5 py-1">
-                  <span class="text-lg font-bold" :class="starClass(cell.periodStar, 'period')">{{ cell.periodStar }}</span>
-                  <span class="text-xs text-[var(--text-faint)]">/</span>
-                  <span class="text-lg font-bold" :class="starClass(cell.mountainStar, 'mountain')">{{ cell.mountainStar }}</span>
-                  <span class="text-xs text-[var(--text-faint)]">/</span>
-                  <span class="text-lg font-bold" :class="starClass(cell.facingStar, 'facing')">{{ cell.facingStar }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 格局判断 -->
-          <div v-if="calcResult.pattern" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-pie" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('xuankong.patternLabel') }}
-            </h3>
-            <p class="text-base font-bold text-[var(--accent)]">
-              {{ t(`xuankong.patterns.${calcResult.pattern.key}`) }}
-            </p>
-            <p class="text-xs text-[var(--text-muted)] mt-1.5 leading-relaxed">
-              {{ t(`xuankong.patternDescriptions.${calcResult.pattern.key}`) }}
-            </p>
-          </div>
-
-          <!-- 兼向警告 -->
-          <div v-if="calcResult.warning" class="rounded-xl border border-amber-500/20 bg-amber-500/[0.05] p-4 mb-5">
-            <div class="flex items-start gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-amber-400 mt-0.5" />
-              <div>
-                <p class="text-sm font-medium text-amber-400">{{ $t('xuankong.warningLabel') }}</p>
-                <p class="text-xs text-[var(--text-muted)] mt-1">{{ calcResult.warning }}</p>
-              </div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="xkr-share-target">
+          <XuankongReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('xuankong.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('xuankong.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title + index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('xuankong.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 免责声明 -->
-          <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-            <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-              {{ $t('xuankong.disclaimer') }}
-            </p>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('xuankong.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <XuankongReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -355,7 +224,7 @@
           <AppShareButton
             tool="xuankong-fengshui"
             :summary="`${calcResult.sittingLabel}${calcResult.facingLabel} · ${calcResult.period.name}`"
-            :share-target="resultRef"
+            :share-target="shareTargetRef"
             :filename="`xuankong-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -387,8 +256,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-
 interface CalcResult {
   direction: number
   year: number
@@ -438,7 +305,7 @@ const form = reactive({
   usage: 'residential' as 'residential' | 'office' | 'shop',
 })
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 const toast = useToast()
 const compassRef = ref<HTMLDivElement>()
 const dragging = ref(false)
@@ -657,54 +524,6 @@ function palaceNameKey(name: string): string {
   return map[name] || 'zhong'
 }
 
-function directionKey(dir: string): string {
-  const map: Record<string, string> = {
-    北: 'n', 东北: 'ne', 东: 'e', 东南: 'se', 南: 's', 西南: 'sw', 西: 'w', 西北: 'nw', 中宫: 'center',
-  }
-  return map[dir] || 'center'
-}
-
-function cellClass(cell: CalcResult['palaces'][number]) {
-  const isProsperous = cell.periodStar === calcResult.value?.period.number
-    || cell.mountainStar === calcResult.value?.period.number
-    || cell.facingStar === calcResult.value?.period.number
-  if (isProsperous) {
-    return 'border-[var(--accent-border)] bg-[var(--accent-bg)]/40'
-  }
-  return 'border-[var(--border-light)] bg-[var(--surface-card)]'
-}
-
-function starClass(star: number, type: 'period' | 'mountain' | 'facing') {
-  const period = calcResult.value?.period.number
-  if (star === period) return 'text-[var(--accent)]'
-  if (star === 5 || star === 2) return 'text-red-400/80'
-  if (type === 'period') return 'text-[var(--text-muted)]'
-  return 'text-[var(--text-primary)]'
-}
-
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('xuankong.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -755,38 +574,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.xkr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.xk-result-wrap {
+  max-width: 80rem;
 }
 </style>
