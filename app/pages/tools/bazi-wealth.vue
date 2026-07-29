@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'bw-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -237,155 +237,33 @@
         </div>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
+      <!-- ============ 阶段 3：结果（纸质报告） ============ -->
       <div v-if="phase === 'result' && chart">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ form.name ? $t('baziWealth.resultTitleWithName', { name: form.name }) : $t('baziWealth.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('bazi.chartSubtitle', { riZhu: chart.riZhu, strength: chart.riZhuStrength, geju: chart.geju }) }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 四柱卡片 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-table-cells" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('baziPan.fourPillars') }}
-            </h3>
-            <div class="grid grid-cols-4 gap-2 text-center">
-              <div class="space-y-1">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.yearPillar') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ chart.year.gan }}{{ chart.year.zhi }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.monthPillar') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ chart.month.gan }}{{ chart.month.zhi }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.dayPillar') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ chart.day.gan }}{{ chart.day.zhi }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.hourPillar') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ chart.hour ? chart.hour.gan + chart.hour.zhi : '?' }}</p>
-              </div>
-            </div>
-            <!-- 五行分数 -->
-            <div class="mt-4 pt-4 border-t border-[var(--border-light)]">
-              <div class="flex items-center justify-between text-xs mb-2">
-                <span class="text-[var(--text-faint)]">{{ $t('bazi.wuxingStrength') }}</span>
-                <span class="text-[var(--text-muted)]">{{ $t('baziWealth.xiyongLabel') }}: {{ chart.xiyong }} · {{ $t('baziWealth.jishenLabel') }}: {{ chart.jishen }}</span>
-              </div>
-              <div class="grid grid-cols-5 gap-2 text-center">
-                <div v-for="(label, key) in wuxingLabels" :key="key">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ label }}</p>
-                  <p class="text-sm font-semibold" :style="{ color: wuxingColors[key] }">{{ chart.wuxingScore[key as keyof typeof chart.wuxingScore] }}%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 大运财富概览 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-bar" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('baziWealth.dayunWealthTitle') }}
-            </h3>
-            <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
-              <div
-                v-for="dy in chart.dayuns.slice(0, 8)"
-                :key="dy.index"
-                class="flex items-center gap-3 text-sm"
-                :class="chart.currentDaYun?.index === dy.index ? 'text-[var(--accent)] font-medium' : 'text-[var(--text-body)]'"
-              >
-                <span class="text-[10px] text-[var(--text-faint)] w-16">{{ dy.ageRange[0] }}-{{ dy.ageRange[1] }}{{ $t('bazi.chartAgeSuffix') }}</span>
-                <span class="font-medium w-12">{{ dy.gan }}{{ dy.zhi }}</span>
-                <span v-if="chart.currentDaYun?.index === dy.index" class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]">{{ $t('bazi.currentLabel') }}</span>
-              </div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="bwr-share-target">
+          <BaziWealthReport
+            :chart="chart"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :birth-date="form.birthDate"
+            :birth-hour="form.birthHour"
+            :gender="form.gender"
+            :name="form.name"
+          />
         </div>
 
-        <!-- AI 财富解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('baziWealth.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('baziWealth.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('baziWealth.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('baziWealth.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <BaziWealthReport
+          :chart="chart"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :birth-date="form.birthDate"
+          :birth-hour="form.birthHour"
+          :gender="form.gender"
+          :name="form.name"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -404,7 +282,7 @@
             tool="bazi-wealth"
             :name="form.name"
             :summary="`日主${chart.riZhu}（${chart.riZhuStrength}）· 喜用${chart.xiyong} · 格局${chart.geju}`"
-            :share-target="resultRef"
+            :share-target="shareTargetRef"
             :filename="`bazi-wealth-${form.name || 'wealth'}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -436,7 +314,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
@@ -500,7 +377,7 @@ const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 
 const toast = useToast()
 const { calc } = useBaziCalc()
@@ -510,22 +387,6 @@ const canSubmit = computed(() => {
 })
 
 const shichenOptions = [...SHICHEN_OPTIONS]
-
-const wuxingLabels: Record<string, string> = {
-  木: t('bazi.wuxingWood'),
-  火: t('bazi.wuxingFire'),
-  土: t('bazi.wuxingEarth'),
-  金: t('bazi.wuxingMetal'),
-  水: t('bazi.wuxingWater'),
-}
-
-const wuxingColors: Record<string, string> = {
-  木: '#4ade80',
-  火: '#f87171',
-  土: '#fbbf24',
-  金: '#e5e7eb',
-  水: '#60a5fa',
-}
 
 async function handleSubmit() {
   if (!canSubmit.value) return
@@ -645,29 +506,6 @@ ${aiContent.value ? '【' + $t('baziWealth.interpretation') + '】\n' + aiConten
   })
 }
 
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('baziWealth.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -723,38 +561,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.bwr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.bw-result-wrap {
+  max-width: 80rem;
 }
 </style>
