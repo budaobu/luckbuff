@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-3xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-3xl mx-auto px-6 py-12" :class="{ 'ty-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
@@ -137,140 +137,43 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <!-- 概览 -->
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-5">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-            <div class="rounded-lg bg-[var(--surface-dropdown)] p-3">
-              <div class="text-[11px] text-[var(--text-faint)]">{{ $t('taiyi.accumulatedYears') }}</div>
-              <div class="font-semibold text-[var(--text-primary)]">{{ chartResult.accumulatedYears.accumulatedYears }}</div>
-            </div>
-            <div class="rounded-lg bg-[var(--surface-dropdown)] p-3">
-              <div class="text-[11px] text-[var(--text-faint)]">{{ $t('taiyi.cyclePosition') }}</div>
-              <div class="font-semibold text-[var(--text-primary)]">{{ chartResult.yearChart.chaoShenJieQi.cyclePosition }}</div>
-            </div>
-            <div class="rounded-lg bg-[var(--surface-dropdown)] p-3">
-              <div class="text-[11px] text-[var(--text-faint)]">{{ $t('taiyi.chaoShenJieQi') }}</div>
-              <div class="font-semibold text-[var(--text-primary)]">{{ chartResult.yearChart.chaoShenJieQi.state }}</div>
-            </div>
-            <div class="rounded-lg bg-[var(--surface-dropdown)] p-3">
-              <div class="text-[11px] text-[var(--text-faint)]">阴阳局</div>
-              <div class="font-semibold text-[var(--text-primary)]">{{ chartResult.yearChart.yinYangJu }}{{ chartResult.yearChart.juNumber }}局</div>
-            </div>
-          </div>
-
-          <div class="mt-4 pt-4 border-t border-[var(--border-subtle)]">
-            <div class="text-xs text-[var(--text-muted)] mb-2">四柱干支</div>
-            <div class="flex flex-wrap gap-2 text-sm">
-              <span class="px-2 py-1 rounded bg-[var(--surface-dropdown)] text-[var(--text-primary)]">年 {{ chartResult.pillars.year }}</span>
-              <span class="px-2 py-1 rounded bg-[var(--surface-dropdown)] text-[var(--text-primary)]">月 {{ chartResult.pillars.month }}</span>
-              <span class="px-2 py-1 rounded bg-[var(--surface-dropdown)] text-[var(--text-primary)]">日 {{ chartResult.pillars.day }}</span>
-              <span class="px-2 py-1 rounded bg-[var(--surface-dropdown)] text-[var(--text-primary)]">时 {{ chartResult.pillars.hour }}</span>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="tyr-share-target">
+          <TaiyiReport
+            :chart="chartResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :question-type="form.questionType"
+            :question-type-label="questionTypeLabel"
+            :datetime="form.datetime"
+          />
         </div>
 
-        <!-- 四盘卡片 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          <div
-            v-for="pan in [chartResult.yearChart, chartResult.monthChart, chartResult.dayChart, chartResult.hourChart]"
-            :key="pan.level"
-            class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4"
-          >
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="font-semibold text-[var(--text-primary)]">{{ pan.levelLabel }}</h3>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--accent-bg)] text-[var(--accent)]">
-                {{ pan.yinYangJu }}{{ pan.juNumber }}局
-              </span>
-            </div>
-
-            <div class="space-y-2 text-sm mb-4">
-              <div class="flex justify-between">
-                <span class="text-[var(--text-muted)]">太乙宫</span>
-                <span class="font-medium text-[var(--text-primary)]">{{ getPalaceLabel(pan.taiyiGong) }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[var(--text-muted)]">计神宫</span>
-                <span class="font-medium text-[var(--text-primary)]">{{ getPalaceLabel(pan.keySpirits.jiShenGong) }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[var(--text-muted)]">文昌宫</span>
-                <span class="font-medium text-[var(--text-primary)]">{{ getPalaceLabel(pan.keySpirits.wenChangGong) }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[var(--text-muted)]">天目</span>
-                <span class="font-medium text-[var(--text-primary)]">{{ getPalaceLabel(pan.keySpirits.tianMuGong) }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-[var(--text-muted)]">地目</span>
-                <span class="font-medium text-[var(--text-primary)]">{{ getPalaceLabel(pan.keySpirits.diMuGong) }}</span>
-              </div>
-            </div>
-
-            <div class="border-t border-[var(--border-subtle)] pt-3">
-              <div class="text-xs text-[var(--text-muted)] mb-2">十六神分布</div>
-              <div class="grid grid-cols-4 gap-2 text-xs">
-                <div
-                  v-for="god in pan.gods"
-                  :key="god.name"
-                  class="rounded-md px-2 py-1.5 text-center"
-                  :class="godNatureClass(god.nature)"
-                >
-                  <div class="font-medium">{{ god.name }}</div>
-                  <div class="text-[10px] opacity-80">{{ getPalaceLabel(god.palace) }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">太乙占事解读</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">解读中</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <div v-if="aiContent" class="space-y-3">
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] p-4">
-              <div class="text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">{{ aiContent }}</div>
-            </div>
-          </div>
-
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">正在生成解读…</p>
-            </div>
-          </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-        </div>
+        <TaiyiReport
+          :chart="chartResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :question-type="form.questionType"
+          :question-type-label="questionTypeLabel"
+          :datetime="form.datetime"
+          @retry="startAiStream(chartResult)"
+        />
 
         <!-- 底部操作 -->
-        <div class="flex gap-3 justify-center flex-wrap">
+        <div class="flex gap-3 justify-center mt-10 flex-wrap">
           <UButton color="warning" variant="soft" class="group/btn" @click="resetForm">
             <template #leading>
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
             {{ $t('taiyi.recalculate') }}
+          </UButton>
+          <UButton color="warning" variant="soft" class="group/btn" @click="handleShare">
+            <template #leading>
+              <UIcon name="i-heroicons-share" class="w-4 h-4" />
+            </template>
+            {{ $t('common.shareResult') }}
           </UButton>
           <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"  @click="() => { navigateTo('/tools') }">
             <template #leading>
@@ -281,13 +184,84 @@
         </div>
       </div>
     </div>
+
+    <!-- 分享弹窗 -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="shareDialogOpen"
+          class="fixed inset-0 z-50 flex items-center justify-center"
+          @click.self="shareDialogOpen = false"
+        >
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
+                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
+                </div>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
+              </div>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+                @click="() => { shareDialogOpen = false }"
+              >
+                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
+              </UButton>
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div>
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
+                  {{ shareData?.copyText }}
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
+                  <template #leading>
+                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.copyText') }}
+                </UButton>
+              </div>
+
+              <div v-if="shareData?.screenshotDataUrl">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
+                  <template #leading>
+                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.downloadImage') }}
+                </UButton>
+              </div>
+
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
+                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
+                  {{ shareData.screenshotError }}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { TaiyiChartResult, QuestionType } from '~~/server/utils/taiyi/types'
 
-const localePath = useLocalePath()
 const { t } = useI18n()
 const toast = useToast()
 
@@ -444,6 +418,54 @@ function resetForm() {
   aiError.value = null
 }
 
+// 分享弹窗
+const shareDialogOpen = ref(false)
+const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
+const shareTargetRef = ref<HTMLElement>()
+
+const { share } = useShare()
+
+async function handleShare() {
+  if (!chartResult.value) return
+
+  try {
+    const result = await share({
+      tool: 'taiyi',
+      summary: `太乙落${getPalaceLabel(chartResult.value.yearChart.taiyiGong)} · ${chartResult.value.yearChart.yinYangJu}${chartResult.value.yearChart.juNumber}局`,
+      shareTarget: shareTargetRef.value,
+      filename: `taiyi-${questionTypeLabel.value}-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
+    })
+
+    shareData.value = result
+    shareDialogOpen.value = true
+  } catch (e: any) {
+    toast.add({
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
+      color: 'error',
+    })
+  }
+}
+
+function copyShareText() {
+  if (!shareData.value) return
+  navigator.clipboard.writeText(shareData.value.copyText).then(() => {
+    toast.add({ title: t('share.textCopied'), color: 'success' })
+  }).catch(() => {
+    toast.add({ title: t('share.copyFail'), color: 'error' })
+  })
+}
+
+function downloadShareImage() {
+  if (!shareData.value?.screenshotDataUrl) return
+  const a = document.createElement('a')
+  a.href = shareData.value.screenshotDataUrl
+  a.download = shareData.value.filename
+  a.click()
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
+}
+
 function getPalaceLabel(palace: number): string {
   const labels: Record<number, string> = {
     1: '坎一',
@@ -457,12 +479,6 @@ function getPalaceLabel(palace: number): string {
     9: '离九',
   }
   return labels[palace] ?? `宫${palace}`
-}
-
-function godNatureClass(nature: string): string {
-  if (nature === '吉') return 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400'
-  if (nature === '凶') return 'bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400'
-  return 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] text-[var(--text-muted)]'
 }
 
 // SEO
@@ -504,3 +520,20 @@ useHead(() => ({
   ],
 }))
 </script>
+
+<style scoped>
+.tyr-share-target {
+  width: 1080px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.ty-result-wrap {
+  max-width: 80rem;
+}
+</style>
