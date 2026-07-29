@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zb-result-wrap': phase === 'result' }">
       <!-- 表单阶段 -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
@@ -157,152 +157,25 @@
         </div>
       </div>
 
-      <!-- 结果阶段 -->
+      <!-- 结果阶段（纸质报告） -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('zibaifeixing.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('zibaifeixing.dateSummary', {
-                year: calcResult.input.year,
-                month: calcResult.input.month,
-                day: calcResult.input.day,
-                branch: calcResult.input.lunarYearBranch,
-                jieqi: calcResult.currentJieqi.name,
-              }) }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 入中星摘要 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-star" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('zibaifeixing.centerLabel') }}
-            </h3>
-            <div class="grid grid-cols-3 gap-3">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('zibaifeixing.yearLabelShort') }}</p>
-                <p class="text-2xl font-bold" :class="starClass(calcResult.yearCenter)">{{ calcResult.yearCenter }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('zibaifeixing.monthLabelShort') }}</p>
-                <p class="text-2xl font-bold" :class="starClass(calcResult.monthCenter)">{{ calcResult.monthCenter }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('zibaifeixing.dayLabelShort') }}</p>
-                <p class="text-2xl font-bold" :class="starClass(calcResult.dayCenter)">{{ calcResult.dayCenter }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 九宫紫白盘 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-pie" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('zibaifeixing.chartLegend.year') }} / {{ $t('zibaifeixing.chartLegend.month') }} / {{ $t('zibaifeixing.chartLegend.day') }}
-            </h3>
-            <div class="grid grid-cols-3 gap-2">
-              <div
-                v-for="cell in gridCells"
-                :key="cell.palaceNumber"
-                class="relative rounded-xl border p-3 min-h-[96px] flex flex-col justify-between"
-                :class="cellClass(cell)"
-              >
-                <div class="flex items-start justify-between">
-                  <span class="text-[10px] text-[var(--text-faint)]">{{ t(`zibaifeixing.palaceNames.${palaceNameKey(cell.name)}`) }}</span>
-                  <span class="text-[10px] text-[var(--text-faint)]">{{ t(`zibaifeixing.directions.${directionKey(cell.direction)}`) }}</span>
-                </div>
-                <div class="flex items-center justify-center gap-1.5 py-1">
-                  <span class="text-lg font-bold" :class="starClass(cell.yearStar)">{{ cell.yearStar }}</span>
-                  <span class="text-xs text-[var(--text-faint)]">/</span>
-                  <span class="text-lg font-bold" :class="starClass(cell.monthStar)">{{ cell.monthStar }}</span>
-                  <span class="text-xs text-[var(--text-faint)]">/</span>
-                  <span class="text-lg font-bold" :class="starClass(cell.dayStar)">{{ cell.dayStar }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="zbr-share-target">
+          <ZibaiReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('zibaifeixing.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('zibaifeixing.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title + index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('zibaifeixing.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-            <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-              {{ $t('zibaifeixing.disclaimer') }}
-            </p>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('zibaifeixing.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <ZibaiReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -317,6 +190,12 @@
             </template>
             {{ $t('zibaifeixing.copyResult') }}
           </UButton>
+          <AppShareButton
+            tool="zibaifeixing"
+            :summary="`${calcResult.input.year}-${calcResult.input.month}-${calcResult.input.day} · ${t('zibaifeixing.chartLegend.year')}${calcResult.yearCenter}/${t('zibaifeixing.chartLegend.month')}${calcResult.monthCenter}/${t('zibaifeixing.chartLegend.day')}${calcResult.dayCenter}`"
+            :share-target="shareTargetRef"
+            :filename="`zibaifeixing-${new Date().toISOString().slice(0, 10)}.png`"
+          />
           <UButton
             color="warning"
             variant="soft"
@@ -346,8 +225,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-
 interface CalcResult {
   input: {
     year: number
@@ -386,7 +263,7 @@ const form = reactive({
   intent: 'general' as 'general' | 'wealth' | 'health' | 'love' | 'study' | 'travel' | 'renovation',
 })
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 const toast = useToast()
 
 const canSubmit = computed(() => {
@@ -561,50 +438,6 @@ function palaceNameKey(name: string): string {
   return map[name] || 'zhong'
 }
 
-function directionKey(dir: string): string {
-  const map: Record<string, string> = {
-    北: 'n', 东北: 'ne', 东: 'e', 东南: 'se', 南: 's', 西南: 'sw', 西: 'w', 西北: 'nw', 中宫: 'center',
-  }
-  return map[dir] || 'center'
-}
-
-function cellClass(cell: CalcResult['palaces'][number]) {
-  const dangerous = [cell.yearStar, cell.monthStar, cell.dayStar].some(s => s === 5 || s === 2)
-  if (dangerous) {
-    return 'border-red-400/20 bg-red-400/[0.06]'
-  }
-  return 'border-[var(--border-light)] bg-[var(--surface-card)]'
-}
-
-function starClass(star: number) {
-  if (star === 5) return 'text-red-400'
-  if (star === 2) return 'text-orange-400'
-  if ([1, 6, 8, 9].includes(star)) return 'text-[var(--accent)]'
-  return 'text-[var(--text-primary)]'
-}
-
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('zibaifeixing.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
 }
@@ -654,38 +487,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.zbr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.zb-result-wrap {
+  max-width: 80rem;
 }
 </style>

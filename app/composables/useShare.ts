@@ -39,6 +39,7 @@ export interface ShareOptions {
     | 'cezi-battle'
     | 'lenormand'
     | 'xuankong-fengshui'
+    | 'zibaifeixing'
     | 'jinri-yunshi'
     | 'jishi'
     | 'wuxing-chuanyi'
@@ -133,6 +134,7 @@ export function useShare() {
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',
       'xuankong-fengshui': '玄空风水',
+      zibaifeixing: '紫白飞星',
       'jinri-yunshi': '今日运势',
       jishi: '今日吉时',
       'wuxing-chuanyi': '五行穿衣指南',
