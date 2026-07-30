@@ -6,17 +6,17 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'ky-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
         <div class="mb-8">
           <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Feng Shui</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('fengshui.title') }}
+            {{ $t('kanyu.title') }}
           </h1>
           <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('fengshui.subtitle') }}
+            {{ $t('kanyu.subtitle') }}
           </p>
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
@@ -24,7 +24,7 @@
         <!-- 顶部免责声明 -->
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 mb-5">
           <p class="text-[11px] text-[var(--text-faint)] text-center leading-relaxed">
-            {{ $t('fengshui.disclaimer') }}
+            {{ $t('kanyu.disclaimer') }}
           </p>
         </div>
 
@@ -34,7 +34,7 @@
           <div class="p-6 space-y-5">
             <!-- 档案快选区 -->
             <div v-if="profiles.length > 0" class="space-y-2">
-              <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('fengshui.selectProfile') }}</label>
+              <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('kanyu.selectProfile') }}</label>
               <div class="flex flex-wrap gap-2">
                 <button
                   v-for="profile in profiles"
@@ -54,14 +54,14 @@
             </div>
             <div v-else class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
               <p class="text-sm text-[var(--text-faint)]">
-                {{ $t('fengshui.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[var(--accent)] hover:underline">{{ $t('fengshui.goSettings') }}</NuxtLink>{{ $t('fengshui.createSuffix') }}
+                {{ $t('kanyu.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[var(--accent)] hover:underline">{{ $t('kanyu.goSettings') }}</NuxtLink>{{ $t('kanyu.createSuffix') }}
               </p>
             </div>
 
             <!-- 性别 -->
             <div>
               <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fengshui.genderLabel') }} <span class="text-[var(--accent)]">*</span>
+                {{ $t('kanyu.genderLabel') }} <span class="text-[var(--accent)]">*</span>
               </label>
               <div class="flex gap-3">
                 <button
@@ -90,7 +90,7 @@
             <!-- 出生日期 -->
             <div class="space-y-1.5">
               <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
-                {{ $t('fengshui.birthDateLabel') }} <span class="text-[var(--accent)]">*</span>
+                {{ $t('kanyu.birthDateLabel') }} <span class="text-[var(--accent)]">*</span>
               </label>
               <UPopover>
                 <UButton
@@ -100,7 +100,7 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('fengshui.birthDatePlaceholder') }}
+                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('kanyu.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
@@ -111,13 +111,13 @@
             <!-- 出生时辰 -->
             <div>
               <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fengshui.birthHourLabel') }}
+                {{ $t('kanyu.birthHourLabel') }}
               </label>
               <USelectMenu
                 v-model="form.birthHour"
                 :items="shichenOptions as any"
                 value-key="dizhi"
-                :placeholder="$t('fengshui.birthHourPlaceholder')"
+                :placeholder="$t('kanyu.birthHourPlaceholder')"
                 class="w-full"
                 :ui="selectUi"
               />
@@ -126,7 +126,7 @@
             <!-- 宅朝向角度 -->
             <div>
               <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fengshui.directionLabel') }} <span class="text-[var(--accent)]">*</span>
+                {{ $t('kanyu.directionLabel') }} <span class="text-[var(--accent)]">*</span>
               </label>
               <div class="flex items-center gap-3">
                 <UInput
@@ -134,27 +134,27 @@
                   type="number"
                   :min="0"
                   :max="360"
-                  :placeholder="$t('fengshui.directionPlaceholder')"
+                  :placeholder="$t('kanyu.directionPlaceholder')"
                   class="w-full"
                   :ui="inputUi"
                 />
               </div>
               <p class="text-[11px] text-[var(--text-faint)] mt-1.5">
-                {{ $t('fengshui.directionHint') }}
+                {{ $t('kanyu.directionHint') }}
               </p>
             </div>
 
             <!-- 建造年份 -->
             <div>
               <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fengshui.buildYearLabel') }} <span class="text-[var(--text-faint)]">（{{ $t('common.optional') }}）</span>
+                {{ $t('kanyu.buildYearLabel') }} <span class="text-[var(--text-faint)]">（{{ $t('common.optional') }}）</span>
               </label>
               <UInput
                 v-model.number="form.buildYear"
                 type="number"
                 :min="1900"
                 :max="2100"
-                :placeholder="$t('fengshui.buildYearPlaceholder')"
+                :placeholder="$t('kanyu.buildYearPlaceholder')"
                 class="w-full"
                 :ui="inputUi"
               />
@@ -163,14 +163,14 @@
             <!-- 入住年份 -->
             <div>
               <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fengshui.moveInYearLabel') }} <span class="text-[var(--text-faint)]">（{{ $t('common.optional') }}）</span>
+                {{ $t('kanyu.moveInYearLabel') }} <span class="text-[var(--text-faint)]">（{{ $t('common.optional') }}）</span>
               </label>
               <UInput
                 v-model.number="form.moveInYear"
                 type="number"
                 :min="1900"
                 :max="2100"
-                :placeholder="$t('fengshui.moveInYearPlaceholder')"
+                :placeholder="$t('kanyu.moveInYearPlaceholder')"
                 class="w-full"
                 :ui="inputUi"
               />
@@ -188,42 +188,42 @@
               <template #leading>
                 <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
               </template>
-              {{ $t('fengshui.submitBtn') }}
+              {{ $t('kanyu.submitBtn') }}
             </UButton>
           </div>
         </div>
 
         <!-- 风水知识卡片 -->
         <div class="mt-6">
-          <h3 class="text-xs font-medium text-[var(--text-muted)] mb-3">{{ $t('fengshui.knowledgeTitle') }}</h3>
+          <h3 class="text-xs font-medium text-[var(--text-muted)] mb-3">{{ $t('kanyu.knowledgeTitle') }}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
               <div class="flex items-center gap-2 mb-2">
                 <UIcon name="i-heroicons-compass" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('fengshui.knowledgeCard1Title') }}</h4>
+                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('kanyu.knowledgeCard1Title') }}</h4>
               </div>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('fengshui.knowledgeCard1Desc') }}</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('kanyu.knowledgeCard1Desc') }}</p>
             </div>
             <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
               <div class="flex items-center gap-2 mb-2">
                 <UIcon name="i-heroicons-home" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('fengshui.knowledgeCard2Title') }}</h4>
+                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('kanyu.knowledgeCard2Title') }}</h4>
               </div>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('fengshui.knowledgeCard2Desc') }}</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('kanyu.knowledgeCard2Desc') }}</p>
             </div>
             <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
               <div class="flex items-center gap-2 mb-2">
                 <UIcon name="i-heroicons-star" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('fengshui.knowledgeCard3Title') }}</h4>
+                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('kanyu.knowledgeCard3Title') }}</h4>
               </div>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('fengshui.knowledgeCard3Desc') }}</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('kanyu.knowledgeCard3Desc') }}</p>
             </div>
             <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
               <div class="flex items-center gap-2 mb-2">
                 <UIcon name="i-heroicons-shield-exclamation" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('fengshui.knowledgeCard4Title') }}</h4>
+                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('kanyu.knowledgeCard4Title') }}</h4>
               </div>
-              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('fengshui.knowledgeCard4Desc') }}</p>
+              <p class="text-xs text-[var(--text-muted)] leading-relaxed">{{ $t('kanyu.knowledgeCard4Desc') }}</p>
             </div>
           </div>
         </div>
@@ -238,127 +238,29 @@
             </div>
             <div class="absolute inset-0 rounded-2xl bg-[var(--accent)]/10 animate-ping" />
           </div>
-          <p class="text-sm text-[var(--text-muted)]">{{ $t('fengshui.calculating') }}</p>
+          <p class="text-sm text-[var(--text-muted)]">{{ $t('kanyu.calculating') }}</p>
         </div>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
-      <div v-if="phase === 'result'" ref="resultRef">
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('fengshui.resultTitle') }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ directionText }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+      <!-- ============ 阶段 3：结果（纸质报告） ============ -->
+      <div v-if="phase === 'result' && calcResult">
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="kyr-share-target">
+          <FengshuiReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- 输入信息概览 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-            <UIcon name="i-heroicons-clipboard-document-list" class="w-4 h-4 text-[var(--accent-muted)]" />
-            {{ $t('fengshui.inputSummary') }}
-          </h3>
-          <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-[var(--text-muted)]">{{ $t('fengshui.genderLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.gender === 'male' ? $t('common.male') : $t('common.female') }}</div>
-            <div class="text-[var(--text-muted)]">{{ $t('fengshui.birthDateLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.birthDate }}</div>
-            <div class="text-[var(--text-muted)]">{{ $t('fengshui.birthHourLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.birthHour ? shichenMap[form.birthHour] : $t('fengshui.unknownHour') }}</div>
-            <div class="text-[var(--text-muted)]">{{ $t('fengshui.directionLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.direction }}° — {{ directionName }}</div>
-            <div v-if="form.buildYear" class="text-[var(--text-muted)]">{{ $t('fengshui.buildYearLabel') }}</div>
-            <div v-if="form.buildYear" class="text-[var(--text-primary)]">{{ form.buildYear }}</div>
-            <div v-if="form.moveInYear" class="text-[var(--text-muted)]">{{ $t('fengshui.moveInYearLabel') }}</div>
-            <div v-if="form.moveInYear" class="text-[var(--text-primary)]">{{ form.moveInYear }}</div>
-          </div>
-        </div>
-
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('fengshui.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('fengshui.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title + index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('fengshui.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 固定提示 -->
-          <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-            <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-              {{ $t('fengshui.disclaimer') }}
-            </p>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('fengshui.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <FengshuiReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -371,12 +273,12 @@
             <template #leading>
               <UIcon name="i-heroicons-clipboard-document" class="w-4 h-4" />
             </template>
-            {{ $t('fengshui.copyResult') }}
+            {{ $t('kanyu.copyResult') }}
           </UButton>
           <AppShareButton
             tool="fengshui"
-            :summary="`${form.direction}°${directionName ? ' · ' + directionName : ''} · ${form.birthDate}`"
-            :share-target="resultRef"
+            :summary="`${calcResult.mingGua}命 · ${form.direction}° · ${form.birthDate}`"
+            :share-target="shareTargetRef"
             :filename="`fengshui-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -388,7 +290,7 @@
             <template #leading>
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
-            {{ $t('fengshui.recalculate') }}
+            {{ $t('kanyu.recalculate') }}
           </UButton>
           <UButton
             color="neutral"
@@ -399,7 +301,7 @@
             <template #leading>
               <UIcon name="i-heroicons-cube" class="w-4 h-4" />
             </template>
-            {{ $t('fengshui.backToTools') }}
+            {{ $t('kanyu.backToTools') }}
           </UButton>
         </div>
       </div>
@@ -408,15 +310,15 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile } from '~/types/user'
+import type { KanyuCalcResult } from '~~/server/api/tools/fengshui/calc.post'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const phase = ref<'form' | 'animating' | 'result'>('form')
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 const toast = useToast()
 
 // 档案选择
@@ -489,19 +391,12 @@ const directionName = computed(() => {
   return list[idx]
 })
 
-const directionText = computed(() => {
-  const parts: string[] = []
-  parts.push(`${t('fengshui.directionLabel')}: ${form.direction}° (${directionName.value})`)
-  if (form.buildYear) parts.push(`${t('fengshui.buildYearLabel')}: ${form.buildYear}`)
-  if (form.moveInYear) parts.push(`${t('fengshui.moveInYearLabel')}: ${form.moveInYear}`)
-  return parts.join(' | ')
-})
-
 const canSubmit = computed(() => {
   return form.gender && form.birthDate && form.direction !== undefined && form.direction >= 0 && form.direction <= 360
 })
 
-// AI 解读状态
+// 排盘结果 + AI 解读状态
+const calcResult = ref<KanyuCalcResult | null>(null)
 const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
@@ -511,18 +406,43 @@ async function handleSubmit() {
   if (!canSubmit.value) return
 
   phase.value = 'animating'
+  calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiStarted.value = false
   aiError.value = null
 
-  setTimeout(() => {
+  try {
+    const result = await $fetch<KanyuCalcResult>('/api/tools/fengshui/calc', {
+      method: 'POST',
+      body: {
+        gender: form.gender,
+        birthDate: form.birthDate,
+        birthHour: form.birthHour || undefined,
+        direction: form.direction,
+        buildYear: form.buildYear || undefined,
+        moveInYear: form.moveInYear || undefined,
+        locale: locale.value,
+      },
+    })
+
+    calcResult.value = result
     phase.value = 'result'
+
     setTimeout(() => startAiStream(), 300)
-  }, 1500)
+  } catch (err: any) {
+    phase.value = 'form'
+    toast.add({
+      title: t('kanyu.calcFail'),
+      description: err.data?.message || err.message || t('kanyu.checkInput'),
+      color: 'error',
+    })
+  }
 }
 
 async function startAiStream() {
+  if (!calcResult.value) return
+
   aiContent.value = ''
   aiStreaming.value = true
   aiStarted.value = false
@@ -531,16 +451,11 @@ async function startAiStream() {
   await nextTick()
 
   try {
-    const response = await fetch('/api/tools/fengshui/analyze', {
+    const response = await fetch('/api/tools/fengshui/reading', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        gender: form.gender,
-        birthDate: form.birthDate,
-        birthHour: form.birthHour || undefined,
-        direction: form.direction,
-        buildYear: form.buildYear || undefined,
-        moveInYear: form.moveInYear || undefined,
+        result: calcResult.value,
         locale: locale.value,
       }),
     })
@@ -573,7 +488,7 @@ async function startAiStream() {
             if (!aiStarted.value) aiStarted.value = true
             aiContent.value += data.text
           } else if (data.type === 'error') {
-            aiError.value = data.message || t('fengshui.aiUnavailable')
+            aiError.value = data.message || t('kanyu.aiUnavailable')
           }
         } catch {
           // ignore
@@ -581,7 +496,7 @@ async function startAiStream() {
       }
     }
   } catch (e: any) {
-    aiError.value = e?.message || t('fengshui.aiUnavailable')
+    aiError.value = e?.message || t('kanyu.aiUnavailable')
   } finally {
     aiStreaming.value = false
   }
@@ -589,6 +504,7 @@ async function startAiStream() {
 
 function resetForm() {
   phase.value = 'form'
+  calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiStarted.value = false
@@ -604,42 +520,26 @@ function resetForm() {
 }
 
 function handleCopy() {
-  const text = `${t('fengshui.resultTitle')}
+  if (!calcResult.value) return
+  const r = calcResult.value
+  const text = `${t('kanyu.resultTitle')}
 
-${t('fengshui.genderLabel')}：${form.gender === 'male' ? t('common.male') : t('common.female')}
-${t('fengshui.birthDateLabel')}：${form.birthDate}
-${t('fengshui.directionLabel')}：${form.direction}° — ${directionName.value}
-${form.buildYear ? t('fengshui.buildYearLabel') + '：' + form.buildYear + '\n' : ''}${form.moveInYear ? t('fengshui.moveInYearLabel') + '：' + form.moveInYear + '\n' : ''}
-${aiContent.value ? '【' + t('fengshui.interpretation') + '】\n' + aiContent.value : ''}
+${t('kanyu.genderLabel')}：${form.gender === 'male' ? t('common.male') : t('common.female')}
+${t('kanyu.birthDateLabel')}：${form.birthDate}
+${t('kanyu.directionLabel')}：${form.direction}° — ${directionName.value}
+${form.buildYear ? t('kanyu.buildYearLabel') + '：' + form.buildYear + '\n' : ''}${form.moveInYear ? t('kanyu.moveInYearLabel') + '：' + form.moveInYear + '\n' : ''}${t('kanyu.report.profileMing')}：${r.mingGua}（${r.mingGuaNumber}）· ${r.dongSiMing}
+${t('kanyu.report.profilePeriod')}：${r.period.name}（${r.period.startYear}-${r.period.endYear}）
+
+【${t('kanyu.report.panTitle')}】
+${r.palaces.map(p => `${p.direction}（${p.name}）：${p.star} · ${p.level}`).join('\n')}
+
+${aiContent.value ? '【' + t('kanyu.interpretation') + '】\n' + aiContent.value : ''}
 `
   navigator.clipboard.writeText(text).then(() => {
     toast.add({ title: t('share.textCopied'), color: 'success' })
   }).catch(() => {
     toast.add({ title: t('share.copyFail'), color: 'error' })
   })
-}
-
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('fengshui.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
 }
 
 // UI Config
@@ -677,7 +577,7 @@ useHead(() => ({
         description: t('seo.fengshuiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
-          name: t('fengshui.title'),
+          name: t('kanyu.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
           url: 'https://www.ososn.com/tools/fengshui',
@@ -695,38 +595,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.kyr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.ky-result-wrap {
+  max-width: 80rem;
 }
 </style>
