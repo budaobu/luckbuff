@@ -1521,7 +1521,7 @@
       "secJudgement": "核心判断",
       "secAdvice": "方位 / 时机 / 行动建议",
       "secRisk": "风险提醒与免责声明",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "streamingHint": "AI 正在解读盘面，报告内容将陆续填入…",
       "verdictPending": "推演中",
       "verdictFavorable": "可期",
@@ -2649,7 +2649,7 @@
       "ziweiThemeTitle": "紫微主轴",
       "advantagesTitle": "三大优势",
       "concernsTitle": "三大隐忧",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "coreDataTitle": "命盘核心数据",
       "gejuLabel": "格局",
       "wangshaiLabel": "旺衰",
@@ -3947,7 +3947,7 @@
       "secTiming": "时间节点提示",
       "streamingHint": "AI 正在逐章撰写占断，内容将实时填充…",
       "retry": "重新解读",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "footerNote": "太乙占断仅供参考，不构成任何决策依据。时运趋势，重在顺势而为。"
     }
   },
@@ -4108,7 +4108,7 @@
       "radarTitle": "四柱骨重雷达",
       "radarNote": "径向长度表示单项骨重（满刻度 {max} 两）",
       "aiTitle": "命理详析",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "streamingHint": "AI 正在逐段撰写解读，内容将实时填充…",
       "footerNote": "称骨论命仅供参考，不构成任何决策依据。命由己造，相由心生。"
     }
@@ -4889,7 +4889,7 @@
       "secDiWai": "地格 · 外格",
       "secZongge": "总格",
       "secSynthesis": "综合评鉴",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "streamingHint": "AI 正在逐段撰写解读，内容将实时填充…",
       "footerNote": "五格剖象仅供参考，不构成任何决策依据。名字之外，事在人为。"
     }
@@ -6899,7 +6899,7 @@
       "secDetails": "正缘细节补充",
       "secStuck": "感情卡点与化解",
       "secMurmur": "隐士的碎碎念",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "streamingHint": "AI 正在逐段撰写正缘报告，内容将实时填充…",
       "footerNote": "正缘分析仅供参考，不构成任何婚恋决策依据。缘分在天，选择在人。",
       "titleWithStar": "{riZhu}日主·{star}临缘",
@@ -6996,7 +6996,7 @@
       "secKinship": "六亲与子女",
       "secDayun": "大运与流年",
       "secAdvice": "综合建议",
-      "pending": "AI 解读生成中…",
+      "pending": "思考中…",
       "streamingHint": "AI 正在逐段撰写精批报告，内容将实时填充…",
       "footerNote": "以上内容为传统命理文化的参考性解读，仅作认识自我的一种民俗视角，不构成对人生决策的依据。",
       "healthColWuxing": "五行",
@@ -7948,7 +7948,7 @@
     "shenThemeValue": "身宫在{zhi}宫，主星{stars}，主后天努力方向。",
     "advFallback": "生年四化：{sihua}",
     "concernFallback": "四化落点：{sihua}",
-    "pending": "AI 解读生成中…",
+    "pending": "思考中…",
     "coreDataTitle": "命盘核心数据",
     "wuxingJuLabel": "五行局",
     "mingGongLabel": "命宫",
