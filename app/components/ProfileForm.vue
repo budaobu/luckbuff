@@ -54,9 +54,7 @@
               v-model="form.label"
               :placeholder="$t('profileForm.labelPlaceholder')"
               color="warning"
-              :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
-              }"
+              :ui="inputUi"
             />
             <p v-if="errors.label" class="text-xs text-red-400/80">
               {{ errors.label }}
@@ -127,71 +125,65 @@
 
           <!-- 出生时辰 — USelect -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthHour') }}</label>
+            <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthHour') }}</label>
             <USelect
               v-model="form.birthHour"
               :items="hourOptions"
               :placeholder="$t('profileForm.birthHourPlaceholder')"
               color="warning"
+              class="w-full"
               :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)]',
+                base: 'w-full bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)]',
+                value: 'pointer-events-none',
                 placeholder: 'text-[var(--text-placeholder)]',
-                content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
-                item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
+                content: 'w-auto min-w-(--reka-select-trigger-width) bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+                item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)] whitespace-nowrap',
               }"
             />
           </div>
 
           <!-- 姓名 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.name') }}</label>
+            <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.name') }}</label>
             <UInput
               v-model="form.name"
               :placeholder="$t('profileForm.namePlaceholder')"
               color="warning"
-              :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
-              }"
+              :ui="inputUi"
             />
           </div>
 
           <!-- 曾用名 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.formerName') }}</label>
+            <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.formerName') }}</label>
             <UInput
               v-model="form.formerName"
               :placeholder="$t('profileForm.formerNamePlaceholder')"
               color="warning"
-              :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
-              }"
+              :ui="inputUi"
             />
           </div>
 
           <!-- 改名年份 -->
           <div v-if="form.formerName" class="space-y-1.5">
-            <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.changedYear') }}</label>
+            <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.changedYear') }}</label>
             <UInput
               v-model.number="form.formerNameChangedYear"
               type="number"
               :placeholder="$t('profileForm.changedYearPlaceholder')"
               color="warning"
-              :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
-              }"
+              :ui="{ base: `${inputBase} tabular-nums` }"
             />
           </div>
 
           <!-- 出生地点 -->
           <div class="space-y-1.5">
-            <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
+            <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
             <UInput
               v-model="form.birthProvince"
               :placeholder="$t('profileForm.birthProvincePlaceholder')"
               color="warning"
-              :ui="{
-                base: 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
-              }"
+              :ui="inputUi"
             />
           </div>
 
@@ -283,6 +275,10 @@ const form = reactive({
 const errors = reactive({
   label: '',
 })
+
+// 统一的输入框样式，避免每个字段重复同一串 CSS 变量类名
+const inputBase = 'bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]'
+const inputUi = { root: 'w-full', base: inputBase }
 
 const hourOptions = SHICHEN_OPTIONS.map(s => ({
   label: `${s.label}（${s.range}）`,
