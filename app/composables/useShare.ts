@@ -70,6 +70,7 @@ export interface ShareOptions {
     | 'fengshui-ornament'
     | 'bazi-zhichang-hepan'
     | 'study-fengshui'
+    | 'fengshui-fish-tank'
     | 'astro-fortune-tune'
     | 'bazi-zhengyuan'
     | 'taiyi'
@@ -164,6 +165,7 @@ export function useShare() {
       'bedroom-fengshui': '卧室风水布局',
       'bazi-zhichang-hepan': '职场八字合盘',
       'study-fengshui': '书房风水布局',
+      'fengshui-fish-tank': '风水鱼缸',
       'astro-fortune-tune': '占星改运',
       'bazi-zhengyuan': '正缘画像',
       taiyi: '太乙神数',
