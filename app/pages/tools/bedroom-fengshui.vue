@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'bfs-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -338,218 +338,25 @@
         </div>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
-      <div v-if="phase === 'result' && calcResult" ref="resultRef">
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('bedroomFengshui.resultTitle') }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('bedroomFengshui.mingGua') }}：{{ calcResult.mingGua }}（{{ calcResult.mingGuaNumber }}） · {{ calcResult.dongSiMing }}｜{{ $t('bedroomFengshui.sitting') }}：{{ calcResult.sittingMountain?.name }}{{ calcResult.sittingMountain?.palace }} · {{ calcResult.dongSiZhai }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+      <!-- ============ 阶段 3：结果（纸质报告） ============ -->
+      <div v-if="phase === 'result' && calcResult">
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="bfs-share-target">
+          <BedroomFengshuiReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- 输入信息概览 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-            <UIcon name="i-heroicons-clipboard-document-list" class="w-4 h-4 text-[var(--accent-muted)]" />
-            {{ $t('bedroomFengshui.inputSummary') }}
-          </h3>
-          <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-[var(--text-muted)]">{{ $t('bedroomFengshui.genderLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.gender === 'male' ? $t('common.male') : $t('common.female') }}</div>
-            <div class="text-[var(--text-muted)]">{{ $t('bedroomFengshui.birthDateLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.birthDate }}</div>
-            <div class="text-[var(--text-muted)]">{{ $t('bedroomFengshui.directionLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.direction }}° — {{ calcResult.mountain?.name }}（{{ calcResult.mountain?.palace }}）</div>
-            <div class="text-[var(--text-muted)]">{{ $t('bedroomFengshui.bedDirectionLabel') }}</div>
-            <div class="text-[var(--text-primary)]">{{ form.bedDirection }}° — {{ bedMountainLabel }}</div>
-          </div>
-        </div>
-
-        <!-- 八宫吉凶盘 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-            <UIcon name="i-heroicons-chart-pie" class="w-4 h-4 text-[var(--accent-muted)]" />
-            {{ $t('bedroomFengshui.chartTitle') }}
-          </h3>
-          <div class="grid grid-cols-3 gap-2">
-            <div
-              v-for="cell in gridCells"
-              :key="cell.name"
-              class="relative rounded-xl border p-3 min-h-[80px] flex flex-col justify-between"
-              :class="cellClass(cell)"
-            >
-              <div class="flex items-start justify-between">
-                <span class="text-[10px] text-[var(--text-faint)]">{{ t(`bedroomFengshui.palaceNames.${palaceNameKey(cell.name)}`) }}</span>
-                <span v-if="cell.direction" class="text-[10px] text-[var(--text-faint)]">{{ t(`bedroomFengshui.directions.${directionKey(cell.direction)}`) }}</span>
-                <span v-else class="text-[10px] text-[var(--text-faint)]">—</span>
-              </div>
-              <div class="flex flex-col items-center justify-center py-1">
-                <template v-if="cell.star">
-                  <span class="text-sm font-bold" :class="starClass(cell.star)">{{ starLabel(cell.star) }}</span>
-                  <span class="text-[10px]" :class="levelClass(cell.level)">{{ cell.level }}</span>
-                </template>
-                <template v-else>
-                  <span class="text-sm font-bold text-[var(--text-muted)]">—</span>
-                  <span class="text-[10px] text-[var(--text-faint)]">—</span>
-                </template>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 床位朝向 + 禁忌 联动建议卡 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-            <UIcon name="i-heroicons-bed" class="w-4 h-4 text-[var(--accent-muted)]" />
-            {{ $t('bedroomFengshui.layoutTitle') }}
-          </h3>
-          <div class="space-y-3">
-            <!-- 床位朝向 -->
-            <div class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)]/30 p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-arrows-pointing-out" class="w-4 h-4 text-[var(--accent)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('bedroomFengshui.bedTitle') }}</h4>
-              </div>
-              <p class="text-xs text-[var(--text-body)] leading-relaxed mb-2">{{ calcResult.bed.note }}</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="text-xs text-[var(--text-muted)]">{{ $t('bedroomFengshui.bedBest') }}</span>
-                <span
-                  v-for="dir in calcResult.bed.bestDirections"
-                  :key="dir"
-                  class="text-xs px-2 py-0.5 rounded-full bg-[var(--accent-bg)] text-[var(--accent)] border border-[var(--accent-border)]"
-                >
-                  {{ t(`bedroomFengshui.directions.${directionKey(dir)}`) }}
-                </span>
-              </div>
-              <div v-if="calcResult.bed.avoidDirections.length" class="flex flex-wrap gap-2 mt-2">
-                <span class="text-xs text-[var(--text-muted)]">{{ $t('bedroomFengshui.bedAvoid') }}</span>
-                <span
-                  v-for="dir in calcResult.bed.avoidDirections"
-                  :key="dir"
-                  class="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20"
-                >
-                  {{ t(`bedroomFengshui.directions.${directionKey(dir)}`) }}
-                </span>
-              </div>
-              <div class="mt-3 text-xs text-[var(--text-body)] leading-relaxed">
-                <span class="font-medium text-[var(--text-primary)]">{{ $t('bedroomFengshui.currentBedStar') }}</span>
-                <span class="text-[var(--accent)]">{{ starLabel(calcResult.bedStar) }} · {{ calcResult.bedStarLevel }}</span>
-              </div>
-            </div>
-
-            <!-- 禁忌提示 -->
-            <div v-if="calcResult.tabooWarnings.length" class="rounded-xl border border-red-500/10 bg-red-500/[0.03] p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('bedroomFengshui.tabooTitle') }}</h4>
-              </div>
-              <div class="space-y-2">
-                <div
-                  v-for="(w, idx) in calcResult.tabooWarnings"
-                  :key="w.key + idx"
-                  class="text-xs"
-                >
-                  <span
-                    class="px-1.5 py-0.5 rounded text-[10px] mr-1.5"
-                    :class="w.severity === 'high'
-                      ? 'bg-red-500/10 text-red-400'
-                      : 'bg-yellow-500/10 text-yellow-500'"
-                  >
-                    {{ w.severity === 'high' ? $t('bedroomFengshui.severityHigh') : $t('bedroomFengshui.severityMedium') }}
-                  </span>
-                  <span class="text-[var(--text-body)]">{{ w.message }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('bedroomFengshui.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('bedroomFengshui.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title + index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('bedroomFengshui.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 免责声明 -->
-          <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-            <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-              {{ $t('bedroomFengshui.disclaimer') }}
-            </p>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('bedroomFengshui.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <BedroomFengshuiReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -567,7 +374,7 @@
           <AppShareButton
             tool="bedroom-fengshui"
             :summary="`${calcResult.mingGua}命 · ${calcResult.mountain?.name}向 · ${form.birthDate}`"
-            :share-target="resultRef"
+            :share-target="shareTargetRef"
             :filename="`bedroom-fengshui-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -599,11 +406,9 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { MOUNTAINS_24 } from '~/utils/bazhai'
 import type { BedroomFengshuiResult, BedroomTaboos } from '~/utils/bedroom-fengshui'
-import type { Gua, Direction, Star } from '~/utils/bazhai'
 
 interface CalcResult extends BedroomFengshuiResult {}
 
@@ -630,7 +435,7 @@ const form = reactive({
   } as BedroomTaboos,
 })
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 const toast = useToast()
 const compassRef = ref<HTMLDivElement>()
 const bedCompassRef = ref<HTMLDivElement>()
@@ -1042,98 +847,6 @@ ${aiContent.value ? '【' + t('bedroomFengshui.interpretation') + '】\n' + aiCo
   })
 }
 
-type GridCell = CalcResult['palaces'][number] | { name: '中'; direction: null; palaceNumber: null; star: null; auspicious: boolean; level: null }
-
-// 九宫格按上南下北排列：巽 离 坤 / 震 中 兑 / 艮 坎 乾
-const gridCells = computed<GridCell[]>(() => {
-  if (!calcResult.value) return []
-  const order: (Gua | '中')[] = ['巽', '离', '坤', '震', '中', '兑', '艮', '坎', '乾']
-  return order.map((name) => {
-    if (name === '中') {
-      return { name: '中', direction: null, palaceNumber: null, star: null, auspicious: true, level: null }
-    }
-    return calcResult.value!.palaces.find(p => p.name === name)!
-  })
-})
-
-function palaceNameKey(name: string): string {
-  const map: Record<string, string> = {
-    坎: 'kan', 坤: 'kun', 震: 'zhen', 巽: 'xun', 乾: 'qian', 兑: 'dui', 艮: 'gen', 离: 'li', 中: 'zhong',
-  }
-  return map[name] || 'li'
-}
-
-function directionKey(dir: string | null): string {
-  if (!dir) return 'n'
-  const map: Record<string, string> = {
-    北: 'n', 东北: 'ne', 东: 'e', 东南: 'se', 南: 's', 西南: 'sw', 西: 'w', 西北: 'nw',
-  }
-  return map[dir] || 'n'
-}
-
-function cellClass(cell: GridCell) {
-  if (cell.name === '中') {
-    return 'border-[var(--border-light)] bg-[var(--surface-card-hover)]'
-  }
-  if (cell.auspicious) {
-    return 'border-[var(--accent-border)] bg-[var(--accent-bg)]/40'
-  }
-  return 'border-red-500/10 bg-red-500/[0.03]'
-}
-
-function starClass(star: Star | null) {
-  if (!star) return ''
-  if (['生气', '延年', '天医'].includes(star)) return 'text-[var(--accent)]'
-  if (star === '伏位') return 'text-[var(--text-muted)]'
-  return 'text-red-400/90'
-}
-
-function levelClass(level: string | null) {
-  if (!level) return ''
-  if (level === '大吉' || level === '吉') return 'text-[var(--accent-muted)]'
-  if (level === '小吉') return 'text-[var(--text-muted)]'
-  return 'text-red-400/70'
-}
-
-function starKey(star: Star | null): string | undefined {
-  if (!star) return undefined
-  const map: Record<Star, string> = {
-    生气: 'shengqi', 延年: 'yannian', 天医: 'tianyi', 伏位: 'fuwei',
-    绝命: 'jueming', 五鬼: 'wugui', 祸害: 'huohai', 六煞: 'liusha',
-  }
-  return map[star]
-}
-
-function starLabel(star: Star | null): string {
-  if (!star) return '—'
-  const key = starKey(star)
-  if (!key) return star
-  return t(`bedroomFengshui.stars.${key}`)
-}
-
-// AI 内容分段（兼容 # / ## / ### 标题）
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=#{1,3}\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^#{1,3}\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('bedroomFengshui.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // 初始化时同步一次 24 山
 onMounted(() => {
   updateMountainFromDirection(form.direction)
@@ -1191,38 +904,13 @@ const selectUi = {
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 截图目标固定 1080px 宽，保证报告以桌面版面导出 */
+.bfs-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.bfs-result-wrap {
+  max-width: 80rem;
 }
 </style>
