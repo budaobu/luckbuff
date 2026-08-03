@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'fso-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -355,220 +355,40 @@
         </div>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
+      <!-- ============ 阶段 3：结果（纸质报告） ============ -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('fengshuiOrnament.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ calcResult.xuankong.sittingLabel }}{{ calcResult.xuankong.facingLabel }} · {{ calcResult.xuankong.period.name }}
-              ｜{{ calcResult.liunian.ganzhiYear }}{{ $t('fengshuiOrnament.liunianSuffix') }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 格局判断 -->
-          <div v-if="calcResult.xuankong.pattern" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2">
-              <UIcon name="i-heroicons-chart-pie" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('fengshuiOrnament.patternLabel') }}
-            </h3>
-            <p class="text-base font-bold text-[var(--accent)]">
-              {{ t(`xuankong.patterns.${calcResult.xuankong.pattern.key}`) }}
-            </p>
-            <p class="text-xs text-[var(--text-muted)] mt-1.5 leading-relaxed">
-              {{ t(`xuankong.patternDescriptions.${calcResult.xuankong.pattern.key}`) }}
-            </p>
-          </div>
-
-          <!-- 八方位判定盘 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-1 flex items-center gap-2">
-              <UIcon name="i-heroicons-table-cells" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('fengshuiOrnament.palaceChartTitle') }}
-            </h3>
-            <p class="text-[11px] text-[var(--text-faint)] mb-4">{{ calcResult.roomGeometry.sectorNote }}</p>
-            <div class="grid grid-cols-3 gap-2">
-              <div
-                v-for="cell in gridCells"
-                :key="cell.direction"
-                class="relative rounded-xl border p-3 min-h-[104px] flex flex-col justify-between"
-                :class="cellClass(cell)"
-              >
-                <div class="flex items-start justify-between">
-                  <span class="text-[10px] text-[var(--text-faint)]">{{ directionLabel(cell.direction) }}</span>
-                  <div class="flex gap-1">
-                    <span v-if="cell.isDoor" class="text-[9px] px-1 rounded bg-[var(--accent-bg)] text-[var(--accent)] border border-[var(--accent-border)]">{{ $t('fengshuiOrnament.flagDoor') }}</span>
-                    <span v-if="cell.hasIrregularCorner" class="text-[9px] px-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">{{ $t('fengshuiOrnament.flagIrregular') }}</span>
-                  </div>
-                </div>
-                <div class="flex items-center justify-center gap-1 py-1 text-[var(--text-primary)]">
-                  <span class="text-sm font-bold">{{ cell.mountainStar }}</span>
-                  <span class="text-[10px] text-[var(--text-faint)]">/</span>
-                  <span class="text-sm font-bold">{{ cell.facingStar }}</span>
-                  <span class="text-[10px] text-[var(--text-faint)]">/</span>
-                  <span class="text-xs text-[var(--text-muted)]">{{ cell.yearStar }}</span>
-                </div>
-                <div class="flex flex-wrap gap-1 justify-center">
-                  <span v-if="cell.isTaiSui" class="text-[9px] px-1 rounded bg-red-500/10 text-red-400 border border-red-500/20">{{ $t('fengshuiOrnament.shaTaiSui') }}</span>
-                  <span v-if="cell.isWuHuang" class="text-[9px] px-1 rounded bg-red-500/10 text-red-400 border border-red-500/20">{{ $t('fengshuiOrnament.shaWuHuang') }}</span>
-                  <span v-if="cell.isSanSha" class="text-[9px] px-1 rounded bg-red-500/10 text-red-400 border border-red-500/20">{{ $t('fengshuiOrnament.shaSanSha') }}</span>
-                  <span v-if="cell.isAnJianSha" class="text-[9px] px-1 rounded bg-red-500/10 text-red-400 border border-red-500/20">{{ $t('fengshuiOrnament.shaAnJian') }}</span>
-                  <span class="text-[9px] px-1 rounded border" :class="gapBadgeClass(cell.elementGap)">
-                    {{ t(`fengshuiOrnament.gapTypes.${cell.elementGap}`) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <p class="text-[10px] text-[var(--text-faint)] mt-3">{{ $t('fengshuiOrnament.chartLegend') }}</p>
-          </div>
-
-          <!-- 逐人游星层 -->
-          <div
-            v-for="person in calcResult.perPerson"
-            :key="person.nickname"
-            class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5"
-          >
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-1 flex items-center gap-2">
-              <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ person.nickname }} · {{ person.mingGua }}{{ $t('fengshuiOrnament.mingGuaSuffix') }}（{{ person.dongSiMing }}）
-            </h3>
-            <p class="text-[11px] text-[var(--text-faint)] mb-4">
-              {{ $t('fengshuiOrnament.roomFacingNote', { direction: directionLabel(person.roomFacingStar.direction), star: person.roomFacingStar.star }) }}
-            </p>
-            <div class="grid grid-cols-4 gap-2 mb-4">
-              <div
-                v-for="dir in eightDirections"
-                :key="dir"
-                class="rounded-lg border p-2 text-center"
-                :class="isAuspiciousYouxing(person.baguaAssignment[dir])
-                  ? 'border-[var(--accent-border)] bg-[var(--accent-bg)]/30'
-                  : 'border-[var(--border-light)] bg-[var(--surface-input)]'"
-              >
-                <div class="text-[10px] text-[var(--text-faint)]">{{ directionLabel(dir) }}</div>
-                <div class="text-xs font-semibold mt-0.5" :class="isAuspiciousYouxing(person.baguaAssignment[dir]) ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">
-                  {{ person.baguaAssignment[dir] ? t(`fengshuiOrnament.youxing.${person.baguaAssignment[dir]}`) : '—' }}
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-2 text-xs">
-              <span
-                v-if="person.wenchangDirection"
-                class="px-2 py-1 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)]/40 text-[var(--accent)]"
-              >
-                {{ $t('fengshuiOrnament.posWenchang') }}：{{ directionLabel(person.wenchangDirection) }}
-              </span>
-              <span
-                v-if="person.taohuaDirection"
-                class="px-2 py-1 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)]/40 text-[var(--accent)]"
-              >
-                {{ $t('fengshuiOrnament.posTaohua') }}：{{ directionLabel(person.taohuaDirection) }}
-              </span>
-              <span
-                v-for="dir in person.guirenDirections"
-                :key="dir"
-                class="px-2 py-1 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)]/40 text-[var(--accent)]"
-              >
-                {{ $t('fengshuiOrnament.posGuiren') }}：{{ directionLabel(dir) }}
-              </span>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告（固定宽度，供分享出图） -->
+        <div ref="shareTargetRef" v-show="false" class="fso-share-target">
+          <FengshuiOrnamentReport
+            :result="calcResult"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('fengshuiOrnament.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('fengshuiOrnament.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title + index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('fengshuiOrnament.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 免责声明 -->
-          <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-            <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-              {{ $t('fengshuiOrnament.disclaimer') }}
-            </p>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('fengshuiOrnament.reinterpret') }}
-            </UButton>
-          </div>
-        </div>
+        <!-- 可见交互版报告 -->
+        <FengshuiOrnamentReport
+          :result="calcResult"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
-          <AppShareButton
-            tool="fengshui-ornament"
-            :summary="`${calcResult.xuankong.sittingLabel}${calcResult.xuankong.facingLabel} · ${calcResult.xuankong.period.name}`"
-            :share-target="resultRef"
-            :filename="`fengshui-ornament-${new Date().toISOString().slice(0, 10)}.png`"
-          />
+          <UButton
+            color="warning"
+            variant="soft"
+            class="group/btn"
+            @click="handleShare"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-share" class="w-4 h-4" />
+            </template>
+            {{ $t('common.shareResult') }}
+          </UButton>
           <UButton
             color="warning"
             variant="soft"
@@ -594,11 +414,82 @@
         </div>
       </div>
     </div>
+
+    <!-- 分享弹窗 -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="shareDialogOpen"
+          class="fixed inset-0 z-50 flex items-center justify-center"
+          @click.self="shareDialogOpen = false"
+        >
+          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
+          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
+            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
+            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
+                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
+                </div>
+                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
+              </div>
+              <UButton
+                color="neutral"
+                variant="ghost"
+                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+                @click="() => { shareDialogOpen = false }"
+              >
+                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
+              </UButton>
+            </div>
+
+            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div>
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
+                  {{ shareData?.copyText }}
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
+                  <template #leading>
+                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.copyText') }}
+                </UButton>
+              </div>
+
+              <div v-if="shareData?.screenshotDataUrl">
+                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
+                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
+                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
+                </div>
+                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
+                  <template #leading>
+                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
+                  </template>
+                  {{ $t('share.downloadImage') }}
+                </UButton>
+              </div>
+
+              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
+                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
+                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
+                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
+                  {{ shareData.screenshotError }}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
+              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { Direction } from '~/utils/bazhai'
 import type { ElementGap } from '~/utils/ornament-rules'
 
@@ -678,8 +569,12 @@ interface UserForm {
 const { t, locale } = useI18n()
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement>()
 const toast = useToast()
+
+// 分享弹窗
+const shareDialogOpen = ref(false)
+const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
+const shareTargetRef = ref<HTMLElement>()
 
 const eightDirections: Direction[] = ['北', '东北', '东', '东南', '南', '西南', '西', '西北']
 
@@ -903,15 +798,6 @@ function resetForm() {
   aiError.value = null
 }
 
-// 九宫格按上南下北排列：东南 南 西南 / 东 中宫 西 / 东北 北 西北
-const gridCells = computed(() => {
-  if (!calcResult.value) return []
-  const order = ['东南', '南', '西南', '东', '中宫', '西', '东北', '北', '西北']
-  return order
-    .map(dir => calcResult.value!.environment.palaces.find(p => p.direction === dir))
-    .filter((p): p is EnvironmentPalace => Boolean(p))
-})
-
 function directionKey(dir: string): string {
   const map: Record<string, string> = {
     北: 'n', 东北: 'ne', 东: 'e', 东南: 'se', 南: 's', 西南: 'sw', 西: 'w', 西北: 'nw', 中宫: 'center',
@@ -919,53 +805,46 @@ function directionKey(dir: string): string {
   return map[dir] || 'center'
 }
 
-function directionLabel(dir: string): string {
-  return t(`fengshuiOrnament.directions.${directionKey(dir)}`)
-}
+// ---- 分享：对完整纸质报告组件截图 ----
+const { share } = useShare()
 
-function cellClass(cell: EnvironmentPalace) {
-  if (cell.isTaiSui || cell.isWuHuang || cell.isSanSha || cell.isAnJianSha) {
-    return 'border-red-500/20 bg-red-500/[0.04]'
+async function handleShare() {
+  if (!calcResult.value) return
+  try {
+    const result = await share({
+      tool: 'fengshui-ornament',
+      summary: `${calcResult.value.xuankong.sittingLabel}${calcResult.value.xuankong.facingLabel} · ${calcResult.value.xuankong.period.name}`,
+      shareTarget: shareTargetRef.value,
+      filename: `fengshui-ornament-${new Date().toISOString().slice(0, 10)}.png`,
+      t,
+    })
+    shareData.value = result
+    shareDialogOpen.value = true
+  } catch (e: any) {
+    toast.add({
+      title: t('share.shareFail'),
+      description: e?.message || t('share.pleaseRetry'),
+      color: 'error',
+    })
   }
-  if (cell.elementGap !== 'neutral' && cell.elementGap !== 'avoid_only') {
-    return 'border-[var(--accent-border)] bg-[var(--accent-bg)]/40'
-  }
-  return 'border-[var(--border-light)] bg-[var(--surface-card)]'
 }
 
-function gapBadgeClass(gap: ElementGap) {
-  if (gap === 'avoid_only') return 'bg-red-500/10 text-red-400 border-red-500/20'
-  if (gap === 'neutral') return 'bg-[var(--surface-card-hover)] text-[var(--text-faint)] border-[var(--border-light)]'
-  return 'bg-[var(--accent-bg)] text-[var(--accent)] border-[var(--accent-border)]'
+function copyShareText() {
+  if (!shareData.value) return
+  navigator.clipboard.writeText(shareData.value.copyText).then(() => {
+    toast.add({ title: t('share.textCopied'), color: 'success' })
+  }).catch(() => {
+    toast.add({ title: t('share.copyFail'), color: 'error' })
+  })
 }
 
-const AUSPICIOUS_YOUXING: YouXingKey[] = ['shengqi', 'tianyi', 'yannian', 'fuwei']
-
-function isAuspiciousYouxing(key: YouXingKey | undefined): boolean {
-  return key !== undefined && AUSPICIOUS_YOUXING.includes(key)
-}
-
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('fengshuiOrnament.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
+function downloadShareImage() {
+  if (!shareData.value?.screenshotDataUrl) return
+  const a = document.createElement('a')
+  a.href = shareData.value.screenshotDataUrl
+  a.download = shareData.value.filename
+  a.click()
+  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
 
 // UI Config
@@ -1020,56 +899,20 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 结果阶段：纸质报告需要更宽的版面 */
+.fso-result-wrap {
+  max-width: 80rem;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
+
+/* 隐藏截图目标：固定宽度，保证出图一致 */
+.fso-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-.ai-section-content :deep(table) {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(th),
-.ai-section-content :deep(td) {
-  border: 1px solid var(--border-light);
-  padding: 0.3rem 0.5rem;
-  text-align: left;
-  color: var(--text-body);
-}
-.ai-section-content :deep(th) {
-  color: var(--text-primary);
-  font-weight: 600;
-  background: var(--surface-card-hover);
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

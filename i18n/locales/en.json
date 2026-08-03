@@ -8098,7 +8098,45 @@
       "jueming": "Jue Ming"
     },
     "birthLabel": "Birth Date & Time (Solar)",
-    "birthHint": "Used to compute ming gua, eight-mansion roaming stars, and Wenchang/Taohua/noble positions. Hour is optional; omitting it does not affect the ming gua result."
+    "birthHint": "Used to compute ming gua, eight-mansion roaming stars, and Wenchang/Taohua/noble positions. Hour is optional; omitting it does not affect the ming gua result.",
+    "report": {
+      "seal": "Feng Shui",
+      "brandName": "Xuanji Geomancy · Placement Report",
+      "generatedAt": "Generated at",
+      "reportTitle": "Feng Shui Ornament Report",
+      "subtitleFallback": "Ba Zhai & Xuan Kong combined reading",
+      "verdictGood": "Favorable layout",
+      "verdictPlain": "Neutral layout",
+      "pending": "Reading in progress, please wait…",
+      "streamingHint": "Generating the reading…",
+      "sealFoot": "Geomancy",
+      "roomInfoTitle": "Room Profile",
+      "roomTypeLabel": "Type",
+      "facingLabel": "Sit/Face",
+      "periodLabel": "Period",
+      "sizeLabel": "Size",
+      "doorLabel": "Door",
+      "patternTitle": "Layout Verdict",
+      "patternNone": "No dominant pattern overlay; refer to per-sector element flow and wandering stars.",
+      "chipGanzhi": "Year Ganzhi",
+      "chipTaisui": "Tai Sui",
+      "chipSuipo": "Sui Po",
+      "chipSansha": "San Sha",
+      "palaceTitle": "Nine-Palace Sector Chart",
+      "elementChartTitle": "Five-Element Qi Distribution",
+      "elementChartNote": "Weighted by each palace's element and its strengthen/weaken gap — an indicative balance view.",
+      "personTitle": "Per-Person Auspicious Sectors",
+      "roomStarShort": "Room star {direction} · {star}",
+      "radarNote": "Wandering-star auspiciousness (auspicious high, inauspicious low)",
+      "aiTitle": "Placement Reading",
+      "elements": {
+        "metal": "Metal",
+        "wood": "Wood",
+        "water": "Water",
+        "fire": "Fire",
+        "earth": "Earth"
+      }
+    }
   },
   "insights": {
     "title": "Insights",

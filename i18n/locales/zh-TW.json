@@ -8119,7 +8119,45 @@
       "jueming": "絕命"
     },
     "birthLabel": "出生時間（陽曆）",
-    "birthHint": "用於計算命卦、八宅遊星與文昌/桃花/貴人位；時辰選填，不填按日中起卦，不影響命卦判定。"
+    "birthHint": "用於計算命卦、八宅遊星與文昌/桃花/貴人位；時辰選填，不填按日中起卦，不影響命卦判定。",
+    "report": {
+      "seal": "風水擺件",
+      "brandName": "玄機堪輿 · 陳設專報",
+      "generatedAt": "生成時間",
+      "reportTitle": "風水擺件推演報告",
+      "subtitleFallback": "八宅玄空合參 · 逐方陳設建議",
+      "verdictGood": "格局可取",
+      "verdictPlain": "平和之局",
+      "pending": "推演生成中，請稍候……",
+      "streamingHint": "推演內容生成中……",
+      "sealFoot": "堪輿",
+      "roomInfoTitle": "房間資訊",
+      "roomTypeLabel": "類型",
+      "facingLabel": "坐向",
+      "periodLabel": "元運",
+      "sizeLabel": "尺寸",
+      "doorLabel": "門位",
+      "patternTitle": "格局定論",
+      "patternNone": "本局無顯著格局疊加，以逐方五行生剋與遊星吉凶為準。",
+      "chipGanzhi": "流年干支",
+      "chipTaisui": "太歲方",
+      "chipSuipo": "歲破方",
+      "chipSansha": "三煞方",
+      "palaceTitle": "九宮方位判定盤",
+      "elementChartTitle": "五行氣場分佈",
+      "elementChartNote": "依九宮所屬五行與各方生剋缺口加權統計，示意本局五行強弱。",
+      "personTitle": "逐人專屬方位",
+      "roomStarShort": "房間坐星 {direction} · {star}",
+      "radarNote": "八宅遊星吉凶示意（吉位值高、凶位值低）",
+      "aiTitle": "陳設解讀",
+      "elements": {
+        "metal": "金",
+        "wood": "木",
+        "water": "水",
+        "fire": "火",
+        "earth": "土"
+      }
+    }
   },
   "insights": {
     "title": "命見",
