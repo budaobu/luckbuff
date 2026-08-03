@@ -239,6 +239,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'studyFengshui.submitBtn',
         path: '/tools/study-fengshui',
       },
+      {
+        icon: 'i-heroicons-beaker',
+        titleKey: 'fishTank.title',
+        descKey: 'seo.fishTankDesc',
+        ctaKey: 'fishTank.submitBtn',
+        path: '/tools/fengshui-fish-tank',
+      },
     ],
   },
   {
