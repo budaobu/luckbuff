@@ -384,8 +384,29 @@ export function useShare() {
       const originalFilters: { el: HTMLElement; filter: string }[] = []
       let offscreen: { position: string; left: string; top: string; zIndex: string } | null = null
       let placeholder: HTMLElement | null = null
+      let veil: HTMLElement | null = null
 
       try {
+        // 0. 截图前先用纯 DOM 同步盖一层全屏不透明遮罩（不依赖 Vue 渲染周期/Transition，
+        // 立即可见、无淡入透明窗口）。随后 useShare 会把隐藏报告 pin 进视口渲染约 1-3 秒，
+        // 没有这层遮罩用户会看到一层报告闪烁。遮罩在所有调用方（AppShareButton 及直接
+        // 调 useShare 的页面）统一生效，finally 里移除。
+        // 背景色取运行时实际生效值：--surface-bg（--surface-page 并不存在，见 main.css），
+        // 读不到再按亮暗模式兜底，保证不透明。
+        const rootStyle = window.getComputedStyle(document.documentElement)
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const veilBg = rootStyle.getPropertyValue('--surface-bg').trim()
+          || rootStyle.getPropertyValue('--surface-page').trim()
+          || (isDark ? '#0a0a0f' : '#faf8f3')
+        veil = document.createElement('div')
+        veil.setAttribute('data-share-veil', '')
+        veil.style.cssText = `position:fixed;inset:0;z-index:9999;background:${veilBg};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;pointer-events:all;`
+        const veilText = document.createElement('p')
+        veilText.style.cssText = 'font-size:14px;color:#8a8577;letter-spacing:0.5px;'
+        veilText.textContent = t('share.generating')
+        veil.appendChild(veilText)
+        document.body.appendChild(veil)
+
         // 1. 保存元素及其所有父节点的原始 display/visibility 值
         // html-to-image 无法对 display:none 的元素截图（量出的尺寸为 0）
         let cur: HTMLElement | null = el
@@ -427,8 +448,8 @@ export function useShare() {
             zIndex: el.style.zIndex,
           }
           // 目标必须留在视口内（Chrome 对完全视口外的元素跳过渲染会截出空白），
-          // fixed 钉在视口内、z-index:-1 压到页面内容之下。可见性问题由
-          // AppShareButton 在截图期间盖全屏遮罩解决（见 share.veil）。
+          // fixed 钉在视口内、z-index:-1 压到页面内容之下。可见性由上方第 0 步的
+          // 全屏遮罩（data-share-veil）挡住，用户不会看到它闪。
           el.style.position = 'fixed'
           el.style.left = '0px'
           el.style.top = '0px'
@@ -453,7 +474,8 @@ export function useShare() {
         // 4. 等待 Chart.js 默认动画完成（1000ms）
         await new Promise(resolve => setTimeout(resolve, 1200))
 
-        const bgColor = window.getComputedStyle(document.documentElement).getPropertyValue('--surface-page').trim()
+        const bgColor = window.getComputedStyle(document.documentElement).getPropertyValue('--surface-bg').trim()
+          || window.getComputedStyle(document.documentElement).getPropertyValue('--surface-page').trim()
           || (window.matchMedia('(prefers-color-scheme: dark)').matches ? '#0a0a0f' : '#f5f0e8')
         const canvas = await toCanvas(el, {
           backgroundColor: bgColor || '#0a0a0f',
@@ -494,6 +516,8 @@ export function useShare() {
         originalFilters.forEach(({ el, filter }) => {
           el.style.filter = filter
         })
+        // 最后移除全屏遮罩（目标已恢复原位、不再可见后再撤遮罩，避免闪烁）
+        veil?.remove()
       }
     } else {
       screenshotError = t('share.screenshotError')

@@ -87,25 +87,8 @@ function downloadShareImage() {
       {{ $t('common.shareResult') }}
     </UButton>
 
-    <Teleport to="body">
-      <!-- 截图生成中的全屏遮罩：挡住隐藏报告被临时钉进视口造成的闪现。
-           注意两点：
-           1) 不能套 Transition 淡入——前 200ms 透明窗口正好让报告闪出来，必须瞬间不透明。
-           2) 背景必须是确定不透明的实色：--surface-page 在运行时是空值，
-              bg-[var(--surface-page)] 实际透明，根本挡不住报告。 -->
-      <div
-        v-if="generating"
-        class="fixed inset-0 z-[60] flex items-center justify-center"
-        style="background-color: #faf8f3;"
-      >
-        <div class="flex flex-col items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-            <UIcon name="i-heroicons-photo" class="w-5 h-5 text-[var(--accent)] animate-pulse" />
-          </div>
-          <p class="text-sm text-[var(--text-muted)]">{{ $t('share.generating') }}</p>
-        </div>
-      </div>
-    </Teleport>
+    <!-- 全屏遮罩由 useShare 在截图期间统一创建（data-share-veil），
+         这里不再重复盖，避免双层遮罩。generating 仅用于按钮防重复点击。 -->
 
     <Teleport to="body">
       <Transition name="fade">
