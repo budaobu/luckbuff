@@ -426,6 +426,9 @@ export function useShare() {
             top: el.style.top,
             zIndex: el.style.zIndex,
           }
+          // 目标必须留在视口内（Chrome 对完全视口外的元素跳过渲染会截出空白），
+          // fixed 钉在视口内、z-index:-1 压到页面内容之下。可见性问题由
+          // AppShareButton 在截图期间盖全屏遮罩解决（见 share.veil）。
           el.style.position = 'fixed'
           el.style.left = '0px'
           el.style.top = '0px'

@@ -16,12 +16,20 @@ const { t } = useI18n()
 const toast = useToast()
 
 const shareDialogOpen = ref(false)
+const generating = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
 
 async function handleShare() {
-  if (props.disabled) return
+  if (props.disabled || generating.value) return
   const { share } = useShare()
 
+  // 截图期间 useShare 会把隐藏的分享目标临时钉进视口渲染（fixed+top:0），
+  // 约 1-3 秒。盖一层全屏遮罩挡住这层闪现，同时给用户「生成中」的明确反馈。
+  generating.value = true
+  // 关键：等遮罩真正渲染上屏后才开始 share()。否则 html-to-image 模块若已缓存，
+  // useShare 可能在遮罩还没进 DOM 的那一帧就把报告 pin 进视口，造成一闪。
+  await nextTick()
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
   try {
     const result = await share({
       tool: props.tool,
@@ -40,6 +48,8 @@ async function handleShare() {
       description: e?.message || t('share.pleaseRetry'),
       color: 'error',
     })
+  } finally {
+    generating.value = false
   }
 }
 
@@ -76,6 +86,26 @@ function downloadShareImage() {
       </template>
       {{ $t('common.shareResult') }}
     </UButton>
+
+    <Teleport to="body">
+      <!-- 截图生成中的全屏遮罩：挡住隐藏报告被临时钉进视口造成的闪现。
+           注意两点：
+           1) 不能套 Transition 淡入——前 200ms 透明窗口正好让报告闪出来，必须瞬间不透明。
+           2) 背景必须是确定不透明的实色：--surface-page 在运行时是空值，
+              bg-[var(--surface-page)] 实际透明，根本挡不住报告。 -->
+      <div
+        v-if="generating"
+        class="fixed inset-0 z-[60] flex items-center justify-center"
+        style="background-color: #faf8f3;"
+      >
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
+            <UIcon name="i-heroicons-photo" class="w-5 h-5 text-[var(--accent)] animate-pulse" />
+          </div>
+          <p class="text-sm text-[var(--text-muted)]">{{ $t('share.generating') }}</p>
+        </div>
+      </div>
+    </Teleport>
 
     <Teleport to="body">
       <Transition name="fade">
