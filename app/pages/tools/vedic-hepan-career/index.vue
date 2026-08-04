@@ -225,7 +225,7 @@ useHead(() => ({
       <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'vhr-result-wrap': step === 'result' }">
       <Transition name="step" mode="out-in">
         <!-- Step 1: 表单 -->
         <div v-if="step === 'form'" key="form">
@@ -302,26 +302,45 @@ useHead(() => ({
 
         <!-- Step 3: 结果 -->
         <div v-else-if="step === 'result' && result" key="result">
-          <div ref="shareTargetRef" v-show="false" class="p-6">
-            <div class="space-y-4">
-              <h2 class="text-xl font-bold text-[var(--text-primary)]">{{ $t('vedicHepanCareer.shareTitle') }}</h2>
-              <div class="text-sm text-[var(--text-body)]">
-                {{ result.personA.name }} {{ result.ascendantComparison.aSignZh }} · {{ result.personB.name }} {{ result.ascendantComparison.bSignZh }}
-              </div>
-            </div>
+          <!-- 隐藏截图目标：完整纸质报告 -->
+          <div ref="shareTargetRef" v-show="false" class="vhr-share-target">
+            <VedicHepanCareerReport
+              :result="result"
+              :analysis="analysisText"
+              :streaming="false"
+              error-msg=""
+            />
           </div>
 
-          <VedicHepanStepResult
+          <VedicHepanCareerReport
             :result="result"
             :analysis="analysisText"
             :streaming="streaming"
             :error-msg="errorMsg"
-            :interpretation-title="$t('vedicHepanCareer.interpretation')"
-            :result-title="$t('vedicHepanCareer.resultTitle')"
-            @restart="reset"
             @retry="handleRetry"
-            @share="handleShare"
           />
+
+          <!-- 底部操作 -->
+          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+            <UButton color="warning" variant="soft" @click="handleShare">
+              <template #leading>
+                <UIcon name="i-heroicons-share" class="w-4 h-4" />
+              </template>
+              {{ $t('common.shareResult') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="reset">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" />
+              </template>
+              {{ $t('vedicHepanCareer.recalculate') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="() => { navigateTo('/') }">
+              <template #leading>
+                <UIcon name="i-heroicons-home" class="w-4 h-4" />
+              </template>
+              {{ $t('common.backHome') }}
+            </UButton>
+          </div>
         </div>
       </Transition>
     </div>
@@ -397,6 +416,15 @@ useHead(() => ({
 </template>
 
 <style scoped>
+.vhr-share-target {
+  width: 1080px;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.vhr-result-wrap {
+  max-width: 80rem;
+}
+
 .step-enter-active,
 .step-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
