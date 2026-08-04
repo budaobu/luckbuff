@@ -6238,7 +6238,32 @@
     "knowledgeCard3Desc": "一方的行星落在另一方的重要宮位（如第1宮、第7宮、第10宮），說明這段關係在自我認知、伴侶關係、事業發展等層面的具體影響。",
     "knowledgeCard4Title": "結果僅供參考",
     "knowledgeCard4Desc": "星盤合婚提供關係傾向與互動主題參考，感情經營仍需雙方用心溝通與共同成長。",
-    "birthDatePlaceholder": "請選擇出生日期"
+    "birthDatePlaceholder": "請選擇出生日期",
+    "report": {
+      "seal": "星盤合婚",
+      "brandName": "吠陀合婚推演",
+      "generatedAt": "生成時間",
+      "rating": "僅供文化娛樂參考",
+      "title": "{a} × {b} 星盤合婚報告",
+      "subtitle": "{aSign} 上升 × {bSign} 上升 · 雙人吠陀星盤合盤",
+      "coupleTitle": "合婚雙方",
+      "ascTitle": "上升星座對比",
+      "aspectSectionTitle": "跨盤相位解析",
+      "aspectDistTitle": "相位類型分佈",
+      "aspectTableTitle": "主要跨盤相位",
+      "colPair": "行星組合",
+      "colAspect": "相位",
+      "colOrb": "容許度",
+      "overlaySectionTitle": "宮位疊加",
+      "natalSectionTitle": "雙方本命盤",
+      "natalAsc": "上升",
+      "natalDasha": "當前大運",
+      "houseShort": "第 {n} 宮",
+      "aiSectionTitle": "AI 合婚解讀",
+      "pending": "解讀生成中…",
+      "streamingHint": "隱士老友正在逐段推演…",
+      "sealFoot": "星盤合婚"
+    }
   },
   "vedicHepanCareer": {
     "title": "星盤事業合盤",

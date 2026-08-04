@@ -6213,7 +6213,32 @@
     "knowledgeCard3Desc": "When one person's planets fall into another's key houses (1st, 7th, 10th), the relationship touches self-image, partnership and career themes.",
     "knowledgeCard4Title": "For Reference Only",
     "knowledgeCard4Desc": "Astrology offers themes and tendencies; real relationships still require communication, empathy and mutual growth.",
-    "birthDatePlaceholder": "Select birth date"
+    "birthDatePlaceholder": "Select birth date",
+    "report": {
+      "seal": "Synastry",
+      "brandName": "Vedic Compatibility Reading",
+      "generatedAt": "Generated at",
+      "rating": "For cultural & entertainment reference only",
+      "title": "{a} × {b} Synastry Report",
+      "subtitle": "{aSign} rising × {bSign} rising · Vedic chart comparison",
+      "coupleTitle": "The Couple",
+      "ascTitle": "Ascendant Comparison",
+      "aspectSectionTitle": "Cross-Chart Aspects",
+      "aspectDistTitle": "Aspect Type Distribution",
+      "aspectTableTitle": "Key Cross Aspects",
+      "colPair": "Planet Pair",
+      "colAspect": "Aspect",
+      "colOrb": "Orb",
+      "overlaySectionTitle": "House Overlays",
+      "natalSectionTitle": "Natal Charts",
+      "natalAsc": "Ascendant",
+      "natalDasha": "Current Dasha",
+      "houseShort": "House {n}",
+      "aiSectionTitle": "AI Compatibility Reading",
+      "pending": "Reading in progress…",
+      "streamingHint": "The hermit is reading section by section…",
+      "sealFoot": "Synastry"
+    }
   },
   "vedicHepanCareer": {
     "title": "Vedic Career Partnership",

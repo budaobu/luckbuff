@@ -6235,7 +6235,32 @@
     "knowledgeCard3Desc": "一方的行星落在另一方的重要宫位（如第1宫、第7宫、第10宫），说明这段关系在自我认知、伴侣关系、事业发展等层面的具体影响。",
     "knowledgeCard4Title": "结果仅供参考",
     "knowledgeCard4Desc": "星盘合婚提供关系倾向与互动主题参考，感情经营仍需双方用心沟通与共同成长。",
-    "birthDatePlaceholder": "请选择出生日期"
+    "birthDatePlaceholder": "请选择出生日期",
+    "report": {
+      "seal": "星盘合婚",
+      "brandName": "吠陀合婚推演",
+      "generatedAt": "生成时间",
+      "rating": "仅供文化娱乐参考",
+      "title": "{a} × {b} 星盘合婚报告",
+      "subtitle": "{aSign} 上升 × {bSign} 上升 · 双人吠陀星盘合盘",
+      "coupleTitle": "合婚双方",
+      "ascTitle": "上升星座对比",
+      "aspectSectionTitle": "跨盘相位解析",
+      "aspectDistTitle": "相位类型分布",
+      "aspectTableTitle": "主要跨盘相位",
+      "colPair": "行星组合",
+      "colAspect": "相位",
+      "colOrb": "容许度",
+      "overlaySectionTitle": "宫位叠加",
+      "natalSectionTitle": "双方本命盘",
+      "natalAsc": "上升",
+      "natalDasha": "当前大运",
+      "houseShort": "第 {n} 宫",
+      "aiSectionTitle": "AI 合婚解读",
+      "pending": "解读生成中…",
+      "streamingHint": "隐士老友正在逐段推演…",
+      "sealFoot": "星盘合婚"
+    }
   },
   "vedicHepanCareer": {
     "title": "星盘事业合盘",
