@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'zzr-result-wrap': phase === 'result' }">
       <!-- ============ 阶段 1：表单 ============ -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -371,178 +371,37 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && chartA && chartB">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('ziweiZhichangHepan.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ formA.name || labelA }} · {{ formB.name || labelB }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
+        <!-- 可见报告（流式渲染） -->
+        <ZiweiZhichangHepanReport
+          :chart-a="chartA"
+          :chart-b="chartB"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          :name-a="formA.name"
+          :name-b="formB.name"
+          :label-a="labelA"
+          :label-b="labelB"
+          :gender-a="formA.gender"
+          :gender-b="formB.gender"
+          @retry="startAiStream"
+        />
 
-          <!-- 两人命盘关键信息并排 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-            <!-- Person A -->
-            <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5">
-              <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent-muted)]" />
-                {{ formA.name || labelA }}
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]">
-                  {{ formA.gender === 'male' ? $t('common.male') : $t('common.female') }}
-                </span>
-              </h3>
-              <div class="space-y-2 text-sm">
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.mingGong') }}</span>
-                  <span class="font-medium text-[var(--accent)]">{{ chartA.mingGong.zhi }} {{ chartA.mingGong.mainStars.join('、') || $t('zwds.borrowPalace') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.shenGong') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartA.shenGong.zhi }} {{ chartA.shenGong.mainStars.join('、') || $t('zwds.borrowPalace') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.wuxingBureau') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartA.wuxingJu }}{{ $t('zwds.juLabel') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.shiyeGongLabel', '事业宫') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatGongInfo(chartA, '事业') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.caiboGongLabel', '财帛宫') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatGongInfo(chartA, '财帛') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.currentDaXian') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatDaXian(chartA.currentDaXian) }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.yearPillarLabel', '年柱') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartA.yearGan }}{{ chartA.yearZhi }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Person B -->
-            <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5">
-              <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent-muted)]" />
-                {{ formB.name || labelB }}
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]">
-                  {{ formB.gender === 'male' ? $t('common.male') : $t('common.female') }}
-                </span>
-              </h3>
-              <div class="space-y-2 text-sm">
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.mingGong') }}</span>
-                  <span class="font-medium text-[var(--accent)]">{{ chartB.mingGong.zhi }} {{ chartB.mingGong.mainStars.join('、') || $t('zwds.borrowPalace') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.shenGong') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartB.shenGong.zhi }} {{ chartB.shenGong.mainStars.join('、') || $t('zwds.borrowPalace') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.wuxingBureau') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartB.wuxingJu }}{{ $t('zwds.juLabel') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.shiyeGongLabel', '事业宫') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatGongInfo(chartB, '事业') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.caiboGongLabel', '财帛宫') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatGongInfo(chartB, '财帛') }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwds.currentDaXian') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ formatDaXian(chartB.currentDaXian) }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--text-faint)]">{{ $t('zwdsAnalysis.yearPillarLabel', '年柱') }}</span>
-                  <span class="font-medium text-[var(--text-primary)]">{{ chartB.yearGan }}{{ chartB.yearZhi }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI 合盘解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('ziweiZhichangHepan.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('ziweiZhichangHepan.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('ziweiZhichangHepan.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('ziweiZhichangHepan.reinterpret') }}
-            </UButton>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告（静态、定宽 1080px） -->
+        <div ref="shareTargetRef" v-show="false" class="zzr-share-target">
+          <ZiweiZhichangHepanReport
+            :chart-a="chartA"
+            :chart-b="chartB"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+            :name-a="formA.name"
+            :name-b="formB.name"
+            :label-a="labelA"
+            :label-b="labelB"
+            :gender-a="formA.gender"
+            :gender-b="formB.gender"
+          />
         </div>
 
         <!-- 底部操作 -->
@@ -562,7 +421,7 @@
             tool="ziwei-zhichang-hepan"
             :name="`${formA.name || labelA} & ${formB.name || labelB}`"
             :summary="`${formA.name || labelA} · ${formB.name || labelB} · ${chartA.mingGong.zhi}命 · ${chartB.mingGong.zhi}命`"
-            :share-target="resultRef"
+            :share-target="shareTargetRef"
             :filename="`ziwei-zhichang-hepan-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -594,11 +453,10 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
-import type { ZwdsChart, ZwdsDaXian } from '~/types/zwds'
+import type { ZwdsChart } from '~/types/zwds'
 
 const { t, locale } = useI18n()
 const phase = ref<'form' | 'animating' | 'result'>('form')
@@ -709,7 +567,7 @@ const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const shareTargetRef = ref<HTMLElement>()
 
 const toast = useToast()
 
@@ -718,18 +576,6 @@ const canSubmit = computed(() => {
 })
 
 const shichenOptions = [...SHICHEN_OPTIONS]
-
-function formatGongInfo(chart: ZwdsChart, name: string): string {
-  const gong = chart.gongs.find(g => g.name === name)
-  if (!gong) return t('common.unknown')
-  const stars = gong.mainStars.join('、') || t('zwds.borrowPalace')
-  return `${gong.zhi} ${stars}`
-}
-
-function formatDaXian(daXian: ZwdsDaXian | null): string {
-  if (!daXian) return t('common.unknown')
-  return `${daXian.gongName}宫 ${daXian.ageRange[0]}-${daXian.ageRange[1]}${t('zwds.ageSuffix')}`
-}
 
 async function handleSubmit() {
   if (!canSubmit.value) return
@@ -892,29 +738,6 @@ ${aiContent.value ? '【' + $t('ziweiZhichangHepan.interpretation') + '】\n' + 
   })
 }
 
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('ziweiZhichangHepan.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -972,38 +795,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.zzr-share-target {
+  width: 1080px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.zzr-result-wrap {
+  max-width: 80rem;
 }
 </style>
