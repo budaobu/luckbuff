@@ -69,21 +69,15 @@ export function getMonthZhiIndex(year: number, month: number, day: number): {
 } {
   const currentDayOfYear = dayOfYear(year, month, day)
 
-  // 确定当前日期落在哪个节区间
-  let jieIndex = 11 // 默认小寒（上年）到立春前 = 丑月
-  for (let i = 0; i < 12; i++) {
-    const jieDay = getJieDayOfYear(year, i)
-    if (currentDayOfYear >= jieDay) {
-      jieIndex = i
+  // 按时间顺序排列的节（年内第几天近似值）：
+  // 小寒(1月) → 立春(2月) → 惊蛰(3月) → ... → 大雪(12月)
+  // 注意：索引 11（小寒）在年初，不能和索引 0~10 放在同一轮 doy 递增循环里比较。
+  const jieOrder: number[] = [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  let jieIndex = 10 // 默认：生日在小寒前（1月初）→ 上年大雪后的子月
+  for (const idx of jieOrder) {
+    if (currentDayOfYear >= getJieDayOfYear(year, idx)) {
+      jieIndex = idx
     }
-  }
-
-  // 修复：getJieDayOfYear 对索引11（小寒）返回的是当年1月6日左右的日期（dayOfYear~6）
-  // 对于12月的日期（dayOfYear > 340），currentDayOfYear >= 6 恒成立，导致 jieIndex 被错误更新为11（丑月）
-  // 但12月在大雪（12月7日）之后、次年小寒（1月6日）之前，应该是子月（jieIndex=10）
-  const daXueDay = getJieDayOfYear(year, 10) // 大雪
-  if (jieIndex === 11 && currentDayOfYear > daXueDay) {
-    jieIndex = 10 // 子月
   }
 
   // 检查是否在节气交界日（前后1天）
