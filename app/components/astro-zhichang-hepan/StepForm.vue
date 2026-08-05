@@ -135,7 +135,7 @@ const inputUi = {
         </div>
         <div class="space-y-1.5">
           <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('astroZhichangHepan.birthTimeLabel') }} <span class="text-[var(--accent)]">*</span></label>
-          <UInput v-model="form.personA.birthTime" type="time" class="w-full" :ui="inputUi" />
+          <UInput v-model="form.personA.birthTime" type="time" lang="zh-CN" step="60" class="w-full" :ui="inputUi" />
           <label class="flex items-center gap-2 mt-2 cursor-pointer">
             <input v-model="form.personA.timeUncertain" type="checkbox" class="rounded border-[var(--border-medium)] bg-[var(--surface-card-hover)] text-[var(--accent)] focus:ring-offset-0">
             <span class="text-[11px] text-[var(--text-muted)]">{{ $t('astroZhichangHepan.timeUncertain') }}</span>
@@ -186,7 +186,7 @@ const inputUi = {
         </div>
         <div class="space-y-1.5">
           <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">{{ $t('astroZhichangHepan.birthTimeLabel') }} <span class="text-[var(--accent)]">*</span></label>
-          <UInput v-model="form.personB.birthTime" type="time" class="w-full" :ui="inputUi" />
+          <UInput v-model="form.personB.birthTime" type="time" lang="zh-CN" step="60" class="w-full" :ui="inputUi" />
           <label class="flex items-center gap-2 mt-2 cursor-pointer">
             <input v-model="form.personB.timeUncertain" type="checkbox" class="rounded border-[var(--border-medium)] bg-[var(--surface-card-hover)] text-[var(--accent)] focus:ring-offset-0">
             <span class="text-[11px] text-[var(--text-muted)]">{{ $t('astroZhichangHepan.timeUncertain') }}</span>

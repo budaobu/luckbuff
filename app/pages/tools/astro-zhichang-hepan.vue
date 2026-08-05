@@ -185,7 +185,7 @@ useHead(() => ({
       <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'azr-result-wrap': step === 'result' }">
       <Transition name="step" mode="out-in">
         <div v-if="step === 'form'" key="form">
           <div class="mb-8">
@@ -234,13 +234,40 @@ useHead(() => ({
         </div>
 
         <div v-else-if="step === 'result' && result" key="result">
-          <div ref="shareTargetRef" v-show="false" class="p-6">
-            <div class="space-y-4">
-              <h2 class="text-xl font-bold text-[var(--text-primary)]">{{ $t('astroZhichangHepan.shareTitle') }}</h2>
-              <div class="text-sm text-[var(--text-body)]">{{ result.personA.roleLabel }}{{ result.personA.name }} {{ result.ascendantComparison.aSignZh }} · {{ result.personB.roleLabel }}{{ result.personB.name }} {{ result.ascendantComparison.bSignZh }}</div>
-            </div>
+          <!-- 可见报告（流式渲染） -->
+          <AstroZhichangHepanReport
+            :result="result"
+            :ai-content="analysisText"
+            :streaming="streaming"
+            :error="errorMsg || null"
+            @retry="handleRetry"
+          />
+
+          <!-- 隐藏截图目标：完整纸质报告（静态、定宽 1080px） -->
+          <div ref="shareTargetRef" v-show="false" class="azr-share-target">
+            <AstroZhichangHepanReport
+              :result="result"
+              :ai-content="analysisText"
+              :streaming="false"
+              :error="null"
+            />
           </div>
-          <AstroZhichangHepanStepResult :result="result" :analysis="analysisText" :streaming="streaming" :error-msg="errorMsg" @restart="reset" @retry="handleRetry" @share="handleShare" />
+
+          <!-- 底部操作 -->
+          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+            <UButton color="warning" variant="soft" @click="handleShare">
+              <template #leading><UIcon name="i-heroicons-share" class="w-4 h-4" /></template>
+              {{ $t('common.shareResult') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="reset">
+              <template #leading><UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" /></template>
+              {{ $t('astroZhichangHepan.recalculate') }}
+            </UButton>
+            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="() => { navigateTo('/') }">
+              <template #leading><UIcon name="i-heroicons-home" class="w-4 h-4" /></template>
+              {{ $t('common.backHome') }}
+            </UButton>
+          </div>
         </div>
       </Transition>
     </div>
@@ -289,4 +316,7 @@ useHead(() => ({
 .step-leave-to { opacity: 0; transform: translateY(-8px); }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+.azr-share-target { width: 1080px; }
+/* 结果阶段：纸质报告需要更宽的版面 */
+.azr-result-wrap { max-width: 80rem; }
 </style>
