@@ -100,6 +100,25 @@ function buildXIntentUrl(text: string, url: string): string {
   return `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
 }
 
+/**
+ * 是否移动设备（iOS/iPadOS/Android 等）。只有移动端才首选系统分享面板
+ * （能真正唤起 X app）；macOS/Windows/Linux 桌面即使支持 navigator.share
+ * 也直接走浏览器 x.com/intent/post。
+ * 注意：这里只用 UA/platform 区分「移动 vs 桌面」，不用于判断跳 app 还是
+ * 浏览器——那一层仍交给 x.com/intent/post 的 universal link 处理。
+ */
+function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent || ''
+  // Android / iPhone / iPod / 常见移动标记
+  if (/Android|iPhone|iPod|webOS|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua)) return true
+  // iPadOS 13+ 桌面模式：UA 伪装成 Macintosh，但有触点点数
+  const platform = (navigator as any).platform || ''
+  const maxTouch = (navigator as any).maxTouchPoints || 0
+  if (/iPad/.test(ua) || (platform === 'MacIntel' && maxTouch > 1)) return true
+  return false
+}
+
 /** 把截图 dataURL 转成 File；失败返回 null。 */
 function screenshotToFile(dataUrl: string | null, filename: string): File | null {
   if (!dataUrl) return null
@@ -123,9 +142,10 @@ async function shareToX() {
   const text = buildXText(shareData.value.copyText, url)
 
   try {
-    // 增强层：尝试原生文件分享
+    // 增强层：仅移动设备尝试原生文件分享（桌面即使支持也直接走浏览器）
     const file = screenshotToFile(shareData.value.screenshotDataUrl, shareData.value.filename)
-    const canNativeShareFiles = !!file
+    const canNativeShareFiles = isMobileDevice()
+      && !!file
       && typeof navigator !== 'undefined'
       && typeof navigator.share === 'function'
       && typeof navigator.canShare === 'function'
