@@ -59,11 +59,12 @@ export const auth = betterAuth({
           clientSecret: process.env.TELEGRAM_CLIENT_SECRET as string,
           discoveryUrl: telegramDiscoveryUrl,
           scopes: ['openid', 'profile'],
-          // Must match the Redirect URL registered in BotFather (localhost is
-          // rejected by Telegram, so 127.0.0.1 is used for local dev).
+          // Must match the Redirect URL registered in BotFather. Default to the
+          // deployed site URL (127.0.0.1 is only for local dev and is what
+          // Telegram accepts instead of localhost); override via env if needed.
           redirectURI:
             process.env.TELEGRAM_REDIRECT_URI ||
-            'http://127.0.0.1:3000/api/auth/oauth2/callback/telegram',
+            `${process.env.NUXT_PUBLIC_SITE_URL || 'http://127.0.0.1:3000'}/api/auth/oauth2/callback/telegram`,
           // Telegram has no userinfo endpoint and its id_token carries no
           // email, but better-auth requires an email per user. Map the OIDC
           // claims from the id_token and synthesize a stable placeholder email
