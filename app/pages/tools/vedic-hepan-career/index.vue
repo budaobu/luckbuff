@@ -295,7 +295,7 @@ useHead(() => ({
         <!-- Step 2: 计算中 -->
         <div v-else-if="step === 'loading'" key="loading" class="flex flex-col items-center justify-center min-h-[60vh]">
           <div class="text-center space-y-4">
-            <div class="w-16 h-16 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin mx-auto" />
+            <ThinkingOrb state="working" :size="64" class="mx-auto" />
             <p class="text-sm text-[var(--text-faint)]">{{ $t('vedicHepanCareer.calculating') }}</p>
           </div>
         </div>

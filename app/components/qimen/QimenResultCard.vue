@@ -14,7 +14,7 @@
 
     <!-- loading -->
     <div v-else-if="status === 'loading'" class="flex flex-col items-center py-8">
-      <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 text-[var(--accent)] animate-spin mb-2" />
+      <ThinkingOrb state="composing" :size="64" class="mb-2" />
       <p class="text-sm text-[var(--text-muted)]">{{ $t('qimen.interpretLoading') }}</p>
     </div>
 

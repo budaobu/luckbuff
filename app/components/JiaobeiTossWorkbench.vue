@@ -31,7 +31,7 @@
           />
           <template #fallback>
             <div class="flex items-center justify-center min-h-[220px]">
-              <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-[var(--accent)] animate-spin" />
+              <ThinkingOrb state="working" :size="64" />
             </div>
           </template>
         </ClientOnly>

@@ -17,12 +17,7 @@
 
     <!-- 等待首个 token -->
     <div v-if="!started && !error" class="flex flex-col items-center py-8">
-      <div class="relative mb-3">
-        <div class="w-10 h-10 rounded-full border-2 border-[var(--accent-border)] border-t-[var(--accent)] animate-spin" />
-        <div class="absolute inset-0 flex items-center justify-center">
-          <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)]" />
-        </div>
-      </div>
+      <ThinkingOrb state="composing" :size="64" class="mb-3" />
       <p class="text-sm text-[var(--text-muted)]">{{ $t('huangdao.aiLoading') }}</p>
     </div>
 

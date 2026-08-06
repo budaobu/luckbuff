@@ -167,9 +167,7 @@
       <!-- ============ 阶段 2：思考中动画 ============ -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
         <div class="relative w-24 h-24">
-          <div class="absolute inset-0 rounded-full border-2 border-[var(--accent)]/20" />
-          <div class="absolute inset-0 rounded-full border-t-2 border-[var(--accent)] animate-spin" />
-          <div class="absolute inset-4 rounded-full border-2 border-[var(--accent)]/10" />
+          <ThinkingOrb state="solving" :size="64" class="absolute inset-0 m-auto" />
           <div class="absolute inset-0 flex items-center justify-center">
             <UIcon name="i-heroicons-swatch" class="w-8 h-8 text-[var(--accent)]" />
           </div>

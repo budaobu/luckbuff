@@ -245,12 +245,7 @@
 
       <!-- 阶段 2：加载 -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <div class="relative">
-          <div class="w-20 h-20 rounded-full border-2 border-[var(--accent-border)] border-t-[var(--accent)] animate-spin" />
-          <div class="absolute inset-0 flex items-center justify-center">
-            <UIcon name="i-heroicons-sun" class="w-8 h-8 text-[var(--accent)]" />
-          </div>
-        </div>
+        <ThinkingOrb state="working" :size="64" />
         <p class="mt-6 text-sm text-[var(--text-faint)]">{{ $t('huangdao.calculating') }}</p>
       </div>
 
