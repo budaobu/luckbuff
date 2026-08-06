@@ -564,7 +564,12 @@
     "hookZipingBaziDefault": "I just did a Zi Ping Bazi reading. The result is intriguing.",
     "hookGenericSummary": "I just finished a Destined Partner reading: {summary}. Check it out!",
     "hookTaiyi": "Taiyi divination says: {summary}. Ask your own question?",
-    "hookTaiyiDefault": "Asked Taiyi about something on my mind — the four-chart synthesis was surprisingly sharp"
+    "hookTaiyiDefault": "Asked Taiyi about something on my mind — the four-chart synthesis was surprisingly sharp",
+    "shareToX": "Share to X",
+    "shareToXOpening": "Opening X share…",
+    "shareToXFailed": "Couldn't open X share. Copy the text and share manually.",
+    "nativeShareCancelled": "Share cancelled",
+    "xShareHint": "Shares the screenshot via native share when supported, otherwise opens your text and link in a new X tab"
   },
   "seo": {
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",

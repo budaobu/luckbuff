@@ -70,6 +70,94 @@ function downloadShareImage() {
   a.click()
   toast.add({ title: t('share.downloadSuccess'), color: 'success' })
 }
+
+// ── 分享到 X（两层实现）──────────────────────────────────────────────
+// 增强层：支持文件分享的设备用 Web Share API（navigator.share + files），
+//         把 useShare 生成的截图作为附件一并分享。
+// 基础层：x.com/intent/post?text=…&url=…，交给系统 universal link
+//         决定跳 X app 还是浏览器（不做 UA 检测）。全程无需 X 开发者账号。
+const sharingToX = ref(false)
+
+/** X 正文上限 280（按字符近似，已编码前）。截断文案，留 1 字符缓冲。 */
+const X_TEXT_LIMIT = 280
+
+/** 从 useShare 的 copyText 提炼 X 文案：去掉内嵌的「👉 url」行（url 走独立参数）。 */
+function buildXText(copyText: string, url: string): string {
+  let text = copyText
+    .split('\n')
+    .map(line => line.trim())
+    // 移除以 👉 开头且包含当前 url 的行（url 单独作为参数传）
+    .filter(line => !(line.startsWith('👉') && line.includes(url)))
+    .join('\n')
+    .trim()
+  if (text.length > X_TEXT_LIMIT - 1) {
+    text = `${text.slice(0, X_TEXT_LIMIT - 2)}…`
+  }
+  return text
+}
+
+function buildXIntentUrl(text: string, url: string): string {
+  return `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
+}
+
+/** 把截图 dataURL 转成 File；失败返回 null。 */
+function screenshotToFile(dataUrl: string | null, filename: string): File | null {
+  if (!dataUrl) return null
+  try {
+    const [head, body] = dataUrl.split(',')
+    const mime = /data:(.*?)(;|$)/.exec(head ?? '')?.[1] || 'image/png'
+    const binary = atob(body ?? '')
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+    const name = /\.(png|jpe?g|webp)$/i.test(filename) ? filename : `${filename}.png`
+    return new File([bytes], name, { type: mime })
+  } catch {
+    return null
+  }
+}
+
+async function shareToX() {
+  if (!shareData.value || sharingToX.value) return
+  sharingToX.value = true
+  const url = window.location.href
+  const text = buildXText(shareData.value.copyText, url)
+
+  try {
+    // 增强层：尝试原生文件分享
+    const file = screenshotToFile(shareData.value.screenshotDataUrl, shareData.value.filename)
+    const canNativeShareFiles = !!file
+      && typeof navigator !== 'undefined'
+      && typeof navigator.share === 'function'
+      && typeof navigator.canShare === 'function'
+      && navigator.canShare({ files: [file] })
+
+    if (canNativeShareFiles && file) {
+      try {
+        await navigator.share({ files: [file], text, url })
+        return // 原生分享成功，结束
+      } catch (e: any) {
+        // 用户取消（AbortError）不视为失败，也不回退打开新标签页
+        if (e?.name === 'AbortError') {
+          toast.add({ title: t('share.nativeShareCancelled'), color: 'neutral' })
+          return
+        }
+        // 其他错误（NotAllowedError/TypeError 等）→ 落到基础层
+      }
+    }
+
+    // 基础层：Web Intent 新标签页
+    window.open(buildXIntentUrl(text, url), '_blank', 'noopener,noreferrer')
+    toast.add({ title: t('share.shareToXOpening'), color: 'success' })
+  } catch (e: any) {
+    toast.add({
+      title: t('share.shareToXFailed'),
+      description: e?.message || t('share.pleaseRetry'),
+      color: 'error',
+    })
+  } finally {
+    sharingToX.value = false
+  }
+}
 </script>
 
 <template>
@@ -128,6 +216,27 @@ function downloadShareImage() {
                   </template>
                   {{ $t('share.copyText') }}
                 </UButton>
+              </div>
+              <!-- 分享到 X：原生文件分享（增强层）→ x.com/intent/post（基础层） -->
+              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3">
+                <UButton
+                  color="neutral"
+                  variant="solid"
+                  size="sm"
+                  block
+                  class="bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
+                  :loading="sharingToX"
+                  :disabled="!shareData"
+                  @click="shareToX"
+                >
+                  <template #leading>
+                    <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                  </template>
+                  {{ $t('share.shareToX') }}
+                </UButton>
+                <p class="text-[10px] text-[var(--text-faint)] mt-2 leading-relaxed">{{ $t('share.xShareHint') }}</p>
               </div>
               <div v-if="shareData?.screenshotDataUrl">
                 <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
