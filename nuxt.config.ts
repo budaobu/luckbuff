@@ -182,6 +182,11 @@ export default defineNuxtConfig({
         pinia: piniaEsmPath,
       },
     },
+    server: {
+      // Telegram OIDC only accepts 127.0.0.1 (not localhost) as a registered
+      // redirect URL; allow it through the dev-server host check.
+      allowedHosts: ['127.0.0.1', 'localhost'],
+    },
   },
 
   icon: {

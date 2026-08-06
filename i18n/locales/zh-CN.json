@@ -2,6 +2,7 @@
   "nav": {
     "home": "首页",
     "tools": "推演工具",
+    "toolsShort": "工具",
     "prophet": "赛事预测",
     "profiles": "我的档案",
     "openMenu": "打开菜单",
@@ -8784,5 +8785,20 @@
       "streamingHint": "山人逐句推演，请稍候…",
       "sealFoot": "风水\n参考"
     }
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "signInWithGoogle": "使用 Google 登录",
+    "signInWithTelegram": "使用 Telegram 登录",
+    "signedInAs": "已登录为 {name}",
+    "syncing": "正在同步你保存的档案…",
+    "synced": "本地档案已合并到你的账号。",
+    "syncFailed": "本地档案同步失败，仍保存在本设备。"
+  },
+  "languageShort": {
+    "zhCN": "简",
+    "zhTW": "繁",
+    "en": "EN"
   }
 }

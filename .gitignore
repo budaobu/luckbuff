@@ -81,3 +81,9 @@ app/pages/tools/cezi-battle/reference/
 
 # Insights translation runtime state (rebuildable cache; per-environment)
 content/insights/.translations/
+
+# better-auth local sqlite
+auth.db
+auth.db-journal
+auth.db-wal
+auth.db-shm

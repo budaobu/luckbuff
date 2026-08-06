@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "tools": "Tools",
+    "toolsShort": "Tools",
     "prophet": "Prophet",
     "profiles": "My Profiles",
     "openMenu": "Open menu",
@@ -8762,5 +8763,20 @@
       "streamingHint": "The hermit reasons line by line…",
       "sealFoot": "Feng\nShui"
     }
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signInWithGoogle": "Continue with Google",
+    "signInWithTelegram": "Continue with Telegram",
+    "signedInAs": "Signed in as {name}",
+    "syncing": "Syncing your saved profiles…",
+    "synced": "Your local profiles were merged into your account.",
+    "syncFailed": "Could not sync local profiles. They remain on this device."
+  },
+  "languageShort": {
+    "zhCN": "简",
+    "zhTW": "繁",
+    "en": "EN"
   }
 }

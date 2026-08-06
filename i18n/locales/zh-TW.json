@@ -2,6 +2,7 @@
   "nav": {
     "home": "首頁",
     "tools": "推演工具",
+    "toolsShort": "工具",
     "prophet": "賽事預測",
     "profiles": "我的檔案",
     "openMenu": "打開選單",
@@ -8783,5 +8784,20 @@
       "streamingHint": "山人逐句推演，請稍候…",
       "sealFoot": "風水\n參考"
     }
+  },
+  "auth": {
+    "signIn": "登入",
+    "signOut": "登出",
+    "signInWithGoogle": "使用 Google 登入",
+    "signInWithTelegram": "使用 Telegram 登入",
+    "signedInAs": "已登入為 {name}",
+    "syncing": "正在同步你儲存的檔案…",
+    "synced": "本機檔案已合併至你的帳號。",
+    "syncFailed": "本機檔案同步失敗，仍儲存在本裝置。"
+  },
+  "languageShort": {
+    "zhCN": "简",
+    "zhTW": "繁",
+    "en": "EN"
   }
 }

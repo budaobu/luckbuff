@@ -103,17 +103,20 @@
         <!-- Theme Toggle -->
         <ThemeToggle class="ml-1" />
 
+        <!-- Auth (Google / Telegram sign-in) -->
+        <AuthButton class="ml-2" />
+
         <!-- Language Switcher -->
         <div ref="langSwitcherRef" class="relative ml-2">
           <button
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 border"
+            class="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs transition-all duration-200 border"
             style="color: var(--text-faint); border-color: var(--border-light);"
             :class="{ 'hover:!text-[var(--text-primary)] hover:!bg-[var(--surface-card-hover)]': true }"
             :aria-label="t('nav.language', { lang: currentLangLabel })"
             @click="langOpen = !langOpen"
           >
             <UIcon name="i-heroicons-language" class="w-3.5 h-3.5" />
-            <span>{{ currentLangLabel }}</span>
+            <span>{{ currentLangShort }}</span>
             <UIcon name="i-heroicons-chevron-down" class="w-3 h-3 transition-transform" :class="{ 'rotate-180': langOpen }" />
           </button>
           <Transition
@@ -248,6 +251,49 @@
           <ThemeToggle />
         </div>
 
+        <!-- Auth (Mobile) -->
+        <div class="border-t pt-2 mt-2" style="border-color: var(--border-subtle);">
+          <p class="px-4 py-2 text-xs" style="color: var(--text-placeholder);">{{ isLoggedIn ? (user?.name || user?.email) : t('auth.signIn') }}</p>
+          <template v-if="!isLoggedIn">
+            <button
+              class="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm text-left transition-colors hover:!bg-[var(--surface-card-hover)]"
+              style="color: var(--text-faint);"
+              @click="mobileOpen = false; signInWithGoogle(route.fullPath || '/')"
+            >
+              <UIcon name="i-simple-icons-google" class="w-4 h-4" />
+              {{ t('auth.signInWithGoogle') }}
+            </button>
+            <button
+              class="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm text-left transition-colors hover:!bg-[var(--surface-card-hover)]"
+              style="color: var(--text-faint);"
+              @click="mobileOpen = false; signInWithTelegram(route.fullPath || '/')"
+            >
+              <UIcon name="i-simple-icons-telegram" class="w-4 h-4" />
+              {{ t('auth.signInWithTelegram') }}
+            </button>
+          </template>
+          <template v-else>
+            <NuxtLink
+              :to="localePath('/settings')"
+              :no-prefetch="true"
+              class="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm text-left transition-colors hover:!bg-[var(--surface-card-hover)]"
+              style="color: var(--text-faint);"
+              @click="mobileOpen = false"
+            >
+              <UIcon name="i-heroicons-folder-open" class="w-4 h-4" />
+              {{ t('nav.profiles') }}
+            </NuxtLink>
+            <button
+              class="flex items-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm text-left transition-colors hover:!bg-[var(--surface-card-hover)]"
+              style="color: var(--text-faint);"
+              @click="mobileOpen = false; signOutUser()"
+            >
+              <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4" />
+              {{ t('auth.signOut') }}
+            </button>
+          </template>
+        </div>
+
         <div class="border-t pt-2 mt-2" style="border-color: var(--border-subtle);">
           <p class="px-4 py-2 text-xs" style="color: var(--text-placeholder);">{{ $t('language.zhCN') === '简体中文' ? '语言' : 'Language' }}</p>
           <button
@@ -278,6 +324,7 @@ const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const mobileOpen = ref(false)
 const langOpen = ref(false)
+const { user, isLoggedIn, signInWithGoogle, signInWithTelegram, signOutUser } = useAuth()
 const toolsOpen = ref(false)
 const mobileToolsOpen = ref(false)
 
@@ -299,9 +346,8 @@ interface NavItem {
 
 const navItems = computed<NavItem[]>(() => [
   { label: t('nav.home'), to: '/', id: 'nav-home' },
-  { label: t('nav.tools'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
+  { label: t('nav.toolsShort'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
-  { label: t('nav.profiles'), to: '/settings', id: 'nav-profiles' },
 ])
 
 const languages: { code: 'zh-CN' | 'zh-TW' | 'en'; name: string }[] = [
@@ -313,6 +359,13 @@ const languages: { code: 'zh-CN' | 'zh-TW' | 'en'; name: string }[] = [
 const currentLangLabel = computed(() => {
   return languages.find(l => l.code === locale.value)?.name || t('language.zhCN')
 })
+
+const langShortMap: Record<string, string> = {
+  'zh-CN': t('languageShort.zhCN'),
+  'zh-TW': t('languageShort.zhTW'),
+  'en': t('languageShort.en'),
+}
+const currentLangShort = computed(() => langShortMap[locale.value] || '简')
 
 function switchLang(code: 'zh-CN' | 'zh-TW' | 'en') {
   const newPath = switchLocalePath(code)
