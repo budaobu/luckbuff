@@ -8427,6 +8427,8 @@
     },
     "readingTime": "~{n} min read",
     "readMore": "Read more",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
     "backToList": "Back to Insights",
     "emptyTitle": "Column in preparation",
     "emptyDesc": "Insights will bring you introductory and in-depth articles on Chinese metaphysics. Stay tuned for the first piece.",

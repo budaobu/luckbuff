@@ -51,7 +51,7 @@
       <!-- 文章列表 -->
       <div v-else class="space-y-3">
         <NuxtLink
-          v-for="article in filteredArticles"
+          v-for="article in pagedArticles"
           :key="article.slug"
           :to="localePath(`/insights/${article.slug}`)"
           class="group block rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
@@ -85,6 +85,39 @@
             </span>
           </div>
         </NuxtLink>
+
+        <!-- 分页（前一页 / 后一页） -->
+        <div v-if="totalPages > 1" class="flex items-center justify-between pt-6">
+          <button
+            type="button"
+            :disabled="currentPage <= 1"
+            :aria-label="$t('insights.prevPage')"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300"
+            :class="currentPage > 1
+              ? 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--accent-border-hover)] hover:text-[var(--accent)] hover:bg-[var(--surface-card-hover)]'
+              : 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-faint)] opacity-40 cursor-not-allowed'"
+            @click="currentPage--"
+          >
+            <UIcon name="i-heroicons-chevron-left" class="w-5 h-5" />
+          </button>
+
+          <span class="text-xs text-[var(--text-faint)] tracking-wider tabular-nums">
+            {{ currentPage }} / {{ totalPages }}
+          </span>
+
+          <button
+            type="button"
+            :disabled="currentPage >= totalPages"
+            :aria-label="$t('insights.nextPage')"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300"
+            :class="currentPage < totalPages
+              ? 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--accent-border-hover)] hover:text-[var(--accent)] hover:bg-[var(--surface-card-hover)]'
+              : 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-faint)] opacity-40 cursor-not-allowed'"
+            @click="currentPage++"
+          >
+            <UIcon name="i-heroicons-chevron-right" class="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -125,6 +158,19 @@ const filteredArticles = computed(() => {
   if (activeCategory.value === 'all') return articles
   return articles.filter(a => a.category === activeCategory.value)
 })
+
+const PAGE_SIZE = 10
+const currentPage = ref(1)
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredArticles.value.length / PAGE_SIZE)))
+
+const pagedArticles = computed(() => {
+  const start = (currentPage.value - 1) * PAGE_SIZE
+  return filteredArticles.value.slice(start, start + PAGE_SIZE)
+})
+
+// 切换分类时回到第一页
+watch(activeCategory, () => { currentPage.value = 1 })
 
 function categoryLabel(cat: string): string {
   const key = `insights.categories.${cat}`
