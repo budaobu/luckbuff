@@ -326,13 +326,12 @@ const thumbnailPersonas = computed(() =>
     <!-- Loading -->
     <div v-else-if="view === 'loading'" class="fbti-container flex flex-col items-center justify-center min-h-[70vh]">
       <div class="relative w-24 h-24 mb-6">
-        <div class="absolute inset-0 rounded-full border-4 border-[#13233A]/8" />
-        <div class="absolute inset-0 rounded-full border-4 border-t-[#9B2D20] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+        <ThinkingOrb state="working" :size="64" class="absolute inset-0 m-auto" />
         <FbtiMascotIcon
           v-if="resultPersonality"
           :gradient="resultPersonality.mascot.gradient"
           :symbol="resultPersonality.mascot.symbol"
-          :size="72"
+          :size="40"
           class="absolute inset-0 m-auto"
         />
       </div>

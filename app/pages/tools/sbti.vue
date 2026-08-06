@@ -148,8 +148,7 @@
       <!-- Loading -->
       <div v-else-if="view === 'loading'" class="flex flex-col items-center justify-center min-h-[60vh]">
         <div class="relative w-24 h-24 mb-6">
-          <div class="absolute inset-0 rounded-full border-4 border-[var(--border-light)]" />
-          <div class="absolute inset-0 rounded-full border-4 border-t-[var(--accent)] border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+          <ThinkingOrb state="working" :size="64" class="absolute inset-0 m-auto" />
           <span class="absolute inset-0 flex items-center justify-center text-3xl">🌀</span>
         </div>
         <p class="text-lg font-semibold text-[var(--text-primary)] mb-2">{{ $t('sbti.loading') }}</p>

@@ -71,7 +71,8 @@
 
       <!-- ============ 阶段 2：动画 ============ -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <HexagramSpin size="full" :label="$t('liuren.calculating')" />
+        <ThinkingOrb state="working" :size="64" />
+        <p class="mt-6 text-sm text-[var(--text-faint)]">{{ $t('liuren.calculating') }}</p>
       </div>
 
       <!-- ============ 阶段 3：结果 ============ -->
