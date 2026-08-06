@@ -103,9 +103,6 @@
         <!-- Theme Toggle -->
         <ThemeToggle class="ml-1" />
 
-        <!-- Auth (Google / Telegram sign-in) -->
-        <AuthButton class="ml-2" />
-
         <!-- Language Switcher -->
         <div ref="langSwitcherRef" class="relative ml-2">
           <button
@@ -149,6 +146,9 @@
             </div>
           </Transition>
         </div>
+
+        <!-- Auth (Google / Telegram sign-in) -->
+        <AuthButton class="ml-2" />
       </div>
 
       <!-- Mobile Menu Button -->
