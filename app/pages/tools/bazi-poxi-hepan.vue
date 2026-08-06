@@ -334,161 +334,24 @@
       </div>
 
       <!-- ============ 阶段 3：结果 ============ -->
-      <div v-if="phase === 'result' && chartA && chartB">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('baziPoxiHepan.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ formA.name || $t('baziPoxiHepan.personA') }} · {{ formB.name || $t('baziPoxiHepan.personB') }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 两人四柱并排 -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-            <!-- Person A 四柱 -->
-            <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5">
-              <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent-muted)]" />
-                {{ formA.name || $t('baziPoxiHepan.personA') }}
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]">{{ formA.gender === 'male' ? $t('common.male') : $t('common.female') }}</span>
-              </h3>
-              <div class="grid grid-cols-4 gap-2 text-center">
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.yearPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartA.year.gan }}{{ chartA.year.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.monthPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartA.month.gan }}{{ chartA.month.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.dayPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartA.day.gan }}{{ chartA.day.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.hourPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartA.hour ? chartA.hour.gan + chartA.hour.zhi : '?' }}</p>
-                </div>
-              </div>
-              <div class="mt-3 pt-3 border-t border-[var(--border-light)] text-xs text-[var(--text-muted)]">
-                {{ $t('bazi.chartSubtitle', { riZhu: chartA.riZhu, strength: chartA.riZhuStrength, geju: chartA.geju }) }}
-              </div>
-            </div>
-
-            <!-- Person B 四柱 -->
-            <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5">
-              <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                <UIcon name="i-heroicons-user" class="w-4 h-4 text-[var(--accent-muted)]" />
-                {{ formB.name || $t('baziPoxiHepan.personB') }}
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)]">{{ formB.gender === 'male' ? $t('common.male') : $t('common.female') }}</span>
-              </h3>
-              <div class="grid grid-cols-4 gap-2 text-center">
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.yearPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartB.year.gan }}{{ chartB.year.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.monthPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartB.month.gan }}{{ chartB.month.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.dayPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartB.day.gan }}{{ chartB.day.zhi }}</p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-[10px] text-[var(--text-faint)]">{{ $t('baziPan.hourPillar') }}</p>
-                  <p class="text-lg font-bold text-[var(--accent)]">{{ chartB.hour ? chartB.hour.gan + chartB.hour.zhi : '?' }}</p>
-                </div>
-              </div>
-              <div class="mt-3 pt-3 border-t border-[var(--border-light)] text-xs text-[var(--text-muted)]">
-                {{ $t('bazi.chartSubtitle', { riZhu: chartB.riZhu, strength: chartB.riZhuStrength, geju: chartB.geju }) }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- AI 合盘解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('baziPoxiHepan.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('baziPoxiHepan.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
-
-          <!-- 结构化展示 -->
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                  {{ section.title.replace(/^##\s*/, '') }}
-                </h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('baziPoxiHepan.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <!-- 重新解读 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('baziPoxiHepan.reinterpret') }}
-            </UButton>
-          </div>
+      <div v-if="phase === 'result' && chartA && chartB" class="max-w-5xl -mx-6 md:mx-auto">
+        <div ref="resultRef" class="px-6 md:px-0">
+          <BaziPoxiReport
+            :chart-a="chartA"
+            :chart-b="chartB"
+            :ai-content="aiContent"
+            :streaming="aiStreaming"
+            :error="aiError"
+            :name-a="formA.name"
+            :name-b="formB.name"
+            :gender-a="formA.gender"
+            :gender-b="formB.gender"
+            @retry="startAiStream"
+          />
         </div>
 
         <!-- 底部操作 -->
-        <div class="flex gap-3 justify-center mt-10 flex-wrap">
+        <div class="flex gap-3 justify-center mt-10 flex-wrap px-6 md:px-0">
           <UButton
             color="warning"
             variant="soft"
@@ -536,7 +399,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
@@ -802,29 +664,6 @@ ${aiContent.value ? '【' + $t('baziPoxiHepan.interpretation') + '】\n' + aiCon
   })
 }
 
-// AI 内容分段
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const result: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = lines[0]!.replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      result.push({ title: titleLine || t('baziPoxiHepan.interpretation'), content })
-    }
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 // UI Config
 const inputUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
@@ -880,40 +719,3 @@ useHead(() => ({
   ],
 }))
 </script>
-
-<style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
-}
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-</style>
