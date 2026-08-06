@@ -74,6 +74,13 @@ fi
 echo "==> build"
 pnpm build
 
+echo "==> backup remote auth.db (user store) before touching the app"
+# auth.db is the live better-auth SQLite store (users/sessions/user_profiles).
+# Nothing in this script rsyncs it, but it is the only copy of production user
+# data — snapshot it on the server before each deploy and keep the latest 7.
+ssh_retry "$SERVER" \
+  "cd $REMOTE_DIR && [ -f auth.db ] && cp auth.db auth.db.bak.\$(date +%Y%m%d-%H%M%S) && ls -t auth.db.bak.* 2>/dev/null | tail -n +8 | xargs -r rm -- || true"
+
 echo "==> rsync .output + ecosystem.config.cjs"
 rsync_retry --delete \
   .output \
