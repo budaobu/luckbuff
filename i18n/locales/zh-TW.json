@@ -564,7 +564,12 @@
     "hookZipingBaziDefault": "剛完成一次子平八字精批，結果很有意思。",
     "hookGenericSummary": "我剛完成正緣畫像推演：{summary}，快來看看吧！",
     "hookTaiyi": "太乙神數占了一卦：{summary}，你也來問一問？",
-    "hookTaiyiDefault": "用太乙神數問了件心事，四盤合參的結果有點東西"
+    "hookTaiyiDefault": "用太乙神數問了件心事，四盤合參的結果有點東西",
+    "shareToX": "分享到 X",
+    "shareToXOpening": "正在開啟 X 分享…",
+    "shareToXFailed": "開啟 X 分享失敗，請複製文案後手動分享",
+    "nativeShareCancelled": "已取消分享",
+    "xShareHint": "支援原生分享時將附帶截圖，否則在 X 新分頁中開啟文案與連結"
   },
   "seo": {
     "homeTitle": "在線命理排盤算命_紫微斗數·八字·吠陀占星·梅花易數",
