@@ -8794,7 +8794,8 @@
     "signedInAs": "已登录为 {name}",
     "syncing": "正在同步你保存的档案…",
     "synced": "本地档案已合并到你的账号。",
-    "syncFailed": "本地档案同步失败，仍保存在本设备。"
+    "syncFailed": "本地档案同步失败，仍保存在本设备。",
+    "signInFailed": "登录失败，请稍后重试。"
   },
   "languageShort": {
     "zhCN": "简",

@@ -8772,7 +8772,8 @@
     "signedInAs": "Signed in as {name}",
     "syncing": "Syncing your saved profiles…",
     "synced": "Your local profiles were merged into your account.",
-    "syncFailed": "Could not sync local profiles. They remain on this device."
+    "syncFailed": "Could not sync local profiles. They remain on this device.",
+    "signInFailed": "Sign-in failed. Please try again later."
   },
   "languageShort": {
     "zhCN": "简",

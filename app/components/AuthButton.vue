@@ -10,6 +10,9 @@ const {
   watchProfilesForSync,
 } = useAuth()
 
+const { t } = useI18n()
+const toast = useToast()
+
 const route = useRoute()
 const callbackURL = computed(() => route.fullPath || '/')
 
@@ -44,10 +47,17 @@ const userInitial = computed(() => {
   return n ? n.trim().charAt(0).toUpperCase() : ''
 })
 
-function login(provider: 'google' | 'telegram') {
+async function login(provider: 'google' | 'telegram') {
   menuOpen.value = false
-  if (provider === 'google') signInWithGoogle(callbackURL.value)
-  else signInWithTelegram(callbackURL.value)
+  // Surface a toast on failure — these promises reject when the backend auth
+  // endpoint errors (e.g. 500), and an unhandled rejection leaves the user
+  // staring at a button that appears to do nothing.
+  try {
+    if (provider === 'google') await signInWithGoogle(callbackURL.value)
+    else await signInWithTelegram(callbackURL.value)
+  } catch {
+    toast.add({ title: t('auth.signInFailed'), color: 'error' })
+  }
 }
 </script>
 

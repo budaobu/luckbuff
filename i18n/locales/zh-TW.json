@@ -8793,7 +8793,8 @@
     "signedInAs": "已登入為 {name}",
     "syncing": "正在同步你儲存的檔案…",
     "synced": "本機檔案已合併至你的帳號。",
-    "syncFailed": "本機檔案同步失敗，仍儲存在本裝置。"
+    "syncFailed": "本機檔案同步失敗，仍儲存在本裝置。",
+    "signInFailed": "登入失敗，請稍後重試。"
   },
   "languageShort": {
     "zhCN": "简",
