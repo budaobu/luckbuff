@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'hd-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -251,169 +251,37 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && days.length > 0">
-        <!-- 隐藏截图目标：3:4 海报 -->
-        <div ref="shareTargetRef" v-show="false" class="p-6">
-          <div class="w-[360px] aspect-[3/4] rounded-2xl border-2 border-[var(--accent-border)] bg-[var(--surface-card)] overflow-hidden flex flex-col">
-            <!-- 海报头部：传统黄历风格 -->
-            <div class="relative bg-[var(--accent)] px-5 py-4 text-center overflow-hidden flex-shrink-0">
-              <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-white" />
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-white" />
-              </div>
-              <div class="relative z-10">
-                <UIcon name="i-heroicons-sun" class="w-6 h-6 text-white mx-auto mb-1" />
-                <h2 class="text-xl font-bold text-white font-serif tracking-wider">{{ $t('huangdao.posterTitle') }}</h2>
-                <p class="text-[11px] text-white/80 mt-0.5">{{ formValues.name || $t('common.unknown') }} · {{ formValues.matter || $t('huangdao.generalMatter') }}</p>
-              </div>
-            </div>
-
-            <!-- 海报主体 -->
-            <div class="flex-1 px-4 py-4 overflow-hidden flex flex-col gap-3">
-              <!-- 最佳吉日推荐：可视化卡片 -->
-              <div>
-                <div class="flex items-center gap-1.5 mb-2">
-                  <UIcon name="i-heroicons-star" class="w-3.5 h-3.5 text-amber-400" />
-                  <span class="text-xs font-semibold text-[var(--text-primary)]">{{ $t('huangdao.aiTopDates') }}</span>
-                </div>
-                <div class="space-y-2">
-                  <div
-                    v-for="day in topDays.slice(0, 3)"
-                    :key="day.date"
-                    class="rounded-lg border overflow-hidden"
-                    :class="day.isAuspicious ? 'border-[var(--accent-border)]' : 'border-[var(--border-subtle)]'"
-                  >
-                    <div class="flex items-center gap-2 p-2.5" :class="day.isAuspicious ? 'bg-[var(--accent-bg)]' : 'bg-[var(--surface-dropdown)]'">
-                      <!-- 日期 -->
-                      <div class="flex-shrink-0 text-center min-w-[52px]">
-                        <div class="text-base font-bold text-[var(--text-primary)] leading-none">{{ formatPosterDay(day.date) }}</div>
-                        <div class="text-[9px] text-[var(--text-faint)] mt-0.5">{{ day.week }}</div>
-                      </div>
-                      <!-- 分隔线 -->
-                      <div class="w-px h-6 bg-[var(--border-subtle)]" />
-                      <!-- 信息 -->
-                      <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-1.5 mb-1">
-                          <span class="text-[11px] font-medium text-[var(--accent)]">{{ day.dayGanZhi }}</span>
-                          <span
-                            class="text-[9px] px-1 py-0.5 rounded-full border"
-                            :class="day.matchScore >= 90
-                              ? 'bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent-border)]'
-                              : day.matchScore >= 70
-                                ? 'bg-amber-400/10 text-amber-400 border-amber-400/30'
-                                : 'bg-[var(--surface-card)] text-[var(--text-muted)] border-[var(--border-light)]'"
-                          >
-                            {{ day.matchScore }}%
-                          </span>
-                        </div>
-                        <!-- 匹配度进度条 -->
-                        <div class="h-1 rounded-full bg-[var(--surface-card)] overflow-hidden mb-1">
-                          <div
-                            class="h-full rounded-full"
-                            :class="day.matchScore >= 90 ? 'bg-[var(--accent)]' : day.matchScore >= 70 ? 'bg-amber-400' : 'bg-[var(--text-muted)]'"
-                            :style="{ width: `${day.matchScore}%` }"
-                          />
-                        </div>
-                        <!-- 宜 -->
-                        <div class="flex flex-wrap gap-1">
-                          <span
-                            v-for="yi in day.yi.slice(0, 2)"
-                            :key="yi"
-                            class="text-[9px] px-1 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          >
-                            {{ yi }}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- 吉神 -->
-                    <div class="px-2.5 py-1 bg-[var(--surface-card)] border-t border-[var(--border-subtle)] flex items-center gap-1 text-[9px] text-[var(--text-faint)]">
-                      <UIcon name="i-heroicons-star" class="w-2.5 h-2.5 text-[var(--accent-muted)]" />
-                      <span class="text-[var(--accent-muted)]">{{ day.jiShen.slice(0, 2).join('、') }}</span>
-                      <span class="text-[var(--border-subtle)]">|</span>
-                      <span>值神{{ day.tianShen }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- AI 解读摘要 -->
-              <div v-if="posterAiSummary" class="flex-1 min-h-0 overflow-hidden">
-                <div class="flex items-center gap-1.5 mb-2">
-                  <UIcon name="i-heroicons-sparkles" class="w-3.5 h-3.5 text-[var(--accent)]" />
-                  <span class="text-xs font-semibold text-[var(--text-primary)]">{{ $t('huangdao.aiInterpretTitle') }}</span>
-                </div>
-                <div class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-dropdown)] p-3 overflow-hidden">
-                  <p class="text-[11px] text-[var(--text-body)] leading-relaxed">{{ posterAiSummary }}</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- 底部 -->
-            <div class="px-4 py-2 border-t border-[var(--border-subtle)] text-center flex-shrink-0">
-              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="hd-share-target">
+          <HuangdaoReport
+            :days="days"
+            :ai-content="aiStreamContent"
+            :streaming="false"
+            :error="null"
+            :name="formValues.name"
+            :gender="formValues.gender"
+            :birth-date="formValues.birthDate"
+            :birth-hour="formValues.birthHour"
+            :matter="formValues.matter"
+            :start-date="formValues.startDate"
+            :end-date="formValues.endDate"
+          />
         </div>
 
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('huangdao.resultTitle', { name: formValues.name || '' }) }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('huangdao.resultSubtitle', { count: days.length, matter: formValues.matter || $t('huangdao.generalMatter') }) }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-        </div>
-
-        <!-- 统一的 AI 择日结果卡片 -->
-        <div class="mb-8">
-          <div class="rounded-2xl border-2 border-[var(--accent-border)] bg-[var(--surface-card)] overflow-hidden">
-            <!-- 传统黄历金色头部 -->
-            <div class="relative bg-[var(--accent)] px-6 py-5 text-center overflow-hidden">
-              <div class="absolute inset-0 opacity-10">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border-2 border-white" />
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border border-white" />
-              </div>
-              <div class="relative z-10">
-                <p class="text-[10px] text-white/70 tracking-[0.3em] uppercase mb-1">Auspicious Day</p>
-                <h2 class="text-2xl font-bold text-white font-serif tracking-wider">{{ $t('huangdao.posterTitle') }}</h2>
-                <p class="text-xs text-white/80 mt-1">{{ formValues.name || $t('common.unknown') }} · {{ formValues.matter || $t('huangdao.generalMatter') }}</p>
-              </div>
-            </div>
-
-            <!-- 事项信息 -->
-            <div class="px-5 py-3 border-b border-[var(--border-subtle)] flex items-center justify-between">
-              <div>
-                <p class="text-[10px] text-[var(--text-faint)] tracking-wide uppercase">{{ $t('huangdao.matter') }}</p>
-                <p class="text-sm font-medium text-[var(--text-primary)]">{{ formValues.matter || $t('huangdao.generalMatter') }}</p>
-              </div>
-              <div class="text-right">
-                <p class="text-[10px] text-[var(--text-faint)] tracking-wide">{{ $t('huangdao.startDate') }} — {{ $t('huangdao.endDate') }}</p>
-                <p class="text-xs text-[var(--text-muted)]">{{ formValues.startDate }} ~ {{ formValues.endDate }}</p>
-              </div>
-            </div>
-
-            <!-- AI 解读（嵌入模式） -->
-            <div class="p-5">
-              <HuangdaoInterpretPanel
-                :content="aiStreamContent"
-                :streaming="aiLoading"
-                :started="aiStarted"
-                :error="aiStreamError"
-                :days="days"
-                embedded
-                @retry="retryAiInterpret"
-              />
-            </div>
-
-            <!-- 底部水印 -->
-            <div class="px-5 py-3 border-t border-[var(--border-subtle)] text-center">
-              <p class="text-[10px] text-[var(--text-placeholder)] tracking-wider">{{ $t('share.generatedBy') }}</p>
-            </div>
-          </div>
-        </div>
+        <HuangdaoReport
+          :days="days"
+          :ai-content="aiStreamContent"
+          :streaming="aiLoading"
+          :error="aiStreamError"
+          :name="formValues.name"
+          :gender="formValues.gender"
+          :birth-date="formValues.birthDate"
+          :birth-hour="formValues.birthHour"
+          :matter="formValues.matter"
+          :start-date="formValues.startDate"
+          :end-date="formValues.endDate"
+          @retry="retryAiInterpret"
+        />
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -513,7 +381,6 @@ const days = ref<HuangdaoDay[]>([])
 const aiLoading = ref(false)
 const aiStreamContent = ref('')
 const aiStreamError = ref<string | null>(null)
-const aiStarted = ref(false)
 const submitting = ref(false)
 
 // 档案选择
@@ -581,27 +448,6 @@ const formValues = reactive<HuangdaoFormValues>({
   endDate: '',
 })
 
-// 按匹配度降序排列的吉日（用于海报展示，与 AI 推荐逻辑一致）
-const topDays = computed(() =>
-  days.value.slice().sort((a, b) => b.matchScore - a.matchScore),
-)
-
-// 海报吉日摘要（基于黄历数据，不依赖 AI）
-const posterSummary = computed(() => {
-  if (!days.value.length) return ''
-  const auspicious = days.value.filter(d => d.isAuspicious)
-  const top = topDays.value.slice(0, 2)
-  const dateStr = top.map(d => {
-    const md = d.date.slice(5).replace('-', '/')
-    return `${md} ${d.dayGanZhi}`
-  }).join('、')
-  return t('huangdao.posterSummary', {
-    count: days.value.length,
-    auspicious: auspicious.length,
-    dates: dateStr,
-  })
-})
-
 // 快捷按键
 const quickButtons = computed(() => [
   { key: 'move', label: t('huangdao.quickButtons.move') },
@@ -651,30 +497,6 @@ onMounted(() => {
 function formatDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
-
-function formatPosterDay(dateStr: string) {
-  const d = new Date(dateStr)
-  return `${d.getMonth() + 1}/${d.getDate()}`
-}
-
-// 从AI内容中提取概述摘要（用于海报展示）
-const posterAiSummary = computed(() => {
-  if (!aiStreamContent.value) return ''
-  let text = aiStreamContent.value.replace(/<!--[\s\S]*?-->/g, '').trim()
-  const sections = text.split(/\n(?=##\s)/)
-  for (const section of sections) {
-    const lines = section.split('\n')
-    const firstLine = lines[0] ?? ''
-    const titleMatch = firstLine.match(/^##\s*(.+)$/)
-    const title = titleMatch?.[1]?.trim() ?? ''
-    if (title.includes('总论') || title.includes('总结') || title.includes('Overview') || title.includes('Conclusion')) {
-      const body = lines.slice(titleMatch ? 1 : 0).join('\n').trim()
-      return body.replace(/[#*_`]/g, '').slice(0, 220)
-    }
-  }
-  // 回退：返回前220字符
-  return text.replace(/^##.*$/gm, '').replace(/[#*_`]/g, '').trim().slice(0, 220)
-})
 
 async function handleSubmit() {
   const profile = selectedProfile.value
@@ -731,7 +553,6 @@ async function startAiInterpret(daysData: HuangdaoDay[]) {
   aiLoading.value = true
   aiStreamContent.value = ''
   aiStreamError.value = null
-  aiStarted.value = false
 
   try {
     const response = await fetch('/api/huangdao/interpret', {
@@ -764,7 +585,6 @@ async function startAiInterpret(daysData: HuangdaoDay[]) {
       const data = await response.json()
       const text = data.choices?.[0]?.message?.content || data.content || data.response || ''
       aiStreamContent.value = text
-      aiStarted.value = true
       return
     }
 
@@ -790,7 +610,6 @@ async function startAiInterpret(daysData: HuangdaoDay[]) {
           const data = JSON.parse(payload)
           const token = data.text || data.response || data.choices?.[0]?.delta?.content
           if (token) {
-            if (!aiStarted.value) aiStarted.value = true
             aiStreamContent.value += token
           }
         } catch {
@@ -811,7 +630,6 @@ function resetToForm() {
   aiLoading.value = false
   aiStreamContent.value = ''
   aiStreamError.value = null
-  aiStarted.value = false
 }
 
 async function retryAiInterpret() {
@@ -833,7 +651,7 @@ async function handleShare() {
       tool: 'huangdao',
       name: formValues.name,
       summary: formValues.matter || t('huangdao.generalMatter'),
-      shareTarget: document.querySelector('.huangdao-first-day-card') as HTMLElement | null || shareTargetRef.value,
+      shareTarget: shareTargetRef.value,
       filename: `huangdao-${formValues.name || '择日'}-${new Date().toISOString().slice(0, 10)}.png`,
       t,
     })
@@ -911,5 +729,18 @@ useHead(() => ({
 </script>
 
 <style scoped>
-/* huangdao-specific page styles removed; AI markdown rendering now lives in HuangdaoInterpretPanel.vue */
+.hd-share-target {
+  width: 1080px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.hd-result-wrap {
+  max-width: 80rem;
+}
 </style>
