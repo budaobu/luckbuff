@@ -2825,7 +2825,11 @@
       "seal": "QIMEN",
       "qrHint": "Scan to seek",
       "yang": "Yang",
-      "yin": "Yin"
+      "yin": "Yin",
+      "archiveLabel": "Archive No.",
+      "archiveNo": "Seeking File No. {no}",
+      "archiveDateLabel": "Filed On",
+      "archiveSeal": "LOST & FOUND\nON RECORD"
     }
   },
   "liurenSeeking": {
@@ -3118,7 +3122,11 @@
       "zhi": "→",
       "huJian": "nuclear",
       "shiRole": "shi",
-      "yingRole": "ying"
+      "yingRole": "ying",
+      "archiveLabel": "Archive No.",
+      "archiveNo": "Seeking File No. {no}",
+      "archiveDateLabel": "Filed On",
+      "archiveSeal": "LOST & FOUND\nON RECORD"
     }
   },
   "ceziBattle": {
