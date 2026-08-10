@@ -3113,7 +3113,30 @@
         "content": "结合六神与爻辞推断失物所在环境"
       }
     },
-    "shareText": "六爻寻物分享"
+    "shareText": "六爻寻物分享",
+    "interpreting": "卦师推演中…",
+    "poster": {
+      "kicker": "六 爻 纳 甲 · 寻 物 启 事",
+      "title": "六爻寻物",
+      "serial": "电线杆事务所 · 第甲子号",
+      "overviewPending": "卦师摇卦推算中，失物下落即将见分晓……",
+      "itemFlag": "寻",
+      "itemFallback": "遗失之物",
+      "lostTimeLabel": "丢失时间",
+      "lastPlaceLabel": "最后见于",
+      "dirLabel": "推算方位",
+      "timeLabel": "寻物吉时",
+      "probLabel": "寻回概率",
+      "fieldPending": "推算中……",
+      "tipsTitle": "寻找建议",
+      "noteLabel": "卦师曰",
+      "notePending": "莫急，卦里自有定数，东西丢不了。",
+      "panLine": "{ben} 之 {bian} · 互见 {hu} · 世{shi}应{ying}",
+      "tearHint": "—— 撕 一 条 · 寻 物 线 索 带 回 家 ——",
+      "brand": "六爻卦师",
+      "seal": "六爻",
+      "qrHint": "扫码寻物"
+    }
   },
   "ceziBattle": {
     "knowledgeCard1Title": "測字對決",
