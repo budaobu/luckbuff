@@ -1,4 +1,5 @@
 import type { DiZhi } from '~/types/user'
+import { toLunar, formatLunarParts } from 'lunar'
 import {
   getDayPillar,
   getMonthZhi,
@@ -25,6 +26,10 @@ interface CalcResult {
   jianChu: string
   jieQi: JieQiInfo
   shiChen: ShiChenTianShen[]
+  /** 农历日期，如「六月廿八」（含闰月标记） */
+  lunarDate: string
+  /** 公历星期（0=周日 … 6=周六） */
+  weekDay: number
   locale: string
 }
 
@@ -53,6 +58,16 @@ export default defineEventHandler(async (event): Promise<CalcResult> => {
   const dayPillar = getDayPillar(year, month, day)
   const monthZhi = getMonthZhi(year, month, day)
 
+  // 农历月/日 + 星期。`lunar` 的 formatLunarParts 直接给「六月」「廿八」段，
+  // 闰月前面加「闰」。星期用本地构造的 Date，与服务端时区无关（当天公历日固定）。
+  const gregorian = new Date(year, month - 1, day)
+  const { lunar } = toLunar(gregorian)
+  const parts = formatLunarParts(lunar)
+  const lunarMonth = parts.find(p => p.type === 'month')?.value ?? ''
+  const lunarDay = parts.find(p => p.type === 'day')?.value ?? ''
+  const lunarDate = `${lunar.isLeapMonth ? '闰' : ''}${lunarMonth}${lunarDay}`
+  const weekDay = gregorian.getDay()
+
   return {
     date: body.date,
     dayPillar: {
@@ -64,6 +79,8 @@ export default defineEventHandler(async (event): Promise<CalcResult> => {
     jianChu: getJianChu(monthZhi, dayPillar.zhi as DiZhi),
     jieQi: getJieQiInfo(year, month, day),
     shiChen: getShiChenTianShen(dayPillar.zhi as DiZhi),
+    lunarDate,
+    weekDay,
     locale,
   }
 })

@@ -131,143 +131,66 @@
 
       <!-- 结果阶段 -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('jishi.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('jishi.resultSubtitle', {
-                date: calcResult.date,
-                dayGanZhi: calcResult.dayGanZhi,
-                jianChu: calcResult.jianChu,
-              }) }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="!aiStreaming && aiContent" ref="posterRef" v-show="false" class="jishi-share-target">
+          <JishiCalendarPoster
+            :date="calcResult.date"
+            :day-gan-zhi="calcResult.dayGanZhi"
+            :month-zhi="calcResult.monthZhi"
+            :jian-chu="calcResult.jianChu"
+            :jie-qi="calcResult.jieQi"
+            :shi-chen="calcResult.shiChen"
+            :lunar-date="calcResult.lunarDate"
+            :week-day="calcResult.weekDay"
+            :ai-content="aiContent"
+          />
+        </div>
+
+        <!-- 页内展示：AI 解读流式融入海报（概述/宜忌/逐时辰简述） -->
+        <JishiCalendarPoster
+          :date="calcResult.date"
+          :day-gan-zhi="calcResult.dayGanZhi"
+          :month-zhi="calcResult.monthZhi"
+          :jian-chu="calcResult.jianChu"
+          :jie-qi="calcResult.jieQi"
+          :shi-chen="calcResult.shiChen"
+          :lunar-date="calcResult.lunarDate"
+          :week-day="calcResult.weekDay"
+          :ai-content="aiContent"
+        />
+
+        <!-- 隐士解读状态条（融入海报之下，非独立卡片） -->
+        <div class="jishi-ai-bar">
+          <div v-if="aiStreaming" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('jishi.interpreting') }}</span>
           </div>
-
-          <!-- 日柱与建除 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('jishi.dayPillar') }}</p>
-                <p class="text-xl font-bold text-[var(--text-primary)]">{{ calcResult.dayGanZhi }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('jishi.monthZhi') }}</p>
-                <p class="text-xl font-bold text-[var(--text-primary)]">{{ calcResult.monthZhi }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('jishi.jianChu') }}</p>
-                <p class="text-xl font-bold text-[var(--text-primary)]">{{ calcResult.jianChu }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)]">{{ $t('jishi.jieQi') }}</p>
-                <p class="text-xl font-bold text-[var(--text-primary)]">
-                  {{ calcResult.jieQi.name || $t('jishi.noJieQi') }}
-                </p>
-              </div>
-            </div>
-            <p v-if="calcResult.jieQi.name" class="text-xs text-[var(--text-muted)] mt-3">
-              {{ calcResult.jieQi.isToday ? $t('jishi.jieQiToday', { name: calcResult.jieQi.name }) : $t('jishi.jieQiNear', { name: calcResult.jieQi.name }) }}
-            </p>
+          <div v-else-if="aiError" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ aiError }}</p>
           </div>
-
-          <!-- 十二时辰黄黑道 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-              <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('jishi.shiChenTitle') }}
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              <div
-                v-for="item in calcResult.shiChen"
-                :key="item.dizhi"
-                class="rounded-xl border p-3 text-center"
-                :class="item.type === '黄道'
-                  ? 'border-green-500/20 bg-green-500/[0.06]'
-                  : 'border-red-500/20 bg-red-500/[0.06]'"
-              >
-                <p class="text-lg font-bold" :class="item.type === '黄道' ? 'text-green-400' : 'text-red-400'">
-                  {{ item.dizhi }}
-                </p>
-                <p class="text-[10px] text-[var(--text-faint)]">{{ item.timeRange }}</p>
-                <p class="text-xs font-medium mt-1" :class="item.type === '黄道' ? 'text-green-400' : 'text-red-400'">
-                  {{ item.tianShen }}
-                </p>
-                <p class="text-[10px]" :class="item.type === '黄道' ? 'text-green-400/70' : 'text-red-400/70'">
-                  {{ item.type }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- AI narrative -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('jishi.aiInterpretation') }}</h3>
-              </div>
-              <div v-if="aiStreaming" class="flex items-center gap-1.5">
-                <span class="text-xs text-[var(--accent-muted)]">{{ $t('jishi.interpreting') }}</span>
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-                </span>
-              </div>
-            </div>
-
-            <div
-              v-if="aiContent"
-              class="prose prose-sm max-w-none text-[var(--text-body)] leading-relaxed"
-              v-html="renderedAiContent"
-            />
-
-            <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-              <div class="flex flex-col items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                  <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-                </div>
-                <p class="text-xs text-[var(--text-muted)]">{{ $t('jishi.generatingInterpretation') }}</p>
-              </div>
-            </div>
-
-            <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-                <p class="text-sm text-red-400">{{ aiError }}</p>
-              </div>
-            </div>
-
-            <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-                {{ $t('jishi.disclaimer') }}
-              </p>
-            </div>
-
-            <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-              <UButton
-                color="warning"
-                variant="soft"
-                size="sm"
-                class="group/btn"
-                @click="startAiStream"
-              >
-                <template #leading>
-                  <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-                </template>
-                {{ $t('jishi.reinterpret') }}
-              </UButton>
-            </div>
+          <div v-else-if="aiContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('jishi.disclaimer') }}</p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="xs"
+              class="group/btn shrink-0"
+              @click="startAiStream"
+            >
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('jishi.reinterpret') }}
+            </UButton>
           </div>
         </div>
 
         <!-- 底部操作 -->
-        <div class="flex gap-3 justify-center mt-10 flex-wrap">
+        <div class="flex gap-3 justify-center mt-8 flex-wrap">
           <UButton
             color="warning"
             variant="soft"
@@ -281,8 +204,9 @@
           </UButton>
           <AppShareButton
             tool="jishi"
+            :disabled="aiStreaming || !aiContent"
             :summary="`${calcResult.dayGanZhi}日 · 建除${calcResult.jianChu} · 黄道${calcResult.shiChen.filter(s => s.type === '黄道').map(s => s.dizhi).join('、')}`"
-            :share-target="resultRef || undefined"
+            :share-target="posterRef || undefined"
             :filename="`jishi-${calcResult.date}.png`"
           />
           <UButton
@@ -303,7 +227,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import type { DiZhi } from '~/types/user'
 
@@ -326,6 +249,10 @@ interface CalcResult {
     isNear: boolean
   }
   shiChen: ShiChenItem[]
+  /** 农历日期，如「六月廿八」 */
+  lunarDate: string
+  /** 公历星期（0=周日 … 6=周六） */
+  weekDay: number
   locale: string
 }
 
@@ -335,7 +262,7 @@ const toast = useToast()
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const selectedDate = ref('')
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement | null>(null)
+const posterRef = ref<HTMLDivElement | null>(null)
 
 const tz = getLocalTimeZone()
 const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), {
@@ -512,11 +439,6 @@ function resetForm() {
   selectQuickDate(0, 'today')
 }
 
-const renderedAiContent = computed(() => {
-  if (!aiContent.value) return ''
-  return marked.parse(aiContent.value, { async: false }) as string
-})
-
 // SEO
 const siteName = 'ososn'
 
@@ -562,16 +484,13 @@ useHead(() => ({
 </script>
 
 <style scoped>
-:deep(.prose p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.jishi-share-target {
+  width: 720px;
 }
-:deep(.prose p:last-child) {
-  margin-bottom: 0;
-}
-:deep(.prose strong) {
-  color: var(--text-primary);
-  font-weight: 600;
+/* 隐士解读状态条：融入海报之下，与海报间距收窄 */
+.jishi-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
 }
 </style>
