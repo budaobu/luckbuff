@@ -3717,7 +3717,36 @@
     "dayAfterTomorrow": "Day After Tomorrow",
     "checkInput": "Check Input",
     "calcFail": "Calc Fail",
-    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "poster": {
+        "brand": "Five-Element Colors",
+        "serial": "by ososn",
+        "solarFmt": "{y}-{m}-{d}",
+        "weekPrefix": "",
+        "weekNames": "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+        "dayUnit": "",
+        "tagDayWuxing": "Day Element",
+        "tagXiYong": "Favorable",
+        "tagJiShen": "Unfavorable",
+        "wuxingOfDay": "Day stem is {wx}",
+        "colorsTitle": "Today's Colors",
+        "daJiFlag": "Best",
+        "ciJiFlag": "Good",
+        "buYiFlag": "Avoid",
+        "tipsTitle": "Styling Tips",
+        "noteLabel": "Note",
+        "overviewPending": "The hermit is picking colors; overview coming…",
+        "seal": "LUCKY",
+        "footerNote": "For cultural & entertainment reference only",
+        "qrHint": "Scan\nto visit",
+        "wuxingName": {
+            "木": "Wood",
+            "火": "Fire",
+            "土": "Earth",
+            "金": "Metal",
+            "水": "Water"
+        }
+    }
   },
   "shengxiaoPiancaiyun": {
     "knowledgeCard1Title": "Zodiac Windfall Luck",

@@ -1,4 +1,5 @@
 import type { DiZhi } from '~/types/user'
+import { toLunar, formatLunarParts } from 'lunar'
 import { getUserPillars, getDivinationDayPillar } from '~~/server/utils/bazi'
 import { GAN_WUXING, WUXING_SHENG, WUXING_KE } from '~/utils/bazi/constants'
 import type { TianGan } from '~~/server/utils/bazi'
@@ -34,6 +35,10 @@ export interface WuxingChuanyiResult {
   buYi: WuxingColorSet
   xiyongWuxing: string
   jishenWuxing: string
+  /** 查询日农历日期，如「六月廿八」（含闰月标记） */
+  lunarDate: string
+  /** 查询日公历星期（0=周日 … 6=周六） */
+  weekDay: number
   locale: string
 }
 
@@ -126,6 +131,15 @@ export default defineEventHandler(async (event): Promise<WuxingChuanyiResult> =>
     reason: `克当日五行${queryRiGanWuxing}，为不宜消耗色`,
   }
 
+  // 查询日农历月/日 + 星期，供纸刊日历海报头部使用（与 jishi 同源）。
+  const gregorian = new Date(year, month - 1, day)
+  const { lunar } = toLunar(gregorian)
+  const parts = formatLunarParts(lunar)
+  const lunarMonth = parts.find(p => p.type === 'month')?.value ?? ''
+  const lunarDay = parts.find(p => p.type === 'day')?.value ?? ''
+  const lunarDate = `${lunar.isLeapMonth ? '闰' : ''}${lunarMonth}${lunarDay}`
+  const weekDay = gregorian.getDay()
+
   return {
     userGanzhi: {
       year: userPillars.year,
@@ -144,6 +158,8 @@ export default defineEventHandler(async (event): Promise<WuxingChuanyiResult> =>
     buYi,
     xiyongWuxing,
     jishenWuxing,
+    lunarDate,
+    weekDay,
     locale,
   }
 })
