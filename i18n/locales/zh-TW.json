@@ -3138,7 +3138,12 @@
       "tearHint": "—— 撕 一 條 · 尋 物 線 索 帶 回 家 ——",
       "brand": "六爻卦師",
       "seal": "六爻",
-      "qrHint": "掃碼尋物"
+      "qrHint": "掃碼尋物",
+      "hexTitle": "卦象",
+      "zhi": "之",
+      "huJian": "互見",
+      "shiRole": "世",
+      "yingRole": "應"
     }
   },
   "ceziBattle": {

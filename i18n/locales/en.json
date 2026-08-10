@@ -3113,7 +3113,12 @@
       "tearHint": "—— TEAR A STRIP · TAKE A CLUE HOME ——",
       "brand": "Liu Yao Diviner",
       "seal": "LiuYao",
-      "qrHint": "Scan to seek"
+      "qrHint": "Scan to seek",
+      "hexTitle": "Hexagram",
+      "zhi": "→",
+      "huJian": "nuclear",
+      "shiRole": "shi",
+      "yingRole": "ying"
     }
   },
   "ceziBattle": {

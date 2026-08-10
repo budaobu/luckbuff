@@ -68,6 +68,36 @@
         </span>
       </p>
 
+      <!-- ============ 卦象：本卦墨线六爻 + 卦名落款，融进启事本体 ============ -->
+      <section v-if="lines.length === 6" class="lsp-hex">
+        <span class="lsp-hex-flag">{{ $t('liuyaoSeeking.poster.hexTitle') }}</span>
+        <div class="lsp-hex-body">
+          <!-- 本卦六爻墨线（自上而下绘制，动爻点墨点、标世应） -->
+          <div class="lsp-hex-lines">
+            <div
+              v-for="(line, i) in lines"
+              :key="i"
+              class="lsp-hex-line-row"
+            >
+              <span class="lsp-hex-glyph" :class="{ 'lsp-hex-glyph-yin': isYinLine(line.value) }">
+                <span class="lsp-hex-seg" />
+                <span v-if="isYinLine(line.value)" class="lsp-hex-seg" />
+              </span>
+              <span v-if="isMovingLine(line)" class="lsp-hex-moving" aria-hidden="true" />
+              <span v-if="roleOf(i)" class="lsp-hex-role">{{ roleOf(i) }}</span>
+            </div>
+          </div>
+          <!-- 卦名落款 -->
+          <div class="lsp-hex-names">
+            <p class="lsp-hex-ben">{{ benGua }}</p>
+            <p v-if="bianGua && bianGua !== benGua" class="lsp-hex-bian">
+              {{ $t('liuyaoSeeking.poster.zhi') }} <em>{{ bianGua }}</em>
+            </p>
+            <p v-if="huGua" class="lsp-hex-hu">{{ $t('liuyaoSeeking.poster.huJian') }} {{ huGua }}</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ 卦象落款：本卦变卦小字 ============ -->
       <div class="lsp-panline">
         {{ $t('liuyaoSeeking.poster.panLine', { ben: benGua, bian: bianGua, hu: huGua, shi: shiYao, ying: yingYao }) }}
@@ -113,6 +143,8 @@ interface Props {
   shiYao?: number | string
   /** 应爻位 */
   yingYao?: number | string
+  /** 六爻（自上而下），含爻值；动爻由 value 判定（6 老阴 / 9 老阳），isMoving 可缺省 */
+  lines?: Array<{ value: number; isMoving?: boolean; label?: string }>
   /** AI 解读全文（OV:/DIR:/TIME:/PROB:/TIP:/NOTE: 行协议）。流式追加，海报实时融入。 */
   aiContent?: string
 }
@@ -123,8 +155,48 @@ const props = withDefaults(defineProps<Props>(), {
   huGua: '',
   shiYao: '',
   yingYao: '',
+  lines: () => [],
   aiContent: '',
 })
+
+const { t } = useI18n()
+
+/* ---------- 卦象：墨线六爻 ---------- */
+
+/** 阴爻（6 老阴 / 8 少阴）画断线，阳爻（7 少阳 / 9 老阳）画整线 */
+const isYinLine = (value: number) => value === 6 || value === 8
+
+/** 动爻：老阴 6 / 老阳 9 为动；后端不保证返回 isMoving，优先从 value 判定 */
+const isMovingLine = (line: { value: number; isMoving?: boolean }) =>
+  line.value === 6 || line.value === 9 || line.isMoving === true
+
+/**
+ * 把世/应爻位解析成 1~6（自初爻数起）。
+ * 后端可能给数字，也可能给「初爻」「二爻」…「上爻」这种 label，两种都接住。
+ */
+const YAO_LABEL_TO_POS: Record<string, number> = {
+  初爻: 1, 二爻: 2, 三爻: 3, 四爻: 4, 五爻: 5, 上爻: 6,
+}
+const yaoPosOf = (v: number | string | undefined): number => {
+  if (typeof v === 'number' && v >= 1 && v <= 6) return v
+  const s = String(v ?? '').trim()
+  if (!s) return 0
+  if (s in YAO_LABEL_TO_POS) return YAO_LABEL_TO_POS[s]!
+  const n = Number(s)
+  return n >= 1 && n <= 6 ? n : 0
+}
+
+/**
+ * 某一行（自上而下 index）对应的世/应标记。
+ * lines 数组 index 0 = 上爻（第 6 爻），index 5 = 初爻（第 1 爻）；
+ * 世应爻位是 1~6 自初爻数起，故数组 index = 6 - 爻位。
+ */
+const roleOf = (topDownIndex: number): string => {
+  const pos = 6 - topDownIndex // 该行实际爻位（1=初 … 6=上）
+  if (yaoPosOf(props.shiYao) === pos) return t('liuyaoSeeking.poster.shiRole')
+  if (yaoPosOf(props.yingYao) === pos) return t('liuyaoSeeking.poster.yingRole')
+  return ''
+}
 
 const siteDomain = 'www.ososn.com'
 /** 撕条条数：重复几条增加辨识度 */
@@ -430,6 +502,106 @@ const aiParsed = computed<AiParsed>(() => {
   padding: 1px 5px;
   margin-right: 6px;
   vertical-align: 1px;
+}
+
+/* ---------- 卦象：墨线六爻 + 卦名落款 ---------- */
+.lsp-hex {
+  margin: 12px 0 0;
+  border-top: 1px solid var(--lsp-line);
+  padding: 11px 4px 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.lsp-hex-flag {
+  flex-shrink: 0;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--lsp-ink);
+  color: #f5efe0;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.lsp-hex-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+/* 六爻墨线：自上而下，墨色横杠，阴爻断、阳爻连 */
+.lsp-hex-lines {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.lsp-hex-line-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 8px;
+}
+.lsp-hex-glyph {
+  display: flex;
+  gap: 5px;
+  width: 56px;
+}
+.lsp-hex-seg {
+  flex: 1;
+  height: 5px;
+  background: var(--lsp-ink);
+  border-radius: 1px;
+  /* 毛笔飞白：边缘略虚 */
+  box-shadow: 0 0 1px rgba(46, 42, 36, 0.4);
+}
+.lsp-hex-moving {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lsp-accent);
+  flex-shrink: 0;
+}
+.lsp-hex-role {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--lsp-accent);
+  flex-shrink: 0;
+}
+/* 卦名落款 */
+.lsp-hex-names {
+  min-width: 0;
+  line-height: 1.3;
+}
+.lsp-hex-ben {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--lsp-ink);
+}
+.lsp-hex-bian {
+  margin: 2px 0 0;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--lsp-ink-soft);
+}
+.lsp-hex-bian em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--lsp-accent);
+}
+.lsp-hex-hu {
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  color: var(--lsp-ink-faint);
 }
 
 /* ---------- 卦象落款小字 ---------- */

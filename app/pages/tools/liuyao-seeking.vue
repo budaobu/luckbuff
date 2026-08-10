@@ -253,6 +253,7 @@
             :hu-gua="result.hexagram?.互卦 || ''"
             :shi-yao="result.hexagram?.世爻位"
             :ying-yao="result.hexagram?.应爻位"
+            :lines="result.lines_top_down || []"
             :ai-content="aiContent"
           />
         </div>
@@ -267,6 +268,7 @@
           :hu-gua="result.hexagram?.互卦 || ''"
           :shi-yao="result.hexagram?.世爻位"
           :ying-yao="result.hexagram?.应爻位"
+          :lines="result.lines_top_down || []"
           :ai-content="aiContent"
         />
 
@@ -297,58 +299,6 @@
               </template>
               {{ $t('liuyaoDivination.reinterpretBtn') }}
             </UButton>
-          </div>
-        </div>
-
-        <!-- 卦象与爻象明细（海报之下的排盘参考） -->
-        <div class="mt-6">
-          <!-- 卦象信息 -->
-          <div v-if="result.hexagram" class="grid grid-cols-3 gap-3 mb-5">
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.benGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.本卦 }}</p>
-              <p class="text-[10px] text-[var(--accent-muted)] mt-1">{{ $t('liuyaoDivination.shiYing', { shi: result.hexagram.世爻位, ying: result.hexagram.应爻位 }) }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.bianGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.变卦 }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
-              <p class="text-[10px] text-[var(--text-faint)] mb-1.5">{{ $t('liuyaoDivination.huGua') }}</p>
-              <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.互卦 }}</p>
-            </div>
-          </div>
-
-          <!-- 爻象展示 -->
-          <div v-if="result.lines_top_down" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3">{{ $t('liuyaoDivination.chartTitle') }}</h3>
-            <div class="space-y-1.5">
-              <div
-                v-for="(line, index) in result.lines_top_down"
-                :key="index"
-                class="flex items-center gap-3 rounded-xl border px-3 py-2"
-                :class="line.isMoving ? 'border-l-2 border-l-[#c9a227]/40 bg-[var(--surface-card)]' : 'border-[var(--border-light)] bg-[var(--surface-card)]'"
-              >
-                <span class="text-[10px] text-[var(--text-placeholder)] w-8 text-center">{{ line.label }}</span>
-                <div class="flex-1 flex items-center justify-center">
-                  <div class="flex items-center gap-1.5">
-                    <LiuyaoCopperCoin
-                      v-for="(coin, ci) in inferCoins(line.value)"
-                      :key="ci"
-                      :is-back="coin.isBack"
-                      :size="30"
-                    />
-                    <span class="text-xs text-[var(--text-placeholder)] ml-1">={{ line.value }}</span>
-                  </div>
-                </div>
-                <span class="text-sm font-bold w-8 text-center" :class="line.isMoving ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">
-                  {{ line.value }}
-                </span>
-                <span v-if="line.isMoving" class="text-[10px] text-[var(--accent-muted)]">
-                  {{ line.value === 6 ? '○' : '●' }}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -780,17 +730,6 @@ const shareSummary = computed(() => {
 
 function unescapeHtml(str: string): string {
   return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-}
-
-// 根据爻值推断 3 枚铜钱正反面
-function inferCoins(value: number): Array<{ isBack: boolean }> {
-  switch (value) {
-    case 6: return [{ isBack: false }, { isBack: false }, { isBack: false }]
-    case 7: return [{ isBack: false }, { isBack: false }, { isBack: true }]
-    case 8: return [{ isBack: false }, { isBack: true }, { isBack: true }]
-    case 9: return [{ isBack: true }, { isBack: true }, { isBack: true }]
-    default: return [{ isBack: false }, { isBack: false }, { isBack: false }]
-  }
 }
 
 // ============================================================
