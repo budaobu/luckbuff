@@ -3742,7 +3742,36 @@
     "dayAfterTomorrow": "日aftertomorrow",
     "checkInput": "check輸入",
     "calcFail": "calc失敗",
-    "aiUnavailable": "AI 解讀暫不可用，請稍後重試。"
+    "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
+    "poster": {
+        "brand": "五行穿衣",
+        "serial": "ososn 出品",
+        "solarFmt": "{y} 年 {m} 月 {d} 日",
+        "weekPrefix": "星期",
+        "weekNames": "日,一,二,三,四,五,六",
+        "dayUnit": "日",
+        "tagDayWuxing": "當日五行",
+        "tagXiYong": "喜用",
+        "tagJiShen": "忌神",
+        "wuxingOfDay": "日干屬{wx}",
+        "colorsTitle": "今日穿衣色",
+        "daJiFlag": "大吉",
+        "ciJiFlag": "次吉",
+        "buYiFlag": "不宜",
+        "tipsTitle": "穿搭要點",
+        "noteLabel": "叮囑",
+        "overviewPending": "隱士正在挑顏色，概述稍後補上……",
+        "seal": "旺色",
+        "footerNote": "僅供文化娛樂參考 · 理性看待",
+        "qrHint": "掃碼\n訪問",
+        "wuxingName": {
+            "木": "木",
+            "火": "火",
+            "土": "土",
+            "金": "金",
+            "水": "水"
+        }
+    }
   },
   "shengxiaoPiancaiyun": {
     "knowledgeCard1Title": "生肖偏財運",

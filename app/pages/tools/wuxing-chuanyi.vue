@@ -137,209 +137,111 @@
 
       <!-- 结果阶段 -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('wuxingChuanyi.resultTitle') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('wuxingChuanyi.resultSubtitle', {
-                queryDate: calcResult.queryDate,
-                queryGanzhi: `${calcResult.queryGanzhi.gan}${calcResult.queryGanzhi.zhi}`,
-                queryRiGanWuxing: calcResult.queryRiGanWuxing,
-              }) }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="!aiStreaming && aiContent" ref="posterRef" v-show="false" class="wuxing-share-target">
+          <WuxingChuanyiPoster
+            :query-date="calcResult.queryDate"
+            :query-ganzhi="calcResult.queryGanzhi"
+            :query-ri-gan-wuxing="calcResult.queryRiGanWuxing"
+            :xiyong-wuxing="calcResult.xiyongWuxing"
+            :jishen-wuxing="calcResult.jishenWuxing"
+            :da-ji="calcResult.daJi"
+            :ci-ji="calcResult.ciJi"
+            :bu-yi="calcResult.buYi"
+            :lunar-date="calcResult.lunarDate"
+            :week-day="calcResult.weekDay"
+            :ai-content="aiContent"
+          />
+        </div>
+
+        <!-- 页内展示：AI 解读流式融入海报（概述/穿搭要点/收口叮嘱） -->
+        <WuxingChuanyiPoster
+          :query-date="calcResult.queryDate"
+          :query-ganzhi="calcResult.queryGanzhi"
+          :query-ri-gan-wuxing="calcResult.queryRiGanWuxing"
+          :xiyong-wuxing="calcResult.xiyongWuxing"
+          :jishen-wuxing="calcResult.jishenWuxing"
+          :da-ji="calcResult.daJi"
+          :ci-ji="calcResult.ciJi"
+          :bu-yi="calcResult.buYi"
+          :lunar-date="calcResult.lunarDate"
+          :week-day="calcResult.weekDay"
+          :ai-content="aiContent"
+        />
+
+        <!-- 隐士解读状态条（融入海报之下，非独立卡片） -->
+        <div class="wuxing-ai-bar">
+          <div v-if="aiStreaming" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('wuxingChuanyi.interpreting') }}</span>
           </div>
-
-          <!-- 颜色卡片 -->
-          <div class="grid grid-cols-1 gap-4 mb-5">
-            <!-- 大吉色 -->
-            <div class="rounded-2xl border border-green-500/20 bg-green-500/[0.06] p-5">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-12 h-12 rounded-xl bg-[var(--surface-card)] border border-green-500/20 flex items-center justify-center text-green-400">
-                  <UIcon name="i-heroicons-star" class="w-6 h-6" />
-                </div>
-                <div>
-                  <p class="text-xs text-green-400">{{ $t('wuxingChuanyi.daJiLabel') }}</p>
-                  <p class="text-lg font-bold text-[var(--text-primary)]">{{ calcResult.daJi.wuxing }}</p>
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span
-                  v-for="color in calcResult.daJi.colors"
-                  :key="color"
-                  class="px-3 py-1.5 rounded-lg bg-[var(--surface-card)] border border-green-500/20 text-sm text-[var(--text-primary)]"
-                >
-                  {{ color }}
-                </span>
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ calcResult.daJi.reason }}</p>
-            </div>
-
-            <!-- 次吉色 -->
-            <div class="rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-bg)] p-5">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-12 h-12 rounded-xl bg-[var(--surface-card)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                  <UIcon name="i-heroicons-hand-thumb-up" class="w-6 h-6" />
-                </div>
-                <div>
-                  <p class="text-xs text-[var(--accent-muted)]">{{ $t('wuxingChuanyi.ciJiLabel') }}</p>
-                  <p class="text-lg font-bold text-[var(--text-primary)]">{{ calcResult.ciJi.wuxing }}</p>
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span
-                  v-for="color in calcResult.ciJi.colors"
-                  :key="color"
-                  class="px-3 py-1.5 rounded-lg bg-[var(--surface-card)] border border-[var(--accent-border)] text-sm text-[var(--text-primary)]"
-                >
-                  {{ color }}
-                </span>
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ calcResult.ciJi.reason }}</p>
-            </div>
-
-            <!-- 不宜色 -->
-            <div class="rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-5">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-12 h-12 rounded-xl bg-[var(--surface-card)] border border-red-500/20 flex items-center justify-center text-red-400">
-                  <UIcon name="i-heroicons-no-symbol" class="w-6 h-6" />
-                </div>
-                <div>
-                  <p class="text-xs text-red-400">{{ $t('wuxingChuanyi.buYiLabel') }}</p>
-                  <p class="text-lg font-bold text-[var(--text-primary)]">{{ calcResult.buYi.wuxing }}</p>
-                </div>
-              </div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span
-                  v-for="color in calcResult.buYi.colors"
-                  :key="color"
-                  class="px-3 py-1.5 rounded-lg bg-[var(--surface-card)] border border-red-500/20 text-sm text-[var(--text-primary)]"
-                >
-                  {{ color }}
-                </span>
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ calcResult.buYi.reason }}</p>
-            </div>
+          <div v-else-if="aiError" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ aiError }}</p>
           </div>
-
-          <!-- AI narrative -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('wuxingChuanyi.aiInterpretation') }}</h3>
-              </div>
-              <div v-if="aiStreaming" class="flex items-center gap-1.5">
-                <span class="text-xs text-[var(--accent-muted)]">{{ $t('wuxingChuanyi.interpreting') }}</span>
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-                </span>
-              </div>
-            </div>
-
-            <div
-              v-if="aiContent"
-              class="space-y-4"
-            >
-              <div
-                v-for="(card, idx) in aiCards"
-                :key="idx"
-                class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] p-4"
-              >
-                <div
-                  class="prose prose-sm max-w-none text-[var(--text-body)] leading-relaxed"
-                  v-html="card.html"
-                />
-              </div>
-            </div>
-
-            <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-              <div class="flex flex-col items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                  <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-                </div>
-                <p class="text-xs text-[var(--text-muted)]">{{ $t('wuxingChuanyi.generatingInterpretation') }}</p>
-              </div>
-            </div>
-
-            <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-                <p class="text-sm text-red-400">{{ aiError }}</p>
-              </div>
-            </div>
-
-            <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-                {{ $t('wuxingChuanyi.disclaimer') }}
-              </p>
-            </div>
-
-            <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-              <UButton
-                color="warning"
-                variant="soft"
-                size="sm"
-                class="group/btn"
-                @click="startAiStream"
-              >
-                <template #leading>
-                  <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-                </template>
-                {{ $t('wuxingChuanyi.reinterpret') }}
-              </UButton>
-            </div>
-          </div>
-
-          <!-- 底部操作 -->
-          <div class="flex gap-3 justify-center mt-10 flex-wrap">
+          <div v-else-if="aiContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('wuxingChuanyi.disclaimer') }}</p>
             <UButton
               color="warning"
               variant="soft"
-              class="group/btn"
-              @click="resetForm"
+              size="xs"
+              class="group/btn shrink-0"
+              @click="startAiStream"
             >
               <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
               </template>
-              {{ $t('wuxingChuanyi.recalculate') }}
-            </UButton>
-            <UButton
-              color="neutral"
-              variant="soft"
-              class="group/btn"
-              @click="handleNextDay"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
-              </template>
-              {{ $t('wuxingChuanyi.nextDayBtn') }}
-            </UButton>
-            <AppShareButton
-              tool="wuxing-chuanyi"
-              :name="formValues.name"
-              :summary="`${calcResult.queryDate} · ${$t('wuxingChuanyi.daJiLabel')}${calcResult.daJi.colors.join('、')} · ${$t('wuxingChuanyi.ciJiLabel')}${calcResult.ciJi.colors.join('、')}`"
-              :share-target="resultRef || undefined"
-              :filename="`wuxing-chuanyi-${calcResult.queryDate}.png`"
-            />
-            <UButton
-              color="neutral"
-              variant="ghost"
-              class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-               @click="() => { navigateTo('/auspicious-datetime') }"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-cube" class="w-4 h-4" />
-              </template>
-              {{ $t('wuxingChuanyi.backToTopic') }}
+              {{ $t('wuxingChuanyi.reinterpret') }}
             </UButton>
           </div>
+        </div>
+
+        <!-- 底部操作 -->
+        <div class="flex gap-3 justify-center mt-8 flex-wrap">
+          <UButton
+            color="warning"
+            variant="soft"
+            class="group/btn"
+            @click="resetForm"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+            </template>
+            {{ $t('wuxingChuanyi.recalculate') }}
+          </UButton>
+          <UButton
+            color="neutral"
+            variant="soft"
+            class="group/btn"
+            @click="handleNextDay"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
+            </template>
+            {{ $t('wuxingChuanyi.nextDayBtn') }}
+          </UButton>
+          <AppShareButton
+            tool="wuxing-chuanyi"
+            :disabled="aiStreaming || !aiContent"
+            :name="formValues.name"
+            :summary="`${calcResult.queryDate} · ${$t('wuxingChuanyi.daJiLabel')}${calcResult.daJi.colors.join('、')} · ${$t('wuxingChuanyi.ciJiLabel')}${calcResult.ciJi.colors.join('、')}`"
+            :share-target="posterRef || undefined"
+            :filename="`wuxing-chuanyi-${calcResult.queryDate}.png`"
+          />
+          <UButton
+            color="neutral"
+            variant="ghost"
+            class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
+             @click="() => { navigateTo('/auspicious-datetime') }"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-cube" class="w-4 h-4" />
+            </template>
+            {{ $t('wuxingChuanyi.backToTopic') }}
+          </UButton>
         </div>
       </div>
     </div>
@@ -347,7 +249,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import { parseDate, CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import type { DiZhi } from '~/types/user'
 
@@ -385,6 +286,8 @@ interface CalcResult {
   buYi: WuxingColorSet
   xiyongWuxing: string
   jishenWuxing: string
+  lunarDate: string
+  weekDay: number
   locale: string
 }
 
@@ -404,7 +307,7 @@ const formValues = ref<FormValues>({
 const lastFormValues = ref<Partial<FormValues>>({})
 const calcResult = ref<CalcResult | null>(null)
 const baziFormRef = ref<{ form: FormValues } | null>(null)
-const resultRef = ref<HTMLDivElement | null>(null)
+const posterRef = ref<HTMLDivElement | null>(null)
 
 const tz = getLocalTimeZone()
 const df = new DateFormatter(locale.value, { dateStyle: 'long' })
@@ -646,19 +549,6 @@ function resetForm() {
   aiError.value = null
 }
 
-const aiCards = computed(() => {
-  if (!aiContent.value) return []
-  return aiContent.value
-    .split('\n---\n')
-    .map(s => s.trim())
-    .filter(Boolean)
-    .map((segment) => {
-      return {
-        html: marked.parse(segment, { async: false }) as string,
-      }
-    })
-})
-
 // SEO
 const siteName = 'ososn'
 
@@ -704,16 +594,13 @@ useHead(() => ({
 </script>
 
 <style scoped>
-:deep(.prose p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.wuxing-share-target {
+  width: 720px;
 }
-:deep(.prose p:last-child) {
-  margin-bottom: 0;
-}
-:deep(.prose strong) {
-  color: var(--text-primary);
-  font-weight: 600;
+/* 隐士解读状态条：融入海报之下，与海报间距收窄 */
+.wuxing-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
 }
 </style>
