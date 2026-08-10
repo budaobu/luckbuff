@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'bz-result-wrap': phase === 'result' }">
       <!-- 表单阶段 -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
@@ -151,170 +151,50 @@
         </div>
       </div>
 
-      <!-- 结果阶段 -->
+      <!-- 结果阶段（纸质报告） -->
       <div v-if="phase === 'result' && calcResult">
-        <div ref="resultRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('shengxiaoPeidui.resultTitle', { label: calcResult.pairLabel }) }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">
-              {{ $t('shengxiaoPeidui.resultSubtitle') }}
-            </p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
+        <!-- 隐藏截图目标：完整纸质报告 -->
+        <div ref="shareTargetRef" v-show="false" class="bzr-share-target">
+          <ShengxiaoPeiduiReport
+            :male="calcResult.male"
+            :female="calcResult.female"
+            :pair-label="calcResult.pairLabel"
+            :zodiac-verdict="calcResult.zodiacVerdict"
+            :nayin-verdict="calcResult.nayinVerdict"
+            :minggua-verdict="calcResult.mingguaVerdict"
+            :ai-content="aiContent"
+            :streaming="false"
+            :error="null"
+          />
+        </div>
 
-          <!-- 生肖配对总览卡 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <div class="flex items-center justify-between gap-4 mb-6">
-              <div class="text-center flex-1">
-                <p class="text-3xl font-bold text-[var(--accent)]">{{ shengxiaoEmoji(calcResult.male.animal) }}</p>
-                <p class="text-sm font-medium text-[var(--text-primary)] mt-1">{{ calcResult.male.animal }}</p>
-              </div>
-              <div class="flex-1 text-center">
-                <p class="text-sm font-semibold text-[var(--text-primary)]">{{ calcResult.zodiacVerdict.label }}</p>
-                <p class="text-xs text-[var(--text-faint)] mt-1">{{ pairHeadline }}</p>
-              </div>
-              <div class="text-center flex-1">
-                <p class="text-3xl font-bold text-[var(--accent)]">{{ shengxiaoEmoji(calcResult.female.animal) }}</p>
-                <p class="text-sm font-medium text-[var(--text-primary)] mt-1">{{ calcResult.female.animal }}</p>
-              </div>
-            </div>
+        <ShengxiaoPeiduiReport
+          :male="calcResult.male"
+          :female="calcResult.female"
+          :pair-label="calcResult.pairLabel"
+          :zodiac-verdict="calcResult.zodiacVerdict"
+          :nayin-verdict="calcResult.nayinVerdict"
+          :minggua-verdict="calcResult.mingguaVerdict"
+          :ai-content="aiContent"
+          :streaming="aiStreaming"
+          :error="aiError"
+          @retry="startAiStream"
+        />
 
-            <!-- 男方 -->
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card-hover)] p-4 mb-3">
-              <p class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                {{ $t('shengxiaoPeidui.maleTitle') }}
-              </p>
-              <p class="text-sm text-[var(--text-body)]">
-                {{ calcResult.male.year }}年属{{ calcResult.male.animal }}{{ calcResult.male.age }}岁
-              </p>
-              <div class="mt-2 space-y-1 text-sm text-[var(--text-muted)]">
-                <p>【{{ $t('shengxiaoPeidui.nayinLabel') }}】{{ calcResult.male.naYin }}</p>
-                <p>【{{ $t('shengxiaoPeidui.shengxiaoMingLabel') }}】{{ calcResult.male.shengXiaoMing }}</p>
-                <p>【{{ $t('shengxiaoPeidui.mingguaLabel') }}】{{ calcResult.male.mingGua }}（{{ calcResult.male.lifeGroupLabel }}）</p>
-              </div>
+        <!-- 八字合盘引导 -->
+        <div class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)] p-4 mt-5">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex-1">
+              <p class="text-sm text-[var(--text-body)]">{{ $t('shengxiaoPeidui.baziHunpanBanner') }}</p>
             </div>
-
-            <!-- 女方 -->
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card-hover)] p-4 mb-4">
-              <p class="text-sm font-semibold text-[var(--text-primary)] mb-2">
-                {{ $t('shengxiaoPeidui.femaleTitle') }}
-              </p>
-              <p class="text-sm text-[var(--text-body)]">
-                {{ calcResult.female.year }}年属{{ calcResult.female.animal }}{{ calcResult.female.age }}岁
-              </p>
-              <div class="mt-2 space-y-1 text-sm text-[var(--text-muted)]">
-                <p>【{{ $t('shengxiaoPeidui.nayinLabel') }}】{{ calcResult.female.naYin }}</p>
-                <p>【{{ $t('shengxiaoPeidui.shengxiaoMingLabel') }}】{{ calcResult.female.shengXiaoMing }}</p>
-                <p>【{{ $t('shengxiaoPeidui.mingguaLabel') }}】{{ calcResult.female.mingGua }}（{{ calcResult.female.lifeGroupLabel }}）</p>
-              </div>
-            </div>
-
-            <!-- 合配标签 -->
-            <div class="flex flex-wrap items-center justify-center gap-3 text-sm">
-              <span
-                class="px-3 py-1.5 rounded-full border font-medium"
-                :class="verdictClass(calcResult.nayinVerdict.key)"
-              >{{ calcResult.nayinVerdict.label }}</span>
-              <span class="text-[var(--text-faint)]">｜</span>
-              <span
-                class="px-3 py-1.5 rounded-full border font-medium"
-                :class="verdictClass(calcResult.mingguaVerdict.key)"
-              >{{ calcResult.mingguaVerdict.label }}</span>
-              <span class="text-[var(--text-faint)]">｜</span>
-              <span
-                class="px-3 py-1.5 rounded-full border font-medium"
-                :class="verdictClass(calcResult.zodiacVerdict.key)"
-              >{{ calcResult.zodiacVerdict.label }}</span>
-            </div>
-          </div>
-
-          <!-- AI 解读摘要 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('shengxiaoPeidui.aiInterpretation') }}</h3>
-              </div>
-              <div v-if="aiStreaming" class="flex items-center gap-1.5">
-                <span class="text-xs text-[var(--accent-muted)]">{{ $t('shengxiaoPeidui.interpreting') }}</span>
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-                </span>
-              </div>
-            </div>
-
-            <div v-if="aiContent" class="space-y-4">
-              <div
-                v-for="(card, idx) in aiCards"
-                :key="idx"
-                class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] p-4"
-              >
-                <div
-                  class="prose prose-sm max-w-none text-[var(--text-body)] leading-relaxed"
-                  v-html="card.html"
-                />
-              </div>
-            </div>
-
-            <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-              <div class="flex flex-col items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                  <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-                </div>
-                <p class="text-xs text-[var(--text-muted)]">{{ $t('shengxiaoPeidui.generatingInterpretation') }}</p>
-              </div>
-            </div>
-
-            <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-                <p class="text-sm text-red-400">{{ aiError }}</p>
-              </div>
-            </div>
-
-            <div v-if="!aiStreaming && aiContent" class="mt-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card-hover)] px-4 py-3">
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">
-                {{ $t('shengxiaoPeidui.disclaimer') }}
-              </p>
-            </div>
-
-            <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-              <UButton
-                color="warning"
-                variant="soft"
-                size="sm"
-                class="group/btn"
-                @click="startAiStream"
-              >
-                <template #leading>
-                  <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-                </template>
-                {{ $t('shengxiaoPeidui.reinterpret') }}
-              </UButton>
-            </div>
-          </div>
-
-          <!-- 八字合盘引导 -->
-          <div class="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)] p-4 mb-5">
-            <div class="flex items-center justify-between gap-4">
-              <div class="flex-1">
-                <p class="text-sm text-[var(--text-body)]">{{ $t('shengxiaoPeidui.baziHunpanBanner') }}</p>
-              </div>
-              <UButton
-                color="warning"
-                variant="soft"
-                size="sm"
-                :to="localePath('/tools/bazi-hunpan')"
-              >
-                {{ $t('shengxiaoPeidui.baziHunpanCta') }}
-              </UButton>
-            </div>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="sm"
+              :to="localePath('/tools/bazi-hunpan')"
+            >
+              {{ $t('shengxiaoPeidui.baziHunpanCta') }}
+            </UButton>
           </div>
         </div>
 
@@ -335,7 +215,7 @@
             tool="shengxiao-peidui"
             :name="`${calcResult.male.year}${calcResult.male.animal}男${calcResult.female.year}${calcResult.female.animal}女`"
             :summary="`${calcResult.zodiacVerdict.label} · ${calcResult.nayinVerdict.label} · ${calcResult.mingguaVerdict.label}`"
-            :share-target="resultRef || undefined"
+            :share-target="shareTargetRef"
             :filename="`shengxiao-peidui-${calcResult.male.year}-${calcResult.female.year}.png`"
           />
           <UButton
@@ -356,8 +236,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-
 interface PartnerForm {
   animal: string
   year: number
@@ -404,12 +282,20 @@ const MAX_YEAR = new Date().getFullYear() + 1
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const calcResult = ref<CalcResult | null>(null)
-const resultRef = ref<HTMLDivElement | null>(null)
+const shareTargetRef = ref<HTMLElement>()
 
 const form = ref<{ male: PartnerForm; female: PartnerForm }>({
   male: { animal: '狗', year: 1994, gender: 'male' },
   female: { animal: '虎', year: 1986, gender: 'female' },
 })
+
+const shengxiaoEmoji = (animal: string) => {
+  const map: Record<string, string> = {
+    鼠: '🐭', 牛: '🐮', 虎: '🐯', 兔: '🐰', 龙: '🐲', 蛇: '🐍',
+    马: '🐴', 羊: '🐑', 猴: '🐵', 鸡: '🐔', 狗: '🐶', 猪: '🐷',
+  }
+  return map[animal] || ''
+}
 
 const animalOptions = computed(() =>
   ANIMALS.map(animal => ({
@@ -589,54 +475,6 @@ function resetForm() {
   aiError.value = null
 }
 
-const aiCards = computed(() => {
-  if (!aiContent.value) return []
-  return aiContent.value
-    .split('\n---\n')
-    .map(s => s.trim())
-    .filter(Boolean)
-    .map((segment) => {
-      return {
-        html: marked.parse(segment, { async: false }) as string,
-      }
-    })
-})
-
-const pairHeadline = computed(() => {
-  if (!calcResult.value) return ''
-  const { zodiacVerdict } = calcResult.value
-  const map: Record<string, string> = {
-    sanhe: t('shengxiaoPeidui.headlineSanhe'),
-    liuhe: t('shengxiaoPeidui.headlineLiuhe'),
-    xiangchong: t('shengxiaoPeidui.headlineXiangchong'),
-    xianghai: t('shengxiaoPeidui.headlineXianghai'),
-    xiangxing: t('shengxiaoPeidui.headlineXiangxing'),
-    same: t('shengxiaoPeidui.headlineSame'),
-    none: t('shengxiaoPeidui.headlineNone'),
-    unknown: t('shengxiaoPeidui.headlineNone'),
-  }
-  return map[zodiacVerdict.key] || zodiacVerdict.label
-})
-
-const shengxiaoEmoji = (animal: string) => {
-  const map: Record<string, string> = {
-    鼠: '🐭', 牛: '🐮', 虎: '🐯', 兔: '🐰', 龙: '🐲', 蛇: '🐍',
-    马: '🐴', 羊: '🐑', 猴: '🐵', 鸡: '🐔', 狗: '🐶', 猪: '🐷',
-  }
-  return map[animal] || ''
-}
-
-const FAVORABLE_KEYS = ['sanhe', 'liuhe', 'same', 'bihe', 'maleShengfemale', 'femaleShengmale', 'sameGroup']
-function verdictClass(key: string): string {
-  if (FAVORABLE_KEYS.includes(key)) {
-    return 'border-green-500/30 bg-green-500/10 text-green-400'
-  }
-  if (['xiangchong', 'xianghai', 'xiangxing', 'maleKefemale', 'femaleKemale', 'diffGroup'].includes(key)) {
-    return 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-  }
-  return 'border-[var(--border-light)] bg-[var(--surface-card)] text-[var(--text-muted)]'
-}
-
 // SEO
 const siteName = 'ososn'
 
@@ -682,21 +520,12 @@ useHead(() => ({
 </script>
 
 <style scoped>
-:deep(.prose p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+.bzr-share-target {
+  width: 1080px;
 }
-:deep(.prose p:last-child) {
-  margin-bottom: 0;
-}
-:deep(.prose strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-:deep(.prose h2), :deep(.prose h3), :deep(.prose h4) {
-  color: var(--text-primary);
-  margin-bottom: 0.5em;
-  font-weight: 600;
+
+/* 结果阶段：纸质报告需要更宽的版面 */
+.bz-result-wrap {
+  max-width: 80rem;
 }
 </style>
