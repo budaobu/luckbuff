@@ -73,15 +73,25 @@
         {{ $t('qimenSeeking.poster.panLine', { dun: dunText, ju: juShu, ri: riGanzhi, shi: shiGanzhi }) }}
       </div>
 
-      <!-- ============ 底部：联系方式撕条（换成品牌落款，重复几条） ============ -->
+      <!-- ============ 底部：归档编号 + 盖印日期章（档案感，无交互、无二维码） ============ -->
       <footer class="qsp-foot">
-        <p class="qsp-foot-hint">{{ $t('qimenSeeking.poster.tearHint') }}</p>
-        <div class="qsp-tears">
-          <span v-for="n in tearCount" :key="n" class="qsp-tear">
-            <span class="qsp-tear-site">{{ siteDomain }}</span>
-            <span class="qsp-tear-brand">{{ $t('qimenSeeking.poster.brand') }}</span>
-          </span>
+        <div class="qsp-archive">
+          <div class="qsp-archive-text">
+            <p class="qsp-archive-no">
+              <em>{{ $t('qimenSeeking.poster.archiveLabel') }}</em>
+              {{ $t('qimenSeeking.poster.archiveNo', { no: archiveNo }) }}
+            </p>
+            <p class="qsp-archive-date">
+              <em>{{ $t('qimenSeeking.poster.archiveDateLabel') }}</em>
+              {{ archiveDate }}
+            </p>
+          </div>
+          <div class="qsp-archive-seal" aria-hidden="true">
+            <span class="qsp-archive-seal-text">{{ archiveSealText }}</span>
+            <span class="qsp-archive-seal-date">{{ archiveDate }}</span>
+          </div>
         </div>
+        <!-- 引流二维码与档案块分离，独立成行 -->
         <div class="qsp-foot-row">
           <div class="qsp-seal-stamp">{{ $t('qimenSeeking.poster.seal') }}</div>
           <div class="qsp-qr" aria-hidden="true">
@@ -119,9 +129,32 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const { t } = useI18n()
 
-const siteDomain = 'www.ososn.com'
-/** 撕条条数：重复几条增加辨识度 */
-const tearCount = 5
+/* ---------- 归档编号 + 盖印日期：档案感落款 ---------- */
+
+/**
+ * 立档日期：取起卦日（日干支对应日期）——没有可靠公历时回退到今日。
+ * 编号尾号由盘面字段做简单 hash，保证同一盘同一号、看起来煞有介事。
+ */
+const pad = (n: number) => String(n).padStart(2, '0')
+
+const archiveDate = computed(() => {
+  const d = new Date()
+  return `${d.getFullYear()} 年 ${pad(d.getMonth() + 1)} 月 ${pad(d.getDate())} 日`
+})
+
+const archiveNo = computed(() => {
+  const d = new Date()
+  const ymd = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`
+  const seed = `${props.riGanzhi}|${props.shiGanzhi}|${props.yinYang}|${props.juShu}|${props.lostItemName}`
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0
+  return `${ymd}-${String(h % 10000).padStart(4, '0')}`
+})
+
+/** 盖印文字（可含 \n 分行），配合做旧印章 */
+const archiveSealText = computed(() =>
+  t('qimenSeeking.poster.archiveSeal').replace(/\\n/g, '\n'),
+)
 
 const dunText = computed(() => (props.yinYang === 'yang' ? t('qimenSeeking.poster.yang') : t('qimenSeeking.poster.yin')))
 
@@ -436,58 +469,75 @@ const aiParsed = computed<AiParsed>(() => {
   color: var(--qsp-ink-faint);
 }
 
-/* ---------- 底部：联系方式撕条 ---------- */
+/* ---------- 底部：归档编号 + 盖印日期章（档案感） ---------- */
 .qsp-foot {
   margin-top: 14px;
   border-top: 2px solid var(--qsp-ink);
-  padding-top: 10px;
+  padding-top: 12px;
 }
-.qsp-foot-hint {
-  margin: 0 0 8px;
-  text-align: center;
+.qsp-archive {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 4px 2px;
+}
+.qsp-archive-text { min-width: 0; }
+.qsp-archive-no,
+.qsp-archive-date {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--qsp-ink);
+  line-height: 1.7;
+}
+.qsp-archive-no { font-weight: 700; font-size: 14px; }
+.qsp-archive-no em,
+.qsp-archive-date em {
+  font-style: normal;
   font-size: 10px;
+  font-weight: 400;
   letter-spacing: 2px;
   color: var(--qsp-ink-faint);
+  margin-right: 8px;
 }
-.qsp-tears {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  border: 1px solid var(--qsp-line);
-  background: rgba(255, 255, 255, 0.4);
-}
-.qsp-tear {
-  flex: 1;
-  min-width: 0;
+/* 仿盖印日期章：半透明朱红、做旧、边缘不齐、微歪斜 */
+.qsp-archive-seal {
+  flex-shrink: 0;
+  width: 92px;
+  height: 92px;
+  border: 2.5px solid rgba(178, 58, 44, 0.72);
+  border-radius: 50%;
+  /* 边缘不齐：多重不规则内描边 + 墨迹飞白 */
+  box-shadow:
+    inset 0 0 0 1.5px rgba(178, 58, 44, 0.28),
+    inset 2px 1px 0 rgba(178, 58, 44, 0.15),
+    inset -1px -2px 0 rgba(178, 58, 44, 0.12),
+    0 0 0 1px rgba(178, 58, 44, 0.08);
+  color: rgba(178, 58, 44, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  padding: 8px 2px;
-  /* 撕条之间的齿孔分隔线 */
-  border-left: 1px dashed var(--qsp-line);
-  transform: rotate(-0.5deg);
+  text-align: center;
+  transform: rotate(-7deg);
+  /* 做旧：整体压半透明，让纸纹透出来 */
+  opacity: 0.86;
+  /* 墨迹不均：径向渐变让局部偏淡 */
+  background: radial-gradient(circle at 38% 32%, rgba(178, 58, 44, 0.06), transparent 60%);
 }
-.qsp-tear:first-child { border-left: none; }
-.qsp-tear:nth-child(odd) { transform: rotate(0.6deg); }
-.qsp-tear-site {
-  font-size: 10px;
+.qsp-archive-seal-text {
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  color: var(--qsp-ink);
-  /* 竖排，仿寻物启事电话撕条 */
-  writing-mode: vertical-rl;
-  max-height: 76px;
-  overflow: hidden;
+  letter-spacing: 2px;
+  line-height: 1.3;
+  white-space: pre-line;
 }
-.qsp-tear-brand {
-  font-size: 8px;
+.qsp-archive-seal-date {
+  font-size: 9px;
   letter-spacing: 1px;
-  color: var(--qsp-ink-faint);
-  writing-mode: vertical-rl;
-  max-height: 60px;
-  overflow: hidden;
+  opacity: 0.9;
 }
 
 .qsp-foot-row {
@@ -547,6 +597,7 @@ const aiParsed = computed<AiParsed>(() => {
   .qsp-sheet { padding: 18px 14px 12px; }
   .qsp-title { font-size: 44px; letter-spacing: 6px; }
   .qsp-item-name { font-size: 24px; }
-  .qsp-tear-site { max-height: 62px; }
+  .qsp-archive-seal { width: 78px; height: 78px; }
+  .qsp-archive-seal-text { font-size: 11px; }
 }
 </style>

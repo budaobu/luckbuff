@@ -2850,7 +2850,11 @@
       "seal": "奇門",
       "qrHint": "掃碼尋物",
       "yang": "陽遁",
-      "yin": "陰遁"
+      "yin": "陰遁",
+      "archiveLabel": "歸檔編號",
+      "archiveNo": "尋字第 {no} 號",
+      "archiveDateLabel": "立檔日期",
+      "archiveSeal": "尋物啟事\n立檔為憑"
     }
   },
   "liurenSeeking": {
@@ -3143,7 +3147,11 @@
       "zhi": "之",
       "huJian": "互見",
       "shiRole": "世",
-      "yingRole": "應"
+      "yingRole": "應",
+      "archiveLabel": "歸檔編號",
+      "archiveNo": "尋字第 {no} 號",
+      "archiveDateLabel": "立檔日期",
+      "archiveSeal": "尋物啟事\n立檔為憑"
     }
   },
   "ceziBattle": {
