@@ -231,47 +231,70 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <!-- 遁局信息 -->
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-4">
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-body)]">
-            <span class="font-semibold text-[var(--text-primary)]">
-              {{ pan.yinYang === 'yang' ? '阳遁' : '阴遁' }}{{ pan.juShu }}局
-            </span>
-            <span class="text-[var(--text-faint)]">|</span>
-            <span>日：{{ pan.riGanzhi }}</span>
-            <span class="text-[var(--text-faint)]">|</span>
-            <span>时：{{ pan.shiGanzhi }}</span>
-            <span class="text-[var(--text-faint)]">|</span>
-            <span>节气：{{ pan.jieqi }}</span>
-          </div>
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="resultStatus === 'done' && interpretContent" ref="posterRef" v-show="false" class="qimen-seeking-share-target">
+          <QimenSeekingPoster
+            :lost-item-name="form.lostItemDesc || form.description || $t('qimenSeeking.poster.itemFallback')"
+            :lost-time="form.lastSeenTime"
+            :last-seen-place="form.lastSeenPlace"
+            :yin-yang="pan.yinYang"
+            :ju-shu="pan.juShu"
+            :ri-ganzhi="pan.riGanzhi"
+            :shi-ganzhi="pan.shiGanzhi"
+            :ai-content="interpretContent"
+          />
         </div>
 
-        <!-- 寻物信息摘要 -->
-        <div v-if="formSummary" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-4">
-          <div class="text-sm text-[var(--text-body)] space-y-1">
-            <div v-if="formSummary.description"><span class="text-[var(--text-faint)]">问事：</span>{{ formSummary.description }}</div>
-            <div v-if="formSummary.lastSeenTime"><span class="text-[var(--text-faint)]">最后见到：</span>{{ formSummary.lastSeenTime }}</div>
-            <div v-if="formSummary.lastSeenPlace"><span class="text-[var(--text-faint)]">最后地点：</span>{{ formSummary.lastSeenPlace }}</div>
-            <div v-if="formSummary.lostItemDesc"><span class="text-[var(--text-faint)]">失物：</span>{{ formSummary.lostItemDesc }}</div>
-            <div v-if="formSummary.relationship"><span class="text-[var(--text-faint)]">关系：</span>{{ formSummary.relationship }}</div>
+        <!-- 页内展示：纸刊寻物启事海报（AI 流式融入） -->
+        <QimenSeekingPoster
+          :lost-item-name="form.lostItemDesc || form.description || $t('qimenSeeking.poster.itemFallback')"
+          :lost-time="form.lastSeenTime"
+          :last-seen-place="form.lastSeenPlace"
+          :yin-yang="pan.yinYang"
+          :ju-shu="pan.juShu"
+          :ri-ganzhi="pan.riGanzhi"
+          :shi-ganzhi="pan.shiGanzhi"
+          :ai-content="interpretContent"
+        />
+
+        <!-- 隐士解读状态条（融入海报之下，非独立卡片） -->
+        <div class="qimen-seeking-ai-bar">
+          <div v-if="resultStatus === 'loading' || resultStatus === 'streaming'" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('qimenSeeking.interpreting') }}</span>
+          </div>
+          <div v-else-if="resultStatus === 'error'" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ interpretError }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startInterpretStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('common.retry') }}
+            </UButton>
+          </div>
+          <div v-else-if="interpretContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('qimen.interpret.disclaimer') }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startInterpretStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('qimenSeeking.reinterpret') }}
+            </UButton>
           </div>
         </div>
 
         <!-- 九宫格盘面 -->
-        <QimenPan
-          :palaces="pan.palaces"
-          :zhifu-gong="pan.zhiFuGong"
-          :zhishi-gong="pan.zhiShiGong"
-        />
-
-        <!-- AI 寻物解读 -->
-        <QimenResultCard
-          :status="resultStatus"
-          :content="interpretContent"
-          :error="interpretError"
-          :metadata="resultMetadata"
-          @retry="startInterpretStream"
-        />
+        <div class="mt-6">
+          <QimenPan
+            :palaces="pan.palaces"
+            :zhifu-gong="pan.zhiFuGong"
+            :zhishi-gong="pan.zhiShiGong"
+          />
+        </div>
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -283,8 +306,9 @@
           </UButton>
           <AppShareButton
             tool="qimen-seeking"
-            :summary="`${pan.yinYang === 'yang' ? '阳遁' : '阴遁'}${pan.juShu}局 · ${pan.jieqi}${formSummary?.lostItemDesc ? ' · 失物：' + formSummary.lostItemDesc : ''}`"
-            :share-target="resultRef"
+            :disabled="resultStatus !== 'done' || !interpretContent"
+            :summary="`${pan.yinYang === 'yang' ? '阳遁' : '阴遁'}${pan.juShu}局 · ${pan.jieqi}${form.lostItemDesc ? ' · 失物：' + form.lostItemDesc : ''}`"
+            :share-target="posterRef || undefined"
             :filename="`qimen-seeking-${pan.riGanzhi}-${pan.shiGanzhi}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo(localePath('/seeking')) }">
@@ -311,6 +335,7 @@ const phase = ref<'form' | 'animating' | 'result'>('form')
 const pan = ref<QimenPanType | null>(null)
 const lastPayload = ref<any>(null)
 const resultRef = ref<HTMLDivElement>()
+const posterRef = ref<HTMLDivElement | null>(null)
 
 const resultStatus = ref<QimenResultStatus>('idle')
 const interpretContent = ref('')
@@ -325,28 +350,6 @@ const form = reactive({
 })
 
 const timeCardRef = ref<{ iso: Ref<string> } | null>(null)
-
-const formSummary = computed(() => {
-  if (phase.value !== 'result') return null
-  const s: Record<string, string> = {}
-  if (form.description) s.description = form.description
-  if (form.lastSeenTime) s.lastSeenTime = form.lastSeenTime
-  if (form.lastSeenPlace) s.lastSeenPlace = form.lastSeenPlace
-  if (form.lostItemDesc) s.lostItemDesc = form.lostItemDesc
-  if (form.relationship) s.relationship = form.relationship
-  return Object.keys(s).length > 0 ? s : null
-})
-
-const resultMetadata = computed(() => {
-  if (!pan.value) return null
-  return {
-    juShu: pan.value.juShu,
-    yinYang: pan.value.yinYang,
-    riGanzhi: pan.value.riGanzhi,
-    shiGanzhi: pan.value.shiGanzhi,
-    jieqi: pan.value.jieqi,
-  }
-})
 
 const directions = ['北', '东北', '东', '东南', '南', '西南', '西', '西北']
 
@@ -550,6 +553,15 @@ useHead(() => ({
 </script>
 
 <style scoped>
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.qimen-seeking-share-target {
+  width: 720px;
+}
+/* 隐士解读状态条：融入海报之下，与海报间距收窄 */
+.qimen-seeking-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
+}
 .outer-dashed-ring {
   animation: spin-dashed 24s linear infinite;
 }

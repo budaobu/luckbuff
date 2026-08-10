@@ -2800,6 +2800,32 @@
         "title": "Qimen Seeking Tool",
         "content": "Content"
       }
+    },
+    "interpreting": "The hermit is divining…",
+    "reinterpret": "Divine again",
+    "poster": {
+      "kicker": "QIMEN DUNJIA · LOST & FOUND NOTICE",
+      "title": "Lost & Found",
+      "serial": "Telegraph-Pole Office · No. Jiazi",
+      "overviewPending": "The hermit is divining — your lost item's whereabouts coming soon…",
+      "itemFlag": "LOST",
+      "itemFallback": "Lost Item",
+      "lostTimeLabel": "Lost at",
+      "lastPlaceLabel": "Last seen",
+      "dirLabel": "Direction",
+      "timeLabel": "Best hour",
+      "probLabel": "Odds",
+      "fieldPending": "Divining…",
+      "tipsTitle": "How to Find It",
+      "noteLabel": "The Hermit says",
+      "notePending": "Don't fret — it's not lost, just playing hide-and-seek.",
+      "panLine": "{dun} Ju {ju} · {ri} day {shi} hour",
+      "tearHint": "—— TEAR ONE OFF · TAKE THE CLUE HOME ——",
+      "brand": "Qimen Hermit",
+      "seal": "QIMEN",
+      "qrHint": "Scan to seek",
+      "yang": "Yang",
+      "yin": "Yin"
     }
   },
   "liurenSeeking": {
