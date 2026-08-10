@@ -234,52 +234,74 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && result">
-        <div ref="shareTargetRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('liuyaoSeeking.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
+        <div class="mb-8">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
+            {{ $t('liuyaoSeeking.resultTitle') }}
+          </h1>
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        </div>
 
-          <!-- 寻物信息摘要 -->
-          <div v-if="formSummary" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-4">
-            <div class="text-sm text-[var(--text-body)] space-y-1">
-              <div v-if="formSummary.description"><span class="text-[var(--text-faint)]">问事：</span>{{ formSummary.description }}</div>
-              <div v-if="formSummary.lastSeenTime"><span class="text-[var(--text-faint)]">最后见到：</span>{{ formSummary.lastSeenTime }}</div>
-              <div v-if="formSummary.lastSeenPlace"><span class="text-[var(--text-faint)]">最后地点：</span>{{ formSummary.lastSeenPlace }}</div>
-              <div v-if="formSummary.lostItemDesc"><span class="text-[var(--text-faint)]">失物：</span>{{ formSummary.lostItemDesc }}</div>
-              <div v-if="formSummary.relationship"><span class="text-[var(--text-faint)]">关系：</span>{{ formSummary.relationship }}</div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="!aiStreaming && aiContent" ref="posterRef" v-show="false" class="liuyao-seeking-share-target">
+          <LiuyaoSeekingPoster
+            :lost-item-name="form.lostItemDesc || form.description || $t('liuyaoSeeking.poster.itemFallback')"
+            :lost-time="form.lastSeenTime"
+            :last-seen-place="form.lastSeenPlace"
+            :ben-gua="result.hexagram?.本卦 || ''"
+            :bian-gua="result.hexagram?.变卦 || ''"
+            :hu-gua="result.hexagram?.互卦 || ''"
+            :shi-yao="result.hexagram?.世爻位"
+            :ying-yao="result.hexagram?.应爻位"
+            :ai-content="aiContent"
+          />
+        </div>
 
-          <!-- 时空信息 -->
-          <div v-if="result.temporal_context" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-            <h3 class="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-              <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
-              {{ $t('liuyaoDivination.temporalParams') }}
-            </h3>
-            <div class="grid grid-cols-2 gap-3 text-xs">
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.yueJian') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.月建 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.riChen') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.日辰 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.shiChen') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.时辰 }}</span>
-              </div>
-              <div class="rounded-lg bg-[var(--surface-card)] p-3">
-                <span class="text-[var(--text-placeholder)] block mb-1">{{ $t('liuyaoDivination.xunKong') }}</span>
-                <span class="text-[var(--text-primary)] font-medium">{{ result.temporal_context.旬空 }}</span>
-              </div>
-            </div>
-          </div>
+        <!-- 页内展示：纸刊寻物启事海报（AI 流式融入） -->
+        <LiuyaoSeekingPoster
+          :lost-item-name="form.lostItemDesc || form.description || $t('liuyaoSeeking.poster.itemFallback')"
+          :lost-time="form.lastSeenTime"
+          :last-seen-place="form.lastSeenPlace"
+          :ben-gua="result.hexagram?.本卦 || ''"
+          :bian-gua="result.hexagram?.变卦 || ''"
+          :hu-gua="result.hexagram?.互卦 || ''"
+          :shi-yao="result.hexagram?.世爻位"
+          :ying-yao="result.hexagram?.应爻位"
+          :ai-content="aiContent"
+        />
 
+        <!-- 卦师解读状态条（融入海报之下，非独立卡片） -->
+        <div class="liuyao-seeking-ai-bar">
+          <div v-if="aiStreaming" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('liuyaoSeeking.interpreting') }}</span>
+          </div>
+          <div v-else-if="aiError" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ aiError }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('common.retry') }}
+            </UButton>
+          </div>
+          <div v-else-if="aiContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('liuyaoDivination.disclaimer') }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('liuyaoDivination.reinterpretBtn') }}
+            </UButton>
+          </div>
+        </div>
+
+        <!-- 卦象与爻象明细（海报之下的排盘参考） -->
+        <div class="mt-6">
           <!-- 卦象信息 -->
           <div v-if="result.hexagram" class="grid grid-cols-3 gap-3 mb-5">
             <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4 text-center">
@@ -330,45 +352,15 @@
           </div>
         </div>
 
-        <!-- AI 断语 -->
-        <div ref="aiInterpretationRef" class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <LiuyaoGeneralAiInterpret
-            :content="aiContent"
-            :streaming="aiStreaming"
-            :started="aiStarted"
-            :error="aiError"
-          />
-
-          <!-- 重新解读按钮 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('liuyaoDivination.reinterpretBtn') }}
-            </UButton>
-          </div>
-        </div>
-
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
-          <UButton
-            color="warning"
-            variant="soft"
-            class="group/btn"
-            @click="handleShare"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-share" class="w-4 h-4" />
-            </template>
-            {{ $t('liuyaoDivination.shareBtn') }}
-          </UButton>
+          <AppShareButton
+            tool="liuyao-seeking"
+            :disabled="aiStreaming || !aiContent"
+            :summary="shareSummary"
+            :share-target="posterRef || undefined"
+            :filename="`liuyao-seeking-${result.hexagram?.本卦 || 'gua'}-${new Date().toISOString().slice(0, 10)}.png`"
+          />
           <UButton
             color="warning"
             variant="soft"
@@ -485,74 +477,6 @@
         </div>
       </Transition>
     </Teleport>
-
-    <!-- 分享弹窗 -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="shareDialogOpen"
-          class="fixed inset-0 z-50 flex items-center justify-center"
-          @click.self="shareDialogOpen = false"
-        >
-          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
-          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
-            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
-            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
-                </div>
-                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoDivination.shareTitle') }}</h3>
-              </div>
-              <UButton
-                color="neutral"
-                variant="ghost"
-                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-                @click="() => { shareDialogOpen = false }"
-              >
-                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
-              </UButton>
-            </div>
-            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
-              <div>
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('liuyaoDivination.shareTextLabel') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
-                  {{ shareData?.copyText }}
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
-                  <template #leading>
-                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('liuyaoDivination.copyTextBtn') }}
-                </UButton>
-              </div>
-              <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('liuyaoDivination.shareScreenshotLabel') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
-                  <img :src="shareData.screenshotDataUrl" :alt="$t('liuyaoDivination.screenshotAlt')" class="w-full rounded-lg">
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
-                  <template #leading>
-                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('liuyaoDivination.downloadImageBtn') }}
-                </UButton>
-              </div>
-              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
-                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
-                <p class="text-xs text-[var(--text-faint)]">{{ $t('liuyaoDivination.screenshotFailed') }}</p>
-                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
-                  {{ shareData.screenshotError }}
-                </p>
-              </div>
-            </div>
-            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
-              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('liuyaoDivination.generatedBy') }}</p>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
@@ -600,11 +524,8 @@ const cityInputRef = ref()
 const result = ref<LiuYaoResult | null>(null)
 const errorInfo = ref<{ code: string; message: string } | null>(null)
 
-// 分享
-const shareDialogOpen = ref(false)
-const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
-const shareTargetRef = ref<HTMLDivElement>()
-const aiInterpretationRef = ref<HTMLDivElement>()
+// 分享（隐藏海报截图目标）
+const posterRef = ref<HTMLDivElement | null>(null)
 
 // ============================================================
 // 计算属性
@@ -616,17 +537,6 @@ const canSubmit = computed(() => {
 const submitHint = computed(() => {
   if (lineValues.value.length < 6) return t('liuyaoDivination.needMoreTosses', { n: 6 - lineValues.value.length })
   return ''
-})
-
-const formSummary = computed(() => {
-  if (phase.value !== 'result') return null
-  const s: Record<string, string> = {}
-  if (form.description) s.description = form.description
-  if (form.lastSeenTime) s.lastSeenTime = form.lastSeenTime
-  if (form.lastSeenPlace) s.lastSeenPlace = form.lastSeenPlace
-  if (form.lostItemDesc) s.lostItemDesc = form.lostItemDesc
-  if (form.relationship) s.relationship = form.relationship
-  return Object.keys(s).length > 0 ? s : null
 })
 
 // ============================================================
@@ -858,60 +768,15 @@ function resetForm() {
   manualCity.value = ''
 }
 
-async function handleShare() {
-  if (!result.value) return
-  const { share } = useShare()
-
-  const hex = result.value.hexagram
+const shareSummary = computed(() => {
+  const hex = result.value?.hexagram
   const hexSummary = hex
     ? hex.本卦 === hex.变卦
       ? hex.本卦
       : `${hex.本卦}变${hex.变卦}`
     : ''
-
-  const summary = `${t('liuyaoSeeking.sharePrefix')}${form.lostItemDesc ? '「' + form.lostItemDesc + '」' : ''}${hexSummary ? '，' + hexSummary : ''}`
-
-  try {
-    const target = (aiContent.value && aiInterpretationRef.value)
-      ? aiInterpretationRef.value
-      : shareTargetRef.value
-
-    const shareResult = await share({
-      tool: 'liuyao-seeking',
-      name: '',
-      summary,
-      shareTarget: target,
-      filename: `liuyao-seeking-${new Date().toISOString().slice(0, 10)}.png`,
-      t,
-    })
-    shareData.value = shareResult
-    shareDialogOpen.value = true
-  } catch (e: any) {
-    toast.add({
-      title: t('liuyaoDivination.shareFailMsg'),
-      description: e?.message || t('liuyaoDivination.shareErrorMsg'),
-      color: 'error',
-    })
-  }
-}
-
-async function copyShareText() {
-  if (!shareData.value?.copyText) return
-  try {
-    await navigator.clipboard.writeText(shareData.value.copyText)
-    toast.add({ title: t('liuyaoDivination.copySuccessMsg'), color: 'success' })
-  } catch {
-    toast.add({ title: t('liuyaoDivination.copyFailMsg'), color: 'error' })
-  }
-}
-
-function downloadShareImage() {
-  if (!shareData.value?.screenshotDataUrl) return
-  const link = document.createElement('a')
-  link.href = shareData.value.screenshotDataUrl
-  link.download = shareData.value.filename
-  link.click()
-}
+  return `${t('liuyaoSeeking.sharePrefix')}${form.lostItemDesc ? '「' + form.lostItemDesc + '」' : ''}${hexSummary ? '，' + hexSummary : ''}`
+})
 
 function unescapeHtml(str: string): string {
   return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
@@ -1018,6 +883,15 @@ useHead(() => ({
 </script>
 
 <style scoped>
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.liuyao-seeking-share-target {
+  width: 720px;
+}
+/* 卦师解读状态条：融入海报之下，与海报间距收窄 */
+.liuyao-seeking-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

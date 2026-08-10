@@ -3116,7 +3116,30 @@
         "content": "內容"
       }
     },
-    "shareText": "分享text"
+    "shareText": "分享text",
+    "interpreting": "卦師推演中…",
+    "poster": {
+      "kicker": "六 爻 納 甲 · 尋 物 啟 事",
+      "title": "六爻尋物",
+      "serial": "電線桿事務所 · 第甲子號",
+      "overviewPending": "卦師搖卦推算中，失物下落即將見分曉……",
+      "itemFlag": "尋",
+      "itemFallback": "遺失之物",
+      "lostTimeLabel": "丟失時間",
+      "lastPlaceLabel": "最後見於",
+      "dirLabel": "推算方位",
+      "timeLabel": "尋物吉時",
+      "probLabel": "尋回概率",
+      "fieldPending": "推算中……",
+      "tipsTitle": "尋找建議",
+      "noteLabel": "卦師曰",
+      "notePending": "莫急，卦裡自有定數，東西丟不了。",
+      "panLine": "{ben} 之 {bian} · 互見 {hu} · 世{shi}應{ying}",
+      "tearHint": "—— 撕 一 條 · 尋 物 線 索 帶 回 家 ——",
+      "brand": "六爻卦師",
+      "seal": "六爻",
+      "qrHint": "掃碼尋物"
+    }
   },
   "ceziBattle": {
     "knowledgeCard1Title": "測字對決",

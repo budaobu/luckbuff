@@ -3091,7 +3091,30 @@
         "content": "Content"
       }
     },
-    "shareText": "Share Text"
+    "shareText": "Share Text",
+    "interpreting": "The diviner is reading the hexagram…",
+    "poster": {
+      "kicker": "SIX LINES · LOST & FOUND",
+      "title": "Liu Yao Seeking",
+      "serial": "Telegraph-Pole Bureau · No. Jia-Zi",
+      "overviewPending": "The diviner is casting the coins, the whereabouts will soon be revealed…",
+      "itemFlag": "LOST",
+      "itemFallback": "A Lost Item",
+      "lostTimeLabel": "Lost on",
+      "lastPlaceLabel": "Last seen",
+      "dirLabel": "Direction",
+      "timeLabel": "Best time",
+      "probLabel": "Odds",
+      "fieldPending": "Divining…",
+      "tipsTitle": "Search tips",
+      "noteLabel": "The Diviner",
+      "notePending": "Fret not — the hexagram holds its answer, your item is not truly lost.",
+      "panLine": "{ben} → {bian} · nuclear {hu} · shi {shi} / ying {ying}",
+      "tearHint": "—— TEAR A STRIP · TAKE A CLUE HOME ——",
+      "brand": "Liu Yao Diviner",
+      "seal": "LiuYao",
+      "qrHint": "Scan to seek"
+    }
   },
   "ceziBattle": {
     "knowledgeCard1Title": "Character Battle",
