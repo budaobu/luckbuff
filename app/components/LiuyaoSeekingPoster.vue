@@ -27,6 +27,36 @@
         </div>
       </section>
 
+      <!-- ============ 卦象：本卦墨线六爻 + 卦名落款（先掷钱排盘，卦象居断卦之前） ============ -->
+      <section v-if="lines.length === 6" class="lsp-hex">
+        <span class="lsp-hex-flag">{{ $t('liuyaoSeeking.poster.hexTitle') }}</span>
+        <div class="lsp-hex-body">
+          <!-- 本卦六爻墨线（自上而下绘制，动爻点墨点、标世应） -->
+          <div class="lsp-hex-lines">
+            <div
+              v-for="(line, i) in lines"
+              :key="i"
+              class="lsp-hex-line-row"
+            >
+              <span class="lsp-hex-glyph" :class="{ 'lsp-hex-glyph-yin': isYinLine(line.value) }">
+                <span class="lsp-hex-seg" />
+                <span v-if="isYinLine(line.value)" class="lsp-hex-seg" />
+              </span>
+              <span v-if="isMovingLine(line)" class="lsp-hex-moving" aria-hidden="true" />
+              <span v-if="roleOf(i)" class="lsp-hex-role">{{ roleOf(i) }}</span>
+            </div>
+          </div>
+          <!-- 卦名落款 -->
+          <div class="lsp-hex-names">
+            <p class="lsp-hex-ben">{{ benGua }}</p>
+            <p v-if="bianGua && bianGua !== benGua" class="lsp-hex-bian">
+              {{ $t('liuyaoSeeking.poster.zhi') }} <em>{{ bianGua }}</em>
+            </p>
+            <p v-if="huGua" class="lsp-hex-hu">{{ $t('liuyaoSeeking.poster.huJian') }} {{ huGua }}</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ============ 推算字段栏：方位 / 时辰 / 概率现状 ============ -->
       <section class="lsp-fields">
         <div class="lsp-field">
@@ -67,36 +97,6 @@
           {{ aiParsed.note || $t('liuyaoSeeking.poster.notePending') }}
         </span>
       </p>
-
-      <!-- ============ 卦象：本卦墨线六爻 + 卦名落款，融进启事本体 ============ -->
-      <section v-if="lines.length === 6" class="lsp-hex">
-        <span class="lsp-hex-flag">{{ $t('liuyaoSeeking.poster.hexTitle') }}</span>
-        <div class="lsp-hex-body">
-          <!-- 本卦六爻墨线（自上而下绘制，动爻点墨点、标世应） -->
-          <div class="lsp-hex-lines">
-            <div
-              v-for="(line, i) in lines"
-              :key="i"
-              class="lsp-hex-line-row"
-            >
-              <span class="lsp-hex-glyph" :class="{ 'lsp-hex-glyph-yin': isYinLine(line.value) }">
-                <span class="lsp-hex-seg" />
-                <span v-if="isYinLine(line.value)" class="lsp-hex-seg" />
-              </span>
-              <span v-if="isMovingLine(line)" class="lsp-hex-moving" aria-hidden="true" />
-              <span v-if="roleOf(i)" class="lsp-hex-role">{{ roleOf(i) }}</span>
-            </div>
-          </div>
-          <!-- 卦名落款 -->
-          <div class="lsp-hex-names">
-            <p class="lsp-hex-ben">{{ benGua }}</p>
-            <p v-if="bianGua && bianGua !== benGua" class="lsp-hex-bian">
-              {{ $t('liuyaoSeeking.poster.zhi') }} <em>{{ bianGua }}</em>
-            </p>
-            <p v-if="huGua" class="lsp-hex-hu">{{ $t('liuyaoSeeking.poster.huJian') }} {{ huGua }}</p>
-          </div>
-        </div>
-      </section>
 
       <!-- ============ 卦象落款：本卦变卦小字 ============ -->
       <div class="lsp-panline">
