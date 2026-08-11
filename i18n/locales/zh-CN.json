@@ -5068,7 +5068,47 @@
     "wugeZonggeLabel": "总格",
     "zongge": "总格",
     "zonggeShort": "总",
-    "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
+    "poster": {
+    "kicker": "三才五格 · 命名鉴定",
+    "title": "命名证书",
+    "serial": "三才五格姓名学鉴定专用",
+    "nameFlag": "命名",
+    "strokeSuffix": "画",
+    "wugeTitle": "五格剖象",
+    "sancaiTitle": "三才配置",
+    "scoreLabel": "综合评分",
+    "gradeLabel": "等级",
+    "luckLabel": "五格运势",
+    "othersTitle": "备选名录",
+    "archiveLabel": "归档",
+    "archiveNo": "命字第 {no} 号",
+    "archiveDateLabel": "立档",
+    "archiveSeal": "命名\\n鉴定",
+    "seal": "鉴定",
+    "qrHint": "扫码起名",
+      "fortune": {
+        "daJi": "大吉",
+        "ji": "吉",
+        "banJi": "半吉",
+        "xiong": "凶",
+        "daXiong": "大凶"
+      },
+      "luck": {
+        "top": "上吉",
+        "good": "吉",
+        "mid": "中吉",
+        "flat": "平",
+        "caution": "需谨慎"
+      },
+      "grade": {
+        "excellent": "极佳",
+        "great": "优秀",
+        "good": "良好",
+        "fair": "中等",
+        "normal": "一般"
+      }
+    }
   },
   "wuge": {
     "knowledgeCard1Title": "五格剖象法",

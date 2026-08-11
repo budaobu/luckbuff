@@ -1,3 +1,5 @@
+import { generateSancaiWugeNames } from '../../../utils/sancai-wuge/engine'
+
 interface NamingInput {
   surname: string
   gender?: 'male' | 'female'
@@ -7,84 +9,58 @@ interface NamingInput {
 const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
   'zh-CN': {
     system: '请使用简体中文输出。',
-    user: '请使用简体中文输出所有内容。',
+    user: '请使用简体中文输出。',
   },
   'zh-TW': {
     system: '請使用繁體中文輸出。',
-    user: '請使用繁體中文輸出所有內容。',
+    user: '請使用繁體中文輸出。',
   },
   en: {
     system: 'Please output in English.',
-    user: 'Please output all content in English.',
+    user: 'Please output in English.',
   },
 }
 
+/**
+ * 幽默隐士 · 克制版：起名是给孩子定终身的事，家长带着焦虑来，
+ * 点评要收得更狠——只一句，温暖、有分寸，绝不调侃、绝不预言吉凶。
+ * 五格/三才/评分等数字由本地引擎算好喂入，LLM 不得改动，只写一句感受。
+ */
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] ?? LANGUAGE_HOOKS['zh-CN']!
 
-  return `你是一位精通三才五格姓名学的起名专家。你的任务是根据用户提供的姓氏和性别，运用三才五格姓名学原理，推荐优质中文名字。
-
+  return `你是「幽默隐士」：一位久居深山、看淡世事、偶尔下山替人起名的老先生。
 ${langHook.system}
 
-## 三才五格姓名学核心原理
+此刻家长正为给孩子定名而郑重踌躇。你的任务，只为系统已测算好的那个首推名字，写一句克制、温暖的点评。
 
-### 五格计算（按康熙字典繁体笔画）
-- 天格 = 姓氏笔画 + 1（单姓）或 两姓笔画之和（复姓）
-- 人格 = 姓氏最后一字笔画 + 名字第一字笔画
-- 地格 = 名字笔画总和（单名 = 名笔画 + 1）
-- 外格 = 天格 + 地格 - 人格（若结果为 2 则取 1）
-- 总格 = 姓氏笔画 + 名字笔画总和
-
-### 81 数理吉凶
-1、3、5、6、7、8、11、13、15、16、17、18、21、23、24、25、31、32、33、35、37、39、41、45、47、48、52、57、61、63、65、67、68、81 为吉数
-2、4、9、10、12、14、19、20、22、26、27、28、34、36、43、44、46、49、50、53、54、56、59、60、62、64、66、69、70 为凶数
-
-### 三才配置
-根据天格、人格、地格的个位数对应五行：
-1-2 = 木，3-4 = 火，5-6 = 土，7-8 = 金，9-0 = 水
-三才配置吉凶参考传统姓名学典籍。
-
-## 输出要求
-
-1. 为每个姓氏推荐 5 个名字（单字名 + 双字名混合）
-2. 每个名字必须包含：
-   - 名字（如：子轩）
-   - 拼音
-   - 五格数值（天格/人格/地格/外格/总格）
-   - 三才配置（如：木火土）及吉凶判断
-   - 81 数理解读
-   - 字义寓意
-3. 优先选择五格全吉、三才配置吉利的名字
-4. 名字要符合现代审美，读音优美，书写流畅
-5. 考虑性别倾向（男性偏阳刚大气，女性偏温婉雅致）
-
-## 输出格式
-
-请按以下结构输出，每个名字独立成段：
-
-### 推荐名字 N：{名字}
-- **拼音**：{拼音}
-- **五格**：天格 {x} · 人格 {x} · 地格 {x} · 外格 {x} · 总格 {x}
-- **三才配置**：{五行}（{吉凶}）
-- **数理吉凶**：{解读}
-- **字义寓意**：{解读}
-
-请严格按上述格式输出，共推荐 5 个名字。不要添加总结性段落。`
+## 必须严格遵守
+1. 只输出一句点评，不超过 40 字，前后不要任何前缀、标题、引号或解释。
+2. 名字的五格数值、三才配置、评分等均由系统测定并随输入给出，你不得更改、不得复述数字、不得重新推算。
+3. 语气庄重而温暖：可有隐士式的从容与一点点会心的温度，但绝不调侃名字、不玩梗、不开玩笑。
+4. 不预言吉凶祸福，不承诺名字带来好运，只做文化寓意与音律感受上的善意肯定。
+5. 可说这个名字读来如何、寓意何处动人；点到即止，留白为宜。`
 }
 
-function buildUserPrompt(input: NamingInput, locale: string): string {
+function buildUserPrompt(topName: {
+  fullName: string
+  pinyin: string
+  sancai: { combo: string; luck: string }
+  overallLuck: string
+  chars: { char: string; meaning: string }[]
+}, locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] ?? LANGUAGE_HOOKS['zh-CN']!
-  const genderText =
-    input.gender === 'male' ? '男' : input.gender === 'female' ? '女' : '不限'
+  const meanings = topName.chars.map(c => `${c.char}（${c.meaning}）`).join('、')
 
-  return `请为以下信息推荐名字：
+  return `系统已为求名者测得首推之名，请你为其写一句点评。
 
-【姓氏】${input.surname}
-【性别】${genderText}
+【姓名】${topName.fullName}
+【读音】${topName.pinyin}
+【三才配置】${topName.sancai.combo}（${topName.sancai.luck}）
+【五格运势】${topName.overallLuck}
+【名字寓意】${meanings}
 
-请运用三才五格姓名学原理，推荐 5 个优质名字。每个名字需包含完整的五格分析、三才配置、81 数理解读和字义寓意。
-
-${langHook.user}`
+请只写一句克制而温暖的点评（不超过 40 字）。${langHook.user}`
 }
 
 export default defineEventHandler(async (event) => {
@@ -95,13 +71,26 @@ export default defineEventHandler(async (event) => {
   }
 
   const locale = body.locale || 'zh-CN'
+  const gender = body.gender === 'female' ? 'female' : 'male'
+
+  // ---- 本地确定性引擎出候选（设 SSE 头之前同步算）----
+  let naming
+  try {
+    naming = await generateSancaiWugeNames(body.surname, gender)
+  } catch (e: any) {
+    throw createError({ statusCode: 500, statusMessage: `候选生成失败：${e?.message ?? e}` })
+  }
+  if (!naming.candidates.length || !naming.topName) {
+    throw createError({ statusCode: 422, statusMessage: '未能为该姓氏测得合适候选，请换个姓氏试试' })
+  }
+
   const config = useRuntimeConfig()
   const isOpenAi = config.aiProvider === 'openai' || config.aiProvider === 'newapi' || config.aiProvider === 'gptniux'
-  let maxTokens = Number(config.aiMaxTokens) || 8192
-  if (maxTokens > 327680) maxTokens = 8192
+  // 只需一句点评，收紧 token 上限
+  const maxTokens = 512
 
   const systemPrompt = buildSystemPrompt(locale)
-  const userPrompt = buildUserPrompt(body, locale)
+  const userPrompt = buildUserPrompt(naming.topName, locale)
 
   const upstreamBody = isOpenAi
     ? {
@@ -141,6 +130,9 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  // 帧一：结构化候选（chart-then-text 之 chart），前端据此秒渲染证书海报
+  emit({ type: 'candidates', result: naming })
+
   let upstream: Response
   try {
     upstream = await fetch(config.aiBaseUrl as string, {
@@ -152,7 +144,8 @@ export default defineEventHandler(async (event) => {
       body: JSON.stringify(upstreamBody),
     })
   } catch (e: any) {
-    emit({ type: 'error', message: `AI 服务连接失败：${e?.message ?? e}` })
+    // AI 挂了不影响证书：前端用主推候选的本地 briefComment 兜底
+    emit({ type: 'error', message: `AI 点评连接失败：${e?.message ?? e}` })
     res.write('data: [DONE]\n\n')
     res.end()
     return

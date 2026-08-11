@@ -194,7 +194,7 @@
       </div>
 
       <!-- ============ 阶段 3：结果 ============ -->
-      <div v-if="phase === 'result'" ref="resultRef">
+      <div v-if="phase === 'result'">
         <!-- Section 标题 -->
         <div class="mb-8">
           <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
@@ -207,81 +207,63 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <!-- AI 流式输出 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <!-- 标题区 -->
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('sancaiWuge.namingResult') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('sancaiWuge.naming') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
+        <!-- 错误提示 -->
+        <div v-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4 mb-5">
+          <div class="flex items-center gap-2">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-sm text-red-400">{{ aiError }}</p>
           </div>
+        </div>
 
-          <!-- 流式内容 -->
-          <div v-if="aiContent" class="space-y-4">
-            <div
-              v-for="(card, index) in nameCards"
-              :key="index"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <div class="ai-section-content" v-html="renderMarkdown(card)" />
-              </div>
-              <span
-                v-if="aiStreaming && index === nameCards.length - 1 && !card.endsWith('</div>')"
-                class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-4 align-middle animate-pulse mb-4"
-              />
-            </div>
-            <!-- 打字光标 -->
-            <span
-              v-if="aiStreaming && (nameCards.length === 0 || aiContent.endsWith('\n'))"
-              class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse"
-            />
-          </div>
+        <!-- 隐藏截图目标：720px 定宽竖版证书，供分享导出（AI 点评到齐后再启用） -->
+        <div
+          v-if="namingResult && !aiStreaming"
+          ref="posterRef"
+          v-show="false"
+          class="sancai-wuge-share-target"
+          aria-hidden="true"
+        >
+          <SancaiWugeCertPoster
+            :top="namingResult.topName!"
+            :others="namingResult.candidates.slice(1)"
+            :surname="form.surname"
+            :ai-content="aiContent"
+          />
+        </div>
 
-          <!-- 加载中 -->
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('sancaiWuge.generatingNames') }}</p>
-            </div>
-          </div>
+        <!-- 可见证书海报：候选秒出，AI 点评流式融入 -->
+        <SancaiWugeCertPoster
+          v-if="namingResult"
+          :top="namingResult.topName!"
+          :others="namingResult.candidates.slice(1)"
+          :surname="form.surname"
+          :ai-content="aiContent"
+        />
 
-          <!-- 错误 -->
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
+        <!-- 加载中（候选未至） -->
+        <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
+              <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
             </div>
+            <p class="text-xs text-[var(--text-muted)]">{{ $t('sancaiWuge.generatingNames') }}</p>
           </div>
+        </div>
 
-          <!-- 重新起名 -->
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('sancaiWuge.rename') }}
-            </UButton>
-          </div>
+        <!-- 重新起名 -->
+        <div v-if="!aiStreaming && (namingResult || aiError)" class="flex justify-center mt-5">
+          <UButton
+            color="warning"
+            variant="soft"
+            size="sm"
+            class="group/btn"
+            @click="startAiStream"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+            </template>
+            {{ $t('sancaiWuge.rename') }}
+          </UButton>
         </div>
 
         <!-- 底部操作 -->
@@ -299,10 +281,11 @@
           </UButton>
           <AppShareButton
             tool="sancai-wuge"
-            :name="form.surname"
-            :summary="`姓${form.surname} · ${form.gender === 'male' ? '男' : form.gender === 'female' ? '女' : ''}`"
-            :share-target="resultRef"
-            :filename="`sancai-wuge-${form.surname || 'name'}-${new Date().toISOString().slice(0, 10)}.png`"
+            :name="namingResult?.topName?.fullName || form.surname"
+            :summary="shareSummary"
+            :share-target="posterRef"
+            :disabled="aiStreaming || !namingResult"
+            :filename="`sancai-wuge-${namingResult?.topName?.fullName || form.surname || 'name'}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
             color="warning"
@@ -333,11 +316,11 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
+import type { SancaiWugeNamingResult } from '~/types/sancai-wuge'
 
 const { t, locale } = useI18n()
 const phase = ref<'form' | 'animating' | 'result'>('form')
-const resultRef = ref<HTMLDivElement>()
+const posterRef = ref<HTMLDivElement>()
 const form = reactive({
   surname: '',
   gender: 'male' as 'male' | 'female',
@@ -349,10 +332,18 @@ const canSubmit = computed(() => {
   return form.surname.trim().length > 0
 })
 
-// AI 起名状态
+// 候选结果（本地引擎，candidates 帧）与 AI 一句点评（text 帧）
+const namingResult = ref<SancaiWugeNamingResult | null>(null)
 const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiError = ref<string | null>(null)
+
+// 分享摘要：主推姓名 + 等级 + 评分
+const shareSummary = computed(() => {
+  const top = namingResult.value?.topName
+  if (!top) return `姓${form.surname}`
+  return `${top.fullName} · ${top.grade} · ${top.score}分`
+})
 
 const wugeGrids = computed(() => [
   { key: 'tiange', label: t('sancaiWuge.wugeTiangeLabel'), name: t('sancaiWuge.tiange'), desc: t('sancaiWuge.tiangeShort') },
@@ -366,6 +357,7 @@ async function handleSubmit() {
   if (!canSubmit.value) return
 
   phase.value = 'animating'
+  namingResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiError.value = null
@@ -378,6 +370,7 @@ async function handleSubmit() {
 }
 
 async function startAiStream() {
+  namingResult.value = null
   aiContent.value = ''
   aiStreaming.value = true
   aiError.value = null
@@ -396,7 +389,13 @@ async function startAiStream() {
     })
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
+      const errText = await response.text().catch(() => '')
+      let msg = `HTTP ${response.status}`
+      try {
+        const j = JSON.parse(errText)
+        msg = j?.statusMessage || j?.message || msg
+      } catch { /* 保留默认 */ }
+      throw new Error(msg)
     }
 
     const reader = response.body!.getReader()
@@ -419,10 +418,15 @@ async function startAiStream() {
 
         try {
           const data = JSON.parse(payload)
-          if (data.type === 'text' && data.text) {
+          if (data.type === 'candidates' && data.result) {
+            // 帧一：本地引擎结构化候选，秒渲染证书海报
+            namingResult.value = data.result
+          } else if (data.type === 'text' && data.text) {
+            // 帧二：AI 一句点评，流式融入主推候选点评位
             aiContent.value += data.text
           } else if (data.type === 'error') {
-            aiError.value = data.message || t('sancaiWuge.aiUnavailable')
+            // AI 点评失败：保留候选，点评位回落到本地短评（海报不空白）
+            aiError.value = null
           }
         } catch {
           // ignore
@@ -438,6 +442,7 @@ async function startAiStream() {
 
 function resetForm() {
   phase.value = 'form'
+  namingResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiError.value = null
@@ -446,32 +451,26 @@ function resetForm() {
 }
 
 function handleCopy() {
-  if (!aiContent.value) return
-  const text = `${t('sancaiWuge.resultTitle')}\n\n${t('sancaiWuge.surnameLabel')}：${form.surname}\n${form.gender ? t('sancaiWuge.genderLabel') + '：' + (form.gender === 'male' ? t('common.male') : t('common.female')) + '\n' : ''}\n${aiContent.value}`
+  const r = namingResult.value
+  if (!r?.topName) return
+  const top = r.topName
+  const gridLine = `${t('sancaiWuge.tiange')}${top.grids.tiange.value}(${top.grids.tiange.fortune}) ${t('sancaiWuge.renge')}${top.grids.renge.value}(${top.grids.renge.fortune}) ${t('sancaiWuge.dige')}${top.grids.dige.value}(${top.grids.dige.fortune}) ${t('sancaiWuge.waige')}${top.grids.waige.value}(${top.grids.waige.fortune}) ${t('sancaiWuge.zongge')}${top.grids.zongge.value}(${top.grids.zongge.fortune})`
+  const othersLine = r.candidates.slice(1)
+    .map(c => `${c.fullName}（${c.score}分 · ${c.grade}）${c.briefComment}`)
+    .join('\n')
+  const comment = aiContent.value || top.briefComment
+  const text = `${t('sancaiWuge.resultTitle')}\n\n` +
+    `${t('sancaiWuge.poster.nameFlag')}：${top.fullName}（${top.pinyin}）\n` +
+    `${gridLine}\n` +
+    `${t('sancaiWuge.poster.sancaiTitle')}：${top.sancai.combo}（${top.sancai.luck}）\n` +
+    `${t('sancaiWuge.poster.scoreLabel')}：${top.score} · ${t('sancaiWuge.poster.gradeLabel')}：${top.grade} · ${t('sancaiWuge.poster.luckLabel')}：${top.overallLuck}\n` +
+    `${comment}\n\n` +
+    `${t('sancaiWuge.poster.othersTitle')}：\n${othersLine}`
   navigator.clipboard.writeText(text).then(() => {
     toast.add({ title: t('share.textCopied'), color: 'success' })
   }).catch(() => {
     toast.add({ title: t('share.copyFail'), color: 'error' })
   })
-}
-
-// 将 AI 内容按 "### 推荐名字" 分割为卡片
-const nameCards = computed(() => {
-  if (!aiContent.value) return []
-  // 按 "### " 分割，保留每个名字区块
-  const parts = aiContent.value.split(/(?=###\s)/)
-  const result: string[] = []
-  for (const part of parts) {
-    const trimmed = part.trim()
-    if (!trimmed) continue
-    result.push(trimmed)
-  }
-  return result
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
 }
 
 // UI Config
@@ -524,53 +523,8 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(h3) {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border-light);
-}
-.ai-section-content :deep(p) {
-  margin-bottom: 0.5em;
-  line-height: 1.75;
-  color: var(--text-body);
-  font-size: 0.875rem;
-}
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-  font-size: 0.875rem;
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-.ai-section-content :deep(hr) {
-  border: none;
-  border-top: 1px solid var(--border-light);
-  margin: 0.75rem 0;
+/* 分享截图目标：720px 定宽竖版证书，html-to-image 按此出图 */
+.sancai-wuge-share-target {
+  width: 720px;
 }
 </style>
