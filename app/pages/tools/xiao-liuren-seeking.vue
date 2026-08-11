@@ -193,119 +193,64 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && result">
-        <div ref="resultRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('xiaoLiurenSeeking.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 寻物信息摘要 -->
-          <div v-if="formSummary" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-4">
-            <div class="text-sm text-[var(--text-body)] space-y-1">
-              <div v-if="formSummary.lostItemDesc"><span class="text-[var(--text-faint)]">{{ $t('xiaoLiurenSeeking.form.lostItemDesc') }}：</span>{{ formSummary.lostItemDesc }}</div>
-              <div v-if="formSummary.lastSeenTime"><span class="text-[var(--text-faint)]">{{ $t('xiaoLiurenSeeking.form.lastSeenTime') }}：</span>{{ formSummary.lastSeenTime }}</div>
-              <div v-if="formSummary.lastSeenPlace"><span class="text-[var(--text-faint)]">{{ $t('xiaoLiurenSeeking.form.lastSeenPlace') }}：</span>{{ formSummary.lastSeenPlace }}</div>
-              <div v-if="formSummary.relationship"><span class="text-[var(--text-faint)]">{{ $t('xiaoLiurenSeeking.form.relationship') }}：</span>{{ formSummary.relationship }}</div>
-              <div v-if="formSummary.description"><span class="text-[var(--text-faint)]">{{ $t('xiaoLiurenSeeking.form.description') }}：</span>{{ formSummary.description }}</div>
-            </div>
-          </div>
-
-          <!-- 起卦信息 -->
-          <div v-if="contextText" class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-4 py-3 mb-4 text-xs text-[var(--text-muted)]">
-            {{ contextText }}
-          </div>
-
-          <!-- 落宫过程 -->
-          <div class="grid grid-cols-3 gap-2 mb-5">
-            <div
-              v-for="(step, index) in result.steps"
-              :key="index"
-              class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center"
-              :class="index === result.steps.length - 1 ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]' : ''"
-            >
-              <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ step.label }}</p>
-              <p class="text-base font-bold text-[var(--text-primary)]">{{ stepValueLabel(step) }}</p>
-            </div>
-          </div>
-
-          <!-- 最终结果 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-6 mb-5 text-center">
-            <p class="text-xs text-[var(--text-muted)] mb-2">{{ $t('xiaoLiuren.finalPosition') }}</p>
-            <div class="text-4xl font-bold text-[var(--accent)] mb-2">{{ result.finalPosition.name }}</div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] text-xs text-[var(--accent)] mb-3">
-              <UIcon name="i-heroicons-hand-raised" class="w-3.5 h-3.5" />
-              {{ result.finalPosition.finger }}
-            </div>
-            <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ result.finalPosition.meaning }}</p>
-            <p class="text-xs text-[var(--text-faint)] mt-2 font-serif">{{ result.finalPosition.summary }}</p>
-          </div>
+        <div class="mb-8">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
+            {{ $t('xiaoLiurenSeeking.resultTitle') }}
+          </h1>
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('xiaoLiurenSeeking.interpretTitle') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('xiaoLiuren.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="!aiStreaming && aiContent" ref="posterRef" v-show="false" class="xiao-liuren-seeking-share-target">
+          <XiaoLiurenSeekingPoster
+            :lost-item-name="form.lostItemDesc || form.description || $t('xiaoLiurenSeeking.poster.itemFallback')"
+            :lost-time="form.lastSeenTime"
+            :last-seen-place="form.lastSeenPlace"
+            :steps="result.steps"
+            :final-position="result.finalPosition"
+            :lunar-date="result.timeContext?.lunarDate || ''"
+            :hour-branch="result.timeContext?.hourBranch || ''"
+            :ai-content="aiContent"
+          />
+        </div>
 
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">{{ section.title.replace(/^##\s*/, '') }}</h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
+        <!-- 页内展示：纸刊寻物启事海报（AI 流式融入） -->
+        <XiaoLiurenSeekingPoster
+          :lost-item-name="form.lostItemDesc || form.description || $t('xiaoLiurenSeeking.poster.itemFallback')"
+          :lost-time="form.lastSeenTime"
+          :last-seen-place="form.lastSeenPlace"
+          :steps="result.steps"
+          :final-position="result.finalPosition"
+          :lunar-date="result.timeContext?.lunarDate || ''"
+          :hour-branch="result.timeContext?.hourBranch || ''"
+          :ai-content="aiContent"
+        />
 
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('xiaoLiuren.generatingInterpretation') }}</p>
-            </div>
+        <!-- 卦师解读状态条（融入海报之下，非独立卡片） -->
+        <div class="xiao-liuren-seeking-ai-bar">
+          <div v-if="aiStreaming" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('xiaoLiuren.interpreting') }}</span>
           </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
+          <div v-else-if="aiError" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ aiError }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
               <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('common.retry') }}
+            </UButton>
+          </div>
+          <div v-else-if="aiContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('xiaoLiuren.disclaimer') }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
               </template>
               {{ $t('xiaoLiuren.reinterpret') }}
             </UButton>
@@ -314,21 +259,11 @@
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
-          <UButton
-            color="warning"
-            variant="soft"
-            class="group/btn"
-            @click="handleCopy"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-clipboard-document" class="w-4 h-4" />
-            </template>
-            {{ $t('xiaoLiuren.copyResult') }}
-          </UButton>
           <AppShareButton
             tool="xiao-liuren-seeking"
+            :disabled="aiStreaming || !aiContent"
             :summary="`${result.finalPosition.name} · ${result.finalPosition.meaning}`"
-            :share-target="resultRef"
+            :share-target="posterRef || undefined"
             :filename="`xiao-liuren-seeking-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -360,8 +295,7 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-import type { XiaoLiurenRequest, XiaoLiurenResult, XiaoLiurenStep } from '~/types/xiao-liuren'
+import type { XiaoLiurenRequest, XiaoLiurenResult } from '~/types/xiao-liuren'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -369,7 +303,7 @@ const toast = useToast()
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const result = ref<XiaoLiurenResult | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const posterRef = ref<HTMLDivElement>()
 
 const form = reactive({
   lostItemDesc: '',
@@ -387,17 +321,6 @@ const canSubmit = computed(() => {
 
 const submitHint = computed(() => {
   return t('xiaoLiurenSeeking.form.validation.required')
-})
-
-const formSummary = computed(() => {
-  if (phase.value !== 'result') return null
-  const s: Record<string, string> = {}
-  if (form.lostItemDesc) s.lostItemDesc = form.lostItemDesc
-  if (form.lastSeenTime) s.lastSeenTime = form.lastSeenTime
-  if (form.lastSeenPlace) s.lastSeenPlace = form.lastSeenPlace
-  if (form.relationship) s.relationship = form.relationship
-  if (form.description) s.description = form.description
-  return Object.keys(s).length > 0 ? s : null
 })
 
 // 动画：大拇指在六宫之间移动
@@ -551,51 +474,6 @@ function resetForm() {
   form.description = ''
 }
 
-function stepValueLabel(step: XiaoLiurenStep) {
-  const names = ['大安', '留连', '速喜', '赤口', '小吉', '空亡']
-  return `${step.value} → ${names[((step.positionIndex % 6) + 6) % 6]}`
-}
-
-const contextText = computed(() => {
-  if (!result.value) return ''
-  if (result.value.method === 'time' && result.value.timeContext) {
-    return result.value.timeContext.lunarDate
-  }
-  return ''
-})
-
-function handleCopy() {
-  if (!result.value) return
-  const text = `${t('xiaoLiurenSeeking.resultTitle')}\n\n${t('xiaoLiurenSeeking.form.lostItemDesc')}：${form.lostItemDesc || t('xiaoLiurenSeeking.unknownItem')}\n${t('xiaoLiuren.finalPosition')}：${result.value.finalPosition.name}\n${result.value.finalPosition.finger} · ${result.value.finalPosition.meaning}\n${result.value.finalPosition.summary}\n\n${aiContent.value ? t('xiaoLiurenSeeking.interpretTitle') + '：\n' + aiContent.value : ''}`
-  navigator.clipboard.writeText(text).then(() => {
-    toast.add({ title: t('share.copySuccess'), color: 'success' })
-  }).catch(() => {
-    toast.add({ title: t('share.copyFail'), color: 'error' })
-  })
-}
-
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const list: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      list.push({ title: titleLine || t('xiaoLiurenSeeking.interpretTitle'), content })
-    }
-  }
-  return list
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
-
 const tips = computed(() => [
   { icon: '🧭', title: t('xiaoLiurenSeeking.tips.direction.title'), content: t('xiaoLiurenSeeking.tips.direction.content') },
   { icon: '🔍', title: t('xiaoLiurenSeeking.tips.probability.title'), content: t('xiaoLiurenSeeking.tips.probability.content') },
@@ -678,38 +556,13 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.xiao-liuren-seeking-share-target {
+  width: 720px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+/* 卦师解读状态条：融入海报之下，与海报间距收窄 */
+.xiao-liuren-seeking-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
 }
 </style>
