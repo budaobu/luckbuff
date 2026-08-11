@@ -3303,7 +3303,31 @@
     "backToTools": "Back to Tools",
     "calcFail": "Calc Fail",
     "checkInput": "Check Input",
-    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "poster": {
+      "kicker": "MEIHUA YISHU · CHARACTER READING",
+      "title": "Character Reading",
+      "serial": "Decompose the character · read each part · land a verdict",
+      "overviewPending": "The hermit is studying your character…",
+      "questionFlag": "ASKED",
+      "charMeta": "{pinyin} · {strokes} strokes · {wuxing}",
+      "timeFlag": "Cast",
+      "timeLine": "{year} year, month {month} day {day}, {hour} hour · sum {sum}",
+      "upperFlag": "Upper",
+      "lowerFlag": "Lower",
+      "movingFlag": "Moving",
+      "trigramFlag": "Trigrams",
+      "trigramLine": "upper {upperSymbol} {upperName} ({upperNature}) · lower {lowerSymbol} {lowerName} ({lowerNature})",
+      "hexLabel": "HEX",
+      "fieldPending": "Pondering…",
+      "verdictFlag": "VERDICT",
+      "verdictPending": "The verdict is forming…",
+      "noteLabel": "HERMIT",
+      "notePending": "A word of advice is coming…",
+      "signWho": "The Humorous Hermit",
+      "seal": "CE\\nZI",
+      "qrHint": "Scan to read"
+    }
   },
   "ceziZhouyi": {
     "knowledgeCard1Title": "Zhouyi Character Divination",
