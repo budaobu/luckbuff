@@ -263,26 +263,72 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && chart">
-        <div ref="shareTargetRef">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('liurenSeeking.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
+        <div class="mb-8">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Seeking Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
+            {{ $t('liurenSeeking.resultTitle') }}
+          </h1>
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
+        </div>
 
-          <!-- 寻物信息摘要 -->
-          <div v-if="formSummary" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4 mb-4">
-            <div class="text-sm text-[var(--text-body)] space-y-1">
-              <div v-if="formSummary.description"><span class="text-[var(--text-faint)]">问事：</span>{{ formSummary.description }}</div>
-              <div v-if="formSummary.lastSeenTime"><span class="text-[var(--text-faint)]">最后见到：</span>{{ formSummary.lastSeenTime }}</div>
-              <div v-if="formSummary.lastSeenPlace"><span class="text-[var(--text-faint)]">最后地点：</span>{{ formSummary.lastSeenPlace }}</div>
-              <div v-if="formSummary.lostItemDesc"><span class="text-[var(--text-faint)]">失物：</span>{{ formSummary.lostItemDesc }}</div>
-              <div v-if="formSummary.relationship"><span class="text-[var(--text-faint)]">关系：</span>{{ formSummary.relationship }}</div>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="resultStatus === 'done' && interpretContent" ref="posterRef" v-show="false" class="liuren-seeking-share-target">
+          <LiurenSeekingPoster
+            :lost-item-name="form.lostItemDesc || form.description || $t('liurenSeeking.poster.itemFallback')"
+            :lost-time="form.lastSeenTime"
+            :last-seen-place="form.lastSeenPlace"
+            :yuejiang="chart.calendar.yuejiang"
+            :shichen="chart.calendar.shichen"
+            :ri-ganzhi="chart.calendar.ganzhi.day"
+            :shi-ganzhi="chart.calendar.ganzhi.hour"
+            :ai-content="interpretContent"
+          />
+        </div>
 
+        <!-- 页内展示：纸刊寻物启事海报（AI 流式融入） -->
+        <LiurenSeekingPoster
+          :lost-item-name="form.lostItemDesc || form.description || $t('liurenSeeking.poster.itemFallback')"
+          :lost-time="form.lastSeenTime"
+          :last-seen-place="form.lastSeenPlace"
+          :yuejiang="chart.calendar.yuejiang"
+          :shichen="chart.calendar.shichen"
+          :ri-ganzhi="chart.calendar.ganzhi.day"
+          :shi-ganzhi="chart.calendar.ganzhi.hour"
+          :ai-content="interpretContent"
+        />
+
+        <!-- 卦师解读状态条（融入海报之下，非独立卡片） -->
+        <div class="liuren-seeking-ai-bar">
+          <div v-if="resultStatus === 'loading' || resultStatus === 'streaming'" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('liurenSeeking.interpreting') }}</span>
+          </div>
+          <div v-else-if="resultStatus === 'error'" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ interpretError }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startInterpretStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('common.retry') }}
+            </UButton>
+          </div>
+          <div v-else-if="interpretContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('liuren.disclaimer') }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startInterpretStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('liurenSeeking.reinterpret') }}
+            </UButton>
+          </div>
+        </div>
+
+        <!-- 课传数据卡片 -->
+        <div class="mt-6">
           <!-- 四柱数据卡片 -->
           <div class="grid grid-cols-2 gap-2">
             <div
@@ -312,59 +358,21 @@
           </div>
         </div>
 
-        <!-- ===== AI 解读 ===== -->
-        <div class="mt-5">
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-lg font-semibold text-[var(--text-primary)]">{{ $t('liurenSeeking.interpretTitle') }}</h3>
-            </div>
-
-            <!-- 等待首个 token -->
-            <div v-if="!interpretStarted && !interpretError" class="flex flex-col items-center py-8">
-              <TianganDizhi size="compact" :label="$t('liuren.result.aiAnalyzing')" />
-            </div>
-
-            <!-- 错误状态 -->
-            <div v-else-if="interpretError" class="text-center py-6">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-8 h-8 text-red-400 mx-auto mb-2" />
-              <p class="text-sm text-red-400">{{ interpretError }}</p>
-              <UButton color="warning" variant="soft" size="sm" class="mt-3" @click="startInterpretStream">
-                <template #leading>
-                  <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-                </template>
-                {{ $t('common.retry') }}
-              </UButton>
-            </div>
-
-            <!-- 流式内容 -->
-            <div v-else class="space-y-4">
-              <div
-                class="text-sm text-[var(--text-body)] leading-relaxed ai-content max-w-none"
-                v-html="renderedContent"
-              />
-              <!-- 光标 -->
-              <div v-if="interpretStreaming" class="flex items-center gap-1">
-                <span class="w-0.5 h-4 bg-[var(--accent)] animate-pulse" />
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
-          <UButton color="warning" variant="soft" class="group/btn" @click="handleShare">
-            <template #leading>
-              <UIcon name="i-heroicons-share" class="w-4 h-4" />
-            </template>
-            {{ $t('common.shareResult') }}
-          </UButton>
           <UButton color="warning" variant="soft" class="group/btn" @click="resetForm">
             <template #leading>
               <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </template>
             {{ $t('common.retry') }}
           </UButton>
+          <AppShareButton
+            tool="liuren-seeking"
+            :disabled="resultStatus !== 'done' || !interpretContent"
+            :summary="`${chart.calendar.ganzhi.day}日${chart.calendar.ganzhi.hour}时 · ${chart.calendar.yuejiang}加${chart.calendar.shichen}${form.lostItemDesc ? ' · 失物：' + form.lostItemDesc : ''}`"
+            :share-target="posterRef || undefined"
+            :filename="`liuren-seeking-${chart.calendar.ganzhi.day}-${chart.calendar.ganzhi.hour}-${new Date().toISOString().slice(0, 10)}.png`"
+          />
           <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { navigateTo(localePath('/seeking')) }">
             <template #leading>
               <UIcon name="i-heroicons-magnifying-glass" class="w-4 h-4" />
@@ -374,60 +382,10 @@
         </div>
       </div>
     </div>
-
-    <!-- 分享弹窗 -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div v-if="shareDialogOpen" class="fixed inset-0 z-50 flex items-center justify-center" @click.self="shareDialogOpen = false">
-          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
-          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
-            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
-            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
-                </div>
-                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('common.share') }}</h3>
-              </div>
-              <UButton color="neutral" variant="ghost" class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]" @click="() => { shareDialogOpen = false }">
-                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
-              </UButton>
-            </div>
-            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
-              <div>
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
-                  {{ shareData?.copyText }}
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
-                  <template #leading>
-                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('common.copy') }}
-                </UButton>
-              </div>
-              <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
-                  <img :src="shareData.screenshotDataUrl" class="w-full rounded-lg" />
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
-                  <template #leading>
-                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('common.download') }}
-                </UButton>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { LiurenChartResponse } from '~/types/liuren'
 
 const { t, locale } = useI18n()
@@ -438,16 +396,13 @@ const phase = ref<'form' | 'animating' | 'result'>('form')
 const chart = ref<LiurenChartResponse | null>(null)
 const lastFormValues = ref<any>(null)
 
-// AI 解读状态
+// AI 解读状态机
+const resultStatus = ref<'idle' | 'loading' | 'streaming' | 'done' | 'error'>('idle')
 const interpretContent = ref('')
-const interpretStreaming = ref(false)
-const interpretStarted = ref(false)
 const interpretError = ref<string | null>(null)
 
-// 分享
-const shareDialogOpen = ref(false)
-const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
-const shareTargetRef = ref<HTMLDivElement>()
+// 隐藏海报截图目标
+const posterRef = ref<HTMLDivElement | null>(null)
 
 const form = reactive({
   description: '',
@@ -474,17 +429,6 @@ const submitHint = computed(() => {
   return ''
 })
 
-const formSummary = computed(() => {
-  if (phase.value !== 'result') return null
-  const s: Record<string, string> = {}
-  if (form.description) s.description = form.description
-  if (form.lastSeenTime) s.lastSeenTime = form.lastSeenTime
-  if (form.lastSeenPlace) s.lastSeenPlace = form.lastSeenPlace
-  if (form.lostItemDesc) s.lostItemDesc = form.lostItemDesc
-  if (form.relationship) s.relationship = form.relationship
-  return Object.keys(s).length > 0 ? s : null
-})
-
 const ganzhiCards = computed(() => {
   if (!chart.value?.calendar) return []
   const g = chart.value.calendar.ganzhi
@@ -502,8 +446,8 @@ async function handleSubmit() {
   phase.value = 'animating'
   chart.value = null
   interpretContent.value = ''
-  interpretStarted.value = false
   interpretError.value = null
+  resultStatus.value = 'idle'
 
   const payload = {
     question: t('liurenSeeking.defaultQuestion', { item: form.lostItemDesc || t('liurenSeeking.unknownItem') }),
@@ -543,8 +487,7 @@ async function handleSubmit() {
 async function startInterpretStream() {
   if (!chart.value || !lastFormValues.value) return
   interpretContent.value = ''
-  interpretStreaming.value = true
-  interpretStarted.value = false
+  resultStatus.value = 'loading'
   interpretError.value = null
 
   try {
@@ -565,6 +508,7 @@ async function startInterpretStream() {
     const reader = response.body!.getReader()
     const decoder = new TextDecoder()
     let buffer = ''
+    resultStatus.value = 'streaming'
 
     while (true) {
       const { done, value } = await reader.read()
@@ -583,7 +527,6 @@ async function startInterpretStream() {
         try {
           const data = JSON.parse(payload)
           if (data.type === 'text' && data.text) {
-            if (!interpretStarted.value) interpretStarted.value = true
             interpretContent.value += data.text
           } else if (data.type === 'error') {
             interpretError.value = data.message || t('liuren.error.aiUnavailable')
@@ -593,10 +536,15 @@ async function startInterpretStream() {
         }
       }
     }
+
+    if (interpretError.value) {
+      resultStatus.value = 'error'
+    } else {
+      resultStatus.value = 'done'
+    }
   } catch (e: any) {
     interpretError.value = e?.message || t('liuren.error.aiUnavailable')
-  } finally {
-    interpretStreaming.value = false
+    resultStatus.value = 'error'
   }
 }
 
@@ -604,8 +552,8 @@ function resetForm() {
   phase.value = 'form'
   chart.value = null
   interpretContent.value = ''
-  interpretStarted.value = false
   interpretError.value = null
+  resultStatus.value = 'idle'
   birthYearInput.value = ''
   form.description = ''
   form.lastSeenTime = ''
@@ -613,58 +561,6 @@ function resetForm() {
   form.lostItemDesc = ''
   form.relationship = ''
   form.location = ''
-}
-
-const renderedContent = computed(() => {
-  if (!interpretContent.value) return ''
-  try {
-    return marked.parse(interpretContent.value, { async: false }) as string
-  } catch {
-    return interpretContent.value
-  }
-})
-
-async function handleShare() {
-  if (!chart.value) return
-  const { share } = useShare()
-
-  try {
-    const summary = `${chart.value.calendar.ganzhi.day}日${chart.value.calendar.ganzhi.hour}时 · ${chart.value.calendar.yuejiang}加${chart.value.calendar.shichen}`
-    const result = await share({
-      tool: 'liuren-seeking',
-      name: form.lostItemDesc?.slice(0, 20) || '',
-      summary,
-      shareTarget: shareTargetRef.value,
-      filename: `liuren-seeking-${new Date().toISOString().slice(0, 10)}.png`,
-      t,
-    })
-    shareData.value = result
-    shareDialogOpen.value = true
-  } catch (e: any) {
-    toast.add({
-      title: t('share.shareFail'),
-      description: e?.message || t('share.pleaseRetry'),
-      color: 'error',
-    })
-  }
-}
-
-async function copyShareText() {
-  if (!shareData.value?.copyText) return
-  try {
-    await navigator.clipboard.writeText(shareData.value.copyText)
-    toast.add({ title: t('share.copySuccess'), color: 'success' })
-  } catch {
-    toast.add({ title: t('share.copyFail'), color: 'error' })
-  }
-}
-
-function downloadShareImage() {
-  if (!shareData.value?.screenshotDataUrl) return
-  const link = document.createElement('a')
-  link.href = shareData.value.screenshotDataUrl
-  link.download = shareData.value.filename
-  link.click()
 }
 
 // 提示与问题灵感
@@ -761,6 +657,16 @@ useHead(() => ({
   opacity: 0;
 }
 
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.liuren-seeking-share-target {
+  width: 720px;
+}
+/* 卦师解读状态条：融入海报之下，与海报间距收窄 */
+.liuren-seeking-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
+}
+
 .outer-dashed-ring {
   animation: spin-dashed 24s linear infinite;
 }
@@ -810,54 +716,5 @@ useHead(() => ({
 @keyframes radar-dot-pulse {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 1; }
-}
-
-.ai-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
-}
-.ai-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-content :deep(h3) {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-top: 0.75rem;
-  margin-bottom: 0.4rem;
-}
-.ai-content :deep(h4) {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-body);
-  margin-top: 0.5rem;
-  margin-bottom: 0.3rem;
-}
-.ai-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
 }
 </style>
