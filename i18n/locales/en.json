@@ -5046,7 +5046,47 @@
     "wugeZonggeLabel": "Wuge Zongge Label",
     "zongge": "Zongge",
     "zonggeShort": "Zongge Short",
-    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "poster": {
+    "kicker": "Sancai Wuge · Naming Appraisal",
+    "title": "Naming Certificate",
+    "serial": "For Sancai Wuge Onomastic Appraisal",
+    "nameFlag": "Naming",
+    "strokeSuffix": " st",
+    "wugeTitle": "Five-Grid Analysis",
+    "sancaiTitle": "Three Talents",
+    "scoreLabel": "Overall Score",
+    "gradeLabel": "Grade",
+    "luckLabel": "Grid Fortune",
+    "othersTitle": "Alternates",
+    "archiveLabel": "Archive",
+    "archiveNo": "Naming No. {no}",
+    "archiveDateLabel": "Filed",
+    "archiveSeal": "Naming\\nAppraisal",
+    "seal": "Appraisal",
+    "qrHint": "Scan to name",
+      "fortune": {
+        "daJi": "Great",
+        "ji": "Good",
+        "banJi": "Fair",
+        "xiong": "Poor",
+        "daXiong": "Bad"
+      },
+      "luck": {
+        "top": "Excellent",
+        "good": "Good",
+        "mid": "Fair",
+        "flat": "Neutral",
+        "caution": "Caution"
+      },
+      "grade": {
+        "excellent": "Superb",
+        "great": "Great",
+        "good": "Good",
+        "fair": "Fair",
+        "normal": "Average"
+      }
+    }
   },
   "wuge": {
     "knowledgeCard1Title": "Wuge Analysis",
