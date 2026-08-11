@@ -3379,7 +3379,30 @@
     "backToTools": "Back to Tools",
     "calcFail": "Calc Fail",
     "checkInput": "Check Input",
-    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
+    "poster": {
+      "kicker": "Zhouyi · Character Reading",
+      "title": "Character Oracle Slip",
+      "serial": "Split the character · read each part · land one verdict",
+      "overviewPending": "The hermit is stroking his beard over this character…",
+      "questionFlag": "Asked",
+      "charMeta": "{pinyin} · {strokes} strokes · element {wuxing}",
+      "strokeFlag": "Cast",
+      "strokeLine": "「{char}」 has {strokes} strokes · {structure} · cast by stroke count",
+      "trigramFlag": "Hexagram",
+      "trigramLine": "Upper {upperSymbol} {upperName} · Lower {lowerSymbol} {lowerName}",
+      "movingFlag": "Moving Line",
+      "movingLineText": "Line {line} moves · hexagram {hexagram}",
+      "hexLabel": "Hex",
+      "fieldPending": "Pondering…",
+      "verdictFlag": "Verdict",
+      "verdictPending": "The verdict is still brewing…",
+      "noteLabel": "Hermit Says",
+      "notePending": "A word of advice is on its way…",
+      "signWho": "Respectfully noted by the Witty Hermit",
+      "seal": "Oracle\\nHermit",
+      "qrHint": "Scan to read"
+    }
   },
   "zhugeCezi": {
     "knowledgeCard1Title": "Zhuge Character Oracle",

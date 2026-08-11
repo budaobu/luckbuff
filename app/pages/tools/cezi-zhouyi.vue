@@ -177,158 +177,46 @@
 
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && result">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Divination Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('ceziZhouyi.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 占问信息 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-4">
-            <div class="flex items-center gap-2 mb-2">
-              <UIcon name="i-heroicons-question-mark-circle" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('ceziZhouyi.resultQuestionLabel') }}</h3>
-            </div>
-            <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ result.input.question || $t('ceziZhouyi.noQuestion') }}</p>
-          </div>
-
-          <!-- 拆字结果 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-4">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-pencil" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('ceziZhouyi.analysisTitle') }}</h3>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.charLabel') }}</p>
-                <p class="text-2xl font-bold text-[var(--accent)]">{{ result.analysis.char }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.pinyinLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.pinyin }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.strokeLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.strokeCount }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.radicalLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.radical }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.structureLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.structure }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.wuxingLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.wuxing }}</p>
-              </div>
-            </div>
-            <div class="rounded-xl border border-[var(--accent-border-hover)] bg-[var(--accent-bg)] p-4">
-              <p class="text-xs text-[var(--accent-muted)] mb-1">{{ $t('ceziZhouyi.meaningLabel') }}</p>
-              <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ result.analysis.meaning }}</p>
-            </div>
-            <div v-if="result.analysis.components.length > 1" class="mt-3 text-xs text-[var(--text-muted)]">
-              {{ $t('ceziZhouyi.componentsLabel') }}：{{ result.analysis.components.join('、') }}
-            </div>
-          </div>
-
-          <!-- 卦象结果 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-5">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-squares-2x2" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('ceziZhouyi.hexagramTitle') }}</h3>
-            </div>
-            <div class="text-center mb-4">
-              <div class="text-5xl font-serif text-[var(--accent)] mb-2">{{ result.hexagram.hexagram }}</div>
-              <p class="text-lg font-semibold text-[var(--text-primary)]">{{ result.hexagram.hexagramName }}</p>
-            </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.upperTrigramLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.upperTrigram }}</p>
-                <p class="text-xs text-[var(--text-muted)]">{{ result.hexagram.upperTrigramName }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('ceziZhouyi.lowerTrigramLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.lowerTrigram }}</p>
-                <p class="text-xs text-[var(--text-muted)]">{{ result.hexagram.lowerTrigramName }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--accent-border-hover)] bg-[var(--accent-bg)] p-3 text-center">
-                <p class="text-[10px] text-[var(--accent-muted)] mb-1">{{ $t('ceziZhouyi.movingLineLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ result.hexagram.movingLine }}</p>
-                <p class="text-xs text-[var(--accent-muted)]">{{ $t('ceziZhouyi.movingLineUnit') }}</p>
-              </div>
-            </div>
-          </div>
+        <div class="mb-8">
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Divination Result</span>
+          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
+            {{ $t('ceziZhouyi.resultTitle') }}
+          </h1>
+          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('ceziZhouyi.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('ceziZhouyi.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
-          </div>
+        <!-- 隐藏截图目标：AI 解读完成后才挂载，保证分享图融合完整解读 -->
+        <div v-if="!aiStreaming && aiContent" ref="posterRef" v-show="false" class="cezi-zhouyi-share-target">
+          <CeziZhouyiPoster :result="result" :ai-content="aiContent" />
+        </div>
 
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">{{ section.title.replace(/^##\s*/, '') }}</h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
+        <!-- 页内展示：解字批命笺海报（AI 流式融入） -->
+        <CeziZhouyiPoster :result="result" :ai-content="aiContent" />
 
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('ceziZhouyi.generatingInterpretation') }}</p>
-            </div>
+        <!-- 隐士解读状态条（融入海报之下，非独立卡片） -->
+        <div class="cezi-zhouyi-ai-bar">
+          <div v-if="aiStreaming" class="flex items-center justify-center gap-2 py-1">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('ceziZhouyi.interpreting') }}</span>
           </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
+          <div v-else-if="aiError" class="flex items-center justify-center gap-2 py-1">
+            <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
+            <p class="text-xs text-red-400">{{ aiError }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
               <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
+              </template>
+              {{ $t('ceziZhouyi.reinterpret') }}
+            </UButton>
+          </div>
+          <div v-else-if="aiContent" class="flex items-center justify-center gap-4 py-1">
+            <p class="text-[11px] text-[var(--text-faint)]">{{ $t('ceziZhouyi.disclaimer') }}</p>
+            <UButton color="warning" variant="soft" size="xs" class="group/btn shrink-0" @click="startAiStream">
+              <template #leading>
+                <UIcon name="i-heroicons-arrow-path" class="w-3.5 h-3.5" />
               </template>
               {{ $t('ceziZhouyi.reinterpret') }}
             </UButton>
@@ -350,8 +238,9 @@
           </UButton>
           <AppShareButton
             tool="cezi-zhouyi"
-            :summary="`字：${result.analysis.char} · ${result.hexagram.hexagramName} · ${result.analysis.strokeCount} 画`"
-            :share-target="resultRef"
+            :disabled="aiStreaming || !aiContent"
+            :summary="`${result.input.question ? '问：' + result.input.question + ' · ' : ''}字：${result.analysis.char} · ${result.hexagram.hexagramName} · ${result.analysis.strokeCount} 画`"
+            :share-target="posterRef || undefined"
             :filename="`cezi-zhouyi-${result.analysis.char}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -383,7 +272,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { CeziZhouyiRequest, CeziZhouyiResult } from '~/types/cezi-zhouyi'
 
 const { t, locale } = useI18n()
@@ -462,7 +350,7 @@ const aiContent = ref('')
 const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
+const posterRef = ref<HTMLDivElement>()
 
 async function startAiStream() {
   if (!result.value) return
@@ -551,27 +439,7 @@ function handleCopy() {
   })
 }
 
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const list: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      list.push({ title: titleLine || t('ceziZhouyi.interpretation'), content })
-    }
-  }
-  return list
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
-}
+// SEO
 
 // SEO
 const siteName = 'ososn'
@@ -618,38 +486,13 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
+/* 隐藏截图目标：固定竖版海报宽度，html-to-image 按此出图（移动端竖版比例） */
+.cezi-zhouyi-share-target {
+  width: 720px;
 }
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
+/* 隐士解读状态条：融入海报之下，与海报间距收窄 */
+.cezi-zhouyi-ai-bar {
+  margin-top: 10px;
+  padding: 0 4px;
 }
 </style>
