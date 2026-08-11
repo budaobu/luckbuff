@@ -2909,7 +2909,33 @@
         "content": "內容"
       }
     },
-    "defaultItem": "錢包"
+    "defaultItem": "錢包",
+    "interpreting": "卦師推演中……",
+    "reinterpret": "重新推演",
+    "poster": {
+      "kicker": "大 六 壬 · 尋 物 啟 事",
+      "title": "六壬尋物",
+      "serial": "電線桿事務所 · 第甲子號",
+      "overviewPending": "卦師掐指推算中，失物下落即將見分曉……",
+      "itemFlag": "尋",
+      "itemFallback": "遺失之物",
+      "lostTimeLabel": "丟失時間",
+      "lastPlaceLabel": "最後見於",
+      "dirLabel": "推算方位",
+      "timeLabel": "尋物吉時",
+      "probLabel": "尋回概率",
+      "fieldPending": "推算中……",
+      "tipsTitle": "尋找建議",
+      "noteLabel": "卦師曰",
+      "notePending": "莫慌，物件有靈，循著方位慢慢尋，多半能回來。",
+      "panLine": "月將{yuejiang}加{shichen} · {ri}日 {shi}時",
+      "seal": "六壬",
+      "qrHint": "掃碼尋物",
+      "archiveLabel": "歸檔編號",
+      "archiveNo": "尋字第 {no} 號",
+      "archiveDateLabel": "立檔日期",
+      "archiveSeal": "尋物啟事\n立檔為憑"
+    }
   },
   "xiaoLiuren": {
     "knowledgeCard1Title": "小六壬簡介",

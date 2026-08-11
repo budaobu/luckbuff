@@ -2884,7 +2884,33 @@
         "content": "Content"
       }
     },
-    "defaultItem": "Default Item"
+    "defaultItem": "Default Item",
+    "interpreting": "The diviner is casting…",
+    "reinterpret": "Cast again",
+    "poster": {
+      "kicker": "DA LIU REN · LOST & FOUND NOTICE",
+      "title": "Lost & Found",
+      "serial": "Telegraph-Pole Office · No. Jiazi",
+      "overviewPending": "The diviner is casting — your lost item's whereabouts coming soon…",
+      "itemFlag": "LOST",
+      "itemFallback": "Lost Item",
+      "lostTimeLabel": "Lost at",
+      "lastPlaceLabel": "Last seen",
+      "dirLabel": "Direction",
+      "timeLabel": "Best hour",
+      "probLabel": "Odds",
+      "fieldPending": "Divining…",
+      "tipsTitle": "How to Find It",
+      "noteLabel": "The Diviner says",
+      "notePending": "Don't fret — follow the bearing and look patiently; it often turns up.",
+      "panLine": "General {yuejiang} on {shichen} · {ri} day {shi} hour",
+      "seal": "LIUREN",
+      "qrHint": "Scan to seek",
+      "archiveLabel": "Archive No.",
+      "archiveNo": "Seeking File No. {no}",
+      "archiveDateLabel": "Filed On",
+      "archiveSeal": "LOST & FOUND\nON RECORD"
+    }
   },
   "xiaoLiuren": {
     "knowledgeCard1Title": "What is Xiao Liu Ren",
