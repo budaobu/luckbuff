@@ -3325,7 +3325,31 @@
     "backToTools": "返回工具列表",
     "calcFail": "计算失败",
     "checkInput": "请检查输入",
-    "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
+    "poster": {
+      "kicker": "梅花易数 · 测字",
+      "title": "解字批命笺",
+      "serial": "拆字解义 · 逐部分读出 · 落一句断语",
+      "overviewPending": "先生正拈须端详此字……",
+      "questionFlag": "所占",
+      "charMeta": "{pinyin} · {strokes} 画 · 五行属 {wuxing}",
+      "timeFlag": "起卦",
+      "timeLine": "{year}年 {month}月{day}日 {hour}时 · 数之和 {sum}",
+      "upperFlag": "上卦",
+      "lowerFlag": "下卦",
+      "movingFlag": "动爻",
+      "trigramFlag": "卦象",
+      "trigramLine": "上 {upperSymbol} {upperName}（{upperNature}）· 下 {lowerSymbol} {lowerName}（{lowerNature}）",
+      "hexLabel": "卦",
+      "fieldPending": "推敲中……",
+      "verdictFlag": "断语",
+      "verdictPending": "断语尚在酝酿……",
+      "noteLabel": "隐士曰",
+      "notePending": "提点稍后即至……",
+      "signWho": "幽默隐士 敬批",
+      "seal": "解字\\n隐士",
+      "qrHint": "扫码测字"
+    }
   },
   "ceziZhouyi": {
     "knowledgeCard1Title": "周易測字",
