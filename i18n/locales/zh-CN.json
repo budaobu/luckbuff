@@ -3401,7 +3401,30 @@
     "backToTools": "返回工具列表",
     "calcFail": "计算失败",
     "checkInput": "请检查输入",
-    "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
+    "poster": {
+      "kicker": "周易 · 测字",
+      "title": "解字批命笺",
+      "serial": "拆字解义 · 逐部分读出 · 落一句断语",
+      "overviewPending": "先生正拈须端详此字……",
+      "questionFlag": "所占",
+      "charMeta": "{pinyin} · {strokes} 画 · 五行属 {wuxing}",
+      "strokeFlag": "起卦",
+      "strokeLine": "「{char}」凡 {strokes} 画 · {structure} · 以画数起卦",
+      "trigramFlag": "卦象",
+      "trigramLine": "上 {upperSymbol} {upperName} · 下 {lowerSymbol} {lowerName}",
+      "movingFlag": "动爻",
+      "movingLineText": "第 {line} 爻动 · 本卦 {hexagram}",
+      "hexLabel": "卦",
+      "fieldPending": "推敲中……",
+      "verdictFlag": "断语",
+      "verdictPending": "断语尚在酝酿……",
+      "noteLabel": "隐士曰",
+      "notePending": "提点稍后即至……",
+      "signWho": "幽默隐士 敬批",
+      "seal": "解字\\n隐士",
+      "qrHint": "扫码测字"
+    }
   },
   "zhugeCezi": {
     "knowledgeCard1Title": "諸葛神數",
