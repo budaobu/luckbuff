@@ -254,6 +254,11 @@
           </div>
         </div>
 
+        <!-- 解字批命笺海报 -->
+        <div ref="posterRef" class="mt-4 mb-5">
+          <LiuyaoCeziPoster :result="result" :ai-content="aiContent" />
+        </div>
+
         <!-- AI 解读 -->
         <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
           <div class="flex items-center gap-3 mb-4">
@@ -338,7 +343,7 @@
           <AppShareButton
             tool="liuyao-cezi"
             :summary="`字：${result.analysis.char} · ${result.hexagram.name} · 动爻${result.hexagram.movingLine}`"
-            :share-target="resultRef"
+            :share-target="posterRef"
             :filename="`liuyao-cezi-${result.analysis.char}-${new Date().toISOString().slice(0, 10)}.png`"
           />
           <UButton
@@ -447,6 +452,7 @@ const aiStreaming = ref(false)
 const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 const resultRef = ref<HTMLDivElement>()
+const posterRef = ref<HTMLDivElement>()
 
 async function startAiStream() {
   if (!result.value) return

@@ -3065,6 +3065,32 @@
       "archiveSeal": "尋物啟事\n立檔為憑"
     }
   },
+  "liuyaoCeziPoster": {
+    "kicker": "六 爻 測 字",
+    "title": "批 命 箋",
+    "serial": "六爻測字 · 拆字解卦 · 一事一斷",
+    "overviewPending": "占卦推演中……",
+    "questionFlag": "所問之事",
+    "noQuestion": "隨緣一問",
+    "movingPrefix": "動",
+    "movingUnit": "爻",
+    "upperFlag": "上卦",
+    "lowerFlag": "下卦",
+    "movingFlag": "動爻",
+    "tiLabel": "體",
+    "yongLabel": "用",
+    "tiyongLabel": "體用",
+    "fieldPending": "推算中……",
+    "verdictFlag": "斷",
+    "verdictPending": "斷語推算中……",
+    "noteLabel": "隱士",
+    "notePending": "提點推算中……",
+    "strokeUnit": "畫",
+    "strokeEstimated": "（估）",
+    "signWho": "幽默隱士 批",
+    "seal": "六爻\n測字",
+    "qrHint": "掃碼占卜"
+  },
   "liuyaoCezi": {
     "knowledgeCard1Title": "六爻測字",
     "knowledgeCard1Desc": "結合所寫之字與六爻搖卦，從字形與卦象雙重角度解讀問題。",
