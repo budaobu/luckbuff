@@ -3040,6 +3040,32 @@
       "archiveSeal": "LOST & FOUND\nON RECORD"
     }
   },
+  "liuyaoCeziPoster": {
+    "kicker": "Liu Yao Character Reading",
+    "title": "Oracle Scroll",
+    "serial": "Liu Yao · Character Divination · One Question",
+    "overviewPending": "Casting hexagram…",
+    "questionFlag": "Question",
+    "noQuestion": "Open reading",
+    "movingPrefix": "Moving line ",
+    "movingUnit": "",
+    "upperFlag": "Upper",
+    "lowerFlag": "Lower",
+    "movingFlag": "Moving",
+    "tiLabel": "Host",
+    "yongLabel": "Guest",
+    "tiyongLabel": "Host·Guest",
+    "fieldPending": "Calculating…",
+    "verdictFlag": "Verdict",
+    "verdictPending": "Verdict loading…",
+    "noteLabel": "Sage",
+    "notePending": "Tip loading…",
+    "strokeUnit": " strokes",
+    "strokeEstimated": " (est.)",
+    "signWho": "The Hermit · Reading",
+    "seal": "Liu Yao\nOracle",
+    "qrHint": "Scan to divine"
+  },
   "liuyaoCezi": {
     "knowledgeCard1Title": "Liu Yao Character Divination",
     "knowledgeCard1Desc": "Combines the written character with Liu Yao coin casting, reading the question from both form and hexagram angles.",
