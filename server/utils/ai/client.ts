@@ -69,14 +69,41 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
     throw new Error('AI 返回内容为空')
   }
 
-  const cleaned = content
-    .replace(/^```json\s*/i, '')
-    .replace(/\s*```$/i, '')
-    .trim()
+  // Strip outer markdown fence (model may wrap despite instructions)
+  let cleaned = content.trim()
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
 
+  // Fast path
   try {
     return JSON.parse(cleaned)
   } catch {
+    // Slow path: find and extract the outermost JSON object or array.
+    // Handles prose before/after the JSON, or partial fences mid-content.
+    const firstBrace = cleaned.indexOf('{')
+    const firstBracket = cleaned.indexOf('[')
+    let start = -1
+    if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+      start = firstBrace
+    } else if (firstBracket !== -1) {
+      start = firstBracket
+    }
+    if (start !== -1) {
+      const closeChar = cleaned[start] === '{' ? '}' : ']'
+      const openChar = cleaned[start]!
+      let depth = 0, inString = false, escape = false, end = -1
+      for (let i = start; i < cleaned.length; i++) {
+        const ch = cleaned[i]!
+        if (escape) { escape = false; continue }
+        if (ch === '\\' && inString) { escape = true; continue }
+        if (ch === '"') { inString = !inString; continue }
+        if (inString) continue
+        if (ch === openChar) depth++
+        else if (ch === closeChar) { depth--; if (depth === 0) { end = i; break } }
+      }
+      if (end !== -1) {
+        try { return JSON.parse(cleaned.slice(start, end + 1)) } catch { /* fall through */ }
+      }
+    }
     throw new Error('AI 返回不是有效 JSON')
   }
 }

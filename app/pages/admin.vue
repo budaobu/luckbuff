@@ -91,7 +91,7 @@
         </div>
         <div v-else class="space-y-2">
           <div
-            v-for="a in articles"
+            v-for="a in pagedArticles"
             :key="a.slug"
             class="flex items-center gap-4 rounded-xl border border-neutral-800 bg-neutral-900/60 px-4 py-3 hover:border-neutral-600 transition-colors cursor-pointer"
             @click="startEdit(a.slug)"
@@ -128,6 +128,34 @@
               class="shrink-0 text-xs text-neutral-400 hover:text-amber-400 transition-colors"
               @click.stop
             >查看页面 ↗</a>
+          </div>
+        </div>
+
+        <!-- 分页导航 -->
+        <div v-if="totalPages > 1" class="flex items-center justify-between pt-4 pb-1">
+          <p class="text-xs text-neutral-500">
+            共 {{ articles.length }} 篇 · 第 {{ currentPage }}/{{ totalPages }} 页
+          </p>
+          <div class="flex items-center gap-1">
+            <button
+              :disabled="currentPage === 1"
+              class="px-3 py-1.5 rounded-lg text-sm border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              @click="currentPage--"
+            >‹ 上一页</button>
+            <button
+              v-for="p in totalPages"
+              :key="p"
+              class="min-w-[2rem] px-2 py-1.5 rounded-lg text-sm border transition-colors"
+              :class="p === currentPage
+                ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+                : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500 hover:bg-neutral-700'"
+              @click="currentPage = p"
+            >{{ p }}</button>
+            <button
+              :disabled="currentPage === totalPages"
+              class="px-3 py-1.5 rounded-lg text-sm border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              @click="currentPage++"
+            >下一页 ›</button>
           </div>
         </div>
       </div>
@@ -465,11 +493,20 @@ const CATEGORY_LABELS: Record<string, string> = {
   'culture': '术数文化',
 }
 
+const PAGE_SIZE = 10
+
 const view = ref<'login' | 'list' | 'editor'>('login')
 const articles = ref<AdminArticle[]>([])
 const categories = ref<string[]>(Object.keys(CATEGORY_LABELS))
 const listPending = ref(false)
 const fatalError = ref('')
+const currentPage = ref(1)
+
+const totalPages = computed(() => Math.max(1, Math.ceil(articles.value.length / PAGE_SIZE)))
+const pagedArticles = computed(() => {
+  const start = (currentPage.value - 1) * PAGE_SIZE
+  return articles.value.slice(start, start + PAGE_SIZE)
+})
 
 const isNew = ref(true)
 const editingSlug = ref('')
@@ -634,6 +671,7 @@ async function logout() {
 
 async function loadList() {
   listPending.value = true
+  currentPage.value = 1
   fatalError.value = ''
   try {
     const data = await adminFetch<{ total: number; categories: string[]; articles: AdminArticle[] }>('/api/admin/insights')
