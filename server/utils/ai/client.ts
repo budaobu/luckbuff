@@ -68,7 +68,7 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
     : (parsed.response ?? parsed.message?.content)
 
   if (typeof content !== 'string' || !content.trim()) {
-    throw new Error('AI 返回内容为空')
+    throw new Error(`AI 返回内容为空 [debug: finish_reason=${parsed.choices?.[0]?.finish_reason}, raw=${JSON.stringify(parsed).slice(0, 500)}]`)
   }
 
   // Strip outer markdown fence (model may wrap despite instructions)
@@ -106,6 +106,6 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
         try { return JSON.parse(cleaned.slice(start, end + 1)) } catch { /* fall through */ }
       }
     }
-    throw new Error('AI 返回不是有效 JSON')
+    throw new Error(`AI 返回不是有效 JSON [debug: finish_reason=${parsed.choices?.[0]?.finish_reason}, contentLen=${cleaned.length}, tail=${JSON.stringify(cleaned.slice(-200))}]`)
   }
 }

@@ -164,11 +164,12 @@ tags: ${JSON.stringify(source.tags)}
 content:
 ${source.content}`
 
-  const maxTokens = Math.min(32768, Math.max(4096, Math.ceil(source.content.length * 1.2)))
+  const maxTokens = Math.min(32768, Math.max(16384, Math.ceil(source.content.length * 2)))
+  const timeoutMs = Math.min(300000, Math.max(120000, source.content.length * 80))
   const transModel = (config.aiTransModel as string) || (config.aiModel as string)
 
   try {
-    const raw = await callAIJson(TRANSLATE_SYSTEM, user, { timeoutMs: 120000, maxTokens, model: transModel })
+    const raw = await callAIJson(TRANSLATE_SYSTEM, user, { timeoutMs, maxTokens, model: transModel })
     const translated = parseTranslatedArticle(raw)
     const structuralError = validateTranslatedStructure(source.content, translated)
     if (structuralError) {
