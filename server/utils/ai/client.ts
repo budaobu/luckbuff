@@ -7,6 +7,7 @@ const isOpenAiProvider = (provider: string) => {
 interface CallAIJsonOptions {
   timeoutMs?: number
   maxTokens?: number
+  model?: string
 }
 
 export async function callAIJson(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
@@ -15,10 +16,11 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
   const isOpenAi = isOpenAiProvider(provider)
   let maxTokens = opts.maxTokens ?? (Number(config.aiMaxTokens) || 8192)
   if (maxTokens > 327680) maxTokens = 8192
+  const model = opts.model || config.aiModel
 
   const upstreamBody = isOpenAi
     ? {
-        model: config.aiModel,
+        model,
         messages: [
           { role: 'system', content: system },
           { role: 'user', content: user },
@@ -27,7 +29,7 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
         max_tokens: maxTokens,
       }
     : {
-        model: config.aiModel,
+        model,
         prompt: `${system}\n\n${user}`,
         stream: false,
         options: { num_predict: maxTokens },

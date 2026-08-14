@@ -165,9 +165,10 @@ content:
 ${source.content}`
 
   const maxTokens = Math.min(32768, Math.max(4096, Math.ceil(source.content.length * 1.2)))
+  const transModel = (config.aiTransModel as string) || (config.aiModel as string)
 
   try {
-    const raw = await callAIJson(TRANSLATE_SYSTEM, user, { timeoutMs: 120000, maxTokens })
+    const raw = await callAIJson(TRANSLATE_SYSTEM, user, { timeoutMs: 120000, maxTokens, model: transModel })
     const translated = parseTranslatedArticle(raw)
     const structuralError = validateTranslatedStructure(source.content, translated)
     if (structuralError) {
@@ -199,7 +200,7 @@ ${source.content}`
       relatedTools: source.relatedTools,
       content: translated.content.trim(),
       translated_from: hash,
-      generator: `ai:${String(config.aiProvider || 'openai')}/${String(config.aiModel || '')}`,
+      generator: `ai:${String(config.aiProvider || 'openai')}/${transModel}`,
       extraMeta: existing?.extraMeta,
     })
     patchTranslationState(slug, 'en', { status: 'done', hash, error: null })
