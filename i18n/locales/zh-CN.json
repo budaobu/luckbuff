@@ -3144,6 +3144,23 @@
     "checkInput": "请检查输入",
     "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
   },
+  "guanyinPoster": {
+    "kicker": "观 音 灵 签",
+    "serial": "观音灵签 · 百签灵应 · 诚心一占",
+    "numberLine": "第 {number} 签",
+    "questionFlag": "所问之事",
+    "noQuestion": "随缘一问",
+    "illustrationAlt": "典故插画 · {title}",
+    "storyFallback": "典故 · {title}",
+    "poemFlag": "签诗",
+    "explanationLabel": "签意",
+    "adviceLabel": "签示",
+    "guidanceLabel": "指引",
+    "guidancePending": "解签中……",
+    "seal": "观音\n灵签",
+    "footerNote": "心诚则灵 · 签文仅供参考",
+    "qrHint": "扫码抽签"
+  },
   "liuyaoSeeking": {
     "knowledgeCard1Title": "六爻尋物",
     "knowledgeCard1Desc": "一事一占，以用神代表失物，觀其旺衰、動靜與生剋判斷能否找回。",

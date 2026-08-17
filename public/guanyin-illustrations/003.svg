@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="#3a2e1f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 董永遇仙 · 燕衔泥：归燕衔泥垒巢 -->
+  <path d="M52 60 C 72 44, 92 42, 104 52 C 118 40, 140 40, 154 52 C 138 52, 124 58, 114 68 C 104 78, 84 76, 72 68 C 64 63, 57 61, 52 60 Z"/>
+  <path d="M104 52 C 108 58, 110 62, 110 66"/>
+  <path d="M70 66 C 60 74, 50 76, 40 74 M70 66 C 62 58, 54 54, 44 54"/>
+  <circle cx="96" cy="58" r="2"/>
+  <path d="M118 108 a26 16 0 0 1 52 0" />
+  <path d="M118 108 h52"/>
+  <path d="M132 96 q 6 -6 12 0 M146 92 q 6 -6 12 0" opacity="0.5"/>
+  <path d="M48 118 q 10 -12 24 -8" opacity="0.5"/>
+</svg>

@@ -3147,6 +3147,23 @@
     "checkInput": "check輸入",
     "aiUnavailable": "AI 解讀暫不可用，請稍後重試。"
   },
+  "guanyinPoster": {
+    "kicker": "觀 音 靈 籤",
+    "serial": "觀音靈籤 · 百籤靈應 · 誠心一占",
+    "numberLine": "第 {number} 籤",
+    "questionFlag": "所問之事",
+    "noQuestion": "隨緣一問",
+    "illustrationAlt": "典故插畫 · {title}",
+    "storyFallback": "典故 · {title}",
+    "poemFlag": "籤詩",
+    "explanationLabel": "籤意",
+    "adviceLabel": "籤示",
+    "guidanceLabel": "指引",
+    "guidancePending": "解籤中……",
+    "seal": "觀音\n靈籤",
+    "footerNote": "心誠則靈 · 籤文僅供參考",
+    "qrHint": "掃碼抽籤"
+  },
   "liuyaoSeeking": {
     "knowledgeCard1Title": "六爻尋物",
     "knowledgeCard1Desc": "一事一占，以用神代表失物，觀其旺衰、動靜與生剋判斷能否找回。",
