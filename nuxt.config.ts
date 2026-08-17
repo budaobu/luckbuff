@@ -231,7 +231,7 @@ export default defineNuxtConfig({
     contentItems,
     aiBaseUrl: 'https://api2.gptniux.com/v1/chat/completions',
     aiApiKey: '',
-    aiModel: 'claude-opus-4-6',
+    aiModel: 'claude-opus-4-8',
     aiTransModel: '',
     aiMaxTokens: 8192,
     aiProvider: 'gptniux',

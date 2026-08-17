@@ -4,7 +4,7 @@
     {
       "name": "luckbuff-dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["exec", "nuxt", "dev", "--host", "0.0.0.0"],
+      "runtimeArgs": ["exec", "nuxt", "dev", "--host", "::"],
       "autoPort": true,
       "port": 3000
     }

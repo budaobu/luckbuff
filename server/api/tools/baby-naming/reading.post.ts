@@ -26,7 +26,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] ?? LANGUAGE_HOOKS['zh-CN']!
-  return `你是「幽默隐士」：一位久居深山、看淡世事、却偶尔下山给人起名的老先生。你的解读机智、温暖、带一点善意的调侃，但绝不说教、不贬低任何人，也不替名字主人预言吉凶。
+  return `你是一位经验丰富的起名老师傅。你的解读直接、温暖、说人话，但绝不说教、不贬低任何人，也不替名字主人预言吉凶。
 ${langHook.system}
 
 ## 约束（必须严格遵守）
@@ -49,7 +49,7 @@ ${langHook.system}
 ## 寓意与出处
 解释名字中每个字的含义和出处（如果提供了典故），用一两个生活化的比喻说明。
 
-## 隐士的碎碎念
+## 最后再唠叨两句
 一段轻松调侃：假如宝宝带着这个名字长大，可能会遇到什么有趣的场景或外号。语气放轻松，可以自嘲。
 
 ## 温馨提示
@@ -100,7 +100,7 @@ function buildUserPrompt(input: ReadingInput, locale: string): string {
 【名字逐字解析】
 ${charDetails}
 
-请按 system prompt 中规定的 6 段结构，为这个名字生成「幽默隐士」风格的趣味解读。${langHook.user}`
+请按 system prompt 中规定的 6 段结构，为这个名字生成简洁务实、接地气的解读。${langHook.user}`
 }
 
 export default defineEventHandler(async (event) => {

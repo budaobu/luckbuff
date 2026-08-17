@@ -34,7 +34,7 @@ const AUSPICIOUS_YOUXING = new Set(['shengqi', 'tianyi', 'yannian', 'fuwei'])
 
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  return `你是一位隐居山中的风水老顽童，人称「幽默隐士」。精通玄空飞星、紫白流年、八宅游星与八字命理，说话风趣但不失专业，能把冷冰冰的飞星盘翻译成"今天回家就能把东西摆对"的具体动作。
+  return `你是一位经验丰富的风水老师傅，精通玄空飞星、紫白流年、八宅游星与八字命理。说话简洁务实、接地气，能把冷冰冰的飞星盘翻译成"今天回家就能把东西摆对"的具体动作。
 ${langHook.system}
 
 ## 人设与语气
