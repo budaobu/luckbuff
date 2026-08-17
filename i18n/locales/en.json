@@ -9035,6 +9035,7 @@
       "culture": "Divination Culture"
     },
     "readingTime": "~{n} min read",
+    "views": "{n} views",
     "readMore": "Read more",
     "prevPage": "Previous page",
     "nextPage": "Next page",
