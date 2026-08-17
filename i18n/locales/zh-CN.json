@@ -3161,6 +3161,21 @@
     "footerNote": "心诚则灵 · 签文仅供参考",
     "qrHint": "扫码抽签"
   },
+  "wealthGodPoster": {
+    "kicker": "五 路 财 神 灵 签",
+    "serial": "五路财神 · 百签纳福 · 求财一占",
+    "numberLine": "第 {number} 签",
+    "questionFlag": "所问财事",
+    "noQuestion": "随缘问财",
+    "poemFlag": "签诗",
+    "explanationLabel": "签意",
+    "adviceLabel": "签示",
+    "guidanceLabel": "财引",
+    "guidancePending": "解签中……",
+    "seal": "五路\n财神",
+    "footerNote": "财源广进 · 签文仅供参考",
+    "qrHint": "扫码求财"
+  },
   "liuyaoSeeking": {
     "knowledgeCard1Title": "六爻尋物",
     "knowledgeCard1Desc": "一事一占，以用神代表失物，觀其旺衰、動靜與生剋判斷能否找回。",

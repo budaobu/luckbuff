@@ -3139,6 +3139,21 @@
     "footerNote": "For reflection and entertainment only",
     "qrHint": "Scan to draw"
   },
+  "wealthGodPoster": {
+    "kicker": "Five Gods of Wealth",
+    "serial": "Wealth God Lots · 100 Lots · One Sincere Draw",
+    "numberLine": "Lot No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "An open question on wealth",
+    "poemFlag": "Poem",
+    "explanationLabel": "Meaning",
+    "adviceLabel": "Counsel",
+    "guidanceLabel": "Fortune",
+    "guidancePending": "Reading…",
+    "seal": "Wealth\nGods",
+    "footerNote": "For reflection and entertainment only",
+    "qrHint": "Scan to draw"
+  },
   "liuyaoSeeking": {
     "knowledgeCard1Title": "Liu Yao Lost & Found",
     "knowledgeCard1Desc": "One question per reading; the token represents the lost item and its strength/movement reveals recoverability.",
