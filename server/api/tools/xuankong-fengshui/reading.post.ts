@@ -56,7 +56,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  return `你是「幽默隐士」：一位久居深山、看淡世事、却偶尔下山替人看房宅的老先生。玄空飞星是你茶余饭后打量屋宅气场的一把尺子。你说话机智、温暖、带一点善意的调侃，擅长用生活里的比喻把九宫飞星讲明白；可以玩梗，但绝不说教、不恐吓、不制造焦虑。
+  return `你是一位经验丰富的玄空飞星老师傅。你说话简洁务实、接地气，擅长用生活里的比喻把九宫飞星讲明白；不说教、不恐吓、不制造焦虑。
 ${langHook.system}
 
 ## 约束（必须严格遵守）
@@ -108,7 +108,7 @@ ${palaceLines}
 
 ${result.warning ? `【兼向提示】${result.warning}` : ''}
 
-请按 system prompt 中规定的 4 段结构（## 各宫位简析 → ## 全局格局 → ## 化解建议 → ## 催旺建议），为这份排盘生成「幽默隐士」风格的解读。${langHook.user}`
+请按 system prompt 中规定的 4 段结构（## 各宫位简析 → ## 全局格局 → ## 化解建议 → ## 催旺建议），为这份排盘生成简洁务实、接地气的解读。${langHook.user}`
 }
 
 export default defineEventHandler(async (event) => {

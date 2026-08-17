@@ -17,7 +17,7 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
 
 function buildSystemPrompt(locale: string): string {
   const langHook = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  return `你是一位隐居山中的风水老顽童，人称「幽默隐士」。精通三元玄空、八宅明镜、形势峦头，说话风趣但不失专业，能把古籍里的堪舆术语翻译成现代人听得懂的居家建议。
+  return `你是一位经验丰富的风水老师傅，精通三元玄空、八宅明镜、形势峦头。说话简洁务实、接地气，能把古籍里的堪舆术语翻译成现代人听得懂、今天就能动手的居家建议。
 ${langHook.system}
 
 ## 人设与语气

@@ -134,201 +134,27 @@
         <p class="text-sm text-[var(--text-muted)] mt-6">{{ $t('liuyaoCezi.calculating') }}</p>
       </div>
 
-      <!-- ============ 阶段 3：结果 ============ -->
+      <!-- ============ 阶段 3：结果（仅海报） ============ -->
       <div v-if="phase === 'result' && result">
-        <div ref="resultRef">
-          <!-- Section 标题 -->
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Divination Result</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('liuyaoCezi.resultTitle') }}
-            </h1>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <!-- 占问信息 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-4">
-            <div class="flex items-center gap-2 mb-2">
-              <UIcon name="i-heroicons-question-mark-circle" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoCezi.resultQuestionLabel') }}</h3>
-            </div>
-            <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ result.input.question || $t('liuyaoCezi.noQuestion') }}</p>
-          </div>
-
-          <!-- 测字分析 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-4">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-pencil" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoCezi.analysisTitle') }}</h3>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mb-4">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('liuyaoCezi.charLabel') }}</p>
-                <p class="text-2xl font-bold text-[var(--accent)]">{{ result.analysis.char }}</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('liuyaoCezi.strokeLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.analysis.strokes }}</p>
-              </div>
-            </div>
-            <div class="rounded-xl border border-[var(--accent-border-hover)] bg-[var(--accent-bg)] p-4">
-              <p class="text-xs text-[var(--accent-muted)] mb-1">{{ $t('liuyaoCezi.derivationTitle') }}</p>
-              <div class="space-y-1 text-sm text-[var(--text-body)]">
-                <p>{{ result.derivation.upperFormula }}</p>
-                <p>{{ result.derivation.lowerFormula }}</p>
-                <p class="text-[var(--accent)]">{{ result.derivation.movingLineFormula }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 卦象结果 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-4">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-squares-2x2" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoCezi.hexagramTitle') }}</h3>
-            </div>
-            <div class="text-center mb-4">
-              <div class="text-5xl font-serif text-[var(--accent)] mb-2">{{ result.hexagram.symbol }}</div>
-              <p class="text-lg font-semibold text-[var(--text-primary)]">{{ result.hexagram.name }}</p>
-            </div>
-            <div class="grid grid-cols-3 gap-2 mb-4">
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('liuyaoCezi.upperTrigramLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.upper.symbol }}</p>
-                <p class="text-xs text-[var(--text-muted)]">{{ result.hexagram.upper.name }}（{{ result.hexagram.upper.nature }}）</p>
-              </div>
-              <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-3 text-center">
-                <p class="text-[10px] text-[var(--text-faint)] mb-1">{{ $t('liuyaoCezi.lowerTrigramLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--text-primary)]">{{ result.hexagram.lower.symbol }}</p>
-                <p class="text-xs text-[var(--text-muted)]">{{ result.hexagram.lower.name }}（{{ result.hexagram.lower.nature }}）</p>
-              </div>
-              <div class="rounded-xl border border-[var(--accent-border-hover)] bg-[var(--accent-bg)] p-3 text-center">
-                <p class="text-[10px] text-[var(--accent-muted)] mb-1">{{ $t('liuyaoCezi.movingLineLabel') }}</p>
-                <p class="text-lg font-bold text-[var(--accent)]">{{ result.hexagram.movingLine }}</p>
-                <p class="text-xs text-[var(--accent-muted)]">{{ $t('liuyaoCezi.movingLineUnit') }}</p>
-              </div>
-            </div>
-            <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-4">
-              <p class="text-xs text-[var(--text-muted)] mb-2">{{ $t('liuyaoCezi.bodyTitle') }}</p>
-              <p class="text-sm text-[var(--text-body)] leading-relaxed">
-                {{ $t('liuyaoCezi.tiLabel') }}：{{ result.body.tiTrigram.name }}（{{ result.body.tiWuxing }}）
-                {{ $t('liuyaoCezi.yongLabel') }}：{{ result.body.yongTrigram.name }}（{{ result.body.yongTrigram.wuxing }}）
-              </p>
-            </div>
-          </div>
-
-          <!-- 纳甲排盘 -->
-          <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 mb-5">
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-heroicons-list-bullet" class="w-5 h-5 text-[var(--accent)]" />
-              <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('liuyaoCezi.linesTitle') }}</h3>
-            </div>
-            <div class="space-y-2">
-              <div
-                v-for="line in result.lines.slice().reverse()"
-                :key="line.position"
-                class="rounded-xl border p-3"
-                :class="line.isMoving ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]' : 'border-[var(--border-light)] bg-[var(--surface-card)]'"
-              >
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium" :class="line.isMoving ? 'text-[var(--accent)]' : 'text-[var(--text-muted)]'">{{ line.label }}</span>
-                    <span class="text-lg">{{ line.yin ? '⚋' : '⚊' }}</span>
-                    <span class="text-sm font-semibold text-[var(--text-primary)]">{{ line.stemBranch }}</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 flex-wrap justify-end">
-                    <span class="text-xs px-1.5 py-0.5 rounded border border-[var(--border-light)] text-[var(--text-muted)]">{{ line.liuQin }}</span>
-                    <span class="text-xs px-1.5 py-0.5 rounded border border-[var(--border-light)] text-[var(--text-muted)]">{{ line.liuShen }}</span>
-                    <span v-if="line.isShi" class="text-xs px-1.5 py-0.5 rounded bg-[var(--accent-bg)] text-[var(--accent)]">{{ $t('liuyaoCezi.shiLabel') }}</span>
-                    <span v-if="line.isYing" class="text-xs px-1.5 py-0.5 rounded bg-[var(--accent-bg)] text-[var(--accent)]">{{ $t('liuyaoCezi.yingLabel') }}</span>
-                    <span v-if="line.isMoving" class="text-xs px-1.5 py-0.5 rounded bg-[var(--accent)] text-white">{{ $t('liuyaoCezi.movingTag') }}</span>
-                    <span v-if="line.isXunKong" class="text-xs px-1.5 py-0.5 rounded border border-red-400/30 text-red-400">{{ $t('liuyaoCezi.xunKongTag') }}</span>
-                    <span v-if="line.isYuePo" class="text-xs px-1.5 py-0.5 rounded border border-orange-400/30 text-orange-400">{{ $t('liuyaoCezi.yuePoTag') }}</span>
-                  </div>
-                </div>
-                <div class="mt-2 text-xs text-[var(--text-faint)]">
-                  {{ $t('liuyaoCezi.wuxingLabel') }}：{{ line.wuxing }}　{{ $t('liuyaoCezi.stateLabel') }}：{{ line.state }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 解字批命笺海报 -->
-        <div ref="posterRef" class="mt-4 mb-5">
+        <!-- 解字批命笺海报：卦象与解读已合并其中 -->
+        <div ref="posterRef" class="mb-3">
           <LiuyaoCeziPoster :result="result" :ai-content="aiContent" />
         </div>
 
-        <!-- AI 解读 -->
-        <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm p-5 mb-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-base font-semibold text-[var(--text-primary)] tracking-wide">{{ $t('liuyaoCezi.interpretation') }}</h3>
-            </div>
-            <div v-if="aiStreaming" class="flex items-center gap-1.5">
-              <span class="text-xs text-[var(--accent-muted)]">{{ $t('liuyaoCezi.interpreting') }}</span>
-              <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
-              </span>
-            </div>
+        <!-- 解读状态 -->
+        <div class="flex items-center justify-center min-h-[22px]">
+          <div v-if="aiStreaming" class="flex items-center gap-1.5">
+            <span class="text-xs text-[var(--accent-muted)]">{{ $t('liuyaoCezi.interpreting') }}</span>
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+            </span>
           </div>
-
-          <div v-if="aiSections.length > 0" class="space-y-3">
-            <div
-              v-for="(section, index) in aiSections"
-              :key="section.title"
-              class="group relative rounded-xl border border-[var(--border-light)] overflow-hidden"
-              :style="{ background: 'linear-gradient(to bottom right, var(--card-gradient-from), transparent)' }"
-            >
-              <div class="relative z-10 p-4">
-                <h4 class="text-sm font-semibold text-[var(--text-primary)] mb-2">{{ section.title.replace(/^##\s*/, '') }}</h4>
-                <div class="ai-section-content" v-html="renderMarkdown(section.content)" />
-                <span
-                  v-if="aiStreaming && index === aiSections.length - 1"
-                  class="inline-block w-[2px] h-5 bg-[var(--accent)] ml-0.5 align-middle animate-pulse mt-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="aiStreaming" class="flex items-center justify-center py-10">
-            <div class="flex flex-col items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center">
-                <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-[var(--accent)] animate-pulse" />
-              </div>
-              <p class="text-xs text-[var(--text-muted)]">{{ $t('liuyaoCezi.generatingInterpretation') }}</p>
-            </div>
-          </div>
-
-          <div v-else-if="aiError" class="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-400" />
-              <p class="text-sm text-red-400">{{ aiError }}</p>
-            </div>
-          </div>
-
-          <div v-if="!aiStreaming && (aiContent || aiError)" class="flex justify-center mt-4">
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              class="group/btn"
-              @click="startAiStream"
-            >
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('liuyaoCezi.reinterpret') }}
-            </UButton>
-          </div>
+          <p v-else-if="aiError" class="text-xs text-red-400">{{ aiError }}</p>
         </div>
 
         <!-- 底部操作 -->
-        <div class="flex gap-3 justify-center mt-10 flex-wrap">
+        <div class="flex gap-3 justify-center mt-6 flex-wrap">
           <UButton
             color="warning"
             variant="soft"
@@ -346,6 +172,18 @@
             :share-target="posterRef"
             :filename="`liuyao-cezi-${result.analysis.char}-${new Date().toISOString().slice(0, 10)}.png`"
           />
+          <UButton
+            v-if="!aiStreaming && (aiContent || aiError)"
+            color="warning"
+            variant="soft"
+            class="group/btn"
+            @click="startAiStream"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-sparkles" class="w-4 h-4" />
+            </template>
+            {{ $t('liuyaoCezi.reinterpret') }}
+          </UButton>
           <UButton
             color="warning"
             variant="soft"
@@ -375,7 +213,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
 import type { LiuyaoCeziRequest, LiuyaoCeziResult } from '~/types/liuyao-cezi'
 
 const { t, locale } = useI18n()
@@ -417,7 +254,6 @@ async function handleSubmit() {
   result.value = null
   aiContent.value = ''
   aiStreaming.value = false
-  aiStarted.value = false
   aiError.value = null
 
   const payload: LiuyaoCeziRequest = {
@@ -449,9 +285,7 @@ async function handleSubmit() {
 // AI 解读状态
 const aiContent = ref('')
 const aiStreaming = ref(false)
-const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
-const resultRef = ref<HTMLDivElement>()
 const posterRef = ref<HTMLDivElement>()
 
 async function startAiStream() {
@@ -459,7 +293,6 @@ async function startAiStream() {
 
   aiContent.value = ''
   aiStreaming.value = true
-  aiStarted.value = false
   aiError.value = null
 
   await nextTick()
@@ -499,7 +332,6 @@ async function startAiStream() {
         try {
           const data = JSON.parse(payload)
           if (data.type === 'text' && data.text) {
-            if (!aiStarted.value) aiStarted.value = true
             aiContent.value += data.text
           } else if (data.type === 'error') {
             aiError.value = data.message || t('liuyaoCezi.aiUnavailable')
@@ -521,7 +353,6 @@ function resetForm() {
   result.value = null
   aiContent.value = ''
   aiStreaming.value = false
-  aiStarted.value = false
   aiError.value = null
   form.char = ''
   form.question = ''
@@ -545,28 +376,6 @@ function handleCopy() {
   }).catch(() => {
     useToast().add({ title: t('share.copyFail'), color: 'error' })
   })
-}
-
-const aiSections = computed(() => {
-  if (!aiContent.value) return []
-  const rawSections = aiContent.value.split(/\n(?=##\s)/)
-  const list: { title: string; content: string }[] = []
-  for (const raw of rawSections) {
-    const trimmed = raw.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    const titleLine = (lines[0] ?? '').replace(/^##\s*/, '').trim()
-    const content = lines.slice(1).join('\n').trim()
-    if (titleLine || content) {
-      list.push({ title: titleLine || t('liuyaoCezi.interpretation'), content })
-    }
-  }
-  return list
-})
-
-function renderMarkdown(text: string): string {
-  if (!text) return ''
-  return marked.parse(text, { async: false }) as string
 }
 
 // SEO
@@ -612,40 +421,3 @@ useHead(() => ({
   ],
 }))
 </script>
-
-<style scoped>
-.ai-section-content :deep(p) {
-  margin-bottom: 0.6em;
-  line-height: 1.75;
-  color: var(--text-body);
-}
-.ai-section-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.ai-section-content :deep(strong) {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.ai-section-content :deep(ul) {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
-  margin-bottom: 0.5rem;
-}
-.ai-section-content :deep(ul li) {
-  position: relative;
-  padding-left: 1.1rem;
-  margin-bottom: 0.3rem;
-  line-height: 1.65;
-  color: var(--text-body);
-}
-.ai-section-content :deep(ul li::before) {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-</style>
