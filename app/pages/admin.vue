@@ -91,10 +91,40 @@
 
       <!-- ══════ 列表视图 ══════ -->
       <div v-if="view === 'list'">
+        <!-- 搜索与筛选 -->
+        <div v-if="articles.length" class="flex flex-wrap items-center gap-2 mb-4">
+          <input
+            v-model="searchQuery"
+            type="search"
+            placeholder="搜索文章标题…"
+            class="flex-1 min-w-[200px] bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
+          >
+          <button
+            type="button"
+            class="text-xs px-3 py-2 rounded-lg border transition-colors"
+            :class="filterZhTwPending
+              ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+              : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500'"
+            @click="filterZhTwPending = !filterZhTwPending"
+          >繁体未同步</button>
+          <button
+            type="button"
+            class="text-xs px-3 py-2 rounded-lg border transition-colors"
+            :class="filterEnPending
+              ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+              : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500'"
+            @click="filterEnPending = !filterEnPending"
+          >英文未同步</button>
+        </div>
+
         <div v-if="listPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
         <div v-else-if="!articles.length" class="text-center py-16 text-neutral-500">
           <p class="text-base mb-2">还没有文章</p>
           <p class="text-sm">点右上角「新建文章」开始写第一篇</p>
+        </div>
+        <div v-else-if="!filteredArticles.length" class="text-center py-16 text-neutral-500">
+          <p class="text-base mb-2">没有匹配的文章</p>
+          <p class="text-sm">换个关键词，或取消翻译状态筛选</p>
         </div>
         <div v-else class="space-y-2">
           <div
@@ -141,7 +171,7 @@
         <!-- 分页导航 -->
         <div v-if="totalPages > 1" class="flex items-center justify-between pt-4 pb-1">
           <p class="text-xs text-neutral-500">
-            共 {{ articles.length }} 篇 · 第 {{ currentPage }}/{{ totalPages }} 页
+            共 {{ filteredArticles.length }} 篇<template v-if="filteredArticles.length !== articles.length">（全部 {{ articles.length }} 篇）</template> · 第 {{ currentPage }}/{{ totalPages }} 页
           </p>
           <div class="flex items-center gap-1">
             <button
@@ -587,12 +617,27 @@ const categories = ref<string[]>(Object.keys(CATEGORY_LABELS))
 const listPending = ref(false)
 const fatalError = ref('')
 const currentPage = ref(1)
+const searchQuery = ref('')
+const filterZhTwPending = ref(false)
+const filterEnPending = ref(false)
 
-const totalPages = computed(() => Math.max(1, Math.ceil(articles.value.length / PAGE_SIZE)))
+const filteredArticles = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  return articles.value.filter(a => {
+    if (q && !a.title.toLowerCase().includes(q)) return false
+    if (filterZhTwPending.value && a.translations?.['zh-tw']?.status === 'done') return false
+    if (filterEnPending.value && a.translations?.en?.status === 'done') return false
+    return true
+  })
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredArticles.value.length / PAGE_SIZE)))
 const pagedArticles = computed(() => {
   const start = (currentPage.value - 1) * PAGE_SIZE
-  return articles.value.slice(start, start + PAGE_SIZE)
+  return filteredArticles.value.slice(start, start + PAGE_SIZE)
 })
+
+watch([searchQuery, filterZhTwPending, filterEnPending], () => { currentPage.value = 1 })
 
 const isNew = ref(true)
 const editingSlug = ref('')
