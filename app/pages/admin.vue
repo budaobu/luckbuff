@@ -55,19 +55,26 @@
         </div>
         <div class="flex items-center gap-2">
           <button
-            v-if="view === 'editor'"
+            v-if="view === 'editor' || view === 'stats'"
             class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
             @click="backToList"
           >
             ← 返回列表
           </button>
-          <button
-            v-else
-            class="text-sm px-4 py-2 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black font-medium transition-colors"
-            @click="startNew"
-          >
-            ＋ 新建文章
-          </button>
+          <template v-else>
+            <button
+              class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
+              @click="openStats"
+            >
+              浏览统计
+            </button>
+            <button
+              class="text-sm px-4 py-2 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black font-medium transition-colors"
+              @click="startNew"
+            >
+              ＋ 新建文章
+            </button>
+          </template>
           <button
             class="text-sm px-3 py-2 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition-colors"
             title="退出登录"
@@ -160,8 +167,87 @@
         </div>
       </div>
 
+      <!-- ══════ 浏览统计视图 ══════ -->
+      <div v-else-if="view === 'stats'">
+        <div v-if="statsPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
+        <template v-else-if="stats">
+          <!-- 概览卡片 -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
+              <p class="text-xs text-neutral-500 mb-1">近 7 日浏览</p>
+              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ stats.last7Total }}</p>
+            </div>
+            <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
+              <p class="text-xs text-neutral-500 mb-1">近 30 日浏览</p>
+              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ stats.last30Total }}</p>
+            </div>
+          </div>
+
+          <!-- 日柱形图 -->
+          <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-medium text-neutral-200">每日浏览</h2>
+              <div class="flex gap-1">
+                <button
+                  v-for="r in ([7, 30] as const)"
+                  :key="r"
+                  type="button"
+                  class="text-xs px-3 py-1.5 rounded-lg border transition-colors"
+                  :class="statsRange === r
+                    ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+                    : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500'"
+                  @click="statsRange = r"
+                >近 {{ r }} 日</button>
+              </div>
+            </div>
+            <div class="flex items-end gap-[3px] h-44">
+              <div
+                v-for="(d, i) in statsChartData"
+                :key="d.date"
+                class="flex-1 min-w-0 h-full flex flex-col items-center gap-1 group"
+              >
+                <span class="h-3.5 text-[10px] leading-none text-neutral-400 opacity-0 group-hover:opacity-100 transition-opacity tabular-nums">{{ d.count }}</span>
+                <div class="w-full flex-1 min-h-0 flex items-end">
+                  <div
+                    class="w-full rounded-t bg-amber-500/60 group-hover:bg-amber-400 transition-colors"
+                    :style="{ height: barHeight(d.count) }"
+                    :title="`${d.date} · ${d.count} 次`"
+                  />
+                </div>
+                <span class="h-3.5 text-[9px] leading-none text-neutral-600 w-full text-center truncate">{{ showChartLabel(i) ? d.date.slice(5) : '' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 单篇排行 -->
+          <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
+            <h2 class="text-sm font-medium text-neutral-200 mb-3">文章浏览排行（前 20）</h2>
+            <p v-if="!stats.top.length" class="text-sm text-neutral-500 py-8 text-center">还没有浏览数据</p>
+            <div v-else class="space-y-1">
+              <div
+                v-for="(item, i) in stats.top"
+                :key="item.slug"
+                class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-800/60 transition-colors"
+              >
+                <span
+                  class="w-6 shrink-0 text-center text-xs tabular-nums"
+                  :class="i < 3 ? 'text-amber-400 font-bold' : 'text-neutral-500'"
+                >{{ i + 1 }}</span>
+                <a
+                  :href="`/insights/${item.slug}`"
+                  target="_blank"
+                  class="flex-1 min-w-0 text-sm text-neutral-200 truncate hover:text-amber-400 transition-colors"
+                >{{ item.title }}</a>
+                <span class="shrink-0 text-sm text-neutral-400 tabular-nums">{{ item.views }} 次</span>
+              </div>
+            </div>
+          </div>
+        </template>
+        <div v-else class="text-sm text-neutral-500 py-12 text-center">暂无数据</div>
+      </div>
+
       <!-- ══════ 编辑视图 ══════ -->
-      <div v-else class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
+      <div v-else-if="view === 'editor'" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
         <!-- 左：正文编辑 -->
         <div class="space-y-4">
           <input
@@ -495,7 +581,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const PAGE_SIZE = 10
 
-const view = ref<'login' | 'list' | 'editor'>('login')
+const view = ref<'login' | 'list' | 'editor' | 'stats'>('login')
 const articles = ref<AdminArticle[]>([])
 const categories = ref<string[]>(Object.keys(CATEGORY_LABELS))
 const listPending = ref(false)
@@ -745,6 +831,50 @@ async function startEdit(slug: string) {
 function backToList() {
   view.value = 'list'
   loadList()
+}
+
+// ── 浏览统计 ──
+
+interface InsightStats {
+  last7Total: number
+  last30Total: number
+  daily: Array<{ date: string; count: number }>
+  top: Array<{ slug: string; title: string; views: number }>
+}
+
+const stats = ref<InsightStats | null>(null)
+const statsPending = ref(false)
+const statsRange = ref<7 | 30>(30)
+
+const statsChartData = computed(() => (stats.value ? stats.value.daily.slice(-statsRange.value) : []))
+const statsChartMax = computed(() => Math.max(1, ...statsChartData.value.map(d => d.count)))
+
+function barHeight(count: number): string {
+  if (count <= 0) return '2%'
+  return `${Math.max(6, Math.round((count / statsChartMax.value) * 100))}%`
+}
+
+function showChartLabel(index: number): boolean {
+  const len = statsChartData.value.length
+  if (len <= 10) return true
+  return index % 5 === 0 || index === len - 1
+}
+
+async function openStats() {
+  view.value = 'stats'
+  statsPending.value = true
+  fatalError.value = ''
+  try {
+    stats.value = await adminFetch<InsightStats>('/api/admin/insights-stats')
+  } catch (e: any) {
+    if (e?.response?.status === 401) {
+      view.value = 'login'
+    } else {
+      fatalError.value = `统计加载失败：${e?.data?.statusMessage || e?.message || e}`
+    }
+  } finally {
+    statsPending.value = false
+  }
 }
 
 function parseTags(): string[] {

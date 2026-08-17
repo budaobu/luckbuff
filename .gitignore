@@ -82,6 +82,9 @@ app/pages/tools/cezi-battle/reference/
 # Insights translation runtime state (rebuildable cache; per-environment)
 content/insights/.translations/
 
+# Insights view counters (per-environment runtime data; server is authoritative)
+content/insights/.views.json
+
 # better-auth local sqlite
 auth.db
 auth.db-journal

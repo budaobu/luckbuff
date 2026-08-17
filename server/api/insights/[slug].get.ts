@@ -1,4 +1,5 @@
 import { readInsightSafe } from '~~/server/utils/insights'
+import { getInsightViewTotal } from '~~/server/utils/insights-views'
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
@@ -16,5 +17,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseHeader(event, 'Cache-Control', 'public, max-age=30, stale-while-revalidate=300')
 
-  return article
+  return { ...article, views: getInsightViewTotal(slug) }
 })

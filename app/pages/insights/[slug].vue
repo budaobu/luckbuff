@@ -73,6 +73,10 @@
               <UIcon name="i-heroicons-clock" class="w-3.5 h-3.5" />
               {{ $t('insights.readingTime', { n: article.readingTime }) }}
             </span>
+            <span v-if="viewCount !== null" class="flex items-center gap-1">
+              <UIcon name="i-heroicons-eye" class="w-3.5 h-3.5" />
+              {{ $t('insights.views', { n: viewCount }) }}
+            </span>
           </div>
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mx-auto mt-6" />
         </header>
@@ -139,6 +143,7 @@ interface InsightDetail {
   readingTime: number
   relatedTools: string[]
   content: string
+  views: number
 }
 
 const route = useRoute()
@@ -160,6 +165,26 @@ const renderedContent = computed(() => {
   } catch {
     return article.value.content
   }
+})
+
+// ── 浏览次数：SSR 展示接口返回的累计值，客户端挂载后上报一次并刷新 ──
+const viewCount = ref<number | null>(article.value?.views ?? null)
+
+watch(article, (a) => {
+  viewCount.value = a?.views ?? null
+})
+
+onMounted(async () => {
+  if (!article.value) return
+  const key = `insight-viewed:${slug.value}`
+  try {
+    if (sessionStorage.getItem(key)) return
+    sessionStorage.setItem(key, '1')
+  } catch { /* storage 不可用则照常计数 */ }
+  try {
+    const res = await $fetch<{ total: number }>(`/api/insights/${slug.value}/view`, { method: 'POST' })
+    viewCount.value = res.total
+  } catch { /* 计数失败不影响阅读 */ }
 })
 
 // ── 相关工具入口（由 frontmatter relatedTools 字段驱动） ──

@@ -117,6 +117,7 @@ echo "==> rsync content/insights/ (editor articles — no --delete: editors publ
 rsync_retry \
   --exclude '.backups/' \
   --exclude '.translations/' \
+  --exclude '.views.json' \
   "content/insights/" \
   "$SERVER:$REMOTE_DIR/content/insights/"
 
