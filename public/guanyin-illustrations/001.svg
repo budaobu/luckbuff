@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="#3a2e1f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- 钟离成道 · 开天辟地：混沌初分，清浊两仪 -->
+  <circle cx="100" cy="62" r="40"/>
+  <path d="M100 22 C 88 40, 112 50, 100 62 C 88 74, 110 88, 100 102"/>
+  <path d="M60 62 a40 40 0 0 1 80 0" opacity="0.45"/>
+  <path d="M30 132 L70 96 L96 126 L120 100 L150 132"/>
+  <path d="M22 142 H178"/>
+  <path d="M40 150 H160" opacity="0.4"/>
+</svg>
