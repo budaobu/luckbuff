@@ -280,12 +280,33 @@
       <div v-else-if="view === 'editor'" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
         <!-- 左：正文编辑 -->
         <div class="space-y-4">
-          <input
-            v-model="form.title"
-            type="text"
-            placeholder="文章标题"
-            class="w-full bg-neutral-900/60 border border-neutral-800 rounded-lg px-4 py-3 text-lg font-medium text-white placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
-          >
+          <div class="relative">
+            <input
+              v-model="form.title"
+              type="text"
+              placeholder="文章标题"
+              class="w-full bg-neutral-900/60 border border-neutral-800 rounded-lg px-4 py-3 text-lg font-medium text-white placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
+              autocomplete="off"
+              @input="onTitleInput"
+              @compositionstart="suggestComposing = true"
+              @compositionend="suggestComposing = false; onTitleInput()"
+              @keydown="onTitleKeydown"
+              @blur="suggestOpen = false"
+            >
+            <div
+              v-if="suggestOpen && suggestItems.length"
+              class="absolute z-20 top-full mt-1 w-full rounded-lg border border-neutral-800 bg-neutral-900 shadow-xl overflow-hidden"
+            >
+              <button
+                v-for="(s, i) in suggestItems"
+                :key="s"
+                type="button"
+                class="block w-full text-left px-4 py-2 text-sm transition-colors"
+                :class="i === suggestActive ? 'bg-neutral-800 text-white' : 'text-neutral-300 hover:bg-neutral-800/60'"
+                @mousedown.prevent="applySuggestion(s)"
+              >{{ s }}</button>
+            </div>
+          </div>
 
           <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 overflow-hidden">
             <!-- 工具条 -->
@@ -703,6 +724,63 @@ const previewHtml = computed(() => {
 
 async function adminFetch<T>(url: string, opts?: any): Promise<T> {
   return await $fetch<T>(url, opts)
+}
+
+// ── 标题关键词联想（Google Suggest） ──
+
+const suggestItems = ref<string[]>([])
+const suggestOpen = ref(false)
+const suggestActive = ref(-1)
+let suggestComposing = false
+let suggestTimer: ReturnType<typeof setTimeout> | undefined
+let suggestSeq = 0
+
+function onTitleInput() {
+  if (suggestComposing) return
+  clearTimeout(suggestTimer)
+  const q = form.title.trim()
+  if (!q) {
+    suggestItems.value = []
+    suggestOpen.value = false
+    suggestSeq++
+    return
+  }
+  suggestTimer = setTimeout(() => fetchSuggestions(q), 300)
+}
+
+async function fetchSuggestions(q: string) {
+  const seq = ++suggestSeq
+  try {
+    const res = await adminFetch<{ suggestions: string[] }>('/api/admin/google-suggest', { query: { q } })
+    if (seq !== suggestSeq || form.title.trim() !== q) return
+    suggestItems.value = res.suggestions.filter(s => s !== q)
+    suggestActive.value = -1
+    suggestOpen.value = suggestItems.value.length > 0
+  } catch { /* 联想失败静默忽略，不影响编辑 */ }
+}
+
+function applySuggestion(s: string) {
+  form.title = s
+  suggestOpen.value = false
+  suggestItems.value = []
+  suggestSeq++
+}
+
+function onTitleKeydown(e: KeyboardEvent) {
+  if (!suggestOpen.value || !suggestItems.value.length) return
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    suggestActive.value = (suggestActive.value + 1) % suggestItems.value.length
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    suggestActive.value = (suggestActive.value - 1 + suggestItems.value.length) % suggestItems.value.length
+  } else if (e.key === 'Enter' && suggestActive.value >= 0) {
+    e.preventDefault()
+    const s = suggestItems.value[suggestActive.value]
+    if (s) applySuggestion(s)
+  } else if (e.key === 'Escape') {
+    suggestOpen.value = false
+  }
 }
 
 // ── 多语言状态徽章 ──
