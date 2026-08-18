@@ -84,6 +84,32 @@
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
+        <!-- 六壬字占 -->
+        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
+          <div class="p-5 flex flex-col flex-1">
+            <div class="w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+              <UIcon name="i-heroicons-hand-raised" class="w-5 h-5" />
+            </div>
+            <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">{{ $t('liurenZizhan.title') }}</h3>
+            <p class="text-xs text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-3 overflow-hidden">
+              {{ $t('liurenZizhan.toolDesc') }}
+            </p>
+            <UButton
+              color="warning"
+              variant="soft"
+              size="sm"
+              :to="localePath('/tools/liuren-zizhan')"
+              class="group/btn w-full justify-center mt-3"
+            >
+              {{ $t('liurenZizhan.toolCta') }}
+              <template #trailing>
+                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+              </template>
+            </UButton>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+
         <!-- 周易测字 -->
         <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="p-5 flex flex-col flex-1">
@@ -277,9 +303,10 @@ useHead(() => ({
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: t('ceziYishu.title'), url: 'https://www.ososn.com/tools/cezi-yishu' },
             { '@type': 'ListItem', position: 2, name: t('qimenZizhan.title'), url: 'https://www.ososn.com/tools/qimen-zizhan' },
-            { '@type': 'ListItem', position: 3, name: t('ceziZhouyi.title'), url: 'https://www.ososn.com/tools/cezi-zhouyi' },
-            { '@type': 'ListItem', position: 4, name: t('liuyaoCezi.title'), url: 'https://www.ososn.com/tools/liuyao-cezi' },
-            { '@type': 'ListItem', position: 5, name: t('zhugeCezi.title'), url: 'https://www.ososn.com/tools/zhuge-cezi' },
+            { '@type': 'ListItem', position: 3, name: t('liurenZizhan.title'), url: 'https://www.ososn.com/tools/liuren-zizhan' },
+            { '@type': 'ListItem', position: 4, name: t('ceziZhouyi.title'), url: 'https://www.ososn.com/tools/cezi-zhouyi' },
+            { '@type': 'ListItem', position: 5, name: t('liuyaoCezi.title'), url: 'https://www.ososn.com/tools/liuyao-cezi' },
+            { '@type': 'ListItem', position: 6, name: t('zhugeCezi.title'), url: 'https://www.ososn.com/tools/zhuge-cezi' },
           ],
         },
       }),
