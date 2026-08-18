@@ -487,6 +487,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/cezi-yishu',
       },
       {
+        icon: 'i-heroicons-square-3-stack-3d',
+        titleKey: 'qimenZizhan.title',
+        descKey: 'qimenZizhan.toolDesc',
+        ctaKey: 'qimenZizhan.toolCta',
+        path: '/tools/qimen-zizhan',
+      },
+      {
         icon: 'i-heroicons-circle-stack',
         titleKey: 'liuyaoCezi.title',
         descKey: 'liuyaoCezi.toolDesc',
