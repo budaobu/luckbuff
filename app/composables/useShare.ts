@@ -74,6 +74,7 @@ export interface ShareOptions {
     | 'astro-fortune-tune'
     | 'bazi-zhengyuan'
     | 'taiyi'
+    | 'liuren-zizhan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -169,6 +170,7 @@ export function useShare() {
       'astro-fortune-tune': '占星改运',
       'bazi-zhengyuan': '正缘画像',
       taiyi: '太乙神数',
+      'liuren-zizhan': '六壬字占',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -362,6 +364,9 @@ export function useShare() {
       taiyi: summary
         ? t('share.hookTaiyi', { summary })
         : t('share.hookTaiyiDefault'),
+      'liuren-zizhan': summary
+        ? t('share.hookLiurenZizhan', { summary })
+        : t('share.hookLiurenZizhanDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
