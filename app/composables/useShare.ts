@@ -76,6 +76,7 @@ export interface ShareOptions {
     | 'taiyi'
     | 'liuren-zizhan'
     | 'poufuchan-zeri'
+    | 'liunian'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -173,6 +174,7 @@ export function useShare() {
       taiyi: '太乙神数',
       'liuren-zizhan': '六壬字占',
       'poufuchan-zeri': '剖腹产择日',
+      liunian: '流年运势',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -372,6 +374,9 @@ export function useShare() {
       'poufuchan-zeri': summary
         ? t('share.hookPoufuchanZeri', { summary })
         : t('share.hookPoufuchanZeriDefault'),
+      liunian: summary
+        ? t('share.hookLiunian', { summary })
+        : t('share.hookLiunianDefault'),
     }
     const hook = hookLines[tool] ?? t('share.hookGeneric', { tool: toolName })
     const url = window.location.href
