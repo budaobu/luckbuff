@@ -371,6 +371,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'home.toolShengxiaoPiancaiyunCta',
         path: '/tools/shengxiao-piancaiyun',
       },
+      {
+        icon: 'i-heroicons-calendar-days',
+        titleKey: 'home.toolLiunianTitle',
+        descKey: 'home.toolLiunianDesc',
+        ctaKey: 'home.toolLiunianCta',
+        path: '/tools/liunian',
+      },
     ],
   },
   {
