@@ -330,6 +330,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/jishi',
       },
       {
+        icon: 'i-heroicons-gift',
+        titleKey: 'home.toolPoufuchanZeriTitle',
+        descKey: 'home.toolPoufuchanZeriDesc',
+        ctaKey: 'home.toolPoufuchanZeriCta',
+        path: '/tools/poufuchan-zeri',
+      },
+      {
         icon: 'i-heroicons-scale',
         titleKey: 'home.toolJinriYijiTitle',
         descKey: 'home.toolJinriYijiDesc',
