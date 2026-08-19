@@ -205,6 +205,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/zibaifeixing',
       },
       {
+        icon: 'i-heroicons-viewfinder-circle',
+        titleKey: 'home.toolJinsuoyuguanFengshuiTitle',
+        descKey: 'home.toolJinsuoyuguanFengshuiDesc',
+        ctaKey: 'home.toolJinsuoyuguanFengshuiCta',
+        path: '/tools/jinsuoyuguan-fengshui',
+      },
+      {
         icon: 'i-heroicons-building-office-2',
         titleKey: 'bazhai.title',
         descKey: 'seo.bazhaiDesc',
