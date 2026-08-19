@@ -6,12 +6,11 @@
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-2.5 group">
-        <div
-          class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:!bg-[var(--accent-bg-hover)] group-hover:!border-[var(--accent-border-hover)]"
-          style="background-color: var(--accent-bg); border: 1px solid var(--accent-border);"
-        >
-          <UIcon name="i-heroicons-sparkles" class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" style="color: var(--accent);" />
-        </div>
+        <img
+          src="/logo.png"
+          alt="ososn"
+          class="w-8 h-8 rounded-lg transition-transform duration-300 group-hover:scale-110"
+        />
         <span class="text-lg font-bold tracking-tight" style="color: var(--accent);">ososn</span>
       </NuxtLink>
 
