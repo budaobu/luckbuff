@@ -84,6 +84,7 @@ content/insights/.translations/
 
 # Insights view counters (per-environment runtime data; server is authoritative)
 content/insights/.views.json
+content/insights/.page-views.json
 
 # better-auth local sqlite
 auth.db

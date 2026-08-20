@@ -200,23 +200,37 @@
       <!-- ══════ 浏览统计视图 ══════ -->
       <div v-else-if="view === 'stats'">
         <div v-if="statsPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
-        <template v-else-if="stats">
+        <template v-else-if="currentStats">
+          <!-- 统计维度切换 -->
+          <div class="flex gap-1 mb-6">
+            <button
+              v-for="t in STATS_TABS"
+              :key="t.key"
+              type="button"
+              class="text-xs px-3 py-1.5 rounded-lg border transition-colors"
+              :class="statsTab === t.key
+                ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+                : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500'"
+              @click="statsTab = t.key"
+            >{{ t.label }}</button>
+          </div>
+
           <!-- 概览卡片 -->
           <div class="grid grid-cols-2 gap-3 mb-6">
             <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-              <p class="text-xs text-neutral-500 mb-1">近 7 日浏览</p>
-              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ stats.last7Total }}</p>
+              <p class="text-xs text-neutral-500 mb-1">近 7 日{{ currentStatsTab.unit }}</p>
+              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ currentStats.last7Total }}</p>
             </div>
             <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-              <p class="text-xs text-neutral-500 mb-1">近 30 日浏览</p>
-              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ stats.last30Total }}</p>
+              <p class="text-xs text-neutral-500 mb-1">近 30 日{{ currentStatsTab.unit }}</p>
+              <p class="text-2xl font-bold text-amber-400 tabular-nums">{{ currentStats.last30Total }}</p>
             </div>
           </div>
 
           <!-- 日柱形图 -->
           <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 mb-6">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-sm font-medium text-neutral-200">每日浏览</h2>
+              <h2 class="text-sm font-medium text-neutral-200">每日{{ currentStatsTab.unit }}</h2>
               <div class="flex gap-1">
                 <button
                   v-for="r in ([7, 30] as const)"
@@ -251,11 +265,11 @@
 
           <!-- 单篇排行 -->
           <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4">
-            <h2 class="text-sm font-medium text-neutral-200 mb-3">文章浏览排行（前 20）</h2>
-            <p v-if="!stats.top.length" class="text-sm text-neutral-500 py-8 text-center">还没有浏览数据</p>
+            <h2 class="text-sm font-medium text-neutral-200 mb-3">{{ currentStatsTab.rankTitle }}</h2>
+            <p v-if="!currentStats.top.length" class="text-sm text-neutral-500 py-8 text-center">还没有数据</p>
             <div v-else class="space-y-1">
               <div
-                v-for="(item, i) in stats.top"
+                v-for="(item, i) in currentStats.top"
                 :key="item.slug"
                 class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-neutral-800/60 transition-colors"
               >
@@ -264,10 +278,10 @@
                   :class="i < 3 ? 'text-amber-400 font-bold' : 'text-neutral-500'"
                 >{{ i + 1 }}</span>
                 <a
-                  :href="`/insights/${item.slug}`"
+                  :href="statsItemHref(item)"
                   target="_blank"
                   class="flex-1 min-w-0 text-sm text-neutral-200 truncate hover:text-amber-400 transition-colors"
-                >{{ item.title }}</a>
+                >{{ statsItemLabel(item) }}</a>
                 <span class="shrink-0 text-sm text-neutral-400 tabular-nums">{{ item.views }} 次</span>
               </div>
             </div>
@@ -958,19 +972,59 @@ function backToList() {
 
 // ── 浏览统计 ──
 
+interface StatsTopItem {
+  slug: string
+  views: number
+  title?: string
+}
+
 interface InsightStats {
   last7Total: number
   last30Total: number
   daily: Array<{ date: string; count: number }>
-  top: Array<{ slug: string; title: string; views: number }>
+  top: StatsTopItem[]
 }
 
+interface PageStats {
+  tools: InsightStats
+  hubs: InsightStats
+  submits: InsightStats
+}
+
+type StatsTab = 'articles' | 'tools' | 'hubs' | 'submits'
+
+const STATS_TABS: Array<{ key: StatsTab; label: string; rankTitle: string; unit: string }> = [
+  { key: 'articles', label: '文章', rankTitle: '文章浏览排行（前 20）', unit: '浏览' },
+  { key: 'tools', label: '工具页', rankTitle: '工具页浏览排行（前 20）', unit: '浏览' },
+  { key: 'hubs', label: '专题页', rankTitle: '专题页浏览排行（前 20）', unit: '浏览' },
+  { key: 'submits', label: '占卜提交', rankTitle: '占卜提交排行（前 20）', unit: '提交' },
+]
+
 const stats = ref<InsightStats | null>(null)
+const pageStats = ref<PageStats | null>(null)
 const statsPending = ref(false)
 const statsRange = ref<7 | 30>(30)
+const statsTab = ref<StatsTab>('articles')
 
-const statsChartData = computed(() => (stats.value ? stats.value.daily.slice(-statsRange.value) : []))
+const currentStatsTab = computed(() => STATS_TABS.find(t => t.key === statsTab.value)!)
+
+const currentStats = computed<InsightStats | null>(() => {
+  if (statsTab.value === 'articles') return stats.value
+  return pageStats.value?.[statsTab.value] ?? null
+})
+
+const statsChartData = computed(() => (currentStats.value ? currentStats.value.daily.slice(-statsRange.value) : []))
 const statsChartMax = computed(() => Math.max(1, ...statsChartData.value.map(d => d.count)))
+
+function statsItemHref(item: StatsTopItem): string | null {
+  if (statsTab.value === 'articles') return `/insights/${item.slug}`
+  if (statsTab.value === 'tools' || statsTab.value === 'submits') return `/tools/${item.slug}`
+  return `/${item.slug}`
+}
+
+function statsItemLabel(item: StatsTopItem): string {
+  return item.title || item.slug
+}
 
 function barHeight(count: number): string {
   if (count <= 0) return '2%'
@@ -988,7 +1042,12 @@ async function openStats() {
   statsPending.value = true
   fatalError.value = ''
   try {
-    stats.value = await adminFetch<InsightStats>('/api/admin/insights-stats')
+    const [insightStats, pageStatsRes] = await Promise.all([
+      adminFetch<InsightStats>('/api/admin/insights-stats'),
+      adminFetch<PageStats>('/api/admin/page-stats'),
+    ])
+    stats.value = insightStats
+    pageStats.value = pageStatsRes
   } catch (e: any) {
     if (e?.response?.status === 401) {
       view.value = 'login'
