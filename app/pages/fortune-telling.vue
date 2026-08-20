@@ -522,84 +522,6 @@
           <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
 
-        <!-- 占星改运 -->
-        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
-          <div class="p-8 flex flex-col flex-1">
-            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-              <UIcon name="i-heroicons-globe-alt" class="w-7 h-7" />
-            </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('home.toolAstroFortuneTuneTitle') }}</h3>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
-              {{ $t('home.toolAstroFortuneTuneDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="md"
-              :to="localePath('/tools/astro-fortune-tune')"
-              class="group/btn w-full justify-center mt-4"
-            >
-              {{ $t('home.toolAstroFortuneTuneCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
-
-        <!-- 七政四余 -->
-        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
-          <div class="p-8 flex flex-col flex-1">
-            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-              <UIcon name="i-heroicons-star" class="w-7 h-7" />
-            </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('home.toolQizhengSiyuTitle') }}</h3>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
-              {{ $t('home.toolQizhengSiyuDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="md"
-              :to="localePath('/tools/qizheng-siyu')"
-              class="group/btn w-full justify-center mt-4"
-            >
-              {{ $t('home.toolQizhengSiyuCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
-
-        <!-- 吠陀占星 -->
-        <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
-          <div class="p-8 flex flex-col flex-1">
-            <div class="w-14 h-14 rounded-xl bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-              <UIcon name="i-heroicons-globe-asia-australia" class="w-7 h-7" />
-            </div>
-            <h3 class="text-xl font-semibold text-[var(--text-primary)] mb-3">{{ $t('home.toolVedicTitle') }}</h3>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-4 overflow-hidden">
-              {{ $t('home.toolVedicDesc') }}
-            </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="md"
-              :to="localePath('/tools/vedic-astro')"
-              class="group/btn w-full justify-center mt-4"
-            >
-              {{ $t('home.toolVedicCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        </div>
-
         <!-- 幸运植物 -->
         <div class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col">
           <div class="p-8 flex flex-col flex-1">
@@ -731,10 +653,7 @@ useHead(() => ({
             { '@type': 'ListItem', position: 17, name: t('home.toolBaziWealthTitle'), url: 'https://www.ososn.com/tools/bazi-wealth' },
             { '@type': 'ListItem', position: 18, name: t('home.toolBaziZhengyuanTitle'), url: 'https://www.ososn.com/tools/bazi-zhengyuan' },
             { '@type': 'ListItem', position: 19, name: t('home.toolBaziFortuneTuneTitle'), url: 'https://www.ososn.com/tools/bazi-fortune-tune' },
-            { '@type': 'ListItem', position: 20, name: t('home.toolAstroFortuneTuneTitle'), url: 'https://www.ososn.com/tools/astro-fortune-tune' },
-            { '@type': 'ListItem', position: 19, name: t('home.toolQizhengSiyuTitle'), url: 'https://www.ososn.com/tools/qizheng-siyu' },
-            { '@type': 'ListItem', position: 20, name: t('home.toolVedicTitle'), url: 'https://www.ososn.com/tools/vedic-astro' },
-            { '@type': 'ListItem', position: 21, name: t('home.toolLuckyPlantTitle'), url: 'https://www.ososn.com/tools/lucky-plant' },
+            { '@type': 'ListItem', position: 20, name: t('home.toolLuckyPlantTitle'), url: 'https://www.ososn.com/tools/lucky-plant' },
           ],
         },
       }),
