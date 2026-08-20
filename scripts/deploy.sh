@@ -118,6 +118,7 @@ rsync_retry \
   --exclude '.backups/' \
   --exclude '.translations/' \
   --exclude '.views.json' \
+  --exclude '.page-views.json' \
   "content/insights/" \
   "$SERVER:$REMOTE_DIR/content/insights/"
 
