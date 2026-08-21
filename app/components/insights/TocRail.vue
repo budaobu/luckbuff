@@ -12,10 +12,9 @@
           class="group relative flex items-center justify-end"
           :style="{ height: `${itemSize}px` }"
         >
-          <!-- hover/active 预览卡，往正文一侧展开 -->
+          <!-- 仅 hover 时往正文侧浮出预览卡（surface-card 是半透明色，浮层要用不透明的 surface-bg） -->
           <div
-            class="absolute right-full top-1/2 -translate-y-1/2 mr-4 w-52 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-3 py-2 shadow-lg shadow-black/5 transition-all duration-200 opacity-0 translate-x-1 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0"
-            :class="link.id === activeId ? '!opacity-100 !translate-x-0 border-[var(--accent-border)]' : ''"
+            class="absolute right-full top-1/2 -translate-y-1/2 mr-4 w-52 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-bg)] px-3 py-2 shadow-lg shadow-black/5 transition-all duration-200 opacity-0 translate-x-1 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0"
           >
             <span
               class="block text-xs leading-snug line-clamp-2"
