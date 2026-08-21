@@ -9320,7 +9320,10 @@
     "seoTitle": "命见 · 命理科普与深度解读专栏",
     "seoDesc": "命见是 ososn 的命理科普与深度解读专栏，以现代视角讲清八字、紫微、风水、占星等传统命理知识。",
     "seoKeywords": "命见,命理科普,八字,紫微斗数,风水,占星,深度解读",
-    "toolCardCta": "去试试"
+    "toolCardCta": "去试试",
+    "sidebarToolsTitle": "相关工具",
+    "sidebarRelatedTitle": "相关阅读",
+    "tocTitle": "本文目录"
   },
   "zwdsReport": {
     "seal": "紫微命鑑",
