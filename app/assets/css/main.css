@@ -54,6 +54,9 @@
   --overlay-bg: rgba(0, 0, 0, 0.6);
   --overlay-blur: rgba(0, 0, 0, 0.4);
 
+  /* Hero 背景图蒙版：顶部压暗保氛围，底部渐隐融入页面底色 */
+  --hero-overlay: linear-gradient(180deg, rgba(10, 10, 15, 0.62) 0%, rgba(10, 10, 15, 0.56) 45%, rgba(10, 10, 15, 0.96) 100%);
+
   /* AI card subtle bg gradient */
   --card-gradient-from: rgba(255, 255, 255, 0.02);
 
@@ -114,6 +117,8 @@
   /* Overlays — lighter in light mode */
   --overlay-bg: rgba(0, 0, 0, 0.35);
   --overlay-blur: rgba(0, 0, 0, 0.25);
+
+  --hero-overlay: linear-gradient(180deg, rgba(250, 248, 243, 0.78) 0%, rgba(250, 248, 243, 0.6) 45%, rgba(250, 248, 243, 0.97) 100%);
 
   /* AI card subtle bg gradient */
   --card-gradient-from: rgba(0, 0, 0, 0.03);
