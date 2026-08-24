@@ -193,7 +193,7 @@ for locale_path in sitemap-zh-CN.xml sitemap-zh-TW.xml sitemap-en.xml; do
   sm_url="https://www.ososn.com/${locale_path}"
   sm_body=""
   for attempt in 1 2 3 4 5; do
-    sm_body=$(curl -s -m 10 "$sm_url")
+    sm_body=$(curl -s -m 30 "$sm_url")
     missing_in_attempt=false
     for route in "${REQUIRED_ROUTES[@]}"; do
       if [ "$(echo "$sm_body" | grep -c "<loc>https://www.ososn.com${prefix}${route}</loc>" || true)" -eq 0 ]; then

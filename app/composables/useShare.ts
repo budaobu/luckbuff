@@ -78,6 +78,7 @@ export interface ShareOptions {
     | 'poufuchan-zeri'
     | 'liunian'
     | 'jinsuoyuguan-fengshui'
+    | 'astro-dice'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -177,6 +178,7 @@ export function useShare() {
       'poufuchan-zeri': '剖腹产择日',
       liunian: '流年运势',
       'jinsuoyuguan-fengshui': '金锁玉关风水',
+      'astro-dice': '占星骰子',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
