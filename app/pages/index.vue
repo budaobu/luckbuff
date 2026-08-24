@@ -6,7 +6,7 @@
     <section class="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
       <!-- 背景图 + 主题蒙版 -->
       <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: image-set(url('/hero_bg.webp') type('image/webp'), url('/hero_bg.png') type('image/png'));" />
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/hero_bg.webp');" />
         <div class="absolute inset-0" style="background: var(--hero-overlay);" />
       </div>
 
