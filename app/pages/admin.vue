@@ -92,7 +92,7 @@
       <!-- ══════ 列表视图 ══════ -->
       <div v-if="view === 'list'">
         <!-- 搜索与筛选 -->
-        <div v-if="articles.length" class="flex flex-wrap items-center gap-2 mb-4">
+        <div v-if="totalAll" class="flex flex-wrap items-center gap-2 mb-4">
           <input
             v-model="searchQuery"
             type="search"
@@ -118,17 +118,17 @@
         </div>
 
         <div v-if="listPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
-        <div v-else-if="!articles.length" class="text-center py-16 text-neutral-500">
+        <div v-else-if="!totalAll" class="text-center py-16 text-neutral-500">
           <p class="text-base mb-2">还没有文章</p>
           <p class="text-sm">点右上角「新建文章」开始写第一篇</p>
         </div>
-        <div v-else-if="!filteredArticles.length" class="text-center py-16 text-neutral-500">
+        <div v-else-if="!articles.length" class="text-center py-16 text-neutral-500">
           <p class="text-base mb-2">没有匹配的文章</p>
           <p class="text-sm">换个关键词，或取消翻译状态筛选</p>
         </div>
         <div v-else class="space-y-2">
           <div
-            v-for="a in pagedArticles"
+            v-for="a in articles"
             :key="a.slug"
             class="flex items-center gap-4 rounded-xl border border-neutral-800 bg-neutral-900/60 px-4 py-3 hover:border-neutral-600 transition-colors cursor-pointer"
             @click="startEdit(a.slug)"
@@ -171,28 +171,32 @@
         <!-- 分页导航 -->
         <div v-if="totalPages > 1" class="flex items-center justify-between pt-4 pb-1">
           <p class="text-xs text-neutral-500">
-            共 {{ filteredArticles.length }} 篇<template v-if="filteredArticles.length !== articles.length">（全部 {{ articles.length }} 篇）</template> · 第 {{ currentPage }}/{{ totalPages }} 页
+            共 {{ filteredTotal }} 篇<template v-if="filteredTotal !== totalAll">（全部 {{ totalAll }} 篇）</template> · 第 {{ currentPage }}/{{ totalPages }} 页
           </p>
           <div class="flex items-center gap-1">
             <button
               :disabled="currentPage === 1"
-              class="px-3 py-1.5 rounded-lg text-sm border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              @click="currentPage--"
-            >‹ 上一页</button>
-            <button
-              v-for="p in totalPages"
-              :key="p"
-              class="min-w-[2rem] px-2 py-1.5 rounded-lg text-sm border transition-colors"
-              :class="p === currentPage
-                ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
-                : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500 hover:bg-neutral-700'"
-              @click="currentPage = p"
-            >{{ p }}</button>
+              class="p-1.5 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              title="上一页"
+              @click="goPage(currentPage - 1)"
+            ><UIcon name="i-heroicons-chevron-left" class="w-4 h-4 block" /></button>
+            <template v-for="(p, i) in pageItems" :key="i">
+              <span v-if="p === '…'" class="px-1.5 text-sm text-neutral-600 select-none">…</span>
+              <button
+                v-else
+                class="min-w-[2rem] px-2 py-1.5 rounded-lg text-sm border transition-colors"
+                :class="p === currentPage
+                  ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+                  : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500 hover:bg-neutral-700'"
+                @click="goPage(p)"
+              >{{ p }}</button>
+            </template>
             <button
               :disabled="currentPage === totalPages"
-              class="px-3 py-1.5 rounded-lg text-sm border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              @click="currentPage++"
-            >下一页 ›</button>
+              class="p-1.5 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              title="下一页"
+              @click="goPage(currentPage + 1)"
+            ><UIcon name="i-heroicons-chevron-right" class="w-4 h-4 block" /></button>
           </div>
         </div>
       </div>
@@ -648,6 +652,8 @@ const PAGE_SIZE = 10
 
 const view = ref<'login' | 'list' | 'editor' | 'stats'>('login')
 const articles = ref<AdminArticle[]>([])
+const totalAll = ref(0)
+const filteredTotal = ref(0)
 const categories = ref<string[]>(Object.keys(CATEGORY_LABELS))
 const listPending = ref(false)
 const fatalError = ref('')
@@ -656,23 +662,36 @@ const searchQuery = ref('')
 const filterZhTwPending = ref(false)
 const filterEnPending = ref(false)
 
-const filteredArticles = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase()
-  return articles.value.filter(a => {
-    if (q && !a.title.toLowerCase().includes(q)) return false
-    if (filterZhTwPending.value && a.translations?.['zh-tw']?.status === 'done') return false
-    if (filterEnPending.value && a.translations?.en?.status === 'done') return false
-    return true
-  })
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredTotal.value / PAGE_SIZE)))
+
+// 页码窗口：首尾 + 当前页 ±2，中间用 … 折叠
+const pageItems = computed<Array<number | '…'>>(() => {
+  const total = totalPages.value
+  const cur = currentPage.value
+  const wanted = [1, total, cur - 2, cur - 1, cur, cur + 1, cur + 2]
+    .filter(p => p >= 1 && p <= total)
+  const sorted = [...new Set(wanted)].sort((a, b) => a - b)
+  const items: Array<number | '…'> = []
+  let prev = 0
+  for (const p of sorted) {
+    if (prev && p - prev > 1) items.push('…')
+    items.push(p)
+    prev = p
+  }
+  return items
 })
 
-const totalPages = computed(() => Math.max(1, Math.ceil(filteredArticles.value.length / PAGE_SIZE)))
-const pagedArticles = computed(() => {
-  const start = (currentPage.value - 1) * PAGE_SIZE
-  return filteredArticles.value.slice(start, start + PAGE_SIZE)
-})
+function goPage(p: number) {
+  if (p < 1 || p > totalPages.value || p === currentPage.value) return
+  loadList(p)
+}
 
-watch([searchQuery, filterZhTwPending, filterEnPending], () => { currentPage.value = 1 })
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+watch(searchQuery, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => loadList(1), 300)
+})
+watch([filterZhTwPending, filterEnPending], () => loadList(1))
 
 const isNew = ref(true)
 const editingSlug = ref('')
@@ -892,13 +911,34 @@ async function logout() {
   view.value = 'login'
 }
 
-async function loadList() {
+interface ListResponse {
+  total: number
+  filteredTotal: number
+  categories: string[]
+  page: number
+  pageSize: number
+  articles: AdminArticle[]
+}
+
+async function loadList(page?: number) {
   listPending.value = true
-  currentPage.value = 1
   fatalError.value = ''
   try {
-    const data = await adminFetch<{ total: number; categories: string[]; articles: AdminArticle[] }>('/api/admin/insights')
+    const pending: string[] = []
+    if (filterZhTwPending.value) pending.push('zh-tw')
+    if (filterEnPending.value) pending.push('en')
+    const data = await adminFetch<ListResponse>('/api/admin/insights', {
+      query: {
+        page: page ?? currentPage.value,
+        pageSize: PAGE_SIZE,
+        q: searchQuery.value.trim(),
+        pending: pending.join(','),
+      },
+    })
     articles.value = data.articles
+    totalAll.value = data.total
+    filteredTotal.value = data.filteredTotal
+    currentPage.value = data.page
     if (data.categories?.length) categories.value = [...data.categories]
   } catch (e: any) {
     if (e?.response?.status === 401) {
@@ -1019,10 +1059,11 @@ const statsChartMax = computed(() => Math.max(1, ...statsChartData.value.map(d =
 function statsItemHref(item: StatsTopItem): string | null {
   if (statsTab.value === 'articles') return `/insights/${item.slug}`
   if (statsTab.value === 'tools' || statsTab.value === 'submits') return `/tools/${item.slug}`
-  return `/${item.slug}`
+  return item.slug === 'home' ? '/' : `/${item.slug}`
 }
 
 function statsItemLabel(item: StatsTopItem): string {
+  if (statsTab.value === 'hubs' && item.slug === 'home') return '首页'
   return item.title || item.slug
 }
 
