@@ -26,6 +26,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (toolMatch) {
       type = 'tool'
       slug = toolMatch[1]!
+    } else if (clean === '/') {
+      // 首页计入专题页统计，slug 固定为 home
+      type = 'hub'
+      slug = 'home'
     } else if (HUB_PATHS.has(clean)) {
       type = 'hub'
       slug = clean.slice(1)
