@@ -1071,7 +1071,12 @@
     "astrologyDesc": "免費在線占星工具合集：吠陀占星本命盤、星盤合婚配對、事業合夥人合盤、占星改運遷居擇地、中式星命七政四餘，輸入出生信息即可排盤並獲得 AI 解讀，僅供文化娛樂參考。",
     "astrologyKeywords": "占星術,星盤,吠陀占星,星盤合盤,星盤合婚,七政四餘,占星改運,本命盤,上升星座,ososn",
     "astrologyOgTitle": "占星術專題_星盤合盤·吠陀占星·七政四餘",
-    "astrologyOgDesc": "吠陀占星、星盤合婚、事業合盤、占星改運與七政四餘工具合集，輸入出生信息即可排盤並獲取 AI 解讀。"
+    "astrologyOgDesc": "吠陀占星、星盤合婚、事業合盤、占星改運與七政四餘工具合集，輸入出生信息即可排盤並獲取 AI 解讀。",
+    "astroDiceTitle": "占星骰子線上擲_行星星座宮位三骰占卜",
+    "astroDiceDesc": "線上占星骰子：行星、星座、宮位三顆骰子同擲，結合廟旺落陷與宮位強度打分，AI 生成壓縮解讀並輸出專屬海報，僅供文化娛樂參考。",
+    "astroDiceKeywords": "占星骰子,線上擲骰,行星骰子,星座骰子,宮位骰子,占星占卜",
+    "astroDiceOgTitle": "占星骰子 · 擲出你當下的宇宙暗號",
+    "astroDiceOgDesc": "行星說什麼，星座說怎樣，宮位說在哪裡——三骰一擲，海報一張。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -6431,6 +6436,81 @@
     "faq3A": "吠陀占星採用恆星黃道並重視月亮宮位與大運系統（Dasha），西方占星採用回歸黃道並側重太陽星座與心理分析。本站吠陀工具基於 Swiss Ephemeris 精確計算。",
     "faq4Q": "占星結果能作為重大決策依據嗎？",
     "faq4A": "不能。占星解讀僅供文化娛樂與自我探索參考，婚姻、投資、醫療、職業等重大決策請結合現實情況並諮詢專業人士。"
+  },
+  "astroDice": {
+    "title": "占星骰子",
+    "subtitle": "行星·星座·宮位三骰同擲，擲出你當下的宇宙暗號",
+    "disclaimer": "僅供文化娛樂參考。骰子不會替你做決定，它只是幫你把心裡那桿秤擦亮一點。",
+    "intro": "心裡默念一件關切的事，或乾脆什麼都不想，點擊搖骰——行星說「什麼」，星座說「怎樣」，宮位說「在哪裡」。",
+    "rollBtn": "擲出骰子",
+    "rolling": "骰子落定中…",
+    "reroll": "再擲一次",
+    "backToAstrology": "返回占星專題",
+    "calcFail": "骰子卡住了，再擲一次試試",
+    "aiUnavailable": "AI 解讀暫時不可用，先看看骰面本身的資訊",
+    "knowledgeTitle": "三分鐘看懂占星骰子",
+    "knowledge1Title": "行星 · 什麼",
+    "knowledge1Desc": "行星代表正在行動的那股能量：是意志、情緒，還是溝通與欲望。",
+    "knowledge2Title": "星座 · 怎樣",
+    "knowledge2Desc": "星座決定能量的表達風格：是橫衝直撞，還是細水長流。",
+    "knowledge3Title": "宮位 · 在哪裡",
+    "knowledge3Desc": "宮位指出這齣戲上演的生活舞台：事業、感情、金錢或內心。",
+    "element": {
+      "fire": "火象能量",
+      "earth": "土象能量",
+      "air": "風象能量",
+      "water": "水象能量"
+    },
+    "luckyColor": {
+      "fire": "緋紅",
+      "earth": "薑黃",
+      "air": "月白",
+      "water": "黛藍"
+    },
+    "luckyDirection": {
+      "fire": "南",
+      "earth": "西南",
+      "air": "西",
+      "water": "北"
+    },
+    "poster": {
+      "brand": "占星骰子",
+      "kicker": "占星骰子",
+      "dimPlanet": "行星",
+      "dimSign": "星座",
+      "dimHouse": "宮位",
+      "dignityNeutral": "廟旺平和",
+      "dignityTag": "{planet}{type}",
+      "dignity": {
+        "domicile": "入廟",
+        "exaltation": "擢升",
+        "detriment": "失勢",
+        "fall": "落陷"
+      },
+      "scoreLabel": "契合指數",
+      "grade": {
+        "daji": "大吉",
+        "ji": "吉",
+        "ping": "平",
+        "xiong": "凶"
+      },
+      "gradeOverview": {
+        "daji": "三骰同氣連枝，能量通透，順著這股勁兒走就是。",
+        "ji": "組合頗為順手，小處留意，大方向沒問題。",
+        "ping": "不好不壞的平穩局，答案在你心裡，骰子只是陪你確認。",
+        "xiong": "能量略有滯澀，別硬頂，換個姿勢再來。"
+      },
+      "dimFallback": {
+        "planet": "這股能量在提醒你：先看清自己在用什麼發力。",
+        "sign": "表達方式，決定事情的溫度與速度。",
+        "house": "生活領域框定了這齣戲的舞台。"
+      },
+      "kaiyunLabel": "開運",
+      "kaiyunFallback": "宜近{color}色之物，行事朝{direction}方更順。",
+      "seal": "星骰",
+      "footerNote": "占星骰子 · 僅供文化娛樂參考",
+      "qrHint": "掃碼再擲"
+    }
   },
   "shuangrenHepan": {
     "title": "雙人合盤工具",

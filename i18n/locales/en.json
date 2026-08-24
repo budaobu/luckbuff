@@ -1071,7 +1071,12 @@
     "astrologyDesc": "Free online astrology tools: Vedic birth charts, relationship synastry, business partner composite charts, astrological relocation guidance and Qi Zheng Si Yu. Enter your birth details for an instant chart with AI interpretation. For cultural entertainment only.",
     "astrologyKeywords": "astrology,birth chart,vedic astrology,synastry,composite chart,qi zheng si yu,astrocartography,natal chart,rising sign,ososn",
     "astrologyOgTitle": "Astrology Hub_Synastry · Vedic Astrology · Qi Zheng Si Yu",
-    "astrologyOgDesc": "Vedic astrology, relationship synastry, career composite charts, astrological relocation and Qi Zheng Si Yu — enter your birth details for an instant chart with AI interpretation."
+    "astrologyOgDesc": "Vedic astrology, relationship synastry, career composite charts, astrological relocation and Qi Zheng Si Yu — enter your birth details for an instant chart with AI interpretation.",
+    "astroDiceTitle": "Astrology Dice Online_Planet Sign House Three-Dice Reading",
+    "astroDiceDesc": "Roll three astrology dice online — planet, sign and house — scored by dignity and house strength, with an AI reading compressed into a shareable poster. For cultural entertainment only.",
+    "astroDiceKeywords": "astrology dice,online dice roll,planet dice,zodiac sign dice,house dice,astrology reading",
+    "astroDiceOgTitle": "Astrology Dice · A cosmic signal for right now",
+    "astroDiceOgDesc": "Planet says what, sign says how, house says where — three dice, one poster."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -6406,6 +6411,81 @@
     "faq3A": "Vedic astrology uses the sidereal zodiac and emphasizes moon houses and the Dasha cycle system, while Western astrology uses the tropical zodiac and focuses on sun signs and psychological analysis. Our Vedic tools compute with Swiss Ephemeris precision.",
     "faq4Q": "Should I make major decisions based on astrology?",
     "faq4A": "No. Readings are for cultural entertainment and self-exploration only. For marriage, investment, medical or career decisions, rely on real-world information and professional advice."
+  },
+  "astroDice": {
+    "title": "Astrology Dice",
+    "subtitle": "Planet, sign and house — three dice, one cosmic signal for right now",
+    "disclaimer": "For cultural entertainment only. The dice never decide for you — they just polish the scale you already carry inside.",
+    "intro": "Hold a question in mind, or hold nothing at all, then roll — the planet says WHAT, the sign says HOW, the house says WHERE.",
+    "rollBtn": "Roll the Dice",
+    "rolling": "Dice settling…",
+    "reroll": "Roll Again",
+    "backToAstrology": "Back to Astrology",
+    "calcFail": "The dice got stuck — try rolling again",
+    "aiUnavailable": "AI reading is unavailable for now — the dice faces still speak for themselves",
+    "knowledgeTitle": "Astrology dice in three minutes",
+    "knowledge1Title": "Planet · What",
+    "knowledge1Desc": "The planet is the energy in motion: will, emotion, communication or desire.",
+    "knowledge2Title": "Sign · How",
+    "knowledge2Desc": "The sign styles that energy: headlong charge or slow drip.",
+    "knowledge3Title": "House · Where",
+    "knowledge3Desc": "The house names the stage: career, love, money or the inner life.",
+    "element": {
+      "fire": "Fire energy",
+      "earth": "Earth energy",
+      "air": "Air energy",
+      "water": "Water energy"
+    },
+    "luckyColor": {
+      "fire": "crimson",
+      "earth": "ginger yellow",
+      "air": "moon white",
+      "water": "deep blue"
+    },
+    "luckyDirection": {
+      "fire": "south",
+      "earth": "southwest",
+      "air": "west",
+      "water": "north"
+    },
+    "poster": {
+      "brand": "Astro Dice",
+      "kicker": "ASTRO DICE",
+      "dimPlanet": "Planet",
+      "dimSign": "Sign",
+      "dimHouse": "House",
+      "dignityNeutral": "Neutral dignity",
+      "dignityTag": "{planet} {type}",
+      "dignity": {
+        "domicile": "in domicile",
+        "exaltation": "exalted",
+        "detriment": "in detriment",
+        "fall": "in fall"
+      },
+      "scoreLabel": "Resonance",
+      "grade": {
+        "daji": "Great",
+        "ji": "Good",
+        "ping": "Even",
+        "xiong": "Rough"
+      },
+      "gradeOverview": {
+        "daji": "Three dice, one clear current — ride it while it flows.",
+        "ji": "A handy combination; mind the details and the trend is yours.",
+        "ping": "An even draw. The answer is already in you; the dice just confirm it.",
+        "xiong": "Slightly stuck energy. Don’t push head-on — change the angle and roll on."
+      },
+      "dimFallback": {
+        "planet": "This energy asks: notice what you are actually pushing with.",
+        "sign": "Style sets the temperature and speed of the matter.",
+        "house": "The life area frames the stage this play is on."
+      },
+      "kaiyunLabel": "Boost",
+      "kaiyunFallback": "Keep {color} close; head {direction} for smoother moves.",
+      "seal": "DICE",
+      "footerNote": "Astro Dice · For cultural entertainment only",
+      "qrHint": "Scan to roll"
+    }
   },
   "shuangrenHepan": {
     "title": "Compatibility Charts",

@@ -205,6 +205,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'home.toolQizhengSiyuCta',
         path: '/tools/qizheng-siyu',
       },
+      {
+        icon: 'i-heroicons-cube',
+        titleKey: 'astroDice.title',
+        descKey: 'astroDice.subtitle',
+        ctaKey: 'astroDice.rollBtn',
+        path: '/tools/astro-dice',
+      },
     ],
   },
   {
