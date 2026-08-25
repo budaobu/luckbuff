@@ -1037,7 +1037,7 @@ const STATS_TABS: Array<{ key: StatsTab; label: string; rankTitle: string; unit:
   { key: 'articles', label: '文章', rankTitle: '文章浏览排行（前 20）', unit: '浏览' },
   { key: 'tools', label: '工具页', rankTitle: '工具页浏览排行（前 20）', unit: '浏览' },
   { key: 'hubs', label: '专题页', rankTitle: '专题页浏览排行（前 20）', unit: '浏览' },
-  { key: 'submits', label: '占卜提交', rankTitle: '占卜提交排行（前 20）', unit: '提交' },
+  { key: 'submits', label: '占卜', rankTitle: '占卜提交排行（前 20）', unit: '提交' },
 ]
 
 const stats = ref<InsightStats | null>(null)

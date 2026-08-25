@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "node scripts/gen-page-titles.mjs",
     "build": "NODE_OPTIONS='--no-deprecation --max-old-space-size=16384' nuxt build",
+    "predev": "node scripts/gen-page-titles.mjs",
     "dev": "NODE_OPTIONS='--no-deprecation' nuxt dev",
     "generate": "NODE_OPTIONS='--no-deprecation' nuxt generate",
     "preview": "NODE_OPTIONS='--no-deprecation' nuxt preview",
