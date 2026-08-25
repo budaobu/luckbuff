@@ -70,6 +70,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/taiyi',
       },
       {
+        icon: 'i-heroicons-globe-asia-australia',
+        titleKey: 'home.toolHuangjiZhinianguaTitle',
+        descKey: 'home.toolHuangjiZhinianguaDesc',
+        ctaKey: 'home.toolHuangjiZhinianguaCta',
+        path: '/tools/huangji-zhiniangua',
+      },
+      {
         icon: 'i-heroicons-eye',
         titleKey: 'home.toolLiurenTitle',
         descKey: 'home.toolLiurenDesc',

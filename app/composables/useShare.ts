@@ -74,6 +74,7 @@ export interface ShareOptions {
     | 'astro-fortune-tune'
     | 'bazi-zhengyuan'
     | 'taiyi'
+    | 'huangji-zhiniangua'
     | 'liuren-zizhan'
     | 'poufuchan-zeri'
     | 'liunian'
@@ -174,6 +175,7 @@ export function useShare() {
       'astro-fortune-tune': '占星改运',
       'bazi-zhengyuan': '正缘画像',
       taiyi: '太乙神数',
+      'huangji-zhiniangua': '皇极经世值年卦',
       'liuren-zizhan': '六壬字占',
       'poufuchan-zeri': '剖腹产择日',
       liunian: '流年运势',
@@ -372,6 +374,9 @@ export function useShare() {
       taiyi: summary
         ? t('share.hookTaiyi', { summary })
         : t('share.hookTaiyiDefault'),
+      'huangji-zhiniangua': summary
+        ? t('share.hookHuangjiZhiniangua', { summary })
+        : t('share.hookHuangjiZhinianguaDefault'),
       'liuren-zizhan': summary
         ? t('share.hookLiurenZizhan', { summary })
         : t('share.hookLiurenZizhanDefault'),
