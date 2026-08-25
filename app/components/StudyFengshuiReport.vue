@@ -184,12 +184,12 @@
               <g v-for="(label, i) in radarLabels" :key="i">
                 <line
                   :x1="0" :y1="0"
-                  :x2="RADAR_AXIS_POINTS[i].x" :y2="RADAR_AXIS_POINTS[i].y"
+                  :x2="RADAR_AXIS_POINTS[i]!.x" :y2="RADAR_AXIS_POINTS[i]!.y"
                   stroke="#e6dfcd"
                   stroke-width="0.6"
                 />
                 <text
-                  :x="RADAR_LABEL_POINTS[i].x" :y="RADAR_LABEL_POINTS[i].y"
+                  :x="RADAR_LABEL_POINTS[i]!.x" :y="RADAR_LABEL_POINTS[i]!.y"
                   class="sfs-radar-label"
                   text-anchor="middle"
                   dominant-baseline="middle"
@@ -200,7 +200,7 @@
               <circle
                 v-for="(p, i) in radarPalaces"
                 :key="p.name"
-                :cx="RADAR_VALUE_POINTS[i].x" :cy="RADAR_VALUE_POINTS[i].y"
+                :cx="RADAR_VALUE_POINTS[i]!.x" :cy="RADAR_VALUE_POINTS[i]!.y"
                 r="2.2"
                 :fill="p.auspicious ? '#4a7c59' : '#8c2f26'"
               />

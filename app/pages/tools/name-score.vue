@@ -278,7 +278,7 @@
               <div class="grid grid-cols-5 gap-2 text-center">
                 <div v-for="(label, key) in wuxingLabels" :key="key">
                   <p class="text-[10px] text-[var(--text-faint)]">{{ label }}</p>
-                  <p class="text-sm font-semibold" :style="{ color: wuxingColors[key] }">{{ chart.wuxingScore[key as keyof typeof chart.wuxingScore] }}%</p>
+                  <p class="text-sm font-semibold" :style="{ color: wuxingColors[key] }">{{ chart.wuxingScore[key as keyof WuxingScore] }}%</p>
                 </div>
               </div>
             </div>
@@ -413,7 +413,7 @@ import { marked } from 'marked'
 import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
-import type { BaziChart } from '~/types/bazi'
+import type { BaziChart, WuxingScore } from '~/types/bazi'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()

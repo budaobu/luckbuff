@@ -4,7 +4,7 @@
     <GlowCard
       v-for="(text, title) in textAnalysis"
       :key="title"
-      :title="$t('bazi.' + titleKey(title))"
+      :title="$t('bazi.' + titleKey(String(title)))"
     >
       <p class="text-sm text-[var(--text-body)] leading-relaxed">{{ text }}</p>
     </GlowCard>

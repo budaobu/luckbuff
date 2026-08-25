@@ -764,7 +764,7 @@ async function adminFetch<T>(url: string, opts?: any): Promise<T> {
 const suggestItems = ref<string[]>([])
 const suggestOpen = ref(false)
 const suggestActive = ref(-1)
-let suggestComposing = false
+let suggestComposing = false as boolean
 let suggestTimer: ReturnType<typeof setTimeout> | undefined
 let suggestSeq = 0
 
@@ -1056,7 +1056,7 @@ const currentStats = computed<InsightStats | null>(() => {
 const statsChartData = computed(() => (currentStats.value ? currentStats.value.daily.slice(-statsRange.value) : []))
 const statsChartMax = computed(() => Math.max(1, ...statsChartData.value.map(d => d.count)))
 
-function statsItemHref(item: StatsTopItem): string | null {
+function statsItemHref(item: StatsTopItem): string {
   if (statsTab.value === 'articles') return `/insights/${item.slug}`
   if (statsTab.value === 'tools' || statsTab.value === 'submits') return `/tools/${item.slug}`
   return item.slug === 'home' ? '/' : `/${item.slug}`
