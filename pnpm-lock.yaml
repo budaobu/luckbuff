@@ -61,6 +61,9 @@ importers:
       html2canvas:
         specifier: ^1.4.1
         version: 1.4.1
+      jsonrepair:
+        specifier: ^3.15.0
+        version: 3.15.0
       lunar:
         specifier: ^2.0.0
         version: 2.0.0
@@ -4960,6 +4963,10 @@ packages:
   jsonc-eslint-parser@2.4.2:
     resolution: {integrity: sha512-1e4qoRgnn448pRuMvKGsFFymUCquZV0mpGgOyIKNgD3JVDTsVJyRBGH/Fm0tBb8WsWGgmB1mDe6/yJMQM37DUA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
+  jsonrepair@3.15.0:
+    resolution: {integrity: sha512-wy8OTjwsJwQRnQJkKnMJJ9vcytRdBPAgIF/Hy6+s1dAj42BHMKiyL8JzEieIl3JY7idt8eyHwBWTO8mh/+mtwA==}
+    hasBin: true
 
   jsprim@1.4.2:
     resolution: {integrity: sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==}
@@ -11692,6 +11699,8 @@ snapshots:
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
       semver: 7.7.4
+
+  jsonrepair@3.15.0: {}
 
   jsprim@1.4.2:
     dependencies:

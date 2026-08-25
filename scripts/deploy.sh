@@ -119,6 +119,7 @@ rsync_retry \
   --exclude '.translations/' \
   --exclude '.views.json' \
   --exclude '.page-views.json' \
+  --exclude '.writelist-queue.json' \
   "content/insights/" \
   "$SERVER:$REMOTE_DIR/content/insights/"
 
