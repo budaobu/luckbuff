@@ -29,6 +29,7 @@
     "drizzle-orm": "^0.45.2",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
+    "jsonrepair": "^3.15.0",
     "lunar": "^2.0.0",
     "marked": "^15.0.7",
     "nanoid": "^5.1.5",

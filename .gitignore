@@ -91,3 +91,6 @@ auth.db
 auth.db-journal
 auth.db-wal
 auth.db-shm
+
+# AI writelist queue (runtime state, per-environment)
+content/insights/.writelist-queue.json

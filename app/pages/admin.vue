@@ -62,6 +62,12 @@
             ← 返回列表
           </button>
           <template v-else>
+            <a
+              href="/admin/writelist"
+              class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
+            >
+              写作队列
+            </a>
             <button
               class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
               @click="openStats"

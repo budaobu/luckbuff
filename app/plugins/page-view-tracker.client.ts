@@ -1,5 +1,8 @@
 // 工具页/专题页浏览上报：全局路由监听，与文章详情页的统计口径一致
 // （sessionStorage 每会话每页去重）。文章页维持 /api/insights/[slug]/view 不变。
+// 从 ofetch 直接引 $fetch：Nuxt 自动导入的 typed $fetch 会把整个路由表联合类型
+// 拉进实例化，路由一多就炸 TS2589；这里只是 fire-and-forget 上报，不需要路由类型
+import { $fetch } from 'ofetch'
 const HUB_PATHS = new Set([
   '/tools',
   '/insights',
