@@ -176,12 +176,12 @@
               <g v-for="(label, i) in radarLabels" :key="i">
                 <line
                   :x1="0" :y1="0"
-                  :x2="RADAR_AXIS_POINTS[i].x" :y2="RADAR_AXIS_POINTS[i].y"
+                  :x2="RADAR_AXIS_POINTS[i]!.x" :y2="RADAR_AXIS_POINTS[i]!.y"
                   stroke="#e6dfcd"
                   stroke-width="0.6"
                 />
                 <text
-                  :x="RADAR_LABEL_POINTS[i].x" :y="RADAR_LABEL_POINTS[i].y"
+                  :x="RADAR_LABEL_POINTS[i]!.x" :y="RADAR_LABEL_POINTS[i]!.y"
                   class="xkr-radar-label"
                   text-anchor="middle"
                   dominant-baseline="middle"

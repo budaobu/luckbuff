@@ -172,7 +172,7 @@ onMounted(async () => {
 function fmtMd(date: string): string {
   const [y, m, d] = date.split('-').map(Number)
   if (locale.value === 'en') {
-    return new Date(y, (m || 1) - 1, d || 1).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    return new Date(y!, (m || 1) - 1, d || 1).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
   return t('poufuchanZeri.poster.mdFmt', { m, d })
 }
@@ -184,7 +184,7 @@ const bestMd = computed(() => fmtMd(props.best.date))
 const bestWeek = computed(() => {
   if (locale.value === 'en') {
     const [y, m, d] = props.best.date.split('-').map(Number)
-    return new Date(y, (m || 1) - 1, d || 1).toLocaleDateString('en-US', { weekday: 'short' })
+    return new Date(y!, (m || 1) - 1, d || 1).toLocaleDateString('en-US', { weekday: 'short' })
   }
   return `${t('poufuchanZeri.poster.weekPrefix')}${props.best.week}`
 })

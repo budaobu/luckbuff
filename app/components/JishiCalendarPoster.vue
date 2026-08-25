@@ -146,7 +146,7 @@ const dayNum = computed(() => {
 const solarText = computed(() => {
   const [y, m, d] = props.date.split('-').map(Number)
   if (locale.value === 'en') {
-    return new Date(y, (m || 1) - 1, d || 1).toLocaleDateString('en-US', {
+    return new Date(y!, (m || 1) - 1, d || 1).toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric',
     })
   }

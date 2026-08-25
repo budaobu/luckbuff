@@ -164,7 +164,7 @@
                     :class="form.nameLength === len
                       ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
                       : 'border-[var(--border-light)] text-[var(--text-muted)] hover:border-[var(--border-medium)]'"
-                    @click="form.nameLength = len"
+                    @click="form.nameLength = len as 1 | 2"
                   >
                     {{ $t(len === 1 ? 'babyNaming.singleName' : 'babyNaming.doubleName') }}
                   </button>

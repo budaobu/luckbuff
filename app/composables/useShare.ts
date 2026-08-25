@@ -76,6 +76,7 @@ export interface ShareOptions {
     | 'taiyi'
     | 'huangji-zhiniangua'
     | 'liuren-zizhan'
+    | 'qimen-zizhan'
     | 'poufuchan-zeri'
     | 'liunian'
     | 'jinsuoyuguan-fengshui'
@@ -177,6 +178,7 @@ export function useShare() {
       taiyi: '太乙神数',
       'huangji-zhiniangua': '皇极经世值年卦',
       'liuren-zizhan': '六壬字占',
+      'qimen-zizhan': '奇门字占',
       'poufuchan-zeri': '剖腹产择日',
       liunian: '流年运势',
       'jinsuoyuguan-fengshui': '金锁玉关风水',

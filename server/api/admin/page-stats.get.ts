@@ -17,11 +17,13 @@ function withTitles(stats: PageViewStats, section: Section) {
 // 提交 slug 多数与工具页同名（/api/tools/<slug>/ 上来的就是工具 slug），
 // submits 表只覆盖了 API 前缀那几个，其余回落到 tools 表查标题。
 function withSubmitTitles(stats: PageViewStats) {
+  const submits: Record<string, string> = pageTitles.submits
+  const tools: Record<string, string> = pageTitles.tools
   return {
     ...stats,
     top: stats.top.map(item => ({
       ...item,
-      title: pageTitles.submits[item.slug] ?? pageTitles.tools[item.slug],
+      title: submits[item.slug] ?? tools[item.slug],
     })),
   }
 }

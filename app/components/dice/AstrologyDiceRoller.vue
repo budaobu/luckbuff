@@ -194,7 +194,7 @@ function initScene() {
   dice = []
   shadows = []
   for (let i = 0; i < count; i++) {
-    const color = DICE_COLORS[i % DICE_COLORS.length]
+    const color = DICE_COLORS[i % DICE_COLORS.length]!
     const geometry = new RoundedBoxGeometry(1.4, 1.4, 1.4, 4, 0.14)
     const materials = randomFaceGlyphs(props.symbols[i] ?? []).map(
       g =>

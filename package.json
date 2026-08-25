@@ -9,6 +9,7 @@
     "dev": "NODE_OPTIONS='--no-deprecation' nuxt dev",
     "generate": "NODE_OPTIONS='--no-deprecation' nuxt generate",
     "preview": "NODE_OPTIONS='--no-deprecation' nuxt preview",
+    "typecheck": "vue-tsc --noEmit",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
@@ -57,7 +58,8 @@
     "playwright": "^1.60.0",
     "png-to-ico": "^3.0.1",
     "to-ico": "^1.1.5",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vue-tsc": "^2.2.12"
   },
   "packageManager": "pnpm@10.8.0"
 }
