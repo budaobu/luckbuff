@@ -186,7 +186,7 @@ const selectUi = {
         cell: '',
         cellTrigger: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[selected]:bg-[var(--accent)] data-[selected]:text-[var(--surface-bg)]',
       }"
-      :class="class"
+      :class="props.class"
       @update:placeholder="handlePlaceholderUpdate($event)"
       @update:model-value="handleModelValueUpdate($event)"
     />
