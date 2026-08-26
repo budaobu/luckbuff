@@ -78,6 +78,7 @@ export interface ShareOptions {
     | 'liuren-zizhan'
     | 'qimen-zizhan'
     | 'poufuchan-zeri'
+    | 'tiche-zeri'
     | 'liunian'
     | 'jinsuoyuguan-fengshui'
     | 'astro-dice'
@@ -180,6 +181,7 @@ export function useShare() {
       'liuren-zizhan': '六壬字占',
       'qimen-zizhan': '奇门字占',
       'poufuchan-zeri': '剖腹产择日',
+      'tiche-zeri': '提车吉日',
       liunian: '流年运势',
       'jinsuoyuguan-fengshui': '金锁玉关风水',
       'astro-dice': '占星骰子',

@@ -430,6 +430,13 @@ const toolCategories: ToolCategory[] = [
         ctaKey: 'home.toolLiunianCta',
         path: '/tools/liunian',
       },
+      {
+        icon: 'i-heroicons-truck',
+        titleKey: 'home.toolTicheZeriTitle',
+        descKey: 'home.toolTicheZeriDesc',
+        ctaKey: 'home.toolTicheZeriCta',
+        path: '/tools/tiche-zeri',
+      },
     ],
   },
   {
