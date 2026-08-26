@@ -64,14 +64,14 @@
         </button>
       </div>
 
-      <!-- 新增标题 -->
+      <!-- 新增主题 -->
       <form class="flex gap-2 mb-5" @submit.prevent="addTitle">
         <input
           v-model="newTitle"
           type="text"
           required
           maxlength="200"
-          placeholder="输入文章标题，回车加入队列…"
+          placeholder="输入文章主题，回车加入队列…"
           class="flex-1 min-w-0 bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
         >
         <button
@@ -85,7 +85,7 @@
       <div v-if="pending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
       <div v-else-if="!items.length" class="text-center py-16 text-neutral-500">
         <p class="text-base mb-2">队列是空的</p>
-        <p class="text-sm">在上方输入标题加入队列</p>
+        <p class="text-sm">在上方输入主题加入队列，AI 会根据主题自拟标题</p>
       </div>
       <div v-else class="space-y-2">
         <div

@@ -12,7 +12,7 @@ import {
 } from '~~/server/utils/insights'
 import { runTranslationPipeline } from '~~/server/utils/insights/translate'
 
-// AI 写作队列：标题进、文章出。持久化在 content/insights/.writelist-queue.json
+// AI 写作队列：主题进、文章出。持久化在 content/insights/.writelist-queue.json
 // （deploy.sh 对 content/insights 无 --delete 同步，且已 exclude 该文件，
 // 线上队列不会被本地上传覆盖，重启后从文件恢复，不丢不重）。
 
@@ -77,11 +77,11 @@ function writeWritelist(data: WritelistData): void {
 
 export function addWritelistTitle(title: string): WritelistItem {
   const trimmed = title.trim()
-  if (!trimmed) throw new Error('标题不能为空')
-  if (trimmed.length > 200) throw new Error('标题不能超过 200 字')
+  if (!trimmed) throw new Error('主题不能为空')
+  if (trimmed.length > 200) throw new Error('主题不能超过 200 字')
   const data = readWritelist()
   const dupe = data.items.find(i => i.title === trimmed && (i.status === 'pending' || i.status === 'writing'))
-  if (dupe) throw new Error('该标题已在队列中')
+  if (dupe) throw new Error('该主题已在队列中')
   const item: WritelistItem = {
     id: `${Date.now().toString(36)}-${randomBytes(3).toString('hex')}`,
     title: trimmed,
@@ -105,7 +105,7 @@ export function removeWritelistItem(id: string): boolean {
   const data = readWritelist()
   const idx = data.items.findIndex(i => i.id === id)
   if (idx === -1) return false
-  if (data.items[idx]!.status === 'writing') throw new Error('写作中的标题不能删除')
+  if (data.items[idx]!.status === 'writing') throw new Error('写作中的主题不能删除')
   data.items.splice(idx, 1)
   writeWritelist(data)
   return true
@@ -114,8 +114,8 @@ export function removeWritelistItem(id: string): boolean {
 export function retryWritelistItem(id: string): WritelistItem {
   const data = readWritelist()
   const item = data.items.find(i => i.id === id)
-  if (!item) throw new Error('标题不存在')
-  if (item.status !== 'failed') throw new Error('只有失败的标题才能重试')
+  if (!item) throw new Error('主题不存在')
+  if (item.status !== 'failed') throw new Error('只有失败的主题才能重试')
   item.status = 'pending'
   item.error = undefined
   item.updatedAt = new Date().toISOString()
@@ -124,7 +124,7 @@ export function retryWritelistItem(id: string): WritelistItem {
 }
 
 // 进程重启时把中断的 writing 重置回 pending（writeInsight 与队列落盘都是同步操作，
-// 中断窗口只有几毫秒；回到 pending 由下一轮重新消费，不会丢标题）
+// 中断窗口只有几毫秒；回到 pending 由下一轮重新消费，不会丢主题）
 export function resetStuckWritingItems(): number {
   const data = readWritelist()
   let n = 0
@@ -141,13 +141,13 @@ export function resetStuckWritingItems(): number {
 
 // ── AI 写作 ──
 
-const WRITE_SYSTEM = `你是「命见」网站 insights 栏目的专职作者。该站点是命理/风水/术数文化内容平台。根据用户给定的文章标题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
+const WRITE_SYSTEM = `你是「命见」网站 insights 栏目的专职作者。该站点是命理/风水/术数文化内容平台。根据用户给定的文章主题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
 
 {"slug": "...", "title": "...", "description": "...", "category": "...", "tags": ["..."], "content": "..."}
 
 要求：
 1. slug：URL 标识，小写英文字母/数字/连字符，3-6 个英文单词概括主题（如 office-fengshui-caiwei），不要拼音、不要中文。
-2. title：可使用用户给定的原标题，也允许在不偏离主题的前提下润色。
+2. title：根据主题自拟的正式文章标题，紧扣主题、适合 SEO，不要照搬主题原文。
 3. description：SEO 摘要，80-150 个汉字，自然流畅，不堆砌关键词。
 4. category：必须是以下之一：metaphysics-basics（命理入门）/ deep-reading（深度解读）/ fengshui（风水文化）/ astrology（星象占星）/ culture（术数文化）。
 5. tags：3-6 个中文 SEO 关键词。
@@ -220,7 +220,7 @@ async function generateAndStore(queueTitle: string, autoPublish: boolean, items:
   }
   console.log(`[writelist] generating "${queueTitle}" model=${model} (NUXT_AI_MODEL) autoPublish=${autoPublish}`)
 
-  const raw = await callAIJson(WRITE_SYSTEM, `文章标题：${queueTitle}`, {
+  const raw = await callAIJson(WRITE_SYSTEM, `文章主题：${queueTitle}`, {
     model,
     timeoutMs: 300_000,
     maxTokens: 32768,
@@ -274,7 +274,7 @@ export async function processNextWritelistItem(): Promise<ProcessResult> {
     item.updatedAt = new Date().toISOString()
     writeWritelist(data)
 
-    // 开关在写入前这一刻读取：切换只影响之后处理的标题，历史结果不回溯
+    // 开关在写入前这一刻读取：切换只影响之后处理的主题，历史结果不回溯
     const { autoPublish } = readWritelist().settings
     const { slug, model } = await generateAndStore(item.title, autoPublish, data.items)
 
