@@ -94,8 +94,28 @@ export function addWritelistTitle(title: string): WritelistItem {
   return item
 }
 
-export function setWritelistAutoPublish(autoPublish: boolean): WritelistSettings {
-  const data = readWritelist()
+export interface AddTitlesResult {
+  added: WritelistItem[]
+  errors: { title: string; error: string }[]
+}
+
+// 批量入队：每行一个主题，空行跳过，单条失败（重复/超长）不影响其余
+export function addWritelistTitles(raw: string): AddTitlesResult {
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean)
+  if (!lines.length) throw new Error('主题不能为空')
+  const added: WritelistItem[] = []
+  const errors: { title: string; error: string }[] = []
+  for (const line of lines) {
+    try {
+      added.push(addWritelistTitle(line))
+    } catch (e) {
+      errors.push({ title: line, error: e instanceof Error ? e.message : String(e) })
+    }
+  }
+  return { added, errors }
+}
+
+export function setWritelistAutoPublish(autoPublish: boolean): WritelistSettings {  const data = readWritelist()
   data.settings.autoPublish = autoPublish === true
   writeWritelist(data)
   return data.settings
@@ -141,19 +161,48 @@ export function resetStuckWritingItems(): number {
 
 // ── AI 写作 ──
 
-const WRITE_SYSTEM = `你是「命见」网站 insights 栏目的专职作者。该站点是命理/风水/术数文化内容平台。根据用户给定的文章主题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
+const WRITE_SYSTEM = `你是「命见」网站 insights 栏目的专职作者，在命理、风水、术数这行泡了很多年。你写作时像一个真懂行的人在跟读者聊天：有自己的判断，敢说哪里存疑，不端架子，不凑字数。
+
+根据用户给定的文章主题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
 
 {"slug": "...", "title": "...", "description": "...", "category": "...", "tags": ["..."], "content": "..."}
 
-要求：
+字段要求：
 1. slug：URL 标识，小写英文字母/数字/连字符，3-6 个英文单词概括主题（如 office-fengshui-caiwei），不要拼音、不要中文。
-2. title：根据主题自拟的正式文章标题，紧扣主题、适合 SEO，不要照搬主题原文。
-3. description：SEO 摘要，80-150 个汉字，自然流畅，不堆砌关键词。
+2. title：紧扣主题的正式文章标题，适合 SEO，不照搬主题原文，不用"一文读懂""史上最全""必看"式标题党。
+3. description：SEO 摘要，80-150 个汉字，说清文章实际讲了什么，不堆砌关键词。
 4. category：必须是以下之一：metaphysics-basics（命理入门）/ deep-reading（深度解读）/ fengshui（风水文化）/ astrology（星象占星）/ culture（术数文化）。
 5. tags：3-6 个中文 SEO 关键词。
-6. content：Markdown 正文，1500-2500 字，含 2-4 个二级标题（## 开头），按需使用列表与引用；语气专业但可读，面向对中华命理文化感兴趣的普通读者；开头直接入题，不要"今天小编带大家"式营销腔。
-7. 内容边界：陈述传统文化观点即可，不做绝对化断言，不给医疗/法律/投资建议，不编造引用来源，不使用图片语法，不插入外部链接。
-8. 只输出 JSON 对象本身，不要用 markdown 代码围栏包裹，不要输出任何其他文字。`
+6. content：Markdown 正文，1500-2500 字，含 2-4 个二级标题（## 开头），按需使用列表；面向对中华命理文化感兴趣的普通读者。
+
+正文写法（这部分决定文章质量，逐条遵守）：
+7. 开头第一段直接进入具体的事情：一个常见做法、一个具体场景、一个很多人会问的疑问。禁止"在快节奏的现代生活中""随着人们对传统文化越来越重视""今天小编就带大家"这类开场，也不要预告全文结构。
+8. 每个新段落必须带来新信息：一个说法的来路、一个具体做法、一个常见误区、一个你的判断。同一个意思换种说法重讲一遍，不算新段落。
+9. 多写具体的东西：方位怎么找、步骤怎么做、民间一般怎么处理、什么情况下不适用。少写空洞的抽象概括和正确的废话。
+10. 句子长短错落，段落不必等长，允许一两句的短段。通篇句式整齐、每段差不多长，是最重的忌讳。
+11. 可以下判断、表态度，也可以明说"这个说法存疑""我个人不建议这么做"，依据就写在判断旁边。不要两边和稀泥。
+12. 禁止翻案腔：不用"不是……而是……""你以为……其实……""看似……实则……""说到底"这类先立靶子再推翻的句式，判断直接从正面给。
+13. 禁止三项以上的同构排比，禁止"首先、其次、再次、最后"的八股结构，禁止给每段结尾都补一句小结。
+14. 结尾写到事情讲完就停。不升华、不号召行动、不写"希望本文对你有所帮助"，不在末段重新摘要全文。
+15. 内容边界：陈述传统文化观点即可，不做绝对化断言，不给医疗/法律/投资建议；引用典籍只限于真实存在且你确信的篇章，拿不准就用"传统上认为""民间有种说法"转述，不编造书名页码、名人名言和统计数据；不使用图片语法，不插入外部链接。
+16. 只输出 JSON 对象本身，不要用 markdown 代码围栏包裹，不要输出任何其他文字。`
+
+// 按正文实际篇幅估算阅读时长：剥离 Markdown 语法后，中文（含标点）按 350 字/分钟、
+// 英文数字按 180 词/分钟计，避免所有文章都落在同一个整数上
+function estimateReadingTime(markdown: string): number {
+  const text = markdown
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/^[-*+]\s+/gm, '')
+    .replace(/^\d+\.\s+/gm, '')
+    .replace(/[*_~`|]/g, '')
+  const cjkCount = (text.match(/[一-鿿㐀-䶿豈-﫿　-〿＀-￯]/g) || []).length
+  const wordCount = (text.match(/[A-Za-z0-9]+/g) || []).length
+  return Math.max(1, Math.round(cjkCount / 350 + wordCount / 180))
+}
 
 interface GeneratedArticle {
   slug: string
@@ -237,7 +286,7 @@ async function generateAndStore(queueTitle: string, autoPublish: boolean, items:
     publishedAt: now.slice(0, 10),
     updatedAt: now,
     author: '幽默隐士',
-    readingTime: Math.max(1, Math.round(article.content.length / 400)),
+    readingTime: estimateReadingTime(article.content),
     draft: !autoPublish,
     relatedTools: [],
     content: article.content,

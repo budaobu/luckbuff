@@ -65,21 +65,24 @@
       </div>
 
       <!-- 新增主题 -->
-      <form class="flex gap-2 mb-5" @submit.prevent="addTitle">
-        <input
+      <form class="flex gap-2 mb-2" @submit.prevent="addTitle">
+        <textarea
           v-model="newTitle"
-          type="text"
           required
-          maxlength="200"
-          placeholder="输入文章主题，回车加入队列…"
-          class="flex-1 min-w-0 bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
-        >
+          rows="3"
+          placeholder="输入文章主题，每行一个，可一次提交多条…"
+          class="flex-1 min-w-0 bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60 resize-y"
+          @keydown.enter.meta.exact.prevent="addTitle"
+          @keydown.enter.ctrl.exact.prevent="addTitle"
+        />
         <button
           type="submit"
           :disabled="adding || !newTitle.trim()"
-          class="shrink-0 px-4 py-2.5 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-medium transition-colors disabled:opacity-50"
+          class="shrink-0 self-end px-4 py-2.5 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-medium transition-colors disabled:opacity-50"
         >{{ adding ? '加入中…' : '加入队列' }}</button>
       </form>
+      <p class="text-[11px] text-neutral-600 mb-5">每行一个主题；Cmd/Ctrl + Enter 快速提交</p>
+      <p v-if="addFeedback" class="rounded-lg border border-neutral-700 bg-neutral-900/60 text-xs text-neutral-300 px-4 py-2.5 mb-4 whitespace-pre-line">{{ addFeedback }}</p>
 
       <!-- 队列列表 -->
       <div v-if="pending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
@@ -168,6 +171,7 @@ const running = ref(false)
 const adding = ref(false)
 const toggling = ref(false)
 const newTitle = ref('')
+const addFeedback = ref('')
 
 const STATUS_LABELS: Record<WritelistStatus, string> = {
   pending: '待写',
@@ -235,15 +239,25 @@ onBeforeUnmount(() => {
 })
 
 async function addTitle() {
-  const title = newTitle.value.trim()
-  if (!title) return
+  const raw = newTitle.value.trim()
+  if (!raw) return
   adding.value = true
   fatalError.value = ''
+  addFeedback.value = ''
   try {
-    await $fetch('/api/admin/writelist', { method: 'POST', body: { title } })
-    newTitle.value = ''
-    await load()
-    schedulePoll()
+    const res = await $fetch<{ added: WritelistItem[]; errors: { title: string; error: string }[] }>('/api/admin/writelist', {
+      method: 'POST',
+      body: { titles: raw },
+    })
+    const parts: string[] = []
+    if (res.added.length) parts.push(`已加入 ${res.added.length} 条主题`)
+    for (const err of res.errors) parts.push(`「${err.title}」未加入：${err.error}`)
+    addFeedback.value = parts.join('\n')
+    if (res.added.length) {
+      newTitle.value = ''
+      await load()
+      schedulePoll()
+    }
   } catch (e: any) {
     fatalError.value = e?.data?.statusMessage || '加入队列失败'
   } finally {
