@@ -5,7 +5,7 @@ export default defineEventHandler((event) => {
   checkInsightsAdminAuth(event)
   const id = getRouterParam(event, 'id') || ''
   try {
-    if (!removeWritelistItem(id)) throw new Error('标题不存在')
+    if (!removeWritelistItem(id)) throw new Error('主题不存在')
     return { ok: true }
   } catch (e) {
     throw createError({ statusCode: 400, statusMessage: e instanceof Error ? e.message : '删除失败' })

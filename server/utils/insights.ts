@@ -60,13 +60,24 @@ function parseInlineArray(value: string): string[] {
   if (!inner) return []
   return inner
     .split(',')
-    .map(s => s.trim().replace(/^["']|["']$/g, ''))
+    .map((s) => {
+      const item = s.trim()
+      if (item.startsWith('"') && item.endsWith('"')) {
+        return item.slice(1, -1).replace(/\\(["\\])/g, '$1')
+      }
+      return item.replace(/^["']|["']$/g, '')
+    })
     .filter(Boolean)
 }
 
 function parseScalar(raw: string): string | number | boolean {
   let value = raw.trim()
-  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+  if (value.startsWith('"') && value.endsWith('"')) {
+    // yamlString 写入时对 \ 和 " 做了转义，读回必须对称反转义，
+    // 否则管线每次读写都会多叠一层反斜杠
+    return value.slice(1, -1).replace(/\\(["\\])/g, '$1')
+  }
+  if (value.startsWith("'") && value.endsWith("'")) {
     return value.slice(1, -1)
   }
   if (value === 'true') return true
