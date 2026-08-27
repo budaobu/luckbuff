@@ -56,17 +56,32 @@
         </article>
       </section>
 
-      <section class="mt-16 grid gap-3 sm:grid-cols-3">
-        <div v-for="num in 3" :key="num" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-center">
-          <div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]">
-            <UIcon :name="`i-heroicons-${['cube-transparent', 'arrows-right-left', 'shield-exclamation'][num - 1]}`" class="h-5 w-5" />
+      <!-- 使用指南 -->
+      <section class="mx-auto mt-16 max-w-3xl">
+        <h2 class="mb-6 text-center text-lg font-semibold text-[var(--text-primary)]">{{ $t('numericEnergyTopic.guideTitle') }}</h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div v-for="num in 3" :key="num" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 text-center">
+            <div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]">
+              <UIcon :name="`i-heroicons-${['squares-plus', 'calculator', 'light-bulb'][num - 1]}`" class="h-5 w-5" />
+            </div>
+            <h4 class="mb-1 text-sm font-semibold text-[var(--text-primary)]">{{ $t(`numericEnergyTopic.guide${num}Title`) }}</h4>
+            <p class="text-xs leading-relaxed text-[var(--text-muted)]">{{ $t(`numericEnergyTopic.guide${num}Desc`) }}</p>
           </div>
-          <h4 class="mb-1 text-sm font-semibold text-[var(--text-primary)]">{{ $t(`numericEnergyTopic.guide${num}Title`) }}</h4>
-          <p class="text-xs leading-relaxed text-[var(--text-muted)]">{{ $t(`numericEnergyTopic.guide${num}Desc`) }}</p>
         </div>
       </section>
 
-      <p class="mt-10 text-center text-[11px] leading-relaxed text-[var(--text-faint)]">
+      <!-- 常见问题 -->
+      <section class="mx-auto mt-16 max-w-3xl">
+        <h2 class="mb-6 text-center text-lg font-semibold text-[var(--text-primary)]">{{ $t('numericEnergyTopic.faqTitle') }}</h2>
+        <div class="space-y-3">
+          <div v-for="num in 4" :key="num" class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
+            <h4 class="mb-2 text-sm font-semibold text-[var(--text-primary)]">{{ $t(`numericEnergyTopic.faq${num}Q`) }}</h4>
+            <p class="text-xs leading-relaxed text-[var(--text-muted)]">{{ $t(`numericEnergyTopic.faq${num}A`) }}</p>
+          </div>
+        </div>
+      </section>
+
+      <p class="mt-12 text-center text-[11px] leading-relaxed text-[var(--text-faint)]">
         {{ $t('numericEnergy.disclaimer') }}
       </p>
     </div>
