@@ -10058,5 +10058,118 @@
     "zhCN": "简",
     "zhTW": "繁",
     "en": "EN"
+  },
+  "numericEnergyTopic": {
+    "title": "数字能量专题",
+    "subtitle": "手机、车牌、门牌与卡尾的一套九星读法",
+    "intro": "同一串数字在不同场景有不同的关注点。这里用统一的洛书九星与五行框架做轻量整理，不预测命运。",
+    "back": "返回工具列表",
+    "guide1Title": "统一核心",
+    "guide1Desc": "四个入口共享一套计算核心，场景只改变解读重点。",
+    "guide2Title": "组合视角",
+    "guide2Desc": "逐位星曜之外，也看相邻五行的生克与固定数理。",
+    "guide3Title": "娱乐参考",
+    "guide3Desc": "民间体系很多，这里保持柔和措辞，不做绝对断言。",
+    "statTitle": "分析位",
+    "statPairs": "相邻组合",
+    "statZero": "归零锚点",
+    "seoTitle": "数字能量专题：手机号、车牌、门牌与银行卡尾号解读",
+    "seoDescription": "用共享的洛书九星与五行框架轻量解读数字串。民间版本多，仅供娱乐参考。",
+    "seoKeywords": "数字能量,洛书九宫,五行,手机号能量"
+  },
+  "numericEnergy": {
+    "disclaimer": "数字能量学在民间流传的版本较多，本工具采用其中一种常见体系，仅供娱乐参考。",
+    "resultDisclaimer": "数字能量学在民间流传版本较多，以上采用其中一种常见体系整理，非唯一权威版本，仅供娱乐参考。",
+    "poster": {
+      "kicker": "NUMERIC ENERGY",
+      "aiReading": "AI 解读",
+      "scene": {
+        "phone": "手机信号场",
+        "plate": "车牌行进线",
+        "door": "门宅纳气",
+        "card": "财务节奏"
+      },
+      "combos": "组合信号",
+      "tips": "行动提示"
+    },
+    "band": {
+      "balanced": "均衡",
+      "flowing": "流畅",
+      "focused": "聚焦"
+    },
+    "element": {
+      "water": "水",
+      "wood": "木",
+      "fire": "火",
+      "earth": "土",
+      "metal": "金"
+    },
+    "reading": {
+      "title": "流式解读"
+    },
+    "status": {
+      "streaming": "正在生成解读…",
+      "failed": "计算未完成",
+      "checkInput": "请检查输入的数字格式",
+      "aiUnavailable": "AI 解读暂时不可用，可稍后重试"
+    },
+    "action": {
+      "reread": "重新解读",
+      "again": "再算一次"
+    },
+    "scenarios": {
+      "phone": {
+        "longTitle": "手机号数字能量",
+        "description": "把手机号码交给九星与五行，看流动、沟通和机会侧重。",
+        "cta": "开始测算",
+        "inputLabel": "输入手机号",
+        "placeholder": "例：13800138000",
+        "help": "可含空格、加号或连字符；建议输入 7–15 位常用手机号。",
+        "seoTitle": "手机号数字能量 | Numeric Energy",
+        "seoDescription": "把手机号码交给九星与五行，看流动、沟通和机会侧重。 仅作娱乐参考，非唯一权威版本。",
+        "seoKeywords": "数字能量,手机号数字能量,洛书九宫,五行",
+        "seoOgTitle": "手机号数字能量 | LuckBuff",
+        "seoOgDescription": "把手机号码交给九星与五行，看流动、沟通和机会侧重。"
+      },
+      "plate": {
+        "longTitle": "车牌号数字能量",
+        "description": "从车牌数字段看行动力、路线张力和出行筛选信号。",
+        "cta": "分析车牌",
+        "inputLabel": "输入车牌号",
+        "placeholder": "例：沪A12345 或 12345",
+        "help": "系统只提取数字；字母与汉字省略，至少需要 2 位连续或合计数字。",
+        "seoTitle": "车牌号数字能量 | Numeric Energy",
+        "seoDescription": "从车牌数字段看行动力、路线张力和出行筛选信号。 仅作娱乐参考，非唯一权威版本。",
+        "seoKeywords": "数字能量,车牌号数字能量,洛书九宫,五行",
+        "seoOgTitle": "车牌号数字能量 | LuckBuff",
+        "seoOgDescription": "从车牌数字段看行动力、路线张力和出行筛选信号。"
+      },
+      "door": {
+        "longTitle": "门牌号数字能量",
+        "description": "解读门牌中的顺序数字，观察空间稳定感与人际聚散。",
+        "cta": "查看能量",
+        "inputLabel": "输入门牌号",
+        "placeholder": "例：12-3-501",
+        "help": "只提取数字并按顺序拼接，可使用常见短横线或斜线分隔。",
+        "seoTitle": "门牌号数字能量 | Numeric Energy",
+        "seoDescription": "解读门牌中的顺序数字，观察空间稳定感与人际聚散。 仅作娱乐参考，非唯一权威版本。",
+        "seoKeywords": "数字能量,门牌号数字能量,洛书九宫,五行",
+        "seoOgTitle": "门牌号数字能量 | LuckBuff",
+        "seoOgDescription": "解读门牌中的顺序数字，观察空间稳定感与人际聚散。"
+      },
+      "card": {
+        "longTitle": "银行卡尾号能量",
+        "description": "用 4–8 位尾号看财务节奏；请勿输入完整卡号。",
+        "cta": "分析尾号",
+        "inputLabel": "输入卡尾号",
+        "placeholder": "例：8888",
+        "help": "仅支持 4–8 位尾部数字，不需要也不建议提供完整银行卡号。",
+        "seoTitle": "银行卡尾号能量 | Numeric Energy",
+        "seoDescription": "用 4–8 位尾号看财务节奏；请勿输入完整卡号。 仅作娱乐参考，非唯一权威版本。",
+        "seoKeywords": "数字能量,银行卡尾号能量,洛书九宫,五行",
+        "seoOgTitle": "银行卡尾号能量 | LuckBuff",
+        "seoOgDescription": "用 4–8 位尾号看财务节奏；请勿输入完整卡号。"
+      }
+    }
   }
 }

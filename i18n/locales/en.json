@@ -10036,5 +10036,118 @@
     "zhCN": "简",
     "zhTW": "繁",
     "en": "EN"
+  },
+  "numericEnergyTopic": {
+    "title": "Numeric Energy",
+    "subtitle": "One nine-star system for phones, plates, doors and card tails",
+    "intro": "The same digits can raise different questions in different settings. This hub applies one lightweight Luoshu star and five-element framework without predicting fate.",
+    "back": "Back to tools",
+    "guide1Title": "Shared core",
+    "guide1Desc": "All four entries share one calculation core; scenes change emphasis only.",
+    "guide2Title": "Pair view",
+    "guide2Desc": "Stars are read digit by digit alongside adjacent five-element cycles.",
+    "guide3Title": "For fun",
+    "guide3Desc": "Many versions exist. Wording stays gentle and never claims certainty.",
+    "statTitle": "digits",
+    "statPairs": "pairs",
+    "statZero": "zeros",
+    "seoTitle": "Numeric Energy for Phones, Plates, Doors and Card Tails",
+    "seoDescription": "Explore numbers with one shared Luoshu star and five-element framework. Folk versions vary; entertainment reference only.",
+    "seoKeywords": "numeric energy, Luoshu nine stars, five elements, phone number energy"
+  },
+  "numericEnergy": {
+    "disclaimer": "Numerical energy has many folk versions. This tool applies one common system and is for entertainment reference only.",
+    "resultDisclaimer": "Numerical energy has many folk versions. The reading above follows one common system, is not an authoritative version, and is for entertainment reference only.",
+    "poster": {
+      "kicker": "NUMERIC ENERGY",
+      "aiReading": "AI Reading",
+      "scene": {
+        "phone": "Signal Field",
+        "plate": "Route Pattern",
+        "door": "Door Qi",
+        "card": "Cash Flow"
+      },
+      "combos": "Combination Signals",
+      "tips": "Action Tips"
+    },
+    "band": {
+      "balanced": "Balanced",
+      "flowing": "Flowing",
+      "focused": "Focused"
+    },
+    "element": {
+      "water": "Water",
+      "wood": "Wood",
+      "fire": "Fire",
+      "earth": "Earth",
+      "metal": "Metal"
+    },
+    "reading": {
+      "title": "Streaming reading"
+    },
+    "status": {
+      "streaming": "Generating reading…",
+      "failed": "Calculation incomplete",
+      "checkInput": "Please check the number format",
+      "aiUnavailable": "AI reading is temporarily unavailable. Try again later."
+    },
+    "action": {
+      "reread": "Read again",
+      "again": "Try another"
+    },
+    "scenarios": {
+      "phone": {
+        "longTitle": "Phone Number Energy",
+        "description": "Read a phone number through nine stars, elements, flow and contact opportunities.",
+        "cta": "Analyze number",
+        "inputLabel": "Enter phone number",
+        "placeholder": "e.g. 13800138000",
+        "help": "Spaces, plus signs and hyphens are allowed. 7–15 digits recommended.",
+        "seoTitle": "Phone Number Energy | Numeric Energy",
+        "seoDescription": "Read a phone number through nine stars, elements, flow and contact opportunities. For entertainment reference only; not an authoritative version.",
+        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
+        "seoOgTitle": "Phone Number Energy | LuckBuff",
+        "seoOgDescription": "Read a phone number through nine stars, elements, flow and contact opportunities."
+      },
+      "plate": {
+        "longTitle": "License Plate Energy",
+        "description": "Look at driving pace, route tension and travel filters from plate digits.",
+        "cta": "Analyze plate",
+        "inputLabel": "Enter license plate",
+        "placeholder": "e.g. ABC12345 or 12345",
+        "help": "Only digits are extracted. Letters and characters are omitted; at least 2 digits required.",
+        "seoTitle": "License Plate Energy | Numeric Energy",
+        "seoDescription": "Look at driving pace, route tension and travel filters from plate digits. For entertainment reference only; not an authoritative version.",
+        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
+        "seoOgTitle": "License Plate Energy | LuckBuff",
+        "seoOgDescription": "Look at driving pace, route tension and travel filters from plate digits."
+      },
+      "door": {
+        "longTitle": "Door Number Energy",
+        "description": "Read ordered door digits for stability, gathering and boundary signals.",
+        "cta": "Check energy",
+        "inputLabel": "Enter door number",
+        "placeholder": "e.g. 12-3-501",
+        "help": "Digits are joined in order. Common dashes or slashes are allowed.",
+        "seoTitle": "Door Number Energy | Numeric Energy",
+        "seoDescription": "Read ordered door digits for stability, gathering and boundary signals. For entertainment reference only; not an authoritative version.",
+        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
+        "seoOgTitle": "Door Number Energy | LuckBuff",
+        "seoOgDescription": "Read ordered door digits for stability, gathering and boundary signals."
+      },
+      "card": {
+        "longTitle": "Card Tail Energy",
+        "description": "Use the last 4–8 digits for money rhythm. Never enter a full card number.",
+        "cta": "Analyze tail",
+        "inputLabel": "Enter card tail",
+        "placeholder": "e.g. 8888",
+        "help": "Only the last 4–8 digits are supported. Do not provide a full card number.",
+        "seoTitle": "Card Tail Energy | Numeric Energy",
+        "seoDescription": "Use the last 4–8 digits for money rhythm. Never enter a full card number. For entertainment reference only; not an authoritative version.",
+        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
+        "seoOgTitle": "Card Tail Energy | LuckBuff",
+        "seoOgDescription": "Use the last 4–8 digits for money rhythm. Never enter a full card number."
+      }
+    }
   }
 }
