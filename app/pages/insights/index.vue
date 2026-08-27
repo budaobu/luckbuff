@@ -187,6 +187,8 @@ function formatDate(iso: string): string {
 
 // ── SEO ──
 const siteName = useRuntimeConfig().public.siteName
+const siteUrl = 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/insights')
 
 useSeoMeta({
   title: () => `${t('insights.seoTitle')} - ${siteName}`,
@@ -196,14 +198,11 @@ useSeoMeta({
   ogDescription: () => t('insights.seoDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/insights',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
 useHead(() => ({
-  link: [
-    { rel: 'canonical', href: 'https://www.ososn.com/insights' },
-  ],
   script: [
     {
       type: 'application/ld+json',
@@ -211,7 +210,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'Blog',
         name: t('insights.title'),
-        url: 'https://www.ososn.com/insights',
+        url: pageUrl.value,
         description: t('insights.seoDesc'),
         publisher: {
           '@type': 'Organization',
@@ -224,7 +223,7 @@ useHead(() => ({
           headline: a.title,
           description: a.description,
           datePublished: a.publishedAt,
-          url: `https://www.ososn.com/insights/${a.slug}`,
+          url: `${siteUrl}${localePath(`/insights/${a.slug}`)}`,
         })),
       }),
     },

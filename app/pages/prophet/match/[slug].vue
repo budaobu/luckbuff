@@ -188,6 +188,7 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
 const slug = computed(() => route.params.slug as string)
+const pageUrl = useLocalizedSeoUrl(() => `/prophet/match/${slug.value}`)
 
 function goBack() {
   navigateTo(localePath('/prophet'))
@@ -234,6 +235,18 @@ const { data: prediction, pending, error } = await useAsyncData(
   () => $fetch<WorldcupPrediction>(`/api/prophet/worldcup-prediction/${slug.value}?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
+
+if (error.value) {
+  throw createError({
+    statusCode: (error.value as any)?.statusCode === 404 ? 404 : 500,
+    statusMessage: 'Prediction not found',
+    fatal: true,
+  })
+}
+
+if (!prediction.value?.homeTeam || !prediction.value?.awayTeam || !prediction.value?.content) {
+  throw createError({ statusCode: 404, statusMessage: 'Prediction not found', fatal: true })
+}
 
 // ── 重构 chart 对象供 QimenChartSummary 使用 ──
 const reconstructedChart = computed<QimenChartResponse | null>(() => {
@@ -345,7 +358,7 @@ useSeoMeta({
   ogDescription: () => pageDesc.value,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'article',
-  ogUrl: () => `https://www.ososn.com/prophet/match/${slug.value}`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -412,7 +425,7 @@ useHead(() => {
       { '@type': 'SportsTeam', name: awayTeamName.value || '' },
     ],
     description: pageDesc.value,
-    url: `https://www.ososn.com/prophet/match/${slug.value}`,
+    url: pageUrl.value,
   }
 
   // Remove undefined values to keep JSON clean
@@ -429,12 +442,6 @@ useHead(() => {
   }
 
   return {
-    link: [
-      {
-        rel: 'canonical',
-        href: `https://www.ososn.com/prophet/match/${slug.value}`,
-      },
-    ],
     script: [
       {
         type: 'application/ld+json',
