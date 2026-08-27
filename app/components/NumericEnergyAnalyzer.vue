@@ -139,7 +139,7 @@
 
         <div class="ne-footer mt-4 flex items-end gap-2 border-t border-[color:var(--ne-border)] pt-3">
           <div class="min-w-0 flex-1">
-            <p class="ne-site font-semibold text-[var(--ne-ink)]">luckbuff.app</p>
+            <p class="ne-site font-semibold text-[var(--ne-ink)]">{{ siteDomain }}</p>
             <p class="ne-disclaimer mt-1 line-clamp-2 leading-snug text-[var(--ne-muted)]">
               {{ t('numericEnergy.disclaimer') }}
             </p>
@@ -179,6 +179,8 @@ import type { NumericEnergyResult, NumericEnergyScenario } from '~~/server/utils
 const props = defineProps<{ scenario: NumericEnergyScenario }>()
 const { t, locale } = useI18n()
 const toast = useToast()
+
+const siteDomain = 'www.ososn.com'
 
 const phase = ref<'form' | 'result'>('form')
 const input = ref('')
