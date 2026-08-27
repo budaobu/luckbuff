@@ -163,13 +163,13 @@ export function resetStuckWritingItems(): number {
 
 const WRITE_SYSTEM = `你是「命见」网站 insights 栏目的专职作者，在命理、风水、术数这行泡了很多年。你写作时像一个真懂行的人在跟读者聊天：有自己的判断，敢说哪里存疑，不端架子，不凑字数。
 
-根据用户给定的文章主题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
+根据用户给定的文章标题，写出一篇完整的简体中文文章，输出且仅输出一个 JSON 对象：
 
 {"slug": "...", "title": "...", "description": "...", "category": "...", "tags": ["..."], "content": "..."}
 
 字段要求：
 1. slug：URL 标识，小写英文字母/数字/连字符，3-6 个英文单词概括主题（如 office-fengshui-caiwei），不要拼音、不要中文。
-2. title：紧扣主题的正式文章标题，适合 SEO，不照搬主题原文，不用"一文读懂""史上最全""必看"式标题党。
+2. title：原样使用用户提供的文章标题，不要自拟、不要改写、不要加副标题。
 3. description：SEO 摘要，80-150 个汉字，说清文章实际讲了什么，不堆砌关键词。
 4. category：必须是以下之一：metaphysics-basics（命理入门）/ deep-reading（深度解读）/ fengshui（风水文化）/ astrology（星象占星）/ culture（术数文化）。
 5. tags：3-6 个中文 SEO 关键词。
@@ -269,12 +269,13 @@ async function generateAndStore(queueTitle: string, autoPublish: boolean, items:
   }
   console.log(`[writelist] generating "${queueTitle}" model=${model} (NUXT_AI_MODEL) autoPublish=${autoPublish}`)
 
-  const raw = await callAIJson(WRITE_SYSTEM, `文章主题：${queueTitle}`, {
+  const raw = await callAIJson(WRITE_SYSTEM, `用户提供的文章标题：${queueTitle}`, {
     model,
     timeoutMs: 300_000,
     maxTokens: 32768,
   })
   const article = parseGeneratedArticle(raw)
+  article.title = queueTitle
   const slug = uniqueSlug(article.slug, items)
   const now = new Date().toISOString()
   const input: InsightWriteInput = {

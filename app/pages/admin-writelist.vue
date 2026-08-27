@@ -64,13 +64,13 @@
         </button>
       </div>
 
-      <!-- 新增主题 -->
+      <!-- 新增标题 -->
       <form class="flex gap-2 mb-2" @submit.prevent="addTitle">
         <textarea
           v-model="newTitle"
           required
           rows="3"
-          placeholder="输入文章主题，每行一个，可一次提交多条…"
+          placeholder="输入文章标题，每行一个，可一次提交多条…"
           class="flex-1 min-w-0 bg-neutral-900/60 border border-neutral-800 rounded-lg px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60 resize-y"
           @keydown.enter.meta.exact.prevent="addTitle"
           @keydown.enter.ctrl.exact.prevent="addTitle"
@@ -81,14 +81,14 @@
           class="shrink-0 self-end px-4 py-2.5 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-medium transition-colors disabled:opacity-50"
         >{{ adding ? '加入中…' : '加入队列' }}</button>
       </form>
-      <p class="text-[11px] text-neutral-600 mb-5">每行一个主题；Cmd/Ctrl + Enter 快速提交</p>
+      <p class="text-[11px] text-neutral-600 mb-5">每行一个标题；Cmd/Ctrl + Enter 快速提交</p>
       <p v-if="addFeedback" class="rounded-lg border border-neutral-700 bg-neutral-900/60 text-xs text-neutral-300 px-4 py-2.5 mb-4 whitespace-pre-line">{{ addFeedback }}</p>
 
       <!-- 队列列表 -->
       <div v-if="pending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
       <div v-else-if="!items.length" class="text-center py-16 text-neutral-500">
         <p class="text-base mb-2">队列是空的</p>
-        <p class="text-sm">在上方输入主题加入队列，AI 会根据主题自拟标题</p>
+        <p class="text-sm">在上方输入文章标题加入队列，AI 直接使用该标题写作</p>
       </div>
       <div v-else class="space-y-2">
         <div
