@@ -201,12 +201,25 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
 const slug = computed(() => route.params.slug as string)
+const pageUrl = useLocalizedSeoUrl(() => `/insights/${slug.value}`)
 
 const { data: article, pending, error } = await useAsyncData(
   () => `insight-${slug.value}-${locale.value}`,
   () => $fetch<InsightDetail>(`/api/insights/${slug.value}?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
+
+if (error.value) {
+  throw createError({
+    statusCode: (error.value as any)?.statusCode === 404 ? 404 : 500,
+    statusMessage: 'Article not found',
+    fatal: true,
+  })
+}
+
+if (!article.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Article not found', fatal: true })
+}
 
 const renderedContent = computed(() => {
   if (!article.value?.content) return ''
@@ -542,7 +555,7 @@ useSeoMeta({
   ogDescription: () => pageDesc.value,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'article',
-  ogUrl: () => `https://www.ososn.com/insights/${slug.value}`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -577,17 +590,14 @@ useHead(() => {
     dateModified: article.value?.updatedAt || article.value?.publishedAt,
     articleSection: article.value?.category,
     keywords: article.value?.tags.join(', '),
-    url: `https://www.ososn.com/insights/${slug.value}`,
+    url: pageUrl.value,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://www.ososn.com/insights/${slug.value}`,
+      '@id': pageUrl.value,
     },
   })
 
   return {
-    link: [
-      { rel: 'canonical', href: `https://www.ososn.com/insights/${slug.value}` },
-    ],
     script: [
       {
         type: 'application/ld+json',

@@ -61,6 +61,7 @@ const autoRoutes = scanPages(join(__dirname, 'app', 'pages'), join(__dirname, 'a
 const SITEMAP_EXCLUDE_ROUTES = new Set<string>([
   '/admin',
   '/admin-writelist',
+  '/settings',
 ])
 
 const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily' | 'monthly' | 'yearly'; priority: number; _i18nTransform: boolean }>> = {
@@ -204,7 +205,6 @@ export default defineNuxtConfig({
       '/privacy': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/admin': { robots: false, sitemap: false },
       '/admin/writelist': { robots: false, sitemap: false },
-      '/zibaifeixing': { redirect: { to: '/tools/zibaifeixing', statusCode: 301 } },
     },
     compressPublicAssets: { gzip: true, brotli: true },
   },

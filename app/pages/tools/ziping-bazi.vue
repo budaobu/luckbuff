@@ -226,6 +226,7 @@ const config = useRuntimeConfig()
 const toast = useToast()
 const siteName = config.public.siteName || 'ososn'
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
+const zipingBaziPageUrl = useLocalizedSeoUrl('/tools/ziping-bazi')
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const formValues = ref<FormValues>({
@@ -425,14 +426,11 @@ useSeoMeta({
   ogDescription: t('seo.zipingBaziOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/ziping-bazi`,
+  ogUrl: zipingBaziPageUrl,
   twitterCard: 'summary_large_image',
 })
 
 useHead(() => ({
-  link: [
-    { rel: 'canonical', href: `${siteUrl}/tools/ziping-bazi` },
-  ],
   script: [
     {
       type: 'application/ld+json',
@@ -440,14 +438,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.zipingBaziTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/ziping-bazi`,
+        url: zipingBaziPageUrl.value,
         description: t('seo.zipingBaziDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('zipingBazi.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/ziping-bazi`,
+          url: zipingBaziPageUrl.value,
           description: t('zipingBazi.subtitle'),
           offers: {
             '@type': 'Offer',
