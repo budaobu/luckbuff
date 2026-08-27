@@ -12,6 +12,7 @@ const HUB_PATHS = new Set([
   '/seeking',
   '/cezi',
   '/fengshui',
+  '/numeric-energy',
   '/auspicious-datetime',
   '/psychological-test',
   '/shuangren-hepan',

@@ -81,6 +81,7 @@ export interface ShareOptions {
     | 'tiche-zeri'
     | 'liunian'
     | 'jinsuoyuguan-fengshui'
+    | 'numeric-energy'
     | 'astro-dice'
   name?: string
   summary?: string
@@ -184,6 +185,7 @@ export function useShare() {
       'tiche-zeri': '提车吉日',
       liunian: '流年运势',
       'jinsuoyuguan-fengshui': '金锁玉关风水',
+      'numeric-energy': '数字能量',
       'astro-dice': '占星骰子',
     }
     const toolName = toolNameMap[tool] ?? '命理'

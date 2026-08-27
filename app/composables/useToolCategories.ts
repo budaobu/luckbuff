@@ -20,6 +20,44 @@ export interface ToolCategory {
 
 const toolCategories: ToolCategory[] = [
   {
+    id: 'numeric-energy',
+    icon: 'i-heroicons-calculator',
+    titleKey: 'numericEnergyTopic.title',
+    subtitleKey: 'numericEnergyTopic.subtitle',
+    sectionPath: '/numeric-energy',
+    tools: [
+      {
+        icon: 'i-heroicons-device-phone-mobile',
+        titleKey: 'numericEnergy.scenarios.phone.longTitle',
+        descKey: 'numericEnergy.scenarios.phone.description',
+        ctaKey: 'numericEnergy.scenarios.phone.cta',
+        path: '/tools/numeric-energy-phone',
+        recommended: true,
+      },
+      {
+        icon: 'i-heroicons-truck',
+        titleKey: 'numericEnergy.scenarios.plate.longTitle',
+        descKey: 'numericEnergy.scenarios.plate.description',
+        ctaKey: 'numericEnergy.scenarios.plate.cta',
+        path: '/tools/numeric-energy-plate',
+      },
+      {
+        icon: 'i-heroicons-home-modern',
+        titleKey: 'numericEnergy.scenarios.door.longTitle',
+        descKey: 'numericEnergy.scenarios.door.description',
+        ctaKey: 'numericEnergy.scenarios.door.cta',
+        path: '/tools/numeric-energy-door',
+      },
+      {
+        icon: 'i-heroicons-credit-card',
+        titleKey: 'numericEnergy.scenarios.card.longTitle',
+        descKey: 'numericEnergy.scenarios.card.description',
+        ctaKey: 'numericEnergy.scenarios.card.cta',
+        path: '/tools/numeric-energy-card',
+      },
+    ],
+  },
+  {
     id: 'fortune-telling',
     icon: 'i-heroicons-sparkles',
     titleKey: 'tools.categoryFortuneTelling',

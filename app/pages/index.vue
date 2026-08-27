@@ -357,6 +357,13 @@ const liuNianData = computed(() => {
 
 const topics = [
   {
+    icon: 'i-heroicons-calculator',
+    titleKey: 'numericEnergyTopic.title',
+    descKey: 'numericEnergyTopic.subtitle',
+    path: '/numeric-energy',
+    span: 'lg:col-span-4',
+  },
+  {
     icon: 'i-heroicons-sparkles',
     titleKey: 'home.topicFortuneTellingTitle',
     descKey: 'home.topicFortuneTellingDesc',
