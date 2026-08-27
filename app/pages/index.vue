@@ -181,15 +181,15 @@
         </h2>
       </div>
 
-      <!-- 11 张专题卡：桌面 12 列网格，3+4+4 错落排列 -->
-      <div v-reveal.stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5">
+      <!-- 12 张专题卡：桌面统一 4 列，移动端逐步降为 2 列 / 1 列 -->
+      <div v-reveal.stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div
           v-for="topic in topics"
           :key="topic.path"
           data-reveal-child
-          class="group arc-card relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
+          class="group arc-card relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-[transform,border-color,background-color] duration-500 hover:-translate-y-1 flex flex-col"
           style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="[topic.span, { 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }]"
+          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
         >
           <div class="p-7 flex flex-col flex-1">
             <div
@@ -207,7 +207,7 @@
               variant="soft"
               size="sm"
               :to="localePath(topic.path)"
-              class="group/btn mt-4"
+              class="group/btn mt-4 self-start"
             >
               {{ $t('home.topicCta') }}
               <template #trailing>
@@ -361,84 +361,72 @@ const topics = [
     titleKey: 'numericEnergyTopic.title',
     descKey: 'numericEnergyTopic.subtitle',
     path: '/numeric-energy',
-    span: 'lg:col-span-4',
   },
   {
     icon: 'i-heroicons-sparkles',
     titleKey: 'home.topicFortuneTellingTitle',
     descKey: 'home.topicFortuneTellingDesc',
     path: '/fortune-telling',
-    span: 'lg:col-span-4',
   },
   {
     icon: 'i-heroicons-star',
     titleKey: 'home.topicAstrologyTitle',
     descKey: 'home.topicAstrologyDesc',
     path: '/astrology',
-    span: 'lg:col-span-4',
   },
   {
     icon: 'i-heroicons-map',
     titleKey: 'home.topicFengshuiTitle',
     descKey: 'home.topicFengshuiDesc',
     path: '/fengshui',
-    span: 'lg:col-span-4',
   },
   {
     icon: 'i-heroicons-heart',
     titleKey: 'home.topicDoubleChartTitle',
     descKey: 'home.topicDoubleChartDesc',
     path: '/shuangren-hepan',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-calendar',
     titleKey: 'home.topicAuspiciousDatetimeTitle',
     descKey: 'home.topicAuspiciousDatetimeDesc',
     path: '/auspicious-datetime',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-magnifying-glass',
     titleKey: 'home.topicSeekingTitle',
     descKey: 'home.topicSeekingDesc',
     path: '/seeking',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-pencil-square',
     titleKey: 'home.topicNamingTitle',
     descKey: 'home.topicNamingDesc',
     path: '/naming',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-pencil',
     titleKey: 'home.topicCeziTitle',
     descKey: 'home.topicCeziDesc',
     path: '/cezi',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-gift-top',
     titleKey: 'home.topicDrawALotTitle',
     descKey: 'home.topicDrawALotDesc',
     path: '/draw-a-lot',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-beaker',
     titleKey: 'home.topicPsychologicalTestTitle',
     descKey: 'home.topicPsychologicalTestDesc',
     path: '/psychological-test',
-    span: 'lg:col-span-3',
   },
   {
     icon: 'i-heroicons-trophy',
     titleKey: 'home.topicProphetTitle',
     descKey: 'home.topicProphetDesc',
     path: '/prophet',
-    span: 'sm:col-span-2 lg:col-span-3',
   },
 ]
 
