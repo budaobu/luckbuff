@@ -761,12 +761,33 @@ const toolCategories: ToolCategory[] = [
     sectionPath: '/prophet',
     tools: [
       {
+        icon: 'i-heroicons-circle-stack',
+        titleKey: 'home.toolLiuyaoFootballTitle',
+        descKey: 'home.toolLiuyaoFootballDesc',
+        ctaKey: 'home.toolLiuyaoFootballCta',
+        path: '/prophet/liuyao-football',
+        recommended: true,
+      },
+      {
+        icon: 'i-heroicons-squares-2x2',
+        titleKey: 'home.toolQimenFootballTitle',
+        descKey: 'home.toolQimenFootballDesc',
+        ctaKey: 'home.toolQimenFootballCta',
+        path: '/prophet/qimen-football',
+      },
+      {
+        icon: 'i-heroicons-cube-transparent',
+        titleKey: 'home.toolLiurenFootballTitle',
+        descKey: 'home.toolLiurenFootballDesc',
+        ctaKey: 'home.toolLiurenFootballCta',
+        path: '/prophet/liuren-football',
+      },
+      {
         icon: 'i-heroicons-sparkles',
         titleKey: 'home.toolLiuyaoTitle',
         descKey: 'home.toolLiuyaoDesc',
         ctaKey: 'home.toolLiuyaoCta',
         path: '/tools/liu-yao',
-        recommended: true,
       },
       {
         icon: 'i-heroicons-squares-2x2',
