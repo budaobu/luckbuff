@@ -86,6 +86,7 @@
 
       <!-- 队列列表 -->
       <div v-if="pending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
+      <div v-else-if="loading" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
       <div v-else-if="!items.length" class="text-center py-16 text-neutral-500">
         <p class="text-base mb-2">队列是空的</p>
         <p class="text-sm">在上方输入文章标题加入队列，AI 直接使用该标题写作</p>
@@ -130,6 +131,38 @@
             >移除</button>
           </div>
         </div>
+
+        <!-- 分页导航 -->
+        <div v-if="totalPages > 1" class="flex items-center justify-between pt-4 pb-1">
+          <p class="text-xs text-neutral-500">
+            共 {{ total }} 条 · 第 {{ currentPage }}/{{ totalPages }} 页
+          </p>
+          <div class="flex items-center gap-1">
+            <button
+              :disabled="currentPage === 1"
+              class="p-1.5 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              title="上一页"
+              @click="goPage(currentPage - 1)"
+            ><UIcon name="i-heroicons-chevron-left" class="w-4 h-4 block" /></button>
+            <template v-for="(p, i) in pageItems" :key="i">
+              <span v-if="p === '…'" class="px-1.5 text-sm text-neutral-600 select-none">…</span>
+              <button
+                v-else
+                class="min-w-[2rem] px-2 py-1.5 rounded-lg text-sm border transition-colors"
+                :class="p === currentPage
+                  ? 'border-amber-500/60 bg-amber-500/15 text-amber-400'
+                  : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500 hover:bg-neutral-700'"
+                @click="goPage(p)"
+              >{{ p }}</button>
+            </template>
+            <button
+              :disabled="currentPage === totalPages"
+              class="p-1.5 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 hover:bg-neutral-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              title="下一页"
+              @click="goPage(currentPage + 1)"
+            ><UIcon name="i-heroicons-chevron-right" class="w-4 h-4 block" /></button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -159,19 +192,52 @@ interface WritelistItem {
 interface WritelistResponse {
   settings: { autoPublish: boolean }
   running: boolean
+  total: number
+  page: number
+  pageSize: number
+  hasActiveItems: boolean
   items: WritelistItem[]
 }
 
 const unauthorized = ref(false)
 const pending = ref(true)
+const loading = ref(false)
 const fatalError = ref('')
 const items = ref<WritelistItem[]>([])
+const total = ref(0)
+const currentPage = ref(1)
+const hasActiveItems = ref(false)
+const PAGE_SIZE = 10
 const settings = reactive({ autoPublish: false })
 const running = ref(false)
 const adding = ref(false)
 const toggling = ref(false)
 const newTitle = ref('')
 const addFeedback = ref('')
+
+const totalPages = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
+
+// 页码窗口：首尾 + 当前页 ±2，中间用 … 折叠
+const pageItems = computed<Array<number | '…'>>(() => {
+  const pageCount = totalPages.value
+  const cur = currentPage.value
+  const wanted = [1, pageCount, cur - 2, cur - 1, cur, cur + 1, cur + 2]
+    .filter(p => p >= 1 && p <= pageCount)
+  const sorted = [...new Set(wanted)].sort((a, b) => a - b)
+  const navigationItems: Array<number | '…'> = []
+  let prev = 0
+  for (const p of sorted) {
+    if (prev && p - prev > 1) navigationItems.push('…')
+    navigationItems.push(p)
+    prev = p
+  }
+  return navigationItems
+})
+
+function goPage(p: number) {
+  if (p < 1 || p > totalPages.value || p === currentPage.value) return
+  load(p)
+}
 
 const STATUS_LABELS: Record<WritelistStatus, string> = {
   pending: '待写',
@@ -201,12 +267,21 @@ function formatDate(iso: string): string {
   return Number.isNaN(d.getTime()) ? iso : d.toLocaleString('zh-CN', { hour12: false })
 }
 
-async function load() {
+async function load(page?: number, { silent = false }: { silent?: boolean } = {}) {
+  if (!silent) loading.value = true
   try {
-    const data = await $fetch<WritelistResponse>('/api/admin/writelist')
+    const data = await $fetch<WritelistResponse>('/api/admin/writelist', {
+      query: {
+        page: page ?? currentPage.value,
+        pageSize: PAGE_SIZE,
+      },
+    })
     items.value = data.items
+    total.value = data.total
+    currentPage.value = data.page
     settings.autoPublish = data.settings.autoPublish
     running.value = data.running
+    hasActiveItems.value = data.hasActiveItems
     unauthorized.value = false
   } catch (e: any) {
     if (e?.response?.status === 401) {
@@ -218,6 +293,7 @@ async function load() {
     }
   } finally {
     pending.value = false
+    if (!silent) loading.value = false
   }
 }
 
@@ -227,10 +303,9 @@ function schedulePoll() {
   if (pollTimer) return
   pollTimer = setTimeout(async () => {
     pollTimer = null
-    await load()
-    if (running.value || items.value.some(i => i.status === 'pending' || i.status === 'writing')) {
+    await load(currentPage.value, { silent: true })
+    if (running.value || hasActiveItems.value)
       schedulePoll()
-    }
   }, 5000)
 }
 
@@ -255,7 +330,7 @@ async function addTitle() {
     addFeedback.value = parts.join('\n')
     if (res.added.length) {
       newTitle.value = ''
-      await load()
+      await load(1)
       schedulePoll()
     }
   } catch (e: any) {
