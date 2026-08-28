@@ -3,7 +3,6 @@ import { zh_cn, zh_tw, en } from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
 const config = useRuntimeConfig()
-const colorMode = useColorMode()
 
 const uiLocale = computed(() => {
   switch (locale.value) {
@@ -28,38 +27,6 @@ useHead(() => ({
   },
   link: [
     ...(head.value.link || []),
-    {
-      rel: 'preconnect',
-      href: 'https://fonts.googleapis.com',
-    },
-    {
-      rel: 'preconnect',
-      href: 'https://fonts.gstatic.com',
-      crossorigin: '',
-    },
-    {
-      rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap',
-      media: 'print',
-      onload: "this.media='all'",
-    },
-  ],
-  script: [
-    {
-      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4898976797860512',
-      async: true,
-      defer: true,
-      fetchpriority: 'low',
-      crossorigin: 'anonymous',
-    },
-    ...(baiduAnalyticsId
-      ? [
-          {
-            innerHTML: `(function(){var s=document.createElement("script");s.async=true;s.defer=true;s.src="https://hm.baidu.com/hm.js?${baiduAnalyticsId}";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(s,n);})();`,
-            tagPosition: 'bodyClose' as const,
-          },
-        ]
-      : []),
   ],
   meta: [
     ...(head.value.meta || []),
@@ -68,6 +35,44 @@ useHead(() => ({
       : []),
   ],
 }))
+
+const interactionController = ref<AbortController | null>(null)
+
+function loadThirdPartyScripts() {
+  if (interactionController.value) {
+    interactionController.value.abort()
+    interactionController.value = null
+  }
+
+  const adsScript = document.createElement('script')
+  adsScript.async = true
+  adsScript.crossOrigin = 'anonymous'
+  adsScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4898976797860512'
+  document.head.appendChild(adsScript)
+
+  if (baiduAnalyticsId) {
+    const analyticsScript = document.createElement('script')
+    analyticsScript.async = true
+    analyticsScript.defer = true
+    analyticsScript.src = `https://hm.baidu.com/hm.js?${baiduAnalyticsId}`
+    document.head.appendChild(analyticsScript)
+  }
+}
+
+onMounted(() => {
+  const controller = new AbortController()
+  interactionController.value = controller
+  const options: AddEventListenerOptions = { signal: controller.signal, passive: true }
+
+  for (const event of ['pointerdown', 'keydown', 'touchstart', 'scroll', 'wheel'] as const) {
+    window.addEventListener(event, loadThirdPartyScripts, { ...options, once: true })
+  }
+})
+
+onBeforeUnmount(() => {
+  interactionController.value?.abort()
+  interactionController.value = null
+})
 </script>
 
 <template>

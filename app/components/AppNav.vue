@@ -7,7 +7,7 @@
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-2.5 group">
         <img
-          src="/logo.png"
+          src="/logo-2026-08.webp"
           alt="ososn"
           class="w-8 h-8 rounded-lg transition-transform duration-300 group-hover:scale-110"
         />

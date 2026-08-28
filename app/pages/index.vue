@@ -6,7 +6,23 @@
     <section class="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
       <!-- 背景图 + 主题蒙版 -->
       <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/hero_bg.webp');" />
+        <picture class="absolute inset-0 block">
+          <source
+            media="(max-width: 767px)"
+            srcset="/hero-bg-mobile-1x-2026-08.webp"
+            width="640"
+            height="1138"
+          >
+          <img
+            src="/hero-bg-2026-08.webp"
+            width="1600"
+            height="900"
+            alt=""
+            fetchpriority="high"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover object-center"
+          >
+        </picture>
         <div class="absolute inset-0" style="background: var(--hero-overlay);" />
       </div>
 
@@ -463,6 +479,22 @@ useSeoMeta({
 })
 
 useHead(() => ({
+  link: [
+    {
+      rel: 'preload',
+      as: 'image',
+      imagesrcset: '/hero-bg-mobile-1x-2026-08.webp',
+      media: '(max-width: 767px)',
+      fetchpriority: 'high',
+    },
+    {
+      rel: 'preload',
+      as: 'image',
+      href: '/hero-bg-2026-08.webp',
+      media: '(min-width: 768px)',
+      fetchpriority: 'high',
+    },
+  ],
   script: [
     {
       type: 'application/ld+json',

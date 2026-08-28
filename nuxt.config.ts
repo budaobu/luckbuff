@@ -175,6 +175,10 @@ export default defineNuxtConfig({
     pinia: piniaEsmPath,
   },
 
+  sourcemap: {
+    client: true,
+  },
+
   vite: {
     optimizeDeps: {
       include: ['nanoid', '@internationalized/date', 'html-to-image', 'marked', 'better-auth/vue', 'better-auth/client/plugins'],
@@ -197,14 +201,31 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
-      '/': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' }, sitemap: { priority: 1.0 } },
-      '/en': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
-      '/zh-TW': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
+      '/': {
+        headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
+        sitemap: { priority: 1.0 },
+      },
+      '/en': {
+        swr: 300,
+        headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
+      },
+      '/zh-TW': {
+        swr: 300,
+        headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
+      },
       '/settings': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/terms': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/privacy': { headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' } },
       '/admin': { robots: false, sitemap: false },
       '/admin/writelist': { robots: false, sitemap: false },
+      '/hero-bg-2026-08.webp': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+      '/hero-bg-mobile-1x-2026-08.webp': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+      '/logo-2026-08.webp': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+      '/favicon.ico': { headers: { 'Cache-Control': 'public, max-age=604800' } },
+      '/icon-180.png': { headers: { 'Cache-Control': 'public, max-age=604800' } },
+      '/icon-192.png': { headers: { 'Cache-Control': 'public, max-age=604800' } },
+      '/icon-512.png': { headers: { 'Cache-Control': 'public, max-age=604800' } },
+      '/og-image.png': { headers: { 'Cache-Control': 'public, max-age=604800' } },
     },
     compressPublicAssets: { gzip: true, brotli: true },
   },
