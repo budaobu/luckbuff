@@ -1,17 +1,18 @@
 <template>
   <nav
-    class="w-full sticky top-0 z-50 border-b backdrop-blur-xl transition-colors duration-300"
-    style="border-color: var(--border-subtle); background-color: color-mix(in srgb, var(--surface-bg) 70%, transparent);"
+    class="w-full sticky top-0 isolate z-50 border-b backdrop-blur-2xl transition-colors duration-300"
+    style="border-color: var(--border-subtle); background-color: color-mix(in srgb, var(--surface-bg) 78%, transparent); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;"
   >
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-6 h-16 md:h-[72px] flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-2.5 group">
         <img
           src="/logo-2026-08.webp"
           alt="ososn"
-          class="w-8 h-8 rounded-lg transition-transform duration-300 group-hover:scale-110"
+          class="w-9 h-9 rounded-xl transition-transform duration-200"
+          style="border: 1px solid var(--accent-border); box-shadow: 0 10px 24px -18px var(--accent-shadow-hover);"
         />
-        <span class="text-lg font-bold tracking-tight" style="color: var(--accent);">ososn</span>
+        <span class="text-[17px] font-semibold tracking-tight" translate="no" style="color: var(--accent);">ososn</span>
       </NuxtLink>
 
       <!-- Desktop Nav -->
@@ -49,15 +50,15 @@
             >
               <div
                 v-show="toolsOpen"
-                class="absolute left-0 mt-2 w-[720px] max-w-[90vw] rounded-xl shadow-2xl overflow-hidden z-50 border p-2 grid grid-cols-4 gap-2"
-                style="background-color: var(--surface-dropdown); border-color: var(--border-medium);"
+                class="absolute right-0 mt-2 w-[760px] max-w-[calc(100vw-3rem)] rounded-2xl overflow-hidden z-50 border p-3 grid grid-cols-2 lg:grid-cols-3 gap-2"
+                style="background-color: var(--surface-dropdown); border-color: var(--border-medium); box-shadow: var(--shadow-panel);"
               >
                 <NuxtLink
                   v-for="cat in categories"
                   :key="cat.id"
                   :to="localePath(cat.sectionPath)"
                   :no-prefetch="true"
-                  class="flex items-start gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors"
+                  class="group flex items-start gap-3 px-2.5 py-3 rounded-xl text-sm transition-colors"
                   :class="route.path === localePath(cat.sectionPath)
                     ? 'font-medium'
                     : 'hover:!bg-[var(--surface-card-hover)]'"
@@ -66,10 +67,17 @@
                     : { color: 'var(--text-faint)' }"
                   @click="toolsOpen = false"
                 >
-                  <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4 mt-0.5 shrink-0" />
+                  <span
+                    class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+                    :style="route.path === localePath(cat.sectionPath)
+                      ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
+                      : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
+                  >
+                    <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                  </span>
                   <div class="flex-1 min-w-0">
-                    <div class="font-medium">{{ t(cat.titleKey) }}</div>
-                    <div class="text-xs truncate" style="color: var(--text-placeholder);">{{ t(cat.subtitleKey) }}</div>
+                    <div class="font-medium leading-snug">{{ t(cat.titleKey) }}</div>
+                    <div class="mt-1 text-xs leading-snug line-clamp-2" style="color: var(--text-placeholder);">{{ t(cat.subtitleKey) }}</div>
                   </div>
                 </NuxtLink>
               </div>
@@ -81,7 +89,7 @@
             v-else
             :to="localePath(item.to)"
             :no-prefetch="true"
-            class="px-4 py-2 rounded-lg text-sm transition-all duration-200 inline-flex items-center gap-1.5"
+            class="px-3.5 py-2 rounded-full text-sm transition-all duration-200 inline-flex items-center gap-1.5"
             style="color: var(--text-faint);"
             :class="route.path === localePath(item.to)
               ? 'font-medium'
@@ -105,7 +113,7 @@
         <!-- Language Switcher -->
         <div ref="langSwitcherRef" class="relative ml-2">
           <button
-            class="flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs transition-all duration-200 border"
+            class="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs transition-all duration-200 border"
             style="color: var(--text-faint); border-color: var(--border-light);"
             :class="{ 'hover:!text-[var(--text-primary)] hover:!bg-[var(--surface-card-hover)]': true }"
             :aria-label="t('nav.language', { lang: currentLangLabel })"
@@ -173,14 +181,14 @@
     >
       <div
         v-if="mobileOpen"
-        class="md:hidden border-t px-6 py-4 space-y-1 backdrop-blur-xl"
+        class="md:hidden border-t px-4 pb-6 pt-4 space-y-1 backdrop-blur-2xl"
         style="border-color: var(--border-subtle); background-color: color-mix(in srgb, var(--surface-bg) 90%, transparent);"
       >
         <template v-for="item in navItems" :key="item.id">
           <!-- Dropdown: 推演工具 -->
           <div v-if="item.dropdown">
             <button
-              class="flex items-center justify-between w-full px-4 py-3 rounded-xl text-sm transition-all"
+              class="flex items-center justify-between w-full px-3 py-3 rounded-xl text-sm transition-all"
               :class="isToolsActive ? 'font-medium' : ''"
               :style="isToolsActive
                 ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
@@ -206,7 +214,7 @@
                   :key="cat.id"
                   :to="localePath(cat.sectionPath)"
                   :no-prefetch="true"
-                  class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-colors"
+                  class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors"
                   :class="route.path === localePath(cat.sectionPath)
                     ? 'font-medium'
                     : 'hover:!bg-[var(--surface-card-hover)]'"
@@ -215,8 +223,15 @@
                     : { color: 'var(--text-faint)' }"
                   @click="mobileOpen = false; mobileToolsOpen = false"
                 >
-                  <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
-                  {{ t(cat.titleKey) }}
+                  <span
+                    class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                    :style="route.path === localePath(cat.sectionPath)
+                      ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
+                      : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
+                  >
+                    <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                  </span>
+                  <span class="truncate">{{ t(cat.titleKey) }}</span>
                 </NuxtLink>
               </div>
             </Transition>
@@ -227,7 +242,7 @@
             v-else
             :to="localePath(item.to)"
             :no-prefetch="true"
-            class="flex items-center gap-2 px-4 py-3 rounded-xl text-sm transition-all"
+            class="flex items-center gap-2 px-3 py-3 rounded-xl text-sm transition-all"
             :class="route.path === localePath(item.to)
               ? 'font-medium'
               : 'hover:!text-[var(--text-primary)] hover:!bg-[var(--surface-card-hover)]'"
@@ -246,7 +261,7 @@
         </template>
 
         <!-- Theme Toggle (Mobile) -->
-        <div class="px-4 py-2">
+        <div class="px-3 py-2">
           <ThemeToggle />
         </div>
 
@@ -294,7 +309,7 @@
         </div>
 
         <div class="border-t pt-2 mt-2" style="border-color: var(--border-subtle);">
-          <p class="px-4 py-2 text-xs" style="color: var(--text-placeholder);">{{ $t('language.zhCN') === '简体中文' ? '语言' : 'Language' }}</p>
+          <p class="px-4 py-2 text-xs" style="color: var(--text-placeholder);">{{ $t('nav.languageLabel') }}</p>
           <button
             v-for="lang in languages"
             :key="lang.code"
