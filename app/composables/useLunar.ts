@@ -6,12 +6,12 @@ export function useLunar() {
    * @param year 阳历年份
    * @param month 阳历月份 (1-12)
    * @param day 阳历日期 (1-31)
-   * @returns 农历格式化字符串，如 "农历甲辰年正月初一"
+   * @returns 农历格式化字符串，如 "甲辰年正月初一"
    */
   function solarToLunar(year: number, month: number, day: number): string {
     try {
       const { lunar } = toLunar({ year, month, day })
-      return formatLunar(lunar)
+      return formatLunar(lunar, { prefix: false })
     } catch {
       return ''
     }

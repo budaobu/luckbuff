@@ -20,6 +20,7 @@ interface AppCalendarProps {
   fixedWeeks?: boolean
   minValue?: any
   maxValue?: any
+  preventDeselect?: boolean
   modelType?: 'date' | 'iso'
   ui?: Record<string, string>
   class?: string
@@ -33,6 +34,7 @@ const props = withDefaults(defineProps<AppCalendarProps>(), {
   pagedNavigation: true,
   fixedWeeks: true,
   weekStartsOn: 0,
+  preventDeselect: true,
   modelType: 'date'
 })
 
@@ -41,6 +43,19 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { solarToLunar } = useLunar()
+
+const selectedDate = computed(() => {
+  const value = props.modelValue
+  if (!value) return null
+  if (Array.isArray(value)) return value[0] ?? null
+  return value
+})
+
+const lunarDate = computed(() => {
+  if (!selectedDate.value) return ''
+  return solarToLunar(selectedDate.value.year, selectedDate.value.month, selectedDate.value.day)
+})
 
 const currentYear = computed(() => {
   return props.modelValue
@@ -173,6 +188,7 @@ const selectUi = {
       :fixed-weeks="fixedWeeks"
       :min-value="minValue"
       :max-value="maxValue"
+      :prevent-deselect="preventDeselect"
       :model-type="modelType"
       :ui="{
         root: '',
@@ -190,5 +206,13 @@ const selectUi = {
       @update:placeholder="handlePlaceholderUpdate($event)"
       @update:model-value="handleModelValueUpdate($event)"
     />
+    <div
+      v-if="lunarDate"
+      class="mt-1 flex items-center justify-between gap-2 border-t px-1 pt-2"
+      style="border-color: var(--border-light);"
+    >
+      <span class="text-xs" style="color: var(--text-faint);">{{ t('common.lunarDate') }}</span>
+      <span class="text-xs font-medium" style="color: var(--text-primary);">{{ lunarDate }}</span>
+    </div>
   </div>
 </template>

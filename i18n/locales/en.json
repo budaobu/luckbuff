@@ -7,6 +7,7 @@
     "profiles": "My Profiles",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
+    "languageLabel": "Language",
     "language": "Current language: {lang}",
     "insights": "Insights"
   },
@@ -48,6 +49,7 @@
     "month11": "November",
     "month12": "December",
     "week": "Week",
+    "lunarDate": "Lunar",
     "customTime": "Custom Time",
     "autoTime": "Auto Time"
   },
@@ -417,6 +419,7 @@
   },
   "footer": {
     "copyright": "ososn · For Cultural Entertainment Only",
+    "navigation": "Legal links",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy"
   },

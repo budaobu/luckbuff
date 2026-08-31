@@ -7,6 +7,7 @@
     "profiles": "我的档案",
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
+    "languageLabel": "语言",
     "language": "当前语言：{lang}",
     "insights": "命见"
   },
@@ -48,6 +49,7 @@
     "month11": "十一月",
     "month12": "十二月",
     "week": "星期",
+    "lunarDate": "农历",
     "customTime": "自定义时间",
     "autoTime": "自动时间"
   },
@@ -417,6 +419,7 @@
   },
   "footer": {
     "copyright": "ososn · 仅供文化娱乐参考",
+    "navigation": "法务链接",
     "terms": "使用条款",
     "privacy": "隐私说明"
   },
