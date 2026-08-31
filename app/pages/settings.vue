@@ -112,7 +112,10 @@ const { t } = useI18n()
 const store = useProfilesStore()
 const { profiles } = useProfiles()
 
-const profilesReady = ref(import.meta.client)
+const profilesReady = ref(false)
+onMounted(() => {
+  profilesReady.value = true
+})
 
 const guidePoints = computed(() => [
   {
