@@ -1133,6 +1133,14 @@
     "comprehensiveAdvice": "Comprehensive Advice",
     "comprehensiveAdviceDesc": "Practical guidance based on chart characteristics",
     "aiDisclaimer": "AI interpretations may vary slightly; chart data (heavenly stems, earthly branches, ten gods, decade cycles) are deterministically calculated.",
+    "poster": {
+      "seal": "Bazi\nPress",
+      "brand": "Four Pillars Review",
+      "issue": "Chart Edition",
+      "strength": "Strength",
+      "xiyong": "Favorable",
+      "jishen": "Unfavorable"
+    },
     "aiResponseFormatError": "AI returned an unexpected format, please try again",
     "aiRequestFailed": "AI request failed",
     "aiInterpret": "AI Interpretation",

@@ -6,7 +6,7 @@
       <div class="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
     </div>
 
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12">
+    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'bazi-result-wrap': phase === 'result' }">
       <!-- 阶段 1：表单 -->
       <div v-if="phase === 'form'">
         <!-- Section 标题 -->
@@ -74,58 +74,20 @@
 
       <!-- 阶段 3：结果 -->
       <div v-if="phase === 'result' && chart">
-        <!-- 隐藏截图目标：运势五维分析卡片（首选） -->
-        <div ref="shareTargetRef" v-show="false" class="p-6">
-          <FortuneRadar
-            :scores="aiResult?.dimensionScores ?? { 感情运: 70, 事业运: 70, 财运: 70, 健康运: 70, 学业运: 70 }"
+        <!-- 唯一结果载体：纸刊海报 -->
+        <div ref="shareTargetRef" class="bazi-poster-target">
+          <BaziPoster
+            :chart="chart"
+            :ai-content="aiContent"
+            :streaming="aiStreaming"
+            :error="aiError"
+            :birth-date="formValues.birthDate"
+            :birth-hour="formValues.birthHour"
+            :gender="formValues.gender"
+            :name="formValues.name"
+            @retry="startAiStream"
           />
         </div>
-
-        <!-- 隐藏截图目标：五行力量分布（备选，AI 不可用时使用） -->
-        <div ref="shareTargetBackupRef" v-show="false" class="p-6">
-          <WuxingAnalysis
-            :wuxing-score="chart.wuxingScore"
-            :analysis-text="analysisRef?.getSummary?.() ?? ''"
-          />
-        </div>
-        <!-- Section 标题 -->
-        <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Result</span>
-          <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ formValues.name ? $t('bazi.chartTitle', { name: formValues.name }) : $t('bazi.chartTitleNoName') }}
-          </h1>
-          <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('bazi.chartSubtitle', { riZhu: chart.riZhu, strength: chart.riZhuStrength, geju: chart.geju }) }}
-          </p>
-          <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-        </div>
-
-        <UTabs
-          :items="tabItems"
-          :ui="{
-            list: 'bg-[var(--surface-dropdown)] rounded-xl p-1 border border-[var(--border-medium)] gap-1',
-            trigger: 'text-[var(--text-muted)] data-[active]:text-[var(--text-primary)] data-[active]:bg-[var(--accent-bg-hover)] data-[active]:font-medium px-4 py-2 text-sm rounded-lg transition-all hover:text-[var(--text-body)]',
-            indicator: 'bg-transparent',
-            content: 'pt-5',
-          }"
-        >
-          <template #ai>
-            <BaziAiInterpret
-              :chart="chart"
-              :ai-stream="aiStreamState"
-              :ai-result="aiResult"
-              @retry="startAiStream"
-            />
-          </template>
-
-          <template #pan>
-            <BaziPan :chart="chart" />
-          </template>
-
-          <template #analysis>
-            <BaziAnalysis ref="analysisRef" :chart="chart" />
-          </template>
-        </UTabs>
 
         <!-- 底部操作 -->
         <div class="flex gap-3 justify-center mt-10 flex-wrap">
@@ -251,7 +213,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BaziChart, BaziAiResult } from '~/types/bazi'
+import type { BaziChart } from '~/types/bazi'
 import type { DiZhi } from '~/types/user'
 const { t } = useI18n()
 const { locale } = useI18n()
@@ -278,35 +240,20 @@ const formValues = ref<FormValues>({
 })
 const lastFormValues = ref<Partial<FormValues>>({})
 const chart = ref<BaziChart | null>(null)
-const aiResult = ref<BaziAiResult | null>(null)
-
-const analysisRef = ref<{ getSummary: () => string } | null>(null)
-
-const tabItems = [
-  { label: t('bazi.aiInterpret'), slot: 'ai' },
-  { label: t('bazi.panCalculation'), slot: 'pan' },
-  { label: t('bazi.comprehensiveAnalysis'), slot: 'analysis' },
-]
 
 const store = useProfilesStore()
 const { calc } = useBaziCalc()
 const toast = useToast()
 
-const aiLoading = ref(false)
+const aiContent = ref('')
+const aiStreaming = ref(false)
 const aiError = ref<string | null>(null)
-
-const aiStreamState = computed(() => ({
-  content: '',
-  streaming: aiLoading.value,
-  started: !aiLoading.value && !!aiResult.value,
-  error: aiError.value,
-}))
+let aiAbortController: AbortController | null = null
 
 // 分享弹窗
 const shareDialogOpen = ref(false)
 const shareData = ref<{ copyText: string; screenshotDataUrl: string | null; filename: string; screenshotError: string | null } | null>(null)
 const shareTargetRef = ref<HTMLElement>()
-const shareTargetBackupRef = ref<HTMLElement>()
 
 function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
@@ -339,13 +286,16 @@ function handleSaveProfile(id: string, values: FormValues) {
 async function startAiStream() {
   if (!chart.value) return
 
-  aiLoading.value = true
+  aiAbortController?.abort()
+  aiAbortController = new AbortController()
+  const { signal } = aiAbortController
+
+  aiStreaming.value = true
   aiError.value = null
-  aiResult.value = null
+  aiContent.value = ''
 
   await nextTick()
 
-  const summary = analysisRef.value?.getSummary() ?? ''
   const profile = {
     id: 'temp',
     label: '临时',
@@ -356,39 +306,75 @@ async function startAiStream() {
   }
 
   try {
-    const result = await $fetch<BaziAiResult>('/api/bazi/interpret', {
+    const response = await fetch('/api/bazi/interpret', {
       method: 'POST',
-      body: {
+      headers: { 'Content-Type': 'application/json' },
+      signal,
+      body: JSON.stringify({
         chart: chart.value,
         profile,
-        summary,
         locale: locale.value,
-      },
+      }),
     })
 
-    aiResult.value = {
-      overview: result.overview ?? '',
-      personality: result.personality ?? { summary: '', detail: '', tags: [] },
-      career: result.career ?? { summary: '', detail: '', tags: [], wealthTrend: '' },
-      relationship: result.relationship ?? { summary: '', detail: '', tags: [], timing: '' },
-      health: result.health ?? { summary: '', detail: '', tags: [], seasons: '' },
-      dimensionScores: result.dimensionScores ?? {},
-      dayunScores: result.dayunScores ?? [],
-      historicalPredictions: result.historicalPredictions ?? [],
-      comprehensiveAdvice: result.comprehensiveAdvice ?? [],
+    if (!response.ok) {
+      const responseText = await response.text()
+      let message = `HTTP ${response.status}`
+      try {
+        const data = JSON.parse(responseText)
+        message = data.message || data.statusMessage || message
+      } catch {
+        if (responseText) message = responseText
+      }
+      throw new Error(message)
+    }
+
+    const reader = response.body?.getReader()
+    if (!reader) throw new Error(t('bazi.aiRequestFailed'))
+
+    const decoder = new TextDecoder()
+    let streamBuffer = ''
+    let received = false
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      streamBuffer += decoder.decode(value, { stream: true })
+      const lines = streamBuffer.split('\n')
+      streamBuffer = lines.pop() ?? ''
+
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue
+        const payload = line.slice(5).trim()
+        if (!payload || payload === '[DONE]') continue
+        const event = JSON.parse(payload) as { type?: string; text?: string; message?: string }
+        if (event.type === 'error') throw new Error(event.message || t('bazi.aiRequestFailed'))
+        if (event.type === 'text' && event.text) {
+          received = true
+          aiContent.value += event.text
+        }
+      }
+    }
+
+    if (!received || !aiContent.value.trim()) {
+      throw new Error(t('bazi.aiRequestFailed'))
     }
   } catch (e: any) {
+    if (signal.aborted) return
     aiError.value = e?.data?.statusMessage || e?.message || t('bazi.aiRequestFailed')
   } finally {
-    aiLoading.value = false
+    aiAbortController = null
+    aiStreaming.value = false
   }
 }
 
 function resetToForm() {
+  aiAbortController?.abort()
   phase.value = 'form'
   chart.value = null
-  aiResult.value = null
-  aiLoading.value = false
+  aiContent.value = ''
+  aiStreaming.value = false
   aiError.value = null
 }
 
@@ -396,9 +382,7 @@ async function handleShare() {
   if (!chart.value) return
   const { share } = useShare()
 
-  // AI 解读有结果且有 dimensionScores 时用首选目标，否则用备选（五行力量分布）
-  const hasAiScores = !!aiResult.value?.dimensionScores
-  const target = hasAiScores ? shareTargetRef.value : shareTargetBackupRef.value
+  const target = shareTargetRef.value
 
   try {
     const result = await share({
@@ -481,3 +465,15 @@ useHead(() => ({
   ],
 }))
 </script>
+
+<style scoped>
+.bazi-result-wrap {
+  max-width: 80rem;
+}
+
+.bazi-poster-target {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+</style>
