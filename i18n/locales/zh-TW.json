@@ -9552,6 +9552,8 @@
   },
   "insights": {
     "title": "命見",
+    "articlesLabel": "文章",
+    "categoriesLabel": "分類",
     "subtitle": "命理科普與深度解讀專欄——以現代視角讀懂傳統命理",
     "badge": "命見專欄",
     "allCategories": "全部",

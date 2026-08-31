@@ -1,5 +1,5 @@
 <template>
-  <div class="group relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5">
+  <div class="profile-card group relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
     <!-- 默认档案标识 -->
     <div
       v-if="profile.isDefault"
@@ -66,7 +66,8 @@
             color="neutral"
             variant="ghost"
             size="xs"
-            class="text-[var(--text-placeholder)] hover:text-[var(--text-primary)]"
+            class="profile-action"
+            :aria-label="$t('common.edit')"
             @click="$emit('edit', profile)"
           />
           <UButton
@@ -74,15 +75,14 @@
             color="neutral"
             variant="ghost"
             size="xs"
-            class="text-[var(--text-placeholder)] hover:text-red-400"
+            class="profile-action profile-action-danger"
+            :aria-label="$t('common.delete')"
             @click="$emit('delete', profile.id)"
           />
         </div>
       </div>
     </div>
 
-    <!-- 底部金色渐变线 -->
-    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
   </div>
 </template>
 
@@ -101,3 +101,66 @@ defineEmits<{
   setDefault: [id: string]
 }>()
 </script>
+
+<style scoped>
+.profile-card {
+  isolation: isolate;
+  box-shadow: var(--shadow-panel);
+  transition:
+    transform 200ms var(--ease-out-expo),
+    border-color 200ms var(--ease-out-expo),
+    background-color 200ms var(--ease-out-expo),
+    box-shadow 200ms var(--ease-out-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile-card:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-card-hover);
+    box-shadow: var(--shadow-panel-hover);
+    transform: translateY(-3px);
+  }
+}
+
+.profile-card:active {
+  transform: scale(0.995);
+}
+
+.profile-card:focus-within {
+  border-color: var(--accent-border);
+}
+
+.profile-action {
+  color: var(--text-placeholder);
+  transition: color 160ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile-action:hover {
+    color: var(--text-primary);
+    transform: scale(1.04);
+  }
+
+  .profile-action-danger:hover {
+    color: #f87171;
+  }
+}
+
+.profile-action:active {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-card,
+  .profile-action {
+    transition: none;
+  }
+
+  .profile-card:hover,
+  .profile-card:active,
+  .profile-action:hover,
+  .profile-action:active {
+    transform: none;
+  }
+}
+</style>

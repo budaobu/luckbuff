@@ -1,107 +1,123 @@
 <template>
   <div class="relative overflow-hidden">
-    <!-- 氛围背景光晕 -->
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-[var(--accent)]/[0.05] blur-[120px]" />
-      <div class="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
-    </div>
+    <div class="insights-ambient" aria-hidden="true" />
 
-    <div class="relative z-10 max-w-3xl mx-auto px-6 py-16">
-      <!-- Section 标题 -->
-      <div class="text-center mb-14">
-        <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-3 block">Insights</span>
-        <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-          {{ $t('insights.title') }}
-        </h1>
-        <p class="text-sm text-[var(--text-faint)] mt-3 max-w-md mx-auto">
-          {{ $t('insights.subtitle') }}
-        </p>
-        <div class="w-12 h-px bg-[var(--accent-border-hover)] mx-auto mt-5" />
-      </div>
+    <main class="relative z-10 mx-auto w-full max-w-7xl px-6 py-14 md:py-20">
+      <header v-reveal class="insights-hero">
+        <div class="insights-hero-copy">
+          <p class="insights-eyebrow">Insights</p>
+          <h1 class="insights-title font-serif">
+            {{ $t('insights.title') }}
+          </h1>
+          <p class="insights-subtitle">
+            {{ $t('insights.subtitle') }}
+          </p>
+        </div>
+
+        <dl v-if="data" class="insights-metrics">
+          <div>
+            <dd>{{ data.total }}</dd>
+            <dt>{{ $t('insights.articlesLabel') }}</dt>
+          </div>
+          <i aria-hidden="true" />
+          <div>
+            <dd>{{ Math.max(0, categories.length - 1) }}</dd>
+            <dt>{{ $t('insights.categoriesLabel') }}</dt>
+          </div>
+        </dl>
+      </header>
 
       <!-- 分类筛选 -->
-      <div v-if="categories.length > 1" class="flex flex-wrap items-center justify-center gap-2 mb-10">
+      <nav
+        v-if="categories.length > 1"
+        class="insights-filter"
+        :aria-label="$t('insights.allCategories')"
+      >
         <button
           v-for="cat in categories"
           :key="cat"
-          class="text-xs px-3.5 py-1.5 rounded-full border transition-all duration-300"
-          :class="activeCategory === cat
-            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)] font-medium'
-            : 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-faint)] hover:border-[var(--accent-border)] hover:text-[var(--text-muted)]'"
+          type="button"
+          class="filter-chip"
+          :class="{ active: activeCategory === cat }"
+          :aria-pressed="activeCategory === cat"
           @click="activeCategory = cat"
         >
           {{ cat === 'all' ? $t('insights.allCategories') : categoryLabel(cat) }}
         </button>
-      </div>
+      </nav>
 
       <!-- 加载中 -->
-      <div v-if="pending" class="space-y-3">
-        <USkeleton v-for="i in 4" :key="i" class="h-24 rounded-xl" />
+      <div v-if="pending" class="insight-list" aria-busy="true">
+        <div v-for="i in 4" :key="i" class="insight-skeleton">
+          <span class="skeleton-line h-3 w-32 animate-pulse rounded-full" />
+          <span class="skeleton-line mt-5 h-6 w-3/4 animate-pulse rounded-full" />
+          <span class="skeleton-line mt-4 h-4 w-full animate-pulse rounded-full" />
+          <span class="skeleton-line mt-2 h-4 w-2/3 animate-pulse rounded-full" />
+        </div>
       </div>
 
       <!-- 空状态 -->
-      <div v-else-if="!filteredArticles.length" class="text-center py-16">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--accent-bg)] border border-[var(--accent-border)] mb-5">
-          <UIcon name="i-heroicons-book-open" class="w-8 h-8 text-[var(--accent-muted)]" />
-        </div>
-        <h2 class="text-lg font-semibold text-[var(--text-primary)] mb-2">{{ $t('insights.emptyTitle') }}</h2>
-        <p class="text-sm text-[var(--text-muted)] max-w-sm mx-auto leading-relaxed">{{ $t('insights.emptyDesc') }}</p>
-      </div>
+      <section v-else-if="!filteredArticles.length" class="insights-empty">
+        <span class="insights-empty-icon">
+          <UIcon name="i-heroicons-book-open" class="h-7 w-7" />
+        </span>
+        <h2>{{ $t('insights.emptyTitle') }}</h2>
+        <p>{{ $t('insights.emptyDesc') }}</p>
+      </section>
 
       <!-- 文章列表 -->
-      <div v-else class="space-y-3">
-        <NuxtLink
-          v-for="article in pagedArticles"
-          :key="article.slug"
-          :to="localePath(`/insights/${article.slug}`)"
-          class="group block rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5 transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-0.5"
-        >
-          <div class="flex items-center gap-2 mb-2 flex-wrap">
-            <span
-              v-if="article.category"
-              class="text-[10px] px-2 py-0.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-faint)] text-[var(--accent)]"
-            >
-              {{ categoryLabel(article.category) }}
-            </span>
-            <span v-if="article.publishedAt" class="text-[11px] text-[var(--text-faint)] flex items-center gap-1">
-              <UIcon name="i-heroicons-calendar-days" class="w-3.5 h-3.5" />
-              {{ formatDate(article.publishedAt) }}
-            </span>
-            <span v-if="article.readingTime" class="text-[11px] text-[var(--text-faint)] flex items-center gap-1">
-              <UIcon name="i-heroicons-clock" class="w-3.5 h-3.5" />
-              {{ $t('insights.readingTime', { n: article.readingTime }) }}
-            </span>
-          </div>
-          <h2 class="text-base font-semibold text-[var(--text-primary)] mb-1.5 group-hover:text-[var(--accent)] transition-colors duration-300">
-            {{ article.title }}
-          </h2>
-          <p v-if="article.description" class="text-sm text-[var(--text-faint)] leading-relaxed line-clamp-2">
-            {{ article.description }}
-          </p>
-          <div class="flex items-center justify-end mt-3">
-            <span class="text-xs text-[var(--accent-muted)] inline-flex items-center gap-1 transition-transform duration-300 group-hover:translate-x-0.5">
-              {{ $t('insights.readMore') }}
-              <UIcon name="i-heroicons-arrow-right" class="w-3.5 h-3.5" />
-            </span>
-          </div>
-        </NuxtLink>
+      <template v-else>
+        <div v-reveal.stagger class="insight-list">
+          <NuxtLink
+            v-for="(article, index) in pagedArticles"
+            :key="article.slug"
+            :to="localePath(`/insights/${article.slug}`)"
+            data-reveal-child
+            class="insight-row group"
+          >
+            <div class="insight-main">
+              <div class="insight-meta">
+                <span v-if="article.category" class="insight-category">
+                  {{ categoryLabel(article.category) }}
+                </span>
+                <span v-if="article.publishedAt" class="insight-date">
+                  <UIcon name="i-heroicons-calendar-days" class="h-3.5 w-3.5" />
+                  {{ formatDate(article.publishedAt) }}
+                </span>
+                <span v-if="article.readingTime" class="insight-date">
+                  <UIcon name="i-heroicons-clock" class="h-3.5 w-3.5" />
+                  {{ $t('insights.readingTime', { n: article.readingTime }) }}
+                </span>
+              </div>
+              <h2>{{ article.title }}</h2>
+              <p v-if="article.description">{{ article.description }}</p>
+            </div>
+
+            <div class="insight-aside">
+              <span class="insight-index font-mono">
+                {{ String((currentPage - 1) * PAGE_SIZE + index + 1).padStart(2, '0') }}
+              </span>
+              <span class="insight-cta">
+                {{ $t('insights.readMore') }}
+                <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </span>
+            </div>
+          </NuxtLink>
+        </div>
 
         <!-- 分页（前一页 / 后一页） -->
-        <div v-if="totalPages > 1" class="flex items-center justify-between pt-6">
+        <nav v-if="totalPages > 1" class="insights-pagination" aria-label="Pagination">
           <button
             type="button"
             :disabled="currentPage <= 1"
             :aria-label="$t('insights.prevPage')"
-            class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300"
-            :class="currentPage > 1
-              ? 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--accent-border-hover)] hover:text-[var(--accent)] hover:bg-[var(--surface-card-hover)]'
-              : 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-faint)] opacity-40 cursor-not-allowed'"
+            class="pagination-button"
             @click="currentPage--"
           >
-            <UIcon name="i-heroicons-chevron-left" class="w-5 h-5" />
+            <UIcon name="i-heroicons-chevron-left" class="h-5 w-5" />
           </button>
 
-          <span class="text-xs text-[var(--text-faint)] tracking-wider tabular-nums">
+          <span class="pagination-status font-mono">
             {{ currentPage }} / {{ totalPages }}
           </span>
 
@@ -109,17 +125,14 @@
             type="button"
             :disabled="currentPage >= totalPages"
             :aria-label="$t('insights.nextPage')"
-            class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300"
-            :class="currentPage < totalPages
-              ? 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-[var(--accent-border-hover)] hover:text-[var(--accent)] hover:bg-[var(--surface-card-hover)]'
-              : 'border-[var(--border-subtle)] bg-[var(--surface-card)] text-[var(--text-faint)] opacity-40 cursor-not-allowed'"
+            class="pagination-button"
             @click="currentPage++"
           >
-            <UIcon name="i-heroicons-chevron-right" class="w-5 h-5" />
+            <UIcon name="i-heroicons-chevron-right" class="h-5 w-5" />
           </button>
-        </div>
-      </div>
-    </div>
+        </nav>
+      </template>
+    </main>
   </div>
 </template>
 
@@ -230,3 +243,365 @@ useHead(() => ({
   ],
 }))
 </script>
+
+<style scoped>
+.insights-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(56rem 30rem at 10% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 64%),
+    linear-gradient(90deg, color-mix(in srgb, var(--border-light) 38%, transparent) 1px, transparent 1px);
+  background-size: auto, 78px 100%;
+  mask-image: linear-gradient(180deg, black, transparent 78%);
+}
+
+.insights-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px;
+  max-width: 900px;
+  margin-bottom: 34px;
+}
+
+.insights-eyebrow {
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.insights-title {
+  margin-bottom: 14px;
+  color: var(--text-primary);
+  font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.insights-subtitle {
+  max-width: 42em;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.insights-metrics {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+}
+
+.insights-metrics div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+
+.insights-metrics dd {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.insights-metrics dt {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.insights-metrics i {
+  width: 1px;
+  height: 34px;
+  background: var(--border-strong);
+}
+
+.insights-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 22px 0;
+  margin-bottom: 18px;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.filter-chip {
+  padding: 8px 13px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1;
+  transition: background-color 160ms var(--ease-out-expo), border-color 160ms var(--ease-out-expo), color 160ms var(--ease-out-expo);
+}
+
+.filter-chip.active {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .filter-chip:hover {
+    border-color: var(--accent-border);
+    color: var(--text-primary);
+  }
+}
+
+.filter-chip:focus-visible,
+.pagination-button:focus-visible,
+.insight-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.insight-list {
+  display: grid;
+  gap: 12px;
+}
+
+.insight-row,
+.insight-skeleton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px;
+  gap: 26px;
+  align-items: center;
+  min-height: 154px;
+  padding: 24px 28px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-panel);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 154px;
+}
+
+.skeleton-line {
+  display: block;
+  background: var(--surface-card-hover);
+}
+
+.insight-row {
+  transition: transform 200ms var(--ease-out-expo), border-color 200ms var(--ease-out-expo), background-color 200ms var(--ease-out-expo), box-shadow 200ms var(--ease-out-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .insight-row:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-card-hover);
+    box-shadow: var(--shadow-panel-hover);
+    transform: translateY(-3px);
+  }
+}
+
+.insight-row:active {
+  transform: scale(0.995);
+}
+
+.insight-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.insight-category {
+  padding: 5px 9px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.insight-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.insight-main h2 {
+  margin-bottom: 9px;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-wrap: balance;
+  transition: color 160ms var(--ease-out-expo);
+}
+
+.insight-row:hover h2 {
+  color: var(--accent);
+}
+
+.insight-main p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.insight-aside {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.insight-index {
+  color: var(--accent-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.insight-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.insights-empty {
+  max-width: 560px;
+  padding: 44px;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-panel);
+}
+
+.insights-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  border: 1px solid var(--accent-border);
+  border-radius: 16px;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.insights-empty h2 {
+  margin-bottom: 9px;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.insights-empty p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.insights-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+}
+
+.pagination-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--surface-card);
+  color: var(--text-muted);
+  transition: border-color 160ms var(--ease-out-expo), background-color 160ms var(--ease-out-expo), color 160ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-button:not(:disabled):hover {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.pagination-button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.pagination-status {
+  color: var(--text-faint);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767px) {
+  .insights-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 26px;
+    margin-bottom: 28px;
+  }
+
+  .insights-metrics {
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .insight-row,
+  .insight-skeleton {
+    grid-template-columns: 1fr;
+    align-items: start;
+    min-height: 0;
+    padding: 22px;
+  }
+
+  .insight-aside {
+    width: 100%;
+    justify-content: space-between;
+    padding: 16px 0 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .insights-empty {
+    padding: 30px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insight-row,
+  .filter-chip,
+  .pagination-button {
+    transition: none;
+  }
+
+  .insight-row:hover,
+  .insight-row:active {
+    transform: none;
+  }
+}
+</style>
