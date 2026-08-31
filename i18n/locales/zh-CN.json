@@ -9553,6 +9553,8 @@
   },
   "insights": {
     "title": "命见",
+    "articlesLabel": "文章",
+    "categoriesLabel": "分类",
     "subtitle": "命理科普与深度解读专栏——以现代视角读懂传统命理",
     "badge": "命见专栏",
     "allCategories": "全部",

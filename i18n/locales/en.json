@@ -9531,6 +9531,8 @@
   },
   "insights": {
     "title": "Insights",
+    "articlesLabel": "Articles",
+    "categoriesLabel": "Categories",
     "subtitle": "A column on Chinese metaphysics — classical wisdom explained from a modern perspective",
     "badge": "Insights Column",
     "allCategories": "All",
