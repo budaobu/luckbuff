@@ -1,6 +1,6 @@
 import type { Directive } from 'vue'
 
-const STAGGER_STEP_MS = 80
+const STAGGER_STEP_MS = 44
 
 let observer: IntersectionObserver | null = null
 
@@ -14,7 +14,7 @@ function markRevealed(el: HTMLElement) {
 function revealChildren(el: HTMLElement) {
   const children = el.querySelectorAll<HTMLElement>('[data-reveal-child]')
   children.forEach((child, i) => {
-    child.style.transitionDelay = `${20 + i * STAGGER_STEP_MS}ms`
+    child.style.transitionDelay = `${12 + i * STAGGER_STEP_MS}ms`
     child.classList.add('revealed')
   })
   // hover must respond instantly, not wait out the queue delay
@@ -89,7 +89,7 @@ let fallback: ReturnType<typeof startScrollFallback> | null = null
  *   <div v-reveal>                    fade+rise on scroll into view
  *   <div v-reveal="{ delay: 2 }">     with .1s * delay transition-delay
  *   <div v-reveal.stagger>            children marked data-reveal-child
- *                                     reveal as a queue (80ms apart)
+ *                                     reveal as a queue (44ms apart)
  *
  * Degrades gracefully: without JS the elements stay visible (classes are
  * only applied by this directive, never present in SSR HTML), and

@@ -2,10 +2,9 @@
   <div>
     <OrganizationSchema />
     <FaqSchema />
-    <!-- ========== HERO ========== -->
-    <section class="relative min-h-[92vh] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
-      <!-- 背景图 + 主题蒙版 -->
-      <div class="absolute inset-0 pointer-events-none">
+    <!-- HERO -->
+    <section class="home-hero">
+      <div class="home-hero-background">
         <picture class="absolute inset-0 block">
           <source
             media="(max-width: 767px)"
@@ -20,86 +19,73 @@
             alt=""
             fetchpriority="high"
             decoding="async"
-            class="absolute inset-0 h-full w-full object-cover object-center"
+            class="hero-image absolute inset-0 h-full w-full object-cover"
           >
         </picture>
-        <div class="absolute inset-0" style="background: var(--hero-overlay);" />
-      </div>
-
-      <!-- 氛围背景光晕 -->
-      <div class="absolute inset-0 pointer-events-none">
-        <div
-          class="absolute top-[15%] left-[20%] w-[500px] h-[500px] rounded-full blur-[120px]"
-          style="background-color: var(--accent-faint);"
-        />
-        <div
-          class="absolute bottom-[20%] right-[15%] w-[400px] h-[400px] rounded-full blur-[100px]"
-          style="background-color: var(--accent-purple-faint);"
-        />
-        <div
-          class="absolute top-[40%] right-[30%] w-[300px] h-[300px] rounded-full blur-[80px]"
-          style="background-color: var(--accent-faint);"
-        />
+        <div class="home-hero-overlay" />
       </div>
 
       <!-- 玄学氛围动效 -->
       <MysticField />
 
-      <!-- 内容 -->
-      <div class="relative z-10 max-w-3xl mx-auto">
+      <div class="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-6 py-20 lg:grid-cols-[minmax(0, 1fr)_370px] lg:items-center lg:gap-12 lg:pb-24 lg:pt-28">
+        <div class="hero-copy">
         <div
           data-hero-reveal="1"
-          class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs tracking-widest uppercase"
-          style="border-color: var(--accent-border); background-color: var(--accent-bg); color: var(--accent);"
+          class="hero-badge"
         >
-          <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: var(--accent);" />
+          <span class="hero-badge-dot" aria-hidden="true" />
           {{ $t('home.badge') }}
         </div>
 
-        <h1 data-hero-reveal="2" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] tracking-tight mb-6 font-serif" style="color: var(--text-primary);">
-          {{ $t('home.title1') }}<br>
-          <span style="color: var(--accent);">{{ $t('home.title2') }}</span>
+        <h1 data-hero-reveal="2" class="hero-title font-serif">
+          <span>{{ $t('home.title1') }}</span>
+          <span class="hero-title-accent">{{ $t('home.title2') }}</span>
         </h1>
 
-        <p data-hero-reveal="3" class="text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed" style="color: var(--text-faint);">
+        <p data-hero-reveal="3" class="hero-subtitle">
           {{ $t('home.subtitle') }}
         </p>
 
-        <div data-hero-reveal="4" class="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <UButton
-            size="lg"
-            color="warning"
-            variant="solid"
+        <div data-hero-reveal="4" class="hero-actions">
+          <NuxtLink
             :to="localePath('/tools')"
-            class="px-8 py-3 text-base font-medium transition-all duration-300 hover:-translate-y-0.5"
-            style="box-shadow: 0 4px 20px var(--accent-shadow);"
-            :ui="{ base: 'hover:shadow-lg' }"
+            class="hero-cta hero-cta-primary"
           >
-            <template #leading>
-              <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
-            </template>
+            <UIcon name="i-heroicons-sparkles" class="h-5 w-5" />
             {{ $t('common.start') }}
-          </UButton>
-          <UButton
-            size="lg"
-            color="neutral"
-            variant="ghost"
+          </NuxtLink>
+          <NuxtLink
             :to="localePath('/settings')"
-            class="transition-all duration-200 border"
-            style="color: var(--text-body); border-color: var(--border-strong);"
-            :ui="{ base: 'hover:!bg-[var(--surface-card-hover)] hover:!border-[var(--border-medium)]' }"
+            class="hero-cta hero-cta-secondary"
           >
             {{ $t('common.saveProfile') }}
-          </UButton>
+          </NuxtLink>
         </div>
+        </div>
+      <aside data-hero-reveal="5" class="hero-panel" aria-labelledby="hero-panel-title">
+        <h2 id="hero-panel-title" class="hero-panel-title">
+          {{ $t('home.toolsTitle') }}
+        </h2>
+        <div class="hero-panel-list">
+          <NuxtLink
+            v-for="entry in heroEntries"
+            :key="entry.path"
+            :to="localePath(entry.path)"
+            class="hero-entry"
+          >
+            <span class="hero-entry-icon">
+              <UIcon :name="entry.icon" class="h-4.5 w-4.5" />
+            </span>
+            <span class="min-w-0">
+              <span class="hero-entry-title">{{ $t(entry.titleKey) }}</span>
+              <span class="hero-entry-desc">{{ $t(entry.descKey) }}</span>
+            </span>
+            <UIcon name="i-heroicons-arrow-right" class="hero-entry-arrow h-4 w-4" />
+          </NuxtLink>
+        </div>
+      </aside>
       </div>
-
-      <!-- 四角十字标记 -->
-      <span class="cross-mark absolute top-[18%] left-[10%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
-      <span class="cross-mark cross-alt absolute top-[22%] right-[12%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
-      <span class="cross-mark cross-alt absolute bottom-[20%] left-[14%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
-      <span class="cross-mark absolute bottom-[16%] right-[10%] text-lg select-none pointer-events-none hidden md:block" style="color: var(--accent-muted);" aria-hidden="true">+</span>
-
     </section>
 
     <!-- ========== 跑马灯分隔带 ========== -->
@@ -109,11 +95,11 @@
           <span
             v-for="(item, i) in tickerItems"
             :key="i"
-            class="flex items-center text-xs tracking-[0.25em] uppercase font-medium"
+            class="flex items-center text-[11px] font-medium uppercase tracking-[0.18em]"
             style="color: var(--text-faint);"
           >
             <span class="px-5">{{ item }}</span>
-            <span style="color: var(--accent-muted);">◆</span>
+            <span class="ticker-dot" />
           </span>
         </span>
       </div>
@@ -156,177 +142,190 @@
       </div>
     </section>
 
-    <!-- ========== 为什么选择 ========== -->
-    <section class="max-w-6xl mx-auto px-6 py-20">
-      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
-        <span class="sec-index font-mono">01</span>
-        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">Why ososn</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
+    <!-- WHY -->
+    <section class="mx-auto w-full max-w-7xl px-6 py-20">
+      <div v-reveal class="home-section-head">
+        <h2 class="section-title font-serif">
           {{ $t('home.whyTitle') }}
         </h2>
       </div>
 
-      <div v-reveal.stagger class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <GlowCard data-reveal-child :title="$t('home.feature1Title')" icon="i-heroicons-cpu-chip">
-          {{ $t('home.feature1Desc') }}
-        </GlowCard>
-        <GlowCard data-reveal-child :title="$t('home.feature2Title')" icon="i-heroicons-language">
-          {{ $t('home.feature2Desc') }}
-        </GlowCard>
-        <GlowCard data-reveal-child :title="$t('home.feature3Title')" icon="i-heroicons-bolt">
-          {{ $t('home.feature3Desc') }}
-        </GlowCard>
-        <GlowCard data-reveal-child :title="$t('home.feature4Title')" icon="i-heroicons-users">
-          {{ $t('home.feature4Desc') }}
-        </GlowCard>
+      <div v-reveal.stagger class="feature-grid">
+        <article
+          v-for="feature in featureItems"
+          :key="feature.titleKey"
+          data-reveal-child
+          class="feature-item"
+        >
+          <div class="feature-icon">
+            <UIcon :name="feature.icon" class="h-5 w-5" />
+          </div>
+          <h3 class="feature-title">
+            {{ $t(feature.titleKey) }}
+          </h3>
+          <p class="feature-desc">
+            {{ $t(feature.descKey) }}
+          </p>
+        </article>
       </div>
     </section>
 
-    <!-- 分隔装饰 -->
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="h-px bg-gradient-to-r from-transparent to-transparent" style="--tw-gradient-stops: transparent, var(--gradient-divider), transparent;" />
-    </div>
-
-    <!-- ========== 推演工具 ========== -->
-    <section class="max-w-6xl mx-auto px-6 py-20">
-      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
-        <span class="sec-index font-mono">02</span>
-        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">{{ $t('home.toolsSubtitle') }}</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
+    <!-- TOPICS -->
+    <section class="mx-auto w-full max-w-7xl px-6 py-20">
+      <div v-reveal class="home-section-head">
+        <h2 class="section-title font-serif">
           {{ $t('home.toolsTitle') }}
         </h2>
       </div>
 
-      <!-- 12 张专题卡：桌面统一 4 列，移动端逐步降为 2 列 / 1 列 -->
-      <div v-reveal.stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div
-          v-for="topic in topics"
-          :key="topic.path"
+      <div v-reveal.stagger class="topic-grid">
+        <NuxtLink
+          v-if="featuredTopic"
+          :key="featuredTopic.sectionPath"
+          :to="localePath(featuredTopic.sectionPath)"
           data-reveal-child
-          class="group arc-card relative rounded-2xl border backdrop-blur-sm overflow-hidden transition-[transform,border-color,background-color] duration-500 hover:-translate-y-1 flex flex-col"
-          style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
+          class="topic-card topic-card-featured"
         >
-          <div class="p-7 flex flex-col flex-1">
+          <span class="topic-card-body">
             <div
-              class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-500 group-hover:scale-110"
+              class="topic-icon topic-icon-featured"
               style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
             >
-              <UIcon :name="topic.icon" class="w-6 h-6" />
+              <UIcon :name="featuredTopic.icon" class="h-7 w-7" />
             </div>
-            <h3 class="text-lg font-semibold mb-2" style="color: var(--text-primary);">{{ $t(topic.titleKey) }}</h3>
-            <p class="text-sm leading-relaxed flex-1 line-clamp-4 overflow-hidden" style="color: var(--text-faint);">
-              {{ $t(topic.descKey) }}
+            <h3 class="topic-title topic-title-featured">{{ $t(featuredTopic.titleKey) }}</h3>
+            <p class="topic-desc topic-desc-featured">
+              {{ $t(featuredTopic.subtitleKey) }}
             </p>
-            <UButton
-              color="warning"
-              variant="soft"
-              size="sm"
-              :to="localePath(topic.path)"
-              class="group/btn mt-4 self-start"
-            >
+            <ul class="featured-tools">
+              <li v-for="tool in featuredTopic.tools.slice(0, 3)" :key="tool.path">
+                {{ $t(tool.titleKey) }}
+              </li>
+            </ul>
+            <span class="topic-cta">
               {{ $t('home.topicCta') }}
-              <template #trailing>
-                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-              </template>
-            </UButton>
-          </div>
-          <div
-            class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            style="--tw-gradient-stops: transparent, var(--accent-muted), transparent;"
-          />
-        </div>
+              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
+            </span>
+          </span>
+        </NuxtLink>
+
+        <NuxtLink
+          v-for="topic in topicCards"
+          :key="topic.sectionPath"
+          :to="localePath(topic.sectionPath)"
+          data-reveal-child
+          class="topic-card"
+        >
+          <span class="topic-card-body">
+            <div
+              class="topic-icon"
+              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
+            >
+              <UIcon :name="topic.icon" class="h-5.5 w-5.5" />
+            </div>
+            <h3 class="topic-title">{{ $t(topic.titleKey) }}</h3>
+            <p class="topic-desc">{{ $t(topic.subtitleKey) }}</p>
+            <span class="topic-cta">
+              {{ $t('home.topicCta') }}
+              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
+            </span>
+          </span>
+        </NuxtLink>
+
+        <NuxtLink
+          :to="localePath('/tools')"
+          data-reveal-child
+          class="topic-card topic-card-more"
+        >
+          <span class="topic-card-body">
+            <div class="topic-icon" style="background-color: var(--surface-bg); border: 1px solid var(--border-strong); color: var(--text-body);">
+              <UIcon name="i-heroicons-rectangle-group" class="h-5.5 w-5.5" />
+            </div>
+            <h3 class="topic-title">{{ $t('tools.title') }}</h3>
+            <p class="topic-desc">{{ $t('tools.subtitle') }}</p>
+            <span class="topic-cta">
+              {{ $t('common.start') }}
+              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
+            </span>
+          </span>
+        </NuxtLink>
       </div>
     </section>
 
-    <!-- 分隔装饰 -->
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="h-px bg-gradient-to-r from-transparent to-transparent" style="--tw-gradient-stops: transparent, var(--gradient-divider), transparent;" />
-    </div>
-
-    <!-- ========== 流年速览 ========== -->
-    <section v-if="liuNianData" class="max-w-4xl mx-auto px-6 py-20">
+    <!-- YEAR -->
+    <section v-if="liuNianData" class="mx-auto w-full max-w-7xl px-6 py-16">
       <div
         v-reveal
-        class="relative rounded-2xl border backdrop-blur-sm p-8 md:p-10 text-center"
+        class="year-panel"
         style="border-color: var(--accent-border); background-color: var(--accent-bg);"
       >
-        <div
-          class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-5"
+        <div class="year-icon"
           style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
         >
           <UIcon name="i-heroicons-eye" class="w-6 h-6" />
         </div>
-        <h3 class="text-lg font-semibold mb-3" style="color: var(--text-primary);">{{ $t('home.liuNianTitle') }}</h3>
-        <p class="text-base mb-6" style="color: var(--text-muted);">{{ $t('home.liuNianText', { name: liuNianData.name, year: liuNianData.year }) }}</p>
-        <UButton color="warning" variant="soft" size="sm" :to="localePath('/tools/bazi')">
+        <div class="year-content">
+          <h3 class="year-title">{{ $t('home.liuNianTitle') }}</h3>
+          <p class="year-desc">{{ $t('home.liuNianText', { name: liuNianData.name, year: liuNianData.year }) }}</p>
+        </div>
+        <NuxtLink :to="localePath('/tools/bazi')" class="topic-cta year-cta">
           {{ $t('home.liuNianCta') }}
-          <template #trailing>
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
-          </template>
-        </UButton>
+          <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
+        </NuxtLink>
       </div>
     </section>
 
-    <!-- ========== FAQ ========== -->
-    <section class="max-w-3xl mx-auto px-6 py-20">
-      <div v-reveal class="sec-head mb-10" style="color: var(--text-primary);">
-        <span class="sec-index font-mono">03</span>
-        <span class="text-xs tracking-[0.2em] uppercase" style="color: var(--accent-muted);">{{ $t('home.faqSubtitle') }}</span>
-        <h2 class="text-2xl md:text-3xl font-bold tracking-tight font-serif">
+    <!-- FAQ -->
+    <section class="mx-auto w-full max-w-5xl px-6 py-20">
+      <div v-reveal class="home-section-head">
+        <h2 class="section-title font-serif">
           {{ $t('home.faqTitle') }}
         </h2>
       </div>
 
-      <div v-reveal.stagger class="space-y-3">
-        <div
+      <div v-reveal.stagger class="faq-list">
+        <article
           v-for="(item, index) in faqItems"
           :key="index"
           data-reveal-child
-          class="group rounded-xl border backdrop-blur-sm overflow-hidden transition-all duration-300"
-          style="border-color: var(--border-subtle); background-color: var(--surface-card);"
-          :class="{ 'hover:!border-[var(--accent-border)] hover:!bg-[var(--surface-card-hover)]': true }"
+          class="faq-item"
         >
           <button
-            class="w-full flex items-center gap-4 px-6 py-5 text-left"
+            :id="`faq-button-${index}`"
+            class="faq-button"
+            :aria-expanded="openFaqIndex === index"
+            :aria-controls="`faq-answer-${index}`"
             @click="toggleFaq(index)"
           >
-            <div
-              class="flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center text-xs font-medium transition-colors"
-              style="border-color: var(--accent-border); background-color: var(--accent-bg); color: var(--accent);"
-              :class="{ 'group-hover:!border-[var(--accent-border-hover)] group-hover:!bg-[var(--accent-bg-hover)]': true }"
-            >
-              {{ index + 1 }}
-            </div>
-            <span class="flex-1 text-sm font-medium transition-colors" style="color: var(--text-primary);"
-              :class="{ 'group-hover:!text-[var(--text-primary)]': true }"
-            >
+            <span class="faq-label">
               {{ item.label }}
             </span>
             <UIcon
               name="i-heroicons-chevron-down"
-              class="w-4 h-4 transition-transform duration-300 flex-shrink-0"
+              class="h-4 w-4 shrink-0 transition-transform duration-200"
               style="color: var(--accent-muted);"
               :class="{ 'rotate-180': openFaqIndex === index }"
             />
           </button>
           <Transition
-            enter-active-class="transition-all duration-300 ease-out"
+            enter-active-class="transition-[max-height,opacity] duration-[260ms] ease-out"
             enter-from-class="max-h-0 opacity-0"
             enter-to-class="max-h-[500px] opacity-100"
-            leave-active-class="transition-all duration-200 ease-in"
+            leave-active-class="transition-[max-height,opacity] duration-200 ease-out"
             leave-from-class="max-h-[500px] opacity-100"
             leave-to-class="max-h-0 opacity-0"
           >
-            <div v-show="openFaqIndex === index" class="overflow-hidden">
-              <div class="px-6 pb-5 pl-[58px]">
-                <p class="text-sm leading-relaxed" style="color: var(--text-faint);">
+                <div
+                  v-show="openFaqIndex === index"
+                  :id="`faq-answer-${index}`"
+                  class="faq-answer overflow-hidden"
+                >
+                <p class="text-[15px] leading-relaxed" style="color: var(--text-muted);">
                   {{ item.content }}
                 </p>
               </div>
-            </div>
           </Transition>
-        </div>
+        </article>
       </div>
     </section>
   </div>
@@ -337,6 +336,7 @@ import { useProfilesStore } from '~/stores/profiles'
 
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
+const categories = useToolCategories()
 const store = useProfilesStore()
 const guideDismissed = ref(false)
 const openFaqIndex = ref<number | null>(null)
@@ -371,36 +371,22 @@ const liuNianData = computed(() => {
   }
 })
 
-const topics = [
+const topics = computed(() => categories.value)
+const featuredTopic = computed(() => topics.value[0])
+const topicCards = computed(() => topics.value.slice(1))
+
+const heroEntries = [
   {
-    icon: 'i-heroicons-calculator',
-    titleKey: 'numericEnergyTopic.title',
-    descKey: 'numericEnergyTopic.subtitle',
-    path: '/numeric-energy',
+    icon: 'i-heroicons-calendar-days',
+    titleKey: 'home.toolBaziTitle',
+    descKey: 'home.toolBaziDesc',
+    path: '/tools/bazi',
   },
   {
-    icon: 'i-heroicons-sparkles',
-    titleKey: 'home.topicFortuneTellingTitle',
-    descKey: 'home.topicFortuneTellingDesc',
-    path: '/fortune-telling',
-  },
-  {
-    icon: 'i-heroicons-star',
-    titleKey: 'home.topicAstrologyTitle',
-    descKey: 'home.topicAstrologyDesc',
-    path: '/astrology',
-  },
-  {
-    icon: 'i-heroicons-map',
-    titleKey: 'home.topicFengshuiTitle',
-    descKey: 'home.topicFengshuiDesc',
-    path: '/fengshui',
-  },
-  {
-    icon: 'i-heroicons-heart',
-    titleKey: 'home.topicDoubleChartTitle',
-    descKey: 'home.topicDoubleChartDesc',
-    path: '/shuangren-hepan',
+    icon: 'i-heroicons-circle-stack',
+    titleKey: 'home.toolLiuyaoDivinationTitle',
+    descKey: 'home.toolLiuyaoDivinationDesc',
+    path: '/tools/liuyao-divination',
   },
   {
     icon: 'i-heroicons-calendar',
@@ -408,42 +394,13 @@ const topics = [
     descKey: 'home.topicAuspiciousDatetimeDesc',
     path: '/auspicious-datetime',
   },
-  {
-    icon: 'i-heroicons-magnifying-glass',
-    titleKey: 'home.topicSeekingTitle',
-    descKey: 'home.topicSeekingDesc',
-    path: '/seeking',
-  },
-  {
-    icon: 'i-heroicons-pencil-square',
-    titleKey: 'home.topicNamingTitle',
-    descKey: 'home.topicNamingDesc',
-    path: '/naming',
-  },
-  {
-    icon: 'i-heroicons-pencil',
-    titleKey: 'home.topicCeziTitle',
-    descKey: 'home.topicCeziDesc',
-    path: '/cezi',
-  },
-  {
-    icon: 'i-heroicons-gift-top',
-    titleKey: 'home.topicDrawALotTitle',
-    descKey: 'home.topicDrawALotDesc',
-    path: '/draw-a-lot',
-  },
-  {
-    icon: 'i-heroicons-beaker',
-    titleKey: 'home.topicPsychologicalTestTitle',
-    descKey: 'home.topicPsychologicalTestDesc',
-    path: '/psychological-test',
-  },
-  {
-    icon: 'i-heroicons-trophy',
-    titleKey: 'home.topicProphetTitle',
-    descKey: 'home.topicProphetDesc',
-    path: '/prophet',
-  },
+]
+
+const featureItems = [
+  { icon: 'i-heroicons-cpu-chip', titleKey: 'home.feature1Title', descKey: 'home.feature1Desc' },
+  { icon: 'i-heroicons-language', titleKey: 'home.feature2Title', descKey: 'home.feature2Desc' },
+  { icon: 'i-heroicons-bolt', titleKey: 'home.feature3Title', descKey: 'home.feature3Desc' },
+  { icon: 'i-heroicons-users', titleKey: 'home.feature4Title', descKey: 'home.feature4Desc' },
 ]
 
 const faqItems = computed(() => [
@@ -514,3 +471,592 @@ useHead(() => ({
   ],
 }))
 </script>
+
+<style scoped>
+.home-hero {
+  position: relative;
+  display: flex;
+  min-height: max(700px, calc(100svh - 4rem));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.home-hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-image {
+  object-position: 72% 58%;
+  filter: saturate(0.86) contrast(1.04);
+}
+
+.home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--surface-bg) 92%, transparent) 0%,
+      color-mix(in srgb, var(--surface-bg) 82%, transparent) 34%,
+      color-mix(in srgb, var(--surface-bg) 32%, transparent) 72%,
+      transparent 100%),
+    var(--hero-overlay);
+}
+
+.hero-copy {
+  max-width: 680px;
+  text-align: left;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  margin-bottom: 24px;
+  padding: 7px 14px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.hero-title {
+  margin-bottom: 22px;
+  color: var(--text-primary);
+  font-size: clamp(2.3rem, 5.1vw, 4.65rem);
+  font-weight: 600;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.hero-title span,
+.hero-title-accent {
+  display: block;
+}
+
+.hero-title-accent {
+  color: var(--accent);
+}
+
+.hero-subtitle {
+  max-width: 36em;
+  margin-bottom: 36px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 14px;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hero-cta-primary {
+  border: 1px solid color-mix(in srgb, var(--accent) 78%, transparent);
+  background: var(--accent);
+  color: #17130c;
+  box-shadow: 0 18px 42px -28px var(--accent-shadow-hover);
+}
+
+.hero-cta-secondary {
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface-bg) 52%, transparent);
+  color: var(--text-body);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .hero-cta-primary:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 22px 48px -28px var(--accent-shadow-hover);
+  }
+
+  .hero-cta-secondary:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-card-hover);
+  }
+}
+
+.hero-cta:active {
+  transform: scale(0.98);
+}
+
+.hero-panel {
+  padding: 20px;
+  border: 1px solid var(--border-medium);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface-bg) 74%, transparent);
+  box-shadow: 0 28px 80px -52px rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.hero-panel-title {
+  margin-bottom: 14px;
+  padding: 0 4px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.hero-panel-list {
+  display: grid;
+  gap: 6px;
+}
+
+.hero-entry {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 16px;
+  align-items: start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition:
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hero-entry-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.hero-entry-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hero-entry-desc {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-entry:hover {
+    border-color: var(--accent-border);
+    background: var(--surface-card-hover);
+  }
+
+  .hero-entry:hover .hero-entry-arrow {
+    transform: translateX(3px);
+  }
+}
+
+.hero-entry-arrow {
+  margin-top: 10px;
+  color: var(--accent-muted);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.home-section-head {
+  max-width: 760px;
+}
+
+.section-title {
+  color: var(--text-primary);
+  font-size: clamp(1.6rem, 2.6vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.feature-grid {
+  display: grid;
+  gap: 32px 56px;
+  margin-top: 52px;
+}
+
+.feature-item {
+  padding-top: 28px;
+  border-top: 1px solid var(--border-light);
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 18px;
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.feature-title {
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.feature-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 14px;
+  margin-top: 52px;
+}
+
+.topic-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface-card);
+  transition:
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.topic-card-featured {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.topic-card-more {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.topic-card-body {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.topic-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  border-radius: 13px;
+}
+
+.topic-icon-featured {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 24px;
+}
+
+.topic-title {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.topic-title-featured {
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+}
+
+.topic-desc {
+  flex: 1;
+  overflow: hidden;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.topic-desc-featured {
+  max-width: 34em;
+  margin-bottom: 28px;
+  font-size: 15px;
+  -webkit-line-clamp: 4;
+}
+
+.featured-tools {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.featured-tools li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-bg) 48%, transparent);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.topic-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: start;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.topic-cta-arrow {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .topic-card:hover {
+    border-color: var(--accent-border-hover);
+    background: var(--surface-card-hover);
+    transform: translateY(-3px);
+  }
+
+  .topic-card:hover .topic-cta-arrow {
+    transform: translateX(3px);
+  }
+}
+
+.topic-card:active {
+  transform: scale(0.995);
+}
+
+.year-panel {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 20px;
+}
+
+.year-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.year-title {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.year-desc {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.year-cta {
+  align-self: start;
+}
+
+.faq-list {
+  overflow: hidden;
+  margin-top: 44px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface-card);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.faq-item:last-child {
+  border-bottom: 0;
+}
+
+.faq-button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 22px 24px;
+  text-align: left;
+  transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.faq-label {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.faq-answer {
+  padding: 0 24px 24px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq-button:hover {
+    background: var(--surface-card-hover);
+  }
+}
+
+.hero-cta:focus-visible,
+.hero-entry:focus-visible,
+.topic-card:focus-visible,
+.year-cta:focus-visible,
+.faq-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.ticker-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--accent-muted);
+}
+
+@media (min-width: 768px) {
+  .hero-subtitle {
+    font-size: 17px;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .topic-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .hero-panel {
+    max-width: 370px;
+    justify-self: end;
+  }
+
+  .year-panel {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-hero {
+    min-height: calc(100svh - 4rem);
+  }
+
+  .hero-image {
+    object-position: 48% 62%;
+  }
+
+  .home-hero-overlay {
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--surface-bg) 62%, transparent) 0%,
+        color-mix(in srgb, var(--surface-bg) 78%, transparent) 48%,
+        color-mix(in srgb, var(--surface-bg) 98%, transparent) 100%),
+      var(--hero-overlay);
+  }
+
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-panel {
+    width: 100%;
+  }
+
+  .topic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topic-card-featured {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .topic-card-body {
+    padding: 22px;
+  }
+
+  .year-panel {
+    padding: 24px;
+  }
+}
+</style>

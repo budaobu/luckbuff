@@ -1,99 +1,106 @@
 <template>
   <div class="relative overflow-hidden">
-    <!-- 氛围背景光晕 -->
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-[var(--accent)]/[0.05] blur-[120px]" />
-      <div class="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-[var(--accent-purple)]/[0.04] blur-[100px]" />
-    </div>
+    <div class="tools-ambient" aria-hidden="true" />
 
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-16">
-      <!-- Page 标题 -->
-      <div class="text-center mb-14">
-        <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-3 block">Tools</span>
-        <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-6 py-14 md:py-16">
+      <header v-reveal class="tools-hero">
+        <p class="tools-eyebrow">
+          {{ $t('tools.title') }}
+        </p>
+        <h1 class="tools-title font-serif">
           {{ $t('tools.title') }}
         </h1>
-        <p class="text-sm text-[var(--text-faint)] mt-3 max-w-md mx-auto">
+        <p class="tools-subtitle">
           {{ $t('tools.subtitle') }}
         </p>
-        <div class="w-12 h-px bg-[var(--accent-border-hover)] mx-auto mt-5" />
 
-        <!-- 使用提示 -->
-        <div class="mt-6 inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] text-sm text-[var(--text-faint)]">
-          <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-[var(--accent-muted)]" />
+        <div class="tools-meta">
+          <span>{{ categories.length }}</span>
+          <span class="tools-meta-label">{{ $t('tools.title') }}</span>
+          <i aria-hidden="true" />
+          <span>{{ totalCount }}</span>
+          <span class="tools-meta-label">Tools</span>
+        </div>
+
+        <div class="tools-guide">
+          <UIcon name="i-heroicons-light-bulb" class="h-4 w-4 shrink-0 text-[var(--accent)]" />
           <i18n-t keypath="tools.guide" tag="span">
             <template #profileLink>
-              <NuxtLink :to="localePath('/settings')" class="text-[var(--accent)] hover:underline">{{ $t('tools.profileLink') }}</NuxtLink>
+              <NuxtLink :to="localePath('/settings')" class="tools-guide-link">
+                {{ $t('tools.profileLink') }}
+              </NuxtLink>
             </template>
           </i18n-t>
         </div>
-      </div>
+      </header>
 
-      <!-- ====== 专题区块 ====== -->
-      <div class="space-y-16">
-        <div v-for="category in categories" :key="category.id">
-          <!-- 专题标题 -->
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <h2 class="text-lg font-semibold text-[var(--text-primary)] flex items-center gap-2">
-                <span class="w-1.5 h-5 rounded-full bg-[var(--accent)]" />
+      <nav v-reveal class="tools-nav" aria-label="Categories">
+        <NuxtLink
+          v-for="category in categories"
+          :key="`nav-${category.id}`"
+          :to="`#${category.id}`"
+          class="tools-chip"
+          external
+        >
+          <UIcon :name="category.icon || 'i-heroicons-rectangle-group'" class="h-3.5 w-3.5" />
+          <span>{{ $t(category.titleKey) }}</span>
+        </NuxtLink>
+      </nav>
+
+      <div class="space-y-14 md:space-y-16">
+        <section
+          v-for="(category, categoryIndex) in categories"
+          :id="category.id"
+          :key="category.id"
+          class="scroll-mt-24"
+        >
+          <div v-reveal class="category-head">
+            <div class="category-index font-mono">
+              {{ String(categoryIndex + 1).padStart(2, '0') }}
+            </div>
+            <div class="min-w-0 flex-1">
+              <h2 class="category-title">
                 {{ $t(category.titleKey) }}
               </h2>
-              <p class="text-xs text-[var(--text-muted)] mt-1 ml-3.5">{{ $t(category.subtitleKey) }}</p>
+              <p class="category-subtitle">
+                {{ $t(category.subtitleKey) }}
+              </p>
             </div>
-          </div>
-
-          <!-- 工具卡片 grid -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div
-              v-for="tool in category.tools.slice(0, 4)"
-              :key="tool.path"
-              class="group arc-card relative rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:-translate-y-1 flex flex-col"
-              :class="{ 'border-[var(--accent-border)]': tool.recommended }"
-            >
-              <!-- 推荐标签 -->
-              <div v-if="tool.recommended" class="absolute top-2 right-2">
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent-bg)] border border-[var(--accent-border)] text-[var(--accent)] font-medium">
-                  {{ $t('seeking.recommended') }}
-                </span>
-              </div>
-
-              <div class="p-5 flex flex-col flex-1">
-                <div class="w-10 h-10 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)] mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-                  <UIcon :name="tool.icon" class="w-5 h-5" />
-                </div>
-                <h3 class="text-base font-semibold text-[var(--text-primary)] mb-2">{{ $t(tool.titleKey) }}</h3>
-                <p class="text-xs text-[var(--text-muted)] leading-relaxed flex-1 line-clamp-3 overflow-hidden">
-                  {{ $t(tool.descKey) }}
-                </p>
-                <UButton
-                  color="warning"
-                  :variant="tool.recommended ? 'solid' : 'soft'"
-                  size="sm"
-                  :to="localePath(tool.path)"
-                  class="group/btn w-full justify-center mt-3"
-                >
-                  {{ $t(tool.ctaKey) }}
-                  <template #trailing>
-                    <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-                  </template>
-                </UButton>
-              </div>
-              <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
-          </div>
-
-          <!-- 更多按钮 -->
-          <div class="mt-5 flex justify-center">
             <NuxtLink
               :to="localePath(category.sectionPath)"
-              class="group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] text-sm text-[var(--text-muted)] transition-all duration-300 hover:border-[var(--accent-border-hover)] hover:bg-[var(--surface-card-hover)] hover:text-[var(--text-primary)]"
+              class="category-link group"
             >
               {{ $t('tools.more', { category: $t(category.titleKey) }) }}
-              <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </NuxtLink>
           </div>
-        </div>
+
+          <div v-reveal.stagger class="topic-grid">
+            <NuxtLink
+              v-for="tool in category.tools.slice(0, 4)"
+              :key="tool.path"
+              :to="localePath(tool.path)"
+              data-reveal-child
+              class="topic-card arc-card group"
+              :class="{ 'topic-card-recommended': tool.recommended }"
+            >
+              <span v-if="tool.recommended" class="topic-badge">
+                {{ $t('seeking.recommended') }}
+              </span>
+              <span class="topic-card-body">
+                <span class="topic-icon">
+                  <UIcon :name="tool.icon" class="h-5 w-5" />
+                </span>
+                <span class="topic-title">{{ $t(tool.titleKey) }}</span>
+                <span class="topic-desc">{{ $t(tool.descKey) }}</span>
+                <span class="topic-cta">
+                  {{ $t(tool.ctaKey) }}
+                  <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </span>
+              </span>
+            </NuxtLink>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -103,10 +110,10 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 const categories = useToolCategories()
+const totalCount = computed(() => categories.value.reduce((sum, category) => sum + category.tools.length, 0))
 
 const siteName = 'ososn'
 
-// ── SEO ──
 useSeoMeta({
   title: () => `${t('seo.toolsTitle')} - ${siteName}`,
   description: t('seo.toolsDesc'),
@@ -119,7 +126,6 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-// JSON-LD: 每个专题作为 ItemList，整体为 WebPage
 useHead(() => {
   const allTools = getAllToolsFlat()
   const itemListElement = allTools.map((tool, index) => ({
@@ -149,3 +155,279 @@ useHead(() => {
   }
 })
 </script>
+
+<style scoped>
+.tools-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(58rem 32rem at 12% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 62%),
+    linear-gradient(90deg, color-mix(in srgb, var(--border-light) 42%, transparent) 1px, transparent 1px);
+  background-size: auto, 72px 100%;
+  mask-image: linear-gradient(180deg, black, transparent 78%);
+}
+
+.tools-hero {
+  max-width: 780px;
+}
+
+.tools-eyebrow {
+  margin-bottom: 14px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tools-title {
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  font-size: clamp(2.1rem, 4vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.tools-subtitle {
+  max-width: 42em;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.tools-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.tools-meta > span:first-of-type,
+.tools-meta > span:nth-of-type(2) {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tools-meta i {
+  width: 1px;
+  height: 18px;
+  background: var(--border-strong);
+}
+
+.tools-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 680px;
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.tools-guide-link {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.tools-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 34px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+
+.tools-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tools-chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: background-color 160ms var(--ease-out-expo), border-color 160ms var(--ease-out-expo), color 160ms var(--ease-out-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tools-chip:hover {
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+    color: var(--text-primary);
+  }
+}
+
+.category-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.category-index {
+  padding-top: 4px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.category-title {
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.category-subtitle {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.category-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: color 160ms var(--ease-out-expo);
+}
+
+.category-link:hover {
+  color: var(--accent);
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.topic-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface-card);
+}
+
+.topic-card-recommended {
+  border-color: var(--accent-border);
+}
+
+.topic-badge {
+  position: absolute;
+  z-index: 11;
+  top: 14px;
+  right: 14px;
+  padding: 4px 9px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.topic-card-body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: 22px;
+}
+
+.topic-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 18px;
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.topic-title {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.topic-desc {
+  flex: 1;
+  overflow: hidden;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.topic-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .topic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .topic-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .category-link {
+    margin-top: 9px;
+  }
+}
+
+@media (max-width: 767px) {
+  .tools-hero {
+    padding-top: 6px;
+  }
+
+  .category-head {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .category-link {
+    margin-top: 0;
+  }
+}
+</style>

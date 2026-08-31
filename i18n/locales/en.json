@@ -10167,9 +10167,9 @@
     "statTitle": "digits",
     "statPairs": "pairs",
     "statZero": "zeros",
-    "seoTitle": "Numeric Energy for Phones, Plates, Doors and Card Tails",
-    "seoDescription": "Explore numbers with one shared Luoshu star and five-element framework. Folk versions vary; entertainment reference only.",
-    "seoKeywords": "numeric energy, Luoshu nine stars, five elements, phone number energy"
+    "seoTitle": "Numeric Energy Readings: Phone, Plate, Door and Card Tail Fortune",
+    "seoDescription": "Check phone, plate, door and bank-card tail fortune with numeric energy, Luoshu nine stars and five elements. Folk versions vary; entertainment reference only.",
+    "seoKeywords": "numeric energy, numeric energy analysis, phone number fortune, license plate fortune, door number fortune, card tail fortune, Luoshu nine stars, five elements"
   },
   "numericEnergy": {
     "disclaimer": "Numerical energy has many folk versions. This tool applies one common system and is for entertainment reference only.",
@@ -10213,56 +10213,56 @@
     },
     "scenarios": {
       "phone": {
-        "longTitle": "Phone Number Energy",
+        "longTitle": "Phone Number Fortune",
         "description": "Read a phone number through nine stars, elements, flow and contact opportunities.",
         "cta": "Analyze number",
         "inputLabel": "Enter phone number",
         "placeholder": "e.g. 13800138000",
         "help": "Spaces, plus signs and hyphens are allowed. 7–15 digits recommended.",
-        "seoTitle": "Phone Number Energy | Numeric Energy",
-        "seoDescription": "Read a phone number through nine stars, elements, flow and contact opportunities. For entertainment reference only; not an authoritative version.",
-        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
-        "seoOgTitle": "Phone Number Energy | LuckBuff",
-        "seoOgDescription": "Read a phone number through nine stars, elements, flow and contact opportunities."
+        "seoTitle": "Phone Number Fortune Test | Numeric Energy",
+        "seoDescription": "Run a phone number fortune test with numeric energy, nine stars and five elements to explore flow, communication and opportunity signals. Entertainment reference only.",
+        "seoKeywords": "phone number fortune, phone number fortune test, phone number energy, numeric energy analysis, Luoshu nine stars, five elements",
+        "seoOgTitle": "Phone Number Fortune Test | ososn",
+        "seoOgDescription": "Run a phone number fortune test with numeric energy, nine stars and five elements."
       },
       "plate": {
-        "longTitle": "License Plate Energy",
+        "longTitle": "License Plate Fortune",
         "description": "Look at driving pace, route tension and travel filters from plate digits.",
         "cta": "Analyze plate",
         "inputLabel": "Enter license plate",
         "placeholder": "e.g. ABC12345 or 12345",
         "help": "Only digits are extracted. Letters and characters are omitted; at least 2 digits required.",
-        "seoTitle": "License Plate Energy | Numeric Energy",
-        "seoDescription": "Look at driving pace, route tension and travel filters from plate digits. For entertainment reference only; not an authoritative version.",
-        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
-        "seoOgTitle": "License Plate Energy | LuckBuff",
-        "seoOgDescription": "Look at driving pace, route tension and travel filters from plate digits."
+        "seoTitle": "License Plate Fortune Reading | Numeric Energy",
+        "seoDescription": "Read license plate fortune with numeric energy to explore driving pace, route tension and travel signals. Entertainment reference only.",
+        "seoKeywords": "license plate fortune, license plate fortune reading, plate number energy, numeric energy analysis, Luoshu nine stars, five elements",
+        "seoOgTitle": "License Plate Fortune Reading | ososn",
+        "seoOgDescription": "Read license plate fortune with numeric energy to explore driving pace, route tension and travel signals."
       },
       "door": {
-        "longTitle": "Door Number Energy",
+        "longTitle": "Door Number Fortune",
         "description": "Read ordered door digits for stability, gathering and boundary signals.",
         "cta": "Check energy",
         "inputLabel": "Enter door number",
         "placeholder": "e.g. 12-3-501",
         "help": "Digits are joined in order. Common dashes or slashes are allowed.",
-        "seoTitle": "Door Number Energy | Numeric Energy",
-        "seoDescription": "Read ordered door digits for stability, gathering and boundary signals. For entertainment reference only; not an authoritative version.",
-        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
-        "seoOgTitle": "Door Number Energy | LuckBuff",
-        "seoOgDescription": "Read ordered door digits for stability, gathering and boundary signals."
+        "seoTitle": "Door Number Fortune Test | Numeric Energy",
+        "seoDescription": "Test door number fortune with numeric energy to read ordered digits for stability, gathering and boundary signals. Entertainment reference only.",
+        "seoKeywords": "door number fortune, door number fortune test, door number energy, numeric energy analysis, Luoshu nine stars, five elements",
+        "seoOgTitle": "Door Number Fortune Test | ososn",
+        "seoOgDescription": "Test door number fortune with numeric energy to read ordered digits for stability, gathering and boundary signals."
       },
       "card": {
-        "longTitle": "Card Tail Energy",
+        "longTitle": "Card Tail Fortune",
         "description": "Use the last 4–8 digits for money rhythm. Never enter a full card number.",
         "cta": "Analyze tail",
         "inputLabel": "Enter card tail",
         "placeholder": "e.g. 8888",
         "help": "Only the last 4–8 digits are supported. Do not provide a full card number.",
-        "seoTitle": "Card Tail Energy | Numeric Energy",
-        "seoDescription": "Use the last 4–8 digits for money rhythm. Never enter a full card number. For entertainment reference only; not an authoritative version.",
-        "seoKeywords": "numeric energy, Luoshu nine stars, five elements, digital energy reading",
-        "seoOgTitle": "Card Tail Energy | LuckBuff",
-        "seoOgDescription": "Use the last 4–8 digits for money rhythm. Never enter a full card number."
+        "seoTitle": "Card Tail Fortune Analysis | Numeric Energy",
+        "seoDescription": "Analyze bank-card tail fortune with numeric energy using the last 4–8 digits. Never enter a full card number. Entertainment reference only.",
+        "seoKeywords": "card tail fortune, bank card tail fortune, card tail energy, numeric energy analysis, Luoshu nine stars, five elements",
+        "seoOgTitle": "Card Tail Fortune Analysis | ososn",
+        "seoOgDescription": "Analyze bank-card tail fortune with numeric energy using the last 4–8 digits. Never enter a full card number."
       }
     }
   }

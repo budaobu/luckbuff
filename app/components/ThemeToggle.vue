@@ -7,12 +7,12 @@
     @click="toggleTheme"
   >
     <UIcon
-      v-show="mounted"
+      v-if="mounted"
       :name="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
       class="w-3.5 h-3.5 transition-transform duration-300"
       :class="{ 'rotate-12': !isDark }"
     />
-    <span class="hidden sm:inline">{{ mounted ? label : '' }}</span>
+    <span v-if="mounted" class="hidden sm:inline">{{ label }}</span>
   </button>
 </template>
 
@@ -24,15 +24,7 @@ const { t } = useI18n()
 const mounted = ref(false)
 onMounted(() => { mounted.value = true })
 
-const isDark = computed(() => colorMode.value === 'dark')
-
-const buttonClasses = computed(() => {
-  const base = 'border-[var(--border-light)] hover:border-[var(--accent-border)]'
-  const text = isDark.value
-    ? 'text-[var(--text-faint)] hover:text-[var(--accent)] hover:bg-[var(--accent-bg)]'
-    : 'text-[var(--text-muted)] hover:text-[var(--accent)] hover:bg-[var(--accent-bg)]'
-  return `${base} ${text}`
-})
+const isDark = computed(() => mounted.value && colorMode.value === 'dark')
 
 const tooltip = computed(() => {
   if (colorMode.preference === 'system') {
@@ -52,4 +44,11 @@ function toggleTheme() {
   const nextIndex = (currentIndex + 1) % modes.length
   colorMode.preference = modes[nextIndex]!
 }
+
+const buttonClasses = computed(() => {
+  if (!mounted.value) {
+    return 'border-[var(--border-light)] text-[var(--text-muted)]'
+  }
+  return `border-[var(--border-light)] hover:border-[var(--accent-border)] ${isDark.value ? 'text-[var(--text-faint)]' : 'text-[var(--text-muted)]'} hover:text-[var(--accent)] hover:bg-[var(--accent-bg)]`
+})
 </script>
