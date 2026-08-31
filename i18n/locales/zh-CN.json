@@ -1133,6 +1133,14 @@
     "comprehensiveAdvice": "综合建议",
     "comprehensiveAdviceDesc": "基于命盘特征的实用指引",
     "aiDisclaimer": "AI 解读每次表述略有差异，排盘数据（干支/十神/大运）为确定性计算。",
+    "poster": {
+      "seal": "四柱\n命刊",
+      "brand": "四柱八字命刊",
+      "issue": "排盘专辑",
+      "strength": "旺衰",
+      "xiyong": "喜用",
+      "jishen": "忌神"
+    },
     "aiResponseFormatError": "AI 返回格式异常，请重试",
     "aiRequestFailed": "AI 请求失败",
     "aiInterpret": "AI 解读",
