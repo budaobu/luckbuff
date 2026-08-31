@@ -24,6 +24,11 @@ function lookup(key) {
 function titleFromFile(path) {
   if (!existsSync(path)) return null
   const src = readFileSync(path, 'utf-8')
+  const componentTitle = src.match(/title-key="([^"]+)"/)
+  if (componentTitle) {
+    const title = lookup(componentTitle[1])
+    if (title) return title
+  }
   const h1 = src.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)
   if (!h1) return null
   const m = h1[1].match(/\$?t\(\s*'([^']+)'/) || h1[1].match(/\$?t\(\s*"([^"]+)"/)

@@ -6,22 +6,22 @@
    ======================================== */
 :root {
   /* Surfaces */
-  --surface-bg: #0a0a0f;
-  --surface-elevated: #111118;
-  --surface-card: rgba(255, 255, 255, 0.04);
-  --surface-card-hover: rgba(255, 255, 255, 0.06);
+  --surface-bg: #07070b;
+  --surface-elevated: #101017;
+  --surface-card: rgba(255, 255, 255, 0.045);
+  --surface-card-hover: rgba(255, 255, 255, 0.07);
   --surface-dropdown: #1a1612;
   --surface-input: rgba(255, 255, 255, 0.04);
 
   /* Text */
   --text-primary: #f5e6c0;
   --text-body: #e8e0d0;
-  --text-muted: rgba(232, 224, 208, 0.6);
-  --text-faint: rgba(232, 224, 208, 0.4);
-  --text-placeholder: rgba(232, 224, 208, 0.3);
+  --text-muted: rgba(232, 224, 208, 0.72);
+  --text-faint: rgba(232, 224, 208, 0.58);
+  --text-placeholder: rgba(232, 224, 208, 0.38);
 
   /* Accent */
-  --accent: #c9a227;
+  --accent: #d4af37;
   --accent-light: #f5e6c0;
   --accent-muted: rgba(201, 162, 39, 0.6);
   --accent-faint: rgba(201, 162, 39, 0.2);
@@ -69,14 +69,17 @@
   --selection-text: #f5e6c0;
   --scrollbar-thumb: rgba(201, 162, 39, 0.2);
   --scrollbar-thumb-hover: rgba(201, 162, 39, 0.4);
+
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 20px 56px -44px rgba(0, 0, 0, 0.9);
+  --shadow-panel-hover: 0 1px 0 rgba(255, 255, 255, 0.07) inset, 0 28px 72px -46px rgba(212, 175, 55, 0.24);
 }
 
 /* ========================================
    Theme Tokens — Light
    ======================================== */
 .light {
-  --surface-bg: #faf8f3;
-  --surface-elevated: #f5f2ea;
+  --surface-bg: #f8f5ef;
+  --surface-elevated: #f1ece1;
   --surface-card: rgba(0, 0, 0, 0.03);
   --surface-card-hover: rgba(0, 0, 0, 0.05);
   --surface-dropdown: #ffffff;
@@ -85,10 +88,10 @@
   --text-primary: #1a1612;
   --text-body: #2d2820;
   --text-muted: rgba(45, 40, 32, 0.7);
-  --text-faint: rgba(45, 40, 32, 0.55);
+  --text-faint: rgba(45, 40, 32, 0.62);
   --text-placeholder: rgba(45, 40, 32, 0.45);
 
-  --accent: #a67c00;
+  --accent: #8a6800;
   --accent-light: #c9a227;
   --accent-muted: rgba(166, 124, 0, 0.6);
   --accent-faint: rgba(166, 124, 0, 0.15);
@@ -127,6 +130,9 @@
   --selection-text: #1a1612;
   --scrollbar-thumb: rgba(166, 124, 0, 0.2);
   --scrollbar-thumb-hover: rgba(166, 124, 0, 0.4);
+
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.72) inset, 0 18px 48px -38px rgba(69, 55, 20, 0.5);
+  --shadow-panel-hover: 0 1px 0 rgba(255, 255, 255, 0.78) inset, 0 24px 62px -40px rgba(69, 55, 20, 0.62);
 }
 
 /* Legacy aliases for backward compat during migration */
@@ -199,8 +205,8 @@
    so animation runs immediately on paint — no JS needed. */
 [data-hero-reveal] {
   opacity: 0;
-  transform: translateY(22px);
-  animation: 0.9s var(--ease-out-expo) forwards hero-in;
+  transform: translateY(18px);
+  animation: 650ms var(--ease-out-expo) forwards hero-in;
 }
 [data-hero-reveal="1"] { animation-delay: 0.05s; }
 [data-hero-reveal="2"] { animation-delay: 0.2s; }
@@ -212,14 +218,30 @@
    so SSR/no-JS output stays fully visible. */
 .reveal-pending {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(22px);
   transition:
-    opacity 0.8s var(--ease-out-expo),
-    transform 0.8s var(--ease-out-expo);
+    opacity 520ms var(--ease-out-expo),
+    transform 520ms var(--ease-out-expo);
 }
 .reveal-pending.revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Route handoff stays quiet and interruptible; it is a state cue, not decoration. */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 200ms var(--ease-out-expo), transform 200ms var(--ease-out-expo);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 
 /* Section head: mono index flickers in, hairline rule draws across */
@@ -237,7 +259,7 @@
   opacity: 0.14;
   transform: scaleX(0);
   transform-origin: 0 50%;
-  transition: transform 1.1s var(--ease-out-expo) 0.15s;
+  transition: transform 560ms var(--ease-out-expo) 80ms;
 }
 .sec-head.revealed::after {
   transform: scaleX(1);
@@ -339,6 +361,59 @@ html {
    ======================================== */
 .font-serif {
   font-family: var(--serif-font);
+}
+
+/* Shared product surface: every tool and topic panel gets one coherent depth model. */
+main :where(h1) {
+  text-wrap: balance;
+  letter-spacing: 0;
+}
+
+main :where(h2, h3, h4) {
+  text-wrap: balance;
+}
+
+main :where(p) {
+  text-wrap: pretty;
+}
+
+main :where(.rounded-2xl.border) {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--surface-bg) 12%, transparent), transparent 54%);
+  box-shadow: var(--shadow-panel);
+}
+
+main :where(.rounded-2xl.border:hover) {
+  box-shadow: var(--shadow-panel-hover);
+}
+
+main :where(.transition-all) {
+  transition-property: transform, border-color, background-color, box-shadow, color;
+  transition-duration: 220ms;
+  transition-timing-function: var(--ease-out-expo);
+}
+
+main :where(.text-\[10px\]) {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 120ms linear;
+    transform: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    transform: none;
+  }
 }
 
 /* ========================================

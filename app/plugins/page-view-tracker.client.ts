@@ -6,6 +6,7 @@ import { $fetch } from 'ofetch'
 const HUB_PATHS = new Set([
   '/tools',
   '/insights',
+  '/astrology',
   '/fortune-telling',
   '/naming',
   '/draw-a-lot',
@@ -16,6 +17,7 @@ const HUB_PATHS = new Set([
   '/auspicious-datetime',
   '/psychological-test',
   '/shuangren-hepan',
+  '/prophet',
 ])
 
 const LOCALE_PREFIX = /^\/(?:zh-CN|zh-TW|en)(?=\/|$)/
