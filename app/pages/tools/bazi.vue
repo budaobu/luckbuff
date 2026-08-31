@@ -67,12 +67,7 @@
         </div>
       </div>
 
-      <!-- 阶段 2：动画 -->
-      <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <TianganDizhi size="full" :label="$t('bazi.calculating')" />
-      </div>
-
-      <!-- 阶段 3：结果 -->
+      <!-- 阶段 2：结果 -->
       <div v-if="phase === 'result' && chart">
         <!-- 唯一结果载体：纸刊海报 -->
         <div ref="shareTargetRef" class="bazi-poster-target">
@@ -228,7 +223,7 @@ interface FormValues {
   birthProvince: string
 }
 
-const phase = ref<'form' | 'animating' | 'result'>('form')
+const phase = ref<'form' | 'result'>('form')
 const formValues = ref<FormValues>({
   gender: 'male',
   birthDate: '',
@@ -262,13 +257,8 @@ function handleSubmit(values: FormValues) {
   const [year, month, day] = values.birthDate.split('-').map(Number) as [number, number, number]
 
   chart.value = calc(year, month, day, values.birthHour ?? null, values.gender)
-  phase.value = 'animating'
-
-  // 最少播放 1.5 秒动画
-  setTimeout(() => {
-    phase.value = 'result'
-    startAiStream()
-  }, 1500)
+  phase.value = 'result'
+  startAiStream()
 }
 
 function handleSaveProfile(id: string, values: FormValues) {
