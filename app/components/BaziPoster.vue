@@ -13,6 +13,11 @@
         </div>
       </header>
 
+      <!-- 四柱可视化 -->
+      <section class="bzp-cover-stage" aria-hidden="true">
+        <LazyBaziPosterScene :chart="chart" />
+      </section>
+
       <!-- 封面标题 -->
       <section class="bzp-cover">
         <div class="bzp-cover-main">
@@ -398,8 +403,9 @@ const scoreItems = computed(() => [
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  min-height: 56px;
   border-bottom: 2px solid var(--bzp-ink);
-  padding-bottom: 10px;
+  padding-bottom: 12px;
 }
 
 .bzp-brand {
@@ -409,16 +415,18 @@ const scoreItems = computed(() => [
 }
 
 .bzp-seal {
-  width: 40px;
-  height: 40px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
-  padding: 3px;
+  padding: 4px;
   border: 2px solid var(--bzp-red);
   color: var(--bzp-red);
   font-size: 10px;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: pre-line;
   text-align: center;
   letter-spacing: 1px;
@@ -435,9 +443,18 @@ const scoreItems = computed(() => [
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 3px;
   font-size: 10px;
+  line-height: 1.35;
+  white-space: nowrap;
   color: var(--bzp-faint);
   letter-spacing: 1px;
+}
+
+.bzp-cover-stage {
+  position: relative;
+  height: clamp(210px, 22vw, 300px);
+  margin: 20px 0 18px;
 }
 
 .bzp-cover {
@@ -446,6 +463,10 @@ const scoreItems = computed(() => [
   gap: 18px;
   padding: 22px 0 18px;
   border-bottom: 1px solid var(--bzp-line);
+}
+
+.bzp-cover-main {
+  align-self: center;
 }
 
 .bzp-kicker {
@@ -1013,6 +1034,11 @@ const scoreItems = computed(() => [
   .bzp-footer-grid,
   .bzp-dayun-notes {
     grid-template-columns: 1fr;
+  }
+
+  .bzp-cover-stage {
+    height: clamp(180px, 52vw, 250px);
+    margin: 16px 0 14px;
   }
 
   .bzp-profile {
