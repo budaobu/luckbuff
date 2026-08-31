@@ -15,6 +15,7 @@ const uiLocale = computed(() => {
 
 const baiduAnalyticsId = config.public.baiduAnalyticsId
 const googleSiteVerification = config.public.googleSiteVerification
+const googleAdsenseClient = config.public.googleAdsenseClient?.trim()
 
 const head = useLocaleHead({
   seo: true,
@@ -44,11 +45,13 @@ function loadThirdPartyScripts() {
     interactionController.value = null
   }
 
-  const adsScript = document.createElement('script')
-  adsScript.async = true
-  adsScript.crossOrigin = 'anonymous'
-  adsScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4898976797860512'
-  document.head.appendChild(adsScript)
+  if (googleAdsenseClient) {
+    const adsScript = document.createElement('script')
+    adsScript.async = true
+    adsScript.crossOrigin = 'anonymous'
+    adsScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseClient}`
+    document.head.appendChild(adsScript)
+  }
 
   if (baiduAnalyticsId) {
     const analyticsScript = document.createElement('script')
