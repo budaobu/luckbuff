@@ -339,7 +339,7 @@ const toolCategories: ToolCategory[] = [
     ],
   },
   {
-    id: 'double-chart',
+    id: 'shuangren-hepan',
     icon: 'i-heroicons-heart',
     titleKey: 'tools.categoryDoubleChart',
     subtitleKey: 'tools.categoryDoubleChartSubtitle',
