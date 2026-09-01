@@ -1,4 +1,5 @@
 import { toLunar } from 'lunar'
+import { getMonthZhiIndex } from '~/utils/bazi/calendar'
 import type {
   AccumulatedYearsInfo,
   ChaoShenJieQiInfo,
@@ -176,23 +177,6 @@ function jieDayOfYear(year: number, jieIndex: number): number {
   return dayOfYear(year, monthMap[jieIndex]!, dayMap[jieIndex]!) + offset
 }
 
-/** 取得月支索引（0=子，1=丑，…，11=亥），以节气为界 */
-function getMonthZhiIndex(year: number, month: number, day: number): number {
-  const currentDay = dayOfYear(year, month, day)
-  let jieIndex = 11 // 默认丑月（小寒到立春前）
-  for (let i = 0; i < 12; i++) {
-    if (currentDay >= jieDayOfYear(year, i)) {
-      jieIndex = i
-    }
-  }
-  // 12 月大雪后应属子月
-  const daXueDay = jieDayOfYear(year, 10)
-  if (jieIndex === 11 && currentDay > daXueDay) {
-    jieIndex = 10
-  }
-  return jieIndex
-}
-
 /** 年柱（以立春为界） */
 function getYearPillar(year: number, month: number, day: number): string {
   const lichenDay = jieDayOfYear(year, 0)
@@ -208,7 +192,7 @@ function getYearPillar(year: number, month: number, day: number): string {
 
 /** 月柱（五虎遁） */
 function getMonthPillar(yearGan: string, year: number, month: number, day: number): string {
-  const jieIndex = getMonthZhiIndex(year, month, day)
+  const jieIndex = getMonthZhiIndex(year, month, day).index
   const zhi = DI_ZHI[jieIndex]!
   const ganStart: Record<string, number> = {
     甲: 2, 己: 2, 乙: 4, 庚: 4, 丙: 6, 辛: 6, 丁: 8, 壬: 8, 戊: 0, 癸: 0,
