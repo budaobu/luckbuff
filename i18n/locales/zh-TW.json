@@ -611,6 +611,11 @@
     "xShareHint": "支援原生分享時將附帶截圖，否則在 X 新分頁中開啟文案與連結"
   },
   "seo": {
+    "mangpaiBaziTitle": "盲派八字排盤_十二神煞流年直斷",
+    "mangpaiBaziDesc": "盲派八字工具復用四柱大運排盤，新增十二神煞流年環，以取象、做功、賓主體用與應期解讀六親、事業、財運、婚姻與健康傾向；娛樂參考。",
+    "mangpaiBaziKeywords": "盲派八字,盲派八字排盤,十二神煞,四柱八字,流年應期,六親精斷",
+    "mangpaiBaziOgTitle": "盲派八字排盤 | ososn",
+    "mangpaiBaziOgDesc": "用盲派取象與做功看四柱、十二神煞與近年應期。",
     "homeTitle": "在線命理排盤算命_紫微斗數·八字·吠陀占星·梅花易數",
     "homeDesc": "ososn 是免費在線命理推演平台，提供八字、紫微、六爻、奇門遁甲、塔羅、靈籤等 AI 解讀工具，僅供文化娛樂參考。",
     "homeKeywords": "在線算命,免費排盤,紫微斗數,四柱八字,吠陀占星,梅花易數,六爻預測,命盤解讀,在線占卜,命理工具",
@@ -10289,6 +10294,46 @@
         "seoKeywords": "銀行卡尾號吉凶,銀行卡號吉凶,卡尾號數字能量,數字能量分析,數字能量組合,洛書九宮,五行",
         "seoOgTitle": "銀行卡尾號吉凶_數字能量分析 | ososn",
         "seoOgDescription": "銀行卡尾號吉凶與卡尾號數字能量分析，用 4–8 位尾號看財務節奏；請勿輸入完整卡號。"
+      }
+    }
+  },
+  "mangpaiBazi": {
+    "title": "盲派八字",
+    "subtitle": "四柱歸壇，十二神煞隨流年落位；取象、做功、賓主體用直斷六親財官與近年應期。",
+    "badge": "取象 · 做功 · 應期",
+    "methodology": "十二神煞以流年地支起太歲順排；斷語由伺服器端按盲派框架生成，僅供娛樂參考。",
+    "cta": "開始排盤",
+    "submit": "開始排盤",
+    "sealChar": "盲",
+    "calculating": "起盤落煞",
+    "again": "再算一命",
+    "back": "回工具",
+    "calcFailed": "排盤失敗，請稍後再試",
+    "readingFailed": "斷語生成失敗，請稍後再試",
+    "shareSummary": "盲派八字 · 日主{dayMaster}（{strength}） · {geju}",
+    "poster": {
+      "brand": "OSOSN · 盲派",
+      "title": "盲派命壇",
+      "subtitle": "日主{dayMaster} · {strength}",
+      "pending": "歲運取象，正在落壇。",
+      "godRing": "十二神煞",
+      "godStart": "起太歲",
+      "basisPrefix": "依據：",
+      "generating": "斷語入壇",
+      "disclaimer": "娛樂參考，非醫療法律建議。",
+      "seal": "幽隱",
+      "year": "年",
+      "month": "月",
+      "day": "日",
+      "hour": "時",
+      "unknown": "未知",
+      "sections": {
+        "family": "六親精斷",
+        "career": "事業官運",
+        "wealth": "財運",
+        "marriage": "婚姻情感",
+        "health": "健康傾向",
+        "timing": "近年應期"
       }
     }
   }
