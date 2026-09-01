@@ -68,22 +68,26 @@ export function getMonthZhiIndex(year: number, month: number, day: number): {
   isJieBorder: boolean
 } {
   const currentDayOfYear = dayOfYear(year, month, day)
+  const liChunDay = getJieDayOfYear(year, 0)
+  const xiaoHanDay = getJieDayOfYear(year, 11)
 
-  // 确定当前日期落在哪个节区间
-  let jieIndex = 11 // 默认小寒（上年）到立春前 = 丑月
-  for (let i = 0; i < 12; i++) {
+  // 1 月到立春前必须单独处理：小寒属于次序首尾相接的节气，不能和当年
+  // 2-12 月放在同一个“向后覆盖”的循环里，否则 5 月会被 1 月 6 日覆盖成丑月。
+  if (currentDayOfYear < liChunDay) {
+    const isXiaoHanBorder = Math.abs(currentDayOfYear - xiaoHanDay) <= 1
+    if (currentDayOfYear < xiaoHanDay) {
+      return { index: 10, isJieBorder: isXiaoHanBorder }
+    }
+    return { index: 11, isJieBorder: isXiaoHanBorder }
+  }
+
+  // 确定当前日期落在当年立春到次年小寒前的哪个节区间。
+  let jieIndex = 0
+  for (let i = 0; i < 11; i++) {
     const jieDay = getJieDayOfYear(year, i)
     if (currentDayOfYear >= jieDay) {
       jieIndex = i
     }
-  }
-
-  // 修复：getJieDayOfYear 对索引11（小寒）返回的是当年1月6日左右的日期（dayOfYear~6）
-  // 对于12月的日期（dayOfYear > 340），currentDayOfYear >= 6 恒成立，导致 jieIndex 被错误更新为11（丑月）
-  // 但12月在大雪（12月7日）之后、次年小寒（1月6日）之前，应该是子月（jieIndex=10）
-  const daXueDay = getJieDayOfYear(year, 10) // 大雪
-  if (jieIndex === 11 && currentDayOfYear > daXueDay) {
-    jieIndex = 10 // 子月
   }
 
   // 检查是否在节气交界日（前后1天）
