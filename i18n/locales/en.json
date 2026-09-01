@@ -616,6 +616,11 @@
     "mangpaiBaziKeywords": "blind school bazi, BaZi chart, twelve year gods, four pillars, annual timing, family reading",
     "mangpaiBaziOgTitle": "Blind-School BaZi Chart | ososn",
     "mangpaiBaziOgDesc": "Read four pillars, twelve year gods and coming-year timing through blind-school imagery and work logic.",
+    "newSchoolBaziTitle": "New School BaZi Chart & Strength-Use God",
+    "newSchoolBaziDesc": "Run a free New School BaZi chart using branch principal qi, adjacent interactions and strength-first use-god judgment. AI readings may differ from traditional Zi Ping BaZi.",
+    "newSchoolBaziKeywords": "new school bazi, BaZi new school, new school ming li, strength use god, four pillars, adjacent interaction",
+    "newSchoolBaziOgTitle": "New School BaZi Chart | ososn",
+    "newSchoolBaziOgDesc": "Read four pillars through New School principal qi, adjacent interactions and strength-first use gods.",
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
     "homeDesc": "ososn is a free online divination platform offering Bazi, Ziwei, Liu Yao, Qimen, Tarot, and divination lots with AI interpretation.",
     "homeKeywords": "online fortune telling,free charting,Ziwei Dou Shu,Bazi,Vedic Astrology,Plum Blossom,Liu Yao,destiny reading,online divination,metaphysics tools",
@@ -10314,6 +10319,41 @@
         "health": "Wellbeing Tendency",
         "timing": "Coming-Year Timing"
       }
+    }
+  }
+  ,
+  "newSchoolBazi": {
+    "title": "New School BaZi",
+    "subtitle": "Judge principal branch qi, adjacent interactions and strength-first use gods with Li Hanchen's simplified New School framework.",
+    "methodologyTitle": "New School Method",
+    "methodologyIntro": "This tool uses simplified New School rules: branches contribute principal qi only; same-category stems and branches act when adjacent, not across a position. Strength is judged first, structure is secondary, and absent words are marked virtual without changing natal strength.",
+    "methodologyNotice": "This tool uses New School methodology; results may differ from traditional Zi Ping BaZi.",
+    "cta": "Chart Now",
+    "submit": "Chart Now",
+    "calculating": "Creating New School chart",
+    "again": "Read again",
+    "calcFailed": "Chart failed",
+    "checkInput": "Please check your input and try again.",
+    "readingFailed": "AI reading failed. Please try again later.",
+    "poster": {
+      "brand": "OSOSN · New School BaZi",
+      "title": "New School Chart",
+      "subtitle": "Day Master {dayMaster} · {strength}",
+      "geju": "Structure",
+      "support": "Support",
+      "xiyong": "Use",
+      "jishen": "Avoid",
+      "benqi": "Branch principal qi only",
+      "adjacent": "Adjacent acts; across a position does not",
+      "xushi": "Absent words stay virtual",
+      "reading": "AI Reading",
+      "disclaimer": "Cultural interpretation and entertainment reference; not medical, legal, or investment advice.",
+      "seal": "New School",
+      "year": "Year",
+      "month": "Month",
+      "day": "Day",
+      "hour": "Hour",
+      "unknown": "Unknown"
     }
   }
 }

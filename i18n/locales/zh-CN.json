@@ -616,6 +616,11 @@
     "mangpaiBaziKeywords": "盲派八字,盲派八字排盘,十二神煞,四柱八字,流年应期,六亲精断",
     "mangpaiBaziOgTitle": "盲派八字排盘 | ososn",
     "mangpaiBaziOgDesc": "用盲派取象与做功看四柱、十二神煞与近年应期。",
+    "newSchoolBaziTitle": "新派八字排盘_八字新派旺衰用神",
+    "newSchoolBaziDesc": "免费新派八字在线排盘，以地支本气、邻位作用、旺衰优先的方法判断四柱用神与格局，并生成新派方法论 AI 解读；结论可能与传统子平八字不同。",
+    "newSchoolBaziKeywords": "新派八字,八字新派,新派 命理,新派八字排盘,旺衰用神,四柱八字,隔不作用",
+    "newSchoolBaziOgTitle": "新派八字排盘 | ososn",
+    "newSchoolBaziOgDesc": "用新派本气、邻位作用与旺衰用神看四柱命局。",
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
     "homeDesc": "ososn 是免费在线命理推演平台，提供八字、紫微、六爻、奇门遁甲、塔罗、灵签等 AI 解读工具，仅供文化娱乐参考。",
     "homeKeywords": "在线算命,免费排盘,紫微斗数,四柱八字,吠陀占星,梅花易数,六爻预测,命盘解读,在线占卜,命理工具",
@@ -10336,6 +10341,41 @@
         "health": "健康倾向",
         "timing": "近年应期"
       }
+    }
+  }
+  ,
+  "newSchoolBazi": {
+    "title": "新派八字",
+    "subtitle": "以李涵辰新派简化体系判断地支本气、邻位作用与旺衰用神，AI 只做框架内的文化解读。",
+    "methodologyTitle": "新派方法论",
+    "methodologyIntro": "本工具采用新派简化规则：地支只取本气，天干与天干、地支与地支相邻作用而隔位不作用；先判旺衰并取用神，格局只作辅助。命局缺字按虚实论标为虚字，不改判原局旺衰。",
+    "methodologyNotice": "本工具采用新派方法论，结论可能与传统子平八字不同。",
+    "cta": "开始排盘",
+    "submit": "开始排盘",
+    "calculating": "正在起新派命盘",
+    "again": "再算一次",
+    "calcFailed": "排盘失败",
+    "checkInput": "请检查输入后重试",
+    "readingFailed": "AI 解读生成失败，请稍后重试",
+    "poster": {
+      "brand": "OSOSN · 新派八字",
+      "title": "新派命局",
+      "subtitle": "日主{dayMaster} · {strength}",
+      "geju": "简化格局",
+      "support": "扶助分",
+      "xiyong": "喜用",
+      "jishen": "忌神",
+      "benqi": "地支只取本气",
+      "adjacent": "相邻作用，隔位不作用",
+      "xushi": "缺字标虚，不改旺衰",
+      "reading": "AI 解读",
+      "disclaimer": "文化解读与娱乐参考，不构成医疗、法律或投资建议。",
+      "seal": "新派观局",
+      "year": "年",
+      "month": "月",
+      "day": "日",
+      "hour": "时",
+      "unknown": "未知"
     }
   }
 }
