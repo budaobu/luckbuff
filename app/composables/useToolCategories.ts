@@ -87,6 +87,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/mangpai-bazi',
       },
       {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'newSchoolBazi.title',
+        descKey: 'newSchoolBazi.subtitle',
+        ctaKey: 'newSchoolBazi.cta',
+        path: '/tools/new-school-bazi',
+      },
+      {
         icon: 'i-heroicons-squares-plus',
         titleKey: 'home.toolBaziZiweiTitle',
         descKey: 'home.toolBaziZiweiDesc',
