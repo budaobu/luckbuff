@@ -151,25 +151,25 @@ onMounted(async () => {
     type: 'svg',
     margin: 0,
     errorCorrectionLevel: 'M',
-    color: { dark: '#e8c88a', light: '#00000000' },
+    color: { dark: '#6d5024', light: '#00000000' },
   })
 })
 </script>
 
 <style scoped>
 .mbp {
-  --mbp-shell: #0f0d0b;
-  --mbp-sheet: #17130f;
-  --mbp-paper: #221b15;
-  --mbp-line: #3d3328;
-  --mbp-line-soft: #2c251d;
-  --mbp-ink: #f2ead9;
-  --mbp-ink-soft: #c9bcab;
-  --mbp-ink-faint: #8f8578;
-  --mbp-bronze: #d3a661;
-  --mbp-bronze-dark: #946f34;
-  --mbp-cinnabar: #b5473a;
-  --mbp-jade: #688a72;
+  --mbp-shell: #f1e8d6;
+  --mbp-sheet: #fdf8ec;
+  --mbp-paper: #fffaf0;
+  --mbp-line: #d8cdb5;
+  --mbp-line-soft: #e7dcc6;
+  --mbp-ink: #383126;
+  --mbp-ink-soft: #6a6050;
+  --mbp-ink-faint: #938877;
+  --mbp-bronze: #8a5a25;
+  --mbp-bronze-dark: #6d471c;
+  --mbp-cinnabar: #a83a2d;
+  --mbp-jade: #537c66;
   width: 100%;
   color: var(--mbp-ink);
   background: var(--mbp-shell);
@@ -181,10 +181,13 @@ onMounted(async () => {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 0%, rgba(211, 166, 97, 0.11), transparent 32%),
+    radial-gradient(circle at 50% 0%, rgba(166, 124, 0, 0.05), transparent 34%),
     var(--mbp-sheet);
   border: 1px solid var(--mbp-line);
-  box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72),
+    inset 0 0 34px rgba(166, 124, 0, 0.07),
+    0 20px 48px -38px rgba(69, 55, 20, 0.55);
 }
 
 .mbp-mesh {
@@ -225,7 +228,7 @@ onMounted(async () => {
   line-height: 1;
   letter-spacing: 7px;
   font-weight: 700;
-  text-shadow: 0 0 16px rgba(211, 166, 97, 0.15);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .mbp-subtitle {
@@ -246,7 +249,7 @@ onMounted(async () => {
 .mbp-pillar {
   min-height: 142px;
   padding: 10px 6px;
-  background: linear-gradient(180deg, rgba(211, 166, 97, 0.08), rgba(0, 0, 0, 0.25));
+  background: linear-gradient(180deg, rgba(166, 124, 0, 0.06), rgba(166, 124, 0, 0.015));
   border: 1px solid var(--mbp-line);
   display: flex;
   flex-direction: column;
@@ -319,7 +322,7 @@ onMounted(async () => {
   min-width: 0;
   padding: 6px 3px;
   border: 1px solid var(--mbp-line-soft);
-  background: rgba(34, 27, 21, 0.72);
+  background: rgba(255, 250, 240, 0.78);
   color: var(--mbp-ink-soft);
   font-size: 11px;
   text-align: center;
@@ -413,7 +416,7 @@ onMounted(async () => {
   display: inline-block;
   width: 58%;
   height: 12px;
-  background: linear-gradient(90deg, transparent, rgba(211, 166, 97, 0.28), transparent);
+  background: linear-gradient(90deg, transparent, rgba(166, 124, 0, 0.22), transparent);
   animation: mbp-shimmer 1.3s infinite;
 }
 
@@ -427,13 +430,13 @@ onMounted(async () => {
 .mbp-error {
   margin: 0;
   padding: 16px 22px;
-  color: #d99388;
+  color: var(--mbp-cinnabar);
   font-size: 12px;
 }
 
 .mbp-foot {
   padding: 18px 22px;
-  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.24));
+  background: linear-gradient(180deg, transparent, rgba(166, 124, 0, 0.06));
 }
 
 .mbp-sign {

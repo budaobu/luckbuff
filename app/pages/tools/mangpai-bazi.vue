@@ -22,7 +22,7 @@
         </div>
 
         <div class="overflow-hidden rounded-xl border border-[var(--border-light)] bg-[var(--surface-dropdown)]">
-          <div class="h-[3px] bg-gradient-to-r from-[#7a5220] via-[#b5473a] to-[#231f1a]" />
+          <div class="h-[3px] bg-gradient-to-r from-[#8a5a25] via-[#a83a2d] to-[#d8cdb5]" />
           <div class="p-5 md:p-6">
             <BaziForm
               :initial-values="lastFormValues"
@@ -43,8 +43,8 @@
 
       <div v-else-if="phase === 'calculating'" class="flex min-h-[58vh] items-center justify-center">
         <div class="w-full max-w-sm text-center">
-          <div class="mx-auto flex h-20 w-20 items-center justify-center border border-[#b5473a]/50 bg-[#231f1a]">
-            <span class="font-serif text-2xl font-bold text-[#b5473a]">{{ $t('mangpaiBazi.sealChar') }}</span>
+          <div class="mx-auto flex h-20 w-20 items-center justify-center border border-[#a83a2d]/45 bg-[#fdf8ec]">
+            <span class="font-serif text-2xl font-bold text-[#a83a2d]">{{ $t('mangpaiBazi.sealChar') }}</span>
           </div>
           <p class="mt-5 text-sm tracking-[0.2em] text-[var(--text-muted)]">
             {{ $t('mangpaiBazi.calculating') }}
