@@ -4,12 +4,19 @@ import type {
   NewSchoolMissingWord,
   NewSchoolPillar,
 } from '~/types/new-school-bazi'
+import {
+  dayOfYear,
+  getHourPillar,
+  getJieDayOfYear,
+  getMonthPillar,
+  getMonthZhiIndex,
+  getYearPillar,
+} from '~/utils/bazi/calendar'
 
 export type NewSchoolGender = 'male' | 'female'
 
 const TIAN_GAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'] as const
 const DI_ZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'] as const
-const MONTH_ZHI = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑'] as const
 
 const GAN_WUXING = {
   甲: '木', 乙: '木', 丙: '火', 丁: '火', 戊: '土',
@@ -40,74 +47,6 @@ const WUXING_KE: Record<string, string> = {
 }
 
 const WUXING_KEYS = ['木', '火', '土', '金', '水'] as const
-
-function isLeapYear(year: number): boolean {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
-}
-
-function dayOfYear(year: number, month: number, day: number): number {
-  const days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  if (isLeapYear(year)) days[2] = 29
-  let result = 0
-  for (let monthIndex = 1; monthIndex < month; monthIndex += 1) result += days[monthIndex]!
-  return result + day
-}
-
-// Approximate solar-term dates follow the existing site calendar convention.
-function getJieDayOfYear(year: number, jieIndex: number): number {
-  const jieMonth = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1][jieIndex]!
-  const jieDay = [4, 6, 5, 6, 6, 7, 8, 8, 8, 7, 7, 6][jieIndex]!
-  return dayOfYear(year, jieMonth, jieDay)
-}
-
-function getMonthZhiIndex(year: number, month: number, day: number): number {
-  const currentDay = dayOfYear(year, month, day)
-  let jieIndex = 11
-  // 索引 11 是次序小寒，不能参与当年“最近已过节气”比较，否则冬夏月份会被回环覆盖。
-  for (let index = 0; index < 11; index += 1) {
-    if (currentDay >= getJieDayOfYear(year, index)) jieIndex = index
-  }
-  return jieIndex
-}
-
-function getYearPillar(year: number, month: number, day: number) {
-  const lichunDay = getJieDayOfYear(year, 0)
-  const effectiveYear = dayOfYear(year, month, day) < lichunDay ? year - 1 : year
-  return {
-    gan: TIAN_GAN[(((effectiveYear - 4) % 10) + 10) % 10]!,
-    zhi: DI_ZHI[(((effectiveYear - 4) % 12) + 12) % 12]!,
-  }
-}
-
-function getMonthPillar(yearGan: string, year: number, month: number, day: number) {
-  const jieIndex = getMonthZhiIndex(year, month, day)
-  const ganStart: Record<string, number> = {
-    甲: 2, 己: 2, 乙: 4, 庚: 4, 丙: 6, 辛: 6, 丁: 8, 壬: 8, 戊: 0, 癸: 0,
-  }
-  return {
-    gan: TIAN_GAN[(((ganStart[yearGan] ?? 0) + jieIndex) % 10 + 10) % 10]!,
-    zhi: MONTH_ZHI[jieIndex]!,
-  }
-}
-
-function getDayPillar(year: number, month: number, day: number) {
-  const previousYear = year - 1
-  const index = (previousYear * 5 + Math.floor(previousYear / 4) + dayOfYear(year, month, day)) % 60
-  return {
-    gan: TIAN_GAN[((index % 10) + 10) % 10]!,
-    zhi: DI_ZHI[((index % 12) + 12) % 12]!,
-  }
-}
-
-function getHourPillar(dayGan: string, hourIndex: number) {
-  const ganStart: Record<string, number> = {
-    甲: 0, 己: 0, 乙: 2, 庚: 2, 丙: 4, 辛: 4, 丁: 6, 壬: 6, 戊: 8, 癸: 8,
-  }
-  return {
-    gan: TIAN_GAN[(((ganStart[dayGan] ?? 0) + hourIndex) % 10 + 10) % 10]!,
-    zhi: DI_ZHI[hourIndex]!,
-  }
-}
 
 function getShiShen(riGan: string, targetGan: string): string {
   const riWuxing = GAN_WUXING[riGan as keyof typeof GAN_WUXING]!
@@ -220,7 +159,7 @@ export function calcNewSchoolBazi(
   const yearRaw = getYearPillar(birthYear, birthMonth, birthDay)
   const monthRaw = getMonthPillar(yearRaw.gan, birthYear, birthMonth, birthDay)
   const dayRaw = getDayPillar(birthYear, birthMonth, birthDay)
-  const hourRaw = hourIndex >= 0 ? getHourPillar(dayRaw.gan, hourIndex) : null
+  const hourRaw = hourIndex >= 0 ? getHourPillar(dayRaw.gan, hourIndex * 2) : null
   const riGan = dayRaw.gan
 
   const year = makePillar(yearRaw.gan, yearRaw.zhi, riGan)
