@@ -611,6 +611,11 @@
     "xShareHint": "Shares the screenshot via native share when supported, otherwise opens your text and link in a new X tab"
   },
   "seo": {
+    "mangpaiBaziTitle": "Blind-School BaZi Chart & Twelve Year Gods",
+    "mangpaiBaziDesc": "A blind-school BaZi tool that reuses four-pillar and luck-cycle calculations, maps twelve annual gods, and reads family, career, wealth, marriage, wellbeing tendencies and timing through imagery and work logic. Entertainment reference only.",
+    "mangpaiBaziKeywords": "blind school bazi, BaZi chart, twelve year gods, four pillars, annual timing, family reading",
+    "mangpaiBaziOgTitle": "Blind-School BaZi Chart | ososn",
+    "mangpaiBaziOgDesc": "Read four pillars, twelve year gods and coming-year timing through blind-school imagery and work logic.",
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
     "homeDesc": "ososn is a free online divination platform offering Bazi, Ziwei, Liu Yao, Qimen, Tarot, and divination lots with AI interpretation.",
     "homeKeywords": "online fortune telling,free charting,Ziwei Dou Shu,Bazi,Vedic Astrology,Plum Blossom,Liu Yao,destiny reading,online divination,metaphysics tools",
@@ -10268,6 +10273,46 @@
         "seoKeywords": "card tail fortune, bank card tail fortune, card tail energy, numeric energy analysis, Luoshu nine stars, five elements",
         "seoOgTitle": "Card Tail Fortune Analysis | ososn",
         "seoOgDescription": "Analyze bank-card tail fortune with numeric energy using the last 4–8 digits. Never enter a full card number."
+      }
+    }
+  },
+  "mangpaiBazi": {
+    "title": "Blind-School BaZi",
+    "subtitle": "Four pillars return to the altar and twelve year gods settle by the flow year. Read family, career, wealth, marriage and timing through imagery, work and host-guest logic.",
+    "badge": "Imagery · Work · Timing",
+    "methodology": "The twelve gods start Tai Sui at the flow-year branch and advance through the branches. Server-side readings use a blind-school framework; entertainment reference only.",
+    "cta": "Chart Now",
+    "submit": "Chart Now",
+    "sealChar": "盲",
+    "calculating": "Setting the chart",
+    "again": "Read another chart",
+    "back": "Back to tools",
+    "calcFailed": "Chart calculation failed. Please try again.",
+    "readingFailed": "Reading generation failed. Please try again.",
+    "shareSummary": "Blind-School BaZi · Day Master {dayMaster} ({strength}) · {geju}",
+    "poster": {
+      "brand": "OSOSN · Blind School",
+      "title": "Blind-School Altar",
+      "subtitle": "Day Master {dayMaster} · {strength}",
+      "pending": "Reading year imagery.",
+      "godRing": "Twelve Year Gods",
+      "godStart": "Tai Sui starts",
+      "basisPrefix": "Basis: ",
+      "generating": "Sealing the reading",
+      "disclaimer": "Entertainment reference only. Not medical or legal advice.",
+      "seal": "Hermit",
+      "year": "Year",
+      "month": "Month",
+      "day": "Day",
+      "hour": "Hour",
+      "unknown": "Unknown",
+      "sections": {
+        "family": "Family Reading",
+        "career": "Career & Office",
+        "wealth": "Wealth",
+        "marriage": "Marriage & Love",
+        "health": "Wellbeing Tendency",
+        "timing": "Coming-Year Timing"
       }
     }
   }

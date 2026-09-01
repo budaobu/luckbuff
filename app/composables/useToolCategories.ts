@@ -80,6 +80,13 @@ const toolCategories: ToolCategory[] = [
         path: '/tools/ziping-bazi',
       },
       {
+        icon: 'i-heroicons-viewfinder-circle',
+        titleKey: 'mangpaiBazi.title',
+        descKey: 'mangpaiBazi.subtitle',
+        ctaKey: 'mangpaiBazi.cta',
+        path: '/tools/mangpai-bazi',
+      },
+      {
         icon: 'i-heroicons-squares-plus',
         titleKey: 'home.toolBaziZiweiTitle',
         descKey: 'home.toolBaziZiweiDesc',
