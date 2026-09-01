@@ -3,7 +3,8 @@
     class="w-full sticky top-0 isolate z-50 border-b backdrop-blur-2xl transition-colors duration-300"
     style="border-color: var(--border-subtle); background-color: color-mix(in srgb, var(--surface-bg) 78%, transparent); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;"
   >
-    <div class="max-w-6xl mx-auto px-6 h-16 md:h-[72px] flex items-center justify-between">
+    <div class="mx-auto w-full max-w-7xl px-6">
+      <div class="flex h-16 w-full max-w-[680px] items-center justify-between md:h-[72px]">
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-2.5 group">
         <img
@@ -168,6 +169,7 @@
         :aria-label="mobileOpen ? t('nav.closeMenu') : t('nav.openMenu')"
         @click="() => { mobileOpen = !mobileOpen }"
       />
+      </div>
     </div>
 
     <!-- Mobile Menu -->

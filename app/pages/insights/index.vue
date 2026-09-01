@@ -521,7 +521,8 @@ useHead(() => ({
 .insights-pagination {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 14px;
   padding-top: 28px;
 }
 
