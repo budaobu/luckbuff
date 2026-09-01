@@ -29,6 +29,14 @@ useHead(() => ({
   link: [
     ...(head.value.link || []),
   ],
+  script: googleAdsenseClient
+    ? [{
+        src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseClient}`,
+        async: true,
+        crossorigin: 'anonymous',
+        tagPosition: 'head',
+      }]
+    : [],
   meta: [
     ...(head.value.meta || []),
     ...(googleSiteVerification
@@ -43,14 +51,6 @@ function loadThirdPartyScripts() {
   if (interactionController.value) {
     interactionController.value.abort()
     interactionController.value = null
-  }
-
-  if (googleAdsenseClient) {
-    const adsScript = document.createElement('script')
-    adsScript.async = true
-    adsScript.crossOrigin = 'anonymous'
-    adsScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseClient}`
-    document.head.appendChild(adsScript)
   }
 
   if (baiduAnalyticsId) {
