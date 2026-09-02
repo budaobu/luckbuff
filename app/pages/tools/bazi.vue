@@ -21,6 +21,32 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
+        <section class="mb-6" aria-labelledby="bazi-decision-title">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h2 id="bazi-decision-title" class="text-sm font-semibold text-[var(--text-primary)]">
+              {{ $t('baziDecision.title') }}
+            </h2>
+            <p class="text-xs text-[var(--text-faint)]">{{ $t('baziDecision.subtitle') }}</p>
+          </div>
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+            <NuxtLink
+              v-for="scene in decisionScenes"
+              :key="scene.path"
+              :to="localePath(scene.path)"
+              class="group rounded-xl border p-3 transition-all duration-200"
+              :class="scene.current
+                ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)]'
+                : 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)] hover:bg-[var(--surface-card-hover)]'"
+            >
+              <div class="flex items-center gap-2">
+                <UIcon :name="scene.icon" class="w-4 h-4" :class="scene.current ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] group-hover:text-[var(--accent)]'" />
+                <span class="text-sm font-medium text-[var(--text-primary)] truncate">{{ scene.title }}</span>
+              </div>
+              <p class="mt-1 text-xs text-[var(--text-faint)] leading-relaxed">{{ scene.description }}</p>
+            </NuxtLink>
+          </div>
+        </section>
+
         <!-- 表单卡片 -->
         <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] overflow-hidden">
           <!-- 顶部金色渐变线 -->
@@ -212,6 +238,7 @@ import type { BaziChart } from '~/types/bazi'
 import type { DiZhi } from '~/types/user'
 const { t } = useI18n()
 const { locale } = useI18n()
+const localePath = useLocalePath()
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -235,6 +262,51 @@ const formValues = ref<FormValues>({
 })
 const lastFormValues = ref<Partial<FormValues>>({})
 const chart = ref<BaziChart | null>(null)
+
+const decisionScenes = computed(() => [
+  {
+    path: '/tools/bazi',
+    icon: 'i-heroicons-calendar-days',
+    title: t('baziDecision.fullTitle'),
+    description: t('baziDecision.fullDesc'),
+    current: true,
+  },
+  {
+    path: '/tools/bazi-elements',
+    icon: 'i-heroicons-chart-bar',
+    title: t('baziDecision.elementsTitle'),
+    description: t('baziDecision.elementsDesc'),
+    current: false,
+  },
+  {
+    path: '/tools/bazi-wealth',
+    icon: 'i-heroicons-banknotes',
+    title: t('baziDecision.wealthTitle'),
+    description: t('baziDecision.wealthDesc'),
+    current: false,
+  },
+  {
+    path: '/tools/bazi-hunpan',
+    icon: 'i-heroicons-heart',
+    title: t('baziDecision.marriageTitle'),
+    description: t('baziDecision.marriageDesc'),
+    current: false,
+  },
+  {
+    path: '/tools/mangpai-bazi',
+    icon: 'i-heroicons-viewfinder-circle',
+    title: t('baziDecision.mangpaiTitle'),
+    description: t('baziDecision.mangpaiDesc'),
+    current: false,
+  },
+  {
+    path: '/tools/new-school-bazi',
+    icon: 'i-heroicons-sparkles',
+    title: t('baziDecision.newSchoolTitle'),
+    description: t('baziDecision.newSchoolDesc'),
+    current: false,
+  },
+])
 
 const store = useProfilesStore()
 const { calc } = useBaziCalc()

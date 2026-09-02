@@ -1067,6 +1067,11 @@
     "baziZhengyuanKeywords": "正缘画像,正缘出现时间,正缘出现征兆,正缘测试,八字看正缘,八字算姻缘,正缘什么时候出现,在线测算,ososn",
     "baziZhengyuanOgTitle": "正缘画像_正缘出现时间与出现征兆_八字看正缘",
     "baziZhengyuanOgDesc": "输入生辰，免费在线生成你的正缘画像：正缘出现时间、出现征兆与伴侣特质参考，仅供文化娱乐参考。",
+    "baziElementsTitle": "五行缺什么怎么看_八字五行分布分析",
+    "baziElementsDesc": "免费在线八字五行分析，输入生辰排出四柱与五行分布，结合日主旺衰和喜用神判断五行缺口、偏弱项与日常调节方向，仅供文化娱乐参考。",
+    "baziElementsKeywords": "五行缺什么,五行缺什么怎么看,八字五行分析,五行分布,喜用神,五行调节,在线八字排盘",
+    "baziElementsOgTitle": "五行缺什么怎么看_八字五行分布分析",
+    "baziElementsOgDesc": "输入生辰查看八字五行分布，结合喜用神理解缺口与偏弱项，获得温和可执行的调节方向。",
     "zipingBaziTitle": "子平八字算命_子平八字命理免费排盘",
     "zipingBaziDesc": "免费子平八字在线排盘，输入出生年月日时即可生成四柱、十神、格局、喜用神与十年大运，用正宗子平法解读你的八字命局与运势趋势。",
     "zipingBaziKeywords": "子平八字,子平法,子平八字算命,子平八字排盘,子平命理,四柱八字,八字免费测算,喜用神,大运流年",
@@ -10388,5 +10393,73 @@
       "hour": "时",
       "unknown": "未知"
     }
+  }
+,
+  "baziElements": {
+    "title": "五行缺口分析",
+    "subtitle": "排出五行分布，结合旺衰与喜用判断缺口如何调节。",
+    "submit": "查看五行分布",
+    "backToBazi": "返回八字排盘",
+    "failed": "五行分析失败",
+    "checkInput": "请检查生日信息后重试",
+    "aiFailed": "AI 解读失败",
+    "shareSummary": "日主{dayMaster}（{strength}），喜用{favorable}",
+    "card1Title": "先排盘，再谈缺项",
+    "card1Desc": "四柱和藏干先转成五行分布，缺项、偏弱与偏旺一目了然。",
+    "card2Title": "喜用决定调节方向",
+    "card2Desc": "不把“缺什么”直接当成“补什么”，优先看喜用与旺衰的组合。",
+    "poster": {
+      "seal": "五行\n诊室",
+      "kicker": "BAZI · FIVE ELEMENTS",
+      "titleNoName": "五行命盘",
+      "balance": "平衡状态",
+      "focusTitle": "调节优先项",
+      "focusNote": "结合喜用与旺衰判断",
+      "readingTitle": "五行调节解读",
+      "disclaimer": "传统文化参考，不构成医疗、法律或投资建议。"
+    },
+    "reading": {
+      "gap": "缺口与偏弱",
+      "use": "喜用方向",
+      "adjust": "调节顺序",
+      "tips": "日常建议"
+    },
+    "levels": {
+      "missing": "缺失",
+      "low": "偏弱",
+      "balanced": "中和",
+      "strong": "偏旺",
+      "dominant": "过旺"
+    },
+    "reasons": {
+      "favorableMissing": "喜用且缺失",
+      "favorableLow": "喜用且偏弱",
+      "favorable": "喜用五行",
+      "missing": "命局缺失",
+      "low": "力量偏弱"
+    },
+    "balance": {
+      "balanced": "分布较均衡",
+      "varied": "分布有差异",
+      "skewed": "力量偏斜",
+      "gap": "有单项缺口",
+      "multiGap": "有多项缺口"
+    }
+  },
+  "baziDecision": {
+    "title": "选择八字分析场景",
+    "subtitle": "同一个命盘，不同问题看不同切面",
+    "fullTitle": "全盘综合",
+    "fullDesc": "四柱、十神、大运与人生总论",
+    "elementsTitle": "五行缺口",
+    "elementsDesc": "看分布、喜用与日常调节",
+    "wealthTitle": "财富格局",
+    "wealthDesc": "看正财偏财与财运走势",
+    "marriageTitle": "婚恋合盘",
+    "marriageDesc": "看姻缘互动与关系模式",
+    "mangpaiTitle": "盲派八字",
+    "mangpaiDesc": "用做功与宾主视角看命局",
+    "newSchoolTitle": "新派八字",
+    "newSchoolDesc": "看作用关系与结构化判断"
   }
 }
