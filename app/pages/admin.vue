@@ -1022,6 +1022,7 @@ interface StatsTopItem {
   slug: string
   views: number
   title?: string
+  path?: string
 }
 
 interface InsightStats {
@@ -1064,6 +1065,7 @@ const statsChartMax = computed(() => Math.max(1, ...statsChartData.value.map(d =
 
 function statsItemHref(item: StatsTopItem): string {
   if (statsTab.value === 'articles') return `/insights/${item.slug}`
+  if (item.path) return item.path
   if (statsTab.value === 'tools' || statsTab.value === 'submits') return `/tools/${item.slug}`
   return item.slug === 'home' ? '/' : `/${item.slug}`
 }

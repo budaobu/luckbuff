@@ -3,6 +3,8 @@
 // 从 ofetch 直接引 $fetch：Nuxt 自动导入的 typed $fetch 会把整个路由表联合类型
 // 拉进实例化，路由一多就炸 TS2589；这里只是 fire-and-forget 上报，不需要路由类型
 import { $fetch } from 'ofetch'
+import { toolCategories } from '~/composables/useToolCategories'
+
 const HUB_PATHS = new Set([
   '/tools',
   '/insights',
@@ -19,6 +21,9 @@ const HUB_PATHS = new Set([
   '/shuangren-hepan',
   '/prophet',
 ])
+const REGISTERED_TOOL_PATHS = new Set(
+  toolCategories.flatMap(category => category.tools.map(tool => tool.path)),
+)
 
 const LOCALE_PREFIX = /^\/(?:zh-CN|zh-TW|en)(?=\/|$)/
 
@@ -29,9 +34,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     let type: 'tool' | 'hub'
     let slug: string
     const toolMatch = clean.match(/^\/tools\/([\w-]+)/)
-    if (toolMatch) {
+    if (toolMatch || REGISTERED_TOOL_PATHS.has(clean)) {
       type = 'tool'
-      slug = toolMatch[1]!
+      slug = toolMatch ? toolMatch[1]! : clean.slice(1).split('/')[1]!
     } else if (clean === '/') {
       // 首页计入专题页统计，slug 固定为 home
       type = 'hub'

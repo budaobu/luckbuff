@@ -4,13 +4,23 @@ import { getPageViewStats, type PageViewStats } from '~~/server/utils/page-views
 // 运行时无需访问 app/pages 源码。
 import pageTitles from '~~/app/data/page-titles.json'
 
-type Section = keyof typeof pageTitles
+type Section = 'tools' | 'hubs' | 'submits'
+const toolPaths: Record<string, string> = pageTitles.paths
+
+function pageHref(slug: string, section: Section): string {
+  if (section === 'hubs') return slug === 'home' ? '/' : `/${slug}`
+  return toolPaths[slug] ?? `/tools/${slug}`
+}
 
 function withTitles(stats: PageViewStats, section: Section) {
   const titles: Record<string, string> = pageTitles[section]
   return {
     ...stats,
-    top: stats.top.map(item => ({ ...item, title: titles[item.slug] })),
+    top: stats.top.map(item => ({
+      ...item,
+      title: titles[item.slug],
+      path: pageHref(item.slug, section),
+    })),
   }
 }
 
@@ -24,6 +34,7 @@ function withSubmitTitles(stats: PageViewStats) {
     top: stats.top.map(item => ({
       ...item,
       title: submits[item.slug] ?? tools[item.slug],
+      path: pageHref(item.slug, 'submits'),
     })),
   }
 }
