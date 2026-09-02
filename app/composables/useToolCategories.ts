@@ -18,7 +18,7 @@ export interface ToolCategory {
   tools: ToolItem[]
 }
 
-const toolCategories: ToolCategory[] = [
+export const toolCategories: ToolCategory[] = [
   {
     id: 'numeric-energy',
     icon: 'i-heroicons-calculator',

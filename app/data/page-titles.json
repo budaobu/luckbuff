@@ -94,7 +94,14 @@
     "ziwei-hunpan": "紫薇婚盘",
     "ziwei-shiye-hepan": "事业紫微合盘",
     "ziwei-zhichang-hepan": "职场紫薇合盘",
-    "zwds": "紫微斗数"
+    "zwds": "紫微斗数",
+    "liuyao-football": "六爻预测足球",
+    "qimen-football": "奇门预测足球",
+    "liuren-football": "大六壬预测足球",
+    "qimen-worldcup": "奇门世界杯",
+    "liuren-worldcup": "大六壬世界杯",
+    "fbti": "足球占卜性格测试",
+    "worldcup-champion-odds-2026": "世界杯冠军赔率"
   },
   "hubs": {
     "home": "首页",
@@ -126,6 +133,21 @@
     "qimen": "奇门遁甲",
     "vedic": "吠陀占星分析",
     "zhouyi": "梅花易数",
-    "zwds": "紫微斗数"
+    "zwds": "紫微斗数",
+    "liuyao-football": "六爻预测足球",
+    "qimen-football": "奇门预测足球",
+    "liuren-football": "大六壬预测足球",
+    "qimen-worldcup": "奇门世界杯",
+    "liuren-worldcup": "大六壬世界杯"
+  },
+  "paths": {
+    "liuyao-football": "/prophet/liuyao-football",
+    "qimen-football": "/prophet/qimen-football",
+    "liuren-football": "/prophet/liuren-football",
+    "qimen-worldcup": "/prophet/qimen-worldcup",
+    "liuren-worldcup": "/prophet/liuren-worldcup",
+    "worldcup-champion-odds-2026": "/prophet/worldcup-champion-odds-2026",
+    "vedic": "/tools/vedic-astro",
+    "prophet": "/prophet"
   }
 }

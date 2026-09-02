@@ -19,10 +19,21 @@ const TOOL_API_PREFIXES = [
   '/api/zwds/',
 ]
 
+// 同一顶层 API 下承载多个页面时，用路由前缀还原成实际工具 slug。
+const TOOL_API_SLUG_ALIASES = [
+  { prefix: '/api/prophet/liuyao-football', slug: 'liuyao-football' },
+  { prefix: '/api/prophet/qimen-football', slug: 'qimen-football' },
+  { prefix: '/api/prophet/liuren-football', slug: 'liuren-football' },
+  { prefix: '/api/prophet/qimen-worldcup/', slug: 'qimen-worldcup' },
+  { prefix: '/api/prophet/liuren-worldcup/', slug: 'liuren-worldcup' },
+]
+
 const DEDUP_WINDOW_MS = 60_000
 const recent = new Map<string, number>()
 
 function toolSlugFromPath(path: string): string | null {
+  const alias = TOOL_API_SLUG_ALIASES.find(item => path.startsWith(item.prefix))
+  if (alias) return alias.slug
   if (path.startsWith('/api/tools/')) {
     const seg = path.slice('/api/tools/'.length).split('/')[0]
     return seg && /^[\w-]{1,80}$/.test(seg) ? seg : null
