@@ -159,6 +159,18 @@ export function getLotType(id: string): LotType | undefined {
   return LOT_TYPES.find(t => t.id === id)
 }
 
+export function getFortuneByNumber(id: string, number: number, locale: string): {
+  lotType: LotType
+  fortune: FortuneLot
+  locale: string
+} {
+  const lotType = getLotType(id)
+  if (!lotType) throw createError({ statusCode: 400, statusMessage: `Unknown lot type: ${id}` })
+  const fortune = lotType.fortunes.find(item => item.number === number)
+  if (!fortune) throw createError({ statusCode: 404, statusMessage: `Lot not found: ${number}` })
+  return { lotType, fortune, locale: locale || 'zh-CN' }
+}
+
 export function drawFortune(id: string, locale: string): { lotType: LotType; fortune: FortuneLot; locale: string } {
   const lotType = getLotType(id)
   if (!lotType) {
