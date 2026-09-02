@@ -10576,4 +10576,20 @@
       "disclaimer": "传统文化参考，不构成婚恋、医疗或法律建议。"
     }
   }
+,
+  "guanyinLotDetail": {
+    "back": "返回观音灵签",
+    "title": "观音灵签第{n}签详解",
+    "poem": "签诗",
+    "meaning": "解签",
+    "advice": "建议",
+    "navigation": "观音灵签导航",
+    "previous": "上一签",
+    "next": "下一签",
+    "lotNo": "第{n}签",
+    "draw": "在线求一签",
+    "seoTitle": "观音灵签第{n}签详解：{title}",
+    "seoDescription": "观音灵签第{n}签「{title}」解签：{meaning} 页面整理签诗、解签与行动建议，并可继续在线求签。",
+    "seoKeywords": "观音灵签第{n}签,观音灵签{n}详解,观音灵签解签,{title},灵签签诗,在线求签"
+  }
 }

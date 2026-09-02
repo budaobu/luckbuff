@@ -10575,4 +10575,20 @@
       "disclaimer": "傳統文化參考，不構成婚戀、醫療或法律建議。"
     }
   }
+,
+  "guanyinLotDetail": {
+    "back": "返回觀音靈簽",
+    "title": "觀音靈簽第{n}簽詳解",
+    "poem": "簽詩",
+    "meaning": "解簽",
+    "advice": "建議",
+    "navigation": "觀音靈簽導覽",
+    "previous": "上一簽",
+    "next": "下一簽",
+    "lotNo": "第{n}簽",
+    "draw": "線上求一簽",
+    "seoTitle": "觀音靈簽第{n}簽詳解：{title}",
+    "seoDescription": "觀音靈簽第{n}簽「{title}」解簽：{meaning} 頁面整理簽詩、解簽與行動建議，並可繼續線上求簽。",
+    "seoKeywords": "觀音靈簽第{n}簽,觀音靈簽{n}詳解,觀音靈簽解簽,{title},靈簽簽詩,線上求簽"
+  }
 }

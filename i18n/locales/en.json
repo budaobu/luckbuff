@@ -10554,4 +10554,20 @@
       "disclaimer": "Traditional culture reference; not relationship, medical or legal advice."
     }
   }
+,
+  "guanyinLotDetail": {
+    "back": "Back to Guanyin Oracle",
+    "title": "Guanyin Oracle No. {n}: {title}",
+    "poem": "Oracle poem",
+    "meaning": "Interpretation",
+    "advice": "Advice",
+    "navigation": "Guanyin Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Guanyin Oracle No. {n} Meaning: {title}",
+    "seoDescription": "Guanyin Oracle No. {n}, “{title}”: {meaning} Read the poem, interpretation and advice, then draw a lot online.",
+    "seoKeywords": "Guanyin Oracle No. {n},Guanyin lot {n} meaning,{title},oracle poem,draw Guanyin lot"
+  }
 }
