@@ -602,6 +602,13 @@ export const toolCategories: ToolCategory[] = [
         path: '/tools/wuge',
       },
       {
+        icon: 'i-heroicons-heart',
+        titleKey: 'nameCompatibility.title',
+        descKey: 'nameCompatibility.subtitle',
+        ctaKey: 'nameCompatibility.submit',
+        path: '/tools/name-compatibility',
+      },
+      {
         icon: 'i-heroicons-star',
         titleKey: 'home.toolNameScoreTitle',
         descKey: 'home.toolNameScoreDesc',
