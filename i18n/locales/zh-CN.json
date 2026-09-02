@@ -1077,6 +1077,11 @@
     "fortune2026Keywords": "2026年运势,2026运势测算,2026生肖运势,2026风水布局,丙午年运势,犯太岁化解,九宫飞星,流年运势",
     "fortune2026OgTitle": "2026年运势测算入口",
     "fortune2026OgDesc": "按问题找工具：流年命盘、生肖犯太岁、事业财富、风水方位和每日运势一次看清。",
+    "nameCompatibilityTitle": "姓名配对_姓名五行关系测试",
+    "nameCompatibilityDesc": "免费在线姓名配对测试，输入两个中文姓名，复用五格剖象与三才五行计算人格生克、总格数理与相处节奏，生成姓名关系海报与AI解读，仅供文化娱乐。",
+    "nameCompatibilityKeywords": "姓名配对,姓名配对测试,姓名五行配对,五格姓名配对,名字合不合,姓名姻缘,在线姓名测试",
+    "nameCompatibilityOgTitle": "姓名配对_姓名五行关系测试",
+    "nameCompatibilityOgDesc": "输入两个姓名，查看人格五行、总格数理和相处节奏，得到温和可执行的相处建议。",
     "zipingBaziTitle": "子平八字算命_子平八字命理免费排盘",
     "zipingBaziDesc": "免费子平八字在线排盘，输入出生年月日时即可生成四柱、十神、格局、喜用神与十年大运，用正宗子平法解读你的八字命局与运势趋势。",
     "zipingBaziKeywords": "子平八字,子平法,子平八字算命,子平八字排盘,子平命理,四柱八字,八字免费测算,喜用神,大运流年",
@@ -10510,6 +10515,65 @@
       "luckyColors": "十二生肖 2026 幸运颜色与数字指南",
       "wealthDirection": "2026 年流年财位在哪个方向？",
       "flyingStars": "2026 丙午年飞星风水布局指南"
+    }
+  }
+,
+  "nameCompatibility": {
+    "title": "姓名配对",
+    "personalityElement": "人格五行",
+    "subtitle": "输入两个中文姓名，从人格五行与总格数理看关系节奏。",
+    "nameA": "姓名 A",
+    "nameB": "姓名 B",
+    "namePlaceholder": "请输入 2-4 个汉字姓名",
+    "nameHint": "系统使用康熙笔画与五格剖象法，输入两个不同姓名。",
+    "submit": "开始姓名配对",
+    "failed": "姓名配对失败",
+    "checkInput": "请检查两个姓名后重试",
+    "aiFailed": "AI 解读失败",
+    "interpreting": "解读中",
+    "aiPending": "AI 正在解读姓名关系...",
+    "card1Title": "先算姓名场",
+    "card1Desc": "复用五格剖象法，把每个名字的人格五行与总格数理先算清。",
+    "card2Title": "再看相处节奏",
+    "card2Desc": "相同、相生、相克与数理信号共同决定共振、滋养、张力或边界。",
+    "pattern": {
+      "resonant": "共振相称",
+      "nourishing": "相互滋养",
+      "dynamic": "动态磨合",
+      "balanced": "互补平衡",
+      "cautious": "需立边界"
+    },
+    "flow": {
+      "same": "{a} 与 {b} 同气共振",
+      "a-to-b": "{a} 滋养 {b}",
+      "b-to-a": "{b} 滋养 {a}",
+      "a-shapes-b": "{a} 塑形 {b}",
+      "b-shapes-a": "{b} 塑形 {a}"
+    },
+    "signals": {
+      "personality-element-same": "人格五行相同，节奏容易同步",
+      "personality-element-generates": "人格五行相生，能量可互相支持",
+      "personality-element-shapes": "人格五行相克，张力可转化为推动力",
+      "total-grid-a-good": "姓名 A 总格数理偏吉",
+      "total-grid-b-good": "姓名 B 总格数理偏吉",
+      "total-grid-mixed": "有总格数理呈半吉，需稳定节奏",
+      "total-grid-a-caution": "姓名 A 总格需留意边界",
+      "total-grid-b-caution": "姓名 B 总格需留意边界"
+    },
+    "reading": {
+      "match": "五行互动",
+      "grid": "数理信号",
+      "flow": "相处节奏",
+      "tips": "相处建议"
+    },
+    "poster": {
+      "seal": "姓名\n配对",
+      "kicker": "NAME COMPATIBILITY",
+      "title": "{a} · {b}",
+      "gridTitle": "总格数理",
+      "gridNote": "康熙笔画 · 五格剖象",
+      "readingTitle": "关系解读",
+      "disclaimer": "传统文化参考，不构成婚恋、医疗或法律建议。"
     }
   }
 }

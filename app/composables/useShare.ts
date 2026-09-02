@@ -2,6 +2,7 @@ export interface ShareOptions {
   tool:
     | 'bazi'
     | 'bazi-elements'
+    | 'name-compatibility'
     | 'zhouyi'
     | 'liuyao'
     | 'zwds'
@@ -112,6 +113,7 @@ export function useShare() {
     const toolNameMap: Record<string, string> = {
       bazi: '八字',
       'bazi-elements': '八字五行缺口',
+      'name-compatibility': '姓名配对',
       zhouyi: '卦象',
       zwds: '紫微',
       liuyao: '六爻',

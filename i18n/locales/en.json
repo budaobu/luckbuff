@@ -1077,6 +1077,11 @@
     "fortune2026Keywords": "2026 fortune,2026 yearly luck,2026 zodiac forecast,2026 feng shui,Bing Wu year,Tai Sui remedies,flying stars,annual forecast",
     "fortune2026OgTitle": "2026 Fortune Tools and Readings",
     "fortune2026OgDesc": "Choose by question: yearly chart, zodiac Tai Sui, career wealth, Feng Shui directions and daily timing.",
+    "nameCompatibilityTitle": "Name Compatibility_Chinese Name Element Matching",
+    "nameCompatibilityDesc": "Free Chinese name compatibility test. Enter two names to compare Personality Grid elements, Total Grid numerology and relationship rhythm using Five Grid theory, with an adaptive poster and AI reading.",
+    "nameCompatibilityKeywords": "name compatibility,chinese name matching,name numerology,five grid compatibility,name element match,relationship names,name test",
+    "nameCompatibilityOgTitle": "Chinese Name Compatibility",
+    "nameCompatibilityOgDesc": "Compare two names by Personality Grid elements and Total Grid numerology for practical relationship rhythm advice.",
     "zipingBaziTitle": "Zi Ping Bazi Fortune Telling_Free Zi Ping Chart",
     "zipingBaziDesc": "Free online Zi Ping Bazi charting. Enter your birth date and time to generate the four pillars, ten gods, pattern, favorable elements and ten-year luck cycles, interpreted by the orthodox Zi Ping method.",
     "zipingBaziKeywords": "Zi Ping Bazi,Zi Ping method,Zi Ping fortune telling,Zi Ping chart,Zi Ping metaphysics,Four Pillars Bazi,free Bazi reading,favorable elements,luck cycles",
@@ -10488,6 +10493,65 @@
       "luckyColors": "2026 lucky colors and numbers for Chinese zodiac signs",
       "wealthDirection": "Where is the 2026 annual wealth direction?",
       "flyingStars": "2026 Bing Wu flying-star Feng Shui layout guide"
+    }
+  }
+,
+  "nameCompatibility": {
+    "title": "Name Compatibility",
+    "personalityElement": "Personality element",
+    "subtitle": "Enter two Chinese names to compare Personality Grid elements and Total Grid numerology.",
+    "nameA": "Name A",
+    "nameB": "Name B",
+    "namePlaceholder": "Enter a 2-4 character Chinese name",
+    "nameHint": "The system uses Kangxi strokes and Five Grid theory; enter two different names.",
+    "submit": "Compare names",
+    "failed": "Name compatibility failed",
+    "checkInput": "Check both names and try again",
+    "aiFailed": "AI reading failed",
+    "interpreting": "Reading",
+    "aiPending": "AI is reading the name relationship...",
+    "card1Title": "Calculate name fields first",
+    "card1Desc": "Five Grid theory maps each name to a Personality Grid element and Total Grid signal.",
+    "card2Title": "Then read the rhythm",
+    "card2Desc": "Same, generating and shaping elements combine with numerology into resonance, support, tension or boundaries.",
+    "pattern": {
+      "resonant": "Resonant match",
+      "nourishing": "Mutually nourishing",
+      "dynamic": "Dynamic friction",
+      "balanced": "Complementary balance",
+      "cautious": "Needs boundaries"
+    },
+    "flow": {
+      "same": "{a} and {b} share one rhythm",
+      "a-to-b": "{a} nourishes {b}",
+      "b-to-a": "{b} nourishes {a}",
+      "a-shapes-b": "{a} shapes {b}",
+      "b-shapes-a": "{b} shapes {a}"
+    },
+    "signals": {
+      "personality-element-same": "Same Personality Grid element; pace can sync",
+      "personality-element-generates": "Generating elements; energy can support both sides",
+      "personality-element-shapes": "Shaping elements; tension can become momentum",
+      "total-grid-a-good": "Name A has a favorable Total Grid signal",
+      "total-grid-b-good": "Name B has a favorable Total Grid signal",
+      "total-grid-mixed": "A mixed Total Grid signal calls for steady pacing",
+      "total-grid-a-caution": "Name A’s Total Grid needs clear boundaries",
+      "total-grid-b-caution": "Name B’s Total Grid needs clear boundaries"
+    },
+    "reading": {
+      "match": "Element interaction",
+      "grid": "Numerology signals",
+      "flow": "Relationship rhythm",
+      "tips": "Suggestions"
+    },
+    "poster": {
+      "seal": "NAME\nMATCH",
+      "kicker": "NAME COMPATIBILITY",
+      "title": "{a} · {b}",
+      "gridTitle": "Total Grid signals",
+      "gridNote": "Kangxi strokes · Five Grid theory",
+      "readingTitle": "Relationship reading",
+      "disclaimer": "Traditional culture reference; not relationship, medical or legal advice."
     }
   }
 }
