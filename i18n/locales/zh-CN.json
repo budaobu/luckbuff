@@ -4900,6 +4900,7 @@
     }
   },
   "drawALot": {
+    "viewDetail": "查看本签详解",
     "knowledgeCard1Title": "線上求籤",
     "knowledgeCard1Desc": "通過隨機算法抽取靈籤，結合籤詩內容獲得對問題的啟示。",
     "knowledgeCard2Title": "心誠則靈",

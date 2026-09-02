@@ -4903,6 +4903,7 @@
     }
   },
   "drawALot": {
+    "viewDetail": "查看本籤詳解",
     "knowledgeCard1Title": "線上求籤",
     "knowledgeCard1Desc": "透過隨機演算法抽取靈籤，結合籤詩內容獲得對問題的啟示。",
     "knowledgeCard2Title": "心誠則靈",

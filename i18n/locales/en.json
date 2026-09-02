@@ -4878,6 +4878,7 @@
     }
   },
   "drawALot": {
+    "viewDetail": "View this lot’s details",
     "knowledgeCard1Title": "Online Fortune Stick",
     "knowledgeCard1Desc": "Draws a sacred lot through random algorithms and offers insight through the poem.",
     "knowledgeCard2Title": "Sincerity Matters",
