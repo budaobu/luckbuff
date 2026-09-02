@@ -1206,6 +1206,14 @@
     "knowledgeCard4Title": "Luck Cycles",
     "knowledgeCard4Desc": "Major luck cycles change every ten years and annual influences shift yearly, revealing ups and downs in fortune."
   },
+  "baziPosterCharts": {
+    "wuxingChartTitle": "Five elements, split into one hundred parts",
+    "wuxingChartSubtitle": "1 dot = 1% · sorted from strongest to weakest",
+    "scoreChartTitle": "Five fortune dimensions, visible point by point",
+    "scoreChartSubtitle": "1 tick = 1 point · inked ticks are the score",
+    "dayunLineChartTitle": "Ten luck periods in one rising-and-falling line",
+    "dayunLineChartSubtitle": "1 dot = 1 luck period · hollow dot is current"
+  },
   "zhouyi": {
     "title": "Plum Blossom (Meihua)",
     "subtitle": "Choose your casting method, sincerity brings clarity",

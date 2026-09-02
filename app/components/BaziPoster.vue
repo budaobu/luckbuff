@@ -91,19 +91,7 @@
         </div>
 
         <div class="bzp-wuxing">
-          <div class="bzp-section-head">
-            <span class="bzp-section-no">01</span>
-            <h2>{{ $t('bazi.wuxingTitle') }}</h2>
-          </div>
-          <div class="bzp-wuxing-grid">
-            <div v-for="item in wuxingList" :key="item.name" class="bzp-wuxing-row">
-              <span class="bzp-wuxing-name">{{ item.name }}</span>
-              <span class="bzp-wuxing-track">
-                <span class="bzp-wuxing-fill" :style="{ width: `${item.value}%`, background: item.color }" />
-              </span>
-              <span class="bzp-wuxing-value">{{ item.value }}%</span>
-            </div>
-          </div>
+          <BaziLieflatHundredField :scores="chart.wuxingScore" />
         </div>
       </section>
 
@@ -151,41 +139,16 @@
           </article>
         </div>
 
-        <div v-if="!error" class="bzp-scores">
-          <div
-            v-for="score in scoreItems"
-            :key="score.key"
-            class="bzp-score"
-          >
-            <span>{{ score.label }}</span>
-            <em>{{ score.value }}</em>
-            <span class="bzp-score-track">
-              <i :style="{ width: `${score.value}%` }" />
-            </span>
-          </div>
+        <div v-if="!error" class="bzp-chart-stack">
+          <BaziLieflatScoreTally :items="scoreItems" />
+          <BaziLieflatDayunLine :points="dayunPoints" />
         </div>
 
-        <!-- 大运 -->
-        <div class="bzp-dayun">
-          <h3>{{ $t('bazi.dayunTable') }}</h3>
-          <div class="bzp-dayun-track">
-            <div
-              v-for="d in chart.dayuns"
-              :key="d.index"
-              class="bzp-dayun-item"
-              :class="{ 'is-current': chart.currentDaYun?.index === d.index }"
-            >
-              <span class="bzp-dayun-age">{{ d.ageRange[0] }}-{{ d.ageRange[1] }}</span>
-              <strong>{{ d.gan }}{{ d.zhi }}</strong>
-              <span class="bzp-dayun-score">{{ reading.dayunScores.find(item => item.index === d.index)?.score ?? d.score ?? '—' }}</span>
-              <span v-if="chart.currentDaYun?.index === d.index" class="bzp-current-tag">{{ $t('bazi.currentLabel') }}</span>
-            </div>
-          </div>
-          <div v-if="reading.dayunScores.length" class="bzp-dayun-notes">
-            <p v-for="item in reading.dayunScores" :key="item.index">
-              <strong>{{ item.ganZhi }} · {{ item.ageRange }}</strong>{{ item.fortune }} · {{ item.analysis }}
-            </p>
-          </div>
+        <!-- 大运逐段解读 -->
+        <div v-if="reading.dayunScores.length" class="bzp-dayun-notes">
+          <p v-for="item in reading.dayunScores" :key="item.index">
+            <strong>{{ item.ganZhi }} · {{ item.ageRange }}</strong>{{ item.fortune }} · {{ item.analysis }}
+          </p>
         </div>
 
         <!-- 关键时期 + 建议 -->
@@ -260,17 +223,6 @@ const pillars = computed(() => {
     canggan: pillar?.canggan.map(item => `${item.gan}·${item.type}`).join(' ') || '—',
   }))
 })
-
-const wuxingColors: Record<string, string> = {
-  木: '#4a7c59',
-  火: '#a8512e',
-  土: '#8a6b3a',
-  金: '#7f7a6c',
-  水: '#3f5a6c',
-}
-
-const wuxingList = computed(() => Object.entries(props.chart.wuxingScore)
-  .map(([name, value]) => ({ name, value, color: wuxingColors[name] ?? '#55503f' })))
 
 const analysisItems = computed(() => {
   const titleMap: Record<string, string> = {
@@ -369,6 +321,20 @@ const scoreItems = computed(() => [
   { key: 'health', label: t('fortuneRadar.labels.health') },
   { key: 'study', label: t('fortuneRadar.labels.study') },
 ].map(item => ({ ...item, value: reading.value.scores[item.key] ?? 0 })))
+
+const dayunPoints = computed(() => props.chart.dayuns.map((dayun) => {
+  const score = reading.value.dayunScores.find(item => item.index === dayun.index)?.score
+    ?? dayun.score
+    ?? 0
+
+  return {
+    index: dayun.index,
+    ganZhi: `${dayun.gan}${dayun.zhi}`,
+    ageRange: dayun.ageRange,
+    score,
+    isCurrent: props.chart.currentDaYun?.index === dayun.index,
+  }
+}))
 </script>
 
 <style scoped>
@@ -699,41 +665,6 @@ const scoreItems = computed(() => [
   color: var(--bzp-faint);
 }
 
-.bzp-wuxing-grid {
-  display: grid;
-  gap: 9px;
-}
-
-.bzp-wuxing-row {
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) 40px;
-  gap: 9px;
-  align-items: center;
-}
-
-.bzp-wuxing-name {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.bzp-wuxing-track {
-  height: 7px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid var(--bzp-line);
-}
-
-.bzp-wuxing-fill,
-.bzp-score-track i {
-  display: block;
-  height: 100%;
-}
-
-.bzp-wuxing-value {
-  font-size: 10px;
-  color: var(--bzp-soft);
-  text-align: right;
-}
-
 .bzp-analysis-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -836,50 +767,12 @@ const scoreItems = computed(() => [
   letter-spacing: 1px;
 }
 
-.bzp-scores {
+.bzp-chart-stack {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 9px;
+  gap: 12px;
   margin-top: 16px;
 }
 
-.bzp-score {
-  min-width: 0;
-  background: var(--bzp-card);
-  border: 1px solid var(--bzp-soft-line);
-  padding: 8px;
-}
-
-.bzp-score > span:first-child {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 10px;
-  color: var(--bzp-faint);
-}
-
-.bzp-score em {
-  display: block;
-  margin: 3px 0 5px;
-  font-size: 21px;
-  font-style: normal;
-  font-weight: 700;
-  color: var(--bzp-red);
-}
-
-.bzp-score-track {
-  display: block;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid var(--bzp-line);
-}
-
-.bzp-dayun {
-  margin-top: 16px;
-}
-
-.bzp-dayun h3,
 .bzp-history h3,
 .bzp-advice h3 {
   margin: 0 0 9px;
@@ -887,59 +780,11 @@ const scoreItems = computed(() => [
   letter-spacing: 2px;
 }
 
-.bzp-dayun-track {
-  display: flex;
-  gap: 7px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.bzp-dayun-item {
-  position: relative;
-  flex: 0 0 auto;
-  width: 58px;
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  background: var(--bzp-card);
-  border: 1px solid var(--bzp-line);
-  padding: 7px 5px;
-}
-
-.bzp-dayun-item.is-current {
-  border-color: var(--bzp-red);
-  box-shadow: inset 0 0 0 1px var(--bzp-red);
-}
-
-.bzp-dayun-age {
-  font-size: 8px;
-  color: var(--bzp-faint);
-}
-
-.bzp-dayun-item strong {
-  font-size: 15px;
-}
-
-.bzp-dayun-score {
-  font-size: 9px;
-  color: var(--bzp-rust);
-}
-
-.bzp-current-tag {
-  position: absolute;
-  top: -7px;
-  right: 2px;
-  background: var(--bzp-red);
-  color: var(--bzp-paper);
-  font-size: 7px;
-  padding: 1px 3px;
-}
-
 .bzp-dayun-notes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px 14px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .bzp-dayun-notes p {
@@ -1055,10 +900,6 @@ const scoreItems = computed(() => [
     font-size: 18px;
   }
 
-  .bzp-scores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .bzp-section-note {
     display: none;
   }
@@ -1075,10 +916,6 @@ const scoreItems = computed(() => [
 
   .bzp-pillars {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .bzp-scores {
-    grid-template-columns: 1fr;
   }
 
   .bzp-foot {
