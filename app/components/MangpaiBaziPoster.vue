@@ -35,16 +35,87 @@
           <span>{{ $t('mangpaiBazi.poster.godRing') }}</span>
           <b>{{ result.shensha.flowYearBranch }}{{ $t('mangpaiBazi.poster.godStart') }}</b>
         </div>
-        <div class="mbp-ring-grid">
-          <span
-            v-for="god in result.shensha.ring"
+        <p class="mbp-ring-legend">{{ $t('mangpaiBazi.poster.godRingLegend') }}</p>
+
+        <svg
+          class="mbp-god-chart"
+          viewBox="0 0 400 330"
+          role="img"
+          :aria-label="`${$t('mangpaiBazi.poster.godRing')} · ${result.shensha.flowYearBranch}${$t('mangpaiBazi.poster.godStart')}`"
+        >
+          <g class="mbp-chart-grid">
+            <circle cx="200" cy="165" r="104" />
+            <circle cx="200" cy="165" r="35" />
+            <line
+              v-for="god in godChartNodes"
+              :key="`spoke-${god.branch}`"
+              :x1="god.spokeStart.x"
+              :y1="god.spokeStart.y"
+              :x2="god.point.x"
+              :y2="god.point.y"
+            />
+          </g>
+
+          <path
+            v-for="mark in natalChartMarks"
+            :key="`line-${mark.branch}`"
+            class="mbp-chart-line"
+            pathLength="1"
+            :d="mark.path"
+          />
+
+          <g
+            v-for="god in godChartNodes"
             :key="god.branch"
-            class="mbp-ring-cell"
+            class="mbp-chart-node"
             :class="{ 'is-flow-year': god.branch === result.shensha.flowYearBranch }"
           >
-            <i>{{ god.branch }}</i>{{ god.name }}
-          </span>
-        </div>
+            <circle :cx="god.point.x" :cy="god.point.y" r="2.4" />
+            <circle
+              v-if="god.branch === result.shensha.flowYearBranch"
+              :cx="god.point.x"
+              :cy="god.point.y"
+              r="7.5"
+              class="mbp-flow-ring"
+            />
+            <text
+              class="mbp-god-label"
+              :x="god.label.x"
+              :y="god.label.y"
+              :text-anchor="god.label.anchor"
+            >
+              {{ god.branch }} · {{ god.name }}
+            </text>
+          </g>
+
+          <g
+            v-for="mark in natalChartMarks"
+            :key="mark.branch"
+            class="mbp-natal-mark"
+          >
+            <circle :cx="mark.point.x" :cy="mark.point.y" r="4.4" />
+            <text
+              class="mbp-natal-label"
+              :x="mark.innerLabel.x"
+              :y="mark.innerLabel.y"
+              :text-anchor="mark.innerLabel.anchor"
+            >
+              {{ mark.labels.join('/') }}
+            </text>
+          </g>
+
+          <g class="mbp-day-master">
+            <circle cx="200" cy="165" r="30" />
+            <text x="200" y="158" class="mbp-day-master-gan">
+              {{ result.dayMaster.gan }}
+            </text>
+            <text x="200" y="180" class="mbp-day-master-label">
+              {{ $t('mangpaiBazi.poster.dayMaster') }}
+            </text>
+          </g>
+        </svg>
+
+        <p class="mbp-ring-note">{{ $t('mangpaiBazi.poster.godRingNote') }}</p>
       </section>
 
       <section
@@ -134,6 +205,91 @@ const pillarItems = computed(() => {
   })
 })
 
+// L5 Radial Convergence skeleton: god positions on the rim, natal branches converge to the day master.
+const godChartNodes = computed(() => {
+  return props.result.shensha.ring.map((god, index) => {
+    const angle = index * 30 - 90
+    const radians = angle * Math.PI / 180
+    const point = {
+      x: 200 + Math.cos(radians) * 104,
+      y: 165 + Math.sin(radians) * 104,
+    }
+    const spokeStart = {
+      x: 200 + Math.cos(radians) * 38,
+      y: 165 + Math.sin(radians) * 38,
+    }
+    const labelPoint = {
+      x: 200 + Math.cos(radians) * 130,
+      y: 165 + Math.sin(radians) * 130,
+    }
+    const anchor = Math.cos(radians) > 0.25
+      ? 'start'
+      : Math.cos(radians) < -0.25 ? 'end' : 'middle'
+
+    return {
+      ...god,
+      angle,
+      point,
+      spokeStart,
+      label: {
+        ...labelPoint,
+        y: labelPoint.y + (Math.sin(radians) < -0.5 ? -2 : Math.sin(radians) > 0.5 ? 9 : 4),
+        anchor,
+      },
+    }
+  })
+})
+
+const natalChartMarks = computed(() => {
+  const labeledPillars = [
+    { label: props.result.chart.year, pillar: props.result.chart.year },
+    { label: props.result.chart.month, pillar: props.result.chart.month },
+    { label: props.result.chart.day, pillar: props.result.chart.day },
+    { label: props.result.chart.hour, pillar: props.result.chart.hour },
+  ].filter((item): item is { label: NonNullable<typeof item.label>; pillar: NonNullable<typeof item.pillar> } => {
+    return Boolean(item.label)
+  })
+  const pillarLabels = [
+    t('mangpaiBazi.poster.year'),
+    t('mangpaiBazi.poster.month'),
+    t('mangpaiBazi.poster.day'),
+    t('mangpaiBazi.poster.hour'),
+  ]
+
+  return labeledPillars
+    .map((item, index) => ({ ...item, pillarLabel: pillarLabels[index] ?? '' }))
+    .reduce<Array<{ branch: string; labels: string[]; point: { x: number; y: number }; path: string; innerLabel: { x: number; y: number; anchor: string } }>>((marks, item) => {
+      const existing = marks.find(mark => mark.branch === item.pillar.zhi)
+      if (existing) {
+        if (!existing.labels.includes(item.pillarLabel)) existing.labels.push(item.pillarLabel)
+        return marks
+      }
+
+      const node = godChartNodes.value.find(node => node.branch === item.pillar.zhi)
+      if (!node) return marks
+
+      const inner = {
+        x: 200 + (node.point.x - 200) * 0.74,
+        y: 165 + (node.point.y - 165) * 0.74,
+      }
+
+      marks.push({
+        branch: item.pillar.zhi,
+        labels: [item.pillarLabel],
+        point: node.point,
+        path: `M${node.point.x} ${node.point.y} C${200 + (node.point.x - 200) * 0.42} ${165 + (node.point.y - 165) * 0.42} ${200 + (node.point.x - 200) * 0.24} ${165 + (node.point.y - 165) * 0.24} 200 165`,
+        innerLabel: {
+          x: inner.x + (node.point.x - 200) * -0.12,
+          y: inner.y + (node.point.y - 165) * -0.12 + 3,
+          anchor: Math.cos(node.angle * Math.PI / 180) > 0.25
+            ? 'start'
+            : Math.cos(node.angle * Math.PI / 180) < -0.25 ? 'end' : 'middle',
+        },
+      })
+      return marks
+    }, [])
+})
+
 const sectionOrder: MangpaiSection['id'][] = [
   'family', 'career', 'wealth', 'marriage', 'health', 'timing',
 ]
@@ -169,7 +325,6 @@ onMounted(async () => {
   --mbp-bronze: #8a5a25;
   --mbp-bronze-dark: #6d471c;
   --mbp-cinnabar: #a83a2d;
-  --mbp-jade: #537c66;
   width: 100%;
   color: var(--mbp-ink);
   background: var(--mbp-shell);
@@ -311,11 +466,97 @@ onMounted(async () => {
   font-weight: 700;
 }
 
-.mbp-ring-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
-  margin-top: 12px;
+.mbp-ring-legend {
+  margin: 8px 0 0;
+  color: var(--mbp-ink-faint);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.mbp-god-chart {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  margin-top: 4px;
+}
+
+.mbp-chart-grid circle,
+.mbp-chart-grid line {
+  fill: none;
+  stroke: var(--mbp-line-soft);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 4;
+}
+
+.mbp-chart-line {
+  fill: none;
+  stroke: var(--mbp-bronze);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  opacity: 0.9;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: mbp-draw 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.mbp-chart-node circle {
+  fill: var(--mbp-bronze-dark);
+}
+
+.mbp-chart-node .mbp-flow-ring {
+  fill: none;
+  stroke: var(--mbp-cinnabar);
+  stroke-width: 1.4;
+}
+
+.mbp-god-label {
+  fill: var(--mbp-ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  dominant-baseline: middle;
+}
+
+.mbp-flow-ring + .mbp-god-label {
+  fill: var(--mbp-ink);
+}
+
+.mbp-natal-mark circle {
+  fill: var(--mbp-ink);
+}
+
+.mbp-natal-label {
+  fill: var(--mbp-bronze);
+  font-size: 9.5px;
+  font-weight: 700;
+  dominant-baseline: middle;
+}
+
+.mbp-day-master circle {
+  fill: var(--mbp-paper);
+  stroke: var(--mbp-bronze-dark);
+  stroke-width: 1;
+}
+
+.mbp-day-master-gan {
+  fill: var(--mbp-ink);
+  font-size: 20px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.mbp-day-master-label {
+  fill: var(--mbp-ink-faint);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-anchor: middle;
+}
+
+.mbp-ring-note {
+  margin: 2px 0 0;
+  color: var(--mbp-ink-faint);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
 .mbp-ring-cell {
@@ -358,7 +599,7 @@ onMounted(async () => {
   background: var(--mbp-bronze-dark);
 }
 
-.mbp-section-health::before { background: var(--mbp-jade); }
+.mbp-section-health::before { background: var(--mbp-bronze); }
 .mbp-section-timing::before { background: var(--mbp-cinnabar); }
 
 .mbp-section-head {
@@ -425,6 +666,22 @@ onMounted(async () => {
 @keyframes mbp-shimmer {
   from { transform: translateX(-35%); }
   to { transform: translateX(35%); }
+}
+
+@keyframes mbp-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbp-chart-line {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+
+  .mbp-skeleton {
+    animation: none;
+  }
 }
 
 .mbp-error {
@@ -510,10 +767,6 @@ onMounted(async () => {
   .mbp-foot {
     padding-left: 15px;
     padding-right: 15px;
-  }
-
-  .mbp-ring-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .mbp-pillar-ganzhi {
