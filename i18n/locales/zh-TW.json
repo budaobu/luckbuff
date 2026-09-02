@@ -1307,6 +1307,14 @@
     "knowledgeCard4Title": "大運流年",
     "knowledgeCard4Desc": "大運每十年一換，流年每年一變，兩者與命盤互動可看運勢起伏。"
   },
+  "baziPosterCharts": {
+    "wuxingChartTitle": "五行聚成一百份，強弱可數",
+    "wuxingChartSubtitle": "1點 = 1% · 按力量降序排列",
+    "scoreChartTitle": "運勢五維，強弱逐格可見",
+    "scoreChartSubtitle": "1刻度 = 1分 · 深色刻度代表得分",
+    "dayunLineChartTitle": "十步大運，一條起伏線看盡",
+    "dayunLineChartSubtitle": "1點 = 一步大運 · 空心點是當前大運"
+  },
   "zwds": {
     "title": "紫微斗數",
     "subtitle": "輸入生辰，推演十二宮命盤",

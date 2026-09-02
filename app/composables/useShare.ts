@@ -514,9 +514,11 @@ export function useShare() {
         const bgColor = window.getComputedStyle(document.documentElement).getPropertyValue('--surface-bg').trim()
           || window.getComputedStyle(document.documentElement).getPropertyValue('--surface-page').trim()
           || (window.matchMedia('(prefers-color-scheme: dark)').matches ? '#0a0a0f' : '#f5f0e8')
+        const targetArea = el.offsetWidth * el.offsetHeight
+        const pixelRatio = Math.max(0.5, Math.min(2, Math.sqrt(16_000_000 / targetArea)))
         const canvas = await toCanvas(el, {
           backgroundColor: bgColor || '#0a0a0f',
-          pixelRatio: 2,
+          pixelRatio,
           cacheBust: true,
         })
 
