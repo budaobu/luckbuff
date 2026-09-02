@@ -1067,6 +1067,11 @@
     "baziZhengyuanKeywords": "destined partner profile,true love timing,signs true love is coming,bazi love reading,zhengyuan test,bazi marriage prediction,free love test,ososn",
     "baziZhengyuanOgTitle": "Destined Partner Profile_True Love Timing & Signs_Bazi Reading",
     "baziZhengyuanOgDesc": "Enter your birth info for a free destined partner profile: when true love may appear, the signs to watch for, and their likely traits. For entertainment only.",
+    "baziElementsTitle": "Five Element Gaps_Free Bazi Element Analysis",
+    "baziElementsDesc": "Free online Bazi five-element analysis. Enter your birth date to map the four pillars and element balance, then interpret gaps, weak elements and practical adjustment directions with your favorable elements.",
+    "baziElementsKeywords": "five elements missing,bazi five elements,five element analysis,element balance,favorable elements,bazi charting,online bazi",
+    "baziElementsOgTitle": "Five Element Gaps_Free Bazi Element Analysis",
+    "baziElementsOgDesc": "Enter your birth date to review your Bazi five-element balance, gaps and favorable elements with gentle adjustment suggestions.",
     "zipingBaziTitle": "Zi Ping Bazi Fortune Telling_Free Zi Ping Chart",
     "zipingBaziDesc": "Free online Zi Ping Bazi charting. Enter your birth date and time to generate the four pillars, ten gods, pattern, favorable elements and ten-year luck cycles, interpreted by the orthodox Zi Ping method.",
     "zipingBaziKeywords": "Zi Ping Bazi,Zi Ping method,Zi Ping fortune telling,Zi Ping chart,Zi Ping metaphysics,Four Pillars Bazi,free Bazi reading,favorable elements,luck cycles",
@@ -10366,5 +10371,73 @@
       "hour": "Hour",
       "unknown": "Unknown"
     }
+  }
+,
+  "baziElements": {
+    "title": "Five Element Gaps",
+    "subtitle": "Map your element balance, then interpret gaps with strength and favorable elements.",
+    "submit": "View Element Balance",
+    "backToBazi": "Back to Bazi",
+    "failed": "Element analysis failed",
+    "checkInput": "Check the birth details and try again",
+    "aiFailed": "AI reading failed",
+    "shareSummary": "Day Master {dayMaster} ({strength}); favorable elements: {favorable}",
+    "card1Title": "Chart first, then gaps",
+    "card1Desc": "Pillars and hidden stems become a clear five-element distribution.",
+    "card2Title": "Favorable elements guide action",
+    "card2Desc": "A missing element is not automatically something to add; strength and favorable elements matter.",
+    "poster": {
+      "seal": "FIVE\nELEMENT",
+      "kicker": "BAZI · FIVE ELEMENTS",
+      "titleNoName": "Element Chart",
+      "balance": "Balance",
+      "focusTitle": "Adjustment priorities",
+      "focusNote": "Based on favorable elements and strength",
+      "readingTitle": "Five-element reading",
+      "disclaimer": "Traditional culture reference; not medical, legal or investment advice."
+    },
+    "reading": {
+      "gap": "Gaps and weak elements",
+      "use": "Favorable direction",
+      "adjust": "Adjustment order",
+      "tips": "Daily suggestions"
+    },
+    "levels": {
+      "missing": "Missing",
+      "low": "Low",
+      "balanced": "Balanced",
+      "strong": "Strong",
+      "dominant": "Dominant"
+    },
+    "reasons": {
+      "favorableMissing": "Favorable & missing",
+      "favorableLow": "Favorable & low",
+      "favorable": "Favorable element",
+      "missing": "Not present",
+      "low": "Low strength"
+    },
+    "balance": {
+      "balanced": "Fairly balanced",
+      "varied": "Varied distribution",
+      "skewed": "Skewed strength",
+      "gap": "Single gap",
+      "multiGap": "Multiple gaps"
+    }
+  },
+  "baziDecision": {
+    "title": "Choose a Bazi focus",
+    "subtitle": "One chart, different questions need different lenses",
+    "fullTitle": "Full reading",
+    "fullDesc": "Pillars, ten gods, cycles and overview",
+    "elementsTitle": "Element gaps",
+    "elementsDesc": "Element balance and daily adjustments",
+    "wealthTitle": "Wealth pattern",
+    "wealthDesc": "Wealth stars and money cycles",
+    "marriageTitle": "Marriage match",
+    "marriageDesc": "Relationship dynamics and compatibility",
+    "mangpaiTitle": "Blind school",
+    "mangpaiDesc": "Work, subject-object and structural action",
+    "newSchoolTitle": "New school",
+    "newSchoolDesc": "Interactions and structured judgment"
   }
 }

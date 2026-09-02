@@ -73,6 +73,13 @@ export const toolCategories: ToolCategory[] = [
         recommended: true,
       },
       {
+        icon: 'i-heroicons-chart-bar',
+        titleKey: 'baziElements.title',
+        descKey: 'baziElements.subtitle',
+        ctaKey: 'baziElements.submit',
+        path: '/tools/bazi-elements',
+      },
+      {
         icon: 'i-heroicons-scale',
         titleKey: 'home.toolZipingBaziTitle',
         descKey: 'home.toolZipingBaziDesc',
