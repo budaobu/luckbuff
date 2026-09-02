@@ -20,6 +20,8 @@
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
+        <Fengshui2026Entry />
+
         <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] backdrop-blur-sm overflow-hidden">
           <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
           <div class="p-6 space-y-6">
