@@ -226,6 +226,17 @@
             color="warning"
             variant="soft"
             class="group/btn"
+            :to="localePath(`/tools/guanyin-lot/${calcResult.fortune.number}`)"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-book-open" class="w-4 h-4" />
+            </template>
+            {{ $t('drawALot.viewDetail') }}
+          </UButton>
+          <UButton
+            color="warning"
+            variant="soft"
+            class="group/btn"
             @click="resetForm"
           >
             <template #leading>
@@ -294,6 +305,7 @@ const bundleSticks = [
 ]
 
 const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const animationStep = ref<0 | 1>(0)
 const form = reactive({
