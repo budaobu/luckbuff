@@ -138,7 +138,8 @@
     "qimen-football": "奇门预测足球",
     "liuren-football": "大六壬预测足球",
     "qimen-worldcup": "奇门世界杯",
-    "liuren-worldcup": "大六壬世界杯"
+    "liuren-worldcup": "大六壬世界杯",
+    "vedic-astro": "吠陀占星分析"
   },
   "paths": {
     "liuyao-football": "/prophet/liuyao-football",

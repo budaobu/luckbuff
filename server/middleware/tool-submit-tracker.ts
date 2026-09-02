@@ -26,6 +26,7 @@ const TOOL_API_SLUG_ALIASES = [
   { prefix: '/api/prophet/liuren-football', slug: 'liuren-football' },
   { prefix: '/api/prophet/qimen-worldcup/', slug: 'qimen-worldcup' },
   { prefix: '/api/prophet/liuren-worldcup/', slug: 'liuren-worldcup' },
+  { prefix: '/api/vedic/', slug: 'vedic-astro' },
 ]
 
 const DEDUP_WINDOW_MS = 60_000
@@ -47,11 +48,22 @@ function toolSlugFromPath(path: string): string | null {
   return null
 }
 
-export default defineEventHandler((event) => {
+async function numericEnergySubmitSlug(event: { [key: string]: any }): Promise<string> {
+  try {
+    const body = await readBody<{ scenario?: string }>(event)
+    const scenario = body?.scenario
+    return scenario && /^[\w-]{1,40}$/.test(scenario) ? `numeric-energy-${scenario}` : 'numeric-energy'
+  } catch {
+    return 'numeric-energy'
+  }
+}
+
+export default defineEventHandler(async (event) => {
   if (event.method !== 'POST') return
   const path = getRequestURL(event).pathname
-  const slug = toolSlugFromPath(path)
+  let slug = toolSlugFromPath(path)
   if (!slug) return
+  if (slug === 'numeric-energy') slug = await numericEnergySubmitSlug(event)
 
   // 等响应结束再计：404/400 等无效请求不算一次占卜
   event.node.res.on('finish', () => {
