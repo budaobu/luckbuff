@@ -101,11 +101,25 @@ export const toolCategories: ToolCategory[] = [
         path: '/tools/bazi-ziwei',
       },
       {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'zwds.title',
+        descKey: 'seo.zwdsDesc',
+        ctaKey: 'common.start',
+        path: '/tools/zwds',
+      },
+      {
         icon: 'i-heroicons-circle-stack',
         titleKey: 'home.toolLiuyaoDivinationTitle',
         descKey: 'home.toolLiuyaoDivinationDesc',
         ctaKey: 'home.toolLiuyaoDivinationCta',
         path: '/tools/liuyao-divination',
+      },
+      {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'zhouyi.title',
+        descKey: 'seo.zhouyiDesc',
+        ctaKey: 'common.start',
+        path: '/tools/zhouyi',
       },
       {
         icon: 'i-heroicons-map',
@@ -350,6 +364,13 @@ export const toolCategories: ToolCategory[] = [
         ctaKey: 'fishTank.submitBtn',
         path: '/tools/fengshui-fish-tank',
       },
+      {
+        icon: 'i-heroicons-viewfinder-circle',
+        titleKey: 'fengshuiOrnament.title',
+        descKey: 'seo.fengshuiOrnamentDesc',
+        ctaKey: 'fengshuiOrnament.submitBtn',
+        path: '/tools/fengshui-ornament',
+      },
     ],
   },
   {
@@ -401,6 +422,13 @@ export const toolCategories: ToolCategory[] = [
         descKey: 'ziweiHunpan.toolDesc',
         ctaKey: 'ziweiHunpan.toolCta',
         path: '/tools/ziwei-hunpan',
+      },
+      {
+        icon: 'i-heroicons-users',
+        titleKey: 'baziPoxiHepan.title',
+        descKey: 'baziPoxiHepan.toolDesc',
+        ctaKey: 'baziPoxiHepan.toolCta',
+        path: '/tools/bazi-poxi-hepan',
       },
       {
         icon: 'i-heroicons-heart',
@@ -631,6 +659,13 @@ export const toolCategories: ToolCategory[] = [
         descKey: 'ceziBattle.toolDesc',
         ctaKey: 'ceziBattle.toolCta',
         path: '/tools/cezi-battle',
+      },
+      {
+        icon: 'i-heroicons-pencil',
+        titleKey: 'liurenZizhan.title',
+        descKey: 'liurenZizhan.toolDesc',
+        ctaKey: 'liurenZizhan.toolCta',
+        path: '/tools/liuren-zizhan',
       },
     ],
   },

@@ -11,6 +11,7 @@ import {
   type InsightWriteInput,
 } from '~~/server/utils/insights'
 import { runTranslationPipeline } from '~~/server/utils/insights/translate'
+import { inferRelatedTools } from '~~/server/utils/insights/related-tools'
 
 // AI 写作队列：主题进、文章出。持久化在 content/insights/.writelist-queue.json
 // （deploy.sh 对 content/insights 无 --delete 同步，且已 exclude 该文件，
@@ -289,7 +290,11 @@ async function generateAndStore(queueTitle: string, autoPublish: boolean, items:
     author: '幽默隐士',
     readingTime: estimateReadingTime(article.content),
     draft: !autoPublish,
-    relatedTools: [],
+    relatedTools: inferRelatedTools({
+      title: article.title,
+      tags: article.tags,
+      content: article.content,
+    }),
     content: article.content,
   }
   const invalid = validateInsightInput(input, true)
