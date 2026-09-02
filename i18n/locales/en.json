@@ -1072,6 +1072,11 @@
     "baziElementsKeywords": "five elements missing,bazi five elements,five element analysis,element balance,favorable elements,bazi charting,online bazi",
     "baziElementsOgTitle": "Five Element Gaps_Free Bazi Element Analysis",
     "baziElementsOgDesc": "Enter your birth date to review your Bazi five-element balance, gaps and favorable elements with gentle adjustment suggestions.",
+    "fortune2026Title": "2026 Fortune Guide_Zodiac Yearly Luck and Feng Shui",
+    "fortune2026Desc": "Your 2026 Bing Wu fortune hub: yearly Bazi, zodiac Tai Sui, career and wealth, flying-star Feng Shui and daily timing tools, with curated readings for each question.",
+    "fortune2026Keywords": "2026 fortune,2026 yearly luck,2026 zodiac forecast,2026 feng shui,Bing Wu year,Tai Sui remedies,flying stars,annual forecast",
+    "fortune2026OgTitle": "2026 Fortune Tools and Readings",
+    "fortune2026OgDesc": "Choose by question: yearly chart, zodiac Tai Sui, career wealth, Feng Shui directions and daily timing.",
     "zipingBaziTitle": "Zi Ping Bazi Fortune Telling_Free Zi Ping Chart",
     "zipingBaziDesc": "Free online Zi Ping Bazi charting. Enter your birth date and time to generate the four pillars, ten gods, pattern, favorable elements and ten-year luck cycles, interpreted by the orthodox Zi Ping method.",
     "zipingBaziKeywords": "Zi Ping Bazi,Zi Ping method,Zi Ping fortune telling,Zi Ping chart,Zi Ping metaphysics,Four Pillars Bazi,free Bazi reading,favorable elements,luck cycles",
@@ -10439,5 +10444,50 @@
     "mangpaiDesc": "Work, subject-object and structural action",
     "newSchoolTitle": "New school",
     "newSchoolDesc": "Interactions and structured judgment"
+  }
+,
+  "fortune2026": {
+    "title": "2026 Fortune Center",
+    "subtitle": "Choose your path: yearly trend, zodiac Tai Sui, career wealth, Feng Shui directions or daily timing.",
+    "tablist": "2026 fortune scenarios",
+    "readingTitle": "2026 readings",
+    "readingDesc": "Understand the yearly background first, then use the matching tools for a personal reading.",
+    "readArticle": "Read guide",
+    "tabs": {
+      "year": {
+        "title": "Yearly trend",
+        "description": "Place the annual cycle inside your Bazi chart."
+      },
+      "zodiac": {
+        "title": "Zodiac Tai Sui",
+        "description": "Review clashes and zodiac wealth prompts for 2026."
+      },
+      "career": {
+        "title": "Career & wealth",
+        "description": "Check wealth pattern, workplace charts and office placement."
+      },
+      "fengshui": {
+        "title": "Feng Shui",
+        "description": "Use flying-star and Xuan Kong methods for 2026 directions."
+      },
+      "daily": {
+        "title": "Daily timing",
+        "description": "Check the day before interviews, contracts, travel or key talks."
+      }
+    },
+    "topics": {
+      "year": "Yearly",
+      "zodiac": "Zodiac",
+      "career": "Career",
+      "fengshui": "Feng Shui"
+    },
+    "articles": {
+      "yearly": "2026 yearly fortune reading: Bing Wu year guide",
+      "zodiacCareer": "2026 second-half career ranking for 12 zodiac signs",
+      "fanTaisui": "Which zodiac signs clash with Tai Sui in 2026?",
+      "luckyColors": "2026 lucky colors and numbers for Chinese zodiac signs",
+      "wealthDirection": "Where is the 2026 annual wealth direction?",
+      "flyingStars": "2026 Bing Wu flying-star Feng Shui layout guide"
+    }
   }
 }
