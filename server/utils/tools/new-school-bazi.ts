@@ -4,6 +4,7 @@ import type {
   NewSchoolMissingWord,
   NewSchoolPillar,
 } from '~/types/new-school-bazi'
+import type { TianGan } from '~/types/user'
 import {
   dayOfYear,
   getHourPillar,
@@ -103,6 +104,17 @@ function relationPower(sourceWuxing: string, targetWuxing: string): 'support' | 
   return effectOf(relationToDay(targetWuxing, sourceWuxing))
 }
 
+// 现有共享日历的日柱公式存在历史误差；新派工具先在本模块内用甲戌基准修正，
+// 避免为修一柱而改变子平八字等既有工具的对外行为。
+function getNewSchoolDayPillar(year: number, month: number, day: number): { gan: string; zhi: string } {
+  const elapsedDays = Math.floor((Date.UTC(year, month - 1, day) - Date.UTC(1900, 0, 1)) / 86_400_000)
+  const index = ((10 + elapsedDays) % 60 + 60) % 60
+  return {
+    gan: TIAN_GAN[index % 10]!,
+    zhi: DI_ZHI[index % 12]!,
+  }
+}
+
 function calcDaYun(
   yearGan: string,
   monthGan: string,
@@ -158,9 +170,9 @@ export function calcNewSchoolBazi(
 
   const yearRaw = getYearPillar(birthYear, birthMonth, birthDay)
   const monthRaw = getMonthPillar(yearRaw.gan, birthYear, birthMonth, birthDay)
-  const dayRaw = getDayPillar(birthYear, birthMonth, birthDay)
+  const dayRaw = getNewSchoolDayPillar(birthYear, birthMonth, birthDay)
   const hourRaw = hourIndex >= 0 ? getHourPillar(dayRaw.gan, hourIndex * 2) : null
-  const riGan = dayRaw.gan
+  const riGan = dayRaw.gan as TianGan
 
   const year = makePillar(yearRaw.gan, yearRaw.zhi, riGan)
   const month = makePillar(monthRaw.gan, monthRaw.zhi, riGan)
@@ -182,6 +194,7 @@ export function calcNewSchoolBazi(
   const monthGanWuxing = GAN_WUXING[month.gan]!
   const dayZhiWuxing = ZHI_WUXING[day.zhi]!
   const yearZhiWuxing = ZHI_WUXING[year.zhi]!
+  const yearGanWuxing = GAN_WUXING[year.gan]!
 
   const interactions: NewSchoolInteraction[] = [
     interaction(`${month.zhi}→日干`, monthZhiWuxing, '日干', dayWuxing, 50),
@@ -197,6 +210,11 @@ export function calcNewSchoolBazi(
   if (relationPower(yearZhiWuxing, monthZhiWuxing) === 'support') monthZhiWeight *= 1.15
   else if (relationPower(yearZhiWuxing, monthZhiWuxing) === 'weaken') monthZhiWeight *= 0.8
   interactions[0]!.weight = Math.round(monthZhiWeight)
+
+  let monthGanWeight = interactions[2]!.weight
+  if (relationPower(yearGanWuxing, monthGanWuxing) === 'support') monthGanWeight *= 1.15
+  else if (relationPower(yearGanWuxing, monthGanWuxing) === 'weaken') monthGanWeight *= 0.8
+  interactions[2]!.weight = Math.round(monthGanWeight)
 
   let weightedSupport = 0
   let weightedWeaken = 0
@@ -242,7 +260,7 @@ export function calcNewSchoolBazi(
     birthYear,
     birthMonth,
     birthDay,
-    getMonthZhiIndex(birthYear, birthMonth, birthDay),
+    getMonthZhiIndex(birthYear, birthMonth, birthDay).index,
   )
   const currentAge = Math.max(0, new Date().getFullYear() - birthYear)
   const currentDaYun = dayuns.find(item => item.ageRange[0]! <= currentAge && item.ageRange[1]! >= currentAge) ?? null
