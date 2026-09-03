@@ -276,7 +276,10 @@
     "toolQizhengSiyuCta": "Generate Chart",
     "toolZipingBaziTitle": "Zi Ping Bazi",
     "toolZipingBaziDesc": "Chart the four pillars, pattern, favorable elements and ten-year luck cycles using the Zi Ping method, ideal for enthusiasts who want to understand Bazi structure in depth.",
-    "toolZipingBaziCta": "Chart now"
+    "toolZipingBaziCta": "Chart now",
+    "toolDreamTitle": "Dream Interpretation",
+    "toolDreamDesc": "Describe your dream and get AI-powered traditional Chinese interpretation",
+    "toolDreamCta": "Interpret Dream"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -1131,7 +1134,12 @@
     "astroDiceDesc": "Roll three astrology dice online — planet, sign and house — scored by dignity and house strength, with an AI reading compressed into a shareable poster. For cultural entertainment only.",
     "astroDiceKeywords": "astrology dice,online dice roll,planet dice,zodiac sign dice,house dice,astrology reading",
     "astroDiceOgTitle": "Astrology Dice · A cosmic signal for right now",
-    "astroDiceOgDesc": "Planet says what, sign says how, house says where — three dice, one poster."
+    "astroDiceOgDesc": "Planet says what, sign says how, house says where — three dice, one poster.",
+    "dreamTitle": "Zhou Gong Dream Interpretation_Free AI Dream Analysis",
+    "dreamDesc": "Describe your dream and get AI-powered interpretation of omens, career, wealth, love and wellness based on traditional Chinese dream symbolism. Free to use.",
+    "dreamKeywords": "dream interpretation,Zhou Gong,AI dream analysis,dream meaning,Chinese dream dictionary,free dream reading,online dream interpretation",
+    "dreamOgTitle": "Zhou Gong Dream Interpretation_Free AI Dream Analysis",
+    "dreamOgDesc": "Describe your dream and get traditional Chinese dream interpretation powered by AI."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -10577,5 +10585,29 @@
     "hubDesc": "Review annual Feng Shui directions and other fortune scenarios.",
     "articleTitle": "2026 Bing Wu flying-star guide",
     "articleDesc": "Read yearly direction notes before charting your home."
+  },
+  "dream": {
+    "title": "Zhou Gong Dream Interpretation",
+    "subtitle": "Describe your dream and get an AI-powered interpretation based on traditional Chinese dream symbolism",
+    "disclaimer": "Interpretations are based on traditional dream interpretation culture, for entertainment reference only, not scientific conclusions.",
+    "formLabel": "Dream Description",
+    "formPlaceholder": "e.g. I dreamt I was in an ancient courtyard and saw a golden snake coiled around a stone pillar, then the snake flew away...",
+    "submitBtn": "Interpret Dream",
+    "interpreting": "Interpreting…",
+    "connecting": "Connecting to dream interpreter…",
+    "againBtn": "New Dream",
+    "noResult": "No interpretation received, please try again",
+    "requestFail": "Dream interpretation request failed",
+    "poster": {
+      "kicker": "Zhou Gong Dream",
+      "title": "Dream Analysis",
+      "pending": "…",
+      "dreamLabel": "Dream Recollection",
+      "fieldSym": "Core Symbolism",
+      "fieldWork": "Career & Wealth",
+      "fieldLove": "Love & Relations",
+      "fieldHealth": "Wellness",
+      "noteLabel": "Interpreter's Note"
+    }
   }
 }

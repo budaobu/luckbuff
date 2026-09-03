@@ -733,6 +733,14 @@ export const toolCategories: ToolCategory[] = [
       ctaKey: 'jiaobei.toolCta',
       path: '/tools/jiaobei',
     },
+    {
+      icon: 'i-heroicons-moon',
+      titleKey: 'home.toolDreamTitle',
+      descKey: 'home.toolDreamDesc',
+      ctaKey: 'home.toolDreamCta',
+      path: '/tools/dream',
+      recommended: true,
+    },
    ],
  },
   {
