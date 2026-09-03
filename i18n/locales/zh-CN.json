@@ -279,7 +279,10 @@
     "toolZipingBaziCta": "立即排盘",
     "toolDreamTitle": "周公解梦",
     "toolDreamDesc": "输入梦境，AI 按周公解梦传统解读吉凶",
-    "toolDreamCta": "开始解梦"
+    "toolDreamCta": "开始解梦",
+    "toolBirthBuddhaTitle": "本命佛",
+    "toolBirthBuddhaDesc": "查生肖守护佛，AI 解读寓意与启示",
+    "toolBirthBuddhaCta": "查看本命佛"
   },
   "prophet": {
     "title": "赛事预测",
@@ -1139,7 +1142,12 @@
     "dreamDesc": "输入梦境描述，AI 按周公解梦传统为你解读梦境吉凶、事业财运、感情人际与身心提示，免费使用。",
     "dreamKeywords": "周公解梦,解梦,AI解梦,梦境解析,梦见,梦到,免费解梦,在线解梦,周公解梦大全",
     "dreamOgTitle": "周公解梦_免费AI在线解梦",
-    "dreamOgDesc": "输入梦境，AI 按传统周公解梦为你解读吉凶与生活启示。"
+    "dreamOgDesc": "输入梦境，AI 按传统周公解梦为你解读吉凶与生活启示。",
+    "birthBuddhaTitle": "本命佛查询_十二生肖守护神在线查询",
+    "birthBuddhaDesc": "输入出生年份，查询你的生肖守护本命佛，AI 解读佛教寓意与修行生活启示，免费使用。",
+    "birthBuddhaKeywords": "本命佛,生肖守护神,千手观音,虚空藏菩萨,文殊菩萨,普贤菩萨,大势至菩萨,大日如来,不动尊菩萨,阿弥陀佛,十二生肖",
+    "birthBuddhaOgTitle": "本命佛查询_十二生肖守护神",
+    "birthBuddhaOgDesc": "输入年份查询你的生肖本命佛，AI 解读守护含义与修行启示。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -10630,6 +10638,45 @@
       "fieldLove": "感情人际",
       "fieldHealth": "身心提醒",
       "noteLabel": "解梦先生语"
+    }
+  },
+  "birthBuddha": {
+    "title": "本命佛",
+    "subtitle": "输入出生年份，查看你的生肖守护本命佛与修行启示",
+    "disclaimer": "解读基于佛教文化传统，仅供文化娱乐参考，非宗教劝诱。",
+    "yearLabel": "出生年份",
+    "yearPlaceholder": "选择年份",
+    "zodiacLabel": "你的生肖",
+    "submitBtn": "查看本命佛",
+    "interpreting": "解读中…",
+    "connecting": "正在连接…",
+    "againBtn": "重新查询",
+    "noResult": "未能获得解读结果，请重试",
+    "requestFail": "请求失败",
+    "zodiac": {
+      "rat": "鼠",
+      "ox": "牛",
+      "tiger": "虎",
+      "rabbit": "兔",
+      "dragon": "龙",
+      "snake": "蛇",
+      "horse": "马",
+      "goat": "羊",
+      "monkey": "猴",
+      "rooster": "鸡",
+      "dog": "狗",
+      "pig": "猪"
+    },
+    "poster": {
+      "kicker": "Birth Buddha",
+      "title": "本命佛守护",
+      "pending": "…",
+      "yearLabel": "出生年份",
+      "buddhaLabel": "本命佛",
+      "fieldSym": "佛教寓意",
+      "fieldChar": "生肖性格",
+      "fieldWork": "事业指引",
+      "fieldLove": "感情启示"
     }
   }
 }
