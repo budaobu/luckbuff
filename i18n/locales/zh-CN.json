@@ -285,7 +285,10 @@
     "toolBirthBuddhaCta": "查看本命佛",
     "toolFortuneCalendarTitle": "运势月历",
     "toolFortuneCalendarDesc": "月历视图查看每日宜忌与吉凶",
-    "toolFortuneCalendarCta": "查看月历"
+    "toolFortuneCalendarCta": "查看月历",
+    "toolMyReportsTitle": "我的报告",
+    "toolMyReportsDesc": "回看保存的测算结果",
+    "toolMyReportsCta": "查看报告"
   },
   "prophet": {
     "title": "赛事预测",
@@ -10698,5 +10701,15 @@
       "xiong": "凶",
       "ping": "平"
     }
+  },
+  "myReports": {
+    "title": "我的报告",
+    "subtitle": "保存的测算结果会在这里显示（仅存储在本机）",
+    "empty": "暂无保存的报告",
+    "emptyHint": "在工具结果页点击「保存报告」即可收藏",
+    "saveBtn": "保存报告",
+    "saved": "报告已保存",
+    "clearAll": "清空全部",
+    "confirmClear": "确定要清空所有保存的报告吗？"
   }
 }

@@ -83,6 +83,14 @@
           <UButton
             variant="outline"
             size="sm"
+            icon="i-heroicons-bookmark"
+            @click="saveReport"
+          >
+            {{ $t('myReports.saveBtn') }}
+          </UButton>
+          <UButton
+            variant="outline"
+            size="sm"
             @click="reset"
           >
             {{ $t('birthBuddha.againBtn') }}
@@ -114,6 +122,7 @@ const form = reactive<{ year?: number }>({ year: undefined })
 const aiContent = ref('')
 const aiError = ref<string | null>(null)
 const aiStarted = ref(false)
+const { save } = useReports()
 
 // Traditional zodiac-to-Buddha mapping (本命佛)
 const zodiacBuddhaMap = [
@@ -156,6 +165,31 @@ function reset() {
   aiContent.value = ''
   aiError.value = null
   aiStarted.value = false
+}
+
+function saveReport() {
+  if (!aiContent.value || !selectedZodiac.value) return
+  const { OV } = parseAiContent(aiContent.value)
+  save(
+    t('birthBuddha.title'),
+    '/tools/birth-buddha',
+    `${selectedZodiac.value.name} · ${selectedZodiac.value.buddha}${OV ? ` · ${OV}` : ''}`,
+    aiContent.value.slice(0, 200),
+    { year: form.year, zodiac: selectedZodiac.value, content: aiContent.value },
+  )
+  toast.add({ title: t('myReports.saved'), color: 'success' })
+}
+
+function parseAiContent(content: string) {
+  const map: Record<string, string> = {}
+  for (const line of content.split('\n').map(l => l.trim()).filter(Boolean)) {
+    const idx = line.indexOf(':')
+    if (idx === -1) continue
+    const key = line.slice(0, idx).trim()
+    const value = line.slice(idx + 1).trim()
+    if (value && !map[key]) map[key] = value
+  }
+  return map
 }
 
 async function startAiStream() {

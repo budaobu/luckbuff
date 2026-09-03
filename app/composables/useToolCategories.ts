@@ -247,6 +247,13 @@ export const toolCategories: ToolCategory[] = [
       ctaKey: 'home.toolFortuneCalendarCta',
       path: '/tools/fortune-calendar',
     },
+    {
+      icon: 'i-heroicons-document-text',
+      titleKey: 'home.toolMyReportsTitle',
+      descKey: 'home.toolMyReportsDesc',
+      ctaKey: 'home.toolMyReportsCta',
+      path: '/tools/my-reports',
+    },
    ],
  },
   {

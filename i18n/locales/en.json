@@ -285,7 +285,10 @@
     "toolBirthBuddhaCta": "Discover Now",
     "toolFortuneCalendarTitle": "Fortune Calendar",
     "toolFortuneCalendarDesc": "Monthly calendar of daily auspicious/inauspicious activities",
-    "toolFortuneCalendarCta": "View Calendar"
+    "toolFortuneCalendarCta": "View Calendar",
+    "toolMyReportsTitle": "My Reports",
+    "toolMyReportsDesc": "Review your saved readings",
+    "toolMyReportsCta": "View Reports"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -10676,5 +10679,15 @@
       "xiong": "Inauspicious",
       "ping": "Neutral"
     }
+  },
+  "myReports": {
+    "title": "My Reports",
+    "subtitle": "Your saved readings appear here (stored locally on this device only)",
+    "empty": "No saved reports yet",
+    "emptyHint": "Click 'Save Report' on any tool result page to bookmark it",
+    "saveBtn": "Save Report",
+    "saved": "Report saved",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear all saved reports?"
   }
 }
