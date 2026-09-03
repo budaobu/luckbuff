@@ -288,7 +288,10 @@
     "toolFortuneCalendarCta": "View Calendar",
     "toolMyReportsTitle": "My Reports",
     "toolMyReportsDesc": "Review your saved readings",
-    "toolMyReportsCta": "View Reports"
+    "toolMyReportsCta": "View Reports",
+    "toolFortuneQaTitle": "AI Fortune Q&A",
+    "toolFortuneQaDesc": "Ask any question, AI routes to the right engine",
+    "toolFortuneQaCta": "Ask Now"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -1158,7 +1161,12 @@
     "fortuneCalendarDesc": "View daily auspicious/inauspicious activities and fortune levels in a monthly calendar format. Plan your month at a glance.",
     "fortuneCalendarKeywords": "fortune calendar,Chinese almanac calendar,daily fortune,auspicious dates,solar terms,monthly almanac,free almanac",
     "fortuneCalendarOgTitle": "Fortune Calendar_Monthly Almanac",
-    "fortuneCalendarOgDesc": "Monthly calendar view of daily auspicious/inauspicious activities and fortune levels."
+    "fortuneCalendarOgDesc": "Monthly calendar view of daily auspicious/inauspicious activities and fortune levels.",
+    "fortuneQaTitle": "AI Fortune Q&A_Free Online Fortune Telling Tool",
+    "fortuneQaDesc": "Ask any question about career, love or wealth. AI automatically routes to bazi or zhouyi engines for answers with actionable advice and timing tips. Free to use.",
+    "fortuneQaKeywords": "AI fortune telling,fortune Q&A,online fortune telling,free reading,bazi reading,zhouyi reading,career fortune,love fortune",
+    "fortuneQaOgTitle": "AI Fortune Q&A_Free Online Q&A",
+    "fortuneQaOgDesc": "Ask freely, AI routes to bazi or zhouyi engines to answer career, love and wealth questions."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -10689,5 +10697,23 @@
     "saved": "Report saved",
     "clearAll": "Clear All",
     "confirmClear": "Are you sure you want to clear all saved reports?"
+  },
+  "fortuneQa": {
+    "title": "AI Fortune Q&A",
+    "subtitle": "Ask any question and AI routes to the bazi or zhouyi engine for answers",
+    "disclaimer": "Answers are based on traditional fortune-telling culture, for entertainment reference only, not scientific conclusions.",
+    "questionLabel": "Your Question",
+    "questionPlaceholder": "e.g. Is this year a good time for a career change? Or: How is my love life lately?",
+    "birthLabel": "Birth Date (optional)",
+    "birthHint": "Provide birth info for more precise bazi analysis",
+    "hourPlaceholder": "Hour (optional)",
+    "hourUnknown": "Unknown hour",
+    "submitBtn": "Ask Now",
+    "interpreting": "Answering…",
+    "connecting": "Connecting to fortune advisor…",
+    "yourQuestion": "Your Question",
+    "againBtn": "New Question",
+    "noResult": "No answer received, please try again",
+    "requestFail": "Request failed"
   }
 }

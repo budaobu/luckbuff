@@ -254,6 +254,14 @@ export const toolCategories: ToolCategory[] = [
       ctaKey: 'home.toolMyReportsCta',
       path: '/tools/my-reports',
     },
+    {
+      icon: 'i-heroicons-chat-bubble-left-right',
+      titleKey: 'home.toolFortuneQaTitle',
+      descKey: 'home.toolFortuneQaDesc',
+      ctaKey: 'home.toolFortuneQaCta',
+      path: '/tools/fortune-qa',
+      recommended: true,
+    },
    ],
  },
   {
