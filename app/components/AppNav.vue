@@ -50,36 +50,75 @@
             >
               <div
                 v-show="toolsOpen"
-                class="absolute right-0 mt-2 w-[760px] max-w-[calc(100vw-3rem)] rounded-2xl overflow-hidden z-50 border p-3 grid grid-cols-2 lg:grid-cols-3 gap-2"
+                class="absolute right-0 mt-2 w-[880px] max-w-[calc(100vw-3rem)] rounded-2xl overflow-hidden z-50 border p-4 grid grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)] gap-4"
                 style="background-color: var(--surface-dropdown); border-color: var(--border-medium); box-shadow: var(--shadow-panel);"
               >
-                <NuxtLink
-                  v-for="cat in categories"
-                  :key="cat.id"
-                  :to="localePath(cat.sectionPath)"
-                  :no-prefetch="true"
-                  class="group flex items-start gap-3 px-2.5 py-3 rounded-xl text-sm transition-colors"
-                  :class="route.path === localePath(cat.sectionPath)
-                    ? 'font-medium'
-                    : 'hover:!bg-[var(--surface-card-hover)]'"
-                  :style="route.path === localePath(cat.sectionPath)
-                    ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
-                    : { color: 'var(--text-faint)' }"
-                  @click="toolsOpen = false"
+                <div
+                  v-for="toolGroup in toolGroups"
+                  :key="toolGroup.id"
+                  class="min-w-0"
+                  :class="toolGroup.id === 'charting'
+                    ? 'md:border-r md:border-[var(--border-light)] md:pr-4'
+                    : ''"
                 >
-                  <span
-                    class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors"
-                    :style="route.path === localePath(cat.sectionPath)
-                      ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
-                      : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
-                  >
-                    <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
-                  </span>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-medium leading-snug">{{ t(cat.titleKey) }}</div>
-                    <div class="mt-1 text-xs leading-snug line-clamp-2" style="color: var(--text-placeholder);">{{ t(cat.subtitleKey) }}</div>
+                  <p class="px-1 pb-3 text-[11px] font-semibold uppercase tracking-[0.12em]" style="color: var(--text-placeholder);">
+                    {{ t(toolGroup.titleKey) }}
+                  </p>
+                  <div :class="toolGroup.id === 'fortune-analysis' ? 'grid grid-cols-1 gap-x-4 gap-y-1 md:grid-cols-2' : 'grid'">
+                    <NuxtLink
+                      v-for="cat in toolGroup.categories"
+                      :key="cat.id"
+                      :to="localePath(cat.sectionPath)"
+                      :no-prefetch="true"
+                      class="group flex items-start gap-3 text-sm transition-all duration-200"
+                      :class="toolGroup.id === 'charting'
+                        ? 'h-full flex-col justify-between rounded-2xl border border-[var(--accent-border)] bg-gradient-to-br from-[var(--accent-bg)] to-[var(--surface-card)] p-5 hover:border-[var(--accent-border-hover)] hover:shadow-lg'
+                        : 'h-10 flex-row items-center rounded-xl px-2.5'"
+                      :style="toolGroup.id === 'charting'
+                        ? { color: 'var(--text-primary)' }
+                        : route.path === localePath(cat.sectionPath)
+                        ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
+                        : { color: 'var(--text-faint)' }"
+                      @click="toolsOpen = false"
+                    >
+                      <span
+                        :class="toolGroup.id === 'charting'
+                          ? 'mb-5 h-11 w-11 rounded-xl'
+                          : 'h-7 w-7 rounded-lg'"
+                        class="flex items-center justify-center shrink-0 transition-colors"
+                        :style="toolGroup.id === 'charting'
+                          ? { backgroundColor: 'var(--surface-card)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
+                          : route.path === localePath(cat.sectionPath)
+                          ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
+                          : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
+                      >
+                        <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block font-medium leading-snug">{{ t(cat.titleKey) }}</span>
+                        <span
+                          v-if="toolGroup.id === 'charting'"
+                          class="mt-2 block text-xs leading-relaxed"
+                          style="color: var(--text-placeholder);"
+                        >{{ t(cat.subtitleKey) }}</span>
+                      </span>
+                      <span
+                        v-if="toolGroup.id === 'charting'"
+                        class="mt-6 flex w-full items-center justify-between rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3 py-2.5"
+                      >
+                        <span class="truncate text-[13px] font-medium">{{ t(cat.tools[0]!.titleKey) }}</span>
+                        <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 shrink-0 text-[var(--accent)] transition-transform duration-200 group-hover:translate-x-0.5" />
+                      </span>
+                      <span
+                        v-if="toolGroup.id === 'fortune-analysis'"
+                        class="shrink-0 text-[11px] tabular-nums"
+                        style="color: var(--text-placeholder);"
+                      >
+                        {{ cat.tools.length }}
+                      </span>
+                    </NuxtLink>
                   </div>
-                </NuxtLink>
+                </div>
               </div>
             </Transition>
           </div>
@@ -208,31 +247,36 @@
               leave-from-class="opacity-100 translate-y-0"
               leave-to-class="opacity-0 -translate-y-1"
             >
-              <div v-show="mobileToolsOpen" class="pl-4 space-y-1 mt-1">
-                <NuxtLink
-                  v-for="cat in categories"
-                  :key="cat.id"
-                  :to="localePath(cat.sectionPath)"
-                  :no-prefetch="true"
-                  class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors"
-                  :class="route.path === localePath(cat.sectionPath)
-                    ? 'font-medium'
-                    : 'hover:!bg-[var(--surface-card-hover)]'"
-                  :style="route.path === localePath(cat.sectionPath)
-                    ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
-                    : { color: 'var(--text-faint)' }"
-                  @click="mobileOpen = false; mobileToolsOpen = false"
-                >
-                  <span
-                    class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              <div v-show="mobileToolsOpen" class="pl-4 mt-1 space-y-3">
+                <div v-for="toolGroup in toolGroups" :key="toolGroup.id">
+                  <p class="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style="color: var(--text-placeholder);">
+                    {{ t(toolGroup.titleKey) }}
+                  </p>
+                  <NuxtLink
+                    v-for="cat in toolGroup.categories"
+                    :key="cat.id"
+                    :to="localePath(cat.sectionPath)"
+                    :no-prefetch="true"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors"
+                    :class="route.path === localePath(cat.sectionPath)
+                      ? 'font-medium'
+                      : 'hover:!bg-[var(--surface-card-hover)]'"
                     :style="route.path === localePath(cat.sectionPath)
-                      ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
-                      : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
+                      ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
+                      : { color: 'var(--text-faint)' }"
+                    @click="mobileOpen = false; mobileToolsOpen = false"
                   >
-                    <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
-                  </span>
-                  <span class="truncate">{{ t(cat.titleKey) }}</span>
-                </NuxtLink>
+                    <span
+                      class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                      :style="route.path === localePath(cat.sectionPath)
+                        ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
+                        : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
+                    >
+                      <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                    </span>
+                    <span class="truncate">{{ t(cat.titleKey) }}</span>
+                  </NuxtLink>
+                </div>
               </div>
             </Transition>
           </div>
@@ -343,6 +387,7 @@ const toolsOpen = ref(false)
 const mobileToolsOpen = ref(false)
 
 const categories = useToolCategories()
+const toolGroups = useToolGroups()
 
 const isToolsActive = computed(() => {
   const toolPaths = categories.value.map(c => localePath(c.sectionPath))

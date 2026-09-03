@@ -85,8 +85,9 @@ export interface ShareOptions {
     | 'jinsuoyuguan-fengshui'
     | 'numeric-energy'
     | 'astro-dice'
-    | 'mangpai-bazi'
-    | 'new-school-bazi'
+  | 'mangpai-bazi'
+  | 'new-school-bazi'
+  | 'bazi-paipan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -195,6 +196,7 @@ export function useShare() {
       'astro-dice': '占星骰子',
       'mangpai-bazi': '盲派八字',
       'new-school-bazi': '新派八字',
+      'bazi-paipan': '八字排盘',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 

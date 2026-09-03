@@ -231,23 +231,6 @@
           </span>
         </NuxtLink>
 
-        <NuxtLink
-          :to="localePath('/tools')"
-          data-reveal-child
-          class="topic-card topic-card-more"
-        >
-          <span class="topic-card-body">
-            <div class="topic-icon" style="background-color: var(--surface-bg); border: 1px solid var(--border-strong); color: var(--text-body);">
-              <UIcon name="i-heroicons-rectangle-group" class="h-5.5 w-5.5" />
-            </div>
-            <h3 class="topic-title">{{ $t('tools.title') }}</h3>
-            <p class="topic-desc">{{ $t('tools.subtitle') }}</p>
-            <span class="topic-cta">
-              {{ $t('common.start') }}
-              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
-            </span>
-          </span>
-        </NuxtLink>
       </div>
     </section>
 
@@ -811,11 +794,6 @@ useHead(() => ({
 .topic-card-featured {
   grid-column: span 2;
   grid-row: span 2;
-}
-
-.topic-card-more {
-  border-color: var(--accent-border);
-  background: var(--accent-bg);
 }
 
 .topic-card-body {

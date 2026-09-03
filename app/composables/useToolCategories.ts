@@ -15,10 +15,40 @@ export interface ToolCategory {
   titleKey: string
   subtitleKey: string
   sectionPath: string
+  group?: ToolGroupId
   tools: ToolItem[]
 }
 
-export const toolCategories: ToolCategory[] = [
+export type ToolGroupId = 'charting' | 'fortune-analysis'
+
+export interface ToolGroup {
+  id: ToolGroupId
+  icon: string
+  titleKey: string
+  subtitleKey: string
+  categories: ToolCategory[]
+}
+
+const chartingToolCategory: ToolCategory = {
+  id: 'paipan',
+  icon: 'i-heroicons-table-cells',
+  titleKey: 'paipanTopic.title',
+  subtitleKey: 'paipanTopic.subtitle',
+  sectionPath: '/paipan',
+  group: 'charting',
+  tools: [
+    {
+      icon: 'i-heroicons-calendar-days',
+      titleKey: 'baziChart.title',
+      descKey: 'baziChart.subtitle',
+      ctaKey: 'baziChart.submit',
+      path: '/tools/bazi-paipan',
+      recommended: true,
+    },
+  ],
+}
+
+const analysisToolCategories: ToolCategory[] = [
   {
     id: 'numeric-energy',
     icon: 'i-heroicons-calculator',
@@ -913,6 +943,43 @@ export const toolCategories: ToolCategory[] = [
     ],
   },
 ]
+
+const numericEnergyCategory = analysisToolCategories.find(category => category.id === 'numeric-energy')!
+const prophetCategory = analysisToolCategories.find(category => category.id === 'prophet')!
+const orderedAnalysisToolCategories = [
+  ...analysisToolCategories.filter(category => !['numeric-energy', 'prophet'].includes(category.id)),
+  numericEnergyCategory,
+  prophetCategory,
+]
+
+export const toolCategories: ToolCategory[] = [
+  chartingToolCategory,
+  ...orderedAnalysisToolCategories.map(category => ({
+    ...category,
+    group: 'fortune-analysis' as const,
+  })),
+]
+
+export const toolGroups: ToolGroup[] = [
+  {
+    id: 'charting',
+    icon: 'i-heroicons-table-cells',
+    titleKey: 'tools.groupCharting',
+    subtitleKey: 'tools.groupChartingSubtitle',
+    categories: [chartingToolCategory],
+  },
+  {
+    id: 'fortune-analysis',
+    icon: 'i-heroicons-sparkles',
+    titleKey: 'tools.groupAnalysis',
+    subtitleKey: 'tools.groupAnalysisSubtitle',
+    categories: orderedAnalysisToolCategories,
+  },
+]
+
+export function useToolGroups(): ComputedRef<ToolGroup[]> {
+  return computed(() => toolGroups)
+}
 
 /**
  * 所有工具专题分类数据

@@ -35,72 +35,85 @@
       </header>
 
       <nav v-reveal class="tools-nav" aria-label="Categories">
-        <NuxtLink
-          v-for="category in categories"
-          :key="`nav-${category.id}`"
-          :to="`#${category.id}`"
-          class="tools-chip"
-          external
-        >
-          <UIcon :name="category.icon || 'i-heroicons-rectangle-group'" class="h-3.5 w-3.5" />
-          <span>{{ $t(category.titleKey) }}</span>
-        </NuxtLink>
+        <template v-for="group in toolGroups" :key="`nav-${group.id}`">
+          <span class="tools-group-chip">
+            <UIcon :name="group.icon" class="h-3.5 w-3.5" />
+            <span>{{ $t(group.titleKey) }}</span>
+          </span>
+          <NuxtLink
+            v-for="category in group.categories"
+            :key="`nav-${category.id}`"
+            :to="`#${category.id}`"
+            class="tools-chip"
+            external
+          >
+            <UIcon :name="category.icon || 'i-heroicons-rectangle-group'" class="h-3.5 w-3.5" />
+            <span>{{ $t(category.titleKey) }}</span>
+          </NuxtLink>
+        </template>
       </nav>
 
       <div class="space-y-14 md:space-y-16">
-        <section
-          v-for="(category, categoryIndex) in categories"
-          :id="category.id"
-          :key="category.id"
-          class="scroll-mt-24"
-        >
-          <div v-reveal class="category-head">
-            <div class="category-index font-mono">
-              {{ String(categoryIndex + 1).padStart(2, '0') }}
-            </div>
-            <div class="min-w-0 flex-1">
-              <h2 class="category-title">
-                {{ $t(category.titleKey) }}
-              </h2>
-              <p class="category-subtitle">
-                {{ $t(category.subtitleKey) }}
-              </p>
-            </div>
-            <NuxtLink
-              :to="localePath(category.sectionPath)"
-              class="category-link group"
-            >
-              {{ $t('tools.more', { category: $t(category.titleKey) }) }}
-              <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </NuxtLink>
+        <template v-for="group in toolGroups" :key="group.id">
+          <div :id="group.id" class="tools-group-head scroll-mt-24">
+            <h2>{{ $t(group.titleKey) }}</h2>
+            <p>{{ $t(group.subtitleKey) }}</p>
           </div>
 
-          <div v-reveal.stagger class="topic-grid">
-            <NuxtLink
-              v-for="tool in category.tools.slice(0, 4)"
-              :key="tool.path"
-              :to="localePath(tool.path)"
-              data-reveal-child
-              class="topic-card arc-card group"
-              :class="{ 'topic-card-recommended': tool.recommended }"
-            >
-              <span v-if="tool.recommended" class="topic-badge">
-                {{ $t('seeking.recommended') }}
-              </span>
-              <span class="topic-card-body">
-                <span class="topic-icon">
-                  <UIcon :name="tool.icon" class="h-5 w-5" />
+          <section
+            v-for="(category, categoryIndex) in group.categories"
+            :id="category.id"
+            :key="category.id"
+            class="scroll-mt-24"
+          >
+            <div v-reveal class="category-head">
+              <div class="category-index font-mono">
+                {{ String(categoryIndex + 1).padStart(2, '0') }}
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="category-title">
+                  {{ $t(category.titleKey) }}
+                </h3>
+                <p class="category-subtitle">
+                  {{ $t(category.subtitleKey) }}
+                </p>
+              </div>
+              <NuxtLink
+                :to="localePath(category.sectionPath)"
+                class="category-link group"
+              >
+                {{ $t('tools.more', { category: $t(category.titleKey) }) }}
+                <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+              </NuxtLink>
+            </div>
+
+            <div v-reveal.stagger class="topic-grid">
+              <NuxtLink
+                v-for="tool in category.tools.slice(0, 4)"
+                :key="tool.path"
+                :to="localePath(tool.path)"
+                data-reveal-child
+                class="topic-card arc-card group"
+                :class="{ 'topic-card-recommended': tool.recommended }"
+              >
+                <span v-if="tool.recommended" class="topic-badge">
+                  {{ $t('seeking.recommended') }}
                 </span>
-                <span class="topic-title">{{ $t(tool.titleKey) }}</span>
-                <span class="topic-desc">{{ $t(tool.descKey) }}</span>
-                <span class="topic-cta">
-                  {{ $t(tool.ctaKey) }}
-                  <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                <span class="topic-card-body">
+                  <span class="topic-icon">
+                    <UIcon :name="tool.icon" class="h-5 w-5" />
+                  </span>
+                  <span class="topic-title">{{ $t(tool.titleKey) }}</span>
+                  <span class="topic-desc">{{ $t(tool.descKey) }}</span>
+                  <span class="topic-cta">
+                    {{ $t(tool.ctaKey) }}
+                    <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </span>
                 </span>
-              </span>
-            </NuxtLink>
-          </div>
-        </section>
+              </NuxtLink>
+            </div>
+          </section>
+        </template>
       </div>
     </div>
   </div>
@@ -110,6 +123,7 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 const categories = useToolCategories()
+const toolGroups = useToolGroups()
 const totalCount = computed(() => categories.value.reduce((sum, category) => sum + category.tools.length, 0))
 
 const siteName = 'ososn'
@@ -240,11 +254,51 @@ useHead(() => {
 
 .tools-nav {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-top: 34px;
   overflow-x: auto;
   padding-bottom: 8px;
   scrollbar-width: none;
+}
+
+.tools-group-chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 7px;
+  margin-left: 8px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tools-group-chip:first-child {
+  margin-left: 0;
+}
+
+.tools-group-head {
+  max-width: 780px;
+}
+
+.tools-group-head h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.tools-group-head p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.tools-group-head + section .category-head,
+.tools-group-head + section {
+  margin-top: 14px;
 }
 
 .tools-nav::-webkit-scrollbar {
