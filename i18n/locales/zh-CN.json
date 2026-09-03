@@ -669,8 +669,8 @@
     "qimenOgTitle": "奇门遁甲在线排盘_起盘_解盘_奇门遁甲算命",
     "qimenOgDesc": "免费奇门遁甲在线排盘_起盘_解盘，奇门遁甲算命，AI解读九宫吉凶方位与行动建议，仅供文化娱乐参考。",
     "huangdaoTitle": "黄道吉日查询_免费择日择吉在线工具",
-    "huangdaoDesc": "免费黄道吉日查询工具，输入生辰与择日事项，结合传统黄历宜忌为你筛选搬家、结婚、开业、签约等最佳良辰吉日。",
-    "huangdaoKeywords": "黄道吉日,择日,黄历查询,搬家吉日,结婚吉日,开业吉日,良辰吉日,免费择日,在线黄历",
+    "huangdaoDesc": "免费黄道吉日查询工具，输入生辰与择日事项，结合传统黄历宜忌为你筛选搬家、结婚、开业、签约、装修、入宅、安床、祭祀、求财等最佳良辰吉日。",
+    "huangdaoKeywords": "黄道吉日,择日,黄历查询,搬家吉日,结婚吉日,开业吉日,签约吉日,装修吉日,动土吉日,入宅吉日,安床吉日,祭祀吉日,求财吉日,良辰吉日,免费择日,在线黄历",
     "huangdaoOgTitle": "黄道吉日查询_免费择日工具",
     "huangdaoOgDesc": "输入生辰与事项，AI 结合黄历宜忌为你挑选最佳吉日良辰，免费使用。",
     "liurenTitle": "大六壬在线排盘_四课三传占卜解读",
@@ -1812,7 +1812,6 @@
       "disclaimer": "预测仅供娱乐参考"
     }
   },
-
   "liurenWorldcup": {
     "badge": "Da Liu Ren · World Cup 2026",
     "title": "大六壬世界杯预测",
@@ -2647,7 +2646,13 @@
       "contract": "签约合作",
       "travel": "出行赴任",
       "medical": "就医手术",
-      "exam": "考试学习"
+      "exam": "考试学习",
+      "renovation": "动土装修",
+      "worship": "祭祀祈福",
+      "moveIn": "入宅安家",
+      "wealth": "求财投资",
+      "bedPlacement": "安床",
+      "marketOpen": "开市纳财"
     },
     "errorNoBirthDate": "请填写出生日期",
     "errorNoDateRange": "请选择日期范围",
@@ -5570,23 +5575,23 @@
     "zonggeShort": "总",
     "aiUnavailable": "AI 解读暂不可用，请稍后重试。",
     "poster": {
-    "kicker": "三才五格 · 命名鉴定",
-    "title": "命名证书",
-    "serial": "三才五格姓名学鉴定专用",
-    "nameFlag": "命名",
-    "strokeSuffix": "画",
-    "wugeTitle": "五格剖象",
-    "sancaiTitle": "三才配置",
-    "scoreLabel": "综合评分",
-    "gradeLabel": "等级",
-    "luckLabel": "五格运势",
-    "othersTitle": "备选名录",
-    "archiveLabel": "归档",
-    "archiveNo": "命字第 {no} 号",
-    "archiveDateLabel": "立档",
-    "archiveSeal": "命名\\n鉴定",
-    "seal": "鉴定",
-    "qrHint": "扫码起名",
+      "kicker": "三才五格 · 命名鉴定",
+      "title": "命名证书",
+      "serial": "三才五格姓名学鉴定专用",
+      "nameFlag": "命名",
+      "strokeSuffix": "画",
+      "wugeTitle": "五格剖象",
+      "sancaiTitle": "三才配置",
+      "scoreLabel": "综合评分",
+      "gradeLabel": "等级",
+      "luckLabel": "五格运势",
+      "othersTitle": "备选名录",
+      "archiveLabel": "归档",
+      "archiveNo": "命字第 {no} 号",
+      "archiveDateLabel": "立档",
+      "archiveSeal": "命名\\n鉴定",
+      "seal": "鉴定",
+      "qrHint": "扫码起名",
       "fortune": {
         "daJi": "大吉",
         "ji": "吉",
@@ -10369,8 +10374,7 @@
         "timing": "近年应期"
       }
     }
-  }
-  ,
+  },
   "newSchoolBazi": {
     "title": "新派八字",
     "subtitle": "以李涵辰新派简化体系判断地支本气、邻位作用与旺衰用神，AI 只做框架内的文化解读。",
@@ -10404,8 +10408,7 @@
       "hour": "时",
       "unknown": "未知"
     }
-  }
-,
+  },
   "baziElements": {
     "title": "五行缺口分析",
     "subtitle": "排出五行分布，结合旺衰与喜用判断缺口如何调节。",
@@ -10472,8 +10475,7 @@
     "mangpaiDesc": "用做功与宾主视角看命局",
     "newSchoolTitle": "新派八字",
     "newSchoolDesc": "看作用关系与结构化判断"
-  }
-,
+  },
   "fortune2026": {
     "title": "2026 年运势中心",
     "subtitle": "按问题进入测算：全年走势、生肖犯太岁、事业财富、风水方位或每日吉时。",
@@ -10517,8 +10519,7 @@
       "wealthDirection": "2026 年流年财位在哪个方向？",
       "flyingStars": "2026 丙午年飞星风水布局指南"
     }
-  }
-,
+  },
   "nameCompatibility": {
     "title": "姓名配对",
     "personalityElement": "人格五行",
@@ -10576,8 +10577,7 @@
       "readingTitle": "关系解读",
       "disclaimer": "传统文化参考，不构成婚恋、医疗或法律建议。"
     }
-  }
-,
+  },
   "guanyinLotDetail": {
     "back": "返回观音灵签",
     "title": "观音灵签第{n}签详解",
@@ -10592,8 +10592,7 @@
     "seoTitle": "观音灵签第{n}签详解：{title}",
     "seoDescription": "观音灵签第{n}签「{title}」解签：{meaning} 页面整理签诗、解签与行动建议，并可继续在线求签。",
     "seoKeywords": "观音灵签第{n}签,观音灵签{n}详解,观音灵签解签,{title},灵签签诗,在线求签"
-  }
-,
+  },
   "fengshui2026Entry": {
     "label": "2026 风水入口",
     "hubTitle": "2026 年运势中心",

@@ -457,6 +457,12 @@ const quickButtons = computed(() => [
   { key: 'travel', label: t('huangdao.quickButtons.travel') },
   { key: 'medical', label: t('huangdao.quickButtons.medical') },
   { key: 'exam', label: t('huangdao.quickButtons.exam') },
+  { key: 'renovation', label: t('huangdao.quickButtons.renovation') },
+  { key: 'worship', label: t('huangdao.quickButtons.worship') },
+  { key: 'moveIn', label: t('huangdao.quickButtons.moveIn') },
+  { key: 'wealth', label: t('huangdao.quickButtons.wealth') },
+  { key: 'bedPlacement', label: t('huangdao.quickButtons.bedPlacement') },
+  { key: 'marketOpen', label: t('huangdao.quickButtons.marketOpen') },
 ])
 
 // 时辰选项

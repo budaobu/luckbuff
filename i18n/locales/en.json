@@ -669,8 +669,8 @@
     "qimenOgTitle": "Qimen Dunjia Online Chart_Cast Chart_Interpret Chart_Qimen Dunjia Fortune Telling",
     "qimenOgDesc": "Free Qimen Dunjia online charting, casting and interpretation. Qimen Dunjia fortune telling with AI analysis of the 9-palace chart, auspicious directions, and actionable advice. For cultural entertainment only.",
     "huangdaoTitle": "Auspicious Day Selector_Free Online Date Picker",
-    "huangdaoDesc": "Free online auspicious day selector. Enter your birth info and event details to find the best dates for moving, weddings, business launches, and more using the traditional Chinese almanac.",
-    "huangdaoKeywords": "auspicious day,date picker,Chinese almanac,moving day,wedding date,business launch,free divination",
+    "huangdaoDesc": "Free auspicious date picker. Enter your birth details and event type to find the best dates for moving, wedding, business launch, contract signing, renovation, move-in, bed placement, worship, wealth seeking, and more using traditional Chinese almanac.",
+    "huangdaoKeywords": "auspicious dates,Chinese almanac,date selection,moving date,wedding date,business launch date,contract date,renovation date,move-in date,bed placement date,worship date,wealth date,lucky dates,free date picker,online almanac",
     "huangdaoOgTitle": "Auspicious Day Selector_Free Date Picker",
     "huangdaoOgDesc": "Enter your birth info and event details. AI combines the traditional almanac to pick the best auspicious dates for you.",
     "liurenTitle": "Da Liu Ren Online Charting_Four Pillars Divination",
@@ -1964,7 +1964,6 @@
       "disclaimer": "For entertainment reference only"
     }
   },
-
   "liurenWorldcup": {
     "badge": "Da Liu Ren · World Cup 2026",
     "title": "Da Liu Ren World Cup Prediction",
@@ -2667,7 +2666,13 @@
       "contract": "Contract / Partnership",
       "travel": "Travel / Departure",
       "medical": "Medical / Surgery",
-      "exam": "Exam / Study"
+      "exam": "Exam / Study",
+      "renovation": "Renovation / Construction",
+      "worship": "Worship / Blessing",
+      "moveIn": "Move-in / Settling",
+      "wealth": "Wealth / Investment",
+      "bedPlacement": "Bed Placement",
+      "marketOpen": "Market Opening"
     },
     "errorNoBirthDate": "Please enter your birth date",
     "errorNoDateRange": "Please select a date range",
@@ -5548,23 +5553,23 @@
     "zonggeShort": "Zongge Short",
     "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
     "poster": {
-    "kicker": "Sancai Wuge · Naming Appraisal",
-    "title": "Naming Certificate",
-    "serial": "For Sancai Wuge Onomastic Appraisal",
-    "nameFlag": "Naming",
-    "strokeSuffix": " st",
-    "wugeTitle": "Five-Grid Analysis",
-    "sancaiTitle": "Three Talents",
-    "scoreLabel": "Overall Score",
-    "gradeLabel": "Grade",
-    "luckLabel": "Grid Fortune",
-    "othersTitle": "Alternates",
-    "archiveLabel": "Archive",
-    "archiveNo": "Naming No. {no}",
-    "archiveDateLabel": "Filed",
-    "archiveSeal": "Naming\\nAppraisal",
-    "seal": "Appraisal",
-    "qrHint": "Scan to name",
+      "kicker": "Sancai Wuge · Naming Appraisal",
+      "title": "Naming Certificate",
+      "serial": "For Sancai Wuge Onomastic Appraisal",
+      "nameFlag": "Naming",
+      "strokeSuffix": " st",
+      "wugeTitle": "Five-Grid Analysis",
+      "sancaiTitle": "Three Talents",
+      "scoreLabel": "Overall Score",
+      "gradeLabel": "Grade",
+      "luckLabel": "Grid Fortune",
+      "othersTitle": "Alternates",
+      "archiveLabel": "Archive",
+      "archiveNo": "Naming No. {no}",
+      "archiveDateLabel": "Filed",
+      "archiveSeal": "Naming\\nAppraisal",
+      "seal": "Appraisal",
+      "qrHint": "Scan to name",
       "fortune": {
         "daJi": "Great",
         "ji": "Good",
@@ -10347,8 +10352,7 @@
         "timing": "Coming-Year Timing"
       }
     }
-  }
-  ,
+  },
   "newSchoolBazi": {
     "title": "New School BaZi",
     "subtitle": "Judge principal branch qi, adjacent interactions and strength-first use gods with Li Hanchen's simplified New School framework.",
@@ -10382,8 +10386,7 @@
       "hour": "Hour",
       "unknown": "Unknown"
     }
-  }
-,
+  },
   "baziElements": {
     "title": "Five Element Gaps",
     "subtitle": "Map your element balance, then interpret gaps with strength and favorable elements.",
@@ -10450,8 +10453,7 @@
     "mangpaiDesc": "Work, subject-object and structural action",
     "newSchoolTitle": "New school",
     "newSchoolDesc": "Interactions and structured judgment"
-  }
-,
+  },
   "fortune2026": {
     "title": "2026 Fortune Center",
     "subtitle": "Choose your path: yearly trend, zodiac Tai Sui, career wealth, Feng Shui directions or daily timing.",
@@ -10495,8 +10497,7 @@
       "wealthDirection": "Where is the 2026 annual wealth direction?",
       "flyingStars": "2026 Bing Wu flying-star Feng Shui layout guide"
     }
-  }
-,
+  },
   "nameCompatibility": {
     "title": "Name Compatibility",
     "personalityElement": "Personality element",
@@ -10554,8 +10555,7 @@
       "readingTitle": "Relationship reading",
       "disclaimer": "Traditional culture reference; not relationship, medical or legal advice."
     }
-  }
-,
+  },
   "guanyinLotDetail": {
     "back": "Back to Guanyin Oracle",
     "title": "Guanyin Oracle No. {n}: {title}",
@@ -10570,8 +10570,7 @@
     "seoTitle": "Guanyin Oracle No. {n} Meaning: {title}",
     "seoDescription": "Guanyin Oracle No. {n}, “{title}”: {meaning} Read the poem, interpretation and advice, then draw a lot online.",
     "seoKeywords": "Guanyin Oracle No. {n},Guanyin lot {n} meaning,{title},oracle poem,draw Guanyin lot"
-  }
-,
+  },
   "fengshui2026Entry": {
     "label": "2026 Feng Shui entry",
     "hubTitle": "2026 Fortune Center",
