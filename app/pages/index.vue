@@ -48,19 +48,18 @@
         </p>
 
         <div data-hero-reveal="4" class="hero-actions">
-          <NuxtLink
-            :to="localePath('/tools')"
-            class="hero-cta hero-cta-primary"
-          >
-            <UIcon name="i-heroicons-sparkles" class="h-5 w-5" />
-            {{ $t('common.start') }}
-          </NuxtLink>
-          <NuxtLink
-            :to="localePath('/settings')"
-            class="hero-cta hero-cta-secondary"
-          >
-            {{ $t('common.saveProfile') }}
-          </NuxtLink>
+          <form class="hero-input-form" @submit.prevent="tryHumorHermit">
+            <input
+              v-model="heroText"
+              type="text"
+              class="hero-input"
+              :placeholder="$t('home.heroPlaceholder')"
+            />
+            <button type="submit" class="hero-cta hero-cta-primary">
+              <UIcon name="i-heroicons-sparkles" class="h-5 w-5" />
+              {{ $t('home.heroTryBtn') }}
+            </button>
+          </form>
         </div>
         </div>
       <aside data-hero-reveal="5" class="hero-panel" aria-labelledby="hero-panel-title">
@@ -339,6 +338,13 @@ const localePath = useLocalePath()
 const categories = useToolCategories()
 const store = useProfilesStore()
 const guideDismissed = ref(false)
+const heroText = ref('')
+
+function tryHumorHermit() {
+  const text = heroText.value.trim()
+  if (text.length < 4) return
+  navigateTo({ path: localePath('/tools/humor-hermit'), query: { text } })
+}
 const openFaqIndex = ref<number | null>(null)
 
 function toggleFaq(index: number) {
@@ -596,6 +602,33 @@ useHead(() => ({
   border: 1px solid var(--border-strong);
   background: color-mix(in srgb, var(--surface-bg) 52%, transparent);
   color: var(--text-body);
+}
+
+.hero-input-form {
+  display: flex;
+  gap: 0.5rem;
+  width: min(28rem, 100%);
+}
+
+.hero-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface-bg) 68%, transparent);
+  color: var(--text-body);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.hero-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.hero-input:focus {
+  border-color: var(--accent-border-hover);
 }
 
 @media (hover: hover) and (pointer: fine) {

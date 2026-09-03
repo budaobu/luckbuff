@@ -9,71 +9,44 @@
       <!-- Form phase -->
       <div v-if="phase === 'form'">
         <div class="mb-8">
-          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Fortune Q&A</span>
+          <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Humor Hermit</span>
           <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-            {{ $t('fortuneQa.title') }}
+            {{ $t('humorHermit.title') }}
           </h1>
           <p class="text-sm text-[var(--text-faint)] mt-2">
-            {{ $t('fortuneQa.subtitle') }}
+            {{ $t('humorHermit.subtitle') }}
           </p>
           <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
         </div>
 
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3 mb-5">
           <p class="text-[11px] text-[var(--text-faint)] text-center leading-relaxed">
-            {{ $t('fortuneQa.disclaimer') }}
+            {{ $t('humorHermit.disclaimer') }}
           </p>
         </div>
 
         <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-dropdown)] overflow-hidden">
           <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
           <div class="p-6 space-y-5">
-            <div>
-              <label class="block text-sm text-[var(--text-muted)] mb-2">{{ $t('fortuneQa.questionLabel') }}</label>
-              <UTextarea
-                v-model="form.question"
-                :placeholder="$t('fortuneQa.questionPlaceholder')"
-                class="w-full"
-                :rows="3"
-                :ui="inputUi"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm text-[var(--text-muted)] mb-2">
-                {{ $t('fortuneQa.birthLabel') }}
-                <span class="text-[11px] text-[var(--text-placeholder)] ml-1">{{ $t('fortuneQa.birthHint') }}</span>
-              </label>
-              <div class="grid grid-cols-2 gap-3">
-                <UInput
-                  v-model="form.birthDate"
-                  type="date"
-                  class="w-full"
-                  :ui="inputUi"
-                />
-                <USelectMenu
-                  v-model="form.birthHour"
-                  :items="hourOptions"
-                  value-key="value"
-                  :placeholder="$t('fortuneQa.hourPlaceholder')"
-                  class="w-full"
-                  :ui="selectUi"
-                />
-              </div>
-            </div>
-
+            <UTextarea
+              v-model="form.text"
+              :placeholder="$t('humorHermit.placeholder')"
+              class="w-full"
+              :rows="4"
+              :ui="inputUi"
+            />
             <UButton
               color="warning"
               size="lg"
               block
-              :disabled="form.question.trim().length < 4"
+              :disabled="form.text.trim().length < 4"
               class="shadow-lg shadow-[var(--accent-shadow)] hover:shadow-[var(--accent-shadow-hover)] transition-all duration-300"
               @click="handleSubmit"
             >
               <template #leading>
-                <UIcon name="i-heroicons-chat-bubble-left-right" class="w-5 h-5" />
+                <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
               </template>
-              {{ $t('fortuneQa.submitBtn') }}
+              {{ $t('humorHermit.submitBtn') }}
             </UButton>
           </div>
         </div>
@@ -82,18 +55,18 @@
       <!-- Interpreting phase -->
       <div v-if="phase === 'interpreting'" class="flex flex-col items-center justify-center min-h-[40vh]">
         <div class="flex items-center gap-3 mb-4">
-          <UIcon name="i-heroicons-chat-bubble-left-right" class="w-6 h-6 text-[var(--accent)] animate-pulse" />
-          <span class="text-sm text-[var(--accent-muted)]">{{ $t('fortuneQa.interpreting') }}</span>
+          <UIcon name="i-heroicons-sparkles" class="w-6 h-6 text-[var(--accent)] animate-pulse" />
+          <span class="text-sm text-[var(--accent-muted)]">{{ $t('humorHermit.interpreting') }}</span>
         </div>
-        <div v-if="!aiStarted" class="text-xs text-[var(--text-placeholder)]">{{ $t('fortuneQa.connecting') }}</div>
+        <div v-if="!aiStarted" class="text-xs text-[var(--text-placeholder)]">{{ $t('humorHermit.connecting') }}</div>
       </div>
 
       <!-- Result phase -->
       <div v-if="phase === 'result' && aiContent">
         <div class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-6">
           <div class="mb-4 pb-3 border-b border-[var(--border-subtle)]">
-            <p class="text-xs text-[var(--text-placeholder)] mb-1">{{ $t('fortuneQa.yourQuestion') }}</p>
-            <p class="text-sm text-[var(--text-primary)] font-medium">{{ form.question }}</p>
+            <p class="text-xs text-[var(--text-placeholder)] mb-1">{{ $t('humorHermit.yourInput') }}</p>
+            <p class="text-sm text-[var(--text-primary)] font-medium">{{ form.text }}</p>
           </div>
           <div class="space-y-3">
             <div v-for="field in parsedFields" :key="field.key" class="flex items-start gap-3">
@@ -113,7 +86,7 @@
             {{ $t('myReports.saveBtn') }}
           </UButton>
           <UButton variant="outline" size="sm" @click="reset">
-            {{ $t('fortuneQa.againBtn') }}
+            {{ $t('humorHermit.againBtn') }}
           </UButton>
         </div>
       </div>
@@ -122,7 +95,7 @@
       <div v-if="phase === 'result' && aiError" class="mt-8 text-center">
         <p class="text-sm text-red-400 mb-4">{{ aiError }}</p>
         <UButton variant="outline" size="sm" @click="reset">
-          {{ $t('fortuneQa.againBtn') }}
+          {{ $t('humorHermit.againBtn') }}
         </UButton>
       </div>
     </div>
@@ -131,33 +104,19 @@
 
 <script setup lang="ts">
 const { t, locale } = useI18n()
+const route = useRoute()
 const toast = useToast()
 
 const inputUi = {
   base: 'w-full bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
 }
-const selectUi = {
-  base: 'w-full bg-[var(--surface-input)] border-[var(--border-light)] focus:border-[var(--accent-border-hover)] text-[var(--text-primary)]',
-}
 
 const phase = ref<'form' | 'interpreting' | 'result'>('form')
-const form = reactive({
-  question: '',
-  birthDate: '',
-  birthHour: '',
-})
+const form = reactive({ text: '' })
 const aiContent = ref('')
 const aiError = ref<string | null>(null)
 const aiStarted = ref(false)
 const { save } = useReports()
-
-const hourOptions = computed(() => [
-  { label: t('fortuneQa.hourUnknown'), value: '' },
-  ...['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'].map((d, i) => ({
-    label: `${d}时`,
-    value: d,
-  })),
-])
 
 const fieldLabels: Record<string, Record<string, string>> = {
   'zh-CN': { OV: '直答', INSIGHT: '洞察', WORK: '事业', LOVE: '感情', ACTION: '行动', TIMING: '时机', NOTE: '提醒' },
@@ -183,13 +142,14 @@ const parsedFields = computed(() => {
 })
 
 function handleSubmit() {
-  if (form.question.trim().length < 4) return
+  if (form.text.trim().length < 4) return
   phase.value = 'interpreting'
   startAiStream()
 }
 
 function reset() {
   phase.value = 'form'
+  form.text = ''
   aiContent.value = ''
   aiError.value = null
   aiStarted.value = false
@@ -199,15 +159,11 @@ function saveReport() {
   if (!aiContent.value) return
   const ov = parsedFields.value.find(f => f.key === 'OV')?.value
   save(
-    t('fortuneQa.title'),
-    '/tools/fortune-qa',
-    ov || form.question.slice(0, 40),
+    t('humorHermit.title'),
+    '/tools/humor-hermit',
+    ov || form.text.slice(0, 40),
     aiContent.value.slice(0, 200),
-    {
-      question: form.question,
-      birthDate: form.birthDate || null,
-      content: aiContent.value,
-    },
+    { text: form.text, content: aiContent.value },
   )
   toast.add({ title: t('myReports.saved'), color: 'success' })
 }
@@ -218,13 +174,11 @@ async function startAiStream() {
   aiStarted.value = false
 
   try {
-    const response = await fetch('/api/tools/fortune-qa/interpret', {
+    const response = await fetch('/api/tools/humor-hermit/interpret', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        question: form.question.trim(),
-        birthDate: form.birthDate || undefined,
-        birthHour: form.birthHour || undefined,
+        text: form.text.trim(),
         locale: locale.value,
       }),
     })
@@ -268,25 +222,33 @@ async function startAiStream() {
     }
 
     if (!aiStarted.value && !aiError.value) {
-      aiError.value = t('fortuneQa.noResult')
+      aiError.value = t('humorHermit.noResult')
       phase.value = 'result'
     }
   } catch (e: any) {
-    aiError.value = e?.message || t('fortuneQa.requestFail')
+    aiError.value = e?.message || t('humorHermit.requestFail')
     phase.value = 'result'
     toast.add({
-      title: t('fortuneQa.requestFail'),
+      title: t('humorHermit.requestFail'),
       description: aiError.value || undefined,
       color: 'error',
     })
   }
 }
 
+onMounted(() => {
+  const text = route.query.text
+  if (typeof text === 'string' && text.trim().length >= 4) {
+    form.text = text
+    handleSubmit()
+  }
+})
+
 useSeoMeta({
-  title: t('seo.fortuneQaTitle'),
-  description: t('seo.fortuneQaDesc'),
-  keywords: t('seo.fortuneQaKeywords'),
-  ogTitle: t('seo.fortuneQaOgTitle'),
-  ogDescription: t('seo.fortuneQaOgDesc'),
+  title: t('seo.humorHermitTitle'),
+  description: t('seo.humorHermitDesc'),
+  keywords: t('seo.humorHermitKeywords'),
+  ogTitle: t('seo.humorHermitOgTitle'),
+  ogDescription: t('seo.humorHermitOgDesc'),
 })
 </script>
