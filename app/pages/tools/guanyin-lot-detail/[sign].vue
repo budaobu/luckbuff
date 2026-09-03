@@ -75,6 +75,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  path: '/tools/guanyin-lots/:sign(\\d+)',
+})
+
 interface LotResponse {
   lotType: { id: string; name: string; count: number }
   fortune: {
@@ -95,7 +99,7 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
 const sign = computed(() => Number(route.params.sign))
-const pageUrl = useLocalizedSeoUrl(() => `/tools/guanyin-lot/${sign.value}`)
+const pageUrl = useLocalizedSeoUrl(() => `/tools/guanyin-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `guanyin-lot-${sign.value}-${locale.value}`,
@@ -139,7 +143,7 @@ useHead(() => ({
         title: lot.value!.fortune.title,
         meaning: lot.value!.fortune.explanation,
       }),
-      url: `https://www.ososn.com/tools/guanyin-lot/${lot.value!.fortune.number}`,
+      url: `https://www.ososn.com/tools/guanyin-lots/${lot.value!.fortune.number}`,
       articleSection: String(lot.value!.lotType.name),
       position: lot.value!.fortune.number,
     }),

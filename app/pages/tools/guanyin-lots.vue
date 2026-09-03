@@ -226,7 +226,7 @@
             color="warning"
             variant="soft"
             class="group/btn"
-            :to="localePath(`/tools/guanyin-lot/${calcResult.fortune.number}`)"
+            :to="localePath(`/tools/guanyin-lots/${calcResult.fortune.number}`)"
           >
             <template #leading>
               <UIcon name="i-heroicons-book-open" class="w-4 h-4" />
