@@ -276,7 +276,22 @@
     "toolQizhengSiyuCta": "立即排盤",
     "toolZipingBaziTitle": "子平八字",
     "toolZipingBaziDesc": "以子平法為核心，排定四柱、格局、喜用與十年大運，適合想深入理解八字命局結構的愛好者。",
-    "toolZipingBaziCta": "立即排盤"
+    "toolZipingBaziCta": "立即排盤",
+    "toolDreamTitle": "周公解夢",
+    "toolDreamDesc": "輸入夢境，AI 按周公解夢傳統解讀吉凶",
+    "toolDreamCta": "開始解夢",
+    "toolBirthBuddhaTitle": "本命佛",
+    "toolBirthBuddhaDesc": "查生肖守護佛，AI 解讀寓意與啟示",
+    "toolBirthBuddhaCta": "查看本命佛",
+    "toolFortuneCalendarTitle": "運勢月曆",
+    "toolFortuneCalendarDesc": "月曆視圖查看每日宜忌與吉凶",
+    "toolFortuneCalendarCta": "查看月曆",
+    "toolMyReportsTitle": "我的報告",
+    "toolMyReportsDesc": "回看保存的測算結果",
+    "toolMyReportsCta": "查看報告",
+    "toolFortuneQaTitle": "AI 命理問答",
+    "toolFortuneQaDesc": "自由提問，AI 自動路由命理引擎解答",
+    "toolFortuneQaCta": "開始提問"
   },
   "prophet": {
     "title": "賽事預測",
@@ -669,8 +684,8 @@
     "qimenOgTitle": "奇門遁甲在線排盤_起盤_解盤_奇門遁甲算命",
     "qimenOgDesc": "免費奇門遁甲在線排盤_起盤_解盤，奇門遁甲算命，AI解讀九宮吉凶方位與行動建議，僅供文化娛樂參考。",
     "huangdaoTitle": "黃道吉日查詢_免費擇日擇吉在線工具",
-    "huangdaoDesc": "免費黃道吉日查詢工具，輸入生辰與擇日事項，結合傳統黃曆宜忌為你篩選搬家、結婚、開業、簽約等最佳良辰吉日。",
-    "huangdaoKeywords": "黃道吉日,擇日,黃曆查詢,搬家吉日,結婚吉日,開業吉日,良辰吉日,免費擇日,在線黃曆",
+    "huangdaoDesc": "免費黃道吉日查詢工具，輸入生辰與擇日事項，結合傳統黃曆宜忌為你篩選搬家、結婚、開業、簽約、裝修、入宅、安床、祭祀、求財等最佳良辰吉日。",
+    "huangdaoKeywords": "黃道吉日,擇日,黃曆查詢,搬家吉日,結婚吉日,開業吉日,簽約吉日,裝修吉日,動土吉日,入宅吉日,安床吉日,祭祀吉日,求財吉日,良辰吉日,免費擇日,線上黃曆",
     "huangdaoOgTitle": "黃道吉日查詢_免費擇日工具",
     "huangdaoOgDesc": "輸入生辰與事項，AI 結合黃曆宜忌為你挑選最佳吉日良辰，免費使用。",
     "liurenTitle": "大六壬在線排盤_四課三傳占卜解讀",
@@ -1131,7 +1146,27 @@
     "astroDiceDesc": "線上占星骰子：行星、星座、宮位三顆骰子同擲，結合廟旺落陷與宮位強度打分，AI 生成壓縮解讀並輸出專屬海報，僅供文化娛樂參考。",
     "astroDiceKeywords": "占星骰子,線上擲骰,行星骰子,星座骰子,宮位骰子,占星占卜",
     "astroDiceOgTitle": "占星骰子 · 擲出你當下的宇宙暗號",
-    "astroDiceOgDesc": "行星說什麼，星座說怎樣，宮位說在哪裡——三骰一擲，海報一張。"
+    "astroDiceOgDesc": "行星說什麼，星座說怎樣，宮位說在哪裡——三骰一擲，海報一張。",
+    "dreamTitle": "周公解夢_免費AI線上解夢工具",
+    "dreamDesc": "輸入夢境描述，AI 按周公解夢傳統為你解讀夢境吉凶、事業財運、感情人際與身心提示，免費使用。",
+    "dreamKeywords": "周公解夢,解夢,AI解夢,夢境解析,夢見,夢到,免費解夢,線上解夢,周公解夢大全",
+    "dreamOgTitle": "周公解夢_免費AI線上解夢",
+    "dreamOgDesc": "輸入夢境，AI 按傳統周公解夢為你解讀吉凶與生活啟示。",
+    "birthBuddhaTitle": "本命佛查詢_十二生肖守護神線上查詢",
+    "birthBuddhaDesc": "輸入出生年份，查詢你的生肖守護本命佛，AI 解讀佛教寓意與修行生活啟示，免費使用。",
+    "birthBuddhaKeywords": "本命佛,生肖守護神,千手觀音,虛空藏菩薩,文殊菩薩,普賢菩薩,大勢至菩薩,大日如來,不動尊菩薩,阿彌陀佛,十二生肖",
+    "birthBuddhaOgTitle": "本命佛查詢_十二生肖守護神",
+    "birthBuddhaOgDesc": "輸入年份查詢你的生肖本命佛，AI 解讀守護含義與修行啟示。",
+    "fortuneCalendarTitle": "運勢月曆_每日黃曆宜忌月度日曆",
+    "fortuneCalendarDesc": "月曆視圖查看每日黃曆宜忌、吉凶等級與節氣信息，幫你一目瞭然規劃整月重要事項。",
+    "fortuneCalendarKeywords": "運勢月曆,黃曆月曆,每日宜忌,吉凶日曆,節氣,擇日月曆,免費黃曆",
+    "fortuneCalendarOgTitle": "運勢月曆_每日黃曆宜忌",
+    "fortuneCalendarOgDesc": "月曆視圖查看每日黃曆宜忌與吉凶等級，輕鬆規劃整月事項。",
+    "fortuneQaTitle": "AI命理問答_免費線上命理提問工具",
+    "fortuneQaDesc": "輸入任何關於事業、感情、財運的問題，AI 自動路由到八字或周易引擎為你解答，提供具體行動建議和時機提示，免費使用。",
+    "fortuneQaKeywords": "AI命理問答,命理提問,線上算命,免費算命,八字問答,周易問答,事業運勢,感情運勢",
+    "fortuneQaOgTitle": "AI命理問答_免費線上提問",
+    "fortuneQaOgDesc": "自由提問，AI 自動路由命理引擎為你解答事業、感情、財運問題。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -1914,7 +1949,6 @@
       "disclaimer": "預測僅供娛樂參考"
     }
   },
-
   "liurenWorldcup": {
     "badge": "Da Liu Ren · World Cup 2026",
     "title": "大六壬世界盃預測",
@@ -2692,7 +2726,13 @@
       "contract": "簽約合作",
       "travel": "出行赴任",
       "medical": "就醫手術",
-      "exam": "考試學習"
+      "exam": "考試學習",
+      "renovation": "動土裝修",
+      "worship": "祭祀祈福",
+      "moveIn": "入宅安家",
+      "wealth": "求財投資",
+      "bedPlacement": "安床",
+      "marketOpen": "開市納財"
     },
     "errorNoBirthDate": "請填寫出生日期",
     "errorNoDateRange": "請選擇日期範圍",
@@ -5573,23 +5613,23 @@
     "zonggeShort": "總",
     "aiUnavailable": "AI 解讀暫不可用，請稍後重試。",
     "poster": {
-    "kicker": "三才五格 · 命名鑑定",
-    "title": "命名證書",
-    "serial": "三才五格姓名學鑑定專用",
-    "nameFlag": "命名",
-    "strokeSuffix": "畫",
-    "wugeTitle": "五格剖象",
-    "sancaiTitle": "三才配置",
-    "scoreLabel": "綜合評分",
-    "gradeLabel": "等級",
-    "luckLabel": "五格運勢",
-    "othersTitle": "備選名錄",
-    "archiveLabel": "歸檔",
-    "archiveNo": "命字第 {no} 號",
-    "archiveDateLabel": "立檔",
-    "archiveSeal": "命名\\n鑑定",
-    "seal": "鑑定",
-    "qrHint": "掃碼起名",
+      "kicker": "三才五格 · 命名鑑定",
+      "title": "命名證書",
+      "serial": "三才五格姓名學鑑定專用",
+      "nameFlag": "命名",
+      "strokeSuffix": "畫",
+      "wugeTitle": "五格剖象",
+      "sancaiTitle": "三才配置",
+      "scoreLabel": "綜合評分",
+      "gradeLabel": "等級",
+      "luckLabel": "五格運勢",
+      "othersTitle": "備選名錄",
+      "archiveLabel": "歸檔",
+      "archiveNo": "命字第 {no} 號",
+      "archiveDateLabel": "立檔",
+      "archiveSeal": "命名\\n鑑定",
+      "seal": "鑑定",
+      "qrHint": "掃碼起名",
       "fortune": {
         "daJi": "大吉",
         "ji": "吉",
@@ -10368,8 +10408,7 @@
         "timing": "近年應期"
       }
     }
-  }
-  ,
+  },
   "newSchoolBazi": {
     "title": "新派八字",
     "subtitle": "以李涵辰新派簡化體系判斷地支本氣、鄰位作用與旺衰用神，AI 只做框架內的文化解讀。",
@@ -10403,8 +10442,7 @@
       "hour": "時",
       "unknown": "未知"
     }
-  }
-,
+  },
   "baziElements": {
     "title": "五行缺口分析",
     "subtitle": "排出五行分佈，結合旺衰與喜用判斷缺口如何調節。",
@@ -10471,8 +10509,7 @@
     "mangpaiDesc": "用做功與賓主視角看命局",
     "newSchoolTitle": "新派八字",
     "newSchoolDesc": "看作用關係與結構化判斷"
-  }
-,
+  },
   "fortune2026": {
     "title": "2026 年運勢中心",
     "subtitle": "按問題進入測算：全年走勢、生肖犯太歲、事業財富、風水方位或每日吉時。",
@@ -10516,8 +10553,7 @@
       "wealthDirection": "2026 年流年財位在哪個方向？",
       "flyingStars": "2026 丙午年飛星風水佈局指南"
     }
-  }
-,
+  },
   "nameCompatibility": {
     "title": "姓名配對",
     "personalityElement": "人格五行",
@@ -10575,8 +10611,7 @@
       "readingTitle": "關係解讀",
       "disclaimer": "傳統文化參考，不構成婚戀、醫療或法律建議。"
     }
-  }
-,
+  },
   "guanyinLotDetail": {
     "back": "返回觀音靈簽",
     "title": "觀音靈簽第{n}簽詳解",
@@ -10591,13 +10626,115 @@
     "seoTitle": "觀音靈簽第{n}簽詳解：{title}",
     "seoDescription": "觀音靈簽第{n}簽「{title}」解簽：{meaning} 頁面整理簽詩、解簽與行動建議，並可繼續線上求簽。",
     "seoKeywords": "觀音靈簽第{n}簽,觀音靈簽{n}詳解,觀音靈簽解簽,{title},靈簽簽詩,線上求簽"
-  }
-,
+  },
   "fengshui2026Entry": {
     "label": "2026 風水入口",
     "hubTitle": "2026 年運勢中心",
     "hubDesc": "查看全年風水方位與其他運勢場景。",
     "articleTitle": "2026 丙午年飛星佈局指南",
     "articleDesc": "先看年度方位要點，再做個人住宅測算。"
+  },
+  "dream": {
+    "title": "周公解夢",
+    "subtitle": "輸入夢境描述，AI 按周公解夢傳統為你解讀吉凶與啟示",
+    "disclaimer": "解讀結果基於傳統解夢文化，僅供文化娛樂參考，非科學結論。",
+    "formLabel": "夢境描述",
+    "formPlaceholder": "例如：夢見自己在一個古老的庭院裡，看到了一條金色的蛇盤在石柱上，然後蛇飛走了……",
+    "submitBtn": "開始解夢",
+    "interpreting": "解夢中…",
+    "connecting": "正在連接解夢先生…",
+    "againBtn": "再解一夢",
+    "noResult": "未能獲得解讀結果，請重試",
+    "requestFail": "解夢請求失敗",
+    "poster": {
+      "kicker": "Zhou Gong Dream",
+      "title": "夢境解析",
+      "pending": "…",
+      "dreamLabel": "夢境回溯",
+      "fieldSym": "核心象徵",
+      "fieldWork": "事業財運",
+      "fieldLove": "感情人際",
+      "fieldHealth": "身心提醒",
+      "noteLabel": "解夢先生語"
+    }
+  },
+  "birthBuddha": {
+    "title": "本命佛",
+    "subtitle": "輸入出生年份，查看你的生肖守護本命佛與修行啟示",
+    "disclaimer": "解讀基於佛教文化傳統，僅供文化娛樂參考，非宗教勸誘。",
+    "yearLabel": "出生年份",
+    "yearPlaceholder": "選擇年份",
+    "zodiacLabel": "你的生肖",
+    "submitBtn": "查看本命佛",
+    "interpreting": "解讀中…",
+    "connecting": "正在連接…",
+    "againBtn": "重新查詢",
+    "noResult": "未能獲得解讀結果，請重試",
+    "requestFail": "請求失敗",
+    "zodiac": {
+      "rat": "鼠",
+      "ox": "牛",
+      "tiger": "虎",
+      "rabbit": "兔",
+      "dragon": "龍",
+      "snake": "蛇",
+      "horse": "馬",
+      "goat": "羊",
+      "monkey": "猴",
+      "rooster": "雞",
+      "dog": "狗",
+      "pig": "豬"
+    },
+    "poster": {
+      "kicker": "Birth Buddha",
+      "title": "本命佛守護",
+      "pending": "…",
+      "yearLabel": "出生年份",
+      "buddhaLabel": "本命佛",
+      "fieldSym": "佛教寓意",
+      "fieldChar": "生肖性格",
+      "fieldWork": "事業指引",
+      "fieldLove": "感情啟示"
+    }
+  },
+  "fortuneCalendar": {
+    "title": "運勢月曆",
+    "subtitle": "按月查看每日黃曆宜忌與吉凶等級",
+    "yiLabel": "宜",
+    "jiLabel": "忌",
+    "jieQiLabel": "節氣",
+    "fortune": {
+      "ji": "吉",
+      "xiong": "凶",
+      "ping": "平"
+    }
+  },
+  "myReports": {
+    "title": "我的報告",
+    "subtitle": "保存的測算結果會在這裡顯示（僅存儲在本機）",
+    "empty": "暫無保存的報告",
+    "emptyHint": "在工具結果頁點擊「保存報告」即可收藏",
+    "saveBtn": "保存報告",
+    "saved": "報告已保存",
+    "clearAll": "清空全部",
+    "confirmClear": "確定要清空所有保存的報告嗎？"
+  },
+  "fortuneQa": {
+    "title": "AI 命理問答",
+    "subtitle": "自由提問，AI 自動路由到八字或周易引擎為你解答",
+    "disclaimer": "回答基於傳統命理文化，僅供文化娛樂參考，非科學結論。",
+    "questionLabel": "你的問題",
+    "questionPlaceholder": "例如：我今年適合跳槽嗎？或者：最近感情運勢怎麼樣？",
+    "birthLabel": "生辰（選填）",
+    "birthHint": "提供生辰可獲得更精準的八字分析",
+    "hourPlaceholder": "時辰（選填）",
+    "hourUnknown": "未知時辰",
+    "submitBtn": "開始提問",
+    "interpreting": "解答中…",
+    "connecting": "正在連接命理顧問…",
+    "yourQuestion": "你的問題",
+    "againBtn": "再問一個",
+    "noResult": "未能獲得解答，請重試",
+    "requestFail": "提問請求失敗"
   }
 }

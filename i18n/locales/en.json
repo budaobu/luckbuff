@@ -276,7 +276,22 @@
     "toolQizhengSiyuCta": "Generate Chart",
     "toolZipingBaziTitle": "Zi Ping Bazi",
     "toolZipingBaziDesc": "Chart the four pillars, pattern, favorable elements and ten-year luck cycles using the Zi Ping method, ideal for enthusiasts who want to understand Bazi structure in depth.",
-    "toolZipingBaziCta": "Chart now"
+    "toolZipingBaziCta": "Chart now",
+    "toolDreamTitle": "Dream Interpretation",
+    "toolDreamDesc": "Describe your dream and get AI-powered traditional Chinese interpretation",
+    "toolDreamCta": "Interpret Dream",
+    "toolBirthBuddhaTitle": "Birth Buddha",
+    "toolBirthBuddhaDesc": "Find your zodiac guardian Buddha with AI interpretation",
+    "toolBirthBuddhaCta": "Discover Now",
+    "toolFortuneCalendarTitle": "Fortune Calendar",
+    "toolFortuneCalendarDesc": "Monthly calendar of daily auspicious/inauspicious activities",
+    "toolFortuneCalendarCta": "View Calendar",
+    "toolMyReportsTitle": "My Reports",
+    "toolMyReportsDesc": "Review your saved readings",
+    "toolMyReportsCta": "View Reports",
+    "toolFortuneQaTitle": "AI Fortune Q&A",
+    "toolFortuneQaDesc": "Ask any question, AI routes to the right engine",
+    "toolFortuneQaCta": "Ask Now"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -669,8 +684,8 @@
     "qimenOgTitle": "Qimen Dunjia Online Chart_Cast Chart_Interpret Chart_Qimen Dunjia Fortune Telling",
     "qimenOgDesc": "Free Qimen Dunjia online charting, casting and interpretation. Qimen Dunjia fortune telling with AI analysis of the 9-palace chart, auspicious directions, and actionable advice. For cultural entertainment only.",
     "huangdaoTitle": "Auspicious Day Selector_Free Online Date Picker",
-    "huangdaoDesc": "Free online auspicious day selector. Enter your birth info and event details to find the best dates for moving, weddings, business launches, and more using the traditional Chinese almanac.",
-    "huangdaoKeywords": "auspicious day,date picker,Chinese almanac,moving day,wedding date,business launch,free divination",
+    "huangdaoDesc": "Free auspicious date picker. Enter your birth details and event type to find the best dates for moving, wedding, business launch, contract signing, renovation, move-in, bed placement, worship, wealth seeking, and more using traditional Chinese almanac.",
+    "huangdaoKeywords": "auspicious dates,Chinese almanac,date selection,moving date,wedding date,business launch date,contract date,renovation date,move-in date,bed placement date,worship date,wealth date,lucky dates,free date picker,online almanac",
     "huangdaoOgTitle": "Auspicious Day Selector_Free Date Picker",
     "huangdaoOgDesc": "Enter your birth info and event details. AI combines the traditional almanac to pick the best auspicious dates for you.",
     "liurenTitle": "Da Liu Ren Online Charting_Four Pillars Divination",
@@ -1131,7 +1146,27 @@
     "astroDiceDesc": "Roll three astrology dice online — planet, sign and house — scored by dignity and house strength, with an AI reading compressed into a shareable poster. For cultural entertainment only.",
     "astroDiceKeywords": "astrology dice,online dice roll,planet dice,zodiac sign dice,house dice,astrology reading",
     "astroDiceOgTitle": "Astrology Dice · A cosmic signal for right now",
-    "astroDiceOgDesc": "Planet says what, sign says how, house says where — three dice, one poster."
+    "astroDiceOgDesc": "Planet says what, sign says how, house says where — three dice, one poster.",
+    "dreamTitle": "Zhou Gong Dream Interpretation_Free AI Dream Analysis",
+    "dreamDesc": "Describe your dream and get AI-powered interpretation of omens, career, wealth, love and wellness based on traditional Chinese dream symbolism. Free to use.",
+    "dreamKeywords": "dream interpretation,Zhou Gong,AI dream analysis,dream meaning,Chinese dream dictionary,free dream reading,online dream interpretation",
+    "dreamOgTitle": "Zhou Gong Dream Interpretation_Free AI Dream Analysis",
+    "dreamOgDesc": "Describe your dream and get traditional Chinese dream interpretation powered by AI.",
+    "birthBuddhaTitle": "Birth Buddha_Zodiac Guardian Buddha Online Lookup",
+    "birthBuddhaDesc": "Enter your birth year to discover your zodiac guardian Buddha, with AI-powered Buddhist meaning and spiritual life insights. Free to use.",
+    "birthBuddhaKeywords": "birth Buddha,zodiac guardian,Chinese zodiac Buddha,Thousand-Hand Avalokitesvara,Akasagarbha,Manjushri,Samantabhadra,Mahasthamaprapta,Vairocana,Amitabha,12 zodiac animals",
+    "birthBuddhaOgTitle": "Birth Buddha_Zodiac Guardian Lookup",
+    "birthBuddhaOgDesc": "Enter your birth year to find your zodiac guardian Buddha with AI interpretation.",
+    "fortuneCalendarTitle": "Fortune Calendar_Monthly Chinese Almanac Do's and Don'ts",
+    "fortuneCalendarDesc": "View daily auspicious/inauspicious activities and fortune levels in a monthly calendar format. Plan your month at a glance.",
+    "fortuneCalendarKeywords": "fortune calendar,Chinese almanac calendar,daily fortune,auspicious dates,solar terms,monthly almanac,free almanac",
+    "fortuneCalendarOgTitle": "Fortune Calendar_Monthly Almanac",
+    "fortuneCalendarOgDesc": "Monthly calendar view of daily auspicious/inauspicious activities and fortune levels.",
+    "fortuneQaTitle": "AI Fortune Q&A_Free Online Fortune Telling Tool",
+    "fortuneQaDesc": "Ask any question about career, love or wealth. AI automatically routes to bazi or zhouyi engines for answers with actionable advice and timing tips. Free to use.",
+    "fortuneQaKeywords": "AI fortune telling,fortune Q&A,online fortune telling,free reading,bazi reading,zhouyi reading,career fortune,love fortune",
+    "fortuneQaOgTitle": "AI Fortune Q&A_Free Online Q&A",
+    "fortuneQaOgDesc": "Ask freely, AI routes to bazi or zhouyi engines to answer career, love and wealth questions."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -1964,7 +1999,6 @@
       "disclaimer": "For entertainment reference only"
     }
   },
-
   "liurenWorldcup": {
     "badge": "Da Liu Ren · World Cup 2026",
     "title": "Da Liu Ren World Cup Prediction",
@@ -2667,7 +2701,13 @@
       "contract": "Contract / Partnership",
       "travel": "Travel / Departure",
       "medical": "Medical / Surgery",
-      "exam": "Exam / Study"
+      "exam": "Exam / Study",
+      "renovation": "Renovation / Construction",
+      "worship": "Worship / Blessing",
+      "moveIn": "Move-in / Settling",
+      "wealth": "Wealth / Investment",
+      "bedPlacement": "Bed Placement",
+      "marketOpen": "Market Opening"
     },
     "errorNoBirthDate": "Please enter your birth date",
     "errorNoDateRange": "Please select a date range",
@@ -5548,23 +5588,23 @@
     "zonggeShort": "Zongge Short",
     "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later.",
     "poster": {
-    "kicker": "Sancai Wuge · Naming Appraisal",
-    "title": "Naming Certificate",
-    "serial": "For Sancai Wuge Onomastic Appraisal",
-    "nameFlag": "Naming",
-    "strokeSuffix": " st",
-    "wugeTitle": "Five-Grid Analysis",
-    "sancaiTitle": "Three Talents",
-    "scoreLabel": "Overall Score",
-    "gradeLabel": "Grade",
-    "luckLabel": "Grid Fortune",
-    "othersTitle": "Alternates",
-    "archiveLabel": "Archive",
-    "archiveNo": "Naming No. {no}",
-    "archiveDateLabel": "Filed",
-    "archiveSeal": "Naming\\nAppraisal",
-    "seal": "Appraisal",
-    "qrHint": "Scan to name",
+      "kicker": "Sancai Wuge · Naming Appraisal",
+      "title": "Naming Certificate",
+      "serial": "For Sancai Wuge Onomastic Appraisal",
+      "nameFlag": "Naming",
+      "strokeSuffix": " st",
+      "wugeTitle": "Five-Grid Analysis",
+      "sancaiTitle": "Three Talents",
+      "scoreLabel": "Overall Score",
+      "gradeLabel": "Grade",
+      "luckLabel": "Grid Fortune",
+      "othersTitle": "Alternates",
+      "archiveLabel": "Archive",
+      "archiveNo": "Naming No. {no}",
+      "archiveDateLabel": "Filed",
+      "archiveSeal": "Naming\\nAppraisal",
+      "seal": "Appraisal",
+      "qrHint": "Scan to name",
       "fortune": {
         "daJi": "Great",
         "ji": "Good",
@@ -10347,8 +10387,7 @@
         "timing": "Coming-Year Timing"
       }
     }
-  }
-  ,
+  },
   "newSchoolBazi": {
     "title": "New School BaZi",
     "subtitle": "Judge principal branch qi, adjacent interactions and strength-first use gods with Li Hanchen's simplified New School framework.",
@@ -10382,8 +10421,7 @@
       "hour": "Hour",
       "unknown": "Unknown"
     }
-  }
-,
+  },
   "baziElements": {
     "title": "Five Element Gaps",
     "subtitle": "Map your element balance, then interpret gaps with strength and favorable elements.",
@@ -10450,8 +10488,7 @@
     "mangpaiDesc": "Work, subject-object and structural action",
     "newSchoolTitle": "New school",
     "newSchoolDesc": "Interactions and structured judgment"
-  }
-,
+  },
   "fortune2026": {
     "title": "2026 Fortune Center",
     "subtitle": "Choose your path: yearly trend, zodiac Tai Sui, career wealth, Feng Shui directions or daily timing.",
@@ -10495,8 +10532,7 @@
       "wealthDirection": "Where is the 2026 annual wealth direction?",
       "flyingStars": "2026 Bing Wu flying-star Feng Shui layout guide"
     }
-  }
-,
+  },
   "nameCompatibility": {
     "title": "Name Compatibility",
     "personalityElement": "Personality element",
@@ -10554,8 +10590,7 @@
       "readingTitle": "Relationship reading",
       "disclaimer": "Traditional culture reference; not relationship, medical or legal advice."
     }
-  }
-,
+  },
   "guanyinLotDetail": {
     "back": "Back to Guanyin Oracle",
     "title": "Guanyin Oracle No. {n}: {title}",
@@ -10570,13 +10605,115 @@
     "seoTitle": "Guanyin Oracle No. {n} Meaning: {title}",
     "seoDescription": "Guanyin Oracle No. {n}, “{title}”: {meaning} Read the poem, interpretation and advice, then draw a lot online.",
     "seoKeywords": "Guanyin Oracle No. {n},Guanyin lot {n} meaning,{title},oracle poem,draw Guanyin lot"
-  }
-,
+  },
   "fengshui2026Entry": {
     "label": "2026 Feng Shui entry",
     "hubTitle": "2026 Fortune Center",
     "hubDesc": "Review annual Feng Shui directions and other fortune scenarios.",
     "articleTitle": "2026 Bing Wu flying-star guide",
     "articleDesc": "Read yearly direction notes before charting your home."
+  },
+  "dream": {
+    "title": "Zhou Gong Dream Interpretation",
+    "subtitle": "Describe your dream and get an AI-powered interpretation based on traditional Chinese dream symbolism",
+    "disclaimer": "Interpretations are based on traditional dream interpretation culture, for entertainment reference only, not scientific conclusions.",
+    "formLabel": "Dream Description",
+    "formPlaceholder": "e.g. I dreamt I was in an ancient courtyard and saw a golden snake coiled around a stone pillar, then the snake flew away...",
+    "submitBtn": "Interpret Dream",
+    "interpreting": "Interpreting…",
+    "connecting": "Connecting to dream interpreter…",
+    "againBtn": "New Dream",
+    "noResult": "No interpretation received, please try again",
+    "requestFail": "Dream interpretation request failed",
+    "poster": {
+      "kicker": "Zhou Gong Dream",
+      "title": "Dream Analysis",
+      "pending": "…",
+      "dreamLabel": "Dream Recollection",
+      "fieldSym": "Core Symbolism",
+      "fieldWork": "Career & Wealth",
+      "fieldLove": "Love & Relations",
+      "fieldHealth": "Wellness",
+      "noteLabel": "Interpreter's Note"
+    }
+  },
+  "birthBuddha": {
+    "title": "Birth Buddha",
+    "subtitle": "Enter your birth year to discover your zodiac guardian Buddha and spiritual insights",
+    "disclaimer": "Interpretations are based on Buddhist cultural tradition, for entertainment reference only, not religious solicitation.",
+    "yearLabel": "Birth Year",
+    "yearPlaceholder": "Select year",
+    "zodiacLabel": "Your Zodiac",
+    "submitBtn": "Discover Birth Buddha",
+    "interpreting": "Interpreting…",
+    "connecting": "Connecting…",
+    "againBtn": "New Query",
+    "noResult": "No interpretation received, please try again",
+    "requestFail": "Request failed",
+    "zodiac": {
+      "rat": "Rat",
+      "ox": "Ox",
+      "tiger": "Tiger",
+      "rabbit": "Rabbit",
+      "dragon": "Dragon",
+      "snake": "Snake",
+      "horse": "Horse",
+      "goat": "Goat",
+      "monkey": "Monkey",
+      "rooster": "Rooster",
+      "dog": "Dog",
+      "pig": "Pig"
+    },
+    "poster": {
+      "kicker": "Birth Buddha",
+      "title": "Zodiac Guardian",
+      "pending": "…",
+      "yearLabel": "Birth Year",
+      "buddhaLabel": "Guardian Buddha",
+      "fieldSym": "Buddhist Meaning",
+      "fieldChar": "Zodiac Traits",
+      "fieldWork": "Career Guidance",
+      "fieldLove": "Love Insights"
+    }
+  },
+  "fortuneCalendar": {
+    "title": "Fortune Calendar",
+    "subtitle": "View daily Chinese almanac do's and don'ts with fortune levels in a monthly calendar",
+    "yiLabel": "Favorable",
+    "jiLabel": "Avoid",
+    "jieQiLabel": "Solar Term",
+    "fortune": {
+      "ji": "Auspicious",
+      "xiong": "Inauspicious",
+      "ping": "Neutral"
+    }
+  },
+  "myReports": {
+    "title": "My Reports",
+    "subtitle": "Your saved readings appear here (stored locally on this device only)",
+    "empty": "No saved reports yet",
+    "emptyHint": "Click 'Save Report' on any tool result page to bookmark it",
+    "saveBtn": "Save Report",
+    "saved": "Report saved",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear all saved reports?"
+  },
+  "fortuneQa": {
+    "title": "AI Fortune Q&A",
+    "subtitle": "Ask any question and AI routes to the bazi or zhouyi engine for answers",
+    "disclaimer": "Answers are based on traditional fortune-telling culture, for entertainment reference only, not scientific conclusions.",
+    "questionLabel": "Your Question",
+    "questionPlaceholder": "e.g. Is this year a good time for a career change? Or: How is my love life lately?",
+    "birthLabel": "Birth Date (optional)",
+    "birthHint": "Provide birth info for more precise bazi analysis",
+    "hourPlaceholder": "Hour (optional)",
+    "hourUnknown": "Unknown hour",
+    "submitBtn": "Ask Now",
+    "interpreting": "Answering…",
+    "connecting": "Connecting to fortune advisor…",
+    "yourQuestion": "Your Question",
+    "againBtn": "New Question",
+    "noResult": "No answer received, please try again",
+    "requestFail": "Request failed"
   }
 }
