@@ -215,19 +215,19 @@ async function fetchMonth() {
   const endDate = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`
 
   try {
-    const res = await $fetch<any>('/api/huangdao/calculate', {
+    const res = await $fetch<any>('/api/tools/fortune-calendar/days', {
       method: 'POST',
-      body: { startDate, endDate, matter: '' },
+      body: { startDate, endDate },
     })
 
     const todayStr = new Date().toISOString().slice(0, 10)
-    days.value = (res.days || []).map((d: any) => ({
+    days.value = (Array.isArray(res) ? res : res.days || []).map((d: any) => ({
       date: d.date,
       dayNumber: Number(d.date.slice(8)),
       lunarDay: d.dayInChinese || '',
       dayGanZhi: d.dayGanZhi || '',
-      yi: d.yi || [],
-      ji: d.ji || [],
+      yi: Array.isArray(d.yi) ? d.yi : [],
+      ji: Array.isArray(d.ji) ? d.ji : [],
       jieQi: d.jieQi || '',
       tianShenLuck: d.tianShenLuck || '',
       fortuneLevel: d.tianShenLuck === '吉' ? 'ji' : d.tianShenLuck === '凶' ? 'xiong' : 'ping',
