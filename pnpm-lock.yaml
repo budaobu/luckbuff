@@ -28,12 +28,18 @@ importers:
       '@nuxtjs/color-mode':
         specifier: ^4.0.0
         version: 4.0.0(magicast@0.5.2)
+      '@openfate/bazi-engine':
+        specifier: 1.1.2
+        version: 1.1.2
       '@pinia-plugin-persistedstate/nuxt':
         specifier: ^1.0.0
         version: 1.2.1(@pinia/nuxt@0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3))))(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))
+      '@soul-atelier/bazi':
+        specifier: 0.9.0
+        version: 0.9.0
       better-auth:
         specifier: ^1.6.26
         version: 1.6.26(@prisma/client@5.22.0)(better-sqlite3@13.0.3)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@prisma/client@5.22.0)(@types/better-sqlite3@9.6.0)(@types/pg@8.20.4)(better-sqlite3@13.0.3)(kysely@0.29.4)(pg@8.22.0))(pg@8.22.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(vue@3.5.33(typescript@5.9.3))
@@ -67,6 +73,9 @@ importers:
       lunar:
         specifier: ^2.0.0
         version: 2.0.0
+      lunar-javascript:
+        specifier: ^1.7.0
+        version: 1.7.7
       marked:
         specifier: ^15.0.7
         version: 15.0.12
@@ -1714,6 +1723,12 @@ packages:
       zod:
         optional: true
 
+  '@openfate/bazi-engine@1.1.2':
+    resolution: {integrity: sha512-Gpxdm7H8l+WHPFHTZhVuLjtuWshrJUFnY413KZJ8NtiryFV17DtXz/Z8YHRp1YhEIFcPvPtxr5B/jDULk25lfA==}
+
+  '@openfate/true-solar-time@4.0.2':
+    resolution: {integrity: sha512-kPcQBPay0sdNGnj2XyoUlg1Cyq6lcVOaTTqlC+lh1Bvg6RODwG4ZD3rOk0C5O/qhnErWXoKHRMb2Kap/YfhAgg==}
+
   '@opentelemetry/semantic-conventions@1.43.0':
     resolution: {integrity: sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==}
     engines: {node: '>=14'}
@@ -2673,6 +2688,15 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@soul-atelier/bazi@0.9.0':
+    resolution: {integrity: sha512-x4oglse1VTlnQftcMuySb9CVxRlEdKVI+4rntJjRwUp9SabnhmbelwFLTBMpzfXMRCg8OOKfoycEfHFQ0/nhhA==}
+
+  '@soul-atelier/calendar@0.7.0':
+    resolution: {integrity: sha512-hb8QhHCem8jth1HVaYehbu8AzfHzwF+9f3mEB00H8y3ED4112GyAI1x9IL88m8lsCrryT7zJXmwsrvEhzLgm5A==}
+
+  '@soul-atelier/core@0.5.0':
+    resolution: {integrity: sha512-VP5jF7lYN4oTsRwfLu29OB378KpFi63STpDMMduiJ3L0a6BvHm9yRRZdtXk7y+OKihmcHTz6PwoYWFC1zuLdXw==}
 
   '@speed-highlight/core@1.2.15':
     resolution: {integrity: sha512-BMq1K3DsElxDWawkX6eLg9+CKJrTVGCBAWVuHXVUV2u0s2711qiChLSId6ikYPfxhdYocLNt3wWwSvDiTvFabw==}
@@ -5142,6 +5166,9 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
+  lunar-javascript@1.7.7:
+    resolution: {integrity: sha512-u/KYiwPIBo/0bT+WWfU7qO1d+aqeB90Tuy4ErXenr2Gam0QcWeezUvtiOIyXR7HbVnW2I1DKfU0NBvzMZhbVQw==}
+
   lunar@2.0.0:
     resolution: {integrity: sha512-xdz1adPhSteIZSq8F320CoR03mf7J7fKvLHncdzsiv3h5FcbEj4USUl6Pc8uG1EN17EBmMME8plqB+yukyfBTw==}
     engines: {node: '>=16.20.0'}
@@ -6510,6 +6537,9 @@ packages:
 
   tweetnacl@0.14.5:
     resolution: {integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==}
+
+  tyme4ts@1.4.4:
+    resolution: {integrity: sha512-a6FfENUrQpg9F3hOhwFW0EDgmIbvOEXbtO7A2R8/49tGDnjqjUsuNIP0OOBnsGmN9y3hAsO69LsBgJk1re1/KA==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -8949,6 +8979,13 @@ snapshots:
       - vite
       - vue
 
+  '@openfate/bazi-engine@1.1.2':
+    dependencies:
+      '@openfate/true-solar-time': 4.0.2
+      lunar-javascript: 1.7.7
+
+  '@openfate/true-solar-time@4.0.2': {}
+
   '@opentelemetry/semantic-conventions@1.43.0': {}
 
   '@oxc-minify/binding-android-arm-eabi@0.117.0':
@@ -9544,6 +9581,18 @@ snapshots:
   '@sindresorhus/is@7.2.0': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@soul-atelier/bazi@0.9.0':
+    dependencies:
+      '@soul-atelier/calendar': 0.7.0
+      '@soul-atelier/core': 0.5.0
+
+  '@soul-atelier/calendar@0.7.0':
+    dependencies:
+      '@soul-atelier/core': 0.5.0
+      tyme4ts: 1.4.4
+
+  '@soul-atelier/core@0.5.0': {}
 
   '@speed-highlight/core@1.2.15': {}
 
@@ -11868,6 +11917,8 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lunar-javascript@1.7.7: {}
+
   lunar@2.0.0: {}
 
   magic-regexp@0.10.0:
@@ -13633,6 +13684,8 @@ snapshots:
       safe-buffer: 5.2.1
 
   tweetnacl@0.14.5: {}
+
+  tyme4ts@1.4.4: {}
 
   type-check@0.4.0:
     dependencies:

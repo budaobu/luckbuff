@@ -6,6 +6,8 @@ export default defineNitroPlugin((nitroApp) => {
     const routeDescriptions: Record<string, { title: string; description: string; category: string }> = {
       '/': { title: 'Home', description: 'Platform landing page showcasing all available divination and metaphysics tools', category: 'other' },
       '/tools': { title: 'Tools Directory', description: 'Comprehensive listing of all available tools on the platform', category: 'other' },
+      '/paipan': { title: 'Charting Tools', description: 'Structured destiny-chart tools based on birth date, hour, place and gender', category: 'tools' },
+      '/tools/bazi-paipan': { title: 'Bazi Chart', description: 'Generate a detailed Bazi chart with solar and lunar birth data, four pillars, hidden stems, Na Yin, Five Elements, symbolic stars and decade luck cycles', category: 'tools' },
       '/tools/bazi': { title: 'Bazi (Four Pillars)', description: 'Calculate the Four Pillars of Destiny based on birth date and time. Displays the natal chart, Ten Gods, Five Elements analysis, major luck cycles, and supports in-depth fate interpretation', category: 'tools' },
       '/tools/bazi-hunpan': { title: 'Bazi Compatibility', description: 'Enter two people\'s birth information for AI-powered compatibility analysis. Analyzes day pillar harmony, Five Elements complementarity, Ten Gods dynamics, and major luck cycle synchronization for relationship insights', category: 'tools' },
       '/tools/zhouyi': { title: 'Plum Blossom Divination', description: 'Generate hexagrams by time, number, or character input. Displays hexagram texts, line texts, changing hexagrams, and detailed interpretations', category: 'tools' },

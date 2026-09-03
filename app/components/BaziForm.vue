@@ -90,7 +90,10 @@
 
     <!-- 出生时辰 -->
     <div class="space-y-1.5">
-      <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthHour') }}</label>
+      <label class="text-xs font-medium text-[var(--text-muted)]">
+        {{ $t('profileForm.birthHour') }}
+        <span v-if="requireHour" class="text-[var(--accent)]">*</span>
+      </label>
       <USelect
         v-model="form.birthHour"
         :items="hourOptions"
@@ -218,6 +221,7 @@ interface Props {
   showName?: boolean
   showFormerName?: boolean
   showBirthProvince?: boolean
+  requireHour?: boolean
   submitLabel?: string
 }
 
@@ -228,6 +232,7 @@ const props = withDefaults(defineProps<Props>(), {
   showName: true,
   showFormerName: true,
   showBirthProvince: true,
+  requireHour: false,
   submitLabel: undefined,
 })
 
@@ -297,7 +302,7 @@ function onBirthDateChange() {
 
 const isValid = computed(() => {
   if (props.minimal) return !!(form.birthDate)
-  return !!(form.gender && form.birthDate)
+  return !!(form.gender && form.birthDate && (!props.requireHour || form.birthHour))
 })
 
 const hasFormChanges = computed(() => {
