@@ -54,6 +54,7 @@
                 <USelectMenu
                   v-model="form.birthHour"
                   :items="hourOptions"
+                  value-key="value"
                   :placeholder="$t('fortuneQa.hourPlaceholder')"
                   class="w-full"
                   :ui="selectUi"

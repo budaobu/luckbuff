@@ -61,9 +61,16 @@
 
 <script setup lang="ts">
 const { t, locale } = useI18n()
+const { isLoggedIn } = useAuth()
 const { reports, load, remove: removeReport, clearAll } = useReports()
 
-onMounted(load)
+onMounted(() => {
+  if (!isLoggedIn.value) {
+    navigateTo('/')
+    return
+  }
+  load()
+})
 
 function formatDate(ts: number) {
   return new Date(ts).toLocaleDateString(locale.value === 'en' ? 'en-US' : locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN', {

@@ -128,6 +128,15 @@ async function login(provider: 'google' | 'telegram') {
             <UIcon name="i-heroicons-folder-open" class="w-4 h-4" />
             {{ $t('nav.profiles') }}
           </NuxtLink>
+          <NuxtLink
+            to="/tools/my-reports"
+            class="w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center gap-2.5 hover:!bg-[var(--surface-card-hover)]"
+            style="color: var(--text-faint);"
+            @click="menuOpen = false"
+          >
+            <UIcon name="i-heroicons-document-text" class="w-4 h-4" />
+            {{ $t('myReports.title') }}
+          </NuxtLink>
           <button
             class="w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center gap-2.5 hover:!bg-[var(--surface-card-hover)]"
             style="color: var(--text-faint);"
