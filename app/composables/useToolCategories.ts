@@ -240,6 +240,13 @@ export const toolCategories: ToolCategory[] = [
       ctaKey: 'home.toolBirthBuddhaCta',
       path: '/tools/birth-buddha',
     },
+    {
+      icon: 'i-heroicons-calendar-days',
+      titleKey: 'home.toolFortuneCalendarTitle',
+      descKey: 'home.toolFortuneCalendarDesc',
+      ctaKey: 'home.toolFortuneCalendarCta',
+      path: '/tools/fortune-calendar',
+    },
    ],
  },
   {

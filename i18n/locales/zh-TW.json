@@ -282,7 +282,10 @@
     "toolDreamCta": "開始解夢",
     "toolBirthBuddhaTitle": "本命佛",
     "toolBirthBuddhaDesc": "查生肖守護佛，AI 解讀寓意與啟示",
-    "toolBirthBuddhaCta": "查看本命佛"
+    "toolBirthBuddhaCta": "查看本命佛",
+    "toolFortuneCalendarTitle": "運勢月曆",
+    "toolFortuneCalendarDesc": "月曆視圖查看每日宜忌與吉凶",
+    "toolFortuneCalendarCta": "查看月曆"
   },
   "prophet": {
     "title": "賽事預測",
@@ -1147,7 +1150,12 @@
     "birthBuddhaDesc": "輸入出生年份，查詢你的生肖守護本命佛，AI 解讀佛教寓意與修行生活啟示，免費使用。",
     "birthBuddhaKeywords": "本命佛,生肖守護神,千手觀音,虛空藏菩薩,文殊菩薩,普賢菩薩,大勢至菩薩,大日如來,不動尊菩薩,阿彌陀佛,十二生肖",
     "birthBuddhaOgTitle": "本命佛查詢_十二生肖守護神",
-    "birthBuddhaOgDesc": "輸入年份查詢你的生肖本命佛，AI 解讀守護含義與修行啟示。"
+    "birthBuddhaOgDesc": "輸入年份查詢你的生肖本命佛，AI 解讀守護含義與修行啟示。",
+    "fortuneCalendarTitle": "運勢月曆_每日黃曆宜忌月度日曆",
+    "fortuneCalendarDesc": "月曆視圖查看每日黃曆宜忌、吉凶等級與節氣信息，幫你一目瞭然規劃整月重要事項。",
+    "fortuneCalendarKeywords": "運勢月曆,黃曆月曆,每日宜忌,吉凶日曆,節氣,擇日月曆,免費黃曆",
+    "fortuneCalendarOgTitle": "運勢月曆_每日黃曆宜忌",
+    "fortuneCalendarOgDesc": "月曆視圖查看每日黃曆宜忌與吉凶等級，輕鬆規劃整月事項。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -10676,6 +10684,18 @@
       "fieldChar": "生肖性格",
       "fieldWork": "事業指引",
       "fieldLove": "感情啟示"
+    }
+  },
+  "fortuneCalendar": {
+    "title": "運勢月曆",
+    "subtitle": "按月查看每日黃曆宜忌與吉凶等級",
+    "yiLabel": "宜",
+    "jiLabel": "忌",
+    "jieQiLabel": "節氣",
+    "fortune": {
+      "ji": "吉",
+      "xiong": "凶",
+      "ping": "平"
     }
   }
 }

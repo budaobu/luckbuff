@@ -282,7 +282,10 @@
     "toolDreamCta": "Interpret Dream",
     "toolBirthBuddhaTitle": "Birth Buddha",
     "toolBirthBuddhaDesc": "Find your zodiac guardian Buddha with AI interpretation",
-    "toolBirthBuddhaCta": "Discover Now"
+    "toolBirthBuddhaCta": "Discover Now",
+    "toolFortuneCalendarTitle": "Fortune Calendar",
+    "toolFortuneCalendarDesc": "Monthly calendar of daily auspicious/inauspicious activities",
+    "toolFortuneCalendarCta": "View Calendar"
   },
   "prophet": {
     "title": "Match Predictions",
@@ -1147,7 +1150,12 @@
     "birthBuddhaDesc": "Enter your birth year to discover your zodiac guardian Buddha, with AI-powered Buddhist meaning and spiritual life insights. Free to use.",
     "birthBuddhaKeywords": "birth Buddha,zodiac guardian,Chinese zodiac Buddha,Thousand-Hand Avalokitesvara,Akasagarbha,Manjushri,Samantabhadra,Mahasthamaprapta,Vairocana,Amitabha,12 zodiac animals",
     "birthBuddhaOgTitle": "Birth Buddha_Zodiac Guardian Lookup",
-    "birthBuddhaOgDesc": "Enter your birth year to find your zodiac guardian Buddha with AI interpretation."
+    "birthBuddhaOgDesc": "Enter your birth year to find your zodiac guardian Buddha with AI interpretation.",
+    "fortuneCalendarTitle": "Fortune Calendar_Monthly Chinese Almanac Do's and Don'ts",
+    "fortuneCalendarDesc": "View daily auspicious/inauspicious activities and fortune levels in a monthly calendar format. Plan your month at a glance.",
+    "fortuneCalendarKeywords": "fortune calendar,Chinese almanac calendar,daily fortune,auspicious dates,solar terms,monthly almanac,free almanac",
+    "fortuneCalendarOgTitle": "Fortune Calendar_Monthly Almanac",
+    "fortuneCalendarOgDesc": "Monthly calendar view of daily auspicious/inauspicious activities and fortune levels."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -10655,6 +10663,18 @@
       "fieldChar": "Zodiac Traits",
       "fieldWork": "Career Guidance",
       "fieldLove": "Love Insights"
+    }
+  },
+  "fortuneCalendar": {
+    "title": "Fortune Calendar",
+    "subtitle": "View daily Chinese almanac do's and don'ts with fortune levels in a monthly calendar",
+    "yiLabel": "Favorable",
+    "jiLabel": "Avoid",
+    "jieQiLabel": "Solar Term",
+    "fortune": {
+      "ji": "Auspicious",
+      "xiong": "Inauspicious",
+      "ping": "Neutral"
     }
   }
 }
