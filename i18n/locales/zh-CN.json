@@ -289,9 +289,11 @@
     "toolMyReportsTitle": "我的报告",
     "toolMyReportsDesc": "回看保存的测算结果",
     "toolMyReportsCta": "查看报告",
-    "toolFortuneQaTitle": "AI 命理问答",
-    "toolFortuneQaDesc": "自由提问，AI 自动路由命理引擎解答",
-    "toolFortuneQaCta": "开始提问"
+    "toolHumorHermitTitle": "幽默隐士",
+    "toolHumorHermitDesc": "输入信息，AI 为你分析事业、感情、财运",
+    "toolHumorHermitCta": "开始分析",
+    "heroPlaceholder": "例：女，生日2001年8月31日 22:05",
+    "heroTryBtn": "马上试试"
   },
   "prophet": {
     "title": "赛事预测",
@@ -1162,11 +1164,11 @@
     "fortuneCalendarKeywords": "运势月历,黄历月历,每日宜忌,吉凶日历,节气,择日月历,免费黄历",
     "fortuneCalendarOgTitle": "运势月历_每日黄历宜忌",
     "fortuneCalendarOgDesc": "月历视图查看每日黄历宜忌与吉凶等级，轻松规划整月事项。",
-    "fortuneQaTitle": "AI命理问答_免费在线命理提问工具",
-    "fortuneQaDesc": "输入任何关于事业、感情、财运的问题，AI 自动路由到八字或周易引擎为你解答，提供具体行动建议和时机提示，免费使用。",
-    "fortuneQaKeywords": "AI命理问答,命理提问,在线算命,免费算命,八字问答,周易问答,事业运势,感情运势",
-    "fortuneQaOgTitle": "AI命理问答_免费在线提问",
-    "fortuneQaOgDesc": "自由提问，AI 自动路由命理引擎为你解答事业、感情、财运问题。"
+    "humorHermitTitle": "幽默隐士_免费AI命理分析工具",
+    "humorHermitDesc": "输入你的生辰信息，幽默隐士为你分析事业、感情、财运，提供具体建议和时机提示，免费使用。",
+    "humorHermitKeywords": "幽默隐士,AI命理分析,免费算命,八字分析,事业运势,感情运势",
+    "humorHermitOgTitle": "幽默隐士_免费AI命理分析",
+    "humorHermitOgDesc": "输入信息，幽默隐士为你分析事业、感情、财运。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -10720,22 +10722,17 @@
     "clearAll": "清空全部",
     "confirmClear": "确定要清空所有保存的报告吗？"
   },
-  "fortuneQa": {
-    "title": "AI 命理问答",
-    "subtitle": "自由提问，AI 自动路由到八字或周易引擎为你解答",
-    "disclaimer": "回答基于传统命理文化，仅供文化娱乐参考，非科学结论。",
-    "questionLabel": "你的问题",
-    "questionPlaceholder": "例如：我今年适合跳槽吗？或者：最近感情运势怎么样？",
-    "birthLabel": "生辰（选填）",
-    "birthHint": "提供生辰可获得更精准的八字分析",
-    "hourPlaceholder": "时辰（选填）",
-    "hourUnknown": "未知时辰",
-    "submitBtn": "开始提问",
-    "interpreting": "解答中…",
-    "connecting": "正在连接命理顾问…",
-    "yourQuestion": "你的问题",
-    "againBtn": "再问一个",
-    "noResult": "未能获得解答，请重试",
-    "requestFail": "提问请求失败"
+  "humorHermit": {
+    "title": "幽默隐士",
+    "subtitle": "输入你的信息或问题，幽默隐士为你分析",
+    "disclaimer": "分析基于传统命理文化，仅供文化娱乐参考，非科学结论。",
+    "placeholder": "例：女，生日2001年8月31日 22:05",
+    "submitBtn": "开始分析",
+    "interpreting": "分析中…",
+    "connecting": "正在连接幽默隐士…",
+    "yourInput": "你的输入",
+    "againBtn": "再试一次",
+    "noResult": "未能获得分析结果，请重试",
+    "requestFail": "分析请求失败"
   }
 }

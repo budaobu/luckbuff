@@ -1,4 +1,3 @@
-import type { DiZhi } from '~/types/user'
 import { getUserPillars, getSimplifiedXiYongJiShen } from '~~/server/utils/bazi'
 
 const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
@@ -13,6 +12,25 @@ function routeEngine(question: string, hasBirth: boolean): 'bazi' | 'general' {
   if (hasBirth) return 'bazi'
   const lower = question.toLowerCase()
   return BAZI_KEYWORDS.some(k => lower.includes(k)) ? 'bazi' : 'general'
+}
+
+const BIRTH_DATE_RE = /(\d{4})\s*[年\/\-\.]\s*(\d{1,2})\s*[月\/\-\.]\s*(\d{1,2})\s*日?/
+const BIRTH_TIME_RE = /(\d{1,2})\s*[时:：]\s*(\d{2})/
+
+function parseBirthFromText(text: string): { date: string; hourDizhi?: string } | null {
+  const dateMatch = BIRTH_DATE_RE.exec(text)
+  if (!dateMatch) return null
+  const [, y, m, d] = dateMatch
+  const date = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+
+  const timeMatch = BIRTH_TIME_RE.exec(text)
+  let hourDizhi: string | undefined
+  if (timeMatch) {
+    const hour = Number(timeMatch[1])
+    const dizhiList = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
+    hourDizhi = dizhiList[Math.floor(((hour + 1) % 24) / 2)] ?? undefined
+  }
+  return { date, hourDizhi }
 }
 
 function buildSystemPrompt(locale: string, engine: string): string {
@@ -56,14 +74,10 @@ ${question}${ctx}
 
 export default defineEventHandler(async (event) => {
   const {
-    question,
-    birthDate,
-    birthHour,
+    text: question,
     locale = 'zh-CN',
   } = await readBody<{
-    question: string
-    birthDate?: string
-    birthHour?: DiZhi
+    text: string
     locale?: string
   }>(event)
 
@@ -72,14 +86,15 @@ export default defineEventHandler(async (event) => {
   }
 
   // Route engine
-  const hasBirth = !!birthDate
+  const birth = parseBirthFromText(question)
+  const hasBirth = !!birth
   const engine = routeEngine(question.trim(), hasBirth)
 
   // Build bazi context if available
   let baziContext = ''
-  if (engine === 'bazi' && birthDate) {
+  if (engine === 'bazi' && birth) {
     try {
-      const pillars = getUserPillars(birthDate, birthHour || undefined)
+      const pillars = getUserPillars(birth.date, birth.hourDizhi as any || undefined)
       const dayGan = (pillars.day as any)?.gan || (pillars.day as any)?.ganZhi?.[0] || ''
       const xiyongResult = getSimplifiedXiYongJiShen(dayGan as any)
       const xiyong = xiyongResult?.xiyong || ''
