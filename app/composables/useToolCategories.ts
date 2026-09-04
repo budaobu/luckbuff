@@ -15,18 +15,27 @@ export interface ToolCategory {
   titleKey: string
   subtitleKey: string
   sectionPath: string
-  group?: ToolGroupId
+  group?: ToolDirectoryGroupId
   tools: ToolItem[]
 }
 
-export type ToolGroupId = 'charting' | 'fortune-analysis'
+export type ToolDirectoryGroupId = 'charting' | 'fortune-analysis' | 'special'
 
-export interface ToolGroup {
-  id: ToolGroupId
+export interface ToolDirectoryLink {
+  icon: string
+  titleKey: string
+  subtitleKey?: string
+  path: string
+  kind: 'tool' | 'topic'
+}
+
+export interface ToolDirectoryGroup {
+  id: ToolDirectoryGroupId
   icon: string
   titleKey: string
   subtitleKey: string
-  categories: ToolCategory[]
+  path: string
+  links: ToolDirectoryLink[]
 }
 
 const chartingToolCategory: ToolCategory = {
@@ -944,6 +953,25 @@ const analysisToolCategories: ToolCategory[] = [
   },
 ]
 
+const analysisToolPaths = [
+  '/tools/qimen',
+  '/tools/bazi',
+  '/tools/zwds',
+  '/tools/zhouyi',
+  '/tools/liuyao-divination',
+  '/tools/liuren',
+  '/tools/xiao-liuren',
+  '/tools/jinkoujue',
+  '/tools/taiyi',
+  '/tools/bazhai-fengshui',
+  '/tools/huangji-zhiniangua',
+  '/tools/jinsuoyuguan-fengshui',
+  '/tools/xuankong-fengshui',
+  '/tools/qizheng-siyu',
+  '/tools/tarot',
+  '/tools/lenormand',
+] as const
+
 const numericEnergyCategory = analysisToolCategories.find(category => category.id === 'numeric-energy')!
 const prophetCategory = analysisToolCategories.find(category => category.id === 'prophet')!
 const orderedAnalysisToolCategories = [
@@ -960,25 +988,76 @@ export const toolCategories: ToolCategory[] = [
   })),
 ]
 
-export const toolGroups: ToolGroup[] = [
+function findRegisteredTool(path: string): ToolItem {
+  const tool = toolCategories
+    .flatMap(category => category.tools)
+    .find(item => item.path === path)
+
+  if (!tool) {
+    throw new Error(`Unregistered tool directory path: ${path}`)
+  }
+
+  return tool
+}
+
+const chartingToolItems = chartingToolCategory.tools
+const analysisToolItems = analysisToolPaths.map(path => findRegisteredTool(path))
+
+export const toolDirectoryGroups: ToolDirectoryGroup[] = [
   {
     id: 'charting',
     icon: 'i-heroicons-table-cells',
-    titleKey: 'tools.groupCharting',
-    subtitleKey: 'tools.groupChartingSubtitle',
-    categories: [chartingToolCategory],
+    titleKey: 'toolDirectories.chartTitle',
+    subtitleKey: 'toolDirectories.chartSubtitle',
+    path: '/chart',
+    links: chartingToolItems.map(tool => ({
+      icon: tool.icon,
+      titleKey: tool.titleKey,
+      subtitleKey: tool.descKey,
+      path: tool.path,
+      kind: 'tool' as const,
+    })),
   },
   {
     id: 'fortune-analysis',
     icon: 'i-heroicons-sparkles',
-    titleKey: 'tools.groupAnalysis',
-    subtitleKey: 'tools.groupAnalysisSubtitle',
-    categories: orderedAnalysisToolCategories,
+    titleKey: 'toolDirectories.analysisTitle',
+    subtitleKey: 'toolDirectories.analysisSubtitle',
+    path: '/tools',
+    links: analysisToolItems.map(tool => ({
+      icon: tool.icon,
+      titleKey: tool.titleKey,
+      subtitleKey: tool.descKey,
+      path: tool.path,
+      kind: 'tool' as const,
+    })),
+  },
+  {
+    id: 'special',
+    icon: 'i-heroicons-rectangle-group',
+    titleKey: 'toolDirectories.specialTitle',
+    subtitleKey: 'toolDirectories.specialSubtitle',
+    path: '/special',
+    links: toolCategories.filter(category => category.id !== 'paipan').map(category => ({
+      icon: category.icon,
+      titleKey: category.titleKey,
+      subtitleKey: category.subtitleKey,
+      path: category.sectionPath,
+      kind: 'topic' as const,
+    })),
   },
 ]
 
-export function useToolGroups(): ComputedRef<ToolGroup[]> {
-  return computed(() => toolGroups)
+export function useToolDirectoryGroups(): ComputedRef<ToolDirectoryGroup[]> {
+  return computed(() => toolDirectoryGroups)
+}
+
+export function useChartingTools(): ComputedRef<ToolItem[]> {
+  return computed(() => chartingToolItems)
+}
+
+export function useAnalysisTools(): ComputedRef<ToolItem[]> {
+  return computed(() => analysisToolItems)
 }
 
 /**
@@ -987,6 +1066,10 @@ export function useToolGroups(): ComputedRef<ToolGroup[]> {
  */
 export function useToolCategories(): ComputedRef<ToolCategory[]> {
   return computed(() => toolCategories)
+}
+
+export function useSpecialToolCategories(): ComputedRef<ToolCategory[]> {
+  return computed(() => toolCategories.filter(category => category.id !== 'paipan'))
 }
 
 /**

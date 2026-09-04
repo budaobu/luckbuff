@@ -4,9 +4,9 @@
 
     <div class="relative z-10 mx-auto w-full max-w-7xl px-6 py-14 md:py-16">
       <nav class="topic-breadcrumb" aria-label="Breadcrumb">
-        <NuxtLink :to="localePath('/tools')" class="topic-back group">
+        <NuxtLink :to="localePath('/special')" class="topic-back group">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
-          {{ $t('tools.title') }}
+          {{ $t('toolDirectories.specialTitle') }}
         </NuxtLink>
       </nav>
 

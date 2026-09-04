@@ -244,6 +244,8 @@ useHead(() => ({
   display: grid;
   gap: 18px;
   margin-bottom: 30px;
+  position: relative;
+  text-align: center;
 }
 
 .bc-eyebrow {
@@ -271,7 +273,9 @@ useHead(() => ({
 }
 
 .bc-back {
-  justify-self: start;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -299,6 +303,8 @@ useHead(() => ({
 .bc-form-wrap {
   display: grid;
   gap: 18px;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .bc-form {
