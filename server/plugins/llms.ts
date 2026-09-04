@@ -5,7 +5,9 @@ export default defineNitroPlugin((nitroApp) => {
 
     const routeDescriptions: Record<string, { title: string; description: string; category: string }> = {
       '/': { title: 'Home', description: 'Platform landing page showcasing all available divination and metaphysics tools', category: 'other' },
-      '/tools': { title: 'Tools Directory', description: 'Comprehensive listing of all available tools on the platform', category: 'other' },
+      '/tools': { title: 'Metaphysics Analysis', description: 'Analysis tools for Bazi, Ziwei, Liu Yao, Qimen, Liu Ren, feng shui, Tarot and related readings', category: 'tools' },
+      '/chart': { title: 'Charting Tools', description: 'Structured destiny-chart tools based on birth date, hour, place and gender', category: 'tools' },
+      '/special': { title: 'Special Topics', description: 'Scenario-based collections of divination, timing, naming, feng shui and compatibility tools', category: 'tools' },
       '/paipan': { title: 'Charting Tools', description: 'Structured destiny-chart tools based on birth date, hour, place and gender', category: 'tools' },
       '/tools/bazi-paipan': { title: 'Bazi Chart', description: 'Generate a detailed Bazi chart with solar and lunar birth data, four pillars, hidden stems, Na Yin, Five Elements, symbolic stars and decade luck cycles', category: 'tools' },
       '/tools/bazi': { title: 'Bazi (Four Pillars)', description: 'Calculate the Four Pillars of Destiny based on birth date and time. Displays the natal chart, Ten Gods, Five Elements analysis, major luck cycles, and supports in-depth fate interpretation', category: 'tools' },

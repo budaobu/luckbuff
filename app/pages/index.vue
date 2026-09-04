@@ -177,60 +177,13 @@
         </h2>
       </div>
 
-      <div v-reveal.stagger class="topic-grid">
-        <NuxtLink
-          v-if="featuredTopic"
-          :key="featuredTopic.sectionPath"
-          :to="localePath(featuredTopic.sectionPath)"
-          data-reveal-child
-          class="topic-card topic-card-featured"
-        >
-          <span class="topic-card-body">
-            <div
-              class="topic-icon topic-icon-featured"
-              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
-            >
-              <UIcon :name="featuredTopic.icon" class="h-7 w-7" />
-            </div>
-            <h3 class="topic-title topic-title-featured">{{ $t(featuredTopic.titleKey) }}</h3>
-            <p class="topic-desc topic-desc-featured">
-              {{ $t(featuredTopic.subtitleKey) }}
-            </p>
-            <ul class="featured-tools">
-              <li v-for="tool in featuredTopic.tools.slice(0, 3)" :key="tool.path">
-                {{ $t(tool.titleKey) }}
-              </li>
-            </ul>
-            <span class="topic-cta">
-              {{ $t('home.topicCta') }}
-              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
-            </span>
-          </span>
-        </NuxtLink>
-
-        <NuxtLink
-          v-for="topic in topicCards"
-          :key="topic.sectionPath"
-          :to="localePath(topic.sectionPath)"
-          data-reveal-child
-          class="topic-card"
-        >
-          <span class="topic-card-body">
-            <div
-              class="topic-icon"
-              style="background-color: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent);"
-            >
-              <UIcon :name="topic.icon" class="h-5.5 w-5.5" />
-            </div>
-            <h3 class="topic-title">{{ $t(topic.titleKey) }}</h3>
-            <p class="topic-desc">{{ $t(topic.subtitleKey) }}</p>
-            <span class="topic-cta">
-              {{ $t('home.topicCta') }}
-              <UIcon name="i-heroicons-arrow-right" class="topic-cta-arrow h-4 w-4" />
-            </span>
-          </span>
-        </NuxtLink>
-
+      <div v-reveal.stagger class="collection-stack">
+        <HomeToolCollection
+          v-for="collection in homeCollections"
+          :key="collection.id"
+          :group="collection"
+          :max-items="collection.id === 'charting' ? 1 : 6"
+        />
       </div>
     </section>
 
@@ -318,7 +271,7 @@ import { useProfilesStore } from '~/stores/profiles'
 
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
-const categories = useToolCategories()
+const toolDirectoryGroups = useToolDirectoryGroups()
 const store = useProfilesStore()
 const guideDismissed = ref(false)
 const heroText = ref('')
@@ -360,9 +313,12 @@ const liuNianData = computed(() => {
   }
 })
 
-const topics = computed(() => categories.value)
-const featuredTopic = computed(() => topics.value[0])
-const topicCards = computed(() => topics.value.slice(1))
+const homeCollections = computed(() => toolDirectoryGroups.value.map(group => group.id === 'special'
+  ? {
+      ...group,
+      links: group.links.filter(link => link.path !== '/paipan'),
+    }
+  : group))
 
 const heroEntries = [
   {
@@ -769,108 +725,10 @@ useHead(() => ({
   text-wrap: pretty;
 }
 
-.topic-grid {
+.collection-stack {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-flow: dense;
-  gap: 14px;
+  gap: 18px;
   margin-top: 52px;
-}
-
-.topic-card {
-  position: relative;
-  display: flex;
-  height: 100%;
-  overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  border-radius: 18px;
-  background: var(--surface-card);
-  transition:
-    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
-    border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
-    background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.topic-card-featured {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-.topic-card-body {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  flex-direction: column;
-  padding: 24px;
-}
-
-.topic-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  margin-bottom: 20px;
-  border-radius: 13px;
-}
-
-.topic-icon-featured {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 24px;
-}
-
-.topic-title {
-  margin-bottom: 8px;
-  color: var(--text-primary);
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.topic-title-featured {
-  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
-}
-
-.topic-desc {
-  flex: 1;
-  overflow: hidden;
-  margin-bottom: 20px;
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.65;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-
-.topic-desc-featured {
-  max-width: 34em;
-  margin-bottom: 28px;
-  font-size: 15px;
-  -webkit-line-clamp: 4;
-}
-
-.featured-tools {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.featured-tools li {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  padding: 12px 14px;
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--surface-bg) 48%, transparent);
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
 }
 
 .topic-cta {
@@ -888,19 +746,9 @@ useHead(() => ({
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .topic-card:hover {
-    border-color: var(--accent-border-hover);
-    background: var(--surface-card-hover);
-    transform: translateY(-3px);
-  }
-
-  .topic-card:hover .topic-cta-arrow {
+  .year-cta:hover .topic-cta-arrow {
     transform: translateX(3px);
   }
-}
-
-.topic-card:active {
-  transform: scale(0.995);
 }
 
 .year-panel {
@@ -984,7 +832,6 @@ useHead(() => ({
 
 .hero-cta:focus-visible,
 .hero-entry:focus-visible,
-.topic-card:focus-visible,
 .year-cta:focus-visible,
 .faq-button:focus-visible {
   outline: 2px solid var(--accent);
@@ -1009,10 +856,6 @@ useHead(() => ({
 }
 
 @media (min-width: 1024px) {
-  .topic-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
   .hero-panel {
     max-width: 370px;
     justify-self: end;
@@ -1051,19 +894,6 @@ useHead(() => ({
 
   .hero-panel {
     width: 100%;
-  }
-
-  .topic-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .topic-card-featured {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .topic-card-body {
-    padding: 22px;
   }
 
   .year-panel {

@@ -50,72 +50,60 @@
             >
               <div
                 v-show="toolsOpen"
-                class="absolute right-0 mt-2 w-[880px] max-w-[calc(100vw-3rem)] rounded-2xl overflow-hidden z-50 border p-4 grid grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)] gap-4"
+                class="absolute right-0 mt-2 w-[860px] max-w-[calc(100vw-3rem)] rounded-2xl overflow-hidden z-50 border p-3"
                 style="background-color: var(--surface-dropdown); border-color: var(--border-medium); box-shadow: var(--shadow-panel);"
               >
                 <div
-                  v-for="toolGroup in toolGroups"
+                  v-for="(toolGroup, groupIndex) in toolGroups"
                   :key="toolGroup.id"
-                  class="min-w-0"
-                  :class="toolGroup.id === 'charting'
-                    ? 'md:border-r md:border-[var(--border-light)] md:pr-4'
+                  class="grid min-w-0 gap-3 p-2 md:grid-cols-[210px_minmax(0,1fr)] md:gap-x-6"
+                  :class="groupIndex < toolGroups.length - 1
+                    ? 'border-b border-[var(--border-light)]'
                     : ''"
                 >
-                  <p class="px-1 pb-3 text-[11px] font-semibold uppercase tracking-[0.12em]" style="color: var(--text-placeholder);">
-                    {{ t(toolGroup.titleKey) }}
-                  </p>
-                  <div :class="toolGroup.id === 'fortune-analysis' ? 'grid grid-cols-1 gap-x-4 gap-y-1 md:grid-cols-2' : 'grid'">
+                  <NuxtLink
+                    :to="localePath(toolGroup.path)"
+                    :no-prefetch="true"
+                    class="group flex items-start gap-3 rounded-xl p-2 transition-colors hover:bg-[var(--surface-card-hover)]"
+                    @click="toolsOpen = false"
+                  >
+                    <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent)]">
+                      <UIcon :name="toolGroup.icon" class="h-4 w-4" />
+                    </span>
+                    <span class="min-w-0">
+                      <span class="block text-sm font-semibold" style="color: var(--text-primary);">
+                        {{ t(toolGroup.titleKey) }}
+                      </span>
+                      <span class="mt-1 block text-xs leading-relaxed" style="color: var(--text-placeholder);">
+                        {{ t(toolGroup.subtitleKey) }}
+                      </span>
+                    </span>
+                    <UIcon name="i-heroicons-arrow-right" class="ml-auto mt-1 h-4 w-4 shrink-0 text-[var(--accent)] transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </NuxtLink>
+                  <div class="flex flex-wrap content-start gap-1.5">
                     <NuxtLink
-                      v-for="cat in toolGroup.categories"
-                      :key="cat.id"
-                      :to="localePath(cat.sectionPath)"
+                      v-for="link in toolGroup.links"
+                      :key="`${toolGroup.id}-${link.path}`"
+                      :to="localePath(link.path)"
                       :no-prefetch="true"
-                      class="group flex items-start gap-3 text-sm transition-all duration-200"
-                      :class="toolGroup.id === 'charting'
-                        ? 'h-full flex-col justify-between rounded-2xl border border-[var(--accent-border)] bg-gradient-to-br from-[var(--accent-bg)] to-[var(--surface-card)] p-5 hover:border-[var(--accent-border-hover)] hover:shadow-lg'
-                        : 'h-10 flex-row items-center rounded-xl px-2.5'"
-                      :style="toolGroup.id === 'charting'
-                        ? { color: 'var(--text-primary)' }
-                        : route.path === localePath(cat.sectionPath)
+                      class="flex h-8 max-w-full min-w-0 items-center gap-2 rounded-xl border border-[var(--border-light)] bg-[var(--surface-input)] px-3 text-[13px] transition-colors hover:border-[var(--border-medium)] hover:bg-[var(--surface-card-hover)]"
+                      :class="route.path === localePath(link.path)
+                        ? 'font-medium'
+                        : 'hover:!bg-[var(--surface-card-hover)]'"
+                      :style="route.path === localePath(link.path)
                         ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
                         : { color: 'var(--text-faint)' }"
                       @click="toolsOpen = false"
                     >
                       <span
-                        :class="toolGroup.id === 'charting'
-                          ? 'mb-5 h-11 w-11 rounded-xl'
-                          : 'h-7 w-7 rounded-lg'"
-                        class="flex items-center justify-center shrink-0 transition-colors"
-                        :style="toolGroup.id === 'charting'
-                          ? { backgroundColor: 'var(--surface-card)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
-                          : route.path === localePath(cat.sectionPath)
+                        class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-colors"
+                        :style="route.path === localePath(link.path)
                           ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
                           : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
                       >
-                        <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                        <UIcon :name="link.icon" class="h-3.5 w-3.5" />
                       </span>
-                      <span class="min-w-0 flex-1">
-                        <span class="block font-medium leading-snug">{{ t(cat.titleKey) }}</span>
-                        <span
-                          v-if="toolGroup.id === 'charting'"
-                          class="mt-2 block text-xs leading-relaxed"
-                          style="color: var(--text-placeholder);"
-                        >{{ t(cat.subtitleKey) }}</span>
-                      </span>
-                      <span
-                        v-if="toolGroup.id === 'charting'"
-                        class="mt-6 flex w-full items-center justify-between rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3 py-2.5"
-                      >
-                        <span class="truncate text-[13px] font-medium">{{ t(cat.tools[0]!.titleKey) }}</span>
-                        <UIcon name="i-heroicons-arrow-right" class="h-4 w-4 shrink-0 text-[var(--accent)] transition-transform duration-200 group-hover:translate-x-0.5" />
-                      </span>
-                      <span
-                        v-if="toolGroup.id === 'fortune-analysis'"
-                        class="shrink-0 text-[11px] tabular-nums"
-                        style="color: var(--text-placeholder);"
-                      >
-                        {{ cat.tools.length }}
-                      </span>
+                      <span class="truncate">{{ t(link.titleKey) }}</span>
                     </NuxtLink>
                   </div>
                 </div>
@@ -249,32 +237,39 @@
             >
               <div v-show="mobileToolsOpen" class="pl-4 mt-1 space-y-3">
                 <div v-for="toolGroup in toolGroups" :key="toolGroup.id">
-                  <p class="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style="color: var(--text-placeholder);">
-                    {{ t(toolGroup.titleKey) }}
-                  </p>
                   <NuxtLink
-                    v-for="cat in toolGroup.categories"
-                    :key="cat.id"
-                    :to="localePath(cat.sectionPath)"
+                    :to="localePath(toolGroup.path)"
                     :no-prefetch="true"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors"
-                    :class="route.path === localePath(cat.sectionPath)
+                    class="flex items-center justify-between px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em]"
+                    style="color: var(--text-placeholder);"
+                    @click="mobileOpen = false; mobileToolsOpen = false"
+                  >
+                    <span>{{ t(toolGroup.titleKey) }}</span>
+                    <UIcon name="i-heroicons-arrow-right" class="h-3.5 w-3.5" />
+                  </NuxtLink>
+                  <NuxtLink
+                    v-for="link in toolGroup.links"
+                    :key="`${toolGroup.id}-${link.path}`"
+                    :to="localePath(link.path)"
+                    :no-prefetch="true"
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors"
+                    :class="route.path === localePath(link.path)
                       ? 'font-medium'
                       : 'hover:!bg-[var(--surface-card-hover)]'"
-                    :style="route.path === localePath(cat.sectionPath)
+                    :style="route.path === localePath(link.path)
                       ? { color: 'var(--accent)', backgroundColor: 'var(--accent-bg)' }
                       : { color: 'var(--text-faint)' }"
                     @click="mobileOpen = false; mobileToolsOpen = false"
                   >
                     <span
-                      class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      :style="route.path === localePath(cat.sectionPath)
+                      class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                      :style="route.path === localePath(link.path)
                         ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }
                         : { backgroundColor: 'var(--surface-input)', color: 'var(--text-faint)', border: '1px solid var(--border-light)' }"
                     >
-                      <UIcon :name="cat.icon || 'i-heroicons-rectangle-group'" class="w-4 h-4" />
+                      <UIcon :name="link.icon" class="w-3.5 h-3.5" />
                     </span>
-                    <span class="truncate">{{ t(cat.titleKey) }}</span>
+                    <span class="truncate">{{ t(link.titleKey) }}</span>
                   </NuxtLink>
                 </div>
               </div>
@@ -387,11 +382,11 @@ const toolsOpen = ref(false)
 const mobileToolsOpen = ref(false)
 
 const categories = useToolCategories()
-const toolGroups = useToolGroups()
+const toolGroups = useToolDirectoryGroups()
 
 const isToolsActive = computed(() => {
-  const toolPaths = categories.value.map(c => localePath(c.sectionPath))
-  toolPaths.push(localePath('/tools'))
+  const toolPaths = toolGroups.value.map(group => localePath(group.path))
+  toolPaths.push(...categories.value.map(c => localePath(c.sectionPath)))
   return toolPaths.some(p => route.path === p)
 })
 

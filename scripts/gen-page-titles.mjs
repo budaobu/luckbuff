@@ -52,8 +52,11 @@ for (const entry of readdirSync(resolve(PAGES_DIR, 'tools'), { withFileTypes: tr
 // ── 目录已注册的工具页：覆盖 /tools 之外的嵌套路由（如 /prophet/*） ──
 const categorySrc = readFileSync(resolve(ROOT, 'app', 'composables', 'useToolCategories.ts'), 'utf-8')
 const toolPathAliases = {}
+const directoryGroupPaths = new Set(['/chart', '/tools', '/special'])
 for (const pathMatch of categorySrc.matchAll(/\bpath:\s*'([^']+)'/g)) {
   const path = pathMatch[1]
+  if (directoryGroupPaths.has(path)) continue
+
   const slug = path.startsWith('/tools/')
     ? path.slice('/tools/'.length)
     : path.split('/').at(-1)

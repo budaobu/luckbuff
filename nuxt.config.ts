@@ -67,6 +67,8 @@ const SITEMAP_EXCLUDE_ROUTES = new Set<string>([
 const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily' | 'monthly' | 'yearly'; priority: number; _i18nTransform: boolean }>> = {
   '/': { priority: 1.0 },
   '/tools': { priority: 0.9 },
+  '/chart': { priority: 0.8 },
+  '/special': { priority: 0.8 },
   '/prophet': { changefreq: 'daily', priority: 0.9 },
   '/insights': { changefreq: 'weekly', priority: 0.8 },
   '/prophet/liuren-worldcup': { changefreq: 'daily', priority: 0.8 },

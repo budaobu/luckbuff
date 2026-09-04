@@ -7,6 +7,8 @@ import { toolCategories } from '~/composables/useToolCategories'
 
 const HUB_PATHS = new Set([
   '/tools',
+  '/chart',
+  '/special',
   '/paipan',
   '/insights',
   '/astrology',

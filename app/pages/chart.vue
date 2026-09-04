@@ -4,8 +4,8 @@
 
     <div class="relative z-10 mx-auto w-full max-w-7xl px-6 py-14 md:py-16">
       <ToolDirectoryHero
-        title-key="toolDirectories.analysisTitle"
-        subtitle-key="toolDirectories.analysisSubtitle"
+        title-key="toolDirectories.chartTitle"
+        subtitle-key="toolDirectories.chartSubtitle"
         count-label-key="toolDirectories.toolCount"
         :count="tools.length"
       />
@@ -17,18 +17,18 @@
 
 <script setup lang="ts">
 const { t } = useI18n()
-const tools = useAnalysisTools()
+const tools = useChartingTools()
 const siteName = 'ososn'
 
 useSeoMeta({
-  title: () => `${t('seo.analysisTitle')} - ${siteName}`,
-  description: t('seo.analysisDesc'),
-  keywords: t('seo.analysisKeywords'),
-  ogTitle: () => `${t('seo.analysisOgTitle')} - ${siteName}`,
-  ogDescription: t('seo.analysisOgDesc'),
+  title: () => `${t('seo.chartTitle')} - ${siteName}`,
+  description: t('seo.chartDesc'),
+  keywords: t('seo.chartKeywords'),
+  ogTitle: () => `${t('seo.chartOgTitle')} - ${siteName}`,
+  ogDescription: t('seo.chartOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools',
+  ogUrl: 'https://www.ososn.com/chart',
   twitterCard: 'summary_large_image',
 })
 
@@ -39,9 +39,9 @@ useHead(() => ({
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
-        name: `${t('seo.analysisTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools',
-        description: t('seo.analysisDesc'),
+        name: `${t('seo.chartTitle')} - ${siteName}`,
+        url: 'https://www.ososn.com/chart',
+        description: t('seo.chartDesc'),
         mainEntity: {
           '@type': 'ItemList',
           itemListElement: tools.value.map((tool, index) => ({
