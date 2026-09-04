@@ -197,6 +197,15 @@ export interface BaziChartStructure {
   evidence: string[]
 }
 
+export interface BaziNatalThemeSignal {
+  id: 'love-attraction' | 'relationship-stability' | 'wealth-capacity' | 'career-structure' | 'learning-structure'
+  title: string
+  score: number
+  evidenceLevel: '保守' | '中等' | '稳定'
+  status: '需补强' | '需取舍' | '有优势'
+  tags: string[]
+}
+
 export interface BaziFlowYearSignal {
   type: string
   value: string
@@ -249,6 +258,7 @@ export interface BaziChartResult {
   shenshaCombinations: BaziShenShaCombination[]
   pattern: BaziChartPattern
   structure: BaziChartStructure
+  natalThemes: BaziNatalThemeSignal[]
   dayuns: BaziDaYun[]
   dayunMeta: BaziDayunMeta
   methodology: {
@@ -745,6 +755,136 @@ function buildPattern(soulChart: SoulChart, energy: BaziChartEnergy): BaziChartP
   }
 }
 
+function themeStatus(score: number): BaziNatalThemeSignal['status'] {
+  return score >= 70 ? '有优势' : score >= 40 ? '需取舍' : '需补强'
+}
+
+function themeEvidence(tags: string[]): BaziNatalThemeSignal['evidenceLevel'] {
+  const decisive = tags.filter(tag => /忌神|占比|强度|清晰度|冲|刑|破|桃花|贵人|将星/.test(tag)).length
+  return decisive >= 3 ? '稳定' : decisive >= 2 ? '中等' : '保守'
+}
+
+function buildNatalThemes(
+  energy: BaziChartEnergy,
+  relations: BaziRelationSignal[],
+  shensha: BaziNatalShenSha[],
+  birth: Pick<BaziChartBirthInfo, 'genderText'>,
+  pattern: BaziChartPattern,
+): BaziNatalThemeSignal[] {
+  const roleElement = (role: string) => energy.wuxing.find(item => item.role === role)
+  const output = roleElement('食伤')
+  const wealth = roleElement('财星')
+  const officer = roleElement('官杀')
+  const resource = roleElement('印星')
+  const spouse = birth.genderText === '女' ? officer : wealth
+  const spouseTenGods = birth.genderText === '女' ? ['正官', '七杀'] : ['正财', '偏财']
+  const clearSpouseStar = energy.tenGods
+    .filter(item => spouseTenGods.includes(item.name))
+    .sort((a, b) => b.percent - a.percent)[0]
+  const hasPeachBlossom = shensha.some(item => item.name === '桃花')
+  const hasWenChang = shensha.some(item => item.name === '文昌')
+  const hasGeneralStar = shensha.some(item => item.name === '将星')
+  const natalConflictCount = relations.filter(item =>
+    item.group === '地支' && ['冲', '刑', '破'].includes(item.type)
+    && item.positions.some(position => ['年柱', '月柱', '日柱'].includes(position)),
+  ).length
+
+  const loveTags = [
+    ...(hasPeachBlossom ? ['桃花'] : []),
+    ...(output && output.percent >= 8 ? ['表达魅力'] : []),
+    ...(spouse && spouse.percent >= 8 ? ['关系星显度'] : []),
+  ]
+  const loveScore = Math.max(12, Math.min(92, Math.round(
+    30
+    + (output?.percent ?? 0) * 1.5
+    + (hasPeachBlossom ? 8 : 0)
+    + (clearSpouseStar && clearSpouseStar.percent >= 8 ? 8 : 0)
+    - natalConflictCount * 5,
+  )))
+
+  const stabilityTags = [
+    ...(spouse?.state === 'unfavorable' ? ['配偶星忌神'] : []),
+    ...(clearSpouseStar ? ['配偶星清晰度'] : []),
+    ...(hasPeachBlossom ? ['桃花'] : []),
+    ...relations
+      .filter(item => item.group === '地支' && ['冲', '刑', '破'].includes(item.type) && item.positions.includes('日柱'))
+      .map(item => item.value + item.type),
+  ]
+  const stabilityScore = Math.max(8, Math.min(94, Math.round(
+    38
+    + (spouse?.percent ?? 0) * 0.8
+    + (clearSpouseStar ? 6 : 0)
+    + (spouse?.state === 'favorable' ? 14 : spouse?.state === 'unfavorable' ? -14 : -4)
+    - natalConflictCount * 8
+    - (hasPeachBlossom ? 4 : 0),
+  )))
+
+  const wealthSupport = output && wealth && output.state !== 'unfavorable' && wealth.percent >= 4
+  const wealthTags = [
+    ...(wealth?.state === 'unfavorable' ? ['财元素忌神'] : []),
+    ...(wealth && wealth.percent >= 8 ? ['财星占比'] : []),
+    ...(wealthSupport ? ['食伤生财'] : []),
+    ...(wealth && wealth.percent >= 12 ? ['财元素强度'] : []),
+  ]
+  const wealthScore = Math.max(8, Math.min(94, Math.round(
+    32
+    + (wealth?.percent ?? 0) * 1.2
+    + (wealthSupport ? 8 : 0)
+    + (wealth?.state === 'favorable' ? 14 : wealth?.state === 'unfavorable' ? -14 : 0),
+  )))
+
+  const careerRelations = relations.filter(item =>
+    item.group === '地支'
+    && ['冲', '刑', '破'].includes(item.type)
+    && item.positions.some(position => ['年柱', '月柱', '日柱'].includes(position)),
+  )
+  const careerTags = [
+    ...(officer && officer.percent >= 8 ? ['官杀占比'] : []),
+    ...(officer?.state === 'unfavorable' ? ['官杀元素忌神'] : []),
+    ...careerRelations.map(item => item.value + item.type),
+    ...(resource && resource.percent >= 8 ? ['印星承接'] : []),
+    ...(hasGeneralStar ? ['将星'] : []),
+  ]
+  const careerScore = Math.max(8, Math.min(94, Math.round(
+    34
+    + (officer?.percent ?? 0) * 0.9
+    + (officer?.state === 'favorable' ? 14 : officer?.state === 'unfavorable' ? -8 : 0)
+    - Math.min(12, careerRelations.length * 4)
+    + (resource && resource.percent >= 8 ? 6 : 0)
+    + (hasGeneralStar ? 4 : 0)
+    + (pattern.status.includes('破格') ? -6 : 0),
+  )))
+
+  const learningTags = [
+    ...(resource?.state === 'unfavorable' ? ['印元素忌神'] : []),
+    ...(resource && resource.percent >= 8 ? ['印星占比'] : []),
+    ...(resource && resource.percent >= 16 ? ['印元素强度'] : []),
+    ...(output && output.percent >= 8 ? ['表达输出'] : []),
+    ...(hasWenChang ? ['文昌贵人'] : []),
+  ]
+  const learningScore = Math.max(8, Math.min(94, Math.round(
+    34
+    + (resource?.percent ?? 0) * 1.4
+    + (resource?.state === 'favorable' ? 14 : resource?.state === 'unfavorable' ? -6 : 0)
+    + (hasWenChang ? 8 : 0)
+    + (output && output.percent >= 8 ? 4 : 0),
+  )))
+
+  const themes: Array<Omit<BaziNatalThemeSignal, 'status' | 'evidenceLevel'>> = [
+    { id: 'love-attraction', title: '恋爱吸引信号', score: loveScore, tags: loveTags },
+    { id: 'relationship-stability', title: '长期关系稳定信号', score: stabilityScore, tags: stabilityTags },
+    { id: 'wealth-capacity', title: '财富承载', score: wealthScore, tags: wealthTags },
+    { id: 'career-structure', title: '事业结构力', score: careerScore, tags: careerTags },
+    { id: 'learning-structure', title: '学习结构力', score: learningScore, tags: learningTags },
+  ]
+
+  return themes.map(theme => ({
+    ...theme,
+    status: themeStatus(theme.score),
+    evidenceLevel: themeEvidence(theme.tags),
+  }))
+}
+
 function buildFlowYears(openChart: OpenFateChart, soulChart: SoulChart, currentYear: number, startYear: number): BaziFlowYear[] {
   const annualMap = new Map<number, NonNullable<SoulChart['decadeFortunes'][number]['annualFortunes'][number]>>()
   for (const decade of soulChart.decadeFortunes) {
@@ -934,6 +1074,13 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
   const forceLeader = [...energy.wuxing].sort((a, b) => b.percent - a.percent)[0]
   const patternName = pattern.name.replace('格', '')
   const patternForce = energy.tenGods.find(item => item.name === patternName)?.percent ?? 0
+  const natalThemes = buildNatalThemes(
+    energy,
+    relations,
+    shensha,
+    { genderText: input.gender === 'male' ? '男' : '女' },
+    pattern,
+  )
 
   return {
     pillars,
@@ -1011,6 +1158,7 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
       patternEvidence: `取格线索：${pattern.monthMainQi}；${pattern.name}${patternForce > 0 ? `力量 ${patternForce}%` : ''}`,
       evidence: pattern.evidence,
     },
+    natalThemes,
     dayuns: buildDayuns(openChart, soulChart, currentYear),
     dayunMeta: {
       direction: openChart.daYun.isForward ? '顺行' : '逆行',

@@ -1,5 +1,11 @@
 <template>
-  <div class="bpr">
+  <div
+    ref="reportRoot"
+    class="bpr"
+    @click="handleReportClick"
+    @keydown.enter.prevent="handleReportKeydown"
+    @keydown.space.prevent="handleReportKeydown"
+  >
     <section class="bpr-card bpr-hero">
       <dl class="bpr-birth-grid">
         <div>
@@ -275,6 +281,25 @@
         <p>{{ $t('baziChart.structureSubtitle') }}</p>
       </header>
       <div class="bpr-body-stack">
+        <div class="bpr-subsection-title">{{ $t('baziChart.themeTitle') }}</div>
+        <div class="bpr-card bpr-theme-list">
+          <article v-for="theme in result.natalThemes" :key="theme.id">
+            <header class="bpr-theme-head">
+              <strong>{{ theme.title }}</strong>
+              <span class="bpr-theme-score">{{ theme.score }}<small>/100</small></span>
+              <em :class="theme.score >= 70 ? 'is-good' : theme.score >= 40 ? 'is-mixed' : 'is-risk'">
+                {{ theme.status }}
+              </em>
+              <small>{{ $t('baziChart.themeEvidence') }}：{{ theme.evidenceLevel }}</small>
+            </header>
+            <div v-if="theme.tags.length" class="bpr-pill-tags">
+              <span v-for="tag in theme.tags" :key="`${theme.id}-${tag}`">{{ tag }}</span>
+            </div>
+            <small v-else class="bpr-theme-empty">—</small>
+          </article>
+        </div>
+        <p class="bpr-theme-note">{{ $t('baziChart.themeNote') }}</p>
+
         <div class="bpr-structure-grid">
           <div class="bpr-card"><span>{{ $t('baziChart.dayStrength') }}</span><strong>{{ result.structure.dayStrength }}</strong><small>{{ result.structure.supportRatio }}%</small></div>
           <div class="bpr-card"><span>{{ $t('baziChart.rootStatus') }}</span><strong>{{ result.structure.rootStatus }}</strong><small>根气 {{ result.energy.rootQuality }}%</small></div>
@@ -303,6 +328,75 @@
     </section>
 
     <p class="bpr-disclaimer">{{ $t('baziChart.disclaimer') }}</p>
+
+    <Teleport to="body">
+      <Transition name="bpr-insight">
+        <div
+          v-if="insightOpen"
+          class="bpr-insight-layer"
+          role="presentation"
+          @click.self="closeInsight"
+        >
+          <section
+            class="bpr-insight"
+            role="dialog"
+            aria-modal="true"
+            :aria-label="insightTitle || $t('baziChart.aiPanelTitle')"
+          >
+            <header class="bpr-insight-head">
+              <div class="min-w-0">
+                <p>
+                  <UIcon name="i-heroicons-sparkles" class="h-3.5 w-3.5" />
+                  {{ $t('baziChart.aiPanelTitle') }}
+                </p>
+                <h3>{{ insightTitle || $t('baziChart.aiPanelTitle') }}</h3>
+              </div>
+              <button type="button" :aria-label="$t('baziChart.aiClose')" @click="closeInsight">
+                <UIcon name="i-heroicons-x-mark" class="h-4 w-4" />
+              </button>
+            </header>
+
+            <div class="bpr-insight-body">
+              <div v-if="insightStatus === 'connecting'" class="bpr-insight-status">
+                <UIcon name="i-heroicons-sparkles" class="h-4 w-4 animate-pulse" />
+                {{ $t('baziChart.aiConnecting') }}
+              </div>
+              <div v-else-if="insightError" class="bpr-insight-error">
+                <UIcon name="i-heroicons-exclamation-triangle" class="h-4 w-4" />
+                <span>{{ insightError }}</span>
+              </div>
+              <div v-else class="bpr-insight-content">{{ insightContent }}</div>
+            </div>
+
+            <footer class="bpr-insight-foot">
+              <small>{{ $t('baziChart.aiDisclaimer') }}</small>
+              <button
+                v-if="insightMode === 'target' && insightStatus === 'complete'"
+                type="button"
+                @click="handleFullReport"
+              >
+                <UIcon :name="isLoggedIn ? 'i-heroicons-arrow-right-circle' : 'i-heroicons-lock-closed'" class="h-4 w-4" />
+                {{ insightFullLabel }}
+              </button>
+            </footer>
+
+            <div v-if="authRequired" class="bpr-insight-auth">
+              <p>{{ $t('baziChart.aiLoginRequired') }}</p>
+              <div>
+                <button type="button" @click="signInWithGoogle(route.fullPath)">
+                  <UIcon name="i-simple-icons-google" class="h-4 w-4" />
+                  Google
+                </button>
+                <button type="button" @click="signInWithTelegram(route.fullPath)">
+                  <UIcon name="i-simple-icons-telegram" class="h-4 w-4" />
+                  Telegram
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -311,9 +405,257 @@ import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 
 const props = defineProps<{ result: BaziChartResult }>()
 const toast = useToast()
-const { t } = useI18n()
+const route = useRoute()
+const { t, locale } = useI18n()
+const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 
 const fourPillars = computed(() => props.result.pillars.map(pillar => pillar.ganzhi).join(' '))
+const reportRoot = ref<HTMLElement | null>(null)
+
+const insightOpen = ref(false)
+const insightMode = ref<'target' | 'full'>('target')
+const insightTitle = ref('')
+const insightContent = ref('')
+const insightStatus = ref<'connecting' | 'streaming' | 'complete' | 'error'>('connecting')
+const insightError = ref('')
+const authRequired = ref(false)
+let insightAbort: AbortController | null = null
+
+const insightFullLabel = computed(() => isLoggedIn.value
+  ? t('baziChart.aiFullReport')
+  : t('baziChart.aiFullReportLogin'))
+
+const TARGET_SELECTORS = [
+  '.bpr-chart-row:not(.bpr-chart-head) > div',
+  '.bpr-char',
+  '.bpr-methodology',
+  '.bpr-methodology dl > div',
+  '.bpr-birth-grid > div',
+  '.bpr-energy-head',
+  '.bpr-card',
+  'article',
+  '.bpr-bar',
+  '.bpr-dayun-meta > div',
+  '.bpr-annual-list > div',
+  '.bpr-structure-grid > div',
+].join(',')
+
+function normalizeText(value: string) {
+  return value.replace(/\s+/g, ' ').trim()
+}
+
+function targetLabel(node: HTMLElement) {
+  const row = node.closest<HTMLElement>('.bpr-chart-row')
+  if (node.classList.contains('bpr-char') || row) {
+    const rowLabel = normalizeText(row?.querySelector<HTMLElement>(':scope > span')?.textContent ?? '')
+    const value = normalizeText(node.textContent ?? '')
+    return [rowLabel, value].filter(Boolean).join(' · ')
+  }
+
+  const explicit = node.querySelector<HTMLElement>('h3, strong, dt, span')
+  const section = node.closest<HTMLElement>('section')
+  const sectionTitle = normalizeText(section?.querySelector<HTMLElement>('.bpr-section-label h2')?.textContent ?? '')
+  const ownTitle = normalizeText(explicit?.textContent ?? '').slice(0, 36)
+  return [sectionTitle, ownTitle].filter(Boolean).join(' · ')
+}
+
+function targetContext(node: HTMLElement) {
+  const section = node.closest<HTMLElement>('section')
+  const sectionTitle = normalizeText(section?.querySelector<HTMLElement>('.bpr-section-label h2')?.textContent ?? '')
+  const stack = node.closest<HTMLElement>('.bpr-body-stack')
+  const subsection = stack?.querySelector<HTMLElement>('.bpr-subsection-title')
+  const subsectionTitle = normalizeText(subsection?.textContent ?? '')
+  const content = normalizeText(node.innerText || node.textContent || '')
+  return {
+    section: sectionTitle,
+    group: subsectionTitle,
+    content: content.slice(0, 2600),
+  }
+}
+
+function initializeTargets() {
+  const root = reportRoot.value
+  if (!root || import.meta.server) return
+
+  for (const node of Array.from(root.querySelectorAll<HTMLElement>(TARGET_SELECTORS))) {
+    if (node.closest('button') || node.dataset.bprAiTarget) continue
+
+    node.dataset.bprAiTarget = 'true'
+    node.tabIndex = 0
+    node.setAttribute('role', 'button')
+    const label = targetLabel(node)
+    node.dataset.bprAiLabel = label
+    node.setAttribute('aria-label', `${label} · ${t('baziChart.aiAction')}`)
+  }
+}
+
+function activateTarget(node: HTMLElement) {
+  const label = node.dataset.bprAiLabel || targetLabel(node)
+  const context = targetContext(node)
+  void requestInsight({
+    selector: node.className || node.tagName.toLowerCase(),
+    label,
+    ...context,
+  })
+}
+
+function handleReportClick(event: MouseEvent) {
+  if ((event.target as HTMLElement).closest('button, a')) return
+  const target = (event.target as HTMLElement).closest<HTMLElement>('[data-bpr-ai-target]')
+  if (target) activateTarget(target)
+}
+
+function handleReportKeydown(event: KeyboardEvent) {
+  const current = event.target as HTMLElement
+  if (current?.dataset?.bprAiTarget !== 'true') return
+  const target = current.closest<HTMLElement>('[data-bpr-ai-target]')
+  if (target) activateTarget(target)
+}
+
+function compactBaziContext() {
+  const r = props.result
+  return [
+    `四柱：${r.pillars.map(p => p.ganzhi).join(' ')}`,
+    `出生：${r.birth.solarText} ${r.birth.genderText}；地点：${r.birth.locationName}；校正时辰：${r.birth.effectiveHour}`,
+    `节气/司令：${r.birth.solarTerm.previous.name} → ${r.birth.solarTerm.next.name}，进度 ${r.birth.solarTerm.progress}%，司令 ${r.birth.solarTerm.siLing.ganzhi}`,
+    `日主：${r.energy.strength}（支持比 ${r.energy.supportRatio}%，${r.energy.rootStatus}）`,
+    `格局：${r.pattern.name} / ${r.pattern.status}；取格：${r.pattern.monthMainQi}`,
+    `用神：${r.energy.primaryUseGod}；辅助：${r.energy.supportUseGod}；忌神：${r.energy.avoidGod}`,
+    `十神：${r.energy.tenGods.map(item => `${item.name} ${item.percent}%`).join('、')}`,
+    `五行：${r.energy.wuxing.map(item => `${item.label} ${item.percent}%（${item.stateLabel}）`).join('、')}`,
+    `主题信号：${r.natalThemes.map(item => `${item.title} ${item.score}/100 ${item.status} [${item.tags.join('+') || '无'}]`).join('；')}`,
+    `原局关系：${r.relations.map(item => `${item.value}${item.type}@${item.positions.join('/')}（${item.intensity}）`).join('；') || '未检出'}`,
+    `神煞：${r.shensha.map(item => `${item.name}@${item.positions.join('/')}（${item.classification}）`).join('；') || '未检出'}`,
+    '大运流年：',
+    ...r.dayuns.map(dayun => [
+      `  ${dayun.index}. ${dayun.startYear}-${dayun.endYear} ${dayun.ganzhi}（${dayun.startAge}-${dayun.endAge}岁）${dayun.isCurrent ? '[当前]' : ''}`,
+      ...dayun.liunian.map(year => `    ${year.year} ${year.ganzhi}：${year.shishenGan}/${year.shishenZhi}，${year.intensity}；${year.summary}`),
+    ].flat()),
+  ].join('\n')
+}
+
+async function requestInsight(target: { selector: string, label: string, section: string, group: string, content: string }) {
+  await streamInsight({
+    mode: 'target',
+    target,
+    title: target.label,
+  })
+}
+
+async function startFullReport() {
+  authRequired.value = false
+  insightMode.value = 'full'
+  insightTitle.value = t('baziChart.aiFullReportTitle')
+  await streamInsight({ mode: 'full', title: insightTitle.value })
+}
+
+function handleFullReport() {
+  if (isLoggedIn.value) {
+    void startFullReport()
+    return
+  }
+  authRequired.value = true
+}
+
+async function streamInsight(payload: { mode: 'target' | 'full', target?: Record<string, string>, title?: string }) {
+  insightAbort?.abort()
+  insightAbort = new AbortController()
+  insightOpen.value = true
+  insightMode.value = payload.mode
+  insightTitle.value = payload.title || ''
+  insightContent.value = ''
+  insightError.value = ''
+  authRequired.value = false
+  insightStatus.value = 'connecting'
+  try {
+    const response = await fetch('/api/tools/bazi-paipan/interpret', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: insightAbort.signal,
+      body: JSON.stringify({
+        ...payload,
+        chart: props.result,
+        chartContext: compactBaziContext(),
+        locale: locale.value,
+      }),
+    })
+
+    if (!response.ok) {
+      let message = `HTTP ${response.status}`
+      try {
+        const data = await response.json()
+        message = data.message || data.statusMessage || message
+      } catch { /* keep HTTP code */ }
+      throw new Error(message)
+    }
+
+    const reader = response.body!.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ''
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() ?? ''
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim()
+        if (!line.startsWith('data:')) continue
+        const payloadText = line.slice(5).trim()
+        if (!payloadText || payloadText === '[DONE]') continue
+
+        try {
+          const chunk = JSON.parse(payloadText)
+          if (chunk.type === 'text' && chunk.text) {
+            insightStatus.value = 'streaming'
+            insightContent.value += chunk.text
+          }
+          else if (chunk.type === 'error') {
+            throw new Error(chunk.message || t('baziChart.aiError'))
+          }
+        }
+        catch (error) {
+          if (error instanceof Error && error.message) throw error
+        }
+      }
+    }
+
+    if (!insightContent.value) throw new Error(t('baziChart.aiNoResult'))
+    insightStatus.value = 'complete'
+  }
+  catch (error) {
+    if ((error as Error)?.name === 'AbortError') return
+    insightStatus.value = 'error'
+    insightError.value = error instanceof Error ? error.message : t('baziChart.aiError')
+  }
+  finally {
+    insightAbort = null
+  }
+}
+
+function closeInsight() {
+  insightAbort?.abort()
+  insightAbort = null
+  insightOpen.value = false
+  insightStatus.value = 'connecting'
+  insightContent.value = ''
+}
+
+watch(() => props.result, async () => {
+  await nextTick()
+  initializeTargets()
+}, { immediate: true })
+
+onMounted(() => {
+  nextTick(initializeTargets)
+})
+
+onBeforeUnmount(() => {
+  insightAbort?.abort()
+})
 
 async function copyPillars() {
   await navigator.clipboard.writeText(fourPillars.value)
@@ -325,6 +667,54 @@ async function copyPillars() {
 .bpr {
   display: grid;
   gap: 34px;
+}
+
+[data-bpr-ai-target] {
+  position: relative;
+  cursor: pointer;
+  border-radius: inherit;
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+[data-bpr-ai-target]::after {
+  content: '✦';
+  position: absolute;
+  z-index: 5;
+  top: 5px;
+  right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-bg) 88%, var(--accent-bg));
+  color: var(--accent);
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+[data-bpr-ai-target]:hover,
+[data-bpr-ai-target]:focus-visible {
+  background-color: color-mix(in srgb, var(--accent-bg) 58%, transparent);
+  border-color: var(--accent-border-hover);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-bg) 68%, transparent);
+}
+
+[data-bpr-ai-target]:hover::after,
+[data-bpr-ai-target]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-bpr-ai-target]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .bpr-card {
@@ -510,6 +900,7 @@ async function copyPillars() {
 .bpr-pill-tags {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 5px;
 }
 
@@ -923,6 +1314,255 @@ async function copyPillars() {
   color: var(--text-body);
   font-size: 13px;
   line-height: 1.7;
+}
+
+.bpr-theme-list {
+  display: grid;
+  gap: 14px;
+}
+
+.bpr-theme-list article + article {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.bpr-theme-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.bpr-theme-head strong {
+  font-size: 14px;
+}
+
+.bpr-theme-score {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bpr-theme-score small {
+  color: var(--text-faint);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.bpr-theme-head em {
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-style: normal;
+}
+
+.bpr-theme-head em.is-good {
+  background: color-mix(in srgb, #16a34a 10%, transparent);
+  color: #15803d;
+}
+
+.bpr-theme-head em.is-mixed {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.bpr-theme-head em.is-risk {
+  background: color-mix(in srgb, #dc2626 9%, transparent);
+  color: #b91c1c;
+}
+
+.bpr-theme-head small {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: 11px;
+}
+
+.bpr-theme-empty {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.bpr-theme-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.bpr-insight-layer {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  padding: 24px;
+  background: color-mix(in srgb, rgba(15, 18, 24, 0.52), transparent);
+  backdrop-filter: blur(8px);
+}
+
+.bpr-insight {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(560px, 100%);
+  max-height: min(74vh, 680px);
+  overflow: hidden;
+  border: 1px solid var(--border-medium);
+  border-radius: 18px;
+  background: var(--surface-dropdown);
+  box-shadow: var(--shadow-panel);
+}
+
+.bpr-insight-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.bpr-insight-head p {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bpr-insight-head h3 {
+  margin: 6px 0 0;
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bpr-insight-head button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  background: var(--surface-input);
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.bpr-insight-body {
+  min-height: 108px;
+  overflow: auto;
+  padding: 18px 20px;
+}
+
+.bpr-insight-content {
+  color: var(--text-body);
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.bpr-insight-status,
+.bpr-insight-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.bpr-insight-error {
+  color: #b91c1c;
+}
+
+.bpr-insight-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.bpr-insight-foot small {
+  min-width: 0;
+  color: var(--text-placeholder);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.bpr-insight-foot button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.bpr-insight-auth {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-card);
+}
+
+.bpr-insight-auth p {
+  margin: 0 0 9px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.bpr-insight-auth div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.bpr-insight-auth button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--surface-input);
+  color: var(--text-body);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.bpr-insight-enter-active,
+.bpr-insight-leave-active {
+  transition: opacity 180ms ease;
+}
+
+.bpr-insight-enter-active .bpr-insight,
+.bpr-insight-leave-active .bpr-insight {
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), opacity 180ms ease;
+}
+
+.bpr-insight-enter-from,
+.bpr-insight-leave-to {
+  opacity: 0;
+}
+
+.bpr-insight-enter-from .bpr-insight,
+.bpr-insight-leave-to .bpr-insight {
+  opacity: 0;
+  transform: translateY(18px);
 }
 
 .bpr-extras {
