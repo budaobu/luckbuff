@@ -88,7 +88,7 @@
     "taiyi": "太乙神数",
     "tarot": "塔罗牌工具",
     "tiche-zeri": "提车吉日",
-    "vedic-astro": "吠陀占星分析",
+    "vedic-astro": "吠陀占星排盘",
     "vedic-hepan-career": "星盘事业合盘",
     "vedic-hepan": "星盘合婚",
     "wuge": "五格剖象工具",
@@ -144,7 +144,7 @@
     "liuyao-divination": "六爻占卜",
     "prophet": "赛事预测",
     "qimen": "奇门遁甲",
-    "vedic": "吠陀占星分析",
+    "vedic": "吠陀占星排盘",
     "zhouyi": "梅花易数",
     "zwds": "紫微斗数",
     "liuyao-football": "六爻预测足球",
@@ -152,7 +152,7 @@
     "liuren-football": "大六壬预测足球",
     "qimen-worldcup": "奇门世界杯",
     "liuren-worldcup": "大六壬世界杯",
-    "vedic-astro": "吠陀占星分析"
+    "vedic-astro": "吠陀占星排盘"
   },
   "paths": {
     "liuyao-football": "/prophet/liuyao-football",

@@ -115,10 +115,6 @@ function validate(): boolean {
     formError.value = t('vedic.form.errCity')
     return false
   }
-  if (!local.dimensions.length) {
-    formError.value = t('vedic.form.errDimensions')
-    return false
-  }
   formError.value = null
   return true
 }
@@ -333,15 +329,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 分析维度 -->
-    <div class="space-y-1.5">
-      <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
-        {{ $t('vedic.form.dimensions') }}
-        <span class="text-[var(--accent)]">*</span>
-      </label>
-      <VedicDimSelector v-model="local.dimensions" />
-    </div>
-
     <!-- 保存到当前档案 -->
     <div v-if="selectedProfileId && hasFormChanges" class="pt-1">
       <UButton
@@ -373,7 +360,7 @@ onMounted(() => {
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-4 h-4" />
       </template>
-      {{ $t('vedic.form.submit') }}
+      {{ $t('vpc.submit') }}
     </UButton>
 
     <p class="text-[10px] text-[var(--text-placeholder)] text-center leading-relaxed">

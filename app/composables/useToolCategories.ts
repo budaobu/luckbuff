@@ -68,6 +68,13 @@ const chartingToolCategory: ToolCategory = {
       ctaKey: 'ziweiChart.submit',
       path: '/tools/ziwei-paipan',
     },
+    {
+      icon: 'i-heroicons-globe-asia-australia',
+      titleKey: 'vpc.title',
+      descKey: 'vpc.subtitle',
+      ctaKey: 'common.start',
+      path: '/tools/vedic-astro',
+    },
   ],
 }
 
