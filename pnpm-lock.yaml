@@ -37,6 +37,9 @@ importers:
       '@pinia/nuxt':
         specifier: ^0.11.3
         version: 0.11.3(magicast@0.5.2)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))
+      '@prisri/jyotish':
+        specifier: 1.1.7
+        version: 1.1.7
       '@soul-atelier/bazi':
         specifier: 0.9.0
         version: 0.9.0
@@ -2473,6 +2476,9 @@ packages:
       prisma:
         optional: true
 
+  '@prisri/jyotish@1.1.7':
+    resolution: {integrity: sha512-4DwPa4ojCufOTj/9z0q+2tzlnrlGQILQuKN1VvUV9BSrXgK7xSKQ7jXk/Fd3e9tdRypvY27hYIe+sEdJGgJP3Q==}
+
   '@rolldown/pluginutils@1.0.0-rc.13':
     resolution: {integrity: sha512-3ngTAv6F/Py35BsYbeeLeecvhMKdsKm4AoOETVhAA+Qc8nrA2I0kF7oa93mE9qnIurngOSpMnQ0x2nQY2FPviA==}
 
@@ -3398,6 +3404,9 @@ packages:
   ast-walker-scope@0.8.3:
     resolution: {integrity: sha512-cbdCP0PGOBq0ASG+sjnKIoYkWMKhhz+F/h9pRexUdX2Hd38+WOlBkRKlqkGOSm0YQpcFMQBJeK4WspUAkwsEdg==}
     engines: {node: '>=20.19.0'}
+
+  astronomy-engine@2.1.19:
+    resolution: {integrity: sha512-8yWKNf7UeNbH458h3sAJ6ZgAjE5jTXp/mNNRFoC20j2SHwZIjAQeEsBB2Q3uCFRaTCCJRv33K2XhkhZQMXoX6w==}
 
   async-sema@3.1.1:
     resolution: {integrity: sha512-tLRNUXati5MFePdAk8dw7Qt7DpxPB60ofAgn8WRhW6a2rcimZnYBP9oxHiv0OHy+Wz7kPMG+t4LGdt31+4EmGg==}
@@ -9452,6 +9461,10 @@ snapshots:
 
   '@prisma/client@5.22.0': {}
 
+  '@prisri/jyotish@1.1.7':
+    dependencies:
+      astronomy-engine: 2.1.19
+
   '@rolldown/pluginutils@1.0.0-rc.13': {}
 
   '@rolldown/pluginutils@1.0.0-rc.17': {}
@@ -10373,6 +10386,8 @@ snapshots:
     dependencies:
       '@babel/parser': 7.29.2
       ast-kit: 2.2.0
+
+  astronomy-engine@2.1.19: {}
 
   async-sema@3.1.1: {}
 

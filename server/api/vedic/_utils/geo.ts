@@ -2,6 +2,7 @@ export interface GeoResult {
   lat: number
   lng: number
   cityName: string
+  timezone?: string
 }
 
 const cache = new Map<string, { value: GeoResult; expiresAt: number }>()
@@ -23,6 +24,7 @@ async function viaOpenMeteo(query: string): Promise<GeoResult | null> {
       lat: hit.latitude,
       lng: hit.longitude,
       cityName: [hit.name, hit.admin1, hit.country].filter(Boolean).join(', '),
+      timezone: hit.timezone,
     }
   } catch {
     return null
@@ -47,6 +49,17 @@ async function viaNominatim(query: string): Promise<GeoResult | null> {
   }
 }
 
+async function timezoneFromCoords(lat: number, lng: number): Promise<string | null> {
+  try {
+    const data = await $fetch<any>('https://api.open-meteo.com/v1/forecast', {
+      params: { latitude: lat, longitude: lng, timezone: 'auto', current: 'temperature_2m' },
+    })
+    return typeof data?.timezone === 'string' && data.timezone ? data.timezone : null
+  } catch {
+    return null
+  }
+}
+
 export async function resolveGeo(cityQuery: string): Promise<GeoResult | null> {
   const key = cityQuery.trim().toLowerCase()
   if (!key) return null
@@ -59,6 +72,9 @@ export async function resolveGeo(cityQuery: string): Promise<GeoResult | null> {
 
   const result = (await viaOpenMeteo(cityQuery)) ?? (await viaNominatim(cityQuery))
   if (result) {
+    if (!result.timezone) {
+      result.timezone = await timezoneFromCoords(result.lat, result.lng) ?? undefined
+    }
     cache.set(key, { value: result, expiresAt: now + TTL_MS })
   }
   return result

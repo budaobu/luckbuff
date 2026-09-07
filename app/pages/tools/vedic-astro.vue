@@ -1,108 +1,157 @@
+<template>
+  <div class="vc-page">
+    <div class="vc-container">
+      <header class="vc-header">
+        <div>
+          <p class="vc-eyebrow">Vedic Chart</p>
+          <h1>{{ $t('vpc.title') }}</h1>
+          <p>{{ $t('vpc.subtitle') }}</p>
+        </div>
+        <NuxtLink :to="localePath('/paipan')" class="vc-back">
+          <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
+          {{ $t('paipanTopic.title') }}
+        </NuxtLink>
+      </header>
+
+      <section v-if="phase === 'form'" class="vc-form-wrap">
+        <div class="vc-card">
+          <h2>{{ $t('vpc.formTitle') }}</h2>
+          <VedicStepForm
+            v-model="formData"
+            :error-msg="formError"
+            @submit="handleSubmit"
+            @save-profile="handleSaveProfile"
+          />
+        </div>
+        <div class="vc-hints">
+          <article><UIcon name="i-heroicons-clock" class="h-4 w-4" /><p>{{ $t('vpc.timeHint') }}</p></article>
+          <article><UIcon name="i-heroicons-map-pin" class="h-4 w-4" /><p>{{ $t('vedic.form.cityHint') }}</p></article>
+          <article><UIcon name="i-heroicons-shield-check" class="h-4 w-4" /><p>{{ $t('vedic.form.privacy') }}</p></article>
+        </div>
+      </section>
+
+      <section v-else-if="phase === 'loading'" class="vc-loading">
+        <span />
+        <p>{{ $t('vpc.calculating') }}</p>
+      </section>
+
+      <div v-else-if="result" ref="shareTargetRef" class="vc-report">
+        <VedicPaipanReport :result="result" />
+      </div>
+
+      <div v-if="phase === 'result'" class="vc-actions">
+        <UButton color="warning" variant="soft" @click="resetToForm">
+          <template #leading><UIcon name="i-heroicons-arrow-path" class="h-4 w-4" /></template>
+          {{ $t('common.retry') }}
+        </UButton>
+        <UButton color="warning" variant="soft" @click="handleShare">
+          <template #leading><UIcon name="i-heroicons-share" class="h-4 w-4" /></template>
+          {{ $t('common.shareResult') }}
+        </UButton>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
-import type { DiZhi, UserProfile } from '~/types/user'
+import type { VedicFormData } from '~/types/vedic'
+import type { UserProfile } from '~/types/user'
+import type { VedicPaipanResult } from '~/types/vedic-paipan'
 
 const { t } = useI18n()
-const {
-  step,
-  formData,
-  chartData,
-  analysisText,
-  errorMsg,
-  streaming,
-  startAnalysis,
-  reset,
-} = useVedicAnalysis()
-
-const store = useProfilesStore()
+const localePath = useLocalePath()
+const toast = useToast()
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+const store = useProfilesStore()
 
-// 分享
-const shareDialogOpen = ref(false)
-const shareData = ref<{
-  copyText: string
-  screenshotDataUrl: string | null
-  filename: string
-  screenshotError: string | null
-} | null>(null)
+const phase = ref<'form' | 'loading' | 'result'>('form')
+const result = ref<VedicPaipanResult | null>(null)
+const formError = ref('')
 const shareTargetRef = ref<HTMLElement>()
+const formData = ref<VedicFormData>({
+  birthDate: '',
+  birthTime: '',
+  city: '',
+  gender: '',
+  dimensions: ['core', 'career', 'love', 'annual'],
+  timeUncertain: false,
+})
 
-async function handleShare() {
-  if (!chartData.value) return
-  const { share } = useShare()
+async function handleSubmit() {
+  formError.value = ''
+  if (!formData.value.birthDate || !formData.value.birthTime || !formData.value.city.trim()) {
+    formError.value = t('vpc.requiredError')
+    return
+  }
 
-  const ascendant = chartData.value.ascendant.signNameZh
-  const currentDasha = chartData.value.dasha.find(d => d.isCurrent)
-  const summary = currentDasha
-    ? `上升${ascendant}，当前${currentDasha.graha}大运`
-    : `上升${ascendant}`
-
+  phase.value = 'loading'
   try {
-    const result = await share({
-      tool: 'vedic',
-      name: '',
-      summary,
-      shareTarget: shareTargetRef.value,
-      filename: `vedic-report-${new Date().toISOString().slice(0, 10)}.png`,
-      t,
+    result.value = await $fetch<VedicPaipanResult>('/api/tools/vedic-paipan/calc', {
+      method: 'POST',
+      body: {
+        birthDate: formData.value.birthDate,
+        birthTime: formData.value.birthTime,
+        city: formData.value.city.trim(),
+        gender: formData.value.gender || '',
+        timeUncertain: formData.value.timeUncertain,
+      },
     })
-
-    shareData.value = result
-    shareDialogOpen.value = true
-  } catch (e: any) {
+    phase.value = 'result'
+    await nextTick()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+  catch (error: any) {
+    phase.value = 'form'
     toast.add({
-      title: t('share.shareFail'),
-      description: e?.message || t('share.pleaseRetry'),
+      title: t('vpc.fail'),
+      description: error?.data?.statusMessage || error?.message || t('common.pleaseRetry'),
       color: 'error',
     })
   }
-}
-
-function copyShareText() {
-  if (!shareData.value) return
-  navigator.clipboard.writeText(shareData.value.copyText).then(() => {
-    toast.add({ title: t('share.textCopied'), color: 'success' })
-  }).catch(() => {
-    toast.add({ title: t('share.copyFail'), color: 'error' })
-  })
-}
-
-function downloadShareImage() {
-  if (!shareData.value?.screenshotDataUrl) return
-  const a = document.createElement('a')
-  a.href = shareData.value.screenshotDataUrl
-  a.download = shareData.value.filename
-  a.click()
-  toast.add({ title: t('share.downloadSuccess'), color: 'success' })
-}
-
-async function handleRetry() {
-  await startAnalysis()
 }
 
 function handleSaveProfile(id: string, values: Partial<Pick<UserProfile, 'gender' | 'birthDate' | 'birthProvince'>>) {
   store.update(id, values)
 }
 
-// 回访流程：URL 带 ?profile=id 时自动加载档案并分析
+function resetToForm() {
+  phase.value = 'form'
+  result.value = null
+}
+
+async function handleShare() {
+  if (!result.value) return
+  const { share } = useShare()
+  try {
+    await share({
+      tool: 'vedic',
+      summary: `${t('vpc.ascendant')} ${result.value.ascendant.signName} · ${result.value.dasha.currentMahadasha?.planet || ''}`,
+      shareTarget: shareTargetRef.value,
+      filename: `vedic-paipan-${formData.value.birthDate}.png`,
+      t,
+    })
+  }
+  catch (error: any) {
+    toast.add({ title: t('share.shareFail'), description: error?.message || t('share.pleaseRetry'), color: 'error' })
+  }
+}
+
 onMounted(() => {
   const profileId = route.query.profile as string | undefined
-  if (profileId) {
-    const profile = store.list.find(p => p.id === profileId)
-    if (profile && profile.gender && profile.birthDate) {
-      const DIZHI_TO_TIME: Record<DiZhi, string> = {
-        '子': '00:00', '丑': '01:00', '寅': '03:00', '卯': '05:00',
-        '辰': '07:00', '巳': '09:00', '午': '11:00', '未': '13:00',
-        '申': '15:00', '酉': '17:00', '戌': '19:00', '亥': '21:00',
-      }
-      formData.value.gender = profile.gender
-      formData.value.birthDate = profile.birthDate
-      formData.value.birthTime = profile.birthHour ? DIZHI_TO_TIME[profile.birthHour] || '' : ''
-      formData.value.city = profile.birthProvince || ''
-      startAnalysis()
-      router.replace({ query: {} })
-    }
+  if (!profileId) return
+  const profile = store.list.find(item => item.id === profileId)
+  const DIZHI_TO_TIME: Record<string, string> = {
+    '子': '00:00', '丑': '01:00', '寅': '03:00', '卯': '05:00',
+    '辰': '07:00', '巳': '09:00', '午': '11:00', '未': '13:00',
+    '申': '15:00', '酉': '17:00', '戌': '19:00', '亥': '21:00',
+  }
+  if (profile?.birthDate) {
+    formData.value.birthDate = profile.birthDate
+    formData.value.birthTime = profile.birthHour ? DIZHI_TO_TIME[profile.birthHour] || '' : ''
+    formData.value.city = profile.birthProvince || ''
+    formData.value.gender = profile.gender || ''
+    router.replace({ query: {} })
   }
 })
 
@@ -121,252 +170,50 @@ useSeoMeta({
 })
 
 useHead(() => ({
-  script: [
-    {
-      type: 'application/ld+json',
-      innerHTML: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        name: `${t('seo.vedicTitle')} - ${siteName}`,
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: t('seo.vedicTitle'),
+      url: 'https://www.ososn.com/tools/vedic-astro',
+      description: t('seo.vedicDesc'),
+      mainEntity: {
+        '@type': 'SoftwareApplication',
+        name: t('vpc.title'),
+        applicationCategory: 'LifestyleApplication',
+        operatingSystem: 'Any',
         url: 'https://www.ososn.com/tools/vedic-astro',
         description: t('seo.vedicDesc'),
-        mainEntity: {
-          '@type': 'SoftwareApplication',
-          name: t('home.toolVedicTitle'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/vedic-astro',
-          description: t('home.toolVedicDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
-        },
-      }),
-    },
-  ],
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
+      },
+    }),
+  }],
 }))
 </script>
 
-<template>
-  <div class="relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-[8%] left-[12%] w-[460px] h-[460px] rounded-full bg-[var(--accent)]/[0.06] blur-[130px]" />
-      <div class="absolute bottom-[18%] right-[10%] w-[380px] h-[380px] rounded-full bg-[var(--accent-purple)]/[0.05] blur-[110px]" />
-    </div>
-
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-12" :class="{ 'vdr-result-wrap': step === 'result' }">
-      <Transition name="step" mode="out-in">
-        <!-- Step 1: 表单 -->
-        <div v-if="step === 'form'" key="form">
-          <div class="mb-8">
-            <span class="text-xs text-[var(--accent-muted)] tracking-[0.2em] uppercase mb-2 block">Vedic Astrology</span>
-            <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight font-serif">
-              {{ $t('vedic.page.title') }}
-            </h1>
-            <p class="text-sm text-[var(--text-faint)] mt-2">{{ $t('vedic.page.subtitle', { swissEphemeris: $t('vedic.terms.swissEphemeris'), lahiriAyanamsha: $t('vedic.terms.lahiriAyanamsha'), wholeSign: $t('vedic.terms.wholeSign') }) }}</p>
-            <div class="w-12 h-px bg-[var(--accent-border-hover)] mt-4" />
-          </div>
-
-          <div class="rounded-2xl border border-[var(--border-light)] bg-[var(--surface-dropdown)] overflow-hidden">
-            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
-            <div class="p-6">
-              <VedicStepForm
-                v-model="formData"
-                :error-msg="errorMsg"
-                @submit="startAnalysis"
-                @save-profile="handleSaveProfile"
-              />
-            </div>
-          </div>
-
-          <!-- 知识卡片 -->
-          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-book-open" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('vedic.knowledgeCard1Title') }}</h4>
-              </div>
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('vedic.knowledgeCard1Desc') }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-square-3-stack-3d" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('vedic.knowledgeCard2Title') }}</h4>
-              </div>
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('vedic.knowledgeCard2Desc') }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-clock" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('vedic.knowledgeCard3Title') }}</h4>
-              </div>
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('vedic.knowledgeCard3Desc') }}</p>
-            </div>
-            <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4">
-              <div class="flex items-center gap-2 mb-2">
-                <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-[var(--accent-muted)]" />
-                <h4 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('vedic.knowledgeCard4Title') }}</h4>
-              </div>
-              <p class="text-xs text-[var(--text-faint)] leading-relaxed">{{ $t('vedic.knowledgeCard4Desc') }}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2: 计算中 -->
-        <div v-else-if="step === 'loading'" key="loading">
-          <VedicStepLoading />
-        </div>
-
-        <!-- Step 3: 结果 -->
-        <div v-else-if="step === 'result' && chartData" key="result">
-          <!-- 隐藏截图目标：完整纸质报告（非流式快照） -->
-          <div ref="shareTargetRef" v-show="false" class="vdr-share-target">
-            <VedicReport
-              :chart="chartData"
-              :ai-content="analysisText"
-              :streaming="false"
-              :error="null"
-            />
-          </div>
-
-          <VedicReport
-            :chart="chartData"
-            :ai-content="analysisText"
-            :streaming="streaming"
-            :error="errorMsg || null"
-            @retry="handleRetry"
-          />
-
-          <!-- 底部操作 -->
-          <div class="flex gap-3 justify-center mt-10 flex-wrap">
-            <UButton v-if="errorMsg" color="warning" variant="soft" @click="handleRetry">
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </template>
-              {{ $t('common.retry') }}
-            </UButton>
-            <UButton color="warning" variant="soft" @click="handleShare">
-              <template #leading>
-                <UIcon name="i-heroicons-share" class="w-4 h-4" />
-              </template>
-              {{ $t('common.shareResult') }}
-            </UButton>
-            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="reset">
-              <template #leading>
-                <UIcon name="i-heroicons-arrow-uturn-left" class="w-4 h-4" />
-              </template>
-              {{ $t('vedic.result.restart') }}
-            </UButton>
-            <UButton color="neutral" variant="ghost" class="text-[var(--text-muted)]" @click="() => { navigateTo('/') }">
-              <template #leading>
-                <UIcon name="i-heroicons-home" class="w-4 h-4" />
-              </template>
-              {{ $t('common.backHome') }}
-            </UButton>
-          </div>
-        </div>
-      </Transition>
-    </div>
-
-    <!-- 分享弹窗 -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="shareDialogOpen"
-          class="fixed inset-0 z-50 flex items-center justify-center"
-          @click.self="shareDialogOpen = false"
-        >
-          <div class="absolute inset-0 bg-[var(--overlay-bg)] backdrop-blur-sm" />
-          <div class="relative rounded-2xl border border-[var(--border-medium)] bg-[var(--surface-dropdown)] overflow-hidden w-[90vw] max-w-md mx-4 shadow-2xl">
-            <div class="h-px bg-gradient-to-r from-transparent via-[var(--accent-border-hover)] to-transparent" />
-            <div class="flex items-center justify-between px-5 py-4 border-b border-[var(--border-light)]">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-[var(--accent-bg)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent)]">
-                  <UIcon name="i-heroicons-share" class="w-4 h-4" />
-                </div>
-                <h3 class="text-sm font-semibold text-[var(--text-primary)]">{{ $t('share.title') }}</h3>
-              </div>
-              <UButton
-                color="neutral"
-                variant="ghost"
-                class="text-[var(--text-faint)] hover:text-[var(--text-body)] hover:bg-[var(--surface-card-hover)]"
-                @click="() => { shareDialogOpen = false }"
-              >
-                <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
-              </UButton>
-            </div>
-            <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
-              <div>
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.copyContext') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-3 text-sm text-[var(--text-body)] leading-relaxed whitespace-pre-wrap">
-                  {{ shareData?.copyText }}
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="copyShareText">
-                  <template #leading>
-                    <UIcon name="i-heroicons-clipboard-document" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('share.copyText') }}
-                </UButton>
-              </div>
-              <div v-if="shareData?.screenshotDataUrl">
-                <p class="text-[11px] text-[var(--text-faint)] mb-1.5 tracking-wide">{{ $t('share.shareScreenshot') }}</p>
-                <div class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] p-2 overflow-hidden">
-                  <img :src="shareData.screenshotDataUrl" :alt="$t('share.shareScreenshot')" class="w-full rounded-lg">
-                </div>
-                <UButton color="warning" variant="soft" size="xs" class="mt-2" @click="downloadShareImage">
-                  <template #leading>
-                    <UIcon name="i-heroicons-arrow-down-tray" class="w-3.5 h-3.5" />
-                  </template>
-                  {{ $t('share.downloadImage') }}
-                </UButton>
-              </div>
-              <div v-else class="rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3.5 py-6 text-center">
-                <UIcon name="i-heroicons-photo" class="w-8 h-8 text-[var(--text-placeholder)] mx-auto mb-2" />
-                <p class="text-xs text-[var(--text-faint)]">{{ $t('share.screenshotFailed') }}</p>
-                <p v-if="shareData?.screenshotError" class="text-[10px] text-red-400/60 mt-1.5 font-mono">
-                  {{ shareData.screenshotError }}
-                </p>
-              </div>
-            </div>
-            <div class="px-5 py-3 border-t border-[var(--border-light)] text-center">
-              <p class="text-[10px] text-[var(--text-placeholder)]">{{ $t('share.generatedBy') }}</p>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
-  </div>
-</template>
-
 <style scoped>
-.step-enter-active,
-.step-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.step-enter-from {
-  opacity: 0;
-  transform: translateY(8px);
-}
-.step-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-/* 结果阶段：纸质报告需要更宽的版面 */
-.vdr-result-wrap {
-  max-width: 80rem;
-}
-
-.vdr-share-target {
-  width: 1080px;
+.vc-page { min-height: 100vh; background: var(--surface-bg); color: var(--text-primary); }
+.vc-container { max-width: 1120px; margin: 0 auto; padding: 40px 20px 72px; }
+.vc-header { display: grid; gap: 18px; margin-bottom: 30px; position: relative; text-align: center; }
+.vc-eyebrow { margin-bottom: 8px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.vc-header h1 { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; }
+.vc-header > div > p { max-width: 660px; margin: 10px auto 0; color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+.vc-back { position: absolute; top: 0; left: 0; display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 13px; }
+.vc-back:hover { color: var(--accent); }
+.vc-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-card); padding: 20px; }
+.vc-card h2 { margin: 0 0 16px; font-size: 16px; font-weight: 700; }
+.vc-form-wrap { display: grid; gap: 18px; max-width: 680px; margin: 0 auto; }
+.vc-hints { display: grid; gap: 10px; }
+.vc-hints article { display: flex; gap: 9px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--border-subtle); border-radius: 10px; background: color-mix(in srgb, var(--surface-card) 72%, transparent); color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+.vc-loading { display: grid; justify-items: center; gap: 12px; padding: 72px 20px; color: var(--text-muted); font-size: 14px; }
+.vc-loading span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: vc-pulse 1s ease-in-out infinite; }
+.vc-report { display: grid; gap: 38px; }
+.vc-actions { display: flex; justify-content: center; gap: 10px; margin-top: 34px; flex-wrap: wrap; }
+@keyframes vc-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@media (max-width: 640px) {
+  .vc-container { padding: 28px 16px 56px; }
+  .vc-back { position: static; justify-content: center; }
+  .vc-header h1 { font-size: 24px; }
 }
 </style>
