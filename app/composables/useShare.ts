@@ -88,6 +88,7 @@ export interface ShareOptions {
   | 'mangpai-bazi'
   | 'new-school-bazi'
   | 'bazi-paipan'
+  | 'ziwei-paipan'
   name?: string
   summary?: string
   /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
@@ -197,6 +198,7 @@ export function useShare() {
       'mangpai-bazi': '盲派八字',
       'new-school-bazi': '新派八字',
       'bazi-paipan': '八字排盘',
+      'ziwei-paipan': '紫微命盘',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 

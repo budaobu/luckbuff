@@ -7,6 +7,7 @@ export interface UserProfile {
   gender: 'male' | 'female'
   birthDate?: string
   birthHour?: DiZhi
+  birthTimeIndex?: number
   birthProvince?: string
   lunarBirthDate?: string
   isDefault?: boolean
