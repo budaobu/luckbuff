@@ -307,9 +307,9 @@ const genderText = computed(() => props.result.birth.gender === 'male'
 const insightFullLabel = computed(() => isLoggedIn.value ? t('vpc.aiFullReport') : t('vpc.aiFullReportLogin'))
 
 const TARGET_SELECTORS = [
-  '.vpc-card',
+  '.vpc-card:not(.vpc-table-card)',
   'article',
-  '.vpc-row > span',
+  '.vpc-table .vpc-row:not(.vpc-head)',
   '.vpc-varga-grid article',
   '.vpc-bar',
   '.vpc-pills button',
@@ -322,8 +322,9 @@ function normalizeText(value: string) {
 function targetLabel(node: HTMLElement) {
   const section = node.closest<HTMLElement>('section')
   const sectionTitle = normalizeText(section?.querySelector<HTMLElement>('.vpc-section-label h2')?.textContent ?? '')
-  const explicit = node.querySelector<HTMLElement>('strong, h3, dt, span')
-  const ownTitle = normalizeText(explicit?.textContent ?? '').slice(0, 48)
+  const ownTitle = node.classList.contains('vpc-row')
+    ? normalizeText(node.innerText || node.textContent || '')
+    : normalizeText(node.querySelector<HTMLElement>('strong, h3, dt, span')?.textContent ?? '').slice(0, 48)
   return [sectionTitle, ownTitle].filter(Boolean).join(' · ')
 }
 
