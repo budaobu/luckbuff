@@ -54,6 +54,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/bazi-paipan',
       recommended: true,
     },
+    {
+      icon: 'i-heroicons-sparkles',
+      titleKey: 'ziweiChart.title',
+      descKey: 'ziweiChart.subtitle',
+      ctaKey: 'ziweiChart.submit',
+      path: '/tools/ziwei-paipan',
+    },
   ],
 }
 

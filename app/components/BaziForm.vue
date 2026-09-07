@@ -95,7 +95,8 @@
         <span v-if="requireHour" class="text-[var(--accent)]">*</span>
       </label>
       <USelect
-        v-model="form.birthHour"
+        :model-value="useTimeIndex ? form.birthTimeIndex : form.birthHour"
+        @update:model-value="value => setHourValue(value)"
         :items="hourOptions"
         :placeholder="$t('profileForm.birthHourPlaceholder')"
         color="warning"
@@ -208,6 +209,7 @@ interface FormValues {
   gender: 'male' | 'female'
   birthDate: string
   birthHour?: DiZhi
+  birthTimeIndex?: number
   name: string
   formerName: string
   formerNameChangedYear?: number
@@ -222,6 +224,7 @@ interface Props {
   showFormerName?: boolean
   showBirthProvince?: boolean
   requireHour?: boolean
+  useTimeIndex?: boolean
   submitLabel?: string
 }
 
@@ -233,6 +236,7 @@ const props = withDefaults(defineProps<Props>(), {
   showFormerName: true,
   showBirthProvince: true,
   requireHour: false,
+  useTimeIndex: false,
   submitLabel: undefined,
 })
 
@@ -244,6 +248,7 @@ const emit = defineEmits<{
 const { profiles, defaultProfile } = useProfiles()
 const store = useProfilesStore()
 const localePath = useLocalePath()
+const { t } = useI18n()
 
 const selectedProfileId = ref<string | null>(null)
 
@@ -251,6 +256,7 @@ const form = reactive<FormValues>({
   gender: 'male',
   birthDate: '',
   birthHour: undefined,
+  birthTimeIndex: undefined,
   name: '',
   formerName: '',
   formerNameChangedYear: undefined,
@@ -258,10 +264,27 @@ const form = reactive<FormValues>({
   ...props.initialValues,
 })
 
-const hourOptions = SHICHEN_OPTIONS.map(s => ({
-  label: `${s.label}（${s.range}）`,
-  value: s.dizhi,
-}))
+const hourOptions = computed(() => props.useTimeIndex
+  ? Array.from({ length: 13 }, (_, index) => ({
+      label: index === 0
+        ? `${t('ziweiChart.timeIndex0')}（00:00~01:00）`
+        : index === 12
+          ? `${t('ziweiChart.timeIndex12')}（23:00~24:00）`
+          : `${t(`ziweiChart.timeIndex${index}`)}（${String(index * 2 - 1).padStart(2, '0')}:00~${String(index * 2 + 1).padStart(2, '0')}:00）`,
+      value: index,
+    }))
+  : SHICHEN_OPTIONS.map(s => ({
+      label: `${s.label}（${s.range}）`,
+      value: s.dizhi,
+    })))
+
+function setHourValue(value: DiZhi | number) {
+  if (props.useTimeIndex) {
+    form.birthTimeIndex = typeof value === 'number' ? value : undefined
+    return
+  }
+  form.birthHour = typeof value === 'string' ? value as DiZhi : undefined
+}
 
 const birthGanZhi = ref('')
 const { dateToGanZhi } = useBaziCalc()
@@ -302,7 +325,8 @@ function onBirthDateChange() {
 
 const isValid = computed(() => {
   if (props.minimal) return !!(form.birthDate)
-  return !!(form.gender && form.birthDate && (!props.requireHour || form.birthHour))
+  const hourReady = props.useTimeIndex ? form.birthTimeIndex !== undefined : form.birthHour !== undefined
+  return !!(form.gender && form.birthDate && (!props.requireHour || hourReady))
 })
 
 const hasFormChanges = computed(() => {
@@ -312,6 +336,7 @@ const hasFormChanges = computed(() => {
   const checks: boolean[] = [
     p.birthDate !== form.birthDate,
     p.birthHour !== form.birthHour,
+    p.birthTimeIndex !== form.birthTimeIndex,
   ]
   if (props.showGender) checks.push(p.gender !== form.gender)
   if (props.showName) checks.push(p.name !== form.name)
@@ -330,6 +355,9 @@ function selectProfile(profile: UserProfile) {
   form.gender = profile.gender
   form.birthDate = profile.birthDate || ''
   form.birthHour = profile.birthHour
+  form.birthTimeIndex = profile.birthTimeIndex ?? (profile.birthHour === undefined
+    ? undefined
+    : Math.max(0, ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'].indexOf(profile.birthHour)))
   form.name = profile.name || ''
   form.formerName = profile.formerName || ''
   form.formerNameChangedYear = profile.formerNameChangedYear
