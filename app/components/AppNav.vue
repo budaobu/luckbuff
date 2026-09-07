@@ -400,6 +400,7 @@ interface NavItem {
 
 const navItems = computed<NavItem[]>(() => [
   { label: t('nav.home'), to: '/', id: 'nav-home' },
+  { label: t('nav.fortune2026'), to: '/fortune/2026', id: 'nav-fortune-2026' },
   { label: t('nav.toolsShort'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
 ])
