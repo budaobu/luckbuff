@@ -1,4 +1,7 @@
 import type { ZiweiChartResult } from '~~/server/utils/tools/ziwei-chart'
+import { getAuthSession } from '~~/server/utils/auth-session'
+
+type InterpretMode = 'target' | 'full'
 
 interface InterpretTarget {
   selector?: string
@@ -9,6 +12,7 @@ interface InterpretTarget {
 }
 
 interface InterpretBody {
+  mode?: InterpretMode
   chart?: ZiweiChartResult
   target?: InterpretTarget
   locale?: 'zh-CN' | 'zh-TW' | 'en'
@@ -29,19 +33,47 @@ const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
   },
 }
 
-function buildSystemPrompt(locale: string) {
+function buildSystemPrompt(mode: InterpretMode, locale: string) {
   const lang = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  return `你是“幽默隐士”，一位见多识广的紫微斗数解析大师。
+  const shared = `你是“幽默隐士”，一位见多识广的紫微斗数解析大师。
 风格：结论先行、简洁务实、温和通透；能把星曜和宫位术语翻译成现实场景，不卖焦虑、不给宿命论。
 规则：只基于命盘结构解读，不预测确定事件，不用绝对断语，不提供医疗、法律或投资建议。${lang.system}
 
 这次只解读用户指定的命盘元素：先给一句结论，再说明星曜与宫位的结构原因，最后给一句现实校准。
 输出一段 70-140 字的纯文本；不要标题、列表、提问、复述标签，也不要展开其他命盘部分。`
+
+  if (mode === 'target') {
+    return shared
+  }
+
+  return `${shared}
+
+请生成完整紫微命盘分析报告。输出 1000-1600 字纯文本，按以下标签逐行分段，标签后换行：
+总论：
+性格与结构：
+事业：
+财富：
+感情：
+身心节奏：
+大限流年：
+行动清单：
+
+每段必须绑定宫位、星曜亮度、四化或运限证据；行动清单用 2-4 行“- ”开头。不要 JSON、Markdown 标题、代码块或多余开场白。`
 }
 
 function buildUserPrompt(body: InterpretBody, chartContext: string) {
   const locale = body.locale || 'zh-CN'
   const lang = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
+
+  if (body.mode === 'full') {
+    return `请基于以下完整紫微命盘摘要，生成全盘 AI 分析报告。
+
+【完整命盘】
+${chartContext}
+
+请覆盖十二宫结构、主星与辅星、生年四化、大限与当前运限，并给出现实化行动建议。${lang.user}`
+  }
+
   const target = body.target || {}
   const label = (target.label || '命盘元素').slice(0, 160)
   const section = (target.section || '紫微命盘').slice(0, 120)
@@ -102,12 +134,19 @@ function buildChartContext(chart: ZiweiChartResult) {
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<InterpretBody>(event)
+  const mode = body?.mode === 'full' ? 'full' : 'target'
 
   if (!validateChart(body?.chart)) {
     throw createError({ statusCode: 400, statusMessage: 'Missing or invalid Ziwei chart' })
   }
-  if (!body?.target?.label?.trim()) {
+  if (mode === 'target' && !body?.target?.label?.trim()) {
     throw createError({ statusCode: 400, statusMessage: 'Missing interpretation target' })
+  }
+  if (mode === 'full') {
+    const session = await getAuthSession(event)
+    if (!session?.user) {
+      throw createError({ statusCode: 401, statusMessage: 'Sign in to view the full report' })
+    }
   }
 
   const config = useRuntimeConfig()
@@ -118,8 +157,8 @@ export default defineEventHandler(async (event) => {
   const locale = body.locale || 'zh-CN'
   const isOpenAi = config.aiProvider === 'openai' || config.aiProvider === 'newapi' || config.aiProvider === 'gptniux'
   const configuredTokens = Number(config.aiMaxTokens) || 8192
-  const maxTokens = Math.min(1024, configuredTokens)
-  const systemPrompt = buildSystemPrompt(locale)
+  const maxTokens = Math.min(mode === 'full' ? 12000 : 1024, configuredTokens)
+  const systemPrompt = buildSystemPrompt(mode, locale)
   const userPrompt = buildUserPrompt(body, buildChartContext(body.chart!))
 
   const upstreamBody = isOpenAi
