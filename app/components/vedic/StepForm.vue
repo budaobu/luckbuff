@@ -353,8 +353,8 @@ onMounted(() => {
     <UButton
       type="submit"
       color="warning"
-      variant="soft"
-      class="w-full justify-center"
+      block
+      class="shadow-lg shadow-[var(--accent-shadow)] hover:shadow-[var(--accent-shadow-hover)] transition-all duration-300"
       size="lg"
     >
       <template #leading>
