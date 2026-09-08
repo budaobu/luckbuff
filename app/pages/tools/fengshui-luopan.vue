@@ -7,7 +7,7 @@
           <h1 class="flp-title">{{ $t('fengshuiLuopan.title') }}</h1>
           <p class="flp-subtitle">{{ $t('fengshuiLuopan.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/paipan')" class="flp-back">
+        <NuxtLink :to="localePath('/chart')" class="flp-back">
           <UIcon name="i-heroicons-arrow-left" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>

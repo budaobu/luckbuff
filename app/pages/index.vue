@@ -313,12 +313,7 @@ const liuNianData = computed(() => {
   }
 })
 
-const homeCollections = computed(() => toolDirectoryGroups.value.map(group => group.id === 'special'
-  ? {
-      ...group,
-      links: group.links.filter(link => link.path !== '/paipan'),
-    }
-  : group))
+const homeCollections = computed(() => toolDirectoryGroups.value)
 
 const heroEntries = [
   {

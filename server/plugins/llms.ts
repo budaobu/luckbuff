@@ -6,9 +6,8 @@ export default defineNitroPlugin((nitroApp) => {
     const routeDescriptions: Record<string, { title: string; description: string; category: string }> = {
       '/': { title: 'Home', description: 'Platform landing page showcasing all available divination and metaphysics tools', category: 'other' },
       '/tools': { title: 'Metaphysics Analysis', description: 'Analysis tools for Bazi, Ziwei, Liu Yao, Qimen, Liu Ren, feng shui, Tarot and related readings', category: 'tools' },
-      '/chart': { title: 'Charting Tools', description: 'Structured destiny-chart tools based on birth date, hour, place and gender', category: 'tools' },
+      '/chart': { title: 'Charting Tools', description: 'Charting directory for Bazi, Ziwei, Vedic astrology and related structured natal and destiny chart tools', category: 'tools' },
       '/special': { title: 'Special Topics', description: 'Scenario-based collections of divination, timing, naming, feng shui and compatibility tools', category: 'tools' },
-      '/paipan': { title: 'Charting Tools', description: 'Structured destiny-chart tools based on birth date, hour, place and gender', category: 'tools' },
       '/tools/bazi-paipan': { title: 'Bazi Chart', description: 'Generate a detailed Bazi chart with solar and lunar birth data, four pillars, hidden stems, Na Yin, Five Elements, symbolic stars and decade luck cycles', category: 'tools' },
       '/tools/qimen-paipan': { title: 'Qimen Dunjia Chart', description: 'Generate a structured Qimen Dunjia chart from time and timezone, with Four Pillars, Xun Kong, nine palaces, heaven and earth stems, stars, doors, gods, and classical patterns', category: 'tools' },
       '/tools/liuren-paipan': { title: 'Da Liu Ren Chart', description: 'Generate a complete Da Liu Ren chart with four pillars, month general, heaven and earth boards, four classes, three transmissions, hidden stems, gods, and symbolic stars', category: 'tools' },

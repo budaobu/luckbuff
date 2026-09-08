@@ -24,7 +24,7 @@ useSeoMeta({
   title: () => `${t('seo.chartTitle')} - ${siteName}`,
   description: t('seo.chartDesc'),
   keywords: t('seo.chartKeywords'),
-  ogTitle: () => `${t('seo.chartOgTitle')} - ${siteName}`,
+  ogTitle: `${t('seo.chartOgTitle')} - ${siteName}`,
   ogDescription: t('seo.chartOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',

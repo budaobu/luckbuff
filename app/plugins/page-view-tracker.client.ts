@@ -9,7 +9,6 @@ const HUB_PATHS = new Set([
   '/tools',
   '/chart',
   '/special',
-  '/paipan',
   '/insights',
   '/astrology',
   '/fortune-telling',

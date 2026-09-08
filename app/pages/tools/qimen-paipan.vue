@@ -7,7 +7,7 @@
           <h1 class="qmp-title">{{ $t('qimenPaipan.title') }}</h1>
           <p class="qmp-subtitle">{{ $t('qimenPaipan.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/paipan')" class="qmp-back">
+        <NuxtLink :to="localePath('/chart')" class="qmp-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>
