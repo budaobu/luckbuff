@@ -76,6 +76,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/ziwei-paipan',
     },
     {
+      icon: 'i-heroicons-viewfinder-circle',
+      titleKey: 'fengshuiLuopan.title',
+      descKey: 'fengshuiLuopan.subtitle',
+      ctaKey: 'fengshuiLuopan.action.start',
+      path: '/tools/fengshui-luopan',
+    },
+    {
       icon: 'i-heroicons-globe-asia-australia',
       titleKey: 'vpc.title',
       descKey: 'vpc.subtitle',

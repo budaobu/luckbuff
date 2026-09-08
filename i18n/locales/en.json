@@ -700,6 +700,11 @@
     "xShareHint": "Attaches the poster via native share when supported, otherwise opens your text and link in a new X tab"
   },
   "seo": {
+    "fengshuiLuopanTitle": "Electronic Feng Shui Luopan_Mobile 3D Direction Chart",
+    "fengshuiLuopanDesc": "A mobile 3D Feng Shui luopan powered by the magnetometer, gyroscope and accelerometer. See heading, 24 mountains, trigrams, stems, branches and five elements in real time.",
+    "fengshuiLuopanKeywords": "electronic feng shui luopan,feng shui compass,3D luopan,24 mountains,bagua direction,mobile compass,magnetic heading",
+    "fengshuiLuopanOgTitle": "Electronic Feng Shui Luopan | ososn",
+    "fengshuiLuopanOgDesc": "Combine real-time phone orientation with traditional luopan rings for the 24 mountains and trigrams.",
     "mangpaiBaziTitle": "Blind-School BaZi Chart & Twelve Year Gods",
     "mangpaiBaziDesc": "A blind-school BaZi tool that reuses four-pillar and luck-cycle calculations, maps twelve annual gods, and reads family, career, wealth, marriage, wellbeing tendencies and timing through imagery and work logic. Entertainment reference only.",
     "mangpaiBaziKeywords": "blind school bazi, BaZi chart, twelve year gods, four pillars, annual timing, family reading",
@@ -1962,6 +1967,86 @@
       "verdictCaution": "Caution",
       "verdictNeutral": "Mixed",
       "footerNote": "Qimen Dunjia is a traditional Chinese divination art. This AI-generated report is for cultural and entertainment reference only, and is not professional advice."
+    }
+  },
+  "fengshuiLuopan": {
+    "title": "Electronic Feng Shui Luopan",
+    "subtitle": "Use mobile orientation sensors with a physical 3D luopan mapped to the 24 mountains, trigrams, stems, branches and elements",
+    "action": {
+      "start": "Allow device orientation and start",
+      "retry": "Try again",
+      "recalibrate": "Recalibrate"
+    },
+    "status": {
+      "detecting": "Checking device capability",
+      "detectingMessage": "After the client is ready, the browser is checked for reliable compass data.",
+      "browserUnsupported": "This browser does not support the electronic compass",
+      "browserUnsupportedMessage": "Open this page in mobile Safari or Chrome with device orientation sensor support.",
+      "permissionRequired": "Device orientation permission required",
+      "permissionRequiredMessage": "The luopan needs magnetometer, gyroscope and accelerometer data. You can authorize access after tapping.",
+      "permissionDenied": "Device orientation is unavailable",
+      "permissionDeniedMessage": "Allow orientation sensors in browser or system settings, then try again.",
+      "calibrating": "Calibrating luopan",
+      "initializing": "Initializing the board",
+      "initializingMessage": "Sensor data is available. Feng shui rings are expanding and the pointer is stabilizing.",
+      "active": "Luopan active",
+      "sensorError": "Unable to get device direction",
+      "sensorErrorMessage": "No reliable absolute orientation data was received. Use a real mobile device and recalibrate."
+    },
+    "calibration": {
+      "level": "Keep the phone level",
+      "rotate": "Rotate slowly in a full circle",
+      "stabilize": "Wait for the luopan to settle",
+      "levelHint": "Move away from metal and magnetic accessories, then hold the phone as level as possible.",
+      "rotateHint": "Stay level and rotate slowly through a full circle so the luopan can sample every bearing.",
+      "stabilizeHint": "The board is settling. Keep the phone steady and avoid quick movements."
+    },
+    "desktop": {
+      "title": "Please open on your phone",
+      "lead": "The electronic Feng Shui luopan needs your phone's built-in sensors. A desktop device cannot provide complete direction awareness.",
+      "explain": "This is not an ordinary web compass. It reads device sensor data in real time, determines the phone's current facing and maps it to the 24 mountains, trigrams and other feng shui rings.",
+      "magnetometer": "Magnetometer",
+      "magnetometerDesc": "Senses Earth's magnetic field and is the core sensor for finding magnetic north.",
+      "gyroscope": "Gyroscope",
+      "gyroscopeDesc": "Senses rotation and angular velocity so the luopan follows the phone smoothly.",
+      "accelerometer": "Accelerometer",
+      "accelerometerDesc": "Senses posture and gravity to help determine whether the phone is level.",
+      "limit": "The current desktop browser environment cannot reliably provide the complete sensor capability this tool needs.",
+      "scan": "Scan with your phone to continue",
+      "scanHint": "Open with mobile Safari, Chrome, or another browser that supports orientation sensors."
+    },
+    "reading": {
+      "heading": "Current magnetic heading",
+      "sensorNote": "Phone sensor precision is limited; the reading is approximate",
+      "mountain": "24 Mountains",
+      "trigram": "Trigram",
+      "element": "Element",
+      "ganzhi": "Stem-branch signal"
+    },
+    "profile": {
+      "title": "Board composition",
+      "complete": "Complete",
+      "reading": "Reading",
+      "compact": "Compact"
+    },
+    "rings": {
+      "trigrams": "Trigrams",
+      "mountains": "24 Mountains",
+      "stems": "Heavenly stems",
+      "branches": "Earthly branches",
+      "elements": "Five elements"
+    },
+    "sensor": {
+      "title": "Sensor status",
+      "level": "Phone level",
+      "magnetic": "Magnetic environment",
+      "interference": "Possible magnetic interference: move away from vehicles, metal objects or magnetic phone accessories, then recalibrate."
+    },
+    "help": {
+      "title": "Usage boundary",
+      "accuracy": "The compass is based on magnetic north from the phone magnetometer. Precision depends on device and environment and is not professional surveying equipment.",
+      "trueNorth": "The displayed heading is magnetic north. No true-north magnetic declination correction is applied.",
+      "culture": "The feng shui rings provide traditional direction and cultural reference only, not professional advice."
     }
   },
   "qimenPaipan": {

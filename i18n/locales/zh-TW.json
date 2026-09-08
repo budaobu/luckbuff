@@ -700,6 +700,11 @@
     "xShareHint": "支援原生分享時將附帶分享圖，否則在 X 新分頁中開啟文案與連結"
   },
   "seo": {
+    "fengshuiLuopanTitle": "電子風水羅盤_手機3D羅盤方位排盤",
+    "fengshuiLuopanDesc": "用手機磁力計、陀螺儀與加速度計驅動的電子風水羅盤，即時查看方位角、二十四山、八卦、天干、地支與五行。",
+    "fengshuiLuopanKeywords": "電子風水羅盤,風水羅盤,3D羅盤,二十四山,八卦方位,手機羅盤,磁北方位",
+    "fengshuiLuopanOgTitle": "電子風水羅盤 | ososn",
+    "fengshuiLuopanOgDesc": "手機即時方向感知與傳統風水羅盤盤層結合，查看二十四山與八卦對應。",
     "mangpaiBaziTitle": "盲派八字排盤_十二神煞流年直斷",
     "mangpaiBaziDesc": "盲派八字工具復用四柱大運排盤，新增十二神煞流年環，以取象、做功、賓主體用與應期解讀六親、事業、財運、婚姻與健康傾向；娛樂參考。",
     "mangpaiBaziKeywords": "盲派八字,盲派八字排盤,十二神煞,四柱八字,流年應期,六親精斷",
@@ -1912,6 +1917,86 @@
       "verdictCaution": "謹慎",
       "verdictNeutral": "參詳",
       "footerNote": "奇門遁甲為中國傳統術數，本報告由 AI 生成，僅供文化娛樂參考，不代替專業意見"
+    }
+  },
+  "fengshuiLuopan": {
+    "title": "電子風水羅盤",
+    "subtitle": "用手機感測器驅動實體感 3D 羅盤，即時對應二十四山、八卦、干支與五行",
+    "action": {
+      "start": "允許裝置方向並開始",
+      "retry": "重新嘗試",
+      "recalibrate": "重新校準"
+    },
+    "status": {
+      "detecting": "正在偵測裝置能力",
+      "detectingMessage": "用戶端準備完成後會判斷目前瀏覽器是否能提供可靠的羅盤資料。",
+      "browserUnsupported": "目前瀏覽器不支援電子羅盤",
+      "browserUnsupportedMessage": "請使用支援裝置方向感測器的手機 Safari 或 Chrome 開啟。",
+      "permissionRequired": "需要允許使用裝置方向",
+      "permissionRequiredMessage": "羅盤需要讀取磁力計、陀螺儀和加速度計的方向資料。你可以在點擊後授權。",
+      "permissionDenied": "無法存取裝置方向",
+      "permissionDeniedMessage": "請在瀏覽器或系統設定中允許方向感測器權限，然後重新嘗試。",
+      "calibrating": "正在校準羅盤",
+      "initializing": "正在初始化盤面",
+      "initializingMessage": "感測器訊號已可用，正在展開風水盤層並穩定指針。",
+      "active": "羅盤已啟用",
+      "sensorError": "無法取得裝置方向",
+      "sensorErrorMessage": "未收到可靠的絕對方向資料。請確認在真實行動裝置上使用，並重新校準。"
+    },
+    "calibration": {
+      "level": "保持手機水平",
+      "rotate": "緩慢旋轉一週",
+      "stabilize": "等待羅盤穩定",
+      "levelHint": "請先遠離金屬和磁吸配件，把手機盡量放平。",
+      "rotateHint": "保持水平，緩慢轉動一整圈，讓羅盤取樣所有方位。",
+      "stabilizeHint": "盤面正在穩定。請繼續持穩手機，避免快速晃動。"
+    },
+    "desktop": {
+      "title": "請使用手機開啟",
+      "lead": "電子風水羅盤需要呼叫手機內建感測器，桌面裝置無法提供完整的方向感知能力。",
+      "explain": "電子風水羅盤並不是普通的網頁指南針。它需要即時讀取裝置感測器資料，判斷手機目前朝向，並將方向映射到二十四山、八卦等風水盤層。",
+      "magnetometer": "磁力計",
+      "magnetometerDesc": "感知地磁場方向，是判斷磁北方向的核心感測器。",
+      "gyroscope": "陀螺儀",
+      "gyroscopeDesc": "感知裝置旋轉和角速度，讓羅盤更平滑地跟隨手機轉動。",
+      "accelerometer": "加速度計",
+      "accelerometerDesc": "感知裝置姿態和重力方向，幫助判斷手機是否保持水平。",
+      "limit": "目前桌面瀏覽器環境無法可靠提供本工具所需要的完整感測器能力。",
+      "scan": "使用手機掃碼繼續",
+      "scanHint": "請使用手機 Safari / Chrome 等支援裝置方向感測器的瀏覽器開啟。"
+    },
+    "reading": {
+      "heading": "目前磁北方位",
+      "sensorNote": "手機感測器精度有限，讀數為近似值",
+      "mountain": "二十四山",
+      "trigram": "八卦",
+      "element": "五行",
+      "ganzhi": "干支訊號"
+    },
+    "profile": {
+      "title": "盤面組合",
+      "complete": "完整",
+      "reading": "讀數",
+      "compact": "簡潔"
+    },
+    "rings": {
+      "trigrams": "八卦",
+      "mountains": "二十四山",
+      "stems": "天干",
+      "branches": "地支",
+      "elements": "五行"
+    },
+    "sensor": {
+      "title": "感測器狀態",
+      "level": "手機水平",
+      "magnetic": "磁場環境",
+      "interference": "疑似磁場干擾：請遠離車輛、金屬物體或磁吸手機殼後重新校準。"
+    },
+    "help": {
+      "title": "使用邊界與說明",
+      "accuracy": "羅盤以手機磁力計提供的磁北為基礎，精度受裝置和環境影響，不能替代專業測量儀器。",
+      "trueNorth": "目前顯示磁北方位，未做真北磁偏角修正。",
+      "culture": "風水盤層用於傳統方位表達和文化參考，不構成任何專業建議。"
     }
   },
   "qimenPaipan": {
