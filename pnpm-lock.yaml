@@ -70,6 +70,9 @@ importers:
       jsonrepair:
         specifier: ^3.15.0
         version: 3.15.0
+      liuren-ts-lib:
+        specifier: 3.1.0
+        version: 3.1.0
       lunar:
         specifier: ^2.0.0
         version: 2.0.0
@@ -5130,6 +5133,9 @@ packages:
   listhen@1.9.1:
     resolution: {integrity: sha512-4EhoyVcXEpNlY5HJRSQpH7Rba94M8N2JmI62ePjl0lrJKXSfG0F1FAgHGxBoz/T3pe41sUEwkIRRIcaUL0/Ofw==}
     hasBin: true
+
+  liuren-ts-lib@3.1.0:
+    resolution: {integrity: sha512-YiT2HB0jEPSaHGH1g+TKAPhXBlj0T+ccr4YHY6AhpOw5byIKgo6TB/0IUzNGFoQFagGCebxs6yItaanKJfxaIQ==}
 
   load-bmfont@1.4.2:
     resolution: {integrity: sha512-qElWkmjW9Oq1F9EI5Gt7aD9zcdHb9spJCW1L/dmPf7KzCCEJxq8nhHz5eCgI9aMf7vrG/wyaCqdsI+Iy9ZTlog==}
@@ -11888,6 +11894,10 @@ snapshots:
       uqr: 0.1.3
     transitivePeerDependencies:
       - srvx
+
+  liuren-ts-lib@3.1.0:
+    dependencies:
+      tyme4ts: 1.4.4
 
   load-bmfont@1.4.2:
     dependencies:

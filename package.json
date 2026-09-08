@@ -32,6 +32,7 @@
     "drizzle-orm": "^0.45.2",
     "iztro": "2.6.1",
     "jsonrepair": "^3.15.0",
+    "liuren-ts-lib": "3.1.0",
     "lunar": "^2.0.0",
     "lunar-javascript": "^1.7.0",
     "marked": "^15.0.7",
