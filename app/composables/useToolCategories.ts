@@ -55,6 +55,13 @@ const chartingToolCategory: ToolCategory = {
       recommended: true,
     },
     {
+      icon: 'i-heroicons-sparkles',
+      titleKey: 'qizhengChart.title',
+      descKey: 'qizhengChart.subtitle',
+      ctaKey: 'qizhengChart.submit',
+      path: '/tools/qizheng-paipan',
+    },
+    {
       icon: 'i-heroicons-square-3-stack-3d',
       titleKey: 'qimenPaipan.title',
       descKey: 'qimenPaipan.subtitle',
