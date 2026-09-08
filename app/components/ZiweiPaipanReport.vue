@@ -259,7 +259,29 @@
 
             <footer class="zp-insight-foot">
               <small>{{ $t('baziChart.aiDisclaimer') }}</small>
+              <button
+                v-if="insightMode === 'target' && insightStatus === 'complete'"
+                type="button"
+                @click="handleFullReport"
+              >
+                <UIcon :name="isLoggedIn ? 'i-heroicons-arrow-right-circle' : 'i-heroicons-lock-closed'" class="h-4 w-4" />
+                {{ insightFullLabel }}
+              </button>
             </footer>
+
+            <div v-if="authRequired" class="zp-insight-auth">
+              <p>{{ $t('ziweiChart.aiLoginRequired') }}</p>
+              <div>
+                <button type="button" @click="signInWithGoogle(route.fullPath)">
+                  <UIcon name="i-simple-icons-google" class="h-4 w-4" />
+                  Google
+                </button>
+                <button type="button" @click="signInWithTelegram(route.fullPath)">
+                  <UIcon name="i-simple-icons-telegram" class="h-4 w-4" />
+                  Telegram
+                </button>
+              </div>
+            </div>
           </section>
         </div>
       </Transition>
@@ -271,15 +293,23 @@
 import type { ZiweiChartResult } from '~~/server/utils/tools/ziwei-chart'
 
 const props = defineProps<{ result: ZiweiChartResult }>()
+const route = useRoute()
 const { t, locale } = useI18n()
+const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 const reportRoot = ref<HTMLElement>()
 
 const insightOpen = ref(false)
+const insightMode = ref<'target' | 'full'>('target')
 const insightTitle = ref('')
 const insightContent = ref('')
 const insightStatus = ref<'connecting' | 'streaming' | 'complete' | 'error'>('connecting')
 const insightError = ref('')
+const authRequired = ref(false)
 let insightAbort: AbortController | null = null
+
+const insightFullLabel = computed(() => isLoggedIn.value
+  ? t('ziweiChart.aiFullReport')
+  : t('ziweiChart.aiFullReportLogin'))
 
 const TARGET_SELECTORS = [
   '.zp-palace',
@@ -384,6 +414,21 @@ function activateTarget(node: HTMLElement) {
   })
 }
 
+async function startFullReport() {
+  authRequired.value = false
+  insightMode.value = 'full'
+  insightTitle.value = t('ziweiChart.aiFullReportTitle')
+  await streamInsight({ mode: 'full', title: insightTitle.value })
+}
+
+function handleFullReport() {
+  if (isLoggedIn.value) {
+    void startFullReport()
+    return
+  }
+  authRequired.value = true
+}
+
 function handleReportClick(event: MouseEvent) {
   if ((event.target as HTMLElement).closest('button, a')) return
   const target = (event.target as HTMLElement).closest<HTMLElement>('[data-zp-ai-target]')
@@ -397,16 +442,18 @@ function handleReportKeydown(event: KeyboardEvent) {
 }
 
 async function requestInsight(target: { selector: string, label: string, section: string, group: string, content: string }) {
-  await streamInsight({ target, title: target.label })
+  await streamInsight({ mode: 'target', target, title: target.label })
 }
 
-async function streamInsight(payload: { target: Record<string, string>, title?: string }) {
+async function streamInsight(payload: { mode: 'target' | 'full', target?: Record<string, string>, title?: string }) {
   insightAbort?.abort()
   insightAbort = new AbortController()
   insightOpen.value = true
+  insightMode.value = payload.mode
   insightTitle.value = payload.title || ''
   insightContent.value = ''
   insightError.value = ''
+  authRequired.value = false
   insightStatus.value = 'connecting'
 
   try {
@@ -482,8 +529,10 @@ function closeInsight() {
   insightAbort?.abort()
   insightAbort = null
   insightOpen.value = false
+  insightMode.value = 'target'
   insightStatus.value = 'connecting'
   insightContent.value = ''
+  authRequired.value = false
 }
 
 watch(() => props.result, async () => {
@@ -659,14 +708,66 @@ defineExpose({ reportRoot })
 }
 
 .zp-insight-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 12px 20px;
   border-top: 1px solid var(--border-subtle);
 }
 
 .zp-insight-foot small {
+  min-width: 0;
   color: var(--text-placeholder);
   font-size: 10px;
   line-height: 1.4;
+}
+
+.zp-insight-foot button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.zp-insight-auth {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-card);
+}
+
+.zp-insight-auth p {
+  margin: 0 0 9px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.zp-insight-auth div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.zp-insight-auth button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--surface-input);
+  color: var(--text-body);
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .zp-insight-enter-active,
