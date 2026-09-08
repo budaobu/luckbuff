@@ -62,6 +62,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/qimen-paipan',
     },
     {
+      icon: 'i-heroicons-circle-stack',
+      titleKey: 'liurenPaipan.title',
+      descKey: 'liurenPaipan.subtitle',
+      ctaKey: 'liurenPaipan.submit',
+      path: '/tools/liuren-paipan',
+    },
+    {
       icon: 'i-heroicons-sparkles',
       titleKey: 'ziweiChart.title',
       descKey: 'ziweiChart.subtitle',
