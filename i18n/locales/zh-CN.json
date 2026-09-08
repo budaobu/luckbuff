@@ -715,6 +715,11 @@
     "newSchoolBaziKeywords": "新派八字,八字新派,新派 命理,新派八字排盘,旺衰用神,四柱八字,隔不作用",
     "newSchoolBaziOgTitle": "新派八字排盘 | ososn",
     "newSchoolBaziOgDesc": "用新派本气、邻位作用与旺衰用神看四柱命局。",
+    "shichuSuimeiTitle": "四柱推命排盘_命式与大运流年计算",
+    "shichuSuimeiDesc": "免费日本四柱推命排盘工具，在线生成命式，查看年柱、節柱、日柱、時柱、通変星、十二運、空亡与大运流年，支持 AI 解读；登录后可生成完整报告。",
+    "shichuSuimeiKeywords": "四柱推命排盘,四柱推命,四柱推命命式,四柱推命计算,四柱推命计算器,四柱推命免费,四柱推命 計算方法,四柱推命 計算機,四柱推命早見表,四柱推命 大運表,四柱推命 空亡,通変星,十二運,空亡自动计算,大运自动计算,年运,AI四柱推命",
+    "shichuSuimeiOgTitle": "四柱推命排盘 | ososn",
+    "shichuSuimeiOgDesc": "免费生成日本四柱推命命式，覆盖通変星、十二運、空亡与大运流年。",
     "homeTitle": "在线命理排盘算命_紫微斗数·八字·吠陀占星·梅花易数",
     "homeDesc": "ososn 是免费在线命理推演平台，提供八字、紫微、六爻、奇门遁甲、塔罗、灵签等 AI 解读工具，仅供文化娱乐参考。",
     "homeKeywords": "在线算命,免费排盘,紫微斗数,四柱八字,吠陀占星,梅花易数,六爻预测,命盘解读,在线占卜,命理工具",
@@ -2331,7 +2336,8 @@
   "language": {
     "zhCN": "简体中文",
     "zhTW": "繁體中文",
-    "en": "English"
+    "en": "English",
+    "ja": "日本語"
   },
   "baziForm": {
     "selectProfile": "选择档案",
@@ -10718,7 +10724,8 @@
   "languageShort": {
     "zhCN": "简",
     "zhTW": "繁",
-    "en": "EN"
+    "en": "EN",
+    "ja": "日"
   },
   "numericEnergyTopic": {
     "title": "数字能量",
@@ -11342,6 +11349,43 @@
     "timeIndex10": "戌时",
     "timeIndex11": "亥时",
     "timeIndex12": "晚子时"
+  },
+  "shichuSuimei": {
+    "system": "四柱推命 · 日本命式",
+    "title": "四柱推命排盘",
+    "subtitle": "输入出生年月日、时辰、出生地点与性别，生成日本四柱推命命式与运势结构",
+    "formTitle": "出生信息",
+    "submit": "生成命式",
+    "chartTitle": "四柱推命命式",
+    "chartSubtitle": "年柱・節柱・日柱・時柱与命式构成",
+    "calendar": "曆法",
+    "dayBoundary": "子時換日",
+    "solar": "太陽暦",
+    "location": "出生地",
+    "trueSolar": "真太陽時",
+    "copy": "コピー",
+    "nayin": "納音",
+    "qiyun": "起運",
+    "qiyunDate": "起運日",
+    "dayunDirection": "大運順逆",
+    "methodology": "排盤依據",
+    "scorePolicy": "評分口徑",
+    "stemTenGod": "通変星（天干）",
+    "hiddenStems": "蔵干",
+    "hiddenTenGods": "蔵干通変星",
+    "diShi": "十二運",
+    "xunKong": "空亡",
+    "tenGodRatio": "通変星构成",
+    "shenshaTitle": "神殺",
+    "shenshaCombination": "神殺组合",
+    "patternStatus": "格局",
+    "dayunTitle": "大運・年運",
+    "primaryUse": "用神",
+    "supportUse": "辅助用神",
+    "avoidGod": "忌神",
+    "school": "流派",
+    "monthRule": "节气规则",
+    "aiFullReportTitle": "完整四柱推命 AI 分析报告"
   },
   "baziChart": {
     "title": "八字排盘",

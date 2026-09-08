@@ -97,6 +97,20 @@ const sitemapUrls = [
       _i18nTransform: true,
       ...SITEMAP_OVERRIDES[loc],
     })),
+  {
+    loc: '/ja/tools/shichu-suimei',
+    changefreq: 'weekly' as const,
+    priority: 0.8,
+    _sitemap: 'sitemap-zh-CN',
+    _i18nTransform: false,
+    alternatives: [
+      { hreflang: 'x-default', href: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ososn.com'}/tools/shichu-suimei` },
+      { hreflang: 'zh-CN', href: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ososn.com'}/tools/shichu-suimei` },
+      { hreflang: 'zh-TW', href: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ososn.com'}/zh-TW/tools/shichu-suimei` },
+      { hreflang: 'en', href: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ososn.com'}/en/tools/shichu-suimei` },
+      { hreflang: 'ja-JP', href: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ososn.com'}/ja/tools/shichu-suimei` },
+    ],
+  },
 ]
 
 export default defineNuxtConfig({
@@ -160,6 +174,7 @@ export default defineNuxtConfig({
       { code: 'zh-CN', name: '简体中文', file: 'zh-CN.json', language: 'zh-CN' },
       { code: 'zh-TW', name: '繁體中文', file: 'zh-TW.json', language: 'zh-TW' },
       { code: 'en', name: 'English', file: 'en.json', language: 'en' },
+      { code: 'ja', name: '日本語', file: 'ja.json', language: 'ja-JP' },
     ],
     defaultLocale: 'zh-CN',
     strategy: 'prefix_except_default',

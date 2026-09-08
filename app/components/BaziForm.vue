@@ -72,7 +72,7 @@
           :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
         >
           <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-          {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+          {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
           <AppCalendar
@@ -248,7 +248,7 @@ const emit = defineEmits<{
 const { profiles, defaultProfile } = useProfiles()
 const store = useProfilesStore()
 const localePath = useLocalePath()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const selectedProfileId = ref<string | null>(null)
 
@@ -274,7 +274,9 @@ const hourOptions = computed(() => props.useTimeIndex
       value: index,
     }))
   : SHICHEN_OPTIONS.map(s => ({
-      label: `${s.label}（${s.range}）`,
+      label: locale.value === 'ja'
+        ? `${s.dizhi}時（${s.range}）`
+        : `${s.label}（${s.range}）`,
       value: s.dizhi,
     })))
 
@@ -290,7 +292,7 @@ const birthGanZhi = ref('')
 const { dateToGanZhi } = useBaziCalc()
 
 const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
+const dateFormatter = computed(() => new DateFormatter(locale.value === 'ja' ? 'ja-JP' : 'zh-CN', { dateStyle: 'long' }))
 const calendarDate = ref<CalendarDate | undefined>(undefined)
 
 function syncBirthDateFromCalendar() {
