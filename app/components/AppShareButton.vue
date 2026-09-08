@@ -23,13 +23,7 @@ async function handleShare() {
   if (props.disabled || generating.value) return
   const { share } = useShare()
 
-  // 截图期间 useShare 会把隐藏的分享目标临时钉进视口渲染（fixed+top:0），
-  // 约 1-3 秒。盖一层全屏遮罩挡住这层闪现，同时给用户「生成中」的明确反馈。
   generating.value = true
-  // 关键：等遮罩真正渲染上屏后才开始 share()。否则 html-to-image 模块若已缓存，
-  // useShare 可能在遮罩还没进 DOM 的那一帧就把报告 pin 进视口，造成一闪。
-  await nextTick()
-  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
   try {
     const result = await share({
       tool: props.tool,
@@ -194,9 +188,6 @@ async function shareToX() {
       </template>
       {{ $t('common.shareResult') }}
     </UButton>
-
-    <!-- 全屏遮罩由 useShare 在截图期间统一创建（data-share-veil），
-         这里不再重复盖，避免双层遮罩。generating 仅用于按钮防重复点击。 -->
 
     <Teleport to="body">
       <Transition name="fade">

@@ -92,9 +92,13 @@ export interface ShareOptions {
   | 'ziwei-paipan'
   name?: string
   summary?: string
-  /** 直接传入 DOM 元素（推荐，不受 tab 切换影响） */
+  /** 覆盖当前页面路径；一般留给特殊入口使用 */
+  path?: string
+  /** 覆盖二维码目标；默认始终指向当前工具页 URL */
+  shareUrl?: string
+  /** 兼容旧调用方；Canvas 分享图不再消费结果页 DOM */
   shareTarget?: HTMLElement
-  /** CSS 选择器（兼容旧用法，但如果目标在隐藏 tab 中会找不到） */
+  /** 兼容旧调用方；Canvas 分享图不再消费结果页 DOM */
   shareTargetSelector?: string
   filename: string
   /** i18n 的 t 函数，必须从组件 setup 中传入 */
@@ -103,6 +107,7 @@ export interface ShareOptions {
 
 export interface ShareResult {
   copyText: string
+  /** 兼容现有调用方属性名；内容是 Canvas 合成海报 */
   screenshotDataUrl: string | null
   filename: string
   screenshotError: string | null
@@ -110,8 +115,7 @@ export interface ShareResult {
 
 export function useShare() {
   async function share(options: ShareOptions): Promise<ShareResult> {
-    const { toCanvas } = await import('html-to-image')
-    const { t, tool, name, summary, shareTarget, shareTargetSelector, filename } = options
+    const { t, tool, name, summary, filename } = options
 
     const toolNameMap: Record<string, string> = {
       bazi: '八字',
@@ -421,155 +425,35 @@ export function useShare() {
           : ''
     const copyText = `${hook}\n\n👉 ${url}${suffix ? `\n${suffix}` : ''}`
 
-    // 生成分享图
-    const el = shareTarget ?? (shareTargetSelector ? document.querySelector(shareTargetSelector) as HTMLElement | null : null)
+    // 分享图是固定背景上的分类版式，不再读取或克隆任何结果页 DOM。
     let screenshotDataUrl: string | null = null
     let screenshotError: string | null = null
 
-    if (el) {
-      const hiddenChain: { el: HTMLElement; display: string; visibility: string; position: string }[] = []
-      const originalFilters: { el: HTMLElement; filter: string }[] = []
-      let offscreen: { position: string; left: string; top: string; zIndex: string } | null = null
-      let placeholder: HTMLElement | null = null
-      let veil: HTMLElement | null = null
+    try {
+      const posterContext = resolveSharePosterContext(
+        options.path || new URL(url, window.location.href).pathname,
+      )
+      const posterFeatureValues = ['1', '2', '3', '4'].map(index =>
+        t(`sharePoster.features.${posterContext?.categoryId ?? 'fortune-telling'}${index}`),
+      )
+      const posterFeatures: [string, string, string, string] = [
+        posterFeatureValues[0] ?? '',
+        posterFeatureValues[1] ?? '',
+        posterFeatureValues[2] ?? '',
+        posterFeatureValues[3] ?? '',
+      ]
 
-      try {
-        // 0. 截图前先用纯 DOM 同步盖一层全屏不透明遮罩（不依赖 Vue 渲染周期/Transition，
-        // 立即可见、无淡入透明窗口）。随后 useShare 会把隐藏报告 pin 进视口渲染约 1-3 秒，
-        // 没有这层遮罩用户会看到一层报告闪烁。遮罩在所有调用方（AppShareButton 及直接
-        // 调 useShare 的页面）统一生效，finally 里移除。
-        // 背景色取运行时实际生效值：--surface-bg（--surface-page 并不存在，见 main.css），
-        // 读不到再按亮暗模式兜底，保证不透明。
-        const rootStyle = window.getComputedStyle(document.documentElement)
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        const veilBg = rootStyle.getPropertyValue('--surface-bg').trim()
-          || rootStyle.getPropertyValue('--surface-page').trim()
-          || (isDark ? '#0a0a0f' : '#faf8f3')
-        veil = document.createElement('div')
-        veil.setAttribute('data-share-veil', '')
-        veil.style.cssText = `position:fixed;inset:0;z-index:9999;background:${veilBg};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;pointer-events:all;`
-        const veilText = document.createElement('p')
-        veilText.style.cssText = 'font-size:14px;color:#8a8577;letter-spacing:0.5px;'
-        veilText.textContent = t('share.generating')
-        veil.appendChild(veilText)
-        document.body.appendChild(veil)
-
-        // 1. 保存元素及其所有父节点的原始 display/visibility 值
-        // html-to-image 无法对 display:none 的元素截图（量出的尺寸为 0）
-        let cur: HTMLElement | null = el
-        while (cur) {
-          const computed = window.getComputedStyle(cur)
-          if (computed.display === 'none' || computed.visibility === 'hidden') {
-            hiddenChain.push({
-              el: cur,
-              display: cur.style.display,
-              visibility: cur.style.visibility,
-              position: cur.style.position,
-            })
-            cur.style.display = 'block'
-            cur.style.visibility = ''
-            if (computed.position === 'fixed') {
-              cur.style.position = 'absolute'
-            }
-          }
-          cur = cur.parentElement
-        }
-
-        // 2. v-show 隐藏目标显示期间会把页面撑高，先用占位兄弟保布局。
-        // 必须保持可见且在视口坐标内：Chrome 对 display:none 或完全在视口外的
-        // 元素不做完整渲染，html-to-image 克隆到的样式快照会缺内容，截出空白图。
-        // 元素高度常超过视口，absolute+scrollIntoView 会受最大滚动距离限制，
-        // 元素顶部被推出视口上方（实测 top:0 的元素在 maxScroll 页面上 rectTop<0）。
-        // 改用 fixed 定位强制进入视口渲染区，与滚动位置无关。
-        if (hiddenChain.length) {
-          const parent = el.parentNode
-          if (parent) {
-            placeholder = document.createElement('div')
-            placeholder.style.cssText = `width:${el.offsetWidth || 1080}px;height:${el.offsetHeight || 0}px;`
-            parent.insertBefore(placeholder, el)
-          }
-          offscreen = {
-            position: el.style.position,
-            left: el.style.left,
-            top: el.style.top,
-            zIndex: el.style.zIndex,
-          }
-          // 目标必须留在视口内（Chrome 对完全视口外的元素跳过渲染会截出空白），
-          // fixed 钉在视口内、z-index:-1 压到页面内容之下。可见性由上方第 0 步的
-          // 全屏遮罩（data-share-veil）挡住，用户不会看到它闪。
-          el.style.position = 'fixed'
-          el.style.left = '0px'
-          el.style.top = '0px'
-          el.style.zIndex = '-1'
-        }
-
-        // 3. 临时关闭 backdrop-blur 等 html-to-image 不支持的 CSS
-        const blurEls = el.querySelectorAll('[class*="backdrop-blur"]')
-        blurEls.forEach((blurEl) => {
-          const htmlEl = blurEl as HTMLElement
-          originalFilters.push({ el: htmlEl, filter: htmlEl.style.filter })
-          htmlEl.style.filter = 'none'
-        })
-
-        // 等待 canvas（Chart.js 等）完全渲染后再截图
-        // 1. 先等一帧让浏览器完成布局
-        await new Promise(resolve => requestAnimationFrame(resolve))
-        // 2. 触发 resize 让 Chart.js 重新计算 canvas 尺寸（从隐藏状态显示后尺寸可能不对）
-        window.dispatchEvent(new Event('resize'))
-        // 3. 再等一帧确保 resize 生效
-        await new Promise(resolve => requestAnimationFrame(resolve))
-        // 4. 等待 Chart.js 默认动画完成（1000ms）
-        await new Promise(resolve => setTimeout(resolve, 1200))
-
-        const bgColor = window.getComputedStyle(document.documentElement).getPropertyValue('--surface-bg').trim()
-          || window.getComputedStyle(document.documentElement).getPropertyValue('--surface-page').trim()
-          || (window.matchMedia('(prefers-color-scheme: dark)').matches ? '#0a0a0f' : '#f5f0e8')
-        const targetArea = el.offsetWidth * el.offsetHeight
-        const pixelRatio = Math.max(0.5, Math.min(2, Math.sqrt(16_000_000 / targetArea)))
-        const canvas = await toCanvas(el, {
-          backgroundColor: bgColor || '#0a0a0f',
-          pixelRatio,
-          cacheBust: true,
-        })
-
-        // 4. 添加水印（颜色随目标底色自适应：亮底用深墨、暗底用亮金）
-        const ctx = canvas.getContext('2d')!
-        const isLightBg = (() => {
-          const c = bgColor.replace('#', '')
-          if (c.length < 6) return false
-          const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16)
-          return (r * 299 + g * 587 + b * 114) / 1000 > 128
-        })()
-        ctx.font = `600 ${22 * 2}px 'Noto Serif SC', 'Songti SC', serif`
-        ctx.fillStyle = isLightBg ? 'rgba(46, 42, 36, 0.35)' : 'rgba(201, 162, 39, 0.45)'
-        ctx.textAlign = 'left'
-        ctx.fillText(`ososn · ${toolName}`, 48, canvas.height - 36)
-
-        screenshotDataUrl = canvas.toDataURL('image/png')
-      } catch (e: any) {
-        screenshotError = e?.message || String(e)
-      } finally {
-        // 无论成功失败，都必须恢复原始样式，否则 v-show="false" 的隐藏元素会永久可见
-        if (offscreen) {
-          el.style.position = offscreen.position
-          el.style.left = offscreen.left
-          el.style.top = offscreen.top
-          el.style.zIndex = offscreen.zIndex
-        }
-        placeholder?.remove()
-        hiddenChain.forEach(({ el, display, visibility, position }) => {
-          el.style.display = display
-          el.style.visibility = visibility
-          el.style.position = position
-        })
-        originalFilters.forEach(({ el, filter }) => {
-          el.style.filter = filter
-        })
-        // 最后移除全屏遮罩（目标已恢复原位、不再可见后再撤遮罩，避免闪烁）
-        veil?.remove()
-      }
-    } else {
-      screenshotError = t('share.screenshotError')
+      screenshotDataUrl = await generateSharePoster({
+        categoryId: posterContext?.categoryId,
+        title: posterContext ? t(posterContext.titleKey) : toolName,
+        subtitle: posterContext ? t(posterContext.descriptionKey) : (summary || toolName),
+        category: posterContext ? t(posterContext.categoryTitleKey) : 'ososn',
+        features: posterFeatures,
+        url: options.shareUrl || url,
+      })
+    }
+    catch (e: any) {
+      screenshotError = e?.message || t('share.screenshotError')
     }
 
     return { copyText, screenshotDataUrl, filename, screenshotError }

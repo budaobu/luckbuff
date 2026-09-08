@@ -35,7 +35,7 @@
         <p>{{ $t('vpc.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" ref="shareTargetRef" class="vc-report">
+      <div v-else-if="result" class="vc-report">
         <VedicPaipanReport :result="result" />
       </div>
 
@@ -44,10 +44,11 @@
           <template #leading><UIcon name="i-heroicons-arrow-path" class="h-4 w-4" /></template>
           {{ $t('common.retry') }}
         </UButton>
-        <UButton color="warning" variant="soft" @click="handleShare">
-          <template #leading><UIcon name="i-heroicons-share" class="h-4 w-4" /></template>
-          {{ $t('common.shareResult') }}
-        </UButton>
+        <AppShareButton
+          tool="vedic"
+          :summary="shareSummary"
+          filename="vedic-paipan-poster.png"
+        />
       </div>
     </div>
   </div>
@@ -68,7 +69,6 @@ const store = useProfilesStore()
 const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<VedicPaipanResult | null>(null)
 const formError = ref('')
-const shareTargetRef = ref<HTMLElement>()
 const formData = ref<VedicFormData>({
   birthDate: '',
   birthTime: '',
@@ -76,6 +76,11 @@ const formData = ref<VedicFormData>({
   gender: '',
   dimensions: ['core', 'career', 'love', 'annual'],
   timeUncertain: false,
+})
+
+const shareSummary = computed(() => {
+  if (!result.value) return undefined
+  return `${t('vpc.ascendant')} ${result.value.ascendant.signName} · ${result.value.dasha.currentMahadasha?.planet || ''}`
 })
 
 async function handleSubmit() {
@@ -118,23 +123,6 @@ function handleSaveProfile(id: string, values: Partial<Pick<UserProfile, 'gender
 function resetToForm() {
   phase.value = 'form'
   result.value = null
-}
-
-async function handleShare() {
-  if (!result.value) return
-  const { share } = useShare()
-  try {
-    await share({
-      tool: 'vedic',
-      summary: `${t('vpc.ascendant')} ${result.value.ascendant.signName} · ${result.value.dasha.currentMahadasha?.planet || ''}`,
-      shareTarget: shareTargetRef.value,
-      filename: `vedic-paipan-${formData.value.birthDate}.png`,
-      t,
-    })
-  }
-  catch (error: any) {
-    toast.add({ title: t('share.shareFail'), description: error?.message || t('share.pleaseRetry'), color: 'error' })
-  }
 }
 
 onMounted(() => {

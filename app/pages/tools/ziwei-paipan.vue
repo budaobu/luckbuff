@@ -48,7 +48,7 @@
         <p>{{ $t('ziweiChart.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" ref="shareTargetRef" class="zc-report">
+      <div v-else-if="result" class="zc-report">
         <ZiweiPaipanReport :result="result" />
       </div>
 
@@ -59,12 +59,11 @@
           </template>
           {{ $t('common.retry') }}
         </UButton>
-        <UButton color="warning" variant="soft" @click="handleShare">
-          <template #leading>
-            <UIcon name="i-heroicons-share" class="h-4 w-4" />
-          </template>
-          {{ $t('common.shareResult') }}
-        </UButton>
+        <AppShareButton
+          tool="ziwei-paipan"
+          :summary="shareSummary"
+          filename="ziwei-paipan-poster.png"
+        />
       </div>
     </div>
   </div>
@@ -100,7 +99,10 @@ const formValues = ref<FormValues>({
   birthProvince: '',
 })
 const lastFormValues = ref<Partial<FormValues>>({})
-const shareTargetRef = ref<HTMLElement>()
+const shareSummary = computed(() => {
+  if (!result.value) return undefined
+  return `${result.value.summary.fiveElementsClass} · ${result.value.summary.soulPalace}`
+})
 
 async function resolveLocation(name: string) {
   const direct = await resolveCityCoords(name)
@@ -166,27 +168,6 @@ function handleSaveProfile(id: string, values: FormValues) {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
-}
-
-async function handleShare() {
-  if (!result.value) return
-  const { share } = useShare()
-  try {
-    await share({
-      tool: 'ziwei-paipan',
-      summary: `${result.value.summary.fiveElementsClass} · ${result.value.summary.soulPalace}`,
-      shareTarget: shareTargetRef.value,
-      filename: `ziwei-paipan-${formValues.value.birthDate}.png`,
-      t,
-    })
-  }
-  catch (error: any) {
-    toast.add({
-      title: t('share.shareFail'),
-      description: error?.message || t('share.pleaseRetry'),
-      color: 'error',
-    })
-  }
 }
 
 const siteName = 'ososn'
