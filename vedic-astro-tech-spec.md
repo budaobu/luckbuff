@@ -1,6 +1,11 @@
 # luckbuff · 吠陀占星工具页 · 技术实施规格
 
-> 版本 v0.3 · 基于 PRD v0.1 · 约束：Nuxt 4 / 项目现有 AI 服务 / Python 精算微服务
+> 版本 v0.3 · 基于 PRD v0.1 · 历史规格
+>
+> **已废弃架构说明（2026-09-08）**：Python 精算微服务已被
+> `@prisri/jyotish` + `astronomy-engine` 的共享 Node 计算核心替换。本文中的
+> `vedic-service`、`VEDIC_SERVICE_URL` 与 PM2 双进程方案仅作历史设计留档，
+> 不代表当前实现。
 
 ---
 

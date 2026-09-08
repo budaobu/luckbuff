@@ -86,7 +86,7 @@ ${pList}
 ${dashaList}`
 }
 
-const CHART_CONTEXT_PROMPT = '以下吠陀占星数据使用 Swiss Ephemeris 精算（Lahiri Ayanamsha，Whole Sign 宫位制），符合 Jyotish 主流标准。'
+const CHART_CONTEXT_PROMPT = '以下吠陀占星数据使用 jyotish/Astronomy Engine 计算（Lahiri Ayanamsha，Whole Sign 宫位制），符合 Jyotish 主流标准。'
 
 const DIM_PROMPTS: Record<VedicDimension, string> = {
   core: `## 性格结构

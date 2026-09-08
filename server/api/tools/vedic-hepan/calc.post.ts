@@ -1,12 +1,11 @@
 import { resolveGeo } from '../../vedic/_utils/geo'
+import { calculateVedicChart } from '~~/server/utils/tools/vedic-paipan'
 import type {
   VedicHepanCalcResult,
   VedicHepanAspect,
   VedicHepanHouseOverlay,
 } from '~/types/vedic-hepan'
 import type { VedicChart, VedicPlanet } from '~/types/vedic'
-
-const VEDIC_SERVICE_URL = process.env.VEDIC_SERVICE_URL ?? 'http://127.0.0.1:8765'
 
 interface CalcBody {
   personA?: {
@@ -27,30 +26,11 @@ interface CalcBody {
   }
 }
 
-function parseDateTime(birthDate: string, birthTime: string): { year: number; month: number; day: number; hour: number; minute: number } {
-  const [yearStr, monthStr, dayStr] = birthDate.split('-')
-  const [hourStr, minuteStr] = birthTime.split(':')
-  const year = Number(yearStr)
-  const month = Number(monthStr)
-  const day = Number(dayStr)
-  const hour = Number(hourStr)
-  const minute = Number(minuteStr)
-  if (!year || !month || !day || Number.isNaN(hour) || Number.isNaN(minute)) {
-    throw createError({ statusCode: 400, statusMessage: `Invalid birthDate or birthTime: ${birthDate} ${birthTime}` })
+function requireTimezone(cityName: string, timezone?: string): string {
+  if (!timezone) {
+    throw createError({ statusCode: 422, statusMessage: `无法确定 ${cityName} 的 IANA 时区` })
   }
-  return { year, month, day, hour, minute }
-}
-
-async function fetchVedicChart(year: number, month: number, day: number, hour: number, minute: number, geo: { lat: number; lng: number }, timeUncertain: boolean): Promise<VedicChart> {
-  return await $fetch<VedicChart>(`${VEDIC_SERVICE_URL}/chart`, {
-    method: 'POST',
-    body: {
-      year, month, day, hour, minute,
-      lat: geo.lat, lng: geo.lng,
-      time_uncertain: timeUncertain,
-    },
-    timeout: 10000,
-  })
+  return timezone
 }
 
 function normalizeLongitude(lon: number): number {
@@ -163,21 +143,21 @@ export default defineEventHandler(async (event): Promise<VedicHepanCalcResult> =
   if (!geoB) {
     throw createError({ statusCode: 422, statusMessage: `无法解析出生地城市：${personB.birthCity}` })
   }
+  const timezoneA = requireTimezone(geoA.cityName, geoA.timezone)
+  const timezoneB = requireTimezone(geoB.cityName, geoB.timezone)
 
-  const aDate = parseDateTime(personA.birthDate, personA.birthTime)
-  const bDate = parseDateTime(personB.birthDate, personB.birthTime)
-
-  let chartA: VedicChart
-  let chartB: VedicChart
-  try {
-    chartA = await fetchVedicChart(aDate.year, aDate.month, aDate.day, aDate.hour, aDate.minute, geoA, personA.timeUncertain ?? false)
-    chartB = await fetchVedicChart(bDate.year, bDate.month, bDate.day, bDate.hour, bDate.minute, geoB, personB.timeUncertain ?? false)
-  } catch (e: any) {
-    throw createError({ statusCode: 503, statusMessage: `星盘计算服务不可用：${e?.message ?? e}` })
-  }
-
-  chartA.cityName = geoA.cityName
-  chartB.cityName = geoB.cityName
+  const chartInput = (person: typeof personA, geo: typeof geoA, timezone: string) => ({
+    birthDate: person.birthDate,
+    birthTime: person.birthTime,
+    latitude: geo.lat,
+    longitude: geo.lng,
+    timezone,
+    cityName: geo.cityName,
+    gender: person.gender,
+    timeUncertain: person.timeUncertain ?? false,
+  })
+  const chartA = calculateVedicChart(chartInput(personA, geoA, timezoneA))
+  const chartB = calculateVedicChart(chartInput(personB, geoB, timezoneB))
 
   const labelA = personA.name?.trim() || '甲方'
   const labelB = personB.name?.trim() || '乙方'
@@ -192,7 +172,7 @@ export default defineEventHandler(async (event): Promise<VedicHepanCalcResult> =
   const aPlanetsInB = computeHouseOverlays(chartA.planets, chartB, labelA)
   const bPlanetsInA = computeHouseOverlays(chartB.planets, chartA, labelB)
 
-  const methodNote = '本次计算基于 Swiss Ephemeris + Lahiri Ayanamsha + Whole Sign 宫位制，分别计算双人本命盘后，在服务端合成跨盘相位与宫位叠加关系。'
+  const methodNote = '本次计算基于 jyotish/Astronomy Engine + Lahiri Ayanamsha + Whole Sign 宫位制，分别计算双人本命盘后，在服务端合成跨盘相位与宫位叠加关系。'
 
   return {
     personA: { name: labelA, chart: chartA, cityName: geoA.cityName },

@@ -36,18 +36,14 @@ Target host and key are overridable via `LUCKBUFF_DEPLOY_HOST` and
   `/dev/stdin`. The stdin path races with `child.stdin.end()` on Linux and
   fails with `ENXIO`.
 
-## Vedic chart microservice
+## Vedic chart calculations
 
-- Code lives in `vedic-service/` (own venv, own PM2 process at
-  `127.0.0.1:8765`). Pinned to `pyswisseph` because Swiss Ephemeris has no
-  JS equivalent — bundle is C-extension, must run in Python.
-- Nuxt server API at `server/api/vedic/{chart,analyze}.post.ts` reads
-  `process.env.VEDIC_SERVICE_URL` (default `http://127.0.0.1:8765`) — set in
-  PM2 `env` block of `ecosystem.config.cjs`.
-- `scripts/deploy.sh` rsyncs `vedic-service/` (without `.venv/`/`.ephe/`) to
-  `/opt/vedic-service`, then runs `pip install -r requirements.txt` and warms
-  up Swiss Ephemeris `.se1` download to `/opt/ephe`. Without warmup the first
-  prod request stalls 30s+ pulling the ephemeris from ftp.astro.com.
+- Vedic charts run in-process through `@prisri/jyotish` (ISC) and
+  `astronomy-engine` (MIT). The shared core is
+  `server/utils/tools/vedic-paipan.ts`; `calculateVedicChart()` provides the
+  legacy `VedicChart` contract used by compatibility and relocation tools.
+- `VEDIC_SERVICE_URL`, the Python worker, and `/opt/ephe` are retired. Deploy
+  deletes a leftover `vedic-service` PM2 process after reloading `luckbuff`.
 - SSE flow: `analyze.post.ts` writes `data: {"type":"chart",...}` first, then
   parses the upstream OpenAI-compatible stream and re-emits each delta as
   `{"type":"text",...}`. Sets `X-Accel-Buffering: no` so Nginx does not

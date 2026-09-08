@@ -1,8 +1,7 @@
 import { resolveGeo } from './_utils/geo'
 import { buildPrompt, VEDIC_SYSTEM_PROMPT } from './_utils/prompts'
+import { calculateVedicChart } from '~~/server/utils/tools/vedic-paipan'
 import type { VedicChart, VedicDimension } from '~/types/vedic'
-
-const VEDIC_SERVICE_URL = process.env.VEDIC_SERVICE_URL ?? 'http://127.0.0.1:8765'
 const DEFAULT_DIMENSIONS: VedicDimension[] = ['core', 'career', 'love', 'annual']
 
 interface AnalyzeBody {
@@ -32,20 +31,23 @@ export default defineEventHandler(async (event) => {
   if (!geo) {
     throw createError({ statusCode: 422, statusMessage: `无法解析城市：${city}` })
   }
+  if (!geo.timezone) {
+    throw createError({ statusCode: 422, statusMessage: `无法确定 ${geo.cityName} 的 IANA 时区` })
+  }
 
   const [year, month, day] = birthDate.split('-').map(Number)
   const [hour, minute] = birthTime.split(':').map(Number)
 
-  let chart: VedicChart
-  try {
-    chart = await $fetch<VedicChart>(`${VEDIC_SERVICE_URL}/chart`, {
-      method: 'POST',
-      body: { year, month, day, hour, minute, lat: geo.lat, lng: geo.lng, time_uncertain: timeUncertain },
-      timeout: 10000,
-    })
-  } catch (e: any) {
-    throw createError({ statusCode: 503, statusMessage: '星盘计算服务暂时不可用，请稍后重试' })
-  }
+  const chart: VedicChart = calculateVedicChart({
+    birthDate,
+    birthTime,
+    latitude: geo.lat,
+    longitude: geo.lng,
+    timezone: geo.timezone,
+    cityName: geo.cityName,
+    gender,
+    timeUncertain,
+  })
 
   chart.cityName = geo.cityName
 
