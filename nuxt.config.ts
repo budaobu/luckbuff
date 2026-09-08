@@ -182,7 +182,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['nanoid', '@internationalized/date', 'html-to-image', 'marked', 'better-auth/vue', 'better-auth/client/plugins'],
+      include: ['nanoid', '@internationalized/date', 'qrcode', 'marked', 'better-auth/vue', 'better-auth/client/plugins'],
     },
     resolve: {
       alias: {

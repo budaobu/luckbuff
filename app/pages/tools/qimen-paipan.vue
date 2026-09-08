@@ -68,7 +68,7 @@
         <p>{{ $t('qimenPaipan.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" ref="shareTargetRef" class="qmp-report">
+      <div v-else-if="result" class="qmp-report">
         <QimenPaipanReport :result="result" />
       </div>
 
@@ -79,12 +79,11 @@
           </template>
           {{ $t('common.retry') }}
         </UButton>
-        <UButton color="warning" variant="soft" @click="handleShare">
-          <template #leading>
-            <UIcon name="i-heroicons-share" class="h-4 w-4" />
-          </template>
-          {{ $t('common.shareResult') }}
-        </UButton>
+        <AppShareButton
+          tool="qimen-paipan"
+          :summary="shareSummary"
+          filename="qimen-paipan-poster.png"
+        />
       </div>
     </div>
   </div>
@@ -103,7 +102,11 @@ const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<QimenPaipanResult | null>(null)
 const form = ref({ location: '' })
 const lastFormValues = ref({ location: '' })
-const shareTargetRef = ref<HTMLElement>()
+const shareSummary = computed(() => {
+  if (!result.value) return undefined
+  const summary = result.value.summary
+  return `${summary.dunTypeText}${summary.juNumber}${t('qimenPaipan.juSuffix')} · ${summary.solarTerm} · ${summary.zhiFu}@${summary.zhiFuPalace}`
+})
 
 function browserTimezone() {
   try {
@@ -170,29 +173,6 @@ async function handleSubmit() {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
-}
-
-async function handleShare() {
-  if (!result.value) return
-  const { share } = useShare()
-  const summary = `${result.value.summary.dunTypeText}${result.value.summary.juNumber}${t('qimenPaipan.juSuffix')} · ${result.value.summary.solarTerm} · ${result.value.summary.zhiFu}@${result.value.summary.zhiFuPalace}`
-
-  try {
-    await share({
-      tool: 'qimen-paipan',
-      summary,
-      shareTarget: shareTargetRef.value,
-      filename: `qimen-paipan-${new Date().toISOString().slice(0, 10)}.png`,
-      t,
-    })
-  }
-  catch (error: any) {
-    toast.add({
-      title: t('share.shareFail'),
-      description: error?.message || t('share.pleaseRetry'),
-      color: 'error',
-    })
-  }
 }
 
 const siteName = 'ososn'

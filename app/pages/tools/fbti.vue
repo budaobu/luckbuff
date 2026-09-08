@@ -10,6 +10,7 @@ import {
   getPersonalityByCode,
   shuffleQuestions,
 } from '~/utils/fbti-data'
+import { generateSharePoster } from '~/utils/share-poster'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -23,7 +24,6 @@ const hiddenInserted = ref(false)
 const loadingText = ref('')
 const resultPersonality = ref<Personality | null>(null)
 const resultScores = ref<Record<'A' | 'B' | 'C' | 'D', number> | null>(null)
-const shareCardRef = ref<HTMLDivElement | null>(null)
 const copying = ref(false)
 const saving = ref(false)
 const encyclopediaSelected = ref<Personality | null>(null)
@@ -140,26 +140,20 @@ async function copyResult() {
 }
 
 async function saveCard() {
-  if (!shareCardRef.value || saving.value) return
+  if (!resultPersonality.value || saving.value) return
   saving.value = true
   try {
-    const { default: html2canvas } = await import('html2canvas')
-    const canvas = await html2canvas(shareCardRef.value, {
-      scale: 2,
-      backgroundColor: '#FBF9F1',
-      useCORS: true,
-      logging: false,
+    const personality = resultPersonality.value
+    const dataUrl = await generateSharePoster({
+      categoryId: 'prophet',
+      title: personality.name,
+      subtitle: `${personality.alias} · ${personality.description}`,
+      category: t('tools.categoryProphet'),
+      url: window.location.href,
     })
-    const ctx = canvas.getContext('2d')
-    if (ctx) {
-      ctx.font = '500 24px ui-monospace, SFMono-Regular, Menlo, monospace'
-      ctx.fillStyle = 'rgba(19,35,58,0.25)'
-      ctx.textAlign = 'right'
-      ctx.fillText('ososn · FBTI', canvas.width - 48, canvas.height - 40)
-    }
     const link = document.createElement('a')
-    link.download = `fbti-${resultPersonality.value!.code}.png`
-    link.href = canvas.toDataURL('image/png')
+    link.download = `fbti-${personality.code}.png`
+    link.href = dataUrl
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -343,7 +337,7 @@ const thumbnailPersonas = computed(() =>
     <div v-else-if="view === 'result' && resultPersonality && resultScores" class="fbti-container pb-20">
       <div class="max-w-md mx-auto">
         <!-- 分享卡渲染区（也用于展示） -->
-        <div ref="shareCardRef" class="fbti-share-card rounded-3xl p-6 md:p-8 mb-6">
+        <div class="fbti-share-card rounded-3xl p-6 md:p-8 mb-6">
           <div class="flex flex-col items-center text-center">
             <FbtiMascotIcon
               :gradient="resultPersonality.mascot.gradient"

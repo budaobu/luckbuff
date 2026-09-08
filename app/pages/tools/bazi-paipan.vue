@@ -47,7 +47,7 @@
         <p>{{ $t('baziChart.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" ref="shareTargetRef" class="bc-report">
+      <div v-else-if="result" class="bc-report">
         <BaziPaipanReport :result="result" />
       </div>
 
@@ -58,12 +58,11 @@
           </template>
           {{ $t('common.retry') }}
         </UButton>
-        <UButton color="warning" variant="soft" @click="handleShare">
-          <template #leading>
-            <UIcon name="i-heroicons-share" class="h-4 w-4" />
-          </template>
-          {{ $t('common.shareResult') }}
-        </UButton>
+        <AppShareButton
+          tool="bazi-paipan"
+          :summary="shareSummary"
+          filename="bazi-paipan-poster.png"
+        />
       </div>
     </div>
   </div>
@@ -100,7 +99,10 @@ const formValues = ref<FormValues>({
   birthProvince: '',
 })
 const lastFormValues = ref<Partial<FormValues>>({})
-const shareTargetRef = ref<HTMLElement>()
+const shareSummary = computed(() => {
+  if (!result.value) return undefined
+  return `${result.value.pillars.map(pillar => pillar.ganzhi).join(' ')} · ${result.value.structure.dayStrength} · ${result.value.pattern.status}`
+})
 
 async function resolveLocation(name: string) {
   const direct = await resolveCityCoords(name)
@@ -158,27 +160,6 @@ function handleSaveProfile(id: string, values: FormValues) {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
-}
-
-async function handleShare() {
-  if (!result.value) return
-  const { share } = useShare()
-  try {
-    await share({
-      tool: 'bazi-paipan',
-      summary: `${result.value.pillars.map(pillar => pillar.ganzhi).join(' ')} · ${result.value.structure.dayStrength} · ${result.value.pattern.status}`,
-      shareTarget: shareTargetRef.value,
-      filename: `bazi-paipan-${formValues.value.birthDate}.png`,
-      t,
-    })
-  }
-  catch (error: any) {
-    toast.add({
-      title: t('share.shareFail'),
-      description: error?.message || t('share.pleaseRetry'),
-      color: 'error',
-    })
-  }
 }
 
 function formatOffset(minutes: number) {

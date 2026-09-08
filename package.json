@@ -30,8 +30,6 @@
     "cnchar": "^3.2.6",
     "cnchar-trad": "^3.2.6",
     "drizzle-orm": "^0.45.2",
-    "html-to-image": "^1.11.13",
-    "html2canvas": "^1.4.1",
     "iztro": "2.6.1",
     "jsonrepair": "^3.15.0",
     "lunar": "^2.0.0",
