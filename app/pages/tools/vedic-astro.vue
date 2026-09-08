@@ -7,7 +7,7 @@
           <h1>{{ $t('vpc.title') }}</h1>
           <p>{{ $t('vpc.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/paipan')" class="vc-back">
+        <NuxtLink :to="localePath('/chart')" class="vc-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>

@@ -7,7 +7,7 @@
           <h1 class="lpp-title">{{ $t('liurenPaipan.title') }}</h1>
           <p class="lpp-subtitle">{{ $t('liurenPaipan.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/paipan')" class="lpp-back">
+        <NuxtLink :to="localePath('/chart')" class="lpp-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>

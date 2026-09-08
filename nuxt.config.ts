@@ -202,6 +202,10 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
+      '/paipan': { redirect: { to: '/chart', statusCode: 308 } },
+      '/zh-CN/paipan': { redirect: { to: '/chart', statusCode: 308 } },
+      '/zh-TW/paipan': { redirect: { to: '/zh-TW/chart', statusCode: 308 } },
+      '/en/paipan': { redirect: { to: '/en/chart', statusCode: 308 } },
       '/': {
         headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400' },
         sitemap: { priority: 1.0 },

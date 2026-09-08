@@ -43,7 +43,7 @@ const chartingToolCategory: ToolCategory = {
   icon: 'i-heroicons-table-cells',
   titleKey: 'paipanTopic.title',
   subtitleKey: 'paipanTopic.subtitle',
-  sectionPath: '/paipan',
+  sectionPath: '/chart',
   group: 'charting',
   tools: [
     {

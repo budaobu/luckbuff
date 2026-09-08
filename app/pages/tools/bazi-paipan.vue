@@ -7,7 +7,7 @@
           <h1 class="bc-title">{{ $t('baziChart.title') }}</h1>
           <p class="bc-subtitle">{{ $t('baziChart.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/paipan')" class="bc-back">
+        <NuxtLink :to="localePath('/chart')" class="bc-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>
