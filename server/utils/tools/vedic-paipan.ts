@@ -16,6 +16,7 @@ import type {
   PlanetaryPosition,
   VargaChart,
 } from '@prisri/jyotish'
+import type { VedicChart, VedicDashaPeriod, VedicPlanet, VedicValidation } from '~~/app/types/vedic'
 import type { VedicPaipanPeriod, VedicPaipanResult, VedicPaipanSignPosition, VedicPaipanVarga } from '~~/app/types/vedic-paipan'
 
 export interface VedicPaipanInput {
@@ -31,6 +32,17 @@ export interface VedicPaipanInput {
   }
 }
 
+export interface VedicChartInput {
+  birthDate: string
+  birthTime: string
+  latitude: number
+  longitude: number
+  timezone: string
+  cityName?: string
+  gender?: 'male' | 'female' | ''
+  timeUncertain?: boolean
+}
+
 const RASHI_KEYS = [
   'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
   'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces',
@@ -44,6 +56,11 @@ const RASHI_NAMES = [
 const RASHI_LORDS = [
   'Mars', 'Venus', 'Mercury', 'Moon', 'Sun', 'Mercury',
   'Venus', 'Mars', 'Jupiter', 'Saturn', 'Saturn', 'Jupiter',
+]
+
+const RASHI_NAMES_ZH = [
+  '白羊', '金牛', '双子', '巨蟹', '狮子', '处女',
+  '天秤', '天蝎', '射手', '摩羯', '水瓶', '双鱼',
 ]
 
 const SPECIAL_LAGNA_KEYS = [
@@ -425,6 +442,119 @@ export function calculateVedicPaipan(input: VedicPaipanInput): VedicPaipanResult
         signName: getChandrashtama(kundli.planets.Moon!.rashi - 1, moonNow.rashi - 1).chandrashtamaRashiName,
       },
     },
+  }
+}
+
+function decimalDegree(value: { degree: number, minute: number, second: number }) {
+  return Number((value.degree + value.minute / 60 + value.second / 3600).toFixed(4))
+}
+
+function mapLegacyPlanet(planet: VedicPaipanResult['planets'][number]): VedicPlanet {
+  return {
+    graha: planet.name,
+    longitude: planet.longitude,
+    sign: planet.sign,
+    signName: planet.signName,
+    signNameZh: RASHI_NAMES_ZH[planet.sign - 1]!,
+    degree: decimalDegree(planet),
+    house: planet.house,
+    isRetrograde: planet.isRetrograde,
+    nakshatra: planet.nakshatra,
+    nakshatraPada: planet.pada,
+  }
+}
+
+function mapLegacyDasha(result: VedicPaipanResult): VedicDashaPeriod[] {
+  const now = Date.now()
+  return result.dasha.mahadashas.map((dasha) => {
+    const startTime = Date.parse(dasha.startTime)
+    const endTime = Date.parse(dasha.endTime)
+    return {
+      graha: dasha.planet,
+      startDate: dasha.startTime,
+      endDate: dasha.endTime,
+      years: dasha.durationYears ?? 0,
+      isCurrent: startTime <= now && now < endTime,
+    }
+  })
+}
+
+function mapLegacyValidations(planets: VedicPaipanResult['planets']): VedicValidation[] {
+  const rahu = planets.find(planet => planet.name === 'Rahu')
+  const ketu = planets.find(planet => planet.name === 'Ketu')
+  if (!rahu || !ketu) {
+    return [{ rule: 'Rahu-Ketu opposition', pass: false, detail: 'Rahu/Ketu calculation missing' }]
+  }
+
+  const rawDiff = Math.abs(rahu.longitude - ketu.longitude)
+  const diff = Math.min(rawDiff, 360 - rawDiff)
+  return [
+    {
+      rule: 'Rahu-Ketu opposition',
+      pass: Math.abs(diff - 180) < 0.5,
+      detail: `差值 ${diff.toFixed(2)}°（应为 180°）`,
+    },
+    {
+      rule: 'Rahu retrograde',
+      pass: rahu.isRetrograde,
+      detail: 'Rahu 应始终逆行',
+    },
+  ]
+}
+
+/**
+ * Shared Vedic chart API for compatibility tools. It reuses the same full
+ * Kundli calculation as /tools/vedic-astro and projects it onto the stable
+ * VedicChart contract consumed by hepan, relocation, and legacy SSE APIs.
+ */
+export function calculateVedicChart(input: VedicChartInput): VedicChart {
+  const result = calculateVedicPaipan({
+    birthDate: input.birthDate,
+    birthTime: input.birthTime,
+    gender: input.gender,
+    timeUncertain: input.timeUncertain,
+    location: {
+      name: input.cityName || input.timezone,
+      latitude: input.latitude,
+      longitude: input.longitude,
+      timezone: input.timezone,
+    },
+  })
+
+  const utc = Date.parse(result.birth.utcText)
+  const julianDay = utc / 86400000 + 2440587.5
+  const [yearText, monthText, dayText] = result.birth.date.split('-')
+  const [hourText, minuteText] = result.birth.time.split(':')
+
+  return {
+    ascendant: {
+      longitude: result.ascendant.longitude,
+      sign: result.ascendant.sign,
+      signName: result.ascendant.signName,
+      signNameZh: RASHI_NAMES_ZH[result.ascendant.sign - 1]!,
+      degree: decimalDegree(result.ascendant),
+      nakshatra: result.ascendant.nakshatra,
+      nakshatraPada: result.ascendant.pada,
+    },
+    planets: result.planets.map(mapLegacyPlanet),
+    houseStartSign: result.ascendant.sign,
+    dasha: mapLegacyDasha(result),
+    ayanamsha: result.methodology.ayanamsha,
+    julianDay: Number(julianDay.toFixed(6)),
+    timezone: result.birth.location.timezone,
+    timeUncertain: result.birth.timeUncertain,
+    validations: mapLegacyValidations(result.planets),
+    birthData: {
+      year: Number(yearText),
+      month: Number(monthText),
+      day: Number(dayText),
+      hour: Number(hourText),
+      minute: Number(minuteText),
+      lat: result.birth.location.latitude,
+      lng: result.birth.location.longitude,
+      utcOffset: result.birth.location.utcOffsetMinutes / 60,
+    },
+    cityName: input.cityName || result.birth.location.name,
   }
 }
 

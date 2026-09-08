@@ -1,4 +1,5 @@
 import { resolveGeo } from '../../vedic/_utils/geo'
+import { calculateVedicChart } from '~~/server/utils/tools/vedic-paipan'
 import type {
   AstroFortuneTuneCalcResult,
   AstroFortuneTuneCity,
@@ -6,8 +7,6 @@ import type {
   AstroFortuneTuneAspectHighlight,
 } from '~/types/astro-fortune-tune'
 import type { VedicChart, VedicPlanet } from '~/types/vedic'
-
-const VEDIC_SERVICE_URL = process.env.VEDIC_SERVICE_URL ?? 'http://127.0.0.1:8765'
 
 interface CalcBody {
   birthDate?: string
@@ -17,30 +16,11 @@ interface CalcBody {
   timeUncertain?: boolean
 }
 
-function parseDateTime(birthDate: string, birthTime: string): { year: number; month: number; day: number; hour: number; minute: number } {
-  const [yearStr, monthStr, dayStr] = birthDate.split('-')
-  const [hourStr, minuteStr] = birthTime.split(':')
-  const year = Number(yearStr)
-  const month = Number(monthStr)
-  const day = Number(dayStr)
-  const hour = Number(hourStr)
-  const minute = Number(minuteStr)
-  if (!year || !month || !day || Number.isNaN(hour) || Number.isNaN(minute)) {
-    throw createError({ statusCode: 400, statusMessage: `Invalid birthDate or birthTime: ${birthDate} ${birthTime}` })
+function requireTimezone(cityName: string, timezone?: string): string {
+  if (!timezone) {
+    throw createError({ statusCode: 422, statusMessage: `无法确定 ${cityName} 的 IANA 时区` })
   }
-  return { year, month, day, hour, minute }
-}
-
-async function fetchVedicChart(year: number, month: number, day: number, hour: number, minute: number, geo: { lat: number; lng: number }): Promise<VedicChart> {
-  return await $fetch<VedicChart>(`${VEDIC_SERVICE_URL}/chart`, {
-    method: 'POST',
-    body: {
-      year, month, day, hour, minute,
-      lat: geo.lat, lng: geo.lng,
-      time_uncertain: false,
-    },
-    timeout: 10000,
-  })
+  return timezone
 }
 
 function normalizeLongitude(lon: number): number {
@@ -129,20 +109,20 @@ export default defineEventHandler(async (event): Promise<AstroFortuneTuneCalcRes
     throw createError({ statusCode: 400, statusMessage: 'Missing birthDate / birthTime / baseCity' })
   }
 
-  const { year, month, day, hour, minute } = parseDateTime(birthDate, birthTime)
-
   const baseGeo = await resolveGeo(baseCity)
   if (!baseGeo) {
     throw createError({ statusCode: 422, statusMessage: `无法解析出生地城市：${baseCity}` })
   }
-
-  let baseChart: VedicChart
-  try {
-    baseChart = await fetchVedicChart(year, month, day, hour, minute, baseGeo)
-  } catch (e: any) {
-    throw createError({ statusCode: 503, statusMessage: `星盘计算服务不可用：${e?.message ?? e}` })
-  }
-  baseChart.cityName = baseGeo.cityName
+  const baseTimezone = requireTimezone(baseGeo.cityName, baseGeo.timezone)
+  const baseChart = calculateVedicChart({
+    birthDate,
+    birthTime,
+    latitude: baseGeo.lat,
+    longitude: baseGeo.lng,
+    timezone: baseTimezone,
+    cityName: baseGeo.cityName,
+    timeUncertain,
+  })
 
   const comparisons: AstroFortuneTuneComparison[] = []
   let hasUnresolvedCities = false
@@ -163,22 +143,27 @@ export default defineEventHandler(async (event): Promise<AstroFortuneTuneCalcRes
       })
       continue
     }
-
-    let relocatedChart: VedicChart
-    try {
-      relocatedChart = await fetchVedicChart(year, month, day, hour, minute, geo)
-    } catch (e: any) {
+    if (!geo.timezone) {
       hasUnresolvedCities = true
       comparisons.push({
         city: { name: trimmed, resolved: false },
         chart: baseChart,
         ascendantDeltaDeg: 0,
         aspectHighlights: [],
-        summary: `城市「${trimmed}」星盘计算失败，将以出生地星盘作为占位：${e?.message ?? e}`,
+        summary: `未能确定城市「${trimmed}」的 IANA 时区，不进行 relocated 星盘比较。`,
       })
       continue
     }
-    relocatedChart.cityName = geo.cityName
+
+    const relocatedChart = calculateVedicChart({
+      birthDate,
+      birthTime,
+      latitude: geo.lat,
+      longitude: geo.lng,
+      timezone: geo.timezone,
+      cityName: geo.cityName,
+      timeUncertain,
+    })
 
     const ascendantDeltaDeg = degreeDistance(baseChart.ascendant.longitude, relocatedChart.ascendant.longitude)
     const aspectHighlights = computeAspectHighlights(baseChart.planets, relocatedChart.planets)
@@ -198,7 +183,7 @@ export default defineEventHandler(async (event): Promise<AstroFortuneTuneCalcRes
 
   const methodNote = timeUncertain
     ? '出生时间已标记为不确定， relocated 角度与相位差异仅供参考，不宜用于精确择地。'
-    : '本次计算基于 Swiss Ephemeris + Lahiri Ayanamsha + Whole Sign 宫位制，对每个候选城市按真实经纬度重新计算命盘角度。'
+    : '本次计算基于 jyotish/Astronomy Engine + Lahiri Ayanamsha + Whole Sign 宫位制，对每个候选城市按真实经纬度重新计算命盘角度。'
 
   return {
     baseChart,
