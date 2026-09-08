@@ -88,6 +88,7 @@ export interface ShareOptions {
   | 'mangpai-bazi'
   | 'new-school-bazi'
   | 'bazi-paipan'
+  | 'shichu-suimei'
   | 'qizheng-paipan'
   | 'qimen-paipan'
   | 'liuren-paipan'
@@ -205,6 +206,7 @@ export function useShare() {
       'mangpai-bazi': '盲派八字',
       'new-school-bazi': '新派八字',
       'bazi-paipan': '八字排盘',
+      'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',
       'qimen-paipan': '奇门遁甲排盘',
       'liuren-paipan': '大六壬排盘',

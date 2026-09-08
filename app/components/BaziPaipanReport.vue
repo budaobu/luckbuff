@@ -6,24 +6,27 @@
     @keydown.enter.prevent="handleReportKeydown"
     @keydown.space.prevent="handleReportKeydown"
   >
-    <section class="bpr-card bpr-hero">
-      <dl class="bpr-birth-grid">
+      <section class="bpr-card bpr-hero">
+        <p v-if="props.terminology === 'shichu-suimei'" class="bpr-system">
+          {{ $t(reportKey('system')) }}
+        </p>
+        <dl class="bpr-birth-grid">
         <div>
-          <dt>{{ $t('baziChart.solar') }}</dt>
+          <dt>{{ $t(reportKey('solar')) }}</dt>
           <dd>{{ result.birth.solarText }}</dd>
-          <small>{{ $t('baziChart.calendar') }}</small>
+          <small>{{ $t(reportKey('calendar')) }}</small>
         </div>
         <div>
-          <dt>{{ $t('baziChart.location') }}</dt>
+          <dt>{{ $t(reportKey('location')) }}</dt>
           <dd>{{ result.birth.locationName }}</dd>
           <small>{{ result.birth.coordinates || '—' }}</small>
         </div>
         <div>
-          <dt>{{ $t('baziChart.trueSolar') }}</dt>
+          <dt>{{ $t(reportKey('trueSolar')) }}</dt>
           <dd>{{ result.birth.clockText }}</dd>
           <small>
             <strong class="bpr-true-solar">{{ result.birth.trueSolarText }}</strong>
-            · {{ result.birth.effectiveHour }}时
+            · {{ result.birth.effectiveHour }}{{ props.terminology === 'shichu-suimei' ? '時' : '时' }}
           </small>
         </div>
         <div>
@@ -37,15 +40,15 @@
         <span>{{ fourPillars }}</span>
         <button type="button" @click="copyPillars">
           <UIcon name="i-heroicons-clipboard-document" class="h-4 w-4" />
-          {{ $t('baziChart.copy') }}
+          {{ $t(reportKey('copy')) }}
         </button>
       </div>
     </section>
 
     <section class="bpr-section">
       <header class="bpr-section-label">
-        <h2>{{ $t('baziChart.chartTitle') }}</h2>
-        <p>{{ $t('baziChart.chartSubtitle') }}</p>
+        <h2>{{ $t(reportKey('chartTitle')) }}</h2>
+        <p>{{ $t(reportKey('chartSubtitle')) }}</p>
       </header>
 
       <div class="bpr-card bpr-chart-card">
@@ -58,19 +61,19 @@
             </div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.stem') }}</span>
+            <span>{{ $t(reportKey('stem')) }}</span>
             <div v-for="pillar in result.pillars" :key="`gan-${pillar.key}`" class="bpr-char">{{ pillar.gan }}</div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.stemTenGod') }}</span>
+            <span>{{ $t(reportKey('stemTenGod')) }}</span>
             <div v-for="pillar in result.pillars" :key="`gan-god-${pillar.key}`">{{ pillar.shishenGan }}</div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.branch') }}</span>
+            <span>{{ $t(reportKey('branch')) }}</span>
             <div v-for="pillar in result.pillars" :key="`zhi-${pillar.key}`" class="bpr-char">{{ pillar.zhi }}</div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.hiddenStems') }}</span>
+            <span>{{ $t(reportKey('hiddenStems')) }}</span>
             <div
               v-for="pillar in result.pillars"
               :key="`hidden-${pillar.key}`"
@@ -81,30 +84,30 @@
             </div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.hiddenTenGods') }}</span>
+            <span>{{ $t(reportKey('hiddenTenGods')) }}</span>
             <div v-for="pillar in result.pillars" :key="`hidden-god-${pillar.key}`" class="bpr-muted">
               {{ pillar.hiddenStems.map(item => item.shishen).join(' / ') }}
             </div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.nayin') }}</span>
+            <span>{{ $t(reportKey('nayin')) }}</span>
             <div v-for="pillar in result.pillars" :key="`nayin-${pillar.key}`">{{ pillar.nayin }}</div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.diShi') }}</span>
+            <span>{{ $t(reportKey('diShi')) }}</span>
             <div v-for="pillar in result.pillars" :key="`dishi-${pillar.key}`">
               {{ pillar.diShi }}
               <small>{{ pillar.selfSitting }}</small>
             </div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.xunKong') }}</span>
+            <span>{{ $t(reportKey('xunKong')) }}</span>
             <div v-for="pillar in result.pillars" :key="`void-${pillar.key}`" class="bpr-tag-cell">
               <span v-for="item in pillar.xunKong" :key="`${pillar.key}-${item}`">{{ item }}</span>
             </div>
           </div>
           <div class="bpr-chart-row bpr-shensha-row">
-            <span>{{ $t('baziChart.shenshaTitle') }}</span>
+            <span>{{ $t(reportKey('shenshaTitle')) }}</span>
             <div v-for="pillar in result.pillars" :key="`shensha-${pillar.key}`" class="bpr-pill-tags">
               <span v-for="item in pillar.shensha" :key="`${pillar.key}-${item.name}`" :class="`is-${item.classification}`">
                 {{ item.name }}
@@ -113,7 +116,7 @@
             </div>
           </div>
           <div class="bpr-chart-row">
-            <span>{{ $t('baziChart.shenshaCombination') }}</span>
+            <span>{{ $t(reportKey('shenshaCombination')) }}</span>
             <div v-for="pillar in result.pillars" :key="`combo-${pillar.key}`" class="bpr-pill-tags">
               <span
                 v-for="combo in result.shenshaCombinations.filter(item => item.positions.includes(pillar.label))"
@@ -126,14 +129,14 @@
         </div>
 
         <div class="bpr-methodology">
-          <strong>{{ $t('baziChart.methodology') }}</strong>
+          <strong>{{ $t(reportKey('methodology')) }}</strong>
           <dl>
-            <div><dt>{{ $t('baziChart.school') }}</dt><dd>{{ result.methodology.school }}</dd></div>
-            <div><dt>{{ $t('baziChart.calendar') }}</dt><dd>{{ result.methodology.calendar }}</dd></div>
-            <div><dt>{{ $t('baziChart.trueSolar') }}</dt><dd>{{ result.methodology.trueSolarTime }}</dd></div>
-            <div><dt>{{ $t('baziChart.dayBoundary') }}</dt><dd>{{ result.methodology.dayBoundary }}</dd></div>
-            <div><dt>{{ $t('baziChart.monthRule') }}</dt><dd>{{ result.methodology.monthRule }}</dd></div>
-            <div><dt>{{ $t('baziChart.scorePolicy') }}</dt><dd>{{ result.methodology.scorePolicy }}</dd></div>
+            <div><dt>{{ $t(reportKey('school')) }}</dt><dd>{{ result.methodology.school }}</dd></div>
+            <div><dt>{{ $t(reportKey('calendar')) }}</dt><dd>{{ result.methodology.calendar }}</dd></div>
+            <div><dt>{{ $t(reportKey('trueSolar')) }}</dt><dd>{{ result.methodology.trueSolarTime }}</dd></div>
+            <div><dt>{{ $t(reportKey('dayBoundary')) }}</dt><dd>{{ result.methodology.dayBoundary }}</dd></div>
+            <div><dt>{{ $t(reportKey('monthRule')) }}</dt><dd>{{ result.methodology.monthRule }}</dd></div>
+            <div><dt>{{ $t(reportKey('scorePolicy')) }}</dt><dd>{{ result.methodology.scorePolicy }}</dd></div>
           </dl>
         </div>
       </div>
@@ -141,8 +144,8 @@
 
     <section class="bpr-section">
       <header class="bpr-section-label">
-        <h2>{{ $t('baziChart.wuxingTitle') }}</h2>
-        <p>{{ $t('baziChart.energySubtitle') }}</p>
+        <h2>{{ $t(reportKey('wuxingTitle')) }}</h2>
+        <p>{{ $t(reportKey('energySubtitle')) }}</p>
       </header>
       <div class="bpr-body-stack">
         <div class="bpr-card bpr-energy-head">
@@ -158,7 +161,7 @@
           <div class="bpr-card"><span>地利</span><strong>{{ result.energy.rootStatus }}</strong><small>根气质量 {{ result.energy.rootQuality }}%</small></div>
         </div>
 
-        <div class="bpr-subsection-title">{{ $t('baziChart.tenGodRatio') }}</div>
+        <div class="bpr-subsection-title">{{ $t(reportKey('tenGodRatio')) }}</div>
         <div class="bpr-card bpr-bars">
           <div v-for="item in result.energy.tenGods" :key="item.name" class="bpr-bar">
             <span>{{ item.name }}</span>
@@ -167,7 +170,7 @@
           </div>
         </div>
 
-        <div class="bpr-subsection-title">{{ $t('baziChart.elementDistribution') }}</div>
+        <div class="bpr-subsection-title">{{ $t(reportKey('elementDistribution')) }}</div>
         <div class="bpr-element-grid">
           <article v-for="item in result.energy.wuxing" :key="item.key" class="bpr-card bpr-element">
             <header>
@@ -184,11 +187,11 @@
 
     <section class="bpr-section">
       <header class="bpr-section-label">
-        <h2>{{ $t('baziChart.signalTitle') }}</h2>
-        <p>{{ $t('baziChart.signalSubtitle') }}</p>
+        <h2>{{ $t(reportKey('signalTitle')) }}</h2>
+        <p>{{ $t(reportKey('signalSubtitle')) }}</p>
       </header>
       <div class="bpr-body-stack">
-        <div class="bpr-subsection-title">{{ $t('baziChart.relationTitle') }}</div>
+        <div class="bpr-subsection-title">{{ $t(reportKey('relationTitle')) }}</div>
         <div v-if="result.relations.length" class="bpr-card bpr-signal-list">
           <article v-for="signal in result.relations" :key="signal.id">
             <div class="bpr-signal-main">
@@ -202,9 +205,9 @@
             </div>
           </article>
         </div>
-        <p v-else class="bpr-empty">{{ $t('baziChart.noRelation') }}</p>
+        <p v-else class="bpr-empty">{{ $t(reportKey('noRelation')) }}</p>
 
-        <div class="bpr-subsection-title">{{ $t('baziChart.keyShensha') }}</div>
+        <div class="bpr-subsection-title">{{ $t(reportKey('keyShensha')) }}</div>
         <div v-if="result.shensha.length" class="bpr-card bpr-shensha-grid">
           <article v-for="item in result.shensha" :key="`${item.name}-${item.positions.join('/')}`">
             <strong>{{ item.name }}</strong>
@@ -226,21 +229,21 @@
 
     <section class="bpr-section">
       <header class="bpr-section-label">
-        <h2>{{ $t('baziChart.dayunTitle') }}</h2>
-        <p>{{ $t('baziChart.dayunSubtitle') }}</p>
+        <h2>{{ $t(reportKey('dayunTitle')) }}</h2>
+        <p>{{ $t(reportKey('dayunSubtitle')) }}</p>
       </header>
       <div class="bpr-body-stack">
         <div class="bpr-card bpr-dayun-meta">
           <div>
-            <span>{{ $t('baziChart.qiyun') }}</span>
+            <span>{{ $t(reportKey('qiyun')) }}</span>
             <strong>{{ result.dayunMeta.startText }}</strong>
           </div>
           <div>
-            <span>{{ $t('baziChart.qiyunDate') }}</span>
+            <span>{{ $t(reportKey('qiyunDate')) }}</span>
             <strong>{{ result.dayunMeta.startDate }}</strong>
           </div>
           <div>
-            <span>{{ $t('baziChart.dayunDirection') }}</span>
+            <span>{{ $t(reportKey('dayunDirection')) }}</span>
             <strong>{{ result.dayunMeta.direction }}</strong>
           </div>
         </div>
@@ -249,7 +252,7 @@
             <header>
               <strong>{{ cycle.startYear }}-{{ cycle.endYear }} {{ cycle.ganzhi }}</strong>
               <span>{{ cycle.startAge }}-{{ cycle.endAge }}</span>
-              <em v-if="cycle.isCurrent">{{ $t('baziChart.current') }}</em>
+              <em v-if="cycle.isCurrent">{{ $t(reportKey('current')) }}</em>
             </header>
             <p>{{ cycle.shishenGan }} / {{ cycle.shishenZhi }}</p>
             <div v-if="cycle.shensha.length" class="bpr-pill-tags">
@@ -277,11 +280,11 @@
 
     <section class="bpr-section">
       <header class="bpr-section-label">
-        <h2>{{ $t('baziChart.structureTitle') }}</h2>
-        <p>{{ $t('baziChart.structureSubtitle') }}</p>
+        <h2>{{ $t(reportKey('structureTitle')) }}</h2>
+        <p>{{ $t(reportKey('structureSubtitle')) }}</p>
       </header>
       <div class="bpr-body-stack">
-        <div class="bpr-subsection-title">{{ $t('baziChart.themeTitle') }}</div>
+        <div class="bpr-subsection-title">{{ $t(reportKey('themeTitle')) }}</div>
         <div class="bpr-card bpr-theme-list">
           <article v-for="theme in result.natalThemes" :key="theme.id">
             <header class="bpr-theme-head">
@@ -290,7 +293,7 @@
               <em :class="theme.score >= 70 ? 'is-good' : theme.score >= 40 ? 'is-mixed' : 'is-risk'">
                 {{ theme.status }}
               </em>
-              <small>{{ $t('baziChart.themeEvidence') }}：{{ theme.evidenceLevel }}</small>
+              <small>{{ $t(reportKey('themeEvidence')) }}：{{ theme.evidenceLevel }}</small>
             </header>
             <div v-if="theme.tags.length" class="bpr-pill-tags">
               <span v-for="tag in theme.tags" :key="`${theme.id}-${tag}`">{{ tag }}</span>
@@ -298,22 +301,22 @@
             <small v-else class="bpr-theme-empty">—</small>
           </article>
         </div>
-        <p class="bpr-theme-note">{{ $t('baziChart.themeNote') }}</p>
+        <p class="bpr-theme-note">{{ $t(reportKey('themeNote')) }}</p>
 
         <div class="bpr-structure-grid">
-          <div class="bpr-card"><span>{{ $t('baziChart.dayStrength') }}</span><strong>{{ result.structure.dayStrength }}</strong><small>{{ result.structure.supportRatio }}%</small></div>
-          <div class="bpr-card"><span>{{ $t('baziChart.rootStatus') }}</span><strong>{{ result.structure.rootStatus }}</strong><small>根气 {{ result.energy.rootQuality }}%</small></div>
-          <div class="bpr-card"><span>{{ $t('baziChart.forceDistribution') }}</span><strong>{{ result.structure.forceDistribution }}</strong><small>{{ result.energy.supportUseGod }} 帮身</small></div>
-          <div class="bpr-card"><span>{{ $t('baziChart.patternStatus') }}</span><strong>{{ result.structure.pattern }}</strong><small>{{ result.structure.patternEvidence }}</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('dayStrength')) }}</span><strong>{{ result.structure.dayStrength }}</strong><small>{{ result.structure.supportRatio }}%</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('rootStatus')) }}</span><strong>{{ result.structure.rootStatus }}</strong><small>根气 {{ result.energy.rootQuality }}%</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('forceDistribution')) }}</span><strong>{{ result.structure.forceDistribution }}</strong><small>{{ result.energy.supportUseGod }} 帮身</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('patternStatus')) }}</span><strong>{{ result.structure.pattern }}</strong><small>{{ result.structure.patternEvidence }}</small></div>
         </div>
         <div class="bpr-card bpr-evidence">
-          <strong>{{ $t('baziChart.evidence') }}</strong>
+          <strong>{{ $t(reportKey('evidence')) }}</strong>
           <p v-for="item in result.structure.evidence" :key="item">{{ item }}</p>
         </div>
         <div class="bpr-structure-grid">
-          <div class="bpr-card"><span>{{ $t('baziChart.primaryUse') }}</span><strong>{{ result.energy.primaryUseGod }}</strong><small>{{ result.energy.adjustment }}</small></div>
-          <div class="bpr-card"><span>{{ $t('baziChart.supportUse') }}</span><strong>{{ result.energy.supportUseGod }}</strong><small>{{ result.energy.rootStatus }}</small></div>
-          <div class="bpr-card"><span>{{ $t('baziChart.avoidGod') }}</span><strong>{{ result.energy.avoidGod }}</strong><small>{{ result.energy.monthCommand }}</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('primaryUse')) }}</span><strong>{{ result.energy.primaryUseGod }}</strong><small>{{ result.energy.adjustment }}</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('supportUse')) }}</span><strong>{{ result.energy.supportUseGod }}</strong><small>{{ result.energy.rootStatus }}</small></div>
+          <div class="bpr-card"><span>{{ $t(reportKey('avoidGod')) }}</span><strong>{{ result.energy.avoidGod }}</strong><small>{{ result.energy.monthCommand }}</small></div>
         </div>
         <div class="bpr-card bpr-extras">
           <article v-for="item in [result.extras.taiYuan, result.extras.mingGong, result.extras.shenGong]" :key="item.label">
@@ -327,7 +330,7 @@
       </div>
     </section>
 
-    <p class="bpr-disclaimer">{{ $t('baziChart.disclaimer') }}</p>
+    <p class="bpr-disclaimer">{{ $t(reportKey('disclaimer')) }}</p>
 
     <Teleport to="body">
       <Transition name="bpr-insight">
@@ -341,17 +344,17 @@
             class="bpr-insight"
             role="dialog"
             aria-modal="true"
-            :aria-label="insightTitle || $t('baziChart.aiPanelTitle')"
+            :aria-label="insightTitle || $t(reportKey('aiPanelTitle'))"
           >
             <header class="bpr-insight-head">
               <div class="min-w-0">
                 <p>
                   <UIcon name="i-heroicons-sparkles" class="h-3.5 w-3.5" />
-                  {{ $t('baziChart.aiPanelTitle') }}
+                  {{ $t(reportKey('aiPanelTitle')) }}
                 </p>
-                <h3>{{ insightTitle || $t('baziChart.aiPanelTitle') }}</h3>
+                <h3>{{ insightTitle || $t(reportKey('aiPanelTitle')) }}</h3>
               </div>
-              <button type="button" :aria-label="$t('baziChart.aiClose')" @click="closeInsight">
+              <button type="button" :aria-label="$t(reportKey('aiClose'))" @click="closeInsight">
                 <UIcon name="i-heroicons-x-mark" class="h-4 w-4" />
               </button>
             </header>
@@ -359,7 +362,7 @@
             <div class="bpr-insight-body">
               <div v-if="insightStatus === 'connecting'" class="bpr-insight-status">
                 <UIcon name="i-heroicons-sparkles" class="h-4 w-4 animate-pulse" />
-                {{ $t('baziChart.aiConnecting') }}
+                {{ $t(reportKey('aiConnecting')) }}
               </div>
               <div v-else-if="insightError" class="bpr-insight-error">
                 <UIcon name="i-heroicons-exclamation-triangle" class="h-4 w-4" />
@@ -369,7 +372,7 @@
             </div>
 
             <footer class="bpr-insight-foot">
-              <small>{{ $t('baziChart.aiDisclaimer') }}</small>
+              <small>{{ $t(reportKey('aiDisclaimer')) }}</small>
               <button
                 v-if="insightMode === 'target' && insightStatus === 'complete'"
                 type="button"
@@ -381,7 +384,7 @@
             </footer>
 
             <div v-if="authRequired" class="bpr-insight-auth">
-              <p>{{ $t('baziChart.aiLoginRequired') }}</p>
+              <p>{{ $t(reportKey('aiLoginRequired')) }}</p>
               <div>
                 <button type="button" @click="signInWithGoogle(route.fullPath)">
                   <UIcon name="i-simple-icons-google" class="h-4 w-4" />
@@ -403,7 +406,14 @@
 <script setup lang="ts">
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 
-const props = defineProps<{ result: BaziChartResult }>()
+const props = withDefaults(defineProps<{
+  result: BaziChartResult
+  terminology?: 'bazi' | 'shichu-suimei'
+  aiEndpoint?: string
+}>(), {
+  terminology: 'bazi',
+  aiEndpoint: '/api/tools/bazi-paipan/interpret',
+})
 const toast = useToast()
 const route = useRoute()
 const { t, locale } = useI18n()
@@ -422,8 +432,47 @@ const authRequired = ref(false)
 let insightAbort: AbortController | null = null
 
 const insightFullLabel = computed(() => isLoggedIn.value
-  ? t('baziChart.aiFullReport')
-  : t('baziChart.aiFullReportLogin'))
+  ? t(reportKey('aiFullReport'))
+  : t(reportKey('aiFullReportLogin')))
+
+const SHICHU_KEY_OVERRIDES = new Set([
+  'system',
+  'chartTitle',
+  'chartSubtitle',
+  'calendar',
+  'dayBoundary',
+  'solar',
+  'location',
+  'trueSolar',
+  'copy',
+  'nayin',
+  'qiyun',
+  'qiyunDate',
+  'dayunDirection',
+  'methodology',
+  'scorePolicy',
+  'stemTenGod',
+  'hiddenStems',
+  'hiddenTenGods',
+  'diShi',
+  'xunKong',
+  'tenGodRatio',
+  'shenshaTitle',
+  'shenshaCombination',
+  'patternStatus',
+  'dayunTitle',
+  'primaryUse',
+  'supportUse',
+  'avoidGod',
+  'school',
+  'monthRule',
+])
+
+function reportKey(key: string) {
+  return props.terminology === 'shichu-suimei' && SHICHU_KEY_OVERRIDES.has(key)
+    ? `shichuSuimei.${key}`
+    : `baziChart.${key}`
+}
 
 const TARGET_SELECTORS = [
   '.bpr-chart-row:not(.bpr-chart-head) > div',
@@ -485,7 +534,7 @@ function initializeTargets() {
     node.setAttribute('role', 'button')
     const label = targetLabel(node)
     node.dataset.bprAiLabel = label
-    node.setAttribute('aria-label', `${label} · ${t('baziChart.aiAction')}`)
+    node.setAttribute('aria-label', `${label} · ${t(reportKey('aiAction'))}`)
   }
 }
 
@@ -514,14 +563,17 @@ function handleReportKeydown(event: KeyboardEvent) {
 
 function compactBaziContext() {
   const r = props.result
+  const isShichu = props.terminology === 'shichu-suimei'
   return [
-    `四柱：${r.pillars.map(p => p.ganzhi).join(' ')}`,
+    `${isShichu ? '体系：日本四柱推命' : '体系：八字'}`,
+    `四柱：${r.pillars.map(p => `${p.label} ${p.ganzhi}`).join(' ')}`,
     `出生：${r.birth.solarText} ${r.birth.genderText}；地点：${r.birth.locationName}；校正时辰：${r.birth.effectiveHour}`,
     `节气/司令：${r.birth.solarTerm.previous.name} → ${r.birth.solarTerm.next.name}，进度 ${r.birth.solarTerm.progress}%，司令 ${r.birth.solarTerm.siLing.ganzhi}`,
+    `十二運：${r.pillars.map(p => `${p.label} ${p.diShi}`).join('、')}`,
     `日主：${r.energy.strength}（支持比 ${r.energy.supportRatio}%，${r.energy.rootStatus}）`,
     `格局：${r.pattern.name} / ${r.pattern.status}；取格：${r.pattern.monthMainQi}`,
     `用神：${r.energy.primaryUseGod}；辅助：${r.energy.supportUseGod}；忌神：${r.energy.avoidGod}`,
-    `十神：${r.energy.tenGods.map(item => `${item.name} ${item.percent}%`).join('、')}`,
+    `${isShichu ? '通変星' : '十神'}：${r.energy.tenGods.map(item => `${item.name} ${item.percent}%`).join('、')}`,
     `五行：${r.energy.wuxing.map(item => `${item.label} ${item.percent}%（${item.stateLabel}）`).join('、')}`,
     `主题信号：${r.natalThemes.map(item => `${item.title} ${item.score}/100 ${item.status} [${item.tags.join('+') || '无'}]`).join('；')}`,
     `原局关系：${r.relations.map(item => `${item.value}${item.type}@${item.positions.join('/')}（${item.intensity}）`).join('；') || '未检出'}`,
@@ -545,7 +597,7 @@ async function requestInsight(target: { selector: string, label: string, section
 async function startFullReport() {
   authRequired.value = false
   insightMode.value = 'full'
-  insightTitle.value = t('baziChart.aiFullReportTitle')
+  insightTitle.value = t(reportKey('aiFullReportTitle'))
   await streamInsight({ mode: 'full', title: insightTitle.value })
 }
 
@@ -568,13 +620,14 @@ async function streamInsight(payload: { mode: 'target' | 'full', target?: Record
   authRequired.value = false
   insightStatus.value = 'connecting'
   try {
-    const response = await fetch('/api/tools/bazi-paipan/interpret', {
+    const response = await fetch(props.aiEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: insightAbort.signal,
       body: JSON.stringify({
         ...payload,
         chart: props.result,
+        terminology: props.terminology,
         chartContext: compactBaziContext(),
         locale: locale.value,
       }),
@@ -614,7 +667,7 @@ async function streamInsight(payload: { mode: 'target' | 'full', target?: Record
             insightContent.value += chunk.text
           }
           else if (chunk.type === 'error') {
-            throw new Error(chunk.message || t('baziChart.aiError'))
+            throw new Error(chunk.message || t(reportKey('aiError')))
           }
         }
         catch (error) {
@@ -623,13 +676,13 @@ async function streamInsight(payload: { mode: 'target' | 'full', target?: Record
       }
     }
 
-    if (!insightContent.value) throw new Error(t('baziChart.aiNoResult'))
+    if (!insightContent.value) throw new Error(t(reportKey('aiNoResult')))
     insightStatus.value = 'complete'
   }
   catch (error) {
     if ((error as Error)?.name === 'AbortError') return
     insightStatus.value = 'error'
-    insightError.value = error instanceof Error ? error.message : t('baziChart.aiError')
+    insightError.value = error instanceof Error ? error.message : t(reportKey('aiError'))
   }
   finally {
     insightAbort = null
@@ -727,6 +780,16 @@ async function copyPillars() {
 .bpr-hero {
   display: grid;
   gap: 18px;
+}
+
+.bpr-system {
+  justify-self: start;
+  padding: 4px 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .bpr-birth-grid {

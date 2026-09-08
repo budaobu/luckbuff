@@ -715,6 +715,11 @@
     "newSchoolBaziKeywords": "new school bazi, BaZi new school, new school ming li, strength use god, four pillars, adjacent interaction",
     "newSchoolBaziOgTitle": "New School BaZi Chart | ososn",
     "newSchoolBaziOgDesc": "Read four pillars through New School principal qi, adjacent interactions and strength-first use gods.",
+    "shichuSuimeiTitle": "Shichu Suimei Calculator_Japanese Four Pillars Chart",
+    "shichuSuimeiDesc": "Free Japanese Shichu Suimei calculator. Generate a natal chart with year, term, day and hour pillars, tsuhen stars, twelve stages, void branches and luck cycles. AI reading and full member reports included.",
+    "shichuSuimeiKeywords": "Shichu Suimei,Japanese Four Pillars,Shichu Suimei calculator,Four Pillars chart,natal chart,tsuhen stars,twelve stages,void branches,dayun,annual luck,free shichu suimei,AI four pillars",
+    "shichuSuimeiOgTitle": "Shichu Suimei Chart | ososn",
+    "shichuSuimeiOgDesc": "Generate a Japanese Four Pillars chart with tsuhen stars, twelve stages, void branches and luck cycles.",
     "homeTitle": "Free Online Destiny Reading_Ziwei · Bazi · Vedic Astrology · Plum Blossom",
     "homeDesc": "ososn is a free online divination platform offering Bazi, Ziwei, Liu Yao, Qimen, Tarot, and divination lots with AI interpretation.",
     "homeKeywords": "online fortune telling,free charting,Ziwei Dou Shu,Bazi,Vedic Astrology,Plum Blossom,Liu Yao,destiny reading,online divination,metaphysics tools",
@@ -2483,7 +2488,8 @@
   "language": {
     "zhCN": "简体中文",
     "zhTW": "繁體中文",
-    "en": "English"
+    "en": "English",
+    "ja": "日本語"
   },
   "baziForm": {
     "selectProfile": "Select Profile",
@@ -10695,7 +10701,8 @@
   "languageShort": {
     "zhCN": "简",
     "zhTW": "繁",
-    "en": "EN"
+    "en": "EN",
+    "ja": "日"
   },
   "numericEnergyTopic": {
     "title": "Numeric Energy",
@@ -11320,6 +11327,43 @@
     "timeIndex10": "Xu",
     "timeIndex11": "Hai",
     "timeIndex12": "Late Zi"
+  },
+  "shichuSuimei": {
+    "system": "Shichu Suimei · Japan",
+    "title": "Shichu Suimei Chart",
+    "subtitle": "Enter birth date, hour, place and gender to generate a Japanese Four Pillars natal chart and luck structure",
+    "formTitle": "Birth Information",
+    "submit": "Generate Chart",
+    "chartTitle": "Shichu Suimei Natal Chart",
+    "chartSubtitle": "Year, term, day and hour pillars with natal structure",
+    "calendar": "Calendar",
+    "dayBoundary": "Day Boundary",
+    "solar": "Solar Date",
+    "location": "Birth Place",
+    "trueSolar": "True Solar Time",
+    "copy": "Copy",
+    "nayin": "Nayin",
+    "qiyun": "Luck Start",
+    "qiyunDate": "Luck Start Date",
+    "dayunDirection": "Direction",
+    "methodology": "Methodology",
+    "scorePolicy": "Scoring Rule",
+    "stemTenGod": "Tsuhen Stars (Stems)",
+    "hiddenStems": "Hidden Stems",
+    "hiddenTenGods": "Hidden Tsuhen Stars",
+    "diShi": "Twelve Stages",
+    "xunKong": "Void Branches",
+    "tenGodRatio": "Tsuhen Star Balance",
+    "shenshaTitle": "Symbolic Stars",
+    "shenshaCombination": "Symbolic Combinations",
+    "patternStatus": "Pattern",
+    "dayunTitle": "Luck Cycles & Years",
+    "primaryUse": "Use God",
+    "supportUse": "Support God",
+    "avoidGod": "Avoid God",
+    "school": "School",
+    "monthRule": "Solar Term Rule",
+    "aiFullReportTitle": "Full Shichu Suimei AI Report"
   },
   "baziChart": {
     "title": "Bazi Chart",

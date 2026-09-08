@@ -55,6 +55,13 @@ const chartingToolCategory: ToolCategory = {
       recommended: true,
     },
     {
+      icon: 'i-heroicons-calendar-date-range',
+      titleKey: 'shichuSuimei.title',
+      descKey: 'shichuSuimei.subtitle',
+      ctaKey: 'shichuSuimei.submit',
+      path: '/tools/shichu-suimei',
+    },
+    {
       icon: 'i-heroicons-sparkles',
       titleKey: 'qizhengChart.title',
       descKey: 'qizhengChart.subtitle',

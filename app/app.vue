@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { zh_cn, zh_tw, en } from '@nuxt/ui/locale'
+import { zh_cn, zh_tw, en, ja } from '@nuxt/ui/locale'
 
 const { locale } = useI18n()
 const config = useRuntimeConfig()
+const route = useRoute()
 
 const uiLocale = computed(() => {
   switch (locale.value) {
     case 'zh-TW': return zh_tw
     case 'en': return en
+    case 'ja': return ja
     case 'zh-CN':
     default: return zh_cn
   }
@@ -21,13 +23,20 @@ const head = useLocaleHead({
   seo: true,
 })
 
+function japaneseAlternateVisible() {
+  return route.path.replace(/^\/(?:zh-TW|en|ja)(?=\/|$)/, '') === '/tools/shichu-suimei'
+}
+
 useHead(() => ({
   htmlAttrs: {
     lang: head.value.htmlAttrs.lang || 'zh-CN',
     dir: (head.value.htmlAttrs.dir || 'ltr') as 'ltr' | 'rtl' | 'auto',
   },
   link: [
-    ...(head.value.link || []),
+    ...(head.value.link || []).filter((link) => {
+      if (link.hreflang !== 'ja' && link.hreflang !== 'ja-JP') return true
+      return japaneseAlternateVisible()
+    }),
   ],
   script: googleAdsenseClient
     ? [{
@@ -38,7 +47,10 @@ useHead(() => ({
       }]
     : [],
   meta: [
-    ...(head.value.meta || []),
+    ...(head.value.meta || []).filter((meta) => {
+      if (meta.property !== 'og:locale:alternate') return true
+      return meta.content !== 'ja_JP' || japaneseAlternateVisible()
+    }),
     ...(googleSiteVerification
       ? [{ name: 'google-site-verification', content: googleSiteVerification }]
       : []),

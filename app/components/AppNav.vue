@@ -164,7 +164,7 @@
               style="background-color: var(--surface-dropdown); border-color: var(--border-medium);"
             >
               <button
-                v-for="lang in languages"
+                v-for="lang in availableLanguages"
                 :key="lang.code"
                 class="w-full px-4 py-2.5 text-left text-sm transition-colors"
                 :class="locale === lang.code
@@ -350,7 +350,7 @@
         <div class="border-t pt-2 mt-2" style="border-color: var(--border-subtle);">
           <p class="px-4 py-2 text-xs" style="color: var(--text-placeholder);">{{ $t('nav.languageLabel') }}</p>
           <button
-            v-for="lang in languages"
+            v-for="lang in availableLanguages"
             :key="lang.code"
             class="block w-full px-4 py-2.5 rounded-xl text-sm text-left transition-colors"
             :class="locale === lang.code
@@ -405,24 +405,36 @@ const navItems = computed<NavItem[]>(() => [
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
 ])
 
-const languages: { code: 'zh-CN' | 'zh-TW' | 'en'; name: string }[] = [
+type AppLanguageCode = 'zh-CN' | 'zh-TW' | 'en' | 'ja'
+
+const baseLanguages = computed<Array<{ code: AppLanguageCode, name: string }>>(() => [
   { code: 'zh-CN', name: t('language.zhCN') },
   { code: 'zh-TW', name: t('language.zhTW') },
   { code: 'en', name: t('language.en') },
-]
+])
+
+const availableLanguages = computed(() => {
+  const languages = [...baseLanguages.value]
+  const routePath = route.path.replace(/^\/(?:zh-TW|en|ja)(?=\/|$)/, '')
+  if (routePath === '/tools/shichu-suimei' && switchLocalePath('ja')) {
+    languages.push({ code: 'ja', name: t('language.ja') })
+  }
+  return languages
+})
 
 const currentLangLabel = computed(() => {
-  return languages.find(l => l.code === locale.value)?.name || t('language.zhCN')
+  return availableLanguages.value.find(l => l.code === locale.value)?.name || t('language.zhCN')
 })
 
 const langShortMap: Record<string, string> = {
   'zh-CN': t('languageShort.zhCN'),
   'zh-TW': t('languageShort.zhTW'),
   'en': t('languageShort.en'),
+  'ja': t('languageShort.ja'),
 }
 const currentLangShort = computed(() => langShortMap[locale.value] || '简')
 
-function switchLang(code: 'zh-CN' | 'zh-TW' | 'en') {
+function switchLang(code: AppLanguageCode) {
   const newPath = switchLocalePath(code)
   langOpen.value = false
   if (newPath) {
