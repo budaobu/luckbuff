@@ -1,110 +1,115 @@
 <template>
-  <div class="lpp-page">
-    <div class="lpp-container">
-      <header class="lpp-header">
+  <div class="tbp-page">
+    <div class="tbp-container">
+      <header class="tbp-header">
         <div>
-          <p class="lpp-eyebrow">Da Liu Ren Chart</p>
-          <h1 class="lpp-title">{{ $t('liurenPaipan.title') }}</h1>
-          <p class="lpp-subtitle">{{ $t('liurenPaipan.subtitle') }}</p>
+          <p class="tbp-eyebrow">Tieban Shenshu Chart</p>
+          <h1 class="tbp-title">{{ $t('tiebanPaipan.title') }}</h1>
+          <p class="tbp-subtitle">{{ $t('tiebanPaipan.subtitle') }}</p>
         </div>
-        <NuxtLink :to="localePath('/chart')" class="lpp-back">
+        <NuxtLink :to="localePath('/chart')" class="tbp-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
           {{ $t('paipanTopic.title') }}
         </NuxtLink>
       </header>
 
-      <section v-if="phase === 'form'" class="lpp-form-wrap">
-        <form class="lpp-card lpp-form" @submit.prevent="handleSubmit">
-          <h2 class="lpp-card-title">{{ $t('liurenPaipan.formTitle') }}</h2>
-
-          <DivinationTimeCard
-            ref="timeCardRef"
-            :label="$t('liurenPaipan.time')"
-            :hint="$t('liurenPaipan.timeHint')"
+      <section v-if="phase === 'form'" class="tbp-form-wrap">
+        <form class="tbp-card" @submit.prevent="handleSubmit">
+          <h2 class="tbp-card-title">{{ $t('tiebanPaipan.formTitle') }}</h2>
+          <ProfileBirthDateSelector
+            :birth-date="form.birthDate"
+            :selected-profile-id="selectedProfileId"
+            :date-label="$t('tiebanPaipan.birthDate')"
             required
+            @select-profile="applyProfile"
+            @update:birth-date="form.birthDate = $event"
           />
 
           <div>
-            <label for="liuren-paipan-location">{{ $t('liurenPaipan.location') }}</label>
+            <label for="tieban-birth-time">{{ $t('tiebanPaipan.birthTime') }}</label>
             <UInput
-              id="liuren-paipan-location"
-              v-model="form.location"
-              :placeholder="$t('liurenPaipan.locationPlaceholder')"
+              id="tieban-birth-time"
+              v-model="form.birthTime"
+              type="time"
+              min="00:00"
+              max="23:59"
+              required
               class="w-full"
+              :ui="{
+                base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+              }"
             />
-            <p class="lpp-field-hint">{{ $t('liurenPaipan.locationHint') }}</p>
           </div>
 
-          <div class="lpp-grid-2">
-            <div>
-              <ProfileBirthDateSelector
-                :birth-date="form.birthDate"
-                :selected-profile-id="selectedProfileId"
-                :date-label="$t('liurenPaipan.birthDate')"
-                @select-profile="applyProfile"
-                @update:birth-date="form.birthDate = $event"
-              />
-              <p class="lpp-field-hint">{{ $t('liurenPaipan.birthHint') }}</p>
-            </div>
-            <div>
-              <label>{{ $t('liurenPaipan.gender') }}</label>
-              <div class="lpp-gender">
-                <button
-                  type="button"
-                  :class="{ active: form.gender === 'male' }"
-                  @click="form.gender = 'male'"
-                >
-                  {{ $t('common.male') }}
-                </button>
-                <button
-                  type="button"
-                  :class="{ active: form.gender === 'female' }"
-                  @click="form.gender = 'female'"
-                >
-                  {{ $t('common.female') }}
-                </button>
-              </div>
+          <div>
+            <label for="tieban-location">{{ $t('tiebanPaipan.location') }}</label>
+            <UInput
+              id="tieban-location"
+              v-model="form.location"
+              :placeholder="$t('tiebanPaipan.locationPlaceholder')"
+              class="w-full"
+            />
+            <p class="tbp-field-hint">{{ $t('tiebanPaipan.locationHint') }}</p>
+          </div>
+
+          <div>
+            <label>{{ $t('tiebanPaipan.gender') }}</label>
+            <div class="tbp-gender">
+              <button
+                type="button"
+                :class="{ active: form.gender === 'male' }"
+                @click="form.gender = 'male'"
+              >
+                {{ $t('common.male') }}
+              </button>
+              <button
+                type="button"
+                :class="{ active: form.gender === 'female' }"
+                @click="form.gender = 'female'"
+              >
+                {{ $t('common.female') }}
+              </button>
             </div>
           </div>
 
           <UButton type="submit" color="warning" size="lg" block>
             <template #leading>
-              <UIcon name="i-heroicons-circle-stack" class="h-4 w-4" />
+              <UIcon name="i-heroicons-calculator" class="h-4 w-4" />
             </template>
-            {{ $t('liurenPaipan.submit') }}
+            {{ $t('tiebanPaipan.submit') }}
           </UButton>
         </form>
 
-        <div class="lpp-hints">
-          <article class="lpp-hint">
+        <div class="tbp-hints">
+          <article class="tbp-hint">
             <UIcon name="i-heroicons-clock" class="h-4 w-4" />
-            <p>{{ $t('liurenPaipan.timeHint') }}</p>
+            <p>{{ $t('tiebanPaipan.minuteHint') }}</p>
           </article>
-          <article class="lpp-hint">
+          <article class="tbp-hint">
             <UIcon name="i-heroicons-map-pin" class="h-4 w-4" />
-            <p>{{ $t('liurenPaipan.solarTimeHint') }}</p>
+            <p>{{ $t('tiebanPaipan.solarTimeHint') }}</p>
           </article>
-          <article class="lpp-hint">
-            <UIcon name="i-heroicons-user" class="h-4 w-4" />
-            <p>{{ $t('liurenPaipan.birthHint') }}</p>
+          <article class="tbp-hint">
+            <UIcon name="i-heroicons-book-open" class="h-4 w-4" />
+            <p>{{ $t('tiebanPaipan.corpusHint') }}</p>
           </article>
-          <article class="lpp-hint">
+          <article class="tbp-hint">
             <UIcon name="i-heroicons-shield-check" class="h-4 w-4" />
-            <p>{{ $t('liurenPaipan.privacyHint') }}</p>
+            <p>{{ $t('tiebanPaipan.privacyHint') }}</p>
           </article>
         </div>
       </section>
 
-      <section v-else-if="phase === 'loading'" class="lpp-loading">
-        <span class="lpp-loading-dot" />
-        <p>{{ $t('liurenPaipan.calculating') }}</p>
+      <section v-else-if="phase === 'loading'" class="tbp-loading">
+        <span class="tbp-loading-dot" />
+        <p>{{ $t('tiebanPaipan.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" class="lpp-report">
-        <LiurenPaipanReport :result="result" />
+      <div v-else-if="result" class="tbp-report">
+        <TiebanPaipanReport :result="result" />
       </div>
 
-      <div v-if="phase === 'result'" class="lpp-actions">
+      <div v-if="phase === 'result'" class="tbp-actions">
         <UButton color="warning" variant="soft" @click="resetToForm">
           <template #leading>
             <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
@@ -112,9 +117,9 @@
           {{ $t('common.retry') }}
         </UButton>
         <AppShareButton
-          tool="liuren-paipan"
+          tool="tieban-paipan"
           :summary="shareSummary"
-          filename="liuren-paipan-poster.png"
+          filename="tieban-paipan-poster.png"
         />
       </div>
     </div>
@@ -122,29 +127,27 @@
 </template>
 
 <script setup lang="ts">
-import type { LiurenPaipanResult } from '~~/app/types/liuren-paipan'
+import type { TiebanPaipanResult } from '~~/app/types/tieban-paipan'
 import type { UserProfile } from '~/types/user'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
-const timeCardRef = ref<{ iso: string, timezone: string } | null>(null)
 
 const phase = ref<'form' | 'loading' | 'result'>('form')
-const result = ref<LiurenPaipanResult | null>(null)
+const result = ref<TiebanPaipanResult | null>(null)
 const selectedProfileId = ref<string | null>(null)
 const form = ref({
-  location: '',
   birthDate: '',
+  birthTime: '',
+  location: '',
   gender: 'male' as 'male' | 'female',
 })
-const lastFormValues = ref({ ...form.value })
 
 const shareSummary = computed(() => {
   if (!result.value) return undefined
-  const { monthGeneral, hourBranch, coursePattern } = result.value.summary
-  return `${monthGeneral}${t('liurenPaipan.generalAddedTo')}${hourBranch}${t('liurenPaipan.hourUnit')} · ${coursePattern}`
+  return `${result.value.natal.hexagram} · ${result.value.numbers.kaokeQuarter} · ${result.value.birth.minuteQuarter.label}`
 })
 
 function browserTimezone() {
@@ -156,10 +159,31 @@ function browserTimezone() {
   }
 }
 
+const PROFILE_HOUR_TIME: Record<string, string> = {
+  子: '00:30',
+  丑: '01:30',
+  寅: '03:30',
+  卯: '05:30',
+  辰: '07:30',
+  巳: '09:30',
+  午: '11:30',
+  未: '13:30',
+  申: '15:30',
+  酉: '17:30',
+  戌: '19:30',
+  亥: '21:30',
+}
+
 function applyProfile(profile: UserProfile) {
   selectedProfileId.value = profile.id
   form.value.gender = profile.gender
   form.value.birthDate = profile.birthDate || ''
+  if (!form.value.birthTime && profile.birthHour) {
+    form.value.birthTime = PROFILE_HOUR_TIME[profile.birthHour] || ''
+  }
+  if (!form.value.location && profile.birthProvince) {
+    form.value.location = profile.birthProvince
+  }
 }
 
 interface ResolvedLocation {
@@ -179,27 +203,24 @@ async function resolveLocation(name: string): Promise<ResolvedLocation | null> {
 }
 
 async function handleSubmit() {
-  const datetime = timeCardRef.value?.iso
-  if (!datetime) {
-    toast.add({ title: t('liurenPaipan.requiredError'), color: 'error' })
+  if (!form.value.birthDate || !form.value.birthTime) {
+    toast.add({ title: t('tiebanPaipan.requiredError'), color: 'error' })
     return
   }
-  lastFormValues.value = { ...form.value }
-  phase.value = 'loading'
 
+  phase.value = 'loading'
   try {
     const location = await resolveLocation(form.value.location)
-    const timezone = location?.timezone || timeCardRef.value?.timezone || browserTimezone()
-    result.value = await $fetch<LiurenPaipanResult>('/api/tools/liuren-paipan/calc', {
+    result.value = await $fetch<TiebanPaipanResult>('/api/tools/tieban-paipan/calc', {
       method: 'POST',
       body: {
-        datetime,
-        timezone,
+        birthDate: form.value.birthDate,
+        birthTime: form.value.birthTime,
+        gender: form.value.gender,
         location: form.value.location,
         longitude: location?.longitude,
         latitude: location?.latitude,
-        birthDate: form.value.birthDate || undefined,
-        gender: form.value.birthDate ? form.value.gender : undefined,
+        timezone: location?.timezone || browserTimezone(),
       },
     })
     phase.value = 'result'
@@ -209,8 +230,8 @@ async function handleSubmit() {
   catch (error: any) {
     phase.value = 'form'
     toast.add({
-      title: t('liurenPaipan.fail'),
-      description: error?.data?.statusMessage || error?.message || t('liurenPaipan.pleaseRetry'),
+      title: t('tiebanPaipan.fail'),
+      description: error?.data?.statusMessage || error?.message || t('tiebanPaipan.pleaseRetry'),
       color: 'error',
     })
   }
@@ -224,14 +245,14 @@ function resetToForm() {
 const siteName = 'ososn'
 
 useSeoMeta({
-  title: () => `${t('seo.liurenPaipanTitle')} - ${siteName}`,
-  description: t('seo.liurenPaipanDesc'),
-  keywords: t('seo.liurenPaipanKeywords'),
-  ogTitle: () => `${t('seo.liurenPaipanOgTitle')} - ${siteName}`,
-  ogDescription: t('seo.liurenPaipanOgDesc'),
+  title: () => `${t('seo.tiebanPaipanTitle')} - ${siteName}`,
+  description: t('seo.tiebanPaipanDesc'),
+  keywords: t('seo.tiebanPaipanKeywords'),
+  ogTitle: () => `${t('seo.tiebanPaipanOgTitle')} - ${siteName}`,
+  ogDescription: t('seo.tiebanPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liuren-paipan',
+  ogUrl: 'https://www.ososn.com/tools/tieban-paipan',
   twitterCard: 'summary_large_image',
 })
 
@@ -242,11 +263,11 @@ useHead(() => ({
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        name: t('liurenPaipan.title'),
+        name: t('tiebanPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/liuren-paipan')}`,
-        description: t('seo.liurenPaipanDesc'),
+        url: `https://www.ososn.com${localePath('/tools/tieban-paipan')}`,
+        description: t('seo.tiebanPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),
     },
@@ -255,27 +276,27 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.lpp-page {
+.tbp-page {
   min-height: 100vh;
   background: var(--surface-bg);
   color: var(--text-primary);
 }
 
-.lpp-container {
+.tbp-container {
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
   padding: 40px 20px 72px;
 }
 
-.lpp-header {
+.tbp-header {
   display: grid;
   gap: 18px;
   margin-bottom: 30px;
   text-align: center;
 }
 
-.lpp-eyebrow {
+.tbp-eyebrow {
   margin-bottom: 8px;
   color: var(--accent);
   font-size: 12px;
@@ -284,19 +305,19 @@ useHead(() => ({
   text-transform: uppercase;
 }
 
-.lpp-title {
+.tbp-title {
   font-size: 30px;
   line-height: 1.2;
 }
 
-.lpp-subtitle {
+.tbp-subtitle {
   max-width: 720px;
   margin: 10px auto 0;
   color: var(--text-muted);
   font-size: 14px;
 }
 
-.lpp-back {
+.tbp-back {
   justify-self: center;
   display: inline-flex;
   align-items: center;
@@ -308,36 +329,39 @@ useHead(() => ({
   font-size: 12px;
 }
 
-.lpp-form-wrap {
+.tbp-form-wrap {
   display: grid;
   gap: 18px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-.lpp-card {
+.tbp-card {
   padding: 22px;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   background: var(--surface-card);
 }
 
-.lpp-card-title {
+.tbp-card-title {
   margin-bottom: 18px;
   font-size: 18px;
 }
 
-.lpp-form {
+.tbp-card form,
+.tbp-card {
   display: grid;
   gap: 18px;
 }
 
-.lpp-form label {
+.tbp-card label {
   display: block;
   margin-bottom: 8px;
   color: var(--text-muted);
   font-size: 14px;
 }
 
-.lpp-form input {
+.tbp-card input {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--border-light);
@@ -346,19 +370,19 @@ useHead(() => ({
   color: var(--text-primary);
 }
 
-.lpp-grid-2 {
+.tbp-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
-.lpp-gender {
+.tbp-gender {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
-.lpp-gender button {
+.tbp-gender button {
   padding: 8px 10px;
   border: 1px solid var(--border-light);
   border-radius: 8px;
@@ -367,25 +391,25 @@ useHead(() => ({
   font-size: 13px;
 }
 
-.lpp-gender button.active {
+.tbp-gender button.active {
   border-color: var(--accent-border-hover);
   background: var(--accent-bg);
   color: var(--accent);
 }
 
-.lpp-field-hint {
+.tbp-field-hint {
   margin: 7px 0 0;
   color: var(--text-faint);
   font-size: 12px;
 }
 
-.lpp-hints {
+.tbp-hints {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.lpp-hint {
+.tbp-hint {
   display: flex;
   gap: 10px;
   padding: 14px;
@@ -396,13 +420,13 @@ useHead(() => ({
   font-size: 13px;
 }
 
-.lpp-hint :deep(.iconify) {
+.tbp-hint :deep(.iconify) {
   flex: 0 0 auto;
   margin-top: 2px;
   color: var(--accent);
 }
 
-.lpp-loading {
+.tbp-loading {
   display: grid;
   justify-items: center;
   gap: 12px;
@@ -411,29 +435,29 @@ useHead(() => ({
   font-size: 14px;
 }
 
-.lpp-loading-dot {
+.tbp-loading-dot {
   width: 12px;
   height: 12px;
   border: 2px solid var(--accent-border);
   border-top-color: var(--accent);
   border-radius: 50%;
-  animation: lpp-spin 900ms linear infinite;
+  animation: tbp-spin 900ms linear infinite;
 }
 
-.lpp-actions {
+.tbp-actions {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 24px;
 }
 
-@keyframes lpp-spin {
+@keyframes tbp-spin {
   to { transform: rotate(360deg); }
 }
 
 @media (max-width: 720px) {
-  .lpp-grid-2,
-  .lpp-hints {
+  .tbp-grid-2,
+  .tbp-hints {
     grid-template-columns: 1fr;
   }
 }
