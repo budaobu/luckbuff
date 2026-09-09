@@ -8,6 +8,7 @@ interface Props {
   shareTarget?: HTMLElement
   filename: string
   disabled?: boolean
+  shareImageFactory?: () => Promise<string | null | undefined>
 }
 
 const props = defineProps<Props>()
@@ -25,10 +26,12 @@ async function handleShare() {
 
   generating.value = true
   try {
+    const customShareImage = await props.shareImageFactory?.()
     const result = await share({
       tool: props.tool,
       name: props.name,
       summary: props.summary,
+      customShareImage,
       shareTarget: props.shareTarget,
       filename: props.filename,
       t,

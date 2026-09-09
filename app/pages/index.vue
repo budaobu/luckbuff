@@ -182,7 +182,8 @@
           v-for="collection in homeCollections"
           :key="collection.id"
           :group="collection"
-          :max-items="collection.id === 'charting' ? 1 : 6"
+          :max-items="collection.id === 'charting' ? 8 : 6"
+          :featured-paths="collection.id === 'charting' ? homeChartingPaths : undefined"
         />
       </div>
     </section>
@@ -314,6 +315,15 @@ const liuNianData = computed(() => {
 })
 
 const homeCollections = computed(() => toolDirectoryGroups.value)
+
+const homeChartingPaths = [
+  '/tools/bazi-paipan',
+  '/tools/qimen-paipan',
+  '/tools/liuren-paipan',
+  '/tools/ziwei-paipan',
+  '/tools/vedic-astro',
+  '/tools/fengshui-luopan',
+]
 
 const heroEntries = [
   {

@@ -46,12 +46,18 @@ import type { ToolDirectoryGroup } from '~/composables/useToolCategories'
 const props = withDefaults(defineProps<{
   group: ToolDirectoryGroup
   maxItems?: number
+  featuredPaths?: string[]
 }>(), {
   maxItems: 6,
 })
 
 const localePath = useLocalePath()
-const visibleItems = computed(() => props.group.links.slice(0, props.maxItems))
+const visibleItems = computed(() => {
+  if (!props.featuredPaths?.length) return props.group.links.slice(0, props.maxItems)
+  return props.featuredPaths
+    .map(path => props.group.links.find(link => link.path === path))
+    .filter(link => !!link)
+})
 </script>
 
 <style scoped>

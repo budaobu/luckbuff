@@ -93,6 +93,7 @@ export interface ShareOptions {
   | 'qimen-paipan'
   | 'liuren-paipan'
   | 'ziwei-paipan'
+  | 'jinri-huangli'
   name?: string
   summary?: string
   /** 覆盖当前页面路径；一般留给特殊入口使用 */
@@ -103,6 +104,8 @@ export interface ShareOptions {
   shareTarget?: HTMLElement
   /** 兼容旧调用方；Canvas 分享图不再消费结果页 DOM */
   shareTargetSelector?: string
+  /** 绕过通用海报，直接使用工具自定义 Canvas 分享图 */
+  customShareImage?: string | null
   filename: string
   /** i18n 的 t 函数，必须从组件 setup 中传入 */
   t: (key: string, ...args: unknown[]) => string
@@ -211,6 +214,7 @@ export function useShare() {
       'qimen-paipan': '奇门遁甲排盘',
       'liuren-paipan': '大六壬排盘',
       'ziwei-paipan': '紫微命盘',
+      'jinri-huangli': '今日黄历',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
@@ -436,6 +440,10 @@ export function useShare() {
     let screenshotError: string | null = null
 
     try {
+      if (options.customShareImage) {
+        screenshotDataUrl = options.customShareImage
+      }
+      else {
       const posterContext = resolveSharePosterContext(
         options.path || new URL(url, window.location.href).pathname,
       )
@@ -457,6 +465,7 @@ export function useShare() {
         features: posterFeatures,
         url: options.shareUrl || url,
       })
+      }
     }
     catch (e: any) {
       screenshotError = e?.message || t('share.screenshotError')

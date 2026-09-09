@@ -47,6 +47,10 @@
         </NuxtLink>
       </nav>
 
+      <section class="mb-14">
+        <ToolDirectoryGrid :tools="featuredEntries" />
+      </section>
+
       <div class="space-y-14 md:space-y-16">
         <section
           v-for="(category, categoryIndex) in categories"
@@ -107,10 +111,31 @@
 </template>
 
 <script setup lang="ts">
+import type { ToolItem } from '~/composables/useToolCategories'
+
 const { t } = useI18n()
 const localePath = useLocalePath()
 const categories = useSpecialToolCategories()
 const totalCount = computed(() => categories.value.reduce((sum, category) => sum + category.tools.length, 0))
+
+const featuredEntries: ToolItem[] = [
+  {
+    icon: 'i-heroicons-sparkles',
+    titleKey: 'fortune2026.entryTitle',
+    descKey: 'fortune2026.subtitle',
+    ctaKey: 'common.start',
+    path: '/fortune/2026',
+    recommended: true,
+  },
+  {
+    icon: 'i-heroicons-calendar-days',
+    titleKey: 'todayAlmanac.title',
+    descKey: 'todayAlmanac.subtitle',
+    ctaKey: 'common.start',
+    path: '/tools/jinri-huangli',
+    recommended: true,
+  },
+]
 
 const siteName = 'ososn'
 

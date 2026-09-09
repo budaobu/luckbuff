@@ -593,6 +593,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/jinri-yiji',
       },
       {
+        icon: 'i-heroicons-calendar-days',
+        titleKey: 'todayAlmanac.title',
+        descKey: 'todayAlmanac.subtitle',
+        ctaKey: 'todayAlmanac.tearAction',
+        path: '/tools/jinri-huangli',
+      },
+      {
         icon: 'i-heroicons-sparkles',
         titleKey: 'home.toolJinriYunshiTitle',
         descKey: 'home.toolJinriYunshiDesc',
@@ -1087,13 +1094,29 @@ export const toolDirectoryGroups: ToolDirectoryGroup[] = [
     titleKey: 'toolDirectories.specialTitle',
     subtitleKey: 'toolDirectories.specialSubtitle',
     path: '/special',
-    links: toolCategories.filter(category => category.id !== 'paipan').map(category => ({
-      icon: category.icon,
-      titleKey: category.titleKey,
-      subtitleKey: category.subtitleKey,
-      path: category.sectionPath,
-      kind: 'topic' as const,
-    })),
+    links: [
+      {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'fortune2026.entryTitle',
+        subtitleKey: 'fortune2026.subtitle',
+        path: '/fortune/2026',
+        kind: 'topic' as const,
+      },
+      {
+        icon: 'i-heroicons-calendar-days',
+        titleKey: 'todayAlmanac.title',
+        subtitleKey: 'todayAlmanac.subtitle',
+        path: '/tools/jinri-huangli',
+        kind: 'tool' as const,
+      },
+      ...toolCategories.filter(category => category.id !== 'paipan').map(category => ({
+        icon: category.icon,
+        titleKey: category.titleKey,
+        subtitleKey: category.subtitleKey,
+        path: category.sectionPath,
+        kind: 'topic' as const,
+      })),
+    ],
   },
 ]
 
