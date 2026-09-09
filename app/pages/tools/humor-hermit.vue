@@ -89,6 +89,18 @@
             {{ $t('humorHermit.againBtn') }}
           </UButton>
         </div>
+
+        <div class="mt-4 flex justify-center">
+          <UButton
+            :to="localePath('/tools/bazi-paipan')"
+            color="warning"
+            variant="soft"
+            size="sm"
+            icon="i-heroicons-arrow-right"
+          >
+            {{ $t('humorHermit.viewBaziBtn') }}
+          </UButton>
+        </div>
       </div>
 
       <!-- Error -->
@@ -104,6 +116,7 @@
 
 <script setup lang="ts">
 const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const route = useRoute()
 const toast = useToast()
 

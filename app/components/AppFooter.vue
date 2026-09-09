@@ -16,7 +16,7 @@
               class="h-8 w-8 rounded-lg"
               style="border: 1px solid var(--accent-border); box-shadow: var(--shadow-panel);"
             />
-            <span class="text-base font-semibold tracking-tight" translate="no" style="color: var(--text-primary);">ososn</span>
+            <span class="text-base font-semibold tracking-tight" translate="no" style="color: var(--text-primary);">{{ $t('footer.brandName') }}</span>
           </div>
           <p class="mt-3 text-sm leading-relaxed" style="color: var(--text-faint);">
             {{ $t('footer.copyright') }}

@@ -55,7 +55,7 @@
     "autoTime": "Auto Time"
   },
   "home": {
-    "badge": "Traditional Divination · Online Charting",
+    "badge": "Online Metaphysics Readings · Charting",
     "tickerItems": [
       "BaZi Reading",
       "Zi Wei Dou Shu",
@@ -67,20 +67,20 @@
       "Oracle Lots",
       "AI Insights"
     ],
-    "title1": "You Were Written Five Thousand Years Ago",
-    "title2": "Now Decoded in Plain Language",
-    "subtitle": "Bazi charts your destiny and fortune cycles, Plum Blossom divines gains and losses, Liu Yao reveals how events unfold, Qimen Dunjia reads timing and direction — five millennia of metaphysical wisdom, retold in language you understand.",
+    "title1": "Online Metaphysics Readings",
+    "title2": "Understand Charts in Plain Language",
+    "subtitle": "Use free Bazi charting, the daily Chinese almanac and Vedic astrology tools to turn traditional fortune-telling data into structured reports and clear interpretations.",
     "guideBanner": "We recommend {saveLink} first so it auto-fills during readings. You can add multiple profiles for family and friends anytime.",
     "saveLink": "saving your birth information",
-    "whyTitle": "Why ososn",
-    "feature1Title": "Multiple Divination Systems",
-    "feature1Desc": "Covers Bazi, Plum Blossom, Liu Yao divination, Qimen Dunjia and more. Algorithms run locally with transparent, traceable charting.",
-    "feature2Title": "Plain-Language Reading",
-    "feature2Desc": "Translates classical metaphysical terminology into modern language, offering targeted analysis based on chart structure — not generic fluff.",
-    "feature3Title": "Streamlined Experience",
-    "feature3Desc": "Chart data computed locally in real time. Results stream as cards — no waiting, view and share instantly.",
-    "feature4Title": "Multi-Profile Management",
-    "feature4Desc": "Save multiple birth profiles for yourself, family, and friends, and switch with one click. Signed out, profiles stay in your browser only; sign in to sync them to your account across devices.",
+    "whyTitle": "Why Choose ososn Online Readings",
+    "feature1Title": "Broad Tool Coverage",
+    "feature1Desc": "Choose a tool for your question: Bazi charting, Zi Wei Dou Shu, Liu Yao, Qimen Dunjia, the daily almanac, Feng Shui and Vedic astrology.",
+    "feature2Title": "Structured Charts, Clear Reading",
+    "feature2Desc": "Generate clear chart data and signals first, then read plain-language explanations that make traditional terminology easier to understand.",
+    "feature3Title": "Streaming AI Interpretations",
+    "feature3Desc": "Read key conclusions as they stream in, while the complete chart information and structural evidence remain in the report.",
+    "feature4Title": "Profiles and Privacy",
+    "feature4Desc": "Save multiple birth profiles and switch instantly. Signed out, profiles stay in your browser; sign in to sync them across devices.",
     "toolsTitle": "Metaphysics Tools",
     "toolsSubtitle": "Tools",
     "toolBaziTitle": "Four Pillars (Bazi)",
@@ -451,7 +451,8 @@
     "seoGeneric": "Error - ososn"
   },
   "footer": {
-    "copyright": "ososn · For Cultural Entertainment Only",
+    "brandName": "ososn Online Metaphysics",
+    "copyright": "Content is for cultural and entertainment reference only and is not professional advice.",
     "navigation": "Legal links",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy"
@@ -11253,6 +11254,7 @@
     "connecting": "Connecting to Humor Hermit…",
     "yourInput": "Your Input",
     "againBtn": "Try Again",
+    "viewBaziBtn": "View Full Bazi Chart Details",
     "noResult": "No result received, please try again",
     "requestFail": "Request failed"
   },
