@@ -327,22 +327,22 @@ const homeChartingPaths = [
 
 const heroEntries = [
   {
+    icon: 'i-heroicons-sun',
+    titleKey: 'todayAlmanac.title',
+    descKey: 'todayAlmanac.subtitle',
+    path: '/tools/jinri-huangli',
+  },
+  {
     icon: 'i-heroicons-calendar-days',
-    titleKey: 'home.toolBaziTitle',
-    descKey: 'home.toolBaziDesc',
-    path: '/tools/bazi',
+    titleKey: 'baziChart.title',
+    descKey: 'baziChart.subtitle',
+    path: '/tools/bazi-paipan',
   },
   {
-    icon: 'i-heroicons-circle-stack',
-    titleKey: 'home.toolLiuyaoDivinationTitle',
-    descKey: 'home.toolLiuyaoDivinationDesc',
-    path: '/tools/liuyao-divination',
-  },
-  {
-    icon: 'i-heroicons-calendar',
-    titleKey: 'home.topicAuspiciousDatetimeTitle',
-    descKey: 'home.topicAuspiciousDatetimeDesc',
-    path: '/auspicious-datetime',
+    icon: 'i-heroicons-globe-alt',
+    titleKey: 'vpc.title',
+    descKey: 'vpc.subtitle',
+    path: '/tools/vedic-astro',
   },
 ]
 
