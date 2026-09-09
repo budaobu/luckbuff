@@ -1,5 +1,6 @@
 {
   "tools": {
+    "2026": "按问题进入测算：全年走势、生肖犯太岁、事业财富、风水方位或每日吉时。",
     "3shanwang-lot": "三山国王灵签",
     "5-god-of-wealth-lot": "五路财神灵签",
     "astro-dice": "占星骰子",
@@ -45,6 +46,7 @@
     "japan-priority-test": "日本很火的心理测试",
     "jiaobei": "掷筊",
     "jinkoujue": "金口诀工具",
+    "jinri-huangli": "今日黄历",
     "jinri-yiji": "今日宜忌工具",
     "jinri-yunshi": "今日运势工具",
     "jinsuoyuguan-fengshui": "金锁玉关风水",
@@ -158,6 +160,7 @@
     "vedic-astro": "吠陀占星排盘"
   },
   "paths": {
+    "2026": "/fortune/2026",
     "liuyao-football": "/prophet/liuyao-football",
     "qimen-football": "/prophet/qimen-football",
     "liuren-football": "/prophet/liuren-football",
