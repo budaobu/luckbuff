@@ -91,6 +91,7 @@ export interface ShareOptions {
   | 'shichu-suimei'
   | 'qizheng-paipan'
   | 'qimen-paipan'
+  | 'tieban-paipan'
   | 'liuren-paipan'
   | 'ziwei-paipan'
   | 'jinri-huangli'
@@ -212,6 +213,7 @@ export function useShare() {
       'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',
       'qimen-paipan': '奇门遁甲排盘',
+      'tieban-paipan': '铁板神数排盘',
       'liuren-paipan': '大六壬排盘',
       'ziwei-paipan': '紫微命盘',
       'jinri-huangli': '今日黄历',

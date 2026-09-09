@@ -76,6 +76,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/qimen-paipan',
     },
     {
+      icon: 'i-heroicons-calculator',
+      titleKey: 'tiebanPaipan.title',
+      descKey: 'tiebanPaipan.subtitle',
+      ctaKey: 'tiebanPaipan.submit',
+      path: '/tools/tieban-paipan',
+    },
+    {
       icon: 'i-heroicons-circle-stack',
       titleKey: 'liurenPaipan.title',
       descKey: 'liurenPaipan.subtitle',
