@@ -29,6 +29,7 @@
           :disabled="initialLoading || !!error || advancing"
           @advance="onAdvance"
           @settled="onSettled"
+          @today="loadCurrent"
         />
 
         <div
@@ -62,16 +63,9 @@
           <p class="text-xs text-white/50">
             {{ currentDay ? `${t('todayAlmanac.timezone')} · ${currentDay.timezone}` : '' }}
           </p>
-          <UButton
-            color="warning"
-            variant="ghost"
-            size="sm"
-            icon="i-lucide-chevrons-down"
-            :disabled="initialLoading || advancing || !!error || !nextDay"
-            @click="onAdvance"
-          >
-            {{ t('todayAlmanac.tearAction') }}
-          </UButton>
+          <p class="text-xs text-white/45">
+            {{ t('todayAlmanac.flipHint') }}
+          </p>
         </div>
       </div>
     </section>

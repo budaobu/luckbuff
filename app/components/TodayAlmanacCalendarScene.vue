@@ -6,7 +6,53 @@
   >
     <div class="scene-hint">
       <UIcon name="i-lucide-hand" class="w-4 h-4" />
-      <span>{{ t('todayAlmanac.tearHint') }}</span>
+      <span>{{ t('todayAlmanac.flipHint') }}</span>
+    </div>
+
+    <div ref="menuRef" class="scene-menu">
+      <button
+        type="button"
+        class="menu-trigger"
+        :aria-expanded="menuOpen"
+        :disabled="disabled"
+        @click.stop="menuOpen = !menuOpen"
+        @pointerdown.stop
+      >
+        <UIcon name="i-lucide-book-open" class="w-4 h-4" />
+        <span>{{ t('todayAlmanac.pageMenu') }}</span>
+      </button>
+
+      <Transition name="menu-pop">
+        <div v-if="menuOpen" class="menu-panel" role="menu" @pointerdown.stop>
+          <button
+            type="button"
+            role="menuitem"
+            :disabled="disabled || !day || !nextDay"
+            @click.stop="startFlip('left')"
+          >
+            <UIcon name="i-lucide-corner-up-left" class="w-4 h-4" />
+            {{ t('todayAlmanac.flipLeft') }}
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            :disabled="disabled"
+            @click.stop="backToToday"
+          >
+            <UIcon name="i-lucide-calendar-check" class="w-4 h-4" />
+            {{ t('todayAlmanac.backToday') }}
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            :disabled="disabled || !day || !nextDay"
+            @click.stop="startFlip('right')"
+          >
+            <UIcon name="i-lucide-corner-up-right" class="w-4 h-4" />
+            {{ t('todayAlmanac.flipRight') }}
+          </button>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
@@ -22,11 +68,20 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ advance: []; settled: [] }>()
+const emit = defineEmits<{ advance: []; settled: []; today: [] }>()
 const { t, locale } = useI18n()
 const sceneRef = ref<HTMLDivElement>()
+const menuRef = ref<HTMLElement>()
 
 const dragging = ref(false)
+const menuOpen = ref(false)
+
+const PAGE_WIDTH = 4.5
+const PAGE_HEIGHT = 6.2
+const PAGE_PIVOT_Y = PAGE_HEIGHT / 2
+const CANVAS_WIDTH = 1400
+const CANVAS_HEIGHT = 1960
+
 let renderer: THREE.WebGLRenderer | null = null
 let resizeObserver: ResizeObserver | null = null
 let animationFrame: number | null = null
@@ -36,21 +91,25 @@ let calendarGroup: THREE.Group | null = null
 let frontPivot: THREE.Group | null = null
 let frontMaterial: THREE.MeshStandardMaterial | null = null
 let rearMaterial: THREE.MeshStandardMaterial | null = null
+let remnantMaterial: THREE.MeshStandardMaterial | null = null
+let frontGeometry: THREE.PlaneGeometry | null = null
+let basePagePositions: Float32Array | null = null
+let paperBumpTexture: THREE.CanvasTexture | null = null
 let frontTexture: THREE.CanvasTexture | null = null
 let rearTexture: THREE.CanvasTexture | null = null
-let frontGeometry: THREE.PlaneGeometry | null = null
-let remnantMaterial: THREE.MeshStandardMaterial | null = null
-let tearBottomMask: THREE.CanvasTexture | null = null
-let tearTopMask: THREE.CanvasTexture | null = null
 let frontTextureKey = ''
 let rearTextureKey = ''
+let tearBottomMask: THREE.CanvasTexture | null = null
+let tearTopMask: THREE.CanvasTexture | null = null
 let pointerId: number | null = null
-let dragStartY = 0
-let progress = 0
-let targetProgress = 0
-let fallProgress = 0
-let phase: 'idle' | 'falling' = 'idle'
-let fallStart = 0
+let pointerStartY = 0
+let pointerLastY = 0
+let flip = 0
+let flipTarget = 0
+let flipSide: 'left' | 'right' = 'right'
+let commitFlip = false
+let phase: 'idle' | 'turning' = 'idle'
+let startTime = performance.now()
 const disposables: Array<{ dispose: () => void }> = []
 
 const weekdayLabels = computed(() => locale.value === 'en'
@@ -61,10 +120,66 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
 
-function createCanvasTexture(day: TodayAlmanac | null) {
+function createPaperBumpTexture() {
+  const canvas = document.createElement('canvas')
+  canvas.width = 512
+  canvas.height = 512
+  const context = canvas.getContext('2d')
+  if (!context) return null
+
+  context.fillStyle = '#808080'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+  for (let i = 0; i < 5200; i += 1) {
+    const gray = 112 + Math.random() * 62
+    context.fillStyle = `rgb(${gray},${gray},${gray})`
+    context.globalAlpha = Math.random() * 0.42
+    context.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 3.2, Math.random() * 2.1)
+  }
+  context.globalAlpha = 1
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.wrapS = THREE.RepeatWrapping
+  texture.wrapT = THREE.RepeatWrapping
+  texture.repeat.set(3, 4)
+  texture.colorSpace = THREE.NoColorSpace
+  disposables.push(texture)
+  return texture
+}
+
+function createRollTexture() {
   const canvas = document.createElement('canvas')
   canvas.width = 1024
-  canvas.height = 1440
+  canvas.height = 256
+  const context = canvas.getContext('2d')
+  if (!context) return null
+
+  const gradient = context.createLinearGradient(0, 0, 0, canvas.height)
+  gradient.addColorStop(0, '#e5d7b8')
+  gradient.addColorStop(0.32, '#fffdf4')
+  gradient.addColorStop(0.62, '#f3ead4')
+  gradient.addColorStop(1, '#c8b58e')
+  context.fillStyle = gradient
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
+  for (let i = 0; i < 1500; i += 1) {
+    context.globalAlpha = Math.random() * 0.07
+    context.fillStyle = Math.random() > 0.85 ? '#8b2b25' : '#725d3d'
+    context.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 22, 1)
+  }
+  context.globalAlpha = 1
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.wrapS = THREE.RepeatWrapping
+  texture.wrapT = THREE.RepeatWrapping
+  disposables.push(texture)
+  return texture
+}
+
+function createCanvasTexture(day: TodayAlmanac | null) {
+  const canvas = document.createElement('canvas')
+  canvas.width = CANVAS_WIDTH
+  canvas.height = CANVAS_HEIGHT
   drawAlmanacPage(canvas, day)
   const texture = new THREE.CanvasTexture(canvas)
   texture.colorSpace = THREE.SRGBColorSpace
@@ -74,17 +189,17 @@ function createCanvasTexture(day: TodayAlmanac | null) {
 }
 
 function createTearMasks() {
+  const segments = 48
   const path: number[] = []
-  const segments = 36
   for (let i = 0; i <= segments; i += 1) {
-    const base = 78 + Math.sin(i * 1.4) * 8
-    path.push(base + Math.random() * 34)
+    const base = 108 + Math.sin(i * 0.9) * 13
+    path.push(base + Math.random() * 36)
   }
 
   const createMaskCanvas = (visibleTop: boolean) => {
     const canvas = document.createElement('canvas')
-    canvas.width = 1024
-    canvas.height = 1440
+    canvas.width = CANVAS_WIDTH
+    canvas.height = CANVAS_HEIGHT
     const context = canvas.getContext('2d')
     if (!context) return canvas
 
@@ -93,24 +208,22 @@ function createTearMasks() {
     context.fillStyle = visibleTop ? '#000000' : '#ffffff'
     context.beginPath()
     context.moveTo(0, path[0]!)
-    path.forEach((y, index) => {
-      context.lineTo((index / segments) * canvas.width, y)
-    })
+    path.forEach((y, index) => context.lineTo((index / segments) * canvas.width, y))
     context.lineTo(canvas.width, canvas.height)
     context.lineTo(0, canvas.height)
     context.closePath()
     context.fill()
 
     context.strokeStyle = visibleTop ? '#000000' : '#ffffff'
-    context.lineWidth = 5
+    context.lineWidth = 6
     context.lineCap = 'round'
-    for (let i = 0; i < 180; i += 1) {
+    for (let i = 0; i < 240; i += 1) {
       const x = Math.random() * canvas.width
-      const nearest = path[Math.round((x / canvas.width) * segments)] ?? 96
-      const y = nearest + (visibleTop ? -1 : 1) * (Math.random() * 18)
+      const nearest = path[Math.round((x / canvas.width) * segments)] ?? 120
+      const y = nearest + (visibleTop ? -1 : 1) * Math.random() * 24
       context.beginPath()
       context.moveTo(x, y)
-      context.lineTo(x + (Math.random() - 0.5) * 10, y + (visibleTop ? 1 : -1) * Math.random() * 16)
+      context.lineTo(x + (Math.random() - 0.5) * 14, y + (visibleTop ? 1 : -1) * Math.random() * 22)
       context.stroke()
     }
     return canvas
@@ -125,11 +238,11 @@ function createTearMasks() {
   tearTopMask = topTexture
 }
 
-function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 2) {
+function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 3) {
   const lines: string[] = []
   let current = ''
   for (const char of text) {
-    if (context.measureText(current + char).width > maxWidth) {
+    if (context.measureText(current + char).width > maxWidth && current) {
       lines.push(current)
       current = char
       if (lines.length === maxLines) break
@@ -140,175 +253,243 @@ function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: num
   }
   if (lines.length < maxLines && current) lines.push(current)
   if (lines.length === maxLines && current && lines[maxLines - 1] !== current) {
-    lines[maxLines - 1] = `${lines[maxLines - 1]!.slice(0, -1)}…`
+    let last = lines[maxLines - 1] ?? ''
+    while (last && context.measureText(`${last}…`).width > maxWidth) {
+      last = last.slice(0, -1)
+      lines[maxLines - 1] = last
+    }
+    lines[maxLines - 1] = `${lines[maxLines - 1]}…`
   }
   return lines
+}
+
+function drawPaper(context: CanvasRenderingContext2D) {
+  context.fillStyle = '#fffdf4'
+  context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+  for (let i = 0; i < 2600; i += 1) {
+    context.globalAlpha = Math.random() * 0.035
+    context.fillStyle = i % 4 === 0 ? '#9a7c55' : '#6b553d'
+    context.fillRect(Math.random() * CANVAS_WIDTH, Math.random() * CANVAS_HEIGHT, Math.random() * 4, Math.random() * 2)
+  }
+
+  for (let i = 0; i < 10; i += 1) {
+    const x = Math.random() * CANVAS_WIDTH
+    const y = Math.random() * CANVAS_HEIGHT
+    const radius = 30 + Math.random() * 100
+    const stain = context.createRadialGradient(x, y, 0, x, y, radius)
+    stain.addColorStop(0, 'rgba(150,120,70,0.035)')
+    stain.addColorStop(1, 'rgba(150,120,70,0)')
+    context.globalAlpha = 1
+    context.fillStyle = stain
+    context.beginPath()
+    context.arc(x, y, radius, 0, Math.PI * 2)
+    context.fill()
+  }
+  context.globalAlpha = 1
+}
+
+function drawCell(
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  title: string,
+  lines: string[],
+  accent: string,
+) {
+  context.strokeStyle = accent
+  context.lineWidth = 5
+  context.strokeRect(x, y, width, height)
+  context.lineWidth = 1.5
+  context.strokeRect(x + 9, y + 9, width - 18, height - 18)
+
+  context.fillStyle = accent
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.font = '700 37px "Noto Serif SC", "Songti SC", "SimSun", serif'
+  context.fillText(title, x + width / 2, y + 48)
+  context.strokeStyle = `${accent}55`
+  context.lineWidth = 2
+  context.beginPath()
+  context.moveTo(x + 32, y + 80)
+  context.lineTo(x + width - 32, y + 80)
+  context.stroke()
+
+  context.fillStyle = '#4b3a29'
+  context.font = '400 25px "Noto Sans SC", ui-sans-serif, sans-serif'
+  lines.forEach((line, index) => {
+    const wrapped = wrapText(context, line, width - 45, 2)
+    wrapped.forEach((text, lineIndex) => {
+      context.fillText(text, x + width / 2, y + 118 + index * 54 + lineIndex * 29)
+    })
+  })
+}
+
+function drawVerticalText(context: CanvasRenderingContext2D, text: string, x: number, startY: number, color: string) {
+  context.fillStyle = color
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.font = '600 36px "Noto Serif SC", "Songti SC", "SimSun", serif'
+  Array.from(text).forEach((char, index) => context.fillText(char, x, startY + index * 47))
 }
 
 function drawAlmanacPage(canvas: HTMLCanvasElement, day: TodayAlmanac | null) {
   const context = canvas.getContext('2d')
   if (!context) return
-  const serif = '"Noto Serif SC", "Songti SC", "SimSun", serif'
-  context.clearRect(0, 0, canvas.width, canvas.height)
-  context.fillStyle = '#fffdf4'
-  context.fillRect(0, 0, canvas.width, canvas.height)
+  drawPaper(context)
+  const crimson = '#b4231d'
+  const green = '#256d47'
+  const ink = '#4b3a29'
+  const softInk = 'rgba(75,58,41,.72)'
 
-  context.globalAlpha = 0.028
-  for (let i = 0; i < 180; i += 1) {
-    context.fillStyle = i % 3 === 0 ? '#6b553d' : '#9a7c55'
-    context.beginPath()
-    context.arc((i * 137) % canvas.width, (i * 271) % canvas.height, i % 4 === 0 ? 1.4 : 0.8, 0, Math.PI * 2)
-    context.fill()
-  }
-  context.globalAlpha = 1
-
-  context.fillStyle = '#8b2b25'
-  context.fillRect(0, 0, canvas.width, 176)
-  context.fillStyle = 'rgba(255,255,255,0.16)'
-  context.fillRect(0, 156, canvas.width, 20)
-
-  context.fillStyle = '#fffdf4'
-  context.textAlign = 'left'
-  context.textBaseline = 'middle'
-  context.font = `500 38px ${serif}`
-  context.fillText(t('todayAlmanac.title'), 56, 66)
-
-  context.font = `700 66px ${serif}`
-  context.fillText(day?.date.replace(/-/g, ' / ') || '---- / -- / --', 54, 126)
-  context.textAlign = 'right'
-  context.font = `400 32px ${serif}`
-  context.fillText(weekdayLabels.value[day?.weekday ?? 0] || '', canvas.width - 54, 126)
-
-  for (const holeX of [150, 874]) {
-    context.fillStyle = '#fffdf4'
-    context.beginPath()
-    context.arc(holeX, 54, 16, 0, Math.PI * 2)
-    context.fill()
-    context.strokeStyle = 'rgba(70,45,25,0.28)'
-    context.lineWidth = 3
-    context.stroke()
-  }
-
-  context.textAlign = 'center'
-  context.fillStyle = '#8b2b25'
-  context.font = `700 132px ${serif}`
-  const lunarLabel = day ? `${day.lunar.monthInChinese}月${day.lunar.dayInChinese}` : '—'
-  context.fillText(lunarLabel, canvas.width / 2, 278)
-
-  context.fillStyle = '#544431'
-  context.font = `500 34px ${serif}`
-  const ganzhi = day ? `${day.lunar.yearGanZhi}年 · ${day.lunar.monthGanZhi}月 · ${day.lunar.dayGanZhi}日` : ''
-  context.fillText(ganzhi, canvas.width / 2, 362)
-
-  context.fillStyle = '#7a6a52'
-  context.font = `400 28px ${serif}`
-  const jianChuLabel = day ? `${t('todayAlmanac.jianChu')} ${day.jianChu} · ${day.tianShen} ${day.tianShenLuck} · ${t('todayAlmanac.nineStar')} ${day.nineStar}` : ''
-  context.fillText(jianChuLabel, canvas.width / 2, 412)
-
-  const columns: Array<{ title: string; values: string[]; ink: string; edge: string }> = [
-    { title: t('todayAlmanac.yi'), values: day?.yi.slice(0, 4) || [], ink: '#2f6a45', edge: 'rgba(47,106,69,.3)' },
-    { title: t('todayAlmanac.ji'), values: day?.ji.slice(0, 4) || [], ink: '#9a3428', edge: 'rgba(154,52,40,.3)' },
-  ]
-  columns.forEach((column, columnIndex) => {
-    const x = 74 + columnIndex * 458
-    const width = 418
-    context.strokeStyle = column.edge
-    context.lineWidth = 3
-    context.strokeRect(x, 466, width, 292)
-    context.fillStyle = column.ink
-    context.font = `700 42px ${serif}`
-    context.fillText(column.title, x + width / 2, 524)
-    context.font = `400 30px ${serif}`
-    column.values.forEach((value, valueIndex) => {
-      const text = `${valueIndex + 1}. ${value}`
-      const lines = wrapText(context, text, width - 44, 1)
-      context.fillText(lines[0] || '', x + width / 2, 596 + valueIndex * 38)
-    })
-  })
-
-  context.fillStyle = '#544431'
-  context.font = `700 34px ${serif}`
-  context.textAlign = 'left'
-  context.fillText(t('todayAlmanac.luckyHours'), 78, 836)
-  context.textAlign = 'right'
-  context.fillText(t('todayAlmanac.directions'), canvas.width - 78, 836)
-
-  context.font = `400 27px ${serif}`
-  context.textAlign = 'left'
-  const luckyHours = day?.hours.filter(hour => hour.luck === '吉').slice(0, 3) || []
-  luckyHours.forEach((hour, index) => {
-    context.fillText(`${hour.startTime}-${hour.endTime} ${hour.tianShen}`, 78, 892 + index * 38)
-  })
-
-  const directions = day
-    ? [
-        `${t('todayAlmanac.xiDirection')} ${day.positions.xi}`,
-        `${t('todayAlmanac.caiDirection')} ${day.positions.cai}`,
-        `${t('todayAlmanac.fuDirection')} ${day.positions.fu}`,
-      ]
-    : []
-  context.textAlign = 'right'
-  directions.forEach((value, index) => {
-    context.fillText(value, canvas.width - 78, 892 + index * 38)
-  })
-
-  context.beginPath()
-  context.strokeStyle = 'rgba(123,102,73,.24)'
+  // Reference-style folio frame.
+  context.strokeStyle = crimson
+  context.lineWidth = 12
+  context.strokeRect(28, 26, CANVAS_WIDTH - 56, CANVAS_HEIGHT - 52)
   context.lineWidth = 2
-  context.moveTo(72, 1028)
-  context.lineTo(canvas.width - 72, 1028)
+  context.strokeRect(56, 54, CANVAS_WIDTH - 112, CANVAS_HEIGHT - 108)
+  context.lineWidth = 4
+  context.strokeRect(74, 72, CANVAS_WIDTH - 148, CANVAS_HEIGHT - 144)
+
+  // Header: solar month + year in a formal plaque.
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.fillStyle = crimson
+  context.font = '500 31px "Noto Serif SC", "Songti SC", serif'
+  context.fillText('·ososn·', CANVAS_WIDTH / 2, 110)
+  context.font = '700 92px "Noto Serif SC", "Songti SC", serif'
+  const solarMonth = day
+    ? new Date(`${day.date}T12:00:00Z`).toLocaleDateString(locale.value === 'en' ? 'en-US' : 'zh-CN', { month: 'long' }).toUpperCase()
+    : '———'
+  context.fillText(`${solarMonth} ${day?.date.slice(0, 4) ?? ''}`, CANVAS_WIDTH / 2, 194)
+  context.font = '600 42px "Noto Serif SC", "Songti SC", serif'
+  context.fillText(day ? `农历${day.lunar.monthInChinese}月` : '', CANVAS_WIDTH / 2, 266)
+  context.strokeStyle = 'rgba(180,35,29,.48)'
+  context.lineWidth = 4
+  context.beginPath()
+  context.moveTo(112, 316)
+  context.lineTo(CANVAS_WIDTH - 112, 316)
   context.stroke()
 
-  context.textAlign = 'left'
-  context.fillStyle = '#6a5842'
-  context.font = `400 25px ${serif}`
+  // Vertical side notes, like printed couplets on an old tear-off calendar.
   if (day) {
-    context.fillText(`${t('todayAlmanac.chongSha')} ${day.chongDesc} · ${day.sha}`, 76, 1084)
-    context.fillText(`${t('todayAlmanac.luckyColor')} ${day.colors.daJi.colors.join(' / ')}`, 76, 1132)
-    context.fillText(`${t('todayAlmanac.avoidColor')} ${day.colors.buYi.colors.join(' / ')}`, 76, 1180)
-    context.fillText(`${t('todayAlmanac.jieQi')} ${day.season.jieQi || day.season.nextJieQi.name} · ${day.season.wuHou}`, 76, 1228)
-    if (day.festivals.length) {
-      context.fillText(day.festivals.slice(0, 2).join(' · '), 76, 1276)
-    }
+    drawVerticalText(context, `喜神${day.positions.xi}`, 134, 430, green)
+    drawVerticalText(context, `财神${day.positions.cai}`, 184, 430, ink)
+    drawVerticalText(context, `福神${day.positions.fu}`, CANVAS_WIDTH - 134, 430, green)
+    drawVerticalText(context, `阳贵${day.positions.yangGui}`, CANVAS_WIDTH - 184, 430, ink)
   }
 
+  // Giant solar day number is the dominant glyph.
+  const solarDay = day ? String(Number(day.date.slice(-2))) : '—'
+  context.save()
+  context.globalAlpha = 0.06
+  context.fillStyle = crimson
+  context.font = '700 580px "Noto Serif SC", "Songti SC", serif'
+  context.fillText(day?.lunar.shengXiao || '', CANVAS_WIDTH / 2, 720)
+  context.restore()
+
+  context.fillStyle = crimson
+  context.font = `700 ${solarDay.length > 1 ? 540 : 700}px "Noto Serif SC", "Songti SC", serif`
+  context.shadowColor = 'rgba(180,35,29,.18)'
+  context.shadowBlur = 34
+  context.fillText(solarDay, CANVAS_WIDTH / 2, 700)
+  context.shadowBlur = 0
+
+  // Central triptych: lunar day, builder star, weekday.
+  drawCell(context, 205, 1015, 315, 165, day?.lunar.dayInChinese ? `${day.lunar.dayInChinese}日` : '—', [day ? `${day.lunar.yearGanZhi}年` : ''], crimson)
+  drawCell(context, 543, 1015, 315, 165, day?.jianChu || '—', [day ? `${day.tianShen} ${day.tianShenLuck}` : ''], green)
+  drawCell(context, 881, 1015, 315, 165, weekdayLabels.value[day?.weekday ?? 0] || '—', [day ? day.lunar.dayGanZhi : ''], crimson)
+
+  // Main 宜 / 忌 block.
+  drawCell(
+    context,
+    92,
+    1225,
+    585,
+    325,
+    t('todayAlmanac.yi'),
+    (day?.yi.slice(0, 5) || []).map((item, index) => `${index + 1}. ${item}`),
+    green,
+  )
+  drawCell(
+    context,
+    723,
+    1225,
+    585,
+    325,
+    t('todayAlmanac.ji'),
+    (day?.ji.slice(0, 5) || []).map((item, index) => `${index + 1}. ${item}`),
+    crimson,
+  )
+
+  // Three practical columns.
+  const luckyHours = day?.hours.filter(hour => hour.luck === '吉').slice(0, 3) || []
+  drawCell(
+    context,
+    92,
+    1585,
+    395,
+    240,
+    t('todayAlmanac.luckyHours'),
+    luckyHours.map(hour => `${hour.startTime} ${hour.tianShen}`),
+    green,
+  )
+  drawCell(
+    context,
+    502,
+    1585,
+    395,
+    240,
+    t('todayAlmanac.directions'),
+    day
+      ? [
+          `${t('todayAlmanac.xiDirection')} ${day.positions.xi}`,
+          `${t('todayAlmanac.caiDirection')} ${day.positions.cai}`,
+          `${t('todayAlmanac.fuDirection')} ${day.positions.fu}`,
+        ]
+      : ['—'],
+    crimson,
+  )
+  drawCell(
+    context,
+    912,
+    1585,
+    395,
+    240,
+    t('todayAlmanac.colorTitle'),
+    day
+      ? [
+          day.colors.daJi.colors.slice(0, 2).join(' '),
+          day.colors.buYi.colors.slice(0, 2).join(' '),
+        ]
+      : ['—'],
+    ink,
+  )
+
+  // Dense base line, preserving the traditional almanac feel.
+  context.textAlign = 'left'
+  context.fillStyle = ink
+  context.font = '400 25px "Noto Sans SC", ui-sans-serif, sans-serif'
+  context.fillText(day ? `${t('todayAlmanac.jiShen')} ${day.jiShen.slice(0, 5).join(' ')}` : '', 92, 1868)
+  context.fillText(day ? `${t('todayAlmanac.xiongSha')} ${day.xiongSha.slice(0, 5).join(' ')}` : '', 92, 1904)
   context.textAlign = 'right'
-  context.fillStyle = 'rgba(107,85,61,.55)'
-  context.font = `500 22px ${serif}`
-  context.fillText('ososn', canvas.width - 76, 1352)
+  context.fillText(day ? `${t('todayAlmanac.nineStar')} ${day.nineStar}` : '', CANVAS_WIDTH - 92, 1868)
+  context.fillText(day ? day.pengZuGan : '', CANVAS_WIDTH - 92, 1904)
+  context.textAlign = 'center'
+  context.fillStyle = softInk
+  context.font = '500 24px "Noto Sans SC", ui-sans-serif, sans-serif'
+  context.fillText(`ososn · ${day?.timezone || 'UTC+8'}`, CANVAS_WIDTH / 2, 1930)
+}
+
+function formatDate(date: string) {
+  return date.replace(/-/g, ' / ')
 }
 
 function setTexture(texture: THREE.CanvasTexture | null, material: THREE.MeshStandardMaterial | null) {
   if (!material) return
   material.map = texture
   material.needsUpdate = true
-}
-
-function prepareTearMaterials() {
-  if (!frontMaterial || !remnantMaterial) return
-  if (!tearBottomMask || !tearTopMask) createTearMasks()
-  frontMaterial.alphaMap = tearBottomMask
-  frontMaterial.alphaTest = 0.08
-  frontMaterial.needsUpdate = true
-
-  remnantMaterial.map = frontTexture
-  remnantMaterial.alphaMap = tearTopMask
-  remnantMaterial.alphaTest = 0.08
-  remnantMaterial.opacity = 1
-  remnantMaterial.visible = true
-  remnantMaterial.needsUpdate = true
-}
-
-function clearTearMaterials() {
-  if (frontMaterial) {
-    frontMaterial.alphaMap = null
-    frontMaterial.alphaTest = 0
-    frontMaterial.needsUpdate = true
-  }
-  if (remnantMaterial) {
-    remnantMaterial.visible = false
-    remnantMaterial.opacity = 0
-  }
 }
 
 function updateTextures() {
@@ -326,80 +507,108 @@ function updateTextures() {
   }
 }
 
-function applyPageTransform() {
-  if (!frontPivot || !frontGeometry || !frontMaterial) return
+function applyPageTurn(amount: number, side: 'left' | 'right') {
+  if (!frontGeometry || !basePagePositions) return
   const position = frontGeometry.attributes.position
   if (!position) return
-  const crumple = phase === 'falling' ? 0.55 + fallProgress * 0.75 : progress
+  const geometryWidth = PAGE_WIDTH - 0.08
+  const originX = side === 'left' ? -geometryWidth / 2 : geometryWidth / 2
+  const originY = -PAGE_HEIGHT / 2
+  const targetX = -originX
+  const targetY = PAGE_HEIGHT / 2
+  const diagonalX = targetX - originX
+  const diagonalY = targetY - originY
+  const diagonalLength = Math.hypot(diagonalX, diagonalY)
+  const diagonalUX = diagonalX / diagonalLength
+  const diagonalUY = diagonalY / diagonalLength
+  const perpendicularUX = -diagonalUY
+  const perpendicularUY = diagonalUX
+  const curlFront = amount * diagonalLength * 1.08
+  const radius = PAGE_HEIGHT * (0.16 + amount * 0.09)
+  const sideDirection = side === 'left' ? -1 : 1
+
   for (let i = 0; i < position.count; i += 1) {
-    const normalizedY = (position.getY(i) + 3.05) / 6.1
-    const x = position.getX(i)
-    const bend = Math.sin(normalizedY * Math.PI) * progress * 0.22
-    const ripple = Math.sin(x * 3.1 + normalizedY * 8.4) * crumple * 0.05
-      + Math.sin(x * 7.6 - normalizedY * 5.2) * (phase === 'falling' ? fallProgress : progress) * 0.035
-    position.setZ(i, bend + ripple)
+    const baseX = basePagePositions[i * 3]!
+    const baseY = basePagePositions[(i * 3) + 1]!
+    const relativeX = baseX - originX
+    const relativeY = baseY - originY
+    const alongDiagonal = relativeX * diagonalUX + relativeY * diagonalUY
+    const acrossDiagonal = relativeX * perpendicularUX + relativeY * perpendicularUY
+    let nextX = baseX
+    let nextY = baseY
+    let nextZ = Math.sin(baseX * 2.2 + relativeY * 1.6) * 0.005
+
+    if (alongDiagonal < curlFront) {
+      const angle = clamp((curlFront - alongDiagonal) / radius, 0, Math.PI * 1.72)
+      const rolledDistance = curlFront - Math.sin(angle) * radius
+      const lift = (1 - Math.cos(angle)) * radius
+      nextX = originX + diagonalUX * rolledDistance + perpendicularUX * acrossDiagonal
+      nextY = originY + diagonalUY * rolledDistance + perpendicularUY * acrossDiagonal
+      nextZ += lift + Math.sin(angle * 5.4 + baseX * 2.1) * amount * 0.014
+    }
+
+    position.setXYZ(i, nextX, nextY, nextZ)
   }
   position.needsUpdate = true
   frontGeometry.computeVertexNormals()
 
-  const tearRotation = phase === 'falling' ? 0.38 + fallProgress * 0.24 : progress * 0.38
-  frontPivot.rotation.x = -tearRotation
-  frontPivot.rotation.z = phase === 'falling' ? 0.025 + fallProgress * 0.17 : progress * -0.012
-  frontPivot.position.y = phase === 'falling' ? 3.05 - fallProgress * 4.2 : 3.05
-  frontPivot.position.z = phase === 'falling' ? 0.018 + fallProgress * 1.1 : 0.018
-  frontPivot.scale.setScalar(phase === 'falling' ? 1 + fallProgress * 0.015 : 1)
-  frontMaterial.opacity = phase === 'falling' ? clamp(1 - fallProgress * 0.92, 0, 1) : 1
-  if (remnantMaterial) {
-    remnantMaterial.opacity = phase === 'falling'
-      ? clamp(1 - Math.max(0, fallProgress - 0.24) * 1.85, 0, 1)
-      : 0
-    remnantMaterial.visible = phase === 'falling' && remnantMaterial.opacity > 0.01
-  }
+  if (!frontPivot || !frontMaterial) return
+  frontPivot.rotation.x = -0.035 - easeInOutCubic(amount) * 1.48
+  frontPivot.rotation.z = amount * 0.05 * sideDirection
+  frontPivot.rotation.y = amount * 0.045 * sideDirection
+  frontPivot.position.z = 0.095 + amount * 0.16
+  frontMaterial.opacity = clamp(1 - Math.max(0, amount - 0.92) * 9, 0, 1)
+
   if (calendarGroup) {
-    calendarGroup.rotation.z = phase === 'falling' ? fallProgress * 0.04 : progress * -0.015
+    calendarGroup.rotation.z = amount * 0.018 * sideDirection
+    calendarGroup.rotation.y = -0.05 + Math.sin((performance.now() - startTime) * 0.0004) * 0.008
   }
 }
 
 function resetPage() {
   phase = 'idle'
-  progress = 0
-  targetProgress = 0
-  fallProgress = 0
-  clearTearMaterials()
-  applyPageTransform()
+  flip = 0
+  flipTarget = 0
+  commitFlip = false
+  applyPageTurn(0, flipSide)
 }
 
-function startTear(): boolean {
+function startFlip(side: 'left' | 'right'): boolean {
   if (phase !== 'idle' || !props.day || !props.nextDay) return false
   pointerId = null
-  progress = 0.54
-  targetProgress = 0.54
-  release(true)
+  dragging.value = false
+  menuOpen.value = false
+  flipSide = side
+  flipTarget = 1
+  commitFlip = true
+  phase = 'turning'
+  emit('advance')
   return true
 }
 
-function release(tear: boolean) {
-  if (pointerId !== null && sceneRef.value?.hasPointerCapture(pointerId)) {
-    sceneRef.value.releasePointerCapture(pointerId)
-  }
-  pointerId = null
-  dragging.value = false
-  if (tear || progress > 0.54) {
-    prepareTearMaterials()
-    phase = 'falling'
-    fallStart = performance.now()
-    emit('advance')
-  }
-  else {
-    targetProgress = 0
+function backToToday() {
+  menuOpen.value = false
+  emit('today')
+}
+
+function onDocumentPointerDown(event: PointerEvent) {
+  if (menuOpen.value && menuRef.value && !menuRef.value.contains(event.target as Node)) {
+    menuOpen.value = false
   }
 }
 
 function onPointerDown(event: PointerEvent) {
   const container = sceneRef.value
-  if (!container || props.disabled || phase !== 'idle' || !props.day || !props.nextDay) return
+  if (!container || props.disabled || phase !== 'idle' || !props.day) return
+  const rect = container.getBoundingClientRect()
+  const xRatio = (event.clientX - rect.left) / rect.width
+  const yRatio = (event.clientY - rect.top) / rect.height
+  if (yRatio < 0.5 || (xRatio > 0.42 && xRatio < 0.58)) return
+
+  flipSide = xRatio <= 0.42 ? 'left' : 'right'
   pointerId = event.pointerId
-  dragStartY = event.clientY
+  pointerStartY = event.clientY
+  pointerLastY = event.clientY
   dragging.value = true
   container.setPointerCapture(event.pointerId)
 }
@@ -408,16 +617,25 @@ function onPointerMove(event: PointerEvent) {
   if (event.pointerId !== pointerId || phase !== 'idle') return
   const container = sceneRef.value
   if (!container) return
-  const distance = event.clientY - dragStartY
-  progress = clamp(progress + distance * 0.0022, 0, 1)
-  dragStartY = event.clientY
-  targetProgress = progress
-  if (progress > 0.58) release(true)
+  const upwardDistance = pointerStartY - event.clientY
+  flipTarget = clamp(upwardDistance / (container.clientHeight * 0.42), 0, 0.88)
+  pointerLastY = event.clientY
 }
 
 function onPointerUp(event: PointerEvent) {
   if (event.pointerId !== pointerId) return
-  release(false)
+  if (sceneRef.value?.hasPointerCapture(pointerId)) sceneRef.value.releasePointerCapture(pointerId)
+  pointerId = null
+  dragging.value = false
+  if (flipTarget > 0.26) {
+    flipTarget = 1
+    commitFlip = true
+    phase = 'turning'
+    emit('advance')
+  }
+  else {
+    flipTarget = 0
+  }
 }
 
 function resize() {
@@ -429,8 +647,8 @@ function resize() {
   renderer.setSize(width, height)
   camera.aspect = width / height
   const aspect = width / height
-  camera.position.set(0, 0.12, aspect < 0.62 ? 14.0 : aspect < 1 ? 13.6 : 13.1)
-  calendarGroup?.scale.setScalar(aspect < 0.62 ? 0.82 : 1)
+  camera.position.set(0, 0.08, aspect < 0.62 ? 13.6 : aspect < 1 ? 12.8 : 12.2)
+  calendarGroup?.scale.setScalar(aspect < 0.62 ? 0.8 : 1)
   camera.updateProjectionMatrix()
 }
 
@@ -442,7 +660,7 @@ function createScene() {
 
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 50)
-  camera.position.set(0, 0.12, 9.6)
+  camera.position.set(0, 0.08, 12.2)
   camera.lookAt(0, 0, 0)
 
   renderer = new THREE.WebGLRenderer({
@@ -456,103 +674,120 @@ function createScene() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   container.appendChild(renderer.domElement)
 
-  scene.add(new THREE.AmbientLight(0xfff4df, 1.2))
-  const key = new THREE.DirectionalLight(0xffeccd, 1.45)
-  key.position.set(2.8, 3.5, 4)
-  const fill = new THREE.DirectionalLight(0x8aa392, 0.32)
-  fill.position.set(-3.5, 0.8, 2)
-  scene.add(key, fill)
+  scene.add(new THREE.AmbientLight(0xfff4df, 1.16))
+  const key = new THREE.DirectionalLight(0xffe9c4, 1.55)
+  key.position.set(3.1, 3.8, 4.4)
+  const fill = new THREE.DirectionalLight(0xd8e3d2, 0.34)
+  fill.position.set(-4, 0.8, 2)
+  const rim = new THREE.DirectionalLight(0xffd2a8, 0.28)
+  rim.position.set(-2, 2.5, -3)
+  scene.add(key, fill, rim)
 
+  paperBumpTexture = createPaperBumpTexture()
   calendarGroup = new THREE.Group()
-  calendarGroup.rotation.set(-0.065, -0.045, 0)
+  calendarGroup.rotation.set(-0.035, -0.05, 0)
   scene.add(calendarGroup)
 
-  const boardGeometry = new THREE.BoxGeometry(4.78, 6.7, 0.17)
-  const boardMaterial = new THREE.MeshStandardMaterial({ color: 0x4b3424, roughness: 0.64, metalness: 0.08 })
-  const board = new THREE.Mesh(boardGeometry, boardMaterial)
-  board.position.z = -0.13
-  calendarGroup.add(board)
+  const backingGeometry = new THREE.BoxGeometry(PAGE_WIDTH + 0.12, PAGE_HEIGHT + 0.1, 0.035)
+  const backingMaterial = new THREE.MeshStandardMaterial({ color: 0x8b2b25, roughness: 0.68 })
+  const backing = new THREE.Mesh(backingGeometry, backingMaterial)
+  backing.position.z = -0.38
+  calendarGroup.add(backing)
 
-  const railGeometry = new THREE.CylinderGeometry(0.13, 0.13, 5.15, 48)
-  const railMaterial = new THREE.MeshStandardMaterial({ color: 0xb78546, roughness: 0.23, metalness: 0.74 })
-  const rail = new THREE.Mesh(railGeometry, railMaterial)
-  rail.rotation.z = Math.PI / 2
-  rail.position.set(0, 3.42, 0.09)
-  calendarGroup.add(rail)
-
-  for (const ringX of [-1.92, 1.92]) {
-    const ringGeometry = new THREE.TorusGeometry(0.12, 0.035, 10, 36)
-    const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xd9b166, roughness: 0.2, metalness: 0.78 })
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-    ring.position.set(ringX, 3.3, 0.06)
-    calendarGroup.add(ring)
-    disposables.push(ringGeometry, ringMaterial)
-  }
-
-  const sheetGeometry = new THREE.PlaneGeometry(4.4, 6.1)
-  const stackOffsets = [
-    { y: -0.045, z: -0.055, rotation: 0.006 },
-    { y: -0.03, z: -0.04, rotation: -0.004 },
-    { y: -0.015, z: -0.025, rotation: 0.003 },
-  ]
-  stackOffsets.forEach((offset) => {
-    const material = new THREE.MeshStandardMaterial({ color: 0xf4ecd8, roughness: 0.82, side: THREE.DoubleSide })
-    const sheet = new THREE.Mesh(sheetGeometry, material)
-    sheet.position.set(0, offset.y, offset.z)
-    sheet.rotation.z = offset.rotation
-    calendarGroup?.add(sheet)
-    disposables.push(material)
+  const stackGeometry = new THREE.BoxGeometry(PAGE_WIDTH + 0.05, PAGE_HEIGHT + 0.03, 0.3)
+  const stackMaterial = new THREE.MeshStandardMaterial({
+    color: 0xf2e8cf,
+    roughness: 0.84,
+    bumpMap: paperBumpTexture,
+    bumpScale: 0.024,
   })
+  const stack = new THREE.Mesh(stackGeometry, stackMaterial)
+  stack.position.set(0, -0.02, -0.12)
+  calendarGroup.add(stack)
 
+  const rollTexture = createRollTexture()
+  const rollGeometry = new THREE.CylinderGeometry(0.34, 0.34, PAGE_WIDTH + 0.06, 72, 1, false)
+  const rollMaterial = new THREE.MeshStandardMaterial({
+    map: rollTexture,
+    bumpMap: paperBumpTexture,
+    bumpScale: 0.028,
+    roughness: 0.76,
+  })
+  const paperRoll = new THREE.Mesh(rollGeometry, rollMaterial)
+  paperRoll.rotation.z = Math.PI / 2
+  paperRoll.position.set(0, PAGE_PIVOT_Y + 0.1, 0.045)
+  calendarGroup.add(paperRoll)
+
+  const sheetGeometry = new THREE.PlaneGeometry(PAGE_WIDTH - 0.06, PAGE_HEIGHT, 24, 12)
   const rearPivot = new THREE.Group()
-  rearPivot.position.set(0, 3.05, -0.015)
+  rearPivot.position.set(0, PAGE_PIVOT_Y, 0.048)
   rearMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    roughness: 0.76,
-    metalness: 0.02,
+    roughness: 0.82,
+    bumpMap: paperBumpTexture,
+    bumpScale: 0.015,
     side: THREE.DoubleSide,
   })
   const rearSheet = new THREE.Mesh(sheetGeometry, rearMaterial)
-  rearSheet.position.y = -3.05
+  rearSheet.position.y = -PAGE_PIVOT_Y
   rearPivot.add(rearSheet)
   calendarGroup.add(rearPivot)
 
   frontPivot = new THREE.Group()
-  frontPivot.position.set(0, 3.05, 0.018)
+  frontPivot.position.set(0, PAGE_PIVOT_Y, 0.095)
   frontMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    roughness: 0.7,
-    metalness: 0.02,
+    roughness: 0.74,
+    metalness: 0.01,
+    bumpMap: paperBumpTexture,
+    bumpScale: 0.022,
     side: THREE.DoubleSide,
     transparent: true,
   })
-  frontGeometry = new THREE.PlaneGeometry(4.4, 6.1, 20, 10)
+  frontGeometry = new THREE.PlaneGeometry(PAGE_WIDTH - 0.08, PAGE_HEIGHT, 52, 82)
+  const initialPositions = frontGeometry.attributes.position?.array
+  if (!initialPositions) throw new Error('Unable to initialize calendar page geometry')
+  basePagePositions = Float32Array.from(initialPositions as Float32Array)
   const frontSheet = new THREE.Mesh(frontGeometry, frontMaterial)
-  frontSheet.position.y = -3.05
+  frontSheet.position.y = -PAGE_PIVOT_Y
   frontPivot.add(frontSheet)
   calendarGroup.add(frontPivot)
 
   remnantMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    roughness: 0.72,
-    metalness: 0.02,
+    roughness: 0.75,
+    bumpMap: paperBumpTexture,
+    bumpScale: 0.018,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0,
   })
   remnantMaterial.visible = false
   const remnantSheet = new THREE.Mesh(sheetGeometry, remnantMaterial)
-  remnantSheet.position.set(0, 0, 0.016)
+  remnantSheet.position.set(0, 0, 0.072)
   calendarGroup.add(remnantSheet)
 
-  disposables.push(boardGeometry, boardMaterial, railGeometry, railMaterial, sheetGeometry, frontGeometry, frontMaterial, rearMaterial, remnantMaterial)
+  disposables.push(
+    backingGeometry,
+    backingMaterial,
+    stackGeometry,
+    stackMaterial,
+    rollGeometry,
+    rollMaterial,
+    sheetGeometry,
+    frontGeometry,
+    frontMaterial,
+    rearMaterial,
+    remnantMaterial,
+  )
   updateTextures()
-  applyPageTransform()
+  applyPageTurn(0, flipSide)
 
   container.addEventListener('pointerdown', onPointerDown)
   container.addEventListener('pointermove', onPointerMove)
   container.addEventListener('pointerup', onPointerUp)
   container.addEventListener('pointercancel', onPointerUp)
+  document.addEventListener('pointerdown', onDocumentPointerDown)
   resizeObserver = new ResizeObserver(resize)
   resizeObserver.observe(container)
   resize()
@@ -561,29 +796,33 @@ function createScene() {
 
 function animate() {
   const tick = () => {
-    if (phase === 'idle') {
-      progress += (targetProgress - progress) * 0.14
+    flip += (flipTarget - flip) * (commitFlip ? 0.075 : 0.13)
+    applyPageTurn(flip, flipSide)
+
+    if (commitFlip && flip > 0.965) {
+      resetPage()
+      renderer?.render(scene!, camera!)
+      emit('settled')
     }
-    else if (phase === 'falling') {
-      fallProgress = clamp((performance.now() - fallStart) / 1450, 0, 1)
-      if (fallProgress >= 1) {
-        resetPage()
-        renderer?.render(scene!, camera!)
-        emit('settled')
-      }
+    else if (!commitFlip && flipTarget === 0 && flip < 0.002) {
+      resetPage()
     }
-    applyPageTransform()
+
     renderer?.render(scene!, camera!)
     animationFrame = requestAnimationFrame(tick)
   }
   animationFrame = requestAnimationFrame(tick)
 }
 
+function easeInOutCubic(value: number) {
+  return value < 0.5 ? 4 * value * value * value : 1 - (-2 * value + 2) ** 3 / 2
+}
+
 watch(() => [props.day?.date, props.nextDay?.date], () => {
   if (phase === 'idle') updateTextures()
 })
 
-defineExpose({ startTear })
+defineExpose({ startFlip })
 
 onMounted(createScene)
 
@@ -594,6 +833,7 @@ onBeforeUnmount(() => {
   sceneRef.value?.removeEventListener('pointermove', onPointerMove)
   sceneRef.value?.removeEventListener('pointerup', onPointerUp)
   sceneRef.value?.removeEventListener('pointercancel', onPointerUp)
+  document.removeEventListener('pointerdown', onDocumentPointerDown)
   renderer?.dispose()
   disposables.forEach(item => item.dispose())
   disposables.length = 0
@@ -605,7 +845,7 @@ onBeforeUnmount(() => {
 .today-calendar-scene {
   position: relative;
   width: 100%;
-  height: min(74vh, 760px);
+  height: min(76vh, 780px);
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
@@ -627,7 +867,7 @@ onBeforeUnmount(() => {
 
 .scene-hint {
   position: absolute;
-  right: max(18px, env(safe-area-inset-right));
+  left: max(18px, env(safe-area-inset-left));
   bottom: max(18px, env(safe-area-inset-bottom));
   display: inline-flex;
   align-items: center;
@@ -641,12 +881,88 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
+.scene-menu {
+  position: absolute;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 2;
+}
+
+.menu-trigger,
+.menu-panel button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  border: 1px solid rgba(255, 253, 244, 0.2);
+  color: rgba(255, 253, 244, 0.88);
+  background: rgba(35, 26, 20, 0.76);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.menu-trigger {
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.menu-trigger:hover,
+.menu-panel button:hover:not(:disabled) {
+  border-color: rgba(230, 189, 120, 0.54);
+  background: rgba(64, 45, 32, 0.86);
+}
+
+.menu-panel {
+  overflow: hidden;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 253, 244, 0.14);
+  border-radius: 14px;
+  background: rgba(28, 20, 15, 0.88);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(16px);
+}
+
+.menu-panel button {
+  padding: 11px 14px;
+  border-width: 0 0 1px;
+  border-color: rgba(255, 253, 244, 0.08);
+  border-radius: 0;
+  font-size: 13px;
+}
+
+.menu-panel button:last-child {
+  border-bottom: 0;
+}
+
+.menu-panel button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.menu-pop-enter-active,
+.menu-pop-leave-active {
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.menu-pop-enter-from,
+.menu-pop-leave-to {
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+}
+
 @media (max-width: 640px) {
   .today-calendar-scene {
-    height: min(64vh, 580px);
+    height: min(66vh, 600px);
   }
 
-  .scene-hint {
+  .scene-hint,
+  .menu-trigger {
     font-size: 11px;
   }
 }
