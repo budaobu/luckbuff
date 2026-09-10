@@ -96,6 +96,7 @@ export interface ShareOptions {
   | 'taiyi-paipan'
   | 'ziwei-paipan'
   | 'jinri-huangli'
+  | 'zibaifeixing-paipan'
   name?: string
   summary?: string
   /** 覆盖当前页面路径；一般留给特殊入口使用 */
@@ -219,6 +220,7 @@ export function useShare() {
       'taiyi-paipan': '太乙神数排盘',
       'ziwei-paipan': '紫微命盘',
       'jinri-huangli': '今日黄历',
+      'zibaifeixing-paipan': '紫白飞星排盘',
     }
     const toolName = toolNameMap[tool] ?? '命理'
 
