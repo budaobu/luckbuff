@@ -93,6 +93,7 @@ export interface ShareOptions {
   | 'qimen-paipan'
   | 'tieban-paipan'
   | 'liuren-paipan'
+  | 'taiyi-paipan'
   | 'ziwei-paipan'
   | 'jinri-huangli'
   name?: string
@@ -215,6 +216,7 @@ export function useShare() {
       'qimen-paipan': '奇门遁甲排盘',
       'tieban-paipan': '铁板神数排盘',
       'liuren-paipan': '大六壬排盘',
+      'taiyi-paipan': '太乙神数排盘',
       'ziwei-paipan': '紫微命盘',
       'jinri-huangli': '今日黄历',
     }

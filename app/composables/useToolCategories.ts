@@ -90,6 +90,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/liuren-paipan',
     },
     {
+      icon: 'i-heroicons-viewfinder-circle',
+      titleKey: 'taiyiPaipan.title',
+      descKey: 'taiyiPaipan.subtitle',
+      ctaKey: 'taiyiPaipan.submit',
+      path: '/tools/taiyi-paipan',
+    },
+    {
       icon: 'i-heroicons-sparkles',
       titleKey: 'ziweiChart.title',
       descKey: 'ziweiChart.subtitle',
