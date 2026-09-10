@@ -95,6 +95,7 @@ export interface ShareOptions {
   | 'liuren-paipan'
   | 'taiyi-paipan'
   | 'ziwei-paipan'
+  | 'xuankong-feixing'
   | 'jinri-huangli'
   name?: string
   summary?: string
@@ -218,6 +219,7 @@ export function useShare() {
       'liuren-paipan': '大六壬排盘',
       'taiyi-paipan': '太乙神数排盘',
       'ziwei-paipan': '紫微命盘',
+      'xuankong-feixing': '玄空飞星排盘',
       'jinri-huangli': '今日黄历',
     }
     const toolName = toolNameMap[tool] ?? '命理'

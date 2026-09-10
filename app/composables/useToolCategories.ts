@@ -105,6 +105,13 @@ const chartingToolCategory: ToolCategory = {
     },
     {
       icon: 'i-heroicons-viewfinder-circle',
+      titleKey: 'xuankongFeixing.title',
+      descKey: 'xuankongFeixing.subtitle',
+      ctaKey: 'xuankongFeixing.submit',
+      path: '/tools/xuankong-feixing',
+    },
+    {
+      icon: 'i-heroicons-viewfinder-circle',
       titleKey: 'fengshuiLuopan.title',
       descKey: 'fengshuiLuopan.subtitle',
       ctaKey: 'fengshuiLuopan.action.start',

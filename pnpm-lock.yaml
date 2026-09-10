@@ -46,6 +46,12 @@ importers:
       '@soul-atelier/bazi':
         specifier: 0.9.0
         version: 0.9.0
+      '@soul-atelier/calendar':
+        specifier: 0.7.0
+        version: 0.7.0
+      '@soul-atelier/xuankong':
+        specifier: 0.2.1
+        version: 0.2.1
       better-auth:
         specifier: ^1.6.26
         version: 1.6.26(@prisma/client@5.22.0)(better-sqlite3@13.0.3)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@prisma/client@5.22.0)(@types/better-sqlite3@9.6.0)(@types/pg@8.20.4)(better-sqlite3@13.0.3)(kysely@0.29.4)(pg@8.22.0))(pg@8.22.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(vue@3.5.33(typescript@5.9.3))
@@ -2712,11 +2718,23 @@ packages:
   '@soul-atelier/bazi@0.9.0':
     resolution: {integrity: sha512-x4oglse1VTlnQftcMuySb9CVxRlEdKVI+4rntJjRwUp9SabnhmbelwFLTBMpzfXMRCg8OOKfoycEfHFQ0/nhhA==}
 
+  '@soul-atelier/calendar@0.3.0':
+    resolution: {integrity: sha512-nzOofC8BHp0+w1RY9yzFBPVFILAtrtE+XPr9gwp8pOMdyOsMUQO3xC3Ow9v3fXzE/f8n9Y8lTTaVTzncaZl7QQ==}
+
   '@soul-atelier/calendar@0.7.0':
     resolution: {integrity: sha512-hb8QhHCem8jth1HVaYehbu8AzfHzwF+9f3mEB00H8y3ED4112GyAI1x9IL88m8lsCrryT7zJXmwsrvEhzLgm5A==}
 
+  '@soul-atelier/core@0.3.0':
+    resolution: {integrity: sha512-gvEeEy72dZ2kgXHRmtLgOGhSSKUPnSS2GNdnH/7piiirYrW1gQ0uwBy5Exm+gEM6cZNHYuXRwDONdxP/4tJzBA==}
+
+  '@soul-atelier/core@0.4.0':
+    resolution: {integrity: sha512-OcICkqAckJ49TU0QNmbuGIAHA8dtZ/8emsZKeVfGLJn/AOhnHqlbv5tnzxqBVkrEPHXG8RNxa6cZJittCgU7oA==}
+
   '@soul-atelier/core@0.5.0':
     resolution: {integrity: sha512-VP5jF7lYN4oTsRwfLu29OB378KpFi63STpDMMduiJ3L0a6BvHm9yRRZdtXk7y+OKihmcHTz6PwoYWFC1zuLdXw==}
+
+  '@soul-atelier/xuankong@0.2.1':
+    resolution: {integrity: sha512-2cY/BUjkEB+UG+8Pc3Yod522f2BElI6yk4qeJi3rmi5WDHcovszTRzWUycPnz6anz6Jpk0Diq8F2l5nb7Kz6FA==}
 
   '@speed-highlight/core@1.2.15':
     resolution: {integrity: sha512-BMq1K3DsElxDWawkX6eLg9+CKJrTVGCBAWVuHXVUV2u0s2711qiChLSId6ikYPfxhdYocLNt3wWwSvDiTvFabw==}
@@ -9626,12 +9644,26 @@ snapshots:
       '@soul-atelier/calendar': 0.7.0
       '@soul-atelier/core': 0.5.0
 
+  '@soul-atelier/calendar@0.3.0':
+    dependencies:
+      '@soul-atelier/core': 0.3.0
+      tyme4ts: 1.4.4
+
   '@soul-atelier/calendar@0.7.0':
     dependencies:
       '@soul-atelier/core': 0.5.0
       tyme4ts: 1.4.4
 
+  '@soul-atelier/core@0.3.0': {}
+
+  '@soul-atelier/core@0.4.0': {}
+
   '@soul-atelier/core@0.5.0': {}
+
+  '@soul-atelier/xuankong@0.2.1':
+    dependencies:
+      '@soul-atelier/calendar': 0.3.0
+      '@soul-atelier/core': 0.4.0
 
   '@speed-highlight/core@1.2.15': {}
 
