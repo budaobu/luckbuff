@@ -104,6 +104,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/ziwei-paipan',
     },
     {
+      icon: 'i-heroicons-squares-2x2',
+      titleKey: 'zibaifeixingPaipan.title',
+      descKey: 'zibaifeixingPaipan.subtitle',
+      ctaKey: 'zibaifeixingPaipan.submit',
+      path: '/tools/zibaifeixing-paipan',
+    },
+    {
       icon: 'i-heroicons-viewfinder-circle',
       titleKey: 'fengshuiLuopan.title',
       descKey: 'fengshuiLuopan.subtitle',
