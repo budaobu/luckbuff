@@ -93,6 +93,7 @@ export interface ShareOptions {
   | 'qizheng-paipan'
   | 'qimen-paipan'
   | 'tieban-paipan'
+  | 'huangji-paipan'
   | 'liuren-paipan'
   | 'taiyi-paipan'
   | 'ziwei-paipan'
@@ -218,6 +219,7 @@ export function useShare() {
       'qizheng-paipan': '七政四余排盘',
       'qimen-paipan': '奇门遁甲排盘',
       'tieban-paipan': '铁板神数排盘',
+      'huangji-paipan': '皇极经世排盘',
       'liuren-paipan': '大六壬排盘',
       'taiyi-paipan': '太乙神数排盘',
       'ziwei-paipan': '紫微命盘',
