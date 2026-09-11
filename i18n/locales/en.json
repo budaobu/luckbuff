@@ -1316,7 +1316,12 @@
     "humorHermitDesc": "Enter your birth info and the Humor Hermit will analyze your career, love and wealth with actionable advice and timing tips. Free to use.",
     "humorHermitKeywords": "Humor Hermit,AI fortune analysis,free reading,bazi analysis,career fortune,love fortune",
     "humorHermitOgTitle": "Humor Hermit_Free AI Fortune Analysis",
-    "humorHermitOgDesc": "Enter your info and the Humor Hermit analyzes your career, love and wealth."
+    "humorHermitOgDesc": "Enter your info and the Humor Hermit analyzes your career, love and wealth.",
+    "rokuseiTitle": "Six-Star Astrology Calculator_Stars & Kill Periods",
+    "rokuseiDesc": "Free Six-Star Astrology calculator. Enter your birth details to find your six-star type, polarity, Reigo condition, twelve-year cycle, 2026 kill periods, and fate-kill windows.",
+    "rokuseiKeywords": "Six-Star Astrology, Rokusei Senjutsu, destiny star, Reigo, twelve-year cycle, major kill period, fate kill, annual fortune, monthly fortune, daily fortune",
+    "rokuseiOgTitle": "Six-Star Astrology Calculator_Stars & Kill Periods",
+    "rokuseiOgDesc": "Calculate your six-star destiny type, twelve-year rhythm, kill periods, and fate-kill windows online."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -2152,7 +2157,7 @@
     "location": "Birth Place (Optional)",
     "locationPlaceholder": "e.g. Chengdu, Hong Kong, Taipei",
     "locationHint": "Place resolves timezone and coordinates; unresolved coordinates show “uncorrected”.",
-    "gender": "Gender",
+    "gender": "Gender / Zodiac",
     "minuteHint": "Tieban Shenshu divides an hour into eight quarters. Provide the most precise minute available.",
     "solarTimeHint": "Resolved coordinates enable true solar time; boundary crossings recalculate the pillars.",
     "corpusHint": "Verses come from public-domain classical transcriptions and are not collated against a printed edition.",
@@ -2176,7 +2181,6 @@
     "birthSubtitle": "Standard time, true solar time, lunar date and eight quarters",
     "solar": "Solar Date",
     "lunar": "Lunar Date",
-    "gender": "Gender / Zodiac",
     "minuteQuarter": "Minute Quarter",
     "requestedTime": "Entered Time",
     "correctedTime": "Corrected Calculation Time",
@@ -11379,7 +11383,12 @@
     "threeCount": "Master-Guest",
     "pillarTitle": "Pillars and Void",
     "calendarSubtitle": "Year, month, day and hour with hidden branches",
-    "pillars": { "year": "Year", "month": "Month", "day": "Day", "hour": "Hour" },
+    "pillars": {
+      "year": "Year",
+      "month": "Month",
+      "day": "Day",
+      "hour": "Hour"
+    },
     "ganzhi": "Gan-Zhi",
     "xunKong": "Void",
     "spiritTitle": "Taiyi Spirits",
@@ -11411,8 +11420,18 @@
     "aiError": "AI interpretation failed. Please try again later.",
     "aiNoResult": "No interpretation was returned",
     "aiDisclaimer": "AI interpretation is for cultural entertainment and traditional reference only.",
-    "jiOptions": { "hour": "Hour", "day": "Day", "month": "Month", "year": "Year" },
-    "methodOptions": { "tongzong": "Tongzong", "jinjing": "Jinjing", "taojin": "Taojin", "ju": "Taiyi Ju" }
+    "jiOptions": {
+      "hour": "Hour",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year"
+    },
+    "methodOptions": {
+      "tongzong": "Tongzong",
+      "jinjing": "Jinjing",
+      "taojin": "Taojin",
+      "ju": "Taiyi Ju"
+    }
   },
   "paipanTopic": {
     "title": "Charting Tools",
@@ -11754,5 +11773,114 @@
     "aiFullReportLogin": "Full analysis · Sign in to view",
     "aiFullReportTitle": "Full Purple White Flying Star AI Report",
     "aiLoginRequired": "Sign in to generate the full Purple White Flying Star AI report."
+  },
+  "rokusei": {
+    "title": "Six-Star Astrology Reading",
+    "subtitle": "Calculate your six-star type, polarity, Reigo condition, twelve-year cycle, monthly and daily rhythm, and fate-kill periods with per-item AI reading.",
+    "formTitle": "Birth Details",
+    "submit": "Calculate Chart",
+    "calculating": "Calculating six-star structure…",
+    "fail": "Six-Star calculation failed",
+    "pleaseRetry": "Please try again later",
+    "requiredError": "Birth date and hour are required",
+    "hourHint": "The primary star uses the day pillar; fate cycles use hour and gender for Bazi decade cycles.",
+    "locationHint": "Add a birthplace to correct true solar time at solar-term, day, or hour boundaries.",
+    "privacyHint": "Birth details are used for this reading only and are not persisted.",
+    "report": {
+      "destinyStar": "Destiny star",
+      "reigoBadge": "Reigo star",
+      "starNumber": "Star number",
+      "dayGanZhi": "Day pillar",
+      "yearBranch": "Adjusted year branch",
+      "voidPair": "Void pair",
+      "annualNow": "This year",
+      "fateNow": "Active fate star",
+      "baziTitle": "Bazi basis",
+      "baziSubtitle": "The primary star comes from the day pillar; polarity uses the solar-term-adjusted year branch and the same verified Bazi chart.",
+      "ganZhi": "Pillar",
+      "tenGod": "Ten God",
+      "void": "Void",
+      "rhythmTitle": "Current rhythm",
+      "rhythmSubtitle": "{year} annual, monthly, and daily positions",
+      "annual": "Annual",
+      "monthlyNow": "This month",
+      "dailyNow": "Today",
+      "oppositeStar": "Reigo opposite",
+      "annualTimeline": "Twelve-year cycle",
+      "cycleNote": "The annual cycle marks Shadow, Stop, and Decline as the three-year major kill period.",
+      "monthlyTimeline": "Monthly rhythm",
+      "monthlyNote": "The {year} monthly cycle breaks the year into narrower action windows.",
+      "dailyTimeline": "Next 12 days",
+      "dailyNote": "Starting from the server date today.",
+      "fateTitle": "Fate stars and fate-kill",
+      "fateSubtitle": "Ten fate stars map to Bazi decade-fortune Ten Gods; a fate kill is marked when the decade branch falls in the day-pillar void pair.",
+      "fateKill": "Fate kill",
+      "ageRange": "About ages {start}-{end}",
+      "noActiveFate": "Not covered by a current decade",
+      "methodTitle": "Method",
+      "calendar": "Time correction",
+      "starRule": "Star rule",
+      "signRule": "Polarity rule",
+      "cycleRule": "Cycle rule",
+      "fateRule": "Fate rule",
+      "monthN": "Month {n}"
+    },
+    "stars": {
+      "earth": "Earth Star",
+      "venus": "Venus Star",
+      "mars": "Mars Star",
+      "uranus": "Uranus Star",
+      "jupiter": "Jupiter Star",
+      "mercury": "Mercury Star"
+    },
+    "signs": {
+      "plus": "(+)",
+      "minus": "(-)"
+    },
+    "phases": {
+      "seed": "Seed",
+      "growth": "Growth",
+      "blossom": "Blossom",
+      "health": "Health",
+      "achievement": "Achievement",
+      "turbulence": "Turbulence",
+      "reunion": "Reunion",
+      "wealth": "Wealth",
+      "stability": "Stability",
+      "shadow": "Shadow",
+      "stop": "Stop",
+      "decline": "Decline"
+    },
+    "ranks": {
+      "normal": "Normal",
+      "small": "Minor kill",
+      "middle": "Middle kill",
+      "big": "Major kill"
+    },
+    "fateStars": {
+      "will": "Will Star",
+      "harmony": "Harmony Star",
+      "play": "Play Star",
+      "solitude": "Solitude Star",
+      "flowing-wealth": "Flowing Wealth",
+      "family-wealth": "Family Wealth",
+      "work": "Work Star",
+      "institution": "Institution Star",
+      "change": "Change Star",
+      "learning": "Learning Star",
+      "unknown": "Unmapped star"
+    },
+    "ai": {
+      "title": "AI Six-Star Reading",
+      "action": "AI reading",
+      "close": "Close reading",
+      "connecting": "Generating reading…",
+      "fullReport": "Generate full report",
+      "fullReportLogin": "Sign in for full report",
+      "fullReportTitle": "Six-Star full report",
+      "loginRequired": "Sign in to view the full report.",
+      "requestFailed": "AI reading request failed",
+      "disclaimer": "AI readings use deterministic chart data and are for cultural entertainment only."
+    }
   }
 }

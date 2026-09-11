@@ -210,6 +210,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/new-school-bazi',
       },
       {
+        icon: 'i-heroicons-star',
+        titleKey: 'rokusei.title',
+        descKey: 'rokusei.subtitle',
+        ctaKey: 'rokusei.submit',
+        path: '/tools/rokusei-senjutsu',
+      },
+      {
         icon: 'i-heroicons-squares-plus',
         titleKey: 'home.toolBaziZiweiTitle',
         descKey: 'home.toolBaziZiweiDesc',
