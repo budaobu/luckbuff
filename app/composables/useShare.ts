@@ -91,6 +91,7 @@ export interface ShareOptions {
   | 'bazi-paipan'
   | 'shichu-suimei'
   | 'qizheng-paipan'
+  | 'natal-astro'
   | 'qimen-paipan'
   | 'tieban-paipan'
   | 'huangji-paipan'
@@ -217,6 +218,7 @@ export function useShare() {
       'bazi-paipan': '八字排盘',
       'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',
+      'natal-astro': '西洋占星本命盘',
       'qimen-paipan': '奇门遁甲排盘',
       'tieban-paipan': '铁板神数排盘',
       'huangji-paipan': '皇极经世排盘',
