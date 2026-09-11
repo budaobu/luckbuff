@@ -69,6 +69,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/qizheng-paipan',
     },
     {
+      icon: 'i-heroicons-globe-alt',
+      titleKey: 'natalAstro.title',
+      descKey: 'natalAstro.subtitle',
+      ctaKey: 'natalAstro.submit',
+      path: '/tools/natal-astro',
+    },
+    {
       icon: 'i-heroicons-square-3-stack-3d',
       titleKey: 'qimenPaipan.title',
       descKey: 'qimenPaipan.subtitle',
