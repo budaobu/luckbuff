@@ -84,6 +84,13 @@ const chartingToolCategory: ToolCategory = {
     },
     {
       icon: 'i-heroicons-circle-stack',
+      titleKey: 'huangjiPaipan.title',
+      descKey: 'huangjiPaipan.subtitle',
+      ctaKey: 'huangjiPaipan.submit',
+      path: '/tools/huangji-paipan',
+    },
+    {
+      icon: 'i-heroicons-circle-stack',
       titleKey: 'liurenPaipan.title',
       descKey: 'liurenPaipan.subtitle',
       ctaKey: 'liurenPaipan.submit',
