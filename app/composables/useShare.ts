@@ -87,6 +87,7 @@ export interface ShareOptions {
     | 'astro-dice'
   | 'mangpai-bazi'
   | 'new-school-bazi'
+  | 'rokusei-senjutsu'
   | 'bazi-paipan'
   | 'shichu-suimei'
   | 'qizheng-paipan'
@@ -211,6 +212,7 @@ export function useShare() {
       'astro-dice': '占星骰子',
       'mangpai-bazi': '盲派八字',
       'new-school-bazi': '新派八字',
+      'rokusei-senjutsu': '六星占术',
       'bazi-paipan': '八字排盘',
       'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',

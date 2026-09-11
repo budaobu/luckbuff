@@ -1316,7 +1316,12 @@
     "humorHermitDesc": "輸入你的生辰信息，幽默隱士為你分析事業、感情、財運，提供具體建議和時機提示，免費使用。",
     "humorHermitKeywords": "幽默隱士,AI命理分析,免費算命,八字分析,事業運勢,感情運勢",
     "humorHermitOgTitle": "幽默隱士_免費AI命理分析",
-    "humorHermitOgDesc": "輸入信息，幽默隱士為你分析事業、感情、財運。"
+    "humorHermitOgDesc": "輸入信息，幽默隱士為你分析事業、感情、財運。",
+    "rokuseiTitle": "六星占術線上計算_命運星與大殺界查詢",
+    "rokuseiDesc": "免費六星占術線上計算，輸入出生年月日、時辰與性別，查詢土星人、金星人、火星人、天王星人、木星人、水星人、靈合星人、十二運勢、2026 大殺界與宿命大殺界。",
+    "rokuseiKeywords": "六星占術,六星占術計算,六星占術2026,命運星,靈合星人,大殺界,十二運勢,年運,月運,日運,宿命大殺界",
+    "rokuseiOgTitle": "六星占術線上計算_命運星與大殺界查詢",
+    "rokuseiOgDesc": "輸入出生資訊自動排六星，查詢命運星、十二運勢、大殺界與宿命大殺界。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -2102,7 +2107,7 @@
     "location": "出生地點（可選）",
     "locationPlaceholder": "如：台北、香港、Chengdu",
     "locationHint": "地點用於解析時區與經緯度；未解析座標會明確顯示未校正。",
-    "gender": "性別",
+    "gender": "性別 / 生肖",
     "minuteHint": "鐵板神數以一刻十五分考刻；請盡量提供精確出生分鐘。",
     "solarTimeHint": "解析到座標時啟用真太陽時校正；跨時辰或日期邊界會重排四柱。",
     "corpusHint": "條文來自公版古籍轉錄，未經善本逐字校勘；缺條會明確標註。",
@@ -2126,7 +2131,6 @@
     "birthSubtitle": "標準時、真太陽時、農曆與八刻對照",
     "solar": "西曆",
     "lunar": "農曆",
-    "gender": "性別 / 生肖",
     "minuteQuarter": "分鐘八刻",
     "requestedTime": "輸入時間",
     "correctedTime": "校正後計算時間",
@@ -11402,7 +11406,12 @@
     "threeCount": "主客",
     "pillarTitle": "四柱與旬空",
     "calendarSubtitle": "年月日時干支與所遁地支",
-    "pillars": { "year": "年柱", "month": "月柱", "day": "日柱", "hour": "時柱" },
+    "pillars": {
+      "year": "年柱",
+      "month": "月柱",
+      "day": "日柱",
+      "hour": "時柱"
+    },
     "ganzhi": "干支",
     "xunKong": "旬空",
     "spiritTitle": "太乙神將",
@@ -11434,8 +11443,18 @@
     "aiError": "AI 解讀失敗，請稍後重試",
     "aiNoResult": "未收到解讀內容",
     "aiDisclaimer": "AI 解讀僅供文化娛樂與傳統命理參考。",
-    "jiOptions": { "hour": "時計", "day": "日計", "month": "月計", "year": "年計" },
-    "methodOptions": { "tongzong": "統宗", "jinjing": "金鏡", "taojin": "淘金", "ju": "太乙局" }
+    "jiOptions": {
+      "hour": "時計",
+      "day": "日計",
+      "month": "月計",
+      "year": "年計"
+    },
+    "methodOptions": {
+      "tongzong": "統宗",
+      "jinjing": "金鏡",
+      "taojin": "淘金",
+      "ju": "太乙局"
+    }
   },
   "paipanTopic": {
     "title": "排盤工具",
@@ -11776,5 +11795,114 @@
     "aiFullReportLogin": "完整分析報告 · 登入後可查看",
     "aiFullReportTitle": "完整紫白飛星 AI 分析報告",
     "aiLoginRequired": "登入後可生成完整紫白飛星 AI 分析報告。"
+  },
+  "rokusei": {
+    "title": "六星占術線上解讀",
+    "subtitle": "輸入出生資訊，計算命運星、陰陽、靈合星人、十二運勢、月日節奏與宿命大殺界，並支援逐項 AI 解讀。",
+    "formTitle": "出生資訊",
+    "submit": "開始排盤",
+    "calculating": "正在計算六星結構…",
+    "fail": "六星占術計算失敗",
+    "pleaseRetry": "請稍後重試",
+    "requiredError": "請填寫出生日期和時辰",
+    "hourHint": "六星主星看出生日干支；宿命週期需要時辰和性別來計算八字大運。",
+    "locationHint": "填寫出生地點可校正真太陽時，避免節氣邊界、日界或時辰邊界造成判定偏移。",
+    "privacyHint": "出生資訊僅用於本次排盤，不會持久保存。",
+    "report": {
+      "destinyStar": "命運星",
+      "reigoBadge": "靈合星人",
+      "starNumber": "星數",
+      "dayGanZhi": "日柱",
+      "yearBranch": "校正年支",
+      "voidPair": "空亡對",
+      "annualNow": "今年運勢",
+      "fateNow": "當前宿命星",
+      "baziTitle": "八字依據",
+      "baziSubtitle": "六星主星來自日柱，陰陽來自節氣校正後的年支；宿命週期沿用同一套已校驗命盤。",
+      "ganZhi": "干支",
+      "tenGod": "十神",
+      "void": "空亡",
+      "rhythmTitle": "當前節奏",
+      "rhythmSubtitle": "{year}年的年運、月運和日運位置",
+      "annual": "年運",
+      "monthlyNow": "本月月運",
+      "dailyNow": "今日日運",
+      "oppositeStar": "靈合對星",
+      "annualTimeline": "十二年運勢",
+      "cycleNote": "按十二運勢循環展示；陰影、停止、減退為年運大殺界。",
+      "monthlyTimeline": "十二月份節奏",
+      "monthlyNote": "{year}年的月運循環，用於把年運拆到更細的行動窗口。",
+      "dailyTimeline": "近十二天節奏",
+      "dailyNote": "以伺服器今日為起點，顯示連續十二天日運。",
+      "fateTitle": "宿命星與宿命大殺界",
+      "fateSubtitle": "按八字大運十神映射十大宿命星；大運地支落入日柱空亡對時標記宿命大殺界。",
+      "fateKill": "宿命大殺界",
+      "ageRange": "約 {start}-{end} 歲",
+      "noActiveFate": "當前大運未覆蓋",
+      "methodTitle": "計算方法",
+      "calendar": "時間校正",
+      "starRule": "主星規則",
+      "signRule": "陰陽規則",
+      "cycleRule": "週期規則",
+      "fateRule": "宿命規則",
+      "monthN": "{n}月"
+    },
+    "stars": {
+      "earth": "土星人",
+      "venus": "金星人",
+      "mars": "火星人",
+      "uranus": "天王星人",
+      "jupiter": "木星人",
+      "mercury": "水星人"
+    },
+    "signs": {
+      "plus": "（＋）",
+      "minus": "（−）"
+    },
+    "phases": {
+      "seed": "种子",
+      "growth": "綠生",
+      "blossom": "立花",
+      "health": "健弱",
+      "achievement": "達成",
+      "turbulence": "亂氣",
+      "reunion": "再會",
+      "wealth": "財成",
+      "stability": "安定",
+      "shadow": "陰影",
+      "stop": "停止",
+      "decline": "減退"
+    },
+    "ranks": {
+      "normal": "常规运",
+      "small": "小杀界",
+      "middle": "中杀界",
+      "big": "大杀界"
+    },
+    "fateStars": {
+      "will": "白照星",
+      "harmony": "妙雅星",
+      "play": "光美星",
+      "solitude": "靜雲星",
+      "flowing-wealth": "綠水星",
+      "family-wealth": "大善星",
+      "work": "風行星",
+      "institution": "大木星",
+      "change": "火竹星",
+      "learning": "香創星",
+      "unknown": "未映射星"
+    },
+    "ai": {
+      "title": "AI 六星解讀",
+      "action": "AI 解讀",
+      "close": "關閉解讀",
+      "connecting": "正在產生解讀…",
+      "fullReport": "產生完整報告",
+      "fullReportLogin": "登入後產生完整報告",
+      "fullReportTitle": "六星占術完整報告",
+      "loginRequired": "完整報告需要登入後查看。",
+      "requestFailed": "AI 解讀請求失敗",
+      "disclaimer": "AI 解讀基於確定性排盤結果，僅供文化娛樂參考。"
+    }
   }
 }
