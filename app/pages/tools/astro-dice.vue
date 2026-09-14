@@ -296,6 +296,8 @@ async function startAiStream() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/astro-dice')
+
 useSeoMeta({
   title: () => `${t('seo.astroDiceTitle')} - ${siteName}`,
   description: t('seo.astroDiceDesc'),
@@ -304,7 +306,7 @@ useSeoMeta({
   ogDescription: t('seo.astroDiceOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/astro-dice',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -316,14 +318,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.astroDiceTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/astro-dice',
+        url: pageUrl.value,
         description: t('seo.astroDiceDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('astroDice.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/astro-dice',
+          url: pageUrl.value,
           description: t('seo.astroDiceOgDesc'),
           offers: {
             '@type': 'Offer',

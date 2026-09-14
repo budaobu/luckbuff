@@ -662,6 +662,8 @@ const selectUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-naming')
+
 useSeoMeta({
   title: () => `${t('seo.baziNamingTitle')} - ${siteName}`,
   description: t('seo.baziNamingDesc'),
@@ -670,7 +672,7 @@ useSeoMeta({
   ogDescription: t('seo.baziNamingOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-naming',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -682,14 +684,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziNamingTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-naming',
+        url: pageUrl.value,
         description: t('seo.baziNamingDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziNaming.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-naming',
+          url: pageUrl.value,
           description: t('seo.baziNamingOgDesc'),
           offers: {
             '@type': 'Offer',

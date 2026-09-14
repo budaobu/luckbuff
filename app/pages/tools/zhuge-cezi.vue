@@ -387,6 +387,8 @@ function handleCopy() {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/zhuge-cezi')
+
 useSeoMeta({
   title: () => `${t('seo.zhugeCeziTitle')} - ${siteName}`,
   description: t('seo.zhugeCeziDesc'),
@@ -395,7 +397,7 @@ useSeoMeta({
   ogDescription: t('seo.zhugeCeziOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/zhuge-cezi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -407,14 +409,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.zhugeCeziTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/zhuge-cezi',
+        url: pageUrl.value,
         description: t('seo.zhugeCeziDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('zhugeCezi.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/zhuge-cezi',
+          url: pageUrl.value,
           description: t('seo.zhugeCeziOgDesc'),
           offers: {
             '@type': 'Offer',

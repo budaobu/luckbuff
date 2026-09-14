@@ -204,6 +204,7 @@ async function handleRetry() {
 
 const siteName = config.public.siteName || 'ososn'
 const siteUrl = config.public.siteUrl || 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/tools/qizheng-siyu')
 
 useSeoMeta({
   title: () => `${t('seo.qizhengSiyuTitle')} - ${siteName}`,
@@ -213,7 +214,7 @@ useSeoMeta({
   ogDescription: t('seo.qizhengSiyuOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/qizheng-siyu`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -225,14 +226,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.qizhengSiyuTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/qizheng-siyu`,
+        url: pageUrl.value,
         description: t('seo.qizhengSiyuDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('qizhengSiyu.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/qizheng-siyu`,
+          url: pageUrl.value,
           description: t('qizhengSiyu.subtitle'),
           offers: {
             '@type': 'Offer',

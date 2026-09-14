@@ -681,6 +681,8 @@ const shengxiaoEmoji = (animal: string) => {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/shengxiao-piancaiyun')
+
 useSeoMeta({
   title: () => `${t('seo.shengxiaoPiancaiyunTitle')} - ${siteName}`,
   description: t('seo.shengxiaoPiancaiyunDesc'),
@@ -689,7 +691,7 @@ useSeoMeta({
   ogDescription: t('seo.shengxiaoPiancaiyunOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/shengxiao-piancaiyun',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -701,14 +703,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.shengxiaoPiancaiyunTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/shengxiao-piancaiyun',
+        url: pageUrl.value,
         description: t('seo.shengxiaoPiancaiyunDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('shengxiaoPiancaiyun.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/shengxiao-piancaiyun',
+          url: pageUrl.value,
           description: t('seo.shengxiaoPiancaiyunOgDesc'),
           offers: {
             '@type': 'Offer',

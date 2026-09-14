@@ -62,6 +62,8 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
+const pageUrl = useLocalizedSeoUrl('/privacy')
+
 useSeoMeta({
   title: t('privacy.seoTitle'),
   description: t('privacy.seoDesc'),
@@ -69,7 +71,7 @@ useSeoMeta({
   ogDescription: t('privacy.seoDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/privacy',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

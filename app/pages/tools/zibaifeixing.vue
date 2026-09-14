@@ -447,6 +447,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/zibaifeixing')
+
 useSeoMeta({
   title: () => `${t('seo.zibaifeixingTitle')} - ${siteName}`,
   description: t('seo.zibaifeixingDesc'),
@@ -455,7 +457,7 @@ useSeoMeta({
   ogDescription: t('seo.zibaifeixingOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/zibaifeixing',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -467,14 +469,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.zibaifeixingTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/zibaifeixing',
+        url: pageUrl.value,
         description: t('seo.zibaifeixingDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('zibaifeixing.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/zibaifeixing',
+          url: pageUrl.value,
           description: t('seo.zibaifeixingOgDesc'),
           offers: {
             '@type': 'Offer',

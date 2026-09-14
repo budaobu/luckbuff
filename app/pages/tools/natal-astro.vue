@@ -247,6 +247,8 @@ onMounted(() => {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/natal-astro')
+
 useSeoMeta({
   title: () => `${t('seo.natalAstroTitle')} - ${siteName}`,
   description: t('seo.natalAstroDesc'),
@@ -255,7 +257,7 @@ useSeoMeta({
   ogDescription: t('seo.natalAstroOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/natal-astro',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -269,7 +271,7 @@ useHead(() => ({
         name: t('natalAstro.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/natal-astro')}`,
+        url: pageUrl.value,
         description: t('seo.natalAstroDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

@@ -366,6 +366,8 @@ const siteName = 'ososn'
 
 const pageTitle = computed(() => t('seo.liurenZizhanTitle'))
 
+const pageUrl = useLocalizedSeoUrl('/tools/liuren-zizhan')
+
 useSeoMeta({
   title: () => `${pageTitle.value} - ${siteName}`,
   description: pageDescription,
@@ -374,7 +376,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liuren-zizhan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -386,14 +388,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.liurenZizhanTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/liuren-zizhan',
+        url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('liurenZizhan.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/liuren-zizhan',
+          url: pageUrl.value,
           description: t('liurenZizhan.subtitle'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

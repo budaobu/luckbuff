@@ -212,6 +212,8 @@ async function handleRetry() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/astro-fortune-tune')
+
 useSeoMeta({
   title: () => `${t('seo.astroFortuneTuneTitle')} - ${siteName}`,
   description: t('seo.astroFortuneTuneDesc'),
@@ -220,7 +222,7 @@ useSeoMeta({
   ogDescription: t('seo.astroFortuneTuneOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/astro-fortune-tune',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -232,14 +234,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.astroFortuneTuneTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/astro-fortune-tune',
+        url: pageUrl.value,
         description: t('seo.astroFortuneTuneDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('astroFortuneTune.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/astro-fortune-tune',
+          url: pageUrl.value,
           description: t('astroFortuneTune.subtitle'),
           offers: {
             '@type': 'Offer',

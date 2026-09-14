@@ -149,6 +149,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/huangji-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.huangjiPaipanTitle')} - ${siteName}`,
   description: t('seo.huangjiPaipanDesc'),
@@ -157,7 +159,7 @@ useSeoMeta({
   ogDescription: t('seo.huangjiPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/huangji-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -171,7 +173,7 @@ useHead(() => ({
         name: t('huangjiPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: 'https://www.ososn.com/tools/huangji-paipan',
+        url: pageUrl.value,
         description: t('seo.huangjiPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

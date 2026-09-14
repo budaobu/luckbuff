@@ -514,6 +514,8 @@ ${aiContent.value ? '【' + t('chenggu.interpretation') + '】\n' + aiContent.va
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/chenggu')
+
 useSeoMeta({
   title: () => `${t('seo.chengguTitle')} - ${siteName}`,
   description: t('seo.chengguDesc'),
@@ -522,7 +524,7 @@ useSeoMeta({
   ogDescription: t('seo.chengguOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/chenggu',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -534,14 +536,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.chengguTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/chenggu',
+        url: pageUrl.value,
         description: t('seo.chengguDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('chenggu.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/chenggu',
+          url: pageUrl.value,
           description: t('seo.chengguOgDesc'),
           offers: {
             '@type': 'Offer',

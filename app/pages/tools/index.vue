@@ -20,6 +20,9 @@ const { t } = useI18n()
 const tools = useAnalysisTools()
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.analysisTitle')} - ${siteName}`,
   description: t('seo.analysisDesc'),
@@ -28,7 +31,7 @@ useSeoMeta({
   ogDescription: t('seo.analysisOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -40,7 +43,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.analysisTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools',
+        url: pageUrl.value,
         description: t('seo.analysisDesc'),
         mainEntity: {
           '@type': 'ItemList',
@@ -48,7 +51,7 @@ useHead(() => ({
             '@type': 'ListItem',
             position: index + 1,
             name: t(tool.titleKey),
-            url: `https://www.ososn.com${tool.path}`,
+            url: seoUrl(tool.path),
           })),
         },
       }),

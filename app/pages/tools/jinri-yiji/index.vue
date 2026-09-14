@@ -677,6 +677,8 @@ const aiCards = computed(() => {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jinri-yiji')
+
 useSeoMeta({
   title: () => `${t('seo.jinriYijiTitle')} - ${siteName}`,
   description: t('seo.jinriYijiDesc'),
@@ -685,7 +687,7 @@ useSeoMeta({
   ogDescription: t('seo.jinriYijiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jinri-yiji',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -697,14 +699,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jinriYijiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jinri-yiji',
+        url: pageUrl.value,
         description: t('seo.jinriYijiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jinriYiji.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jinri-yiji',
+          url: pageUrl.value,
           description: t('seo.jinriYijiOgDesc'),
           offers: {
             '@type': 'Offer',

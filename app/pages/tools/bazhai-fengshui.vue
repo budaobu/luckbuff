@@ -301,6 +301,7 @@ const dragging = ref(false)
 const config = useRuntimeConfig()
 const siteName = config.public.siteName as string
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/tools/bazhai-fengshui')
 
 // 24 山下拉选项
 const mountainOptions = computed(() =>
@@ -552,7 +553,7 @@ useSeoMeta({
   ogDescription: t('seo.bazhaiOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/bazhai-fengshui`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -564,14 +565,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.bazhaiTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/bazhai-fengshui`,
+        url: pageUrl.value,
         description: t('seo.bazhaiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('bazhai.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/bazhai-fengshui`,
+          url: pageUrl.value,
           description: t('seo.bazhaiOgDesc'),
           offers: {
             '@type': 'Offer',

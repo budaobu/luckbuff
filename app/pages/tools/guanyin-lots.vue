@@ -485,6 +485,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/guanyin-lots')
+
 useSeoMeta({
   title: () => `${t('seo.guanyinLotTitle')} - ${siteName}`,
   description: t('seo.guanyinLotDesc'),
@@ -493,7 +495,7 @@ useSeoMeta({
   ogDescription: t('seo.guanyinLotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/guanyin-lots',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -505,14 +507,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.guanyinLotTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/guanyin-lots',
+        url: pageUrl.value,
         description: t('seo.guanyinLotDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('drawALot.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/guanyin-lots',
+          url: pageUrl.value,
           description: t('seo.guanyinLotOgDesc'),
           offers: {
             '@type': 'Offer',

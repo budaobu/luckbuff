@@ -181,6 +181,8 @@ function handleFormSubmit(data: Omit<UserProfile, 'id'>) {
   closeForm()
 }
 
+const pageUrl = useLocalizedSeoUrl('/settings')
+
 useSeoMeta({
   title: t('settings.seoTitle'),
   description: t('settings.seoDesc'),
@@ -188,7 +190,7 @@ useSeoMeta({
   ogDescription: t('settings.seoDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/settings',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

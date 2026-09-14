@@ -348,6 +348,8 @@ const posterRef = ref<HTMLDivElement | null>(null)
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/huangji-zhiniangua')
+
 useSeoMeta({
   title: () => `${t('seo.huangjiZhinianguaTitle')} - ${siteName}`,
   description: () => t('seo.huangjiZhinianguaDesc'),
@@ -356,7 +358,7 @@ useSeoMeta({
   ogDescription: () => t('seo.huangjiZhinianguaOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/huangji-zhiniangua',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -368,14 +370,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.huangjiZhinianguaTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/huangji-zhiniangua',
+        url: pageUrl.value,
         description: t('seo.huangjiZhinianguaDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('seo.huangjiZhinianguaTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/huangji-zhiniangua',
+          url: pageUrl.value,
           description: t('seo.huangjiZhinianguaDesc'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

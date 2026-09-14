@@ -177,6 +177,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/qimen-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.qimenPaipanTitle')} - ${siteName}`,
   description: t('seo.qimenPaipanDesc'),
@@ -185,7 +187,7 @@ useSeoMeta({
   ogDescription: t('seo.qimenPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/qimen-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -199,7 +201,7 @@ useHead(() => ({
         name: t('qimenPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/qimen-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.qimenPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

@@ -370,6 +370,9 @@ const tickerItems = computed<string[]>(() => {
   return Array.isArray(raw) ? raw.map((item) => rt(item as never)) : []
 })
 
+const pageUrl = useLocalizedSeoUrl('/')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.homeTitle')} - ${siteName}`,
   description: t('seo.homeDesc'),
@@ -378,7 +381,7 @@ useSeoMeta({
   ogDescription: t('seo.homeOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
   twitterTitle: () => `${t('seo.homeTwitterTitle')} - ${siteName}`,
   twitterDescription: t('seo.homeTwitterDesc'),
@@ -409,11 +412,11 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: `${t('seo.homeTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com',
+        url: pageUrl.value,
         description: t('seo.homeDesc'),
         potentialAction: {
           '@type': 'SearchAction',
-          target: 'https://www.ososn.com/tools',
+          target: seoUrl('/tools'),
           'query-input': 'required name=search_term_string',
         },
       }),

@@ -168,6 +168,8 @@ function reset() {
   phase.value = 'form'
 }
 
+const pageUrl = useLocalizedSeoUrl('/prophet/qimen-football')
+
 useSeoMeta({
   title: () => t('footballPrediction.qimenSeoTitle'),
   description: () => t('footballPrediction.qimenSeoDescription'),
@@ -175,7 +177,7 @@ useSeoMeta({
   ogTitle: () => t('footballPrediction.qimenTitle'),
   ogDescription: () => t('footballPrediction.qimenSubtitle'),
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet/qimen-football',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

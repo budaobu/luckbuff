@@ -443,6 +443,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jinsuoyuguan-fengshui')
+
 useSeoMeta({
   title: () => `${t('seo.jinsuoyuguanTitle')} - ${siteName}`,
   description: t('seo.jinsuoyuguanDesc'),
@@ -451,7 +453,7 @@ useSeoMeta({
   ogDescription: t('seo.jinsuoyuguanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jinsuoyuguan-fengshui',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -463,14 +465,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jinsuoyuguanTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jinsuoyuguan-fengshui',
+        url: pageUrl.value,
         description: t('seo.jinsuoyuguanDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jinsuoyuguan.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jinsuoyuguan-fengshui',
+          url: pageUrl.value,
           description: t('seo.jinsuoyuguanOgDesc'),
           offers: {
             '@type': 'Offer',

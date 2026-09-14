@@ -856,6 +856,7 @@ const inputUi = {
 const config = useRuntimeConfig()
 const siteName = config.public.siteName as string
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/tools/fengshui-ornament')
 
 useSeoMeta({
   title: () => `${t('seo.fengshuiOrnamentTitle')} - ${siteName}`,
@@ -865,7 +866,7 @@ useSeoMeta({
   ogDescription: t('seo.fengshuiOrnamentOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/fengshui-ornament`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -877,14 +878,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.fengshuiOrnamentTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/fengshui-ornament`,
+        url: pageUrl.value,
         description: t('seo.fengshuiOrnamentDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('fengshuiOrnament.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/fengshui-ornament`,
+          url: pageUrl.value,
           description: t('seo.fengshuiOrnamentOgDesc'),
           offers: {
             '@type': 'Offer',

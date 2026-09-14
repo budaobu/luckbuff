@@ -592,6 +592,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/3shanwang-lot')
+
 useSeoMeta({
   title: () => `${t('seo.sanshanwangLotTitle')} - ${siteName}`,
   description: t('seo.sanshanwangLotDesc'),
@@ -600,7 +602,7 @@ useSeoMeta({
   ogDescription: t('seo.sanshanwangLotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/3shanwang-lot',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -612,14 +614,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.sanshanwangLotTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/3shanwang-lot',
+        url: pageUrl.value,
         description: t('seo.sanshanwangLotDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('sanshanwangLot.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/3shanwang-lot',
+          url: pageUrl.value,
           description: t('seo.sanshanwangLotOgDesc'),
           offers: {
             '@type': 'Offer',

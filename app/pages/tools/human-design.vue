@@ -244,7 +244,7 @@ function resetToForm() {
 }
 
 const siteName = 'ososn'
-const pageUrl = computed(() => `https://www.ososn.com${localePath('/tools/human-design')}`)
+const pageUrl = useLocalizedSeoUrl('/tools/human-design')
 
 useSeoMeta({
   title: () => `${t('seo.humanDesignTitle')} - ${siteName}`,

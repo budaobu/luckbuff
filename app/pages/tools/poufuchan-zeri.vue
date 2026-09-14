@@ -606,6 +606,8 @@ function resetForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/poufuchan-zeri')
+
 useSeoMeta({
   title: () => `${t('seo.poufuchanZeriTitle')} - ${siteName}`,
   description: t('seo.poufuchanZeriDesc'),
@@ -614,7 +616,7 @@ useSeoMeta({
   ogDescription: t('seo.poufuchanZeriOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/poufuchan-zeri',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -626,14 +628,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.poufuchanZeriTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/poufuchan-zeri',
+        url: pageUrl.value,
         description: t('seo.poufuchanZeriDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('poufuchanZeri.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/poufuchan-zeri',
+          url: pageUrl.value,
           description: t('seo.poufuchanZeriOgDesc'),
           offers: {
             '@type': 'Offer',

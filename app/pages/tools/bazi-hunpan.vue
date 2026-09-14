@@ -676,6 +676,8 @@ const selectUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-hunpan')
+
 useSeoMeta({
   title: () => `${t('seo.baziHunpanTitle')} - ${siteName}`,
   description: t('seo.baziHunpanDesc'),
@@ -684,7 +686,7 @@ useSeoMeta({
   ogDescription: t('seo.baziHunpanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-hunpan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -696,14 +698,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziHunpanTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-hunpan',
+        url: pageUrl.value,
         description: t('seo.baziHunpanDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziHunpan.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-hunpan',
+          url: pageUrl.value,
           description: t('seo.baziHunpanOgDesc'),
           offers: {
             '@type': 'Offer',

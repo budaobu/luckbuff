@@ -450,7 +450,7 @@ useSeoMeta({
   ogDescription: t('seo.fengshuiLuopanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: pageUrl.value,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

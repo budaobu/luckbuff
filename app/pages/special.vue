@@ -139,6 +139,9 @@ const featuredEntries: ToolItem[] = [
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/special')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.specialTitle')} - ${siteName}`,
   description: t('seo.specialDesc'),
@@ -147,7 +150,7 @@ useSeoMeta({
   ogDescription: t('seo.specialOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/special',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -157,7 +160,7 @@ useHead(() => {
     '@type': 'ListItem',
     position: index + 1,
     name: t(tool.titleKey),
-    url: `https://www.ososn.com${tool.path}`,
+    url: seoUrl(tool.path),
   }))
 
   return {
@@ -168,7 +171,7 @@ useHead(() => {
           '@context': 'https://schema.org',
           '@type': 'WebPage',
           name: `${t('seo.specialTitle')} - ${siteName}`,
-          url: 'https://www.ososn.com/special',
+          url: pageUrl.value,
           description: t('seo.specialDesc'),
           mainEntity: {
             '@type': 'ItemList',

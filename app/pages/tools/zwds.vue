@@ -429,6 +429,8 @@ function downloadShareImage() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/zwds')
+
 useSeoMeta({
   title: () => `${t('seo.zwdsTitle')} - ${siteName}`,
   description: t('seo.zwdsDesc'),
@@ -437,7 +439,7 @@ useSeoMeta({
   ogDescription: t('seo.zwdsOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/zwds',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -449,14 +451,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.zwdsTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/zwds',
+        url: pageUrl.value,
         description: t('seo.zwdsDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('home.toolZwdsTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/zwds',
+          url: pageUrl.value,
           description: t('home.toolZwdsDesc'),
           offers: {
             '@type': 'Offer',

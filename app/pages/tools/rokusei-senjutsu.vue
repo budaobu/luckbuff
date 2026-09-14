@@ -155,6 +155,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/rokusei-senjutsu')
+
 useSeoMeta({
   title: () => `${t('seo.rokuseiTitle')} - ${siteName}`,
   description: t('seo.rokuseiDesc'),
@@ -163,7 +165,7 @@ useSeoMeta({
   ogDescription: t('seo.rokuseiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/rokusei-senjutsu',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -177,7 +179,7 @@ useHead(() => ({
         name: t('rokusei.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/rokusei-senjutsu')}`,
+        url: pageUrl.value,
         description: t('seo.rokuseiDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

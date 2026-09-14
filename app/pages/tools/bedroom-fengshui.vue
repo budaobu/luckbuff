@@ -445,7 +445,7 @@ const bedDragging = ref(false)
 const config = useRuntimeConfig()
 const siteName = computed(() => (config.public.siteName as string) || 'ososn')
 const siteUrl = computed(() => (config.public.siteUrl as string) || 'https://www.ososn.com')
-const pageUrl = computed(() => `${siteUrl.value}/tools/bedroom-fengshui`)
+const pageUrl = useLocalizedSeoUrl('/tools/bedroom-fengshui')
 
 // 阳历生日日历
 const tz = getLocalTimeZone()
@@ -862,7 +862,7 @@ useSeoMeta({
   ogDescription: () => t('seo.bedroomFengshuiOgDesc'),
   ogImage: () => `${siteUrl.value}/og-image.png`,
   ogType: 'website',
-  ogUrl: pageUrl.value,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

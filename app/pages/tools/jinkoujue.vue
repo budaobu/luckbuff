@@ -638,6 +638,8 @@ function renderMarkdown(text: string): string {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jinkoujue')
+
 useSeoMeta({
   title: () => `${t('seo.jinkoujueTitle')} - ${siteName}`,
   description: t('seo.jinkoujueDesc'),
@@ -646,7 +648,7 @@ useSeoMeta({
   ogDescription: t('seo.jinkoujueOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jinkoujue',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -658,14 +660,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jinkoujueTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jinkoujue',
+        url: pageUrl.value,
         description: t('seo.jinkoujueDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jinkoujue.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jinkoujue',
+          url: pageUrl.value,
           description: t('seo.jinkoujueOgDesc'),
           offers: {
             '@type': 'Offer',

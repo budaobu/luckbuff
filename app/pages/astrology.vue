@@ -16,6 +16,9 @@ const category = useToolCategories().value.find(item => item.id === 'astrology')
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/astrology')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.astrologyTitle')} - ${siteName}`,
   description: t('seo.astrologyDesc'),
@@ -24,7 +27,7 @@ useSeoMeta({
   ogDescription: t('seo.astrologyOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/astrology',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -36,7 +39,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.astrologyTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/astrology',
+        url: pageUrl.value,
         description: t('seo.astrologyDesc'),
         mainEntity: {
           '@type': 'ItemList',
@@ -44,7 +47,7 @@ useHead(() => ({
             '@type': 'ListItem',
             position: index + 1,
             name: t(tool.titleKey),
-            url: `https://www.ososn.com${tool.path}`,
+            url: seoUrl(tool.path),
           })),
         },
       }),

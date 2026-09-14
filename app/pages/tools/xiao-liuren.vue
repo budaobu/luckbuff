@@ -630,6 +630,8 @@ function renderMarkdown(text: string): string {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/xiao-liuren')
+
 useSeoMeta({
   title: () => `${t('seo.xiaoLiurenTitle')} - ${siteName}`,
   description: t('seo.xiaoLiurenDesc'),
@@ -638,7 +640,7 @@ useSeoMeta({
   ogDescription: t('seo.xiaoLiurenOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/xiao-liuren',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -650,14 +652,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.xiaoLiurenTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/xiao-liuren',
+        url: pageUrl.value,
         description: t('seo.xiaoLiurenDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('xiaoLiuren.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/xiao-liuren',
+          url: pageUrl.value,
           description: t('seo.xiaoLiurenOgDesc'),
           offers: {
             '@type': 'Offer',

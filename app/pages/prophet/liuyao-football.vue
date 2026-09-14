@@ -168,6 +168,8 @@ function reset() {
   phase.value = 'form'
 }
 
+const pageUrl = useLocalizedSeoUrl('/prophet/liuyao-football')
+
 useSeoMeta({
   title: () => t('footballPrediction.liuyaoSeoTitle'),
   description: () => t('footballPrediction.liuyaoSeoDescription'),
@@ -175,7 +177,7 @@ useSeoMeta({
   ogTitle: () => t('footballPrediction.liuyaoTitle'),
   ogDescription: () => t('footballPrediction.liuyaoSubtitle'),
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet/liuyao-football',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

@@ -177,7 +177,7 @@ function downloadShareImage() {
 
 const config = useRuntimeConfig()
 const siteName = computed(() => config.public.siteName || 'ososn')
-const pageUrl = computed(() => `${config.public.siteUrl || 'https://www.ososn.com'}/tools/vedic-hepan`)
+const pageUrl = useLocalizedSeoUrl('/tools/vedic-hepan')
 
 useSeoMeta({
   title: () => `${t('seo.vedicHepanTitle')} - ${siteName.value}`,
@@ -187,7 +187,7 @@ useSeoMeta({
   ogDescription: t('seo.vedicHepanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: pageUrl.value,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

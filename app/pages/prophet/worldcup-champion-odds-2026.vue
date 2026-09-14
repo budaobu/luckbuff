@@ -330,6 +330,9 @@ function getChampBarColor(val: number): string {
 // ── SEO ──
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/prophet/worldcup-champion-odds-2026')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.championOddsTitle')} - ${siteName}`,
   description: t('seo.championOddsDesc'),
@@ -338,7 +341,7 @@ useSeoMeta({
   ogDescription: t('seo.championOddsOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet/worldcup-champion-odds-2026',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -350,14 +353,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.championOddsTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/prophet/worldcup-champion-odds-2026',
+        url: pageUrl.value,
         description: t('seo.championOddsDesc'),
         mainEntity: {
           '@type': 'ItemList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: t('home.toolLiuyaoTitle'), url: 'https://www.ososn.com/tools/liu-yao' },
-            { '@type': 'ListItem', position: 2, name: t('home.toolQimenWorldcupTitle'), url: 'https://www.ososn.com/prophet/qimen-worldcup' },
-            { '@type': 'ListItem', position: 3, name: t('home.toolLiurenWorldcupTitle'), url: 'https://www.ososn.com/prophet/liuren-worldcup' },
+            { '@type': 'ListItem', position: 1, name: t('home.toolLiuyaoTitle'), url: seoUrl('/tools/liu-yao') },
+            { '@type': 'ListItem', position: 2, name: t('home.toolQimenWorldcupTitle'), url: seoUrl('/prophet/qimen-worldcup') },
+            { '@type': 'ListItem', position: 3, name: t('home.toolLiurenWorldcupTitle'), url: seoUrl('/prophet/liuren-worldcup') },
           ],
         },
       }),

@@ -720,6 +720,8 @@ function renderMarkdown(text: string): string {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/marriage-xiangxing')
+
 useSeoMeta({
   title: () => `${t('seo.marriageXiangxingTitle')} - ${siteName}`,
   description: t('seo.marriageXiangxingDesc'),
@@ -728,7 +730,7 @@ useSeoMeta({
   ogDescription: t('seo.marriageXiangxingOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/marriage-xiangxing',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -740,14 +742,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.marriageXiangxingTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/marriage-xiangxing',
+        url: pageUrl.value,
         description: t('seo.marriageXiangxingDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('marriageXiangxing.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/marriage-xiangxing',
+          url: pageUrl.value,
           description: t('seo.marriageXiangxingOgDesc'),
           offers: {
             '@type': 'Offer',

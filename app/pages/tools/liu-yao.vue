@@ -1035,6 +1035,8 @@ const pageDescription = computed(() => {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/liu-yao')
+
 useSeoMeta({
   title: () => `${t('seo.liuyaoTitle')} - ${siteName}`,
   description: pageDescription,
@@ -1043,7 +1045,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liu-yao',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -1055,14 +1057,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.liuyaoTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/liu-yao',
+        url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('home.toolLiuyaoTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/liu-yao',
+          url: pageUrl.value,
           description: t('home.toolLiuyaoDesc'),
           offers: {
             '@type': 'Offer',

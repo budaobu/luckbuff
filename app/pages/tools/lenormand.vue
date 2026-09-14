@@ -475,6 +475,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/lenormand')
+
 useSeoMeta({
   title: () => `${t('seo.lenormandTitle')} - ${siteName}`,
   description: t('seo.lenormandDesc'),
@@ -483,7 +485,7 @@ useSeoMeta({
   ogDescription: t('seo.lenormandOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/lenormand',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -495,14 +497,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.lenormandTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/lenormand',
+        url: pageUrl.value,
         description: t('seo.lenormandDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('lenormand.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/lenormand',
+          url: pageUrl.value,
           description: t('seo.lenormandOgDesc'),
           offers: {
             '@type': 'Offer',

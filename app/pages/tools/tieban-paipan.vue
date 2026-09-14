@@ -244,6 +244,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/tieban-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.tiebanPaipanTitle')} - ${siteName}`,
   description: t('seo.tiebanPaipanDesc'),
@@ -252,7 +254,7 @@ useSeoMeta({
   ogDescription: t('seo.tiebanPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/tieban-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -266,7 +268,7 @@ useHead(() => ({
         name: t('tiebanPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/tieban-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.tiebanPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

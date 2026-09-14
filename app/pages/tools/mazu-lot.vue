@@ -592,6 +592,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/mazu-lot')
+
 useSeoMeta({
   title: () => `${t('seo.mazuLotTitle')} - ${siteName}`,
   description: t('seo.mazuLotDesc'),
@@ -600,7 +602,7 @@ useSeoMeta({
   ogDescription: t('seo.mazuLotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/mazu-lot',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -612,14 +614,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.mazuLotTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/mazu-lot',
+        url: pageUrl.value,
         description: t('seo.mazuLotDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('mazuLot.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/mazu-lot',
+          url: pageUrl.value,
           description: t('seo.mazuLotOgDesc'),
           offers: {
             '@type': 'Offer',
