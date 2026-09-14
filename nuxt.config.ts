@@ -212,7 +212,7 @@ export default defineNuxtConfig({
   },
 
   icon: {
-    serverBundle: 'remote',
+    serverBundle: 'local',
   },
 
   nitro: {
