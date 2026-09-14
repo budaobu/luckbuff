@@ -239,6 +239,7 @@ const ringOptions: LuopanRingId[] = ['trigrams', 'mountains', 'stems', 'branches
 let orientationEngine: OrientationEngine | null = null
 let calibrationEngine: CalibrationEngine | null = null
 let sensorTimeout: ReturnType<typeof setTimeout> | null = null
+let initializationTimeout: number | null = null
 let lastUiUpdate = 0
 
 const visibleRings = computed(() => {
@@ -308,8 +309,16 @@ function clearSensorTimeout() {
   }
 }
 
+function clearInitializationTimeout() {
+  if (initializationTimeout) {
+    clearTimeout(initializationTimeout)
+    initializationTimeout = null
+  }
+}
+
 function stopRealtime() {
   clearSensorTimeout()
+  clearInitializationTimeout()
   orientationEngine?.stop()
   orientationEngine = null
   calibrationEngine?.abort()
@@ -337,9 +346,10 @@ function handleSample(sample: LuopanSample) {
     return
   }
 
-  if (calibration.value.phase === 'complete') {
+  if (calibration.value.phase === 'complete' && status.value === 'calibrating') {
+    clearInitializationTimeout()
     status.value = 'initializing'
-    window.setTimeout(() => {
+    initializationTimeout = window.setTimeout(() => {
       if (status.value === 'initializing') status.value = 'active'
     }, 700)
   }
