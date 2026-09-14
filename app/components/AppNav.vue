@@ -208,7 +208,7 @@
     >
       <div
         v-if="mobileOpen"
-        class="md:hidden border-t px-4 pb-6 pt-4 space-y-1 backdrop-blur-2xl"
+        class="md:hidden border-t px-4 pb-6 pt-4 space-y-1 backdrop-blur-2xl max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
         style="border-color: var(--border-subtle); background-color: color-mix(in srgb, var(--surface-bg) 90%, transparent);"
       >
         <template v-for="item in navItems" :key="item.id">
@@ -380,6 +380,17 @@ const langOpen = ref(false)
 const { user, isLoggedIn, signInWithGoogle, signInWithTelegram, signOutUser } = useAuth()
 const toolsOpen = ref(false)
 const mobileToolsOpen = ref(false)
+
+// Lock page scroll while the mobile menu is open so touches inside the menu
+// scroll the menu, not the body behind it.
+watch(mobileOpen, (open) => {
+  if (!import.meta.client) return
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
+onBeforeUnmount(() => {
+  if (import.meta.client) document.body.style.overflow = ''
+})
 
 const categories = useToolCategories()
 const toolGroups = useToolDirectoryGroups()
