@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid payload' })
   }
 
-  const total = recordPageView(type as 'tool' | 'hub', slug)
+  const total = recordPageView(type as 'tool' | 'hub' | 'page', slug)
   return { total }
 })
