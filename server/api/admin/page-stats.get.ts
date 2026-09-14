@@ -4,11 +4,12 @@ import { getPageViewStats, type PageViewStats } from '~~/server/utils/page-views
 // 运行时无需访问 app/pages 源码。
 import pageTitles from '~~/app/data/page-titles.json'
 
-type Section = 'tools' | 'hubs' | 'submits'
+type Section = 'tools' | 'hubs' | 'pages' | 'submits'
 const toolPaths: Record<string, string> = pageTitles.paths
 
 function pageHref(slug: string, section: Section): string {
   if (section === 'hubs') return slug === 'home' ? '/' : `/${slug}`
+  if (section === 'pages') return `/${slug}`
   return toolPaths[slug] ?? `/tools/${slug}`
 }
 
@@ -46,6 +47,7 @@ export default defineEventHandler((event) => {
   return {
     tools: withTitles(getPageViewStats('tool'), 'tools'),
     hubs: withTitles(getPageViewStats('hub'), 'hubs'),
+    pages: withTitles(getPageViewStats('page'), 'pages'),
     submits: withSubmitTitles(getPageViewStats('tool-submit')),
   }
 })

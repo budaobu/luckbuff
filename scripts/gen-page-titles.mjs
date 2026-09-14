@@ -69,6 +69,27 @@ for (const pathMatch of categorySrc.matchAll(/\bpath:\s*'([^']+)'/g)) {
   if (!path.startsWith('/tools/')) toolPathAliases[slug] = path
 }
 
+// ── 观音灵签详情页：自定义动态路由，按签号作为独立统计项 ──
+const guanyinLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'guanyin-lots-100.json'), 'utf-8'))
+const guanyinTitleTemplate = lookup('guanyinLotDetail.title')
+for (const lot of guanyinLots) {
+  const slug = `guanyin-lot-${lot.id}`
+  tools[slug] ??= guanyinTitleTemplate?.replace('{n}', String(lot.id)) || slug
+  toolPathAliases[slug] = `/tools/guanyin-lots/${lot.id}`
+}
+
+// ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
+const matchDir = resolve(ROOT, 'content', 'worldcup-predictions')
+for (const filename of readdirSync(matchDir)) {
+  if (!filename.endsWith('.md') || /\.\w{2}(-\w{2})?\.md$/.test(filename)) continue
+  const src = readFileSync(resolve(matchDir, filename), 'utf-8')
+  const slug = src.match(/^slug:\s*["']([^"']+)["']/m)?.[1]
+  const title = src.match(/^#\s+(.+)$/m)?.[1]?.trim()
+  if (!slug || !/^[\w-]{1,80}$/.test(slug)) continue
+  tools[slug] ??= title || slug
+  toolPathAliases[slug] = `/prophet/match/${slug}`
+}
+
 // ── 专题页：HUB_PATHS 与 app/plugins/page-view-tracker.client.ts 保持一致 ──
 const trackerSrc = readFileSync(resolve(ROOT, 'app', 'plugins', 'page-view-tracker.client.ts'), 'utf-8')
 const hubBlock = trackerSrc.match(/HUB_PATHS\s*=\s*new Set\(\[([\s\S]*?)\]\)/)
@@ -80,6 +101,16 @@ for (const path of hubPaths) {
   const title = titleFromFile(resolve(PAGES_DIR, `${slug}.vue`))
     || titleFromFile(resolve(PAGES_DIR, slug, 'index.vue'))
   if (title) hubs[slug] = title
+}
+
+// ── 其他公共页面：与 PAGE_PATHS 保持一致，不计入工具或专题页 ──
+const pagePathsBlock = trackerSrc.match(/PAGE_PATHS\s*=\s*new Set\(\[([\s\S]*?)\]\)/)
+const pagePaths = pagePathsBlock ? [...pagePathsBlock[1].matchAll(/'([^']+)'/g)].map(m => m[1]) : []
+const pages = {}
+for (const path of pagePaths) {
+  const slug = path.slice(1)
+  const title = titleFromFile(resolve(PAGES_DIR, `${slug}.vue`))
+  if (title) pages[slug] = title
 }
 
 // ── 占卜提交：slug 来自 tool-submit-tracker 的 API 前缀，多数与工具页同名 ──
@@ -117,7 +148,7 @@ for (const [slug, path] of Object.entries(SUBMIT_PAGE_PATHS)) {
   if (submits[slug]) toolPathAliases[slug] = path
 }
 
-const out = { tools, hubs, submits }
+const out = { tools, hubs, pages, submits }
 if (Object.keys(toolPathAliases).length) out.paths = toolPathAliases
 writeFileSync(OUT_FILE, `${JSON.stringify(out, null, 2)}\n`)
-console.log(`page-titles: ${Object.keys(tools).length} tools, ${Object.keys(hubs).length} hubs, ${Object.keys(submits).length} submits -> app/data/page-titles.json`)
+console.log(`page-titles: ${Object.keys(tools).length} tools, ${Object.keys(hubs).length} hubs, ${Object.keys(pages).length} pages, ${Object.keys(submits).length} submits -> app/data/page-titles.json`)

@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path'
 const VIEWS_FILE = resolve(process.cwd(), 'content', 'insights', '.page-views.json')
 const DAILY_RETENTION_DAYS = 40
 
-export const PAGE_VIEW_TYPES = ['tool', 'hub', 'tool-submit'] as const
+export const PAGE_VIEW_TYPES = ['tool', 'hub', 'page', 'tool-submit'] as const
 export type PageViewType = typeof PAGE_VIEW_TYPES[number]
 
 interface ViewEntry {
