@@ -674,7 +674,9 @@
  // SEO
  const siteName = 'ososn'
 
- useSeoMeta({
+ const pageUrl = useLocalizedSeoUrl('/tools/ziwei-hunpan')
+
+useSeoMeta({
    title: () => `${t('seo.ziweiHunpanTitle')} - ${siteName}`,
    description: t('seo.ziweiHunpanDesc'),
    keywords: t('seo.ziweiHunpanKeywords'),
@@ -682,7 +684,7 @@
    ogDescription: t('seo.ziweiHunpanOgDesc'),
    ogImage: 'https://www.ososn.com/og-image.png',
    ogType: 'website',
-   ogUrl: 'https://www.ososn.com/tools/ziwei-hunpan',
+   ogUrl: pageUrl,
    twitterCard: 'summary_large_image',
  })
 
@@ -694,14 +696,14 @@
          '@context': 'https://schema.org',
          '@type': 'WebPage',
          name: `${t('seo.ziweiHunpanTitle')} - ${siteName}`,
-         url: 'https://www.ososn.com/tools/ziwei-hunpan',
+         url: pageUrl.value,
          description: t('seo.ziweiHunpanDesc'),
          mainEntity: {
            '@type': 'SoftwareApplication',
            name: t('ziweiHunpan.title'),
            applicationCategory: 'LifestyleApplication',
            operatingSystem: 'Any',
-           url: 'https://www.ososn.com/tools/ziwei-hunpan',
+           url: pageUrl.value,
            description: t('seo.ziweiHunpanOgDesc'),
            offers: {
              '@type': 'Offer',

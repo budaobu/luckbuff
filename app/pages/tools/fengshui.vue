@@ -553,6 +553,8 @@ const selectUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/fengshui')
+
 useSeoMeta({
   title: () => `${t('seo.fengshuiTitle')} - ${siteName}`,
   description: t('seo.fengshuiDesc'),
@@ -561,7 +563,7 @@ useSeoMeta({
   ogDescription: t('seo.fengshuiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/fengshui',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -573,14 +575,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.fengshuiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/fengshui',
+        url: pageUrl.value,
         description: t('seo.fengshuiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('kanyu.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/fengshui',
+          url: pageUrl.value,
           description: t('seo.fengshuiOgDesc'),
           offers: {
             '@type': 'Offer',

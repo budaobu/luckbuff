@@ -172,6 +172,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/ziwei-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.ziweiChartTitle')} - ${siteName}`,
   description: t('seo.ziweiChartDesc'),
@@ -180,7 +182,7 @@ useSeoMeta({
   ogDescription: t('seo.ziweiChartOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/ziwei-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -194,7 +196,7 @@ useHead(() => ({
         name: t('ziweiChart.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/ziwei-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.ziweiChartDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

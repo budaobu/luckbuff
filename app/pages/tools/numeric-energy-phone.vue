@@ -26,6 +26,8 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/numeric-energy-phone')
+
 useSeoMeta({
   title: () => `${t('numericEnergy.scenarios.phone.seoTitle')} - ${siteName}`,
   description: t('numericEnergy.scenarios.phone.seoDescription'),
@@ -33,7 +35,7 @@ useSeoMeta({
   ogTitle: () => t('numericEnergy.scenarios.phone.seoOgTitle'),
   ogDescription: t('numericEnergy.scenarios.phone.seoDescription'),
   ogImage: 'https://www.ososn.com/og-image.png',
-  ogUrl: 'https://www.ososn.com/tools/numeric-energy-phone',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

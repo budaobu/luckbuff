@@ -472,6 +472,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/5-god-of-wealth-lot')
+
 useSeoMeta({
   title: () => `${t('seo.wealthGodLotTitle')} - ${siteName}`,
   description: t('seo.wealthGodLotDesc'),
@@ -480,7 +482,7 @@ useSeoMeta({
   ogDescription: t('seo.wealthGodLotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/5-god-of-wealth-lot',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -492,14 +494,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.wealthGodLotTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/5-god-of-wealth-lot',
+        url: pageUrl.value,
         description: t('seo.wealthGodLotDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('wealthGodLot.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/5-god-of-wealth-lot',
+          url: pageUrl.value,
           description: t('seo.wealthGodLotOgDesc'),
           offers: {
             '@type': 'Offer',

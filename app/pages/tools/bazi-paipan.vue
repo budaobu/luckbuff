@@ -176,6 +176,8 @@ function shortDatetime(value: string) {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.baziChartTitle')} - ${siteName}`,
   description: t('seo.baziChartDesc'),
@@ -184,7 +186,7 @@ useSeoMeta({
   ogDescription: t('seo.baziChartOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -198,7 +200,7 @@ useHead(() => ({
         name: t('baziChart.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/bazi-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.baziChartDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

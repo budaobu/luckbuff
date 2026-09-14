@@ -87,6 +87,9 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const route = '/fortune/2026'
 
+const pageUrl = useLocalizedSeoUrl('/fortune/2026')
+const seoUrl = useLocalizedSeoPath()
+
 const tabs: HubTab[] = [
   {
     id: 'year',
@@ -160,7 +163,7 @@ useSeoMeta({
   ogDescription: t('seo.fortune2026OgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: `https://www.ososn.com${route}`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -172,7 +175,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
         name: t('seo.fortune2026Title'),
-        url: `https://www.ososn.com${route}`,
+        url: pageUrl.value,
         description: t('seo.fortune2026Desc'),
         mainEntity: {
           '@type': 'ItemList',
@@ -181,7 +184,7 @@ useHead(() => ({
               '@type': 'ListItem',
               position: index + 1,
               name: t(item.titleKey),
-              url: `https://www.ososn.com${item.path}`,
+              url: seoUrl(item.path),
             })),
         },
       }),

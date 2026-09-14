@@ -610,6 +610,8 @@ const pageTitle = computed(() => {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/liuren-seeking')
+
 useSeoMeta({
   title: () => `${pageTitle.value} - ${siteName}`,
   description: pageDescription,
@@ -618,7 +620,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liuren-seeking',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -630,14 +632,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${pageTitle.value} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/liuren-seeking',
+        url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('liurenSeeking.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/liuren-seeking',
+          url: pageUrl.value,
           description: t('liurenSeeking.subtitle'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

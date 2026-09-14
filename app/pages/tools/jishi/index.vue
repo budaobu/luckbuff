@@ -442,6 +442,8 @@ function resetForm() {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jishi')
+
 useSeoMeta({
   title: () => `${t('seo.jishiTitle')} - ${siteName}`,
   description: t('seo.jishiDesc'),
@@ -450,7 +452,7 @@ useSeoMeta({
   ogDescription: t('seo.jishiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jishi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -462,14 +464,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jishiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jishi',
+        url: pageUrl.value,
         description: t('seo.jishiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jishi.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jishi',
+          url: pageUrl.value,
           description: t('seo.jishiOgDesc'),
           offers: {
             '@type': 'Offer',

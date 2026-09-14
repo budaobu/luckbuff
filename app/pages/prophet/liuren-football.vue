@@ -185,6 +185,8 @@ function reset() {
   phase.value = 'form'
 }
 
+const pageUrl = useLocalizedSeoUrl('/prophet/liuren-football')
+
 useSeoMeta({
   title: () => t('footballPrediction.liurenSeoTitle'),
   description: () => t('footballPrediction.liurenSeoDescription'),
@@ -192,7 +194,7 @@ useSeoMeta({
   ogTitle: () => t('footballPrediction.liurenTitle'),
   ogDescription: () => t('footballPrediction.liurenSubtitle'),
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet/liuren-football',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

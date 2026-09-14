@@ -731,6 +731,8 @@ onBeforeUnmount(() => {
   insightAbort?.abort()
 })
 
+const pageUrl = useLocalizedSeoUrl('/tools/jinri-huangli')
+
 useSeoMeta({
   title: () => `${t('seo.jinriHuangliTitle')} - ${siteName}`,
   description: t('seo.jinriHuangliDesc'),
@@ -739,7 +741,7 @@ useSeoMeta({
   ogDescription: t('seo.jinriHuangliOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jinri-huangli',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -751,14 +753,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jinriHuangliTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jinri-huangli',
+        url: pageUrl.value,
         description: t('seo.jinriHuangliDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('todayAlmanac.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jinri-huangli',
+          url: pageUrl.value,
           description: t('seo.jinriHuangliOgDesc'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

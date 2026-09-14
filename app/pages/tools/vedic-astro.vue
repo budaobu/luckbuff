@@ -145,6 +145,8 @@ onMounted(() => {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/vedic-astro')
+
 useSeoMeta({
   title: () => `${t('seo.vedicTitle')} - ${siteName}`,
   description: t('seo.vedicDesc'),
@@ -153,7 +155,7 @@ useSeoMeta({
   ogDescription: t('seo.vedicOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/vedic-astro',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -164,14 +166,14 @@ useHead(() => ({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: t('seo.vedicTitle'),
-      url: 'https://www.ososn.com/tools/vedic-astro',
+      url: pageUrl.value,
       description: t('seo.vedicDesc'),
       mainEntity: {
         '@type': 'SoftwareApplication',
         name: t('vpc.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: 'https://www.ososn.com/tools/vedic-astro',
+        url: pageUrl.value,
         description: t('seo.vedicDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       },

@@ -757,6 +757,8 @@ const selectUi = {
 // ============ SEO ============
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/prophet/liuren-worldcup')
+
 useSeoMeta({
   title: () => t('liurenWorldcup.seo.title'),
   description: () => t('liurenWorldcup.seo.description'),
@@ -765,7 +767,7 @@ useSeoMeta({
   ogDescription: () => t('liurenWorldcup.seo.ogDescription'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet/liuren-worldcup',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -777,7 +779,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: t('liurenWorldcup.seo.title'),
-        url: 'https://www.ososn.com/prophet/liuren-worldcup',
+        url: pageUrl.value,
         description: t('liurenWorldcup.seo.description'),
       }),
     },

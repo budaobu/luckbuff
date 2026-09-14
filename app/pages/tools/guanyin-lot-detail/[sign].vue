@@ -143,7 +143,7 @@ useHead(() => ({
         title: lot.value!.fortune.title,
         meaning: lot.value!.fortune.explanation,
       }),
-      url: `https://www.ososn.com/tools/guanyin-lots/${lot.value!.fortune.number}`,
+      url: pageUrl.value,
       articleSection: String(lot.value!.lotType.name),
       position: lot.value!.fortune.number,
     }),

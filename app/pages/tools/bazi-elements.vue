@@ -293,6 +293,7 @@ async function handleShare() {
 }
 
 const siteName = 'ososn'
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-elements')
 useSeoMeta({
   title: () => `${t('seo.baziElementsTitle')} - ${siteName}`,
   description: t('seo.baziElementsDesc'),
@@ -301,7 +302,7 @@ useSeoMeta({
   ogDescription: t('seo.baziElementsOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: `https://www.ososn.com/tools/bazi-elements`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -313,14 +314,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: t('seo.baziElementsTitle'),
-        url: 'https://www.ososn.com/tools/bazi-elements',
+        url: pageUrl.value,
         description: t('seo.baziElementsDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziElements.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-elements',
+          url: pageUrl.value,
           description: t('seo.baziElementsDesc'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

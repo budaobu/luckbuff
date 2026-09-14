@@ -363,6 +363,8 @@ function resetForm() {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/liunian')
+
 useSeoMeta({
   title: () => `${t('seo.liunianTitle')} - ${siteName}`,
   description: t('seo.liunianDesc'),
@@ -371,7 +373,7 @@ useSeoMeta({
   ogDescription: t('seo.liunianOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liunian',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -383,14 +385,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.liunianTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/liunian',
+        url: pageUrl.value,
         description: t('seo.liunianDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('liunian.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/liunian',
+          url: pageUrl.value,
           description: t('seo.liunianOgDesc'),
           offers: {
             '@type': 'Offer',

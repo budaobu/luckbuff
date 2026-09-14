@@ -153,6 +153,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/zibaifeixing-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.zibaifeixingPaipanTitle')} - ${siteName}`,
   description: t('seo.zibaifeixingPaipanDesc'),
@@ -161,7 +163,7 @@ useSeoMeta({
   ogDescription: t('seo.zibaifeixingPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/zibaifeixing-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -175,7 +177,7 @@ useHead(() => ({
         name: t('zibaifeixingPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/zibaifeixing-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.zibaifeixingPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

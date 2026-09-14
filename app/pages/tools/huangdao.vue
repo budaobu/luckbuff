@@ -693,6 +693,8 @@ function downloadShareImage() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/huangdao')
+
 useSeoMeta({
   title: () => `${t('seo.huangdaoTitle')} - ${siteName}`,
   description: t('seo.huangdaoDesc'),
@@ -701,7 +703,7 @@ useSeoMeta({
   ogDescription: t('seo.huangdaoOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/huangdao',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -713,14 +715,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.huangdaoTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/huangdao',
+        url: pageUrl.value,
         description: t('seo.huangdaoDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('home.toolHuangdaoTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/huangdao',
+          url: pageUrl.value,
           description: t('home.toolHuangdaoDesc'),
           offers: {
             '@type': 'Offer',

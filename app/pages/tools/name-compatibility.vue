@@ -232,6 +232,8 @@ async function handleShare() {
 }
 
 const siteName = 'ososn'
+const pageUrl = useLocalizedSeoUrl('/tools/name-compatibility')
+
 useSeoMeta({
   title: () => `${t('seo.nameCompatibilityTitle')} - ${siteName}`,
   description: t('seo.nameCompatibilityDesc'),
@@ -240,7 +242,7 @@ useSeoMeta({
   ogDescription: t('seo.nameCompatibilityOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/name-compatibility',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -251,14 +253,14 @@ useHead(() => ({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: t('seo.nameCompatibilityTitle'),
-      url: 'https://www.ososn.com/tools/name-compatibility',
+      url: pageUrl.value,
       description: t('seo.nameCompatibilityDesc'),
       mainEntity: {
         '@type': 'SoftwareApplication',
         name: t('nameCompatibility.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: 'https://www.ososn.com/tools/name-compatibility',
+        url: pageUrl.value,
         description: t('seo.nameCompatibilityDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       },

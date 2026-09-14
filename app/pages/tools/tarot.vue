@@ -451,6 +451,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/tarot')
+
 useSeoMeta({
   title: () => `${t('seo.tarotTitle')} - ${siteName}`,
   description: t('seo.tarotDesc'),
@@ -459,7 +461,7 @@ useSeoMeta({
   ogDescription: t('seo.tarotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/tarot',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -471,14 +473,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.tarotTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/tarot',
+        url: pageUrl.value,
         description: t('seo.tarotDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('tarot.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/tarot',
+          url: pageUrl.value,
           description: t('seo.tarotOgDesc'),
           offers: {
             '@type': 'Offer',

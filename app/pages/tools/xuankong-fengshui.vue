@@ -534,6 +534,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/xuankong-fengshui')
+
 useSeoMeta({
   title: () => `${t('seo.xuankongTitle')} - ${siteName}`,
   description: t('seo.xuankongDesc'),
@@ -542,7 +544,7 @@ useSeoMeta({
   ogDescription: t('seo.xuankongOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/xuankong-fengshui',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -554,14 +556,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.xuankongTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/xuankong-fengshui',
+        url: pageUrl.value,
         description: t('seo.xuankongDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('xuankong.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/xuankong-fengshui',
+          url: pageUrl.value,
           description: t('seo.xuankongOgDesc'),
           offers: {
             '@type': 'Offer',

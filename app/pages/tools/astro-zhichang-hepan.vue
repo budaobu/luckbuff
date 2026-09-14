@@ -138,7 +138,7 @@ function downloadShareImage() {
 
 const config = useRuntimeConfig()
 const siteName = computed(() => config.public.siteName || 'ososn')
-const pageUrl = computed(() => `${config.public.siteUrl || 'https://www.ososn.com'}/tools/astro-zhichang-hepan`)
+const pageUrl = useLocalizedSeoUrl('/tools/astro-zhichang-hepan')
 
 useSeoMeta({
   title: () => `${t('seo.astroZhichangHepanTitle')} - ${siteName.value}`,
@@ -148,7 +148,7 @@ useSeoMeta({
   ogDescription: t('seo.astroZhichangHepanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: pageUrl.value,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

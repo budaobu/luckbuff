@@ -203,6 +203,8 @@ function resetToForm() {
 }
 
 const siteName = 'ososn'
+const pageUrl = useLocalizedSeoUrl('/tools/taiyi-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.taiyiPaipanTitle')} - ${siteName}`,
   description: t('seo.taiyiPaipanDesc'),
@@ -211,7 +213,7 @@ useSeoMeta({
   ogDescription: t('seo.taiyiPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/taiyi-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -224,7 +226,7 @@ useHead(() => ({
       name: t('taiyiPaipan.title'),
       applicationCategory: 'LifestyleApplication',
       operatingSystem: 'Any',
-      url: `https://www.ososn.com${localePath('/tools/taiyi-paipan')}`,
+      url: pageUrl.value,
       description: t('seo.taiyiPaipanDesc'),
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
     }),

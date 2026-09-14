@@ -63,6 +63,8 @@
 const { t } = useI18n()
 const localePath = useLocalePath()
 
+const pageUrl = useLocalizedSeoUrl('/terms')
+
 useSeoMeta({
   title: t('terms.seoTitle'),
   description: t('terms.seoDesc'),
@@ -70,7 +72,7 @@ useSeoMeta({
   ogDescription: t('terms.seoDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/terms',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 </script>

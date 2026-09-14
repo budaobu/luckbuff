@@ -641,6 +641,8 @@ const shengxiaoEmoji = (animal: string) => {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jinri-yunshi')
+
 useSeoMeta({
   title: () => `${t('seo.jinriYunshiTitle')} - ${siteName}`,
   description: t('seo.jinriYunshiDesc'),
@@ -649,7 +651,7 @@ useSeoMeta({
   ogDescription: t('seo.jinriYunshiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jinri-yunshi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -661,14 +663,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jinriYunshiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jinri-yunshi',
+        url: pageUrl.value,
         description: t('seo.jinriYunshiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jinriYunshi.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jinri-yunshi',
+          url: pageUrl.value,
           description: t('seo.jinriYunshiOgDesc'),
           offers: {
             '@type': 'Offer',

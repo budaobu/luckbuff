@@ -249,6 +249,7 @@ const toast = useToast()
 const config = useRuntimeConfig()
 const siteName = config.public.siteName as string
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-zhengyuan')
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
 const formValues = ref<FormValues>({
@@ -470,7 +471,7 @@ useSeoMeta({
   ogDescription: t('seo.baziZhengyuanOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/bazi-zhengyuan`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -482,14 +483,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziZhengyuanTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/bazi-zhengyuan`,
+        url: pageUrl.value,
         description: t('seo.baziZhengyuanDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziZhengyuan.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/bazi-zhengyuan`,
+          url: pageUrl.value,
           description: t('seo.baziZhengyuanOgDesc'),
           offers: {
             '@type': 'Offer',

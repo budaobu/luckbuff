@@ -607,6 +607,7 @@ const selectUi = {
 const config = useRuntimeConfig()
 const siteName = config.public.siteName as string
 const siteUrl = (config.public.siteUrl as string) || 'https://www.ososn.com'
+const pageUrl = useLocalizedSeoUrl('/tools/fengshui-fish-tank')
 
 useSeoMeta({
   title: () => `${t('seo.fishTankTitle')} - ${siteName}`,
@@ -616,7 +617,7 @@ useSeoMeta({
   ogDescription: t('seo.fishTankOgDesc'),
   ogImage: `${siteUrl}/og-image.png`,
   ogType: 'website',
-  ogUrl: `${siteUrl}/tools/fengshui-fish-tank`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -628,14 +629,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.fishTankTitle')} - ${siteName}`,
-        url: `${siteUrl}/tools/fengshui-fish-tank`,
+        url: pageUrl.value,
         description: t('seo.fishTankDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('fishTank.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: `${siteUrl}/tools/fengshui-fish-tank`,
+          url: pageUrl.value,
           description: t('seo.fishTankOgDesc'),
           offers: {
             '@type': 'Offer',

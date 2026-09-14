@@ -552,6 +552,8 @@ function resetForm() {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/wuxing-chuanyi')
+
 useSeoMeta({
   title: () => `${t('seo.wuxingChuanyiTitle')} - ${siteName}`,
   description: t('seo.wuxingChuanyiDesc'),
@@ -560,7 +562,7 @@ useSeoMeta({
   ogDescription: t('seo.wuxingChuanyiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/wuxing-chuanyi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -572,14 +574,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.wuxingChuanyiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/wuxing-chuanyi',
+        url: pageUrl.value,
         description: t('seo.wuxingChuanyiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('wuxingChuanyi.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/wuxing-chuanyi',
+          url: pageUrl.value,
           description: t('seo.wuxingChuanyiOgDesc'),
           offers: {
             '@type': 'Offer',

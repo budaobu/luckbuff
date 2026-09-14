@@ -516,6 +516,8 @@ function resetForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/tiche-zeri')
+
 useSeoMeta({
   title: () => `${t('seo.ticheZeriTitle')} - ${siteName}`,
   description: t('seo.ticheZeriDesc'),
@@ -524,7 +526,7 @@ useSeoMeta({
   ogDescription: t('seo.ticheZeriOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/tiche-zeri',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -536,14 +538,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.ticheZeriTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/tiche-zeri',
+        url: pageUrl.value,
         description: t('seo.ticheZeriDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('ticheZeri.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/tiche-zeri',
+          url: pageUrl.value,
           description: t('seo.ticheZeriOgDesc'),
           offers: {
             '@type': 'Offer',

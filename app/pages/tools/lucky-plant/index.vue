@@ -753,6 +753,8 @@ const selectUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/lucky-plant')
+
 useSeoMeta({
   title: () => `${t('seo.luckyPlantTitle')} - ${siteName}`,
   description: t('seo.luckyPlantDesc'),
@@ -761,7 +763,7 @@ useSeoMeta({
   ogDescription: t('seo.luckyPlantOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/lucky-plant',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -773,14 +775,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.luckyPlantTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/lucky-plant',
+        url: pageUrl.value,
         description: t('seo.luckyPlantDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('luckyPlant.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/lucky-plant',
+          url: pageUrl.value,
           description: t('seo.luckyPlantOgDesc'),
           offers: {
             '@type': 'Offer',

@@ -442,6 +442,8 @@ function downloadShareImage() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-ziwei')
+
 useSeoMeta({
   title: () => `${t('seo.baziZiweiTitle')} - ${siteName}`,
   description: t('seo.baziZiweiDesc'),
@@ -450,7 +452,7 @@ useSeoMeta({
   ogDescription: t('seo.baziZiweiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-ziwei',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -462,14 +464,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziZiweiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-ziwei',
+        url: pageUrl.value,
         description: t('seo.baziZiweiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('seo.baziZiweiTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-ziwei',
+          url: pageUrl.value,
           description: t('seo.baziZiweiDesc'),
           offers: {
             '@type': 'Offer',

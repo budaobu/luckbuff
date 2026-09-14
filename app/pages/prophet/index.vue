@@ -18,6 +18,9 @@ const category = useToolCategories().value.find(item => item.id === 'prophet')!
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/prophet')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('seo.prophetTitle')} - ${siteName}`,
   description: t('seo.prophetDesc'),
@@ -26,7 +29,7 @@ useSeoMeta({
   ogDescription: t('seo.prophetOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/prophet',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -38,7 +41,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.prophetTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/prophet',
+        url: pageUrl.value,
         description: t('seo.prophetDesc'),
         mainEntity: {
           '@type': 'ItemList',
@@ -46,7 +49,7 @@ useHead(() => ({
             '@type': 'ListItem',
             position: index + 1,
             name: t(tool.titleKey),
-            url: `https://www.ososn.com${tool.path}`,
+            url: seoUrl(tool.path),
           })),
         },
       }),

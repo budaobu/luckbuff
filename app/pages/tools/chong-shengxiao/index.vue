@@ -690,6 +690,8 @@ const aiCards = computed(() => {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/chong-shengxiao')
+
 useSeoMeta({
   title: () => `${t('seo.chongShengxiaoTitle')} - ${siteName}`,
   description: t('seo.chongShengxiaoDesc'),
@@ -698,7 +700,7 @@ useSeoMeta({
   ogDescription: t('seo.chongShengxiaoOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/chong-shengxiao',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -710,14 +712,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.chongShengxiaoTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/chong-shengxiao',
+        url: pageUrl.value,
         description: t('seo.chongShengxiaoDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('chongShengxiao.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/chong-shengxiao',
+          url: pageUrl.value,
           description: t('seo.chongShengxiaoOgDesc'),
           offers: {
             '@type': 'Offer',

@@ -313,6 +313,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-fortune-tune')
+
 useSeoMeta({
   title: () => `${t('seo.baziFortuneTuneTitle')} - ${siteName}`,
   description: t('seo.baziFortuneTuneDesc'),
@@ -321,7 +323,7 @@ useSeoMeta({
   ogDescription: t('seo.baziFortuneTuneOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-fortune-tune',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -333,14 +335,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziFortuneTuneTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-fortune-tune',
+        url: pageUrl.value,
         description: t('seo.baziFortuneTuneDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziFortuneTune.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-fortune-tune',
+          url: pageUrl.value,
           description: t('baziFortuneTune.subtitle'),
           offers: {
             '@type': 'Offer',

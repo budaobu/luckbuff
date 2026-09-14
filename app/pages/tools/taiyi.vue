@@ -484,6 +484,8 @@ function getPalaceLabel(palace: number): string {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/taiyi')
+
 useSeoMeta({
   title: () => `${t('seo.taiyiTitle')} - ${siteName}`,
   description: () => t('seo.taiyiDesc'),
@@ -492,7 +494,7 @@ useSeoMeta({
   ogDescription: () => t('seo.taiyiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/taiyi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -504,14 +506,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.taiyiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/taiyi',
+        url: pageUrl.value,
         description: t('seo.taiyiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('seo.taiyiTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/taiyi',
+          url: pageUrl.value,
           description: t('seo.taiyiDesc'),
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
         },

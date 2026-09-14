@@ -223,6 +223,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/liuren-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.liurenPaipanTitle')} - ${siteName}`,
   description: t('seo.liurenPaipanDesc'),
@@ -231,7 +233,7 @@ useSeoMeta({
   ogDescription: t('seo.liurenPaipanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liuren-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -245,7 +247,7 @@ useHead(() => ({
         name: t('liurenPaipan.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/liuren-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.liurenPaipanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

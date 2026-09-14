@@ -361,6 +361,8 @@ function downloadShareImage() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/zhouyi')
+
 useSeoMeta({
   title: () => `${t('seo.zhouyiTitle')} - ${siteName}`,
   description: t('seo.zhouyiDesc'),
@@ -369,7 +371,7 @@ useSeoMeta({
   ogDescription: t('seo.zhouyiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/zhouyi',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -381,14 +383,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.zhouyiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/zhouyi',
+        url: pageUrl.value,
         description: t('seo.zhouyiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('home.toolZhouyiTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/zhouyi',
+          url: pageUrl.value,
           description: t('home.toolZhouyiDesc'),
           offers: {
             '@type': 'Offer',

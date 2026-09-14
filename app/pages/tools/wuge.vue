@@ -411,6 +411,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/wuge')
+
 useSeoMeta({
   title: () => `${t('seo.wugeTitle')} - ${siteName}`,
   description: t('seo.wugeDesc'),
@@ -419,7 +421,7 @@ useSeoMeta({
   ogDescription: t('seo.wugeOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/wuge',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -431,14 +433,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.wugeTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/wuge',
+        url: pageUrl.value,
         description: t('seo.wugeDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('wuge.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/wuge',
+          url: pageUrl.value,
           description: t('seo.wugeOgDesc'),
           offers: {
             '@type': 'Offer',

@@ -691,7 +691,7 @@ const selectUi = {
 // SEO
 const config = useRuntimeConfig()
 const siteName = computed(() => config.public.siteName || 'ososn')
-const pageUrl = computed(() => `${config.public.siteUrl || 'https://www.ososn.com'}/tools/bazi-shiye-hepan`)
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-shiye-hepan')
 
 useSeoMeta({
   title: () => `${t('seo.baziShiyeHepanTitle')} - ${siteName.value}`,
@@ -701,7 +701,7 @@ useSeoMeta({
   ogDescription: t('seo.baziShiyeHepanOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: pageUrl.value,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

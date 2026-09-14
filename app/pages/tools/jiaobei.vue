@@ -546,6 +546,8 @@ const textareaUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/jiaobei')
+
 useSeoMeta({
   title: () => `${t('seo.jiaobeiTitle')} - ${siteName}`,
   description: t('seo.jiaobeiDesc'),
@@ -554,7 +556,7 @@ useSeoMeta({
   ogDescription: t('seo.jiaobeiOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/jiaobei',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -566,14 +568,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.jiaobeiTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/jiaobei',
+        url: pageUrl.value,
         description: t('seo.jiaobeiDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('jiaobei.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/jiaobei',
+          url: pageUrl.value,
           description: t('seo.jiaobeiOgDesc'),
           offers: {
             '@type': 'Offer',

@@ -470,6 +470,8 @@ const inputUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/numerology')
+
 useSeoMeta({
   title: () => `${t('seo.numerologyTitle')} - ${siteName}`,
   description: t('seo.numerologyDesc'),
@@ -478,7 +480,7 @@ useSeoMeta({
   ogDescription: t('seo.numerologyOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/numerology',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -490,14 +492,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.numerologyTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/numerology',
+        url: pageUrl.value,
         description: t('seo.numerologyDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('numerology.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/numerology',
+          url: pageUrl.value,
           description: t('seo.numerologyOgDesc'),
           offers: {
             '@type': 'Offer',

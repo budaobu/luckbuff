@@ -595,6 +595,8 @@ function renderMarkdown(text: string): string {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/child-activity-interest')
+
 useSeoMeta({
   title: () => `${t('seo.childActivityInterestTitle')} - ${siteName}`,
   description: t('seo.childActivityInterestDesc'),
@@ -603,7 +605,7 @@ useSeoMeta({
   ogDescription: t('seo.childActivityInterestOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/child-activity-interest',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -615,14 +617,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.childActivityInterestTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/child-activity-interest',
+        url: pageUrl.value,
         description: t('seo.childActivityInterestDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('childActivityInterest.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/child-activity-interest',
+          url: pageUrl.value,
           description: t('seo.childActivityInterestOgDesc'),
           offers: {
             '@type': 'Offer',

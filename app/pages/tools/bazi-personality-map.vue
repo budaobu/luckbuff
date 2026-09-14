@@ -540,6 +540,8 @@ function renderMarkdown(text: string): string {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-personality-map')
+
 useSeoMeta({
   title: () => `${t('seo.baziPersonalityMapTitle')} - ${siteName}`,
   description: t('seo.baziPersonalityMapDesc'),
@@ -548,7 +550,7 @@ useSeoMeta({
   ogDescription: t('seo.baziPersonalityMapOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-personality-map',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -560,14 +562,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziPersonalityMapTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-personality-map',
+        url: pageUrl.value,
         description: t('seo.baziPersonalityMapDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziPersonalityMap.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-personality-map',
+          url: pageUrl.value,
           description: t('seo.baziPersonalityMapOgDesc'),
           offers: {
             '@type': 'Offer',

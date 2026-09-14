@@ -708,6 +708,8 @@ const pageDescription = computed(() => {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/liuyao-divination')
+
 useSeoMeta({
   title: () => `${t('seo.liuyaoDivinationTitle')} - ${siteName}`,
   description: pageDescription,
@@ -716,7 +718,7 @@ useSeoMeta({
   ogDescription: pageDescription,
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/liuyao-divination',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -728,14 +730,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.liuyaoDivinationTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/liuyao-divination',
+        url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('home.toolLiuyaoDivinationTitle'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/liuyao-divination',
+          url: pageUrl.value,
           description: t('home.toolLiuyaoDivinationDesc'),
           offers: {
             '@type': 'Offer',

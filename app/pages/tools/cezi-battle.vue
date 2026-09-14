@@ -1698,6 +1698,8 @@ onUnmounted(() => {
   }
 })
 
+const pageUrl = useLocalizedSeoUrl('/tools/cezi-battle')
+
 useSeoMeta({
   title: () => `${t('seo.ceziBattleTitle')} - ososn`,
   description: t('seo.ceziBattleDesc'),
@@ -1706,7 +1708,7 @@ useSeoMeta({
   ogDescription: t('seo.ceziBattleOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/cezi-battle',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image'
 })
 </script>

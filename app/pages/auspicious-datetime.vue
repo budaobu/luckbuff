@@ -13,6 +13,9 @@
 <script setup lang="ts">
 const { t } = useI18n()
 const route = '/auspicious-datetime'
+
+const pageUrl = useLocalizedSeoUrl('/auspicious-datetime')
+const seoUrl = useLocalizedSeoPath()
 const category = useToolCategories().value.find(item => item.id === 'auspicious-datetime')!
 
 const siteName = 'ososn'
@@ -25,7 +28,7 @@ useSeoMeta({
   ogDescription: t('seo.auspiciousDatetimeOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: `https://www.ososn.com${route}`,
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -37,7 +40,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.auspiciousDatetimeTitle')} - ${siteName}`,
-        url: `https://www.ososn.com${route}`,
+        url: pageUrl.value,
         description: t('seo.auspiciousDatetimeDesc'),
         mainEntity: {
           '@type': 'ItemList',
@@ -45,7 +48,7 @@ useHead(() => ({
             '@type': 'ListItem',
             position: index + 1,
             name: t(tool.titleKey),
-            url: `https://www.ososn.com${tool.path}`,
+            url: seoUrl(tool.path),
           })),
         },
       }),

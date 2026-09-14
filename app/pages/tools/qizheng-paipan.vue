@@ -157,6 +157,8 @@ function resetToForm() {
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/qizheng-paipan')
+
 useSeoMeta({
   title: () => `${t('seo.qizhengChartTitle')} - ${siteName}`,
   description: t('seo.qizhengChartDesc'),
@@ -165,7 +167,7 @@ useSeoMeta({
   ogDescription: t('seo.qizhengChartOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/qizheng-paipan',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -179,7 +181,7 @@ useHead(() => ({
         name: t('qizhengChart.title'),
         applicationCategory: 'LifestyleApplication',
         operatingSystem: 'Any',
-        url: `https://www.ososn.com${localePath('/tools/qizheng-paipan')}`,
+        url: pageUrl.value,
         description: t('seo.qizhengChartDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
       }),

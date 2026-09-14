@@ -519,6 +519,8 @@ const selectUi = {
 // SEO
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/tools/bazi-wealth')
+
 useSeoMeta({
   title: () => `${t('seo.baziWealthTitle')} - ${siteName}`,
   description: t('seo.baziWealthDesc'),
@@ -527,7 +529,7 @@ useSeoMeta({
   ogDescription: t('seo.baziWealthOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/bazi-wealth',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -539,14 +541,14 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('seo.baziWealthTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/tools/bazi-wealth',
+        url: pageUrl.value,
         description: t('seo.baziWealthDesc'),
         mainEntity: {
           '@type': 'SoftwareApplication',
           name: t('baziWealth.title'),
           applicationCategory: 'LifestyleApplication',
           operatingSystem: 'Any',
-          url: 'https://www.ososn.com/tools/bazi-wealth',
+          url: pageUrl.value,
           description: t('seo.baziWealthOgDesc'),
           offers: {
             '@type': 'Offer',

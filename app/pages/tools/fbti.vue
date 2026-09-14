@@ -36,6 +36,8 @@ const loadingLines = [
   '正在给吉祥物补补水彩…',
 ]
 
+const pageUrl = useLocalizedSeoUrl('/tools/fbti')
+
 useSeoMeta({
   title: () => `${t('fbti.seoTitle')} - ososn`,
   description: t('fbti.seoDesc'),
@@ -44,7 +46,7 @@ useSeoMeta({
   ogDescription: t('fbti.seoDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/tools/fbti',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 

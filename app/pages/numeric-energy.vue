@@ -16,6 +16,9 @@ const category = useToolCategories().value.find(item => item.id === 'numeric-ene
 
 const siteName = 'ososn'
 
+const pageUrl = useLocalizedSeoUrl('/numeric-energy')
+const seoUrl = useLocalizedSeoPath()
+
 useSeoMeta({
   title: () => `${t('numericEnergyTopic.seoTitle')} - ${siteName}`,
   description: t('numericEnergyTopic.seoDescription'),
@@ -24,7 +27,7 @@ useSeoMeta({
   ogDescription: t('numericEnergyTopic.seoDescription'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
-  ogUrl: 'https://www.ososn.com/numeric-energy',
+  ogUrl: pageUrl,
   twitterCard: 'summary_large_image',
 })
 
@@ -36,7 +39,7 @@ useHead(() => ({
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: `${t('numericEnergyTopic.seoTitle')} - ${siteName}`,
-        url: 'https://www.ososn.com/numeric-energy',
+        url: pageUrl.value,
         description: t('numericEnergyTopic.seoDescription'),
         mainEntity: {
           '@type': 'ItemList',
@@ -44,7 +47,7 @@ useHead(() => ({
             '@type': 'ListItem',
             position: index + 1,
             name: t(tool.titleKey),
-            url: `https://www.ososn.com${tool.path}`,
+            url: seoUrl(tool.path),
           })),
         },
       }),
