@@ -67,6 +67,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@prisma/client@5.22.0)(@types/better-sqlite3@9.6.0)(@types/pg@8.20.4)(better-sqlite3@13.0.3)(kysely@0.29.4)(pg@8.22.0)
+      free-human-design:
+        specifier: 1.0.1
+        version: 1.0.1
       iztro:
         specifier: 2.6.1
         version: 2.6.1
@@ -3318,6 +3321,9 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
+  '@vvo/tzdb@6.198.0':
+    resolution: {integrity: sha512-bNRWBhWYl0edVgyX6AYbhoCM2tk2lXJjGCyO2VDc2xn6Dw8dLd7WGj2DDXkVOkmOIQTNjEAcxrEpIzz5pWVwFg==}
+
   abbrev@3.0.1:
     resolution: {integrity: sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -3408,6 +3414,10 @@ packages:
   ast-walker-scope@0.8.3:
     resolution: {integrity: sha512-cbdCP0PGOBq0ASG+sjnKIoYkWMKhhz+F/h9pRexUdX2Hd38+WOlBkRKlqkGOSm0YQpcFMQBJeK4WspUAkwsEdg==}
     engines: {node: '>=20.19.0'}
+
+  astronomia@4.2.0:
+    resolution: {integrity: sha512-mTvpBGyXB80aSsDhAAiuwza5VqAyqmj5yzhjBrFhRy17DcWDzJrb8Vdl4Sm+g276S+mY7bk/5hi6akZ5RQFeHg==}
+    engines: {node: '>=12.0.0'}
 
   astronomy-engine@2.1.19:
     resolution: {integrity: sha512-8yWKNf7UeNbH458h3sAJ6ZgAjE5jTXp/mNNRFoC20j2SHwZIjAQeEsBB2Q3uCFRaTCCJRv33K2XhkhZQMXoX6w==}
@@ -3786,6 +3796,9 @@ packages:
 
   citty@0.2.2:
     resolution: {integrity: sha512-+6vJA3L98yv+IdfKGZHBNiGW5KHn22e/JwID0Strsz8h4S/csAu/OuICwxrg44k5MRiZHWIo8XXuJgQTriRP4w==}
+
+  city-timezones@1.3.4:
+    resolution: {integrity: sha512-yLmtCxU4y5HLAw9XGIMcGEXO+R2KH1sb595wEQC/E9BxSDpazCD7v9ZQRySO7367IXWsWqt3z2xFVh3OkZdgEQ==}
 
   cliui@6.0.0:
     resolution: {integrity: sha512-t6wbgtoCXvAzst7QgXxJYqPt0usEfbgQdftEPbLL/cvv6HPE5VgvqCuAIDR0NgU52ds6rFwqrgakNLrHEjCbrQ==}
@@ -4652,6 +4665,11 @@ packages:
       react-dom:
         optional: true
 
+  free-human-design@1.0.1:
+    resolution: {integrity: sha512-o2e8Fu3VNXgQugzFQwJPrPfZSVCASDyZKy2bj594NQTeJEPA2ixM+wuBVSZ50nfZKagqyIQFBOLgUI0xGKEhpg==}
+    engines: {node: '>=16'}
+    hasBin: true
+
   fresh@2.0.0:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
@@ -5206,6 +5224,10 @@ packages:
   lunar@2.0.0:
     resolution: {integrity: sha512-xdz1adPhSteIZSq8F320CoR03mf7J7fKvLHncdzsiv3h5FcbEj4USUl6Pc8uG1EN17EBmMME8plqB+yukyfBTw==}
     engines: {node: '>=16.20.0'}
+
+  luxon@3.7.2:
+    resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
+    engines: {node: '>=12'}
 
   magic-regexp@0.10.0:
     resolution: {integrity: sha512-Uly1Bu4lO1hwHUW0CQeSWuRtzCMNO00CmXtS8N6fyvB3B979GOEEeAkiTUDsmbYLAbvpUS/Kt5c4ibosAzVyVg==}
@@ -10291,6 +10313,8 @@ snapshots:
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
 
+  '@vvo/tzdb@6.198.0': {}
+
   abbrev@3.0.1: {}
 
   abort-controller@3.0.0:
@@ -10382,6 +10406,8 @@ snapshots:
     dependencies:
       '@babel/parser': 7.29.2
       ast-kit: 2.2.0
+
+  astronomia@4.2.0: {}
 
   astronomy-engine@2.1.19: {}
 
@@ -10678,6 +10704,8 @@ snapshots:
       consola: 3.4.2
 
   citty@0.2.2: {}
+
+  city-timezones@1.3.4: {}
 
   cliui@6.0.0:
     dependencies:
@@ -11463,6 +11491,13 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
+  free-human-design@1.0.1:
+    dependencies:
+      '@vvo/tzdb': 6.198.0
+      astronomia: 4.2.0
+      city-timezones: 1.3.4
+      luxon: 3.7.2
+
   fresh@2.0.0: {}
 
   fs-constants@1.0.0: {}
@@ -11981,6 +12016,8 @@ snapshots:
   lunar-typescript@1.8.6: {}
 
   lunar@2.0.0: {}
+
+  luxon@3.7.2: {}
 
   magic-regexp@0.10.0:
     dependencies:

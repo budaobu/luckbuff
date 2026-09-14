@@ -55,6 +55,13 @@ const chartingToolCategory: ToolCategory = {
       recommended: true,
     },
     {
+      icon: 'i-heroicons-squares-2x2',
+      titleKey: 'humanDesign.title',
+      descKey: 'humanDesign.cardDescription',
+      ctaKey: 'humanDesign.submit',
+      path: '/tools/human-design',
+    },
+    {
       icon: 'i-heroicons-calendar-date-range',
       titleKey: 'shichuSuimei.title',
       descKey: 'shichuSuimei.subtitle',
