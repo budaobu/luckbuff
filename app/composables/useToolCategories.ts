@@ -55,6 +55,13 @@ const chartingToolCategory: ToolCategory = {
       recommended: true,
     },
     {
+      icon: 'i-heroicons-globe-asia-australia',
+      titleKey: 'thaiAstro.title',
+      descKey: 'thaiAstro.subtitle',
+      ctaKey: 'thaiAstro.submit',
+      path: '/tools/thai-astro-paipan',
+    },
+    {
       icon: 'i-heroicons-squares-2x2',
       titleKey: 'humanDesign.title',
       descKey: 'humanDesign.cardDescription',

@@ -90,6 +90,7 @@ export interface ShareOptions {
   | 'new-school-bazi'
   | 'rokusei-senjutsu'
   | 'bazi-paipan'
+  | 'thai-astro-paipan'
   | 'shichu-suimei'
   | 'qizheng-paipan'
   | 'natal-astro'
@@ -219,6 +220,7 @@ export function useShare() {
       'new-school-bazi': '新派八字',
       'rokusei-senjutsu': '六星占术',
       'bazi-paipan': '八字排盘',
+      'thai-astro-paipan': '泰国12星宿命盘',
       'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',
       'natal-astro': '西洋占星本命盘',
