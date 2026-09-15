@@ -893,6 +893,13 @@ const analysisToolCategories: ToolCategory[] = [
         recommended: true,
       },
       {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'omikuji.title',
+        descKey: 'omikuji.toolDesc',
+        ctaKey: 'omikuji.draw',
+        path: '/tools/omikuji',
+      },
+      {
         icon: 'i-heroicons-currency-dollar',
         titleKey: 'wealthGodLot.title',
         descKey: 'wealthGodLot.toolDesc',

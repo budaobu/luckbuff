@@ -104,6 +104,7 @@ export interface ShareOptions {
   | 'sukuyo-paipan'
   | 'jinri-huangli'
   | 'zibaifeixing-paipan'
+  | 'omikuji'
   name?: string
   summary?: string
   /** 覆盖当前页面路径；一般留给特殊入口使用 */
@@ -150,6 +151,7 @@ export function useShare() {
       fengshui: '风水',
       'guanyin-lot': '观音灵签',
       'wealth-god-lot': '五路财神签',
+      omikuji: '日本御神签',
       'bazi-hunpan': '八字合盘',
       'bazi-naming': '八字起名',
       'bazi-wealth': '八字算财富',
