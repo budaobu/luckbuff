@@ -125,6 +125,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/ziwei-paipan',
     },
     {
+      icon: 'i-heroicons-moon',
+      titleKey: 'sukuyoPaipan.title',
+      descKey: 'sukuyoPaipan.subtitle',
+      ctaKey: 'sukuyoPaipan.submit',
+      path: '/tools/sukuyo-paipan',
+    },
+    {
       icon: 'i-heroicons-squares-2x2',
       titleKey: 'zibaifeixingPaipan.title',
       descKey: 'zibaifeixingPaipan.subtitle',
