@@ -23,6 +23,7 @@ const TOOL_MATCHERS: RelatedToolMatcher[] = [
   { key: 'bazi-ziwei', terms: ['八字紫微', '紫微', '紫薇', '星曜', '十二宫'] },
   { key: 'liuyao-divination', terms: ['六爻', '摇卦', '起卦', '爻辞', 'liuyao'] },
   { key: 'tarot', terms: ['塔罗', '塔罗牌', '牌阵', '大阿卡纳', 'tarot'] },
+  { key: 'thai-tarot', terms: ['泰式塔罗', '泰国塔罗', 'Thai tarot'] },
   { key: 'huangdao', terms: ['黄道吉日', '黄历', '择日', '吉日', '宜忌'] },
   { key: 'jinri-yunshi', terms: ['今日运势', '每日运势', '日运'] },
   { key: 'liunian', terms: ['流年', '大运', '年运', '太岁'] },
