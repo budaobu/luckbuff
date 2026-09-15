@@ -421,7 +421,12 @@
     "thaiAstroDesc": "生年月日・時刻・都市からราศี12นักษัตร、ลัคนา、12ภพ、九曜、タイ式เกตุ、ตนุเศษ、ทักษาを無料計算し、AIが全体構造を解釈します。",
     "thaiAstroKeywords": "タイ占星術,タイ 12ラーシー,ราศี12นักษัตร,タイ出生図,タイ ネイタルチャート,無料タイ占星,ลัคนา,12ภพ,タイ式เกตุ,AIタイ占星",
     "thaiAstroOgTitle": "タイ12ラーシー出生図｜無料タイ占星術とAI解釈",
-    "thaiAstroOgDesc": "12ราศี、12ภพ、ลัคนา、九曜、ตนุเศษを含むタイ出生図を無料生成し、AI全体解釈に対応します。"
+    "thaiAstroOgDesc": "12ราศี、12ภพ、ลัคนา、九曜、ตนุเศษを含むタイ出生図を無料生成し、AI全体解釈に対応します。",
+    "thaiBuddhaTitle": "タイ曜日仏占い_誕生仏・カラー・方位とAI解説",
+    "thaiBuddhaOgTitle": "タイ曜日仏占い_8つの誕生仏解説",
+    "thaiBuddhaDesc": "無料のタイ曜日仏占い。生年月日・時刻・場所から水曜昼と夜を判別し、8つの誕生仏、ラッキーカラー、吉日、マハータクサ方位、AI完全レポートを表示します。",
+    "thaiBuddhaKeywords": "タイ曜日仏, 誕生仏, タイ占い 曜日, 曜日仏 カラー, 水曜夜 仏, タイ占星 方位",
+    "thaiBuddhaOgDesc": "水曜昼・夜を含む8つのタイ誕生仏を判定し、カラー、吉日、方位、AIレポートまで表示します。"
   },
   "thaiAstro": {
     "title": "タイ12ラーシー出生図",
@@ -501,27 +506,65 @@
     "aiFullReportTitle": "タイ12ラーシー完全レポート",
     "aiLoginRequired": "完全レポートはログイン後に生成できます。",
     "bodies": {
-      "sun": "太陽", "moon": "月", "mars": "火星", "mercury": "水星",
-      "jupiter": "木星", "venus": "金星", "saturn": "土星", "rahu": "ราหู",
-      "thaiKetu": "タイ式เกตุ", "uranus": "มฤตยู"
+      "sun": "太陽",
+      "moon": "月",
+      "mars": "火星",
+      "mercury": "水星",
+      "jupiter": "木星",
+      "venus": "金星",
+      "saturn": "土星",
+      "rahu": "ราหู",
+      "thaiKetu": "タイ式เกตุ",
+      "uranus": "มฤตยู"
     },
     "signs": {
-      "aries": "เมษ", "taurus": "พฤษภ", "gemini": "เมถุน", "cancer": "กรกฎ",
-      "leo": "สิงห์", "virgo": "กันย์", "libra": "ตุล", "scorpio": "พิจิก",
-      "sagittarius": "ธนู", "capricorn": "มกร", "aquarius": "กุมภ์", "pisces": "มีน"
+      "aries": "เมษ",
+      "taurus": "พฤษภ",
+      "gemini": "เมถุน",
+      "cancer": "กรกฎ",
+      "leo": "สิงห์",
+      "virgo": "กันย์",
+      "libra": "ตุล",
+      "scorpio": "พิจิก",
+      "sagittarius": "ธนู",
+      "capricorn": "มกร",
+      "aquarius": "กุมภ์",
+      "pisces": "มีน"
     },
     "houses": {
-      "tanu": "ตนุ", "katumpha": "กดุมภะ", "sahatcha": "สหัชชะ", "phanthu": "พันธุ",
-      "putta": "ปุตตะ", "ari": "อริ", "patni": "ปัตนิ", "marana": "มรณะ",
-      "supha": "ศุภะ", "kamma": "กัมมะ", "lapha": "ลาภะ", "vinat": "วินาศ"
+      "tanu": "ตนุ",
+      "katumpha": "กดุมภะ",
+      "sahatcha": "สหัชชะ",
+      "phanthu": "พันธุ",
+      "putta": "ปุตตะ",
+      "ari": "อริ",
+      "patni": "ปัตนิ",
+      "marana": "มรณะ",
+      "supha": "ศุภะ",
+      "kamma": "กัมมะ",
+      "lapha": "ลาภะ",
+      "vinat": "วินาศ"
     },
     "statuses": {
-      "exalted": "อุจจ์", "own": "เกษตร", "debilitated": "นิจ", "detriment": "ปรเกษตร"
+      "exalted": "อุจจ์",
+      "own": "เกษตร",
+      "debilitated": "นิจ",
+      "detriment": "ปรเกษตร"
     },
-    "triyangas": { "first": "第1区", "second": "第2区", "third": "第3区" },
+    "triyangas": {
+      "first": "第1区",
+      "second": "第2区",
+      "third": "第3区"
+    },
     "taksaRoles": {
-      "attendant": "บริวาร", "longevity": "อายุ", "power": "เดช", "glory": "ศรี",
-      "root": "มูละ", "effort": "อุตสาหะ", "minister": "มนตรี", "calamity": "กาลกิณี"
+      "attendant": "บริวาร",
+      "longevity": "อายุ",
+      "power": "เดช",
+      "glory": "ศรี",
+      "root": "มูละ",
+      "effort": "อุตสาหะ",
+      "minister": "มนตรี",
+      "calamity": "กาลกิณี"
     },
     "navamsaNumber": "นวางศ์ {number}"
   },
@@ -610,6 +653,174 @@
       "fullReportTitle": "タイ式タロット完全レポート",
       "loginRequired": "完全レポートはログイン後に生成できます。",
       "disclaimer": "AI解釈は今回の抽牌のみに基づきます。方向の示唆であり、現実判断の根拠ではありません。"
+    }
+  },
+  "thaiBuddha": {
+    "title": "タイ曜日仏占い",
+    "subtitle": "日曜から土曜、水曜昼と夜の8類で誕生仏・ラッキーカラー・方位と八宮を読み解く",
+    "formTitle": "出生情報",
+    "birthDate": "生年月日",
+    "birthTime": "出生時刻",
+    "birthCity": "出生地（任意）",
+    "birthCityPlaceholder": "例：Bangkok（日の出・日の入り計算用）",
+    "submit": "解析する",
+    "calculating": "計算中...",
+    "requiredError": "生年月日と時刻を入力してください",
+    "fail": "計算に失敗しました",
+    "pleaseRetry": "入力を確認してください",
+    "timeHint": "タイ式は日の出で日を替え、水曜は日の入り後にラーフ時間になります。",
+    "locationHint": "出生地を入力すると現地の日の出・日の入りで補正します。未入力は06:00/18:00の近似です。",
+    "privacyHint": "リクエスト内で計算し、出生情報は保存しません。",
+    "locationFail": "出生地を解決できません。別の都市名を入力するか空欄にしてください。",
+    "birth": "出生",
+    "location": "場所",
+    "noLocation": "未入力",
+    "planet": "惑星",
+    "sunEvents": "日の出/日の入り",
+    "sunEventHint": "日替わりと水曜の分岐",
+    "corrected": "現地太陽イベント補正済み",
+    "uncorrected": "06:00/18:00近似",
+    "meaningTitle": "仏姿と意味",
+    "meaningSubtitle": "仏姿は仏教の物語層、性格や色はタイ民俗層です。",
+    "story": "物語",
+    "personality": "伝統的性格",
+    "timing": "カラーとタイミング",
+    "dayColor": "曜日カラー",
+    "luckyColor": "ラッキーカラー",
+    "unluckyColor": "避けたいカラー",
+    "luckyDay": "吉日",
+    "unluckyDay": "注意日",
+    "taksaTitle": "マハータクサ八方位",
+    "taksaSubtitle": "出生惑星が伴侶宮から始まり、カーラキニーの文字は名前に避ける伝統です。",
+    "methodology": "方法",
+    "engine": "エンジン",
+    "rule": "太陽イベント",
+    "disclaimer": "境界",
+    "disclaimerText": "タイの民俗・占星伝統を示すもので、科学的結論や人生指示ではありません。",
+    "avoid": "名前に避用",
+    "favorable": "使用可",
+    "aiAction": "AI解説",
+    "aiPanelTitle": "対象AI解説",
+    "aiClose": "閉じる",
+    "aiConnecting": "AIに接続中...",
+    "aiError": "AI解説に失敗しました",
+    "aiNoResult": "AI結果が空です",
+    "aiFullReport": "完全レポートを作成",
+    "aiFullReportLogin": "ログインして完全レポート",
+    "aiFullReportTitle": "完全曜日仏レポート",
+    "aiLoginRequired": "完全解説にはログインが必要です。",
+    "aiDisclaimer": "伝統的な民俗解説、参考用です。",
+    "houses": {
+      "companion": "伴侶宮",
+      "life": "寿命宮",
+      "authority": "権威宮",
+      "fortune": "福運宮",
+      "foundation": "根基宮",
+      "effort": "努力宮",
+      "minister": "顧問宮",
+      "kalakini": "カーラキニー"
+    },
+    "directions": {
+      "northeast": "北東",
+      "east": "東",
+      "southeast": "南東",
+      "south": "南",
+      "southwest": "南西",
+      "west": "西",
+      "northwest": "北西",
+      "north": "北"
+    },
+    "planets": {
+      "sun": "太陽",
+      "moon": "月",
+      "mars": "火星",
+      "mercury": "水星",
+      "jupiter": "木星",
+      "venus": "金星",
+      "saturn": "土星",
+      "rahu": "ラーフ"
+    },
+    "colors": {
+      "red": "赤",
+      "yellow": "黄",
+      "pink": "ピンク",
+      "green": "緑",
+      "dark-green": "濃緑",
+      "orange": "オレンジ",
+      "light-blue": "水色",
+      "purple": "紫",
+      "black": "黒",
+      "white": "白",
+      "blue": "青"
+    },
+    "letters": {
+      "vowels": "母音グループ"
+    },
+    "days": {
+      "sunday": {
+        "name": "日曜日",
+        "buddha": "目を捧げる仏 · ปางถวายเนตร",
+        "posture": "立位、腰の前で腕を交差",
+        "story": "成道後の仏が菩提樹を七日間見つめ、感謝と集中を示します。",
+        "personality": "信頼され、知的で落ち着きがあります。",
+        "professions": "経営、公務、医療、工芸、貿易"
+      },
+      "monday": {
+        "name": "月曜日",
+        "buddha": "親族を止める仏 · ปางห้ามญาติ",
+        "posture": "立位、右手を外に向けて挙げる",
+        "story": "争いを静め、対話と境界をつくる姿です。",
+        "personality": "真面目で記憶力があり、技能や移動に向きます。",
+        "professions": "医療、看護、漁業"
+      },
+      "tuesday": {
+        "name": "火曜日",
+        "buddha": "涅槃に似た臥仏 · ปางไสยาสน์",
+        "posture": "右側を下に横たわる",
+        "story": "静かな威厳が傲慢を落ち着かせます。",
+        "personality": "勇敢、果断、行動的で心が広い。",
+        "professions": "警察、軍事、化学、料理、美容"
+      },
+      "wednesday-day": {
+        "name": "水曜昼",
+        "buddha": "鉢を持つ仏 · ปางอุ้มบาตร",
+        "posture": "立位で鉢を持つ",
+        "story": "布施の機会をつくり、価値を循環させます。",
+        "personality": "野心があり、社交的で表現力があります。",
+        "professions": "金融、歌、音楽、美術、デザイン"
+      },
+      "wednesday-night": {
+        "name": "水曜夜",
+        "buddha": "森林の隠棲仏 · ปางป่าเลไลยก์",
+        "posture": "森に座り、象と猿が供養する",
+        "story": "集団が乱れたとき、離れることで明晰さを回復します。",
+        "personality": "勤勉、誠実、冷静。",
+        "professions": "執筆、詩、医療、科学、演技、考古学"
+      },
+      "thursday": {
+        "name": "木曜日",
+        "buddha": "禅定仏 · ปางสมาธิ",
+        "posture": "結跏趺坐で手を重ねる",
+        "story": "内なる秩序と洞察が判断を成熟させます。",
+        "personality": "親切、静か、威厳があり公正です。",
+        "professions": "法律、教育、助言、宗教"
+      },
+      "friday": {
+        "name": "金曜日",
+        "buddha": "沈思仏 · ปางรำพึง",
+        "posture": "立位、胸の前で腕を交差",
+        "story": "深い真理を届く言葉に変える姿です。",
+        "personality": "魅力があり、社交的で野心と表現力があります。",
+        "professions": "金融、歌、音楽、美術、デザイン"
+      },
+      "saturday": {
+        "name": "土曜日",
+        "buddha": "ナーガ守護仏 · ปางนาคปรก",
+        "posture": "七頭のナーガの下で瞑想",
+        "story": "嵐を守るナーガが、耐性と保護を示します。",
+        "personality": "論理的で静か、体系的な実作に強い。",
+        "professions": "農業、建設、鉱業、執務"
+      }
     }
   }
 }

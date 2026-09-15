@@ -1396,7 +1396,12 @@
     "rokuseiDesc": "Free Six-Star Astrology calculator. Enter your birth details to find your six-star type, polarity, Reigo condition, twelve-year cycle, 2026 kill periods, and fate-kill windows.",
     "rokuseiKeywords": "Six-Star Astrology, Rokusei Senjutsu, destiny star, Reigo, twelve-year cycle, major kill period, fate kill, annual fortune, monthly fortune, daily fortune",
     "rokuseiOgTitle": "Six-Star Astrology Calculator_Stars & Kill Periods",
-    "rokuseiOgDesc": "Calculate your six-star destiny type, twelve-year rhythm, kill periods, and fate-kill windows online."
+    "rokuseiOgDesc": "Calculate your six-star destiny type, twelve-year rhythm, kill periods, and fate-kill windows online.",
+    "thaiBuddhaTitle": "Thai Birthday Buddha_Day Buddhas, Colors and Directions",
+    "thaiBuddhaOgTitle": "Thai Birthday Buddha_Readings, Colors and Directions",
+    "thaiBuddhaDesc": "Free Thai Birthday Buddha calculator. Split Wednesday day and night, read all eight day Buddhas, lucky colors, days, Maha Taksa directions and the full AI report.",
+    "thaiBuddhaKeywords": "Thai Birthday Buddha, Thai day Buddha, Buddha by day of birth, Thai lucky colors, Wednesday night Buddha, Thai astrology directions",
+    "thaiBuddhaOgDesc": "Calculate all eight Thai Birthday Buddhas with Wednesday day/night, colors, lucky days, directions and an AI report."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -12476,28 +12481,234 @@
     "aiFullReportTitle": "Thai 12 Rasi full report",
     "aiLoginRequired": "Sign in to generate the full Thai chart report.",
     "bodies": {
-      "sun": "Sun", "moon": "Moon", "mars": "Mars", "mercury": "Mercury",
-      "jupiter": "Jupiter", "venus": "Venus", "saturn": "Saturn", "rahu": "Rahu",
-      "thaiKetu": "Thai Ketu", "uranus": "Mrityu"
+      "sun": "Sun",
+      "moon": "Moon",
+      "mars": "Mars",
+      "mercury": "Mercury",
+      "jupiter": "Jupiter",
+      "venus": "Venus",
+      "saturn": "Saturn",
+      "rahu": "Rahu",
+      "thaiKetu": "Thai Ketu",
+      "uranus": "Mrityu"
     },
     "signs": {
-      "aries": "เมษ", "taurus": "พฤษภ", "gemini": "เมถุน", "cancer": "กรกฎ",
-      "leo": "สิงห์", "virgo": "กันย์", "libra": "ตุล", "scorpio": "พิจิก",
-      "sagittarius": "ธนู", "capricorn": "มกร", "aquarius": "กุมภ์", "pisces": "มีน"
+      "aries": "เมษ",
+      "taurus": "พฤษภ",
+      "gemini": "เมถุน",
+      "cancer": "กรกฎ",
+      "leo": "สิงห์",
+      "virgo": "กันย์",
+      "libra": "ตุล",
+      "scorpio": "พิจิก",
+      "sagittarius": "ธนู",
+      "capricorn": "มกร",
+      "aquarius": "กุมภ์",
+      "pisces": "มีน"
     },
     "houses": {
-      "tanu": "ตนุ", "katumpha": "กดุมภะ", "sahatcha": "สหัชชะ", "phanthu": "พันธุ",
-      "putta": "ปุตตะ", "ari": "อริ", "patni": "ปัตนิ", "marana": "มรณะ",
-      "supha": "ศุภะ", "kamma": "กัมมะ", "lapha": "ลาภะ", "vinat": "วินาศ"
+      "tanu": "ตนุ",
+      "katumpha": "กดุมภะ",
+      "sahatcha": "สหัชชะ",
+      "phanthu": "พันธุ",
+      "putta": "ปุตตะ",
+      "ari": "อริ",
+      "patni": "ปัตนิ",
+      "marana": "มรณะ",
+      "supha": "ศุภะ",
+      "kamma": "กัมมะ",
+      "lapha": "ลาภะ",
+      "vinat": "วินาศ"
     },
     "statuses": {
-      "exalted": "อุจจ์", "own": "เกษตร", "debilitated": "นิจ", "detriment": "ปรเกษตร"
+      "exalted": "อุจจ์",
+      "own": "เกษตร",
+      "debilitated": "นิจ",
+      "detriment": "ปรเกษตร"
     },
-    "triyangas": { "first": "First", "second": "Second", "third": "Third" },
+    "triyangas": {
+      "first": "First",
+      "second": "Second",
+      "third": "Third"
+    },
     "taksaRoles": {
-      "attendant": "บริวาร", "longevity": "อายุ", "power": "เดช", "glory": "ศรี",
-      "root": "มูละ", "effort": "อุตสาหะ", "minister": "มนตรี", "calamity": "กาลกิณี"
+      "attendant": "บริวาร",
+      "longevity": "อายุ",
+      "power": "เดช",
+      "glory": "ศรี",
+      "root": "มูละ",
+      "effort": "อุตสาหะ",
+      "minister": "มนตรี",
+      "calamity": "กาลกิณี"
     },
     "navamsaNumber": "Navamsa {number}"
+  },
+  "thaiBuddha": {
+    "title": "Thai Birthday Buddha Reading",
+    "subtitle": "Eight Thai day Buddhas with birth colors, directions, Maha Taksa and AI readings",
+    "formTitle": "Birth details",
+    "birthDate": "Birth date",
+    "birthTime": "Birth time",
+    "birthCity": "Birthplace (optional)",
+    "birthCityPlaceholder": "e.g. Bangkok, for exact sunrise and sunset",
+    "submit": "Start reading",
+    "calculating": "Calculating your day Buddha...",
+    "requiredError": "Birth date and time are required",
+    "fail": "Calculation failed",
+    "pleaseRetry": "Check the input and retry",
+    "timeHint": "Thai reckoning turns the day at sunrise; Wednesday night belongs to Rahu after sunset.",
+    "locationHint": "A birthplace uses local sunrise and sunset; without it, 06:00 and 18:00 are only approximations.",
+    "privacyHint": "Calculated within the request; birth data is not stored.",
+    "locationFail": "Cannot resolve the birthplace. Change the city name or leave it empty.",
+    "birth": "Birth",
+    "location": "Location",
+    "noLocation": "Not provided",
+    "planet": "Planet",
+    "sunEvents": "Sunrise/Sunset",
+    "sunEventHint": "Day boundary and Wednesday split",
+    "corrected": "Local sun-event corrected",
+    "uncorrected": "06:00 / 18:00 approximation",
+    "meaningTitle": "Buddha posture and meaning",
+    "meaningSubtitle": "Postures carry Buddhist narrative; traits and colors belong to Thai folklore.",
+    "story": "Story",
+    "personality": "Traditional traits",
+    "timing": "Colors and timing",
+    "dayColor": "Day color",
+    "luckyColor": "Lucky color",
+    "unluckyColor": "Color to avoid",
+    "luckyDay": "Lucky day",
+    "unluckyDay": "Day to watch",
+    "taksaTitle": "Maha Taksa eight directions",
+    "taksaSubtitle": "The birth planet starts the companion house; the Kalakini house supplies letters traditionally avoided in names.",
+    "methodology": "Methodology",
+    "engine": "Engine",
+    "rule": "Sun events",
+    "disclaimer": "Boundary",
+    "disclaimerText": "This page presents Thai folklore and astrology traditions; it is not a scientific conclusion or life instruction.",
+    "avoid": "Avoid in names",
+    "favorable": "Usable",
+    "aiAction": "AI reading",
+    "aiPanelTitle": "Target AI reading",
+    "aiClose": "Close",
+    "aiConnecting": "Connecting to AI...",
+    "aiError": "AI reading failed",
+    "aiNoResult": "AI returned no content",
+    "aiFullReport": "Generate full report",
+    "aiFullReportLogin": "Sign in for full report",
+    "aiFullReportTitle": "Full Birthday Buddha report",
+    "aiLoginRequired": "Sign in to generate the full reading.",
+    "aiDisclaimer": "Traditional folklore interpretation, for reference only.",
+    "houses": {
+      "companion": "Companion",
+      "life": "Life",
+      "authority": "Authority",
+      "fortune": "Fortune",
+      "foundation": "Foundation",
+      "effort": "Effort",
+      "minister": "Minister",
+      "kalakini": "Kalakini"
+    },
+    "directions": {
+      "northeast": "Northeast",
+      "east": "East",
+      "southeast": "Southeast",
+      "south": "South",
+      "southwest": "Southwest",
+      "west": "West",
+      "northwest": "Northwest",
+      "north": "North"
+    },
+    "planets": {
+      "sun": "Sun",
+      "moon": "Moon",
+      "mars": "Mars",
+      "mercury": "Mercury",
+      "jupiter": "Jupiter",
+      "venus": "Venus",
+      "saturn": "Saturn",
+      "rahu": "Rahu"
+    },
+    "colors": {
+      "red": "Red",
+      "yellow": "Yellow",
+      "pink": "Pink",
+      "green": "Green",
+      "dark-green": "Dark green",
+      "orange": "Orange",
+      "light-blue": "Light blue",
+      "purple": "Purple",
+      "black": "Black",
+      "white": "White",
+      "blue": "Blue"
+    },
+    "letters": {
+      "vowels": "Vowel group"
+    },
+    "days": {
+      "sunday": {
+        "name": "Sunday",
+        "buddha": "Offering Eyes · ปางถวายเนตร",
+        "posture": "Standing, arms crossed at the waist",
+        "story": "The Buddha gazes at the Bodhi tree for seven days in gratitude and steadfast attention.",
+        "personality": "Respectable, wise, at ease, and trusted by family and friends.",
+        "professions": "Management, public service, medicine, crafts, trade"
+      },
+      "monday": {
+        "name": "Monday",
+        "buddha": "Forbidding Relatives · ปางห้ามญาติ",
+        "posture": "Standing, right palm raised outward",
+        "story": "The Buddha stops a conflict between relatives, signalling reassurance and boundaries.",
+        "personality": "Thoughtful, serious, a good memory, and drawn to skilled or mobile work.",
+        "professions": "Medicine, nursing, fishing"
+      },
+      "tuesday": {
+        "name": "Tuesday",
+        "buddha": "Reclining Buddha · ปางไสยาสน์",
+        "posture": "Reclining on the right side",
+        "story": "Calm authority overcomes arrogance without agitation.",
+        "personality": "Brave, decisive, active, and broad minded.",
+        "professions": "Police, military, chemistry, cooking, hairdressing"
+      },
+      "wednesday-day": {
+        "name": "Wednesday Day",
+        "buddha": "Alms Bowl · ปางอุ้มบาตร",
+        "posture": "Standing while holding an alms bowl",
+        "story": "Accepting alms lets others create merit; generosity circulates value.",
+        "personality": "Ambitious, sociable, expressive, and creative.",
+        "professions": "Finance, singing, music, art, design"
+      },
+      "wednesday-night": {
+        "name": "Wednesday Night",
+        "buddha": "Forest Retreat · ปางป่าเลไลยก์",
+        "posture": "Seated in the forest with elephant and monkey",
+        "story": "Withdrawal restores clarity when groups lose their centre.",
+        "personality": "Hardworking, diligent, calm, and honest.",
+        "professions": "Writing, poetry, medicine, science, acting, archaeology"
+      },
+      "thursday": {
+        "name": "Thursday",
+        "buddha": "Meditation · ปางสมาธิ",
+        "posture": "Seated meditation with hands resting in the lap",
+        "story": "Inner order and insight ripen into clear judgement.",
+        "personality": "Kind, composed, dignified, and fair minded.",
+        "professions": "Law, teaching, counselling, ministry"
+      },
+      "friday": {
+        "name": "Friday",
+        "buddha": "Contemplation · ปางรำพึง",
+        "posture": "Standing, arms crossed on the chest",
+        "story": "Deep truth is translated into words people can receive.",
+        "personality": "Charming, sociable, ambitious, and expressive.",
+        "professions": "Finance, singing, music, art, design"
+      },
+      "saturday": {
+        "name": "Saturday",
+        "buddha": "Naga Shelter · ปางนาคปรก",
+        "posture": "Meditating under the seven-headed Naga canopy",
+        "story": "The Naga shields the Buddha from storms; protection becomes resilience.",
+        "personality": "Logical, quiet, reserved, and methodical.",
+        "professions": "Agriculture, construction, mining, enforcement"
+      }
+    }
   }
 }

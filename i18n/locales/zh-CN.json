@@ -1396,7 +1396,12 @@
     "rokuseiDesc": "免费六星占术在线计算，输入出生年月日、时辰与性别，查询土星人、金星人、火星人、天王星人、木星人、水星人、灵合星人、十二运势、2026 大杀界与宿命大杀界。",
     "rokuseiKeywords": "六星占术,六星占术计算,六星占术2026,命运星,灵合星人,大杀界,十二运势,年运,月运,日运,宿命大杀界",
     "rokuseiOgTitle": "六星占术在线计算_命运星与大杀界查询",
-    "rokuseiOgDesc": "输入出生信息自动排六星，查询命运星、十二运势、大杀界与宿命大杀界。"
+    "rokuseiOgDesc": "输入出生信息自动排六星，查询命运星、十二运势、大杀界与宿命大杀界。",
+    "thaiBuddhaTitle": "泰国星期佛算命_生日佛颜色方位与AI解读",
+    "thaiBuddhaOgTitle": "泰国星期佛算命_8类生日佛解析",
+    "thaiBuddhaDesc": "免费泰国星期佛算命：输入出生日期时间与地点，区分周三日夜，解读8类生日佛、幸运色、吉日、Maha Thaksa方位与AI完整报告。",
+    "thaiBuddhaKeywords": "泰国星期佛, 泰国生日佛, 星期佛颜色, 星期佛方位, 泰国佛牌生日, 星期佛AI解读",
+    "thaiBuddhaOgDesc": "8类泰国星期佛在线解析：区分周三日夜，看生日佛、幸运色、吉日、方位与AI完整报告。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -12499,28 +12504,234 @@
     "aiFullReportTitle": "泰国12星宿命盘完整报告",
     "aiLoginRequired": "完整泰国命盘报告需要登录后生成。",
     "bodies": {
-      "sun": "太阳", "moon": "月亮", "mars": "火星", "mercury": "水星",
-      "jupiter": "木星", "venus": "金星", "saturn": "土星", "rahu": "ราหู",
-      "thaiKetu": "泰式เกตุ", "uranus": "มฤตยู"
+      "sun": "太阳",
+      "moon": "月亮",
+      "mars": "火星",
+      "mercury": "水星",
+      "jupiter": "木星",
+      "venus": "金星",
+      "saturn": "土星",
+      "rahu": "ราหู",
+      "thaiKetu": "泰式เกตุ",
+      "uranus": "มฤตยู"
     },
     "signs": {
-      "aries": "เมษ", "taurus": "พฤษภ", "gemini": "เมถุน", "cancer": "กรกฎ",
-      "leo": "สิงห์", "virgo": "กันย์", "libra": "ตุล", "scorpio": "พิจิก",
-      "sagittarius": "ธนู", "capricorn": "มกร", "aquarius": "กุมภ์", "pisces": "มีน"
+      "aries": "เมษ",
+      "taurus": "พฤษภ",
+      "gemini": "เมถุน",
+      "cancer": "กรกฎ",
+      "leo": "สิงห์",
+      "virgo": "กันย์",
+      "libra": "ตุล",
+      "scorpio": "พิจิก",
+      "sagittarius": "ธนู",
+      "capricorn": "มกร",
+      "aquarius": "กุมภ์",
+      "pisces": "มีน"
     },
     "houses": {
-      "tanu": "ตนุ", "katumpha": "กดุมภะ", "sahatcha": "สหัชชะ", "phanthu": "พันธุ",
-      "putta": "ปุตตะ", "ari": "อริ", "patni": "ปัตนิ", "marana": "มรณะ",
-      "supha": "ศุภะ", "kamma": "กัมมะ", "lapha": "ลาภะ", "vinat": "วินาศ"
+      "tanu": "ตนุ",
+      "katumpha": "กดุมภะ",
+      "sahatcha": "สหัชชะ",
+      "phanthu": "พันธุ",
+      "putta": "ปุตตะ",
+      "ari": "อริ",
+      "patni": "ปัตนิ",
+      "marana": "มรณะ",
+      "supha": "ศุภะ",
+      "kamma": "กัมมะ",
+      "lapha": "ลาภะ",
+      "vinat": "วินาศ"
     },
     "statuses": {
-      "exalted": "อุจจ์", "own": "เกษตร", "debilitated": "นิจ", "detriment": "ปรเกษตร"
+      "exalted": "อุจจ์",
+      "own": "เกษตร",
+      "debilitated": "นิจ",
+      "detriment": "ปรเกษตร"
     },
-    "triyangas": { "first": "第一段", "second": "第二段", "third": "第三段" },
+    "triyangas": {
+      "first": "第一段",
+      "second": "第二段",
+      "third": "第三段"
+    },
     "taksaRoles": {
-      "attendant": "บริวาร", "longevity": "อายุ", "power": "เดช", "glory": "ศรี",
-      "root": "มูละ", "effort": "อุตสาหะ", "minister": "มนตรี", "calamity": "กาลกิณี"
+      "attendant": "บริวาร",
+      "longevity": "อายุ",
+      "power": "เดช",
+      "glory": "ศรี",
+      "root": "มูละ",
+      "effort": "อุตสาหะ",
+      "minister": "มนตรี",
+      "calamity": "กาลกิณี"
     },
     "navamsaNumber": "第 {number} นวางศ์"
+  },
+  "thaiBuddha": {
+    "title": "泰国星期佛算命",
+    "subtitle": "按周日到周六与周三日夜八类，解析生日佛、幸运色、方位和泰国八宫",
+    "formTitle": "出生信息",
+    "birthDate": "出生日期",
+    "birthTime": "出生时间",
+    "birthCity": "出生地点（选填）",
+    "birthCityPlaceholder": "如 Bangkok，用于精确日出日落",
+    "submit": "开始解析",
+    "calculating": "正在计算星期佛...",
+    "requiredError": "请填写出生日期和时间",
+    "fail": "计算失败",
+    "pleaseRetry": "请检查输入后重试",
+    "timeHint": "泰国传统从日出换日；周三在日落后进入罗睺时段。",
+    "locationHint": "填写地点可按当地日出日落校正；不填则用 06:00 / 18:00 简算。",
+    "privacyHint": "结果在请求内计算，不保存出生信息。",
+    "locationFail": "无法解析出生地点，请更换城市名或留空",
+    "birth": "出生",
+    "location": "地点",
+    "noLocation": "未填写",
+    "planet": "主星",
+    "sunEvents": "日出/日落",
+    "sunEventHint": "换日与周三分界",
+    "corrected": "当地太阳事件校正",
+    "uncorrected": "06:00 / 18:00 近似",
+    "meaningTitle": "佛姿与含义",
+    "meaningSubtitle": "佛姿是佛教叙事层；性格与颜色是泰国民俗层。",
+    "story": "故事",
+    "personality": "传统性格",
+    "timing": "颜色与吉时",
+    "dayColor": "当日色",
+    "luckyColor": "幸运色",
+    "unluckyColor": "避用色",
+    "luckyDay": "吉日",
+    "unluckyDay": "注意日",
+    "taksaTitle": "Maha Thaksa 八宫方位",
+    "taksaSubtitle": "出生主星起伴侣宫，按固定星序展开；厄运宫字母传统上用于避免。",
+    "methodology": "规则",
+    "engine": "引擎",
+    "rule": "太阳事件",
+    "disclaimer": "边界",
+    "disclaimerText": "本页呈现泰国民俗与占星传统，不构成科学结论或人生指令。",
+    "avoid": "命名避用",
+    "favorable": "可用",
+    "aiAction": "AI 解读",
+    "aiPanelTitle": "目标 AI 解读",
+    "aiClose": "关闭",
+    "aiConnecting": "连接 AI...",
+    "aiError": "AI 解读失败",
+    "aiNoResult": "AI 未返回内容",
+    "aiFullReport": "生成完整报告",
+    "aiFullReportLogin": "登录后生成完整报告",
+    "aiFullReportTitle": "完整星期佛报告",
+    "aiLoginRequired": "完整解读需要登录后生成。",
+    "aiDisclaimer": "传统民俗解读，仅供参考。",
+    "houses": {
+      "companion": "伴侣宫",
+      "life": "寿命宫",
+      "authority": "权威宫",
+      "fortune": "福运宫",
+      "foundation": "根基宫",
+      "effort": "努力宫",
+      "minister": "顾问宫",
+      "kalakini": "厄运宫"
+    },
+    "directions": {
+      "northeast": "东北",
+      "east": "东",
+      "southeast": "东南",
+      "south": "南",
+      "southwest": "西南",
+      "west": "西",
+      "northwest": "西北",
+      "north": "北"
+    },
+    "planets": {
+      "sun": "日",
+      "moon": "月",
+      "mars": "火星",
+      "mercury": "水星",
+      "jupiter": "木星",
+      "venus": "金星",
+      "saturn": "土星",
+      "rahu": "罗睺"
+    },
+    "colors": {
+      "red": "红色",
+      "yellow": "黄色",
+      "pink": "粉色",
+      "green": "绿色",
+      "dark-green": "深绿",
+      "orange": "橙色",
+      "light-blue": "浅蓝",
+      "purple": "紫色",
+      "black": "黑色",
+      "white": "白色",
+      "blue": "蓝色"
+    },
+    "letters": {
+      "vowels": "元音字母组"
+    },
+    "days": {
+      "sunday": {
+        "name": "星期日",
+        "buddha": "供眼佛 · ปางถวายเนตร",
+        "posture": "站立，双臂交叠于腰前",
+        "story": "佛陀成道后凝望菩提树七天，象征感恩与不动的专注。",
+        "personality": "受敬重、智慧、自在，容易被亲友信任。",
+        "professions": "管理者、公职、医生、工匠、贸易"
+      },
+      "monday": {
+        "name": "星期一",
+        "buddha": "止亲佛 · ปางห้ามญาติ",
+        "posture": "站立，右手举掌向外",
+        "story": "佛陀抬掌止息亲族争水，代表安抚、沟通与边界感。",
+        "personality": "认真、记忆好、思考深，适合移动与技能型工作。",
+        "professions": "医生、护理、渔业"
+      },
+      "tuesday": {
+        "name": "星期二",
+        "buddha": "卧佛 · ปางไสยาสน์",
+        "posture": "右侧卧",
+        "story": "佛陀以平静威仪降伏傲慢，象征从容的力量。",
+        "personality": "勇敢、果断、行动力强，心思开阔。",
+        "professions": "警务、军职、化学、厨艺、美发"
+      },
+      "wednesday-day": {
+        "name": "星期三·日",
+        "buddha": "托钵佛 · ปางอุ้มบาตร",
+        "posture": "站立托钵",
+        "story": "佛陀接受供养，让大众有机会种福，象征给予与流通。",
+        "personality": "有野心、善社交、表达力强，具有创作感。",
+        "professions": "金融、歌唱、音乐、艺术、设计"
+      },
+      "wednesday-night": {
+        "name": "星期三·夜",
+        "buddha": "森林隐修佛 · ปางป่าเลไลยก์",
+        "posture": "林中独坐，象与猴供养",
+        "story": "佛陀退入森林，在孤独中恢复清明，象征退一步的智慧。",
+        "personality": "勤恳、踏实、冷静、诚实。",
+        "professions": "写作、诗歌、医疗、科研、表演、考古"
+      },
+      "thursday": {
+        "name": "星期四",
+        "buddha": "禅定佛 · ปางสมาธิ",
+        "posture": "结跏趺坐，双手叠放",
+        "story": "佛陀于菩提树下入定，象征内在秩序与洞见。",
+        "personality": "善良、庄重、安静、重视公正。",
+        "professions": "法官、律师、教师、宗教或教育顾问"
+      },
+      "friday": {
+        "name": "星期五",
+        "buddha": "沉思佛 · ปางรำพึง",
+        "posture": "站立，双臂交叠胸前",
+        "story": "佛陀思量如何说法，把深理转为可接受的路径。",
+        "personality": "有魅力、社交灵活、有野心，喜欢美与表达。",
+        "professions": "金融、歌唱、音乐、艺术、设计"
+      },
+      "saturday": {
+        "name": "星期六",
+        "buddha": "那伽护佛 · ปางนาคปรก",
+        "posture": "那伽展开七头遮护冥想",
+        "story": "那伽王护佑佛陀免于风雨，象征压力中的保护与韧性。",
+        "personality": "理性、安静、有距离感，擅长系统与实作。",
+        "professions": "农业、建筑、采矿、执法"
+      }
+    }
   }
 }

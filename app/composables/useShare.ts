@@ -88,6 +88,7 @@ export interface ShareOptions {
     | 'astro-dice'
   | 'mangpai-bazi'
   | 'new-school-bazi'
+  | 'thai-buddha'
   | 'rokusei-senjutsu'
   | 'bazi-paipan'
   | 'thai-astro-paipan'
@@ -218,6 +219,7 @@ export function useShare() {
       'astro-dice': '占星骰子',
       'mangpai-bazi': '盲派八字',
       'new-school-bazi': '新派八字',
+      'thai-buddha': '泰国星期佛',
       'rokusei-senjutsu': '六星占术',
       'bazi-paipan': '八字排盘',
       'thai-astro-paipan': '泰国12星宿命盘',
