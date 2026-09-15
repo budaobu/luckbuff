@@ -245,6 +245,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/new-school-bazi',
       },
       {
+        icon: 'i-heroicons-sun',
+        titleKey: 'thaiBuddha.title',
+        descKey: 'thaiBuddha.subtitle',
+        ctaKey: 'thaiBuddha.submit',
+        path: '/tools/thai-buddha',
+      },
+      {
         icon: 'i-heroicons-star',
         titleKey: 'rokusei.title',
         descKey: 'rokusei.subtitle',
