@@ -426,7 +426,12 @@
     "thaiBuddhaOgTitle": "タイ曜日仏占い_8つの誕生仏解説",
     "thaiBuddhaDesc": "無料のタイ曜日仏占い。生年月日・時刻・場所から水曜昼と夜を判別し、8つの誕生仏、ラッキーカラー、吉日、マハータクサ方位、AI完全レポートを表示します。",
     "thaiBuddhaKeywords": "タイ曜日仏, 誕生仏, タイ占い 曜日, 曜日仏 カラー, 水曜夜 仏, タイ占星 方位",
-    "thaiBuddhaOgDesc": "水曜昼・夜を含む8つのタイ誕生仏を判定し、カラー、吉日、方位、AIレポートまで表示します。"
+    "thaiBuddhaOgDesc": "水曜昼・夜を含む8つのタイ誕生仏を判定し、カラー、吉日、方位、AIレポートまで表示します。",
+    "omikujiTitle": "おみくじオンライン占い_運勢・項目・待ち人の解説",
+    "omikujiDesc": "無料のおみくじオンライン占い。願い事を入れると大吉から大凶までの運勢、和歌風の言葉、恋愛・待ち人・金運・健康など18項目の導きとAI解説を表示します。",
+    "omikujiKeywords": "おみくじ,おみくじ オンライン,おみくじ 無料,おみくじ 種類,おみくじ 順番,おみくじ 項目,おみくじ 待ち人,御神籤",
+    "omikujiOgTitle": "おみくじオンライン占い_運勢・項目・待ち人の解説",
+    "omikujiOgDesc": "願い事を入れておみくじを引くと、運勢・お言葉・18項目の導きとAI解説がわかります。文化・娯楽としてお楽しみください。"
   },
   "thaiAstro": {
     "title": "タイ12ラーシー出生図",
@@ -822,5 +827,52 @@
         "professions": "農業、建設、鉱業、執務"
       }
     }
+  },
+  "omikuji": {
+    "title": "おみくじ",
+    "toolDesc": "九段階の運勢、お言葉、18項目の導きまで引けるオンラインおみくじ。",
+    "subtitle": "神社やお寺に多く見られるおみくじの項目をもとに、運勢から願い・恋愛・待ち人・健康・金運まで読み解きます。",
+    "disclaimer": "このツールは一般的なおみくじの枠組みによる参考表示です。特定の神社・寺院の籤を示すものではなく、判断・医療・法律・お金の助言ではありません。",
+    "questionLabel": "願い事・質問",
+    "questionPlaceholder": "仕事の転換、関係の選択、今の悩みなど、聞きたいことを書きます",
+    "draw": "おみくじを引く",
+    "boxMark": "籤",
+    "shaking": "心を整えています",
+    "opening": "おみくじが出ました",
+    "knowledge1Title": "九段階の運勢",
+    "knowledge1Desc": "大吉・吉・中吉・小吉・半吉・末吉・末小吉・凶・大凶がよく見られます。並び方は神社やお寺によって異なります。",
+    "knowledge2Title": "おみくじの項目",
+    "knowledge2Desc": "全体の運勢やお言葉に加え、願い・待ち人・恋愛・縁談・商売・失物・住居・旅立ち・健康・学問・争い事などの項目があります。",
+    "knowledge3Title": "引き方",
+    "knowledge3Desc": "参拝の後に質問を一つに絞ります。引いたら全体の言葉を読み、願いに近い項目を丁寧に見ましょう。",
+    "knowledge4Title": "引いた後",
+    "knowledge4Desc": "持ち帰って読み返しても、決められた結び所に結んでも良いとされます。迷う場合は現地の案内に従いましょう。",
+    "questionRequired": "願い事または質問を入力してください",
+    "drawFailed": "おみくじを引けませんでした",
+    "checkInput": "入力を確認してもう一度お試しください",
+    "resultTitle": "おみくじの結果",
+    "interpreting": "AIが解説しています",
+    "reinterpret": "もう一度解説",
+    "aiUnavailable": "AI解説は利用できません",
+    "copy": "結果をコピー",
+    "redraw": "もう一度引く",
+    "backToTools": "ツールへ戻る",
+    "interpretation": "AI解説"
+  },
+  "omikujiPoster": {
+    "kicker": "ososn おみくじ",
+    "serial": "九段階の枠組み · 百籤参考",
+    "numberLine": "{number} 番",
+    "questionFlag": "願い",
+    "noQuestion": "具体的な質問は未入力",
+    "poemFlag": "お言葉",
+    "summaryLabel": "意味",
+    "actionLabel": "行動",
+    "guidanceLabel": "導き",
+    "guidancePending": "AIの導きを作成中",
+    "directionLabel": "吉方位",
+    "colorLabel": "象徴色",
+    "footerNote": "一般的なおみくじ枠組みの参考表示です。",
+    "qrHint": "QRで引く"
   }
 }
