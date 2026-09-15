@@ -921,6 +921,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/mazu-lot',
       },
       {
+        icon: 'i-heroicons-shield-check',
+        titleKey: 'guandiLot.title',
+        descKey: 'guandiLot.toolDesc',
+        ctaKey: 'guandiLot.toolCta',
+        path: '/tools/guandi-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',

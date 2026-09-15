@@ -35,6 +35,7 @@ const REGISTERED_TOOL_PATHS = new Set(
 const LOCALE_PREFIX = /^\/(?:zh-CN|zh-TW|en)(?=\/|$)/
 const PROPHET_MATCH_RE = /^\/prophet\/match\/([\w-]{1,80})$/
 const GUANYIN_LOT_DETAIL_RE = /^\/tools\/guanyin-lots\/(\d{1,3})$/
+const GUANDI_LOT_DETAIL_RE = /^\/tools\/guandi-lots\/(\d{1,3})$/
 const TOOL_ROUTE_RE = /^\/tools\/([\w-]{1,80})\/?$/
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -45,6 +46,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     let slug: string
     const matchMatch = clean.match(PROPHET_MATCH_RE)
     const guanyinMatch = clean.match(GUANYIN_LOT_DETAIL_RE)
+    const guandiMatch = clean.match(GUANDI_LOT_DETAIL_RE)
     const toolMatch = clean.match(TOOL_ROUTE_RE)
     if (matchMatch) {
       type = 'tool'
@@ -52,6 +54,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     } else if (guanyinMatch) {
       type = 'tool'
       slug = `guanyin-lot-${guanyinMatch[1]}`
+    } else if (guandiMatch) {
+      type = 'tool'
+      slug = `guandi-lot-${guandiMatch[1]}`
     } else if (toolMatch || REGISTERED_TOOL_PATHS.has(clean)) {
       type = 'tool'
       slug = toolMatch ? toolMatch[1]! : clean.slice(1).split('/')[1]!

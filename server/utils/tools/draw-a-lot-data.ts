@@ -1,4 +1,5 @@
 import guanyinLotData from '../../../app/data/guanyin-lots-100.json'
+import guandiLotData from '../../../app/data/guandi-lots-100.json'
 import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
@@ -127,6 +128,18 @@ const mazuFortunes: FortuneLot[] = mazuLotData.map(item => makeFortune(
   item.customLevel,
 ))
 
+// 关帝灵签：Wikisource 清刊本百签事实层，源文件见 app/data/guandi-lots-100.json
+
+const guandiFortunes: FortuneLot[] = guandiLotData.map(item => makeFortune(
+  item.id,
+  (item.levelCode === 'lower-middle' ? 'lowerMiddle' : item.levelCode) as FortuneLot['levelCode'],
+  item.title,
+  item.poem,
+  item.explanation,
+  item.advice,
+  item.level,
+))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -152,6 +165,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '妈祖灵签', 'zh-TW': '媽祖靈簽', en: `Mazu Oracle` },
     count: mazuFortunes.length,
     fortunes: mazuFortunes,
+  },
+  {
+    id: 'guandi',
+    name: { 'zh-CN': '关帝灵签', 'zh-TW': '關帝靈簽', en: `Guandi Oracle` },
+    count: guandiFortunes.length,
+    fortunes: guandiFortunes,
   },
 ]
 

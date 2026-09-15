@@ -38,6 +38,7 @@ export interface ShareOptions {
     | 'jinkoujue'
     | 'xiao-liuren-seeking'
     | 'mazu-lot'
+    | 'guandi-lot'
     | 'chenggu'
     | 'cezi-battle'
     | 'lenormand'
@@ -172,6 +173,7 @@ export function useShare() {
       jinkoujue: '金口诀',
       'xiao-liuren-seeking': '小六壬寻物',
       'mazu-lot': '妈祖灵签',
+      'guandi-lot': '关帝灵签',
       chenggu: '称骨算命',
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',
@@ -337,6 +339,9 @@ export function useShare() {
       'mazu-lot': summary
         ? t('share.hookMazuLot', { summary })
         : t('share.hookMazuLotDefault'),
+      'guandi-lot': summary
+        ? t('share.hookGuandiLot', { summary })
+        : t('share.hookGuandiLotDefault'),
       chenggu: summary
         ? t('share.hookChenggu', { summary })
         : t('share.hookChengguDefault'),
