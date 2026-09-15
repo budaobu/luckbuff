@@ -78,6 +78,15 @@ for (const lot of guanyinLots) {
   toolPathAliases[slug] = `/tools/guanyin-lots/${lot.id}`
 }
 
+// 关帝灵签详情页：同一动态路由规则，按签号作为独立统计项
+const guandiLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'guandi-lots-100.json'), 'utf-8'))
+const guandiTitleTemplate = lookup('guandiLotDetail.title')
+for (const lot of guandiLots) {
+  const slug = `guandi-lot-${lot.id}`
+  tools[slug] ??= guandiTitleTemplate?.replace('{n}', String(lot.id)) || slug
+  toolPathAliases[slug] = `/tools/guandi-lots/${lot.id}`
+}
+
 // ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
 const matchDir = resolve(ROOT, 'content', 'worldcup-predictions')
 for (const filename of readdirSync(matchDir)) {

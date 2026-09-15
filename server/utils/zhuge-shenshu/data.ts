@@ -2081,7 +2081,7 @@ export const ZHUGE_SHENQIAN: Record<number, ZhugeShenqian> = {
     number: '三四七',
     title: '万里江湖',
     poem: '马进徐行似有程，月沈西海日东升，运来何必劳心力，风送江湖万里清。',
-    interpretation: '目前机运欠佳，事情进行缓慢，日夜*劳，来日运转，情况即可完全改观。',
+    interpretation: '目前机运欠佳，事情进行缓慢，日夜辛劳，来日运转，情况即可完全改观。',
   },
   347: {
     number: '三四八',
