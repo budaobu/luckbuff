@@ -322,6 +322,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/tarot',
       },
       {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'thaiTarot.title',
+        descKey: 'thaiTarot.subtitle',
+        ctaKey: 'thaiTarot.submit',
+        path: '/tools/thai-tarot',
+      },
+      {
         icon: 'i-heroicons-squares-plus',
         titleKey: 'home.toolLenormandTitle',
         descKey: 'home.toolLenormandDesc',
@@ -1081,6 +1088,7 @@ const analysisToolPaths = [
   '/tools/xuankong-fengshui',
   '/tools/qizheng-siyu',
   '/tools/tarot',
+  '/tools/thai-tarot',
   '/tools/lenormand',
 ] as const
 

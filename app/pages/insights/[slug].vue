@@ -403,6 +403,13 @@ const TOOL_REGISTRY: Record<string, ToolEntry> = {
     descKey: 'tarot.subtitle',
     tags: ['塔罗', '塔罗牌', '牌阵', 'tarot'],
   },
+  'thai-tarot': {
+    path: '/tools/thai-tarot',
+    icon: 'i-heroicons-rectangle-stack',
+    titleKey: 'thaiTarot.title',
+    descKey: 'thaiTarot.subtitle',
+    tags: ['泰式塔罗', '泰国塔罗', '塔罗牌', '牌阵', 'Thai tarot'],
+  },
   'huangdao': {
     path: '/tools/huangdao',
     icon: 'i-heroicons-sun',

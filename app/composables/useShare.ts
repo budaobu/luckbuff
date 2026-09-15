@@ -30,6 +30,7 @@ export interface ShareOptions {
     | 'zhuge-cezi'
     | 'xiao-liuren'
     | 'tarot'
+    | 'thai-tarot'
     | 'ziwei-hunpan'
     | 'wuge'
     | 'cezi-zhouyi'
@@ -159,6 +160,7 @@ export function useShare() {
       'zhuge-cezi': '诸葛神数测字',
       'xiao-liuren': '小六壬',
       tarot: '塔罗牌',
+      'thai-tarot': '泰式塔罗牌',
       'ziwei-hunpan': '紫微斗数合盘',
       wuge: '五格剖象法',
       'cezi-zhouyi': '周易测字',
