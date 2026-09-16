@@ -1,7 +1,7 @@
 <template>
   <section class="mx-auto w-full max-w-7xl px-6 py-20" aria-labelledby="daily-hexagram-title">
-    <div v-reveal class="home-section-head">
-      <h2 id="daily-hexagram-title" class="section-title font-serif">
+    <div v-reveal class="daily-section-head">
+      <h2 id="daily-hexagram-title" class="daily-section-title font-serif">
         {{ $t('home.dailyHexagram.title') }}
       </h2>
       <p class="daily-desc">
@@ -30,9 +30,6 @@
             </template>
           </div>
         </div>
-        <p class="daily-figure-caption">
-          {{ $t('home.dailyHexagram.index', { n: hexagram.id }) }}
-        </p>
       </div>
 
       <div class="daily-body">
@@ -56,9 +53,9 @@
           <span class="daily-tag daily-tag-accent">{{ upperTrigram.wuxing }}</span>
         </div>
 
-        <blockquote class="daily-guaci">
+        <p class="daily-guaci">
           {{ shortName }}：{{ hexagram.guaci }}
-        </blockquote>
+        </p>
 
         <div class="daily-hermit">
           <span>{{ $t('home.dailyHexagram.hermitLabel') }}</span>
@@ -182,26 +179,34 @@ onBeforeUnmount(() => {
   text-wrap: pretty;
 }
 
+.daily-section-head {
+  max-width: 760px;
+}
+
+.daily-section-title {
+  color: var(--text-primary);
+  font-size: clamp(1.6rem, 2.6vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
 .daily-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 28px;
   margin-top: 48px;
-  padding: 28px 24px;
+  padding: 30px 26px;
   overflow: hidden;
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
-  background:
-    radial-gradient(circle at 12% 14%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 52%),
-    var(--surface-card);
-  box-shadow: 0 24px 70px -56px rgba(0, 0, 0, 0.55);
+  background: var(--surface-card);
 }
 
 .daily-figure {
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 22px;
   min-height: 240px;
 }
 
@@ -294,12 +299,6 @@ onBeforeUnmount(() => {
   }
 }
 
-.daily-figure-caption {
-  color: var(--text-faint);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-}
-
 .daily-body {
   min-width: 0;
 }
@@ -325,13 +324,12 @@ onBeforeUnmount(() => {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 14px;
 }
 
 .daily-title h3 {
   color: var(--text-primary);
   font-family: var(--font-serif, serif);
-  font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+  font-size: clamp(1.5rem, 2.2vw, 1.8rem);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -365,9 +363,7 @@ onBeforeUnmount(() => {
 }
 
 .daily-guaci {
-  margin: 20px 0 0;
-  padding-left: 14px;
-  border-left: 2px solid var(--accent-border-hover);
+  margin: 18px 0 0;
   color: var(--text-body);
   font-size: 15px;
   line-height: 1.7;
@@ -411,23 +407,21 @@ onBeforeUnmount(() => {
   gap: 8px;
   min-height: 42px;
   padding: 0 27px;
-  border: 1px solid var(--text-primary);
-  border-radius: 999px;
-  background: var(--text-primary);
-  color: var(--surface-bg);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 78%, transparent);
+  background: var(--accent);
+  color: #17130c;
   font-size: 14px;
   font-weight: 500;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
   transition:
     transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 160ms ease,
-    box-shadow 160ms ease;
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .daily-cast-button:not(:disabled):hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--accent) 94%, #fff);
   }
 }
 
@@ -457,7 +451,7 @@ onBeforeUnmount(() => {
 
 .daily-notice {
   max-width: 30em;
-  color: var(--text-placeholder);
+  color: var(--text-faint);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -479,7 +473,7 @@ onBeforeUnmount(() => {
     grid-template-columns: 260px minmax(0, 1fr);
     gap: 40px;
     align-items: center;
-    padding: 36px;
+    padding: 34px;
   }
 
   .daily-figure {
@@ -490,6 +484,10 @@ onBeforeUnmount(() => {
 @media (max-width: 480px) {
   .daily-panel {
     padding: 24px 18px;
+  }
+
+  .daily-figure {
+    min-height: 190px;
   }
 
   .daily-hermit {

@@ -57,7 +57,7 @@
   "home": {
     "dailyHexagram": {
       "title": "Daily Hexagram",
-      "description": "Cast a hexagram, read its judgment, and find today's balance. Six lines form the image: solid is yang, broken is yin.",
+      "description": "Today's hexagram is selected by date. Read the judgment and hermit note, or cast again for a different angle.",
       "index": "Hexagram {n}",
       "upperSuffix": " above",
       "lowerSuffix": " below",
@@ -85,7 +85,7 @@
     "subtitle": "Use free Bazi charting, the daily Chinese almanac and Vedic astrology tools to turn traditional fortune-telling data into structured reports and clear interpretations.",
     "guideBanner": "We recommend {saveLink} first so it auto-fills during readings. You can add multiple profiles for family and friends anytime.",
     "saveLink": "saving your birth information",
-    "whyTitle": "Why Choose ososn Online Readings",
+    "whyTitle": "Why Choose ososn",
     "feature1Title": "Broad Tool Coverage",
     "feature1Desc": "Choose a tool for your question: Bazi charting, Zi Wei Dou Shu, Liu Yao, Qimen Dunjia, the daily almanac, Feng Shui and Vedic astrology.",
     "feature2Title": "Structured Charts, Clear Reading",
@@ -94,7 +94,7 @@
     "feature3Desc": "Read key conclusions as they stream in, while the complete chart information and structural evidence remain in the report.",
     "feature4Title": "Profiles and Privacy",
     "feature4Desc": "Save multiple birth profiles and switch instantly. Signed out, profiles stay in your browser; sign in to sync them across devices.",
-    "toolsTitle": "Metaphysics Tools",
+    "toolsTitle": "Charts & Readings",
     "toolsSubtitle": "Tools",
     "toolBaziTitle": "Four Pillars (Bazi)",
     "toolBaziDesc": "Best for understanding your overall life pattern, personality, and fortune cycles. Decodes your chart structure, useful elements, and decade-long cycles.",

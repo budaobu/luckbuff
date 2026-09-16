@@ -56,8 +56,8 @@
   },
   "home": {
     "dailyHexagram": {
-      "title": "每日一卦",
-      "description": "搖出一卦，讀卦辭，知宜忌。卦象由六爻構成，實線為陽，斷線為陰。",
+      "title": "今日一卦",
+      "description": "按今天日期排出一卦，直接讀卦辭和隱士提示；想換個角度，就重新搖卦。",
       "index": "第 {n} 卦",
       "upperSuffix": "上",
       "lowerSuffix": "下",
@@ -85,7 +85,7 @@
     "subtitle": "提供八字排盤、今日黃曆、吠陀占星等免費工具，把傳統命理資訊整理成結構化報告與白話解讀，便於認識趨勢、時機與個人特質。",
     "guideBanner": "建議先{saveLink}，推演時自動填入。隨時可為家人朋友添加多份檔案。",
     "saveLink": "保存你的生辰信息",
-    "whyTitle": "為什麼選擇 ososn 線上命理分析",
+    "whyTitle": "為什麼選擇 ososn",
     "feature1Title": "覆蓋多類命理工具",
     "feature1Desc": "從八字排盤、紫微斗數、六爻與奇門，到今日黃曆、風水和吠陀占星，可按具體問題選擇對應工具。",
     "feature2Title": "結構化排盤與白話解讀",
@@ -94,7 +94,7 @@
     "feature3Desc": "解讀結果逐步呈現，便於快速閱讀關鍵結論；完整資訊與結構證據保留在排盤報告中。",
     "feature4Title": "檔案與隱私管理",
     "feature4Desc": "可保存多個生辰檔案並一鍵切換；未登入時檔案僅存於瀏覽器本地，登入後同步到帳號。",
-    "toolsTitle": "命理工具",
+    "toolsTitle": "排盤工具與命理分析",
     "toolsSubtitle": "Tools",
     "toolBaziTitle": "四柱八字",
     "toolBaziDesc": "適合看人生整體格局、性格特質與大運走勢。從出生年月日時出發，為你解讀格局、用神與十年大運。",
