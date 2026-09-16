@@ -700,7 +700,9 @@
     "nativeShareCancelled": "已取消分享",
     "xShareHint": "支援原生分享時將附帶分享圖，否則在 X 新分頁中開啟文案與連結",
     "hookGuandiLot": "我剛完成關帝靈籤測算：{summary}，快來看看吧！",
-    "hookGuandiLotDefault": "剛完成一次關帝靈籤測算，結果很有意思。"
+    "hookGuandiLotDefault": "剛完成一次關帝靈籤測算，結果很有意思。",
+    "hookWongTaiSinLot": "我剛完成黃大仙靈籤測算：{summary}，快來看看吧！",
+    "hookWongTaiSinLotDefault": "剛完成一次黃大仙靈籤測算，結果很有意思。"
   },
   "natalAstro": {
     "title": "西洋占星本命盤",
@@ -1413,7 +1415,12 @@
     "guandiLotDesc": "免費線上關帝靈籤抽籤解籤工具，完整100籤籤詩、聖意、東坡解、碧仙註、解曰與典故，輸入問題即可抽取關公靈籤並取得AI解籤，僅供文化娛樂。",
     "guandiLotKeywords": "關帝靈籤,關帝靈籤線上抽籤,關帝靈籤解籤,關帝靈籤100籤,關公靈籤,關聖帝君靈籤,籤詩解籤,ososn",
     "guandiLotOgTitle": "關帝靈籤線上抽籤解籤_100籤籤詩詳解",
-    "guandiLotOgDesc": "線上抽取關帝靈籤，查看100籤籤詩、聖意、解曰與典故，並取得AI解籤指引，僅供文化娛樂。"
+    "guandiLotOgDesc": "線上抽取關帝靈籤，查看100籤籤詩、聖意、解曰與典故，並取得AI解籤指引，僅供文化娛樂。",
+    "wongTaiSinLotTitle": "黃大仙靈籤線上抽籤解籤_100籤籤詩白話解",
+    "wongTaiSinLotDesc": "2026黃大仙靈籤線上抽籤解籤，完整整理100籤籤詩、典故、籤解與白話運勢指引，覆蓋事業、感情、財運、健康，可查看第1-100籤詳解。",
+    "wongTaiSinLotKeywords": "黃大仙靈籤,黃大仙靈籤解籤,黃大仙靈籤白話解,黃大仙靈籤線上,黃大仙靈籤2026,黃大仙靈籤100籤,黃大仙靈籤詳解",
+    "wongTaiSinLotOgTitle": "黃大仙靈籤線上抽籤解籤_100籤籤詩白話解",
+    "wongTaiSinLotOgDesc": "線上抽取黃大仙靈籤，查看100籤籤詩、典故、籤解與AI問事指引。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -12833,5 +12840,49 @@
     "seoTitle": "關帝靈籤第{n}籤詳解：{title}",
     "seoDescription": "關帝靈籤第{n}籤「{title}」解籤：{meaning} 頁面整理籤詩、聖意、東坡解、碧仙註、解曰與典故，並可繼續線上求籤。",
     "seoKeywords": "關帝靈籤第{n}籤,關帝靈籤{n}詳解,關帝靈籤解籤,{title},籤詩,聖意,東坡解,碧仙註"
+  },
+  "wongTaiSinLot": {
+    "title": "黃大仙靈籤",
+    "toolDesc": "線上抽取黃大仙靈籤，取得籤詩、典故、籤解與運勢指引。",
+    "disclaimer": "本工具基於黃大仙靈籤傳統文化生成參考結果，僅供文化娛樂與信仰參考，不構成任何決策、占卜或專業建議。請理性看待，重大決策請結合現實情況獨立判斷。",
+    "toolCta": "立即求籤",
+    "subtitle": "誠心默念所問之事，抽取黃大仙百籤中的一籤。",
+    "questionLabel": "問題",
+    "questionPlaceholder": "請輸入所問之事，如事業、感情、財運或健康",
+    "questionHint": "一事一問，問題越明確，解讀越聚焦",
+    "drawing": "搖籤中……",
+    "resultTitle": "黃大仙靈籤結果",
+    "numberPrefix": "第",
+    "numberSuffix": "籤",
+    "poemTitle": "籤詩",
+    "allusionTitle": "典故",
+    "explanationTitle": "籤解",
+    "adviceTitle": "運勢指引",
+    "interpretation": "AI 解讀",
+    "interpreting": "解讀中……",
+    "reinterpret": "重新解讀",
+    "copyResult": "複製結果",
+    "viewDetail": "查看籤文詳解",
+    "redraw": "重新抽取",
+    "questionRequired": "問題必填",
+    "drawFailed": "抽籤失敗",
+    "checkInput": "請檢查輸入",
+    "aiUnavailable": "AI 解讀暫不可用，請稍後重試。"
+  },
+  "wongTaiSinLotDetail": {
+    "back": "返回黃大仙靈籤",
+    "title": "黃大仙靈籤第{n}籤詳解",
+    "poem": "籤詩",
+    "allusion": "典故",
+    "explanation": "籤解",
+    "advice": "運勢指引",
+    "navigation": "黃大仙靈籤導覽",
+    "previous": "上一籤",
+    "next": "下一籤",
+    "lotNo": "第{n}籤",
+    "draw": "線上求一籤",
+    "seoTitle": "黃大仙靈籤第{n}籤詳解：{title}",
+    "seoDescription": "黃大仙靈籤第{n}籤「{title}」解籤：{meaning} 頁面整理籤詩、典故、籤解與白話運勢指引，並可繼續線上求籤。",
+    "seoKeywords": "黃大仙靈籤第{n}籤,黃大仙靈籤{n}詳解,黃大仙靈籤解籤,{title},籤詩,典故,籤解,白話解"
   }
 }
