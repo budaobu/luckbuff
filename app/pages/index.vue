@@ -169,6 +169,8 @@
       </div>
     </section>
 
+    <HomeDailyHexagram />
+
     <!-- TOPICS -->
     <section class="mx-auto w-full max-w-7xl px-6 py-20">
       <div v-reveal class="home-section-head">

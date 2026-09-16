@@ -55,6 +55,19 @@
     "autoTime": "Auto Time"
   },
   "home": {
+    "dailyHexagram": {
+      "title": "Daily Hexagram",
+      "description": "Cast a hexagram, read its judgment, and find today's balance. Six lines form the image: solid is yang, broken is yin.",
+      "index": "Hexagram {n}",
+      "upperSuffix": " above",
+      "lowerSuffix": " below",
+      "hermitLabel": "Hermit says",
+      "cast": "Cast",
+      "casting": "Casting…",
+      "moving": "Line {n} moves",
+      "changed": "Tends toward {name}",
+      "notice": "Coins are simulated for cultural entertainment only."
+    },
     "badge": "Online Metaphysics Readings · Charting",
     "tickerItems": [
       "BaZi Reading",

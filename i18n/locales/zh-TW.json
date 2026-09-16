@@ -55,6 +55,19 @@
     "autoTime": "auto時間"
   },
   "home": {
+    "dailyHexagram": {
+      "title": "每日一卦",
+      "description": "搖出一卦，讀卦辭，知宜忌。卦象由六爻構成，實線為陽，斷線為陰。",
+      "index": "第 {n} 卦",
+      "upperSuffix": "上",
+      "lowerSuffix": "下",
+      "hermitLabel": "隱士說",
+      "cast": "搖卦",
+      "casting": "搖卦中…",
+      "moving": "第 {n} 爻動",
+      "changed": "趨向 {name}",
+      "notice": "卦象由三枚銅錢模擬，結果僅供文化娛樂參考。"
+    },
     "badge": "線上命理分析 · 八字與占星排盤",
     "tickerItems": [
       "八字精批",
