@@ -1,0 +1,1065 @@
+[
+  {
+    "id": 1,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "关关雎鸠",
+      "在河之洲",
+      "窈窕淑女",
+      "君子好逑"
+    ],
+    "source": "《诗经·关雎》"
+  },
+  {
+    "id": 2,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "落霞与孤鹜齐飞",
+      "秋水共长天一色"
+    ],
+    "source": "《滕王阁序》"
+  },
+  {
+    "id": 3,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "宗庙飨之",
+      "子孙保之"
+    ],
+    "source": "《礼记·中庸》"
+  },
+  {
+    "id": 4,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "斯人也",
+      "而有斯疾也",
+      "斯人也",
+      "而有斯疾也"
+    ],
+    "source": "《论语·雍也第六》"
+  },
+  {
+    "id": 5,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "逾东家墙而",
+      "搂其处子",
+      "则得妻",
+      "不搂",
+      "则不得妻"
+    ],
+    "source": "《孟子·告子下》"
+  },
+  {
+    "id": 6,
+    "rank": "上吉",
+    "rankCode": "upper",
+    "poem": [
+      "风弄竹声",
+      "只道金佩响",
+      "月移花影",
+      "疑是玉人来"
+    ],
+    "source": ""
+  },
+  {
+    "id": 7,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "斯是陋室",
+      "惟吾德馨"
+    ],
+    "source": "《陋室铭》"
+  },
+  {
+    "id": 8,
+    "rank": "中上",
+    "rankCode": "upper-middle",
+    "poem": [
+      "期我乎桑中",
+      "要我乎上宫",
+      "送我乎淇之上也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 9,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "则父母国人皆贱之"
+    ],
+    "source": ""
+  },
+  {
+    "id": 10,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "又道是养儿代老",
+      "积谷防饥"
+    ],
+    "source": "《琵琶记》"
+  },
+  {
+    "id": 11,
+    "rank": "中平",
+    "rankCode": "middle",
+    "poem": [
+      "自剪芭蕉写佛经",
+      "金莲无复印中庭",
+      "清风明月长相忆",
+      "玉管朱弦可要听",
+      "多病不胜衣更薄",
+      "宿妆犹在酒初醒",
+      "卫星年违别成何事",
+      "卧看牵牛织女星"
+    ],
+    "source": ""
+  },
+  {
+    "id": 12,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "一则以喜",
+      "一则以惧"
+    ],
+    "source": "《论语注疏·卷04》"
+  },
+  {
+    "id": 13,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "山穷水尽疑无路",
+      "柳暗花明又一村"
+    ],
+    "source": ""
+  },
+  {
+    "id": 14,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "谁谓荼苦",
+      "其甘如荠",
+      "宴尔新婚",
+      "如史如弟"
+    ],
+    "source": ""
+  },
+  {
+    "id": 15,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "君子审礼",
+      "不可诬以奸诈"
+    ],
+    "source": "《礼记·经解》"
+  },
+  {
+    "id": 16,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "意中人",
+      "人中意",
+      "则那些无情",
+      "花鸟也情凝",
+      "一般的解结",
+      "枝头学并栖"
+    ],
+    "source": ""
+  },
+  {
+    "id": 17,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "德者本也",
+      "财者末也"
+    ],
+    "source": "《大学章句》"
+  },
+  {
+    "id": 18,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "非独内德茂也",
+      "盖亦有外戚之助焉"
+    ],
+    "source": "《史记·卷049》"
+  },
+  {
+    "id": 19,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "或十年",
+      "或七八年",
+      "或五六年",
+      "或四三年"
+    ],
+    "source": "《尚书·无逸》"
+  },
+  {
+    "id": 20,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "何如",
+      "子曰",
+      "可也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 21,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "十亩之间兮",
+      "桑者闲闲兮"
+    ],
+    "source": "《诗经·十亩之间》"
+  },
+  {
+    "id": 22,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "久旱逢甘雨",
+      "他乡遇故知",
+      "洞房花烛夜",
+      "金榜挂名时"
+    ],
+    "source": ""
+  },
+  {
+    "id": 23,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "山只一点故情留",
+      "直似春蚕到老",
+      "尚把丝抽"
+    ],
+    "source": ""
+  },
+  {
+    "id": 24,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "他思已穷",
+      "恨不穷",
+      "是为娇鸾鶵",
+      "凤失雌雄"
+    ],
+    "source": ""
+  },
+  {
+    "id": 25,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "可妻也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 26,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "维熊维罢",
+      "男子之祥",
+      "维虺维蛇",
+      "女子之祥"
+    ],
+    "source": ""
+  },
+  {
+    "id": 27,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "有宗室之美"
+    ],
+    "source": ""
+  },
+  {
+    "id": 28,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "夫妇也",
+      "昆弟也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 29,
+    "rank": "中平",
+    "rankCode": "middle",
+    "poem": [
+      "有意栽花花不发",
+      "无心插柳柳成荫"
+    ],
+    "source": ""
+  },
+  {
+    "id": 30,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "话别无长夜",
+      "相思又此春",
+      "瑶姬不可见",
+      "巫峡更何人",
+      "运石疑填海",
+      "乘槎欲问津",
+      "瑶情每未注",
+      "谁共尔为邻"
+    ],
+    "source": ""
+  },
+  {
+    "id": 31,
+    "rank": "中平",
+    "rankCode": "middle",
+    "poem": [
+      "虚设",
+      "夜静水寒鱼不饵",
+      "笑满船空载明月"
+    ],
+    "source": "《琵琶记》"
+  },
+  {
+    "id": 32,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "因荷而得藕",
+      "有杏不须梅"
+    ],
+    "source": ""
+  },
+  {
+    "id": 33,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "可以托六尺之孤",
+      "可以寄百里之命"
+    ],
+    "source": ""
+  },
+  {
+    "id": 34,
+    "rank": "中平",
+    "rankCode": "middle",
+    "poem": [
+      "仍旧贯如之何",
+      "何必改作"
+    ],
+    "source": "《汉书·卷097下》"
+  },
+  {
+    "id": 35,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "遇人之不淑矣"
+    ],
+    "source": ""
+  },
+  {
+    "id": 36,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "投我以木桃",
+      "报之以琼瑶"
+    ],
+    "source": "《诗经·木瓜》"
+  },
+  {
+    "id": 37,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "求则得之",
+      "舍则失之"
+    ],
+    "source": "《孟子·告子上》"
+  },
+  {
+    "id": 38,
+    "rank": "上吉",
+    "rankCode": "upper",
+    "poem": [
+      "妻也者",
+      "亲之主也"
+    ],
+    "source": "《礼记·哀公问》"
+  },
+  {
+    "id": 39,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "不得乎亲",
+      "不可以为人",
+      "不顺乎亲",
+      "不可以为子"
+    ],
+    "source": ""
+  },
+  {
+    "id": 40,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "踏破铁鞋无觅处",
+      "得来全不费工夫"
+    ],
+    "source": "《水浒传 (120回本)·第036回》"
+  },
+  {
+    "id": 41,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "良人者",
+      "所仰望而终身也",
+      "今若此"
+    ],
+    "source": "《孟子·离娄下》"
+  },
+  {
+    "id": 42,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "重重叠叠上瑶台",
+      "几度呼童扫不开",
+      "刚被太阳收拾去",
+      "却教明月送将来"
+    ],
+    "source": ""
+  },
+  {
+    "id": 43,
+    "rank": "上吉",
+    "rankCode": "upper",
+    "poem": [
+      "君子有援勤之桃",
+      "淑女无投梭之拒"
+    ],
+    "source": ""
+  },
+  {
+    "id": 44,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "遐迩一体",
+      "率宾旧王"
+    ],
+    "source": ""
+  },
+  {
+    "id": 45,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "后生可畏",
+      "焉知来者之",
+      "不如今也"
+    ],
+    "source": "《论语·子罕第九》"
+  },
+  {
+    "id": 46,
+    "rank": "中上",
+    "rankCode": "upper-middle",
+    "poem": [
+      "不愧于天",
+      "不怍于人"
+    ],
+    "source": ""
+  },
+  {
+    "id": 47,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "害女红者也"
+    ],
+    "source": "《汉书·卷005》"
+  },
+  {
+    "id": 48,
+    "rank": "上吉",
+    "rankCode": "upper",
+    "poem": [
+      "五百英雄都在此",
+      "不知谁做状元郎"
+    ],
+    "source": "《琵琶记》"
+  },
+  {
+    "id": 49,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "故好而知其恶",
+      "恶而知其美者"
+    ],
+    "source": "《大学章句》"
+  },
+  {
+    "id": 50,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "两世一身",
+      "形单影支"
+    ],
+    "source": ""
+  },
+  {
+    "id": 51,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "虽有善者",
+      "亦无如之何矣"
+    ],
+    "source": "《礼记·大学》"
+  },
+  {
+    "id": 52,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "云从龙",
+      "风从虎",
+      "圣人作而万",
+      "君万事皆可成也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 53,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "其所厚者薄",
+      "而其所薄者厚"
+    ],
+    "source": "《礼记·大学 (证释本)》"
+  },
+  {
+    "id": 54,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "成也萧何",
+      "败也萧何"
+    ],
+    "source": "《蟾宫曲·叹世》"
+  },
+  {
+    "id": 55,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "不思旧姻",
+      "求尔新君"
+    ],
+    "source": ""
+  },
+  {
+    "id": 56,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "永老无离别",
+      "万古当团聚",
+      "愿天下有情人",
+      "都成眷属"
+    ],
+    "source": ""
+  },
+  {
+    "id": 57,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "是谓凤凰于飞",
+      "和鸣锵锵"
+    ],
+    "source": ""
+  },
+  {
+    "id": 58,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "帷旧婚媾",
+      "其能降以相从乎"
+    ],
+    "source": ""
+  },
+  {
+    "id": 59,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "脍炙",
+      "所同也",
+      "羊枣",
+      "所独也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 60,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "心茍不愆",
+      "何惜于人言"
+    ],
+    "source": ""
+  },
+  {
+    "id": 61,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "不知其人",
+      "视其友"
+    ],
+    "source": "《史记·卷102》"
+  },
+  {
+    "id": 62,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "嘉耦曰配"
+    ],
+    "source": ""
+  },
+  {
+    "id": 63,
+    "rank": "中平",
+    "rankCode": "middle",
+    "poem": [
+      "子规夜半犹啼血",
+      "不信东风唤不回"
+    ],
+    "source": "《送春 (王令)》"
+  },
+  {
+    "id": 64,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "齐大",
+      "非吾耦也"
+    ],
+    "source": "《毛诗正义·卷四》"
+  },
+  {
+    "id": 65,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "在幽闺自怜"
+    ],
+    "source": ""
+  },
+  {
+    "id": 66,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "惊起却回头",
+      "有恨无人省",
+      "拣尽寒枝不肯栖",
+      "寂寞沙洲冷"
+    ],
+    "source": "《宋词三百首》"
+  },
+  {
+    "id": 67,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "再",
+      "斯可矣"
+    ],
+    "source": ""
+  },
+  {
+    "id": 68,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "茍有可观",
+      "皆有右乐",
+      "匪必瑰奇假丽者也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 69,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "天下多负人",
+      "何必是"
+    ],
+    "source": ""
+  },
+  {
+    "id": 70,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "利有攸往"
+    ],
+    "source": "《周易·益》"
+  },
+  {
+    "id": 71,
+    "rank": "中上",
+    "rankCode": "upper-middle",
+    "poem": [
+      "虽有丝麻",
+      "无弃菅蒯",
+      "虽有姬姜",
+      "无弃蕉萃"
+    ],
+    "source": ""
+  },
+  {
+    "id": 72,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "以若所为求若所欲",
+      "犹缘木而求鱼也"
+    ],
+    "source": "《孟子注疏·卷01下》"
+  },
+  {
+    "id": 73,
+    "rank": "上吉",
+    "rankCode": "upper",
+    "poem": [
+      "白云初晴",
+      "幽鸟相逐"
+    ],
+    "source": "《全唐诗·卷634》"
+  },
+  {
+    "id": 74,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "恨相见晚也"
+    ],
+    "source": ""
+  },
+  {
+    "id": 75,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "则去偷香窃",
+      "玉上用心",
+      "又不曾得甚",
+      "自从海棠开",
+      "想到如今"
+    ],
+    "source": ""
+  },
+  {
+    "id": 76,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "忘足",
+      "履之适也",
+      "忘要",
+      "带之适也"
+    ],
+    "source": "《庄子·达生》"
+  },
+  {
+    "id": 77,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "摽有梅",
+      "其实七兮",
+      "求我庶士",
+      "迨其吉兮"
+    ],
+    "source": "《诗经·摽有梅》"
+  },
+  {
+    "id": 78,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "欲速则不达",
+      "见小利则大事不成"
+    ],
+    "source": "《论语注疏·卷13》"
+  },
+  {
+    "id": 79,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "更洒遍客舍青青",
+      "千缕柳色新"
+    ],
+    "source": "《古今词话 (宋)》"
+  },
+  {
+    "id": 80,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "悲莫悲兮生别离",
+      "乐莫乐兮新相知"
+    ],
+    "source": "《楚辞补注·卷第二》"
+  },
+  {
+    "id": 81,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "经之营之",
+      "不日成之"
+    ],
+    "source": ""
+  },
+  {
+    "id": 82,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "行去耶",
+      "前朱雀而后玄武",
+      "左青龙而右白虎"
+    ],
+    "source": ""
+  },
+  {
+    "id": 83,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "姑舍是"
+    ],
+    "source": ""
+  },
+  {
+    "id": 84,
+    "rank": "上平",
+    "rankCode": "upper-middle",
+    "poem": [
+      "劝君莫惜金缕衣",
+      "劝君须惜少年时",
+      "有花堪折直须折",
+      "莫待无花空折枝"
+    ],
+    "source": "《全唐诗话·卷六》"
+  },
+  {
+    "id": 85,
+    "rank": "上上大吉",
+    "rankCode": "upper",
+    "poem": [
+      "得其所哉",
+      "得其所哉"
+    ],
+    "source": "《孟子·万章上》"
+  },
+  {
+    "id": 86,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "河汉清且浅",
+      "相去复几许",
+      "盈盈一水间",
+      "脉脉不得语"
+    ],
+    "source": "《昭明文选·卷29》"
+  },
+  {
+    "id": 87,
+    "rank": "下",
+    "rankCode": "lower",
+    "poem": [
+      "便如凤去秦楼",
+      "云敛巫山"
+    ],
+    "source": ""
+  },
+  {
+    "id": 88,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "是非吾所谓情也"
+    ],
+    "source": "《庄子·德充符》"
+  },
+  {
+    "id": 89,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "卜以决疑不疑何卜"
+    ],
+    "source": "《周易爻变易缊·卷8》"
+  },
+  {
+    "id": 90,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "两情若是长久时",
+      "又岂在朝朝暮暮"
+    ],
+    "source": ""
+  },
+  {
+    "id": 91,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "你往事已沉",
+      "我只言自今"
+    ],
+    "source": ""
+  },
+  {
+    "id": 92,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "明明如月",
+      "何时可掇"
+    ],
+    "source": "《昭明文选·卷27》"
+  },
+  {
+    "id": 93,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "而浮生若梦",
+      "为懽几何"
+    ],
+    "source": "《古文观止·卷7》"
+  },
+  {
+    "id": 94,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "巧言令色",
+      "鲜矣仁"
+    ],
+    "source": "《论语·阳货第十七》"
+  },
+  {
+    "id": 95,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "螽斯羽",
+      "薨薨兮",
+      "宜尔子孙",
+      "绳绳兮"
+    ],
+    "source": ""
+  },
+  {
+    "id": 96,
+    "rank": "上上",
+    "rankCode": "upper",
+    "poem": [
+      "虽执鞭之士",
+      "吾亦为之"
+    ],
+    "source": "《史记·卷061》"
+  },
+  {
+    "id": 97,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "归楚",
+      "楚人不信",
+      "归汉",
+      "汉人震恐",
+      "足下欲持是安归乎"
+    ],
+    "source": "《史记·淮阴侯列传》"
+  },
+  {
+    "id": 98,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "昨夜江边春水生",
+      "艨艟巨舰一毛轻",
+      "向来枉费推移力",
+      "此日中流自在行"
+    ],
+    "source": "《观书有感》"
+  },
+  {
+    "id": 99,
+    "rank": "中",
+    "rankCode": "middle",
+    "poem": [
+      "必先苦其心志"
+    ],
+    "source": ""
+  },
+  {
+    "id": 100,
+    "rank": "上",
+    "rankCode": "upper",
+    "poem": [
+      "花好",
+      "月圆",
+      "人寿"
+    ],
+    "source": ""
+  }
+]

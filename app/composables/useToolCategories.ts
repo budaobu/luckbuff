@@ -900,6 +900,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/omikuji',
       },
       {
+        icon: 'i-heroicons-heart',
+        titleKey: 'yuelaoLot.title',
+        descKey: 'yuelaoLot.toolDesc',
+        ctaKey: 'yuelaoLot.toolCta',
+        path: '/tools/yuelao-lot',
+      },
+      {
         icon: 'i-heroicons-currency-dollar',
         titleKey: 'wealthGodLot.title',
         descKey: 'wealthGodLot.toolDesc',
