@@ -928,6 +928,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/guandi-lot',
       },
       {
+        icon: 'i-heroicons-moon',
+        titleKey: 'wongTaiSinLot.title',
+        descKey: 'wongTaiSinLot.toolDesc',
+        ctaKey: 'wongTaiSinLot.toolCta',
+        path: '/tools/wong-tai-sin-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',

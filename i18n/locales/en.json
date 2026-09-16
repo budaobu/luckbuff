@@ -700,7 +700,9 @@
     "nativeShareCancelled": "Share cancelled",
     "xShareHint": "Attaches the poster via native share when supported, otherwise opens your text and link in a new X tab",
     "hookGuandiLot": "I just drew a Guandi oracle: {summary}. Take a look!",
-    "hookGuandiLotDefault": "I just drew a Guandi oracle and the result is interesting."
+    "hookGuandiLotDefault": "I just drew a Guandi oracle and the result is interesting.",
+    "hookWongTaiSinLot": "I just drew a Wong Tai Sin oracle: {summary}. Take a look!",
+    "hookWongTaiSinLotDefault": "I just drew a Wong Tai Sin oracle and the result is interesting."
   },
   "natalAstro": {
     "title": "Western Natal Chart",
@@ -1413,7 +1415,12 @@
     "guandiLotDesc": "Free online Guandi oracle drawing. Explore all 100 classical signs, sacred intent, Dongpo notes, Bixian notes, interpretations and allusions, then get an AI reading. For cultural entertainment only.",
     "guandiLotKeywords": "Guandi oracle,Guan Gong oracle,Guandi oracle online,Guandi oracle interpretation,100 oracle signs,oracle poem,ososn",
     "guandiLotOgTitle": "Guandi Oracle Online_Draw 100 Lots & AI Interpretation",
-    "guandiLotOgDesc": "Draw a Guandi oracle online and read all 100 classical signs with sacred intent, notes and AI guidance. For cultural entertainment only."
+    "guandiLotOgDesc": "Draw a Guandi oracle online and read all 100 classical signs with sacred intent, notes and AI guidance. For cultural entertainment only.",
+    "wongTaiSinLotTitle": "Wong Tai Sin Oracle Online_Draw 100 Lots & AI Interpretation",
+    "wongTaiSinLotDesc": "Draw Wong Tai Sin Oracle online. Explore 100 complete signs with poems, allusions, interpretations, fortune guidance and AI readings for career, love, wealth and health.",
+    "wongTaiSinLotKeywords": "Wong Tai Sin Oracle,Wong Tai Sin fortune sticks,Wong Tai Sin lot meaning,100 lots,online oracle,AI interpretation",
+    "wongTaiSinLotOgTitle": "Wong Tai Sin Oracle Online_Draw 100 Lots & AI Interpretation",
+    "wongTaiSinLotOgDesc": "Draw a Wong Tai Sin Oracle lot and read its poem, allusion, interpretation and AI guidance."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -12811,5 +12818,49 @@
     "seoTitle": "Guandi Oracle No. {n} Meaning: {title}",
     "seoDescription": "Guandi Oracle No. {n}, “{title}”: {meaning} Read the poem, sacred intent, Dongpo notes, Bixian notes, interpretation and allusion, then draw online.",
     "seoKeywords": "Guandi Oracle No. {n},Guandi lot {n} meaning,{title},oracle poem,sacred intent,Dongpo notes"
+  },
+  "wongTaiSinLot": {
+    "title": "Wong Tai Sin Oracle",
+    "toolDesc": "Draw a Wong Tai Sin oracle for the poem, allusion, interpretation and guidance.",
+    "disclaimer": "This tool generates reference results based on traditional Wong Tai Sin oracle culture. It is for cultural entertainment and faith reference only, and does not constitute decision-making, divination, or professional advice.",
+    "toolCta": "Draw a Lot",
+    "subtitle": "Focus on your question and draw one of the 100 Wong Tai Sin oracle signs.",
+    "questionLabel": "Question",
+    "questionPlaceholder": "Enter your question about career, love, wealth or health",
+    "questionHint": "One question at a time gives a clearer reading",
+    "drawing": "Drawing……",
+    "resultTitle": "Wong Tai Sin Oracle Result",
+    "numberPrefix": "No.",
+    "numberSuffix": "",
+    "poemTitle": "Oracle Poem",
+    "allusionTitle": "Allusion",
+    "explanationTitle": "Interpretation",
+    "adviceTitle": "Fortune Guidance",
+    "interpretation": "AI Reading",
+    "interpreting": "Reading……",
+    "reinterpret": "Reinterpret",
+    "copyResult": "Copy Result",
+    "viewDetail": "View Sign Details",
+    "redraw": "Draw Again",
+    "questionRequired": "Question Required",
+    "drawFailed": "Draw Failed",
+    "checkInput": "Check Input",
+    "aiUnavailable": "AI interpretation is temporarily unavailable, please try again later."
+  },
+  "wongTaiSinLotDetail": {
+    "back": "Back to Wong Tai Sin Oracle",
+    "title": "Wong Tai Sin Oracle No. {n}: {title}",
+    "poem": "Oracle Poem",
+    "allusion": "Allusion",
+    "explanation": "Interpretation",
+    "advice": "Fortune Guidance",
+    "navigation": "Wong Tai Sin Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Wong Tai Sin Oracle No. {n} Meaning: {title}",
+    "seoDescription": "Wong Tai Sin Oracle No. {n}, “{title}”: {meaning} Read the poem, allusion, interpretation and fortune guidance, then draw online.",
+    "seoKeywords": "Wong Tai Sin Oracle No. {n},Wong Tai Sin lot {n} meaning,{title},oracle poem,allusion,interpretation"
   }
 }

@@ -158,7 +158,12 @@ export default defineNuxtConfig({
       priority: 0.8,
     },
     urls: sitemapUrls as any,
-    sources: ['/api/__sitemap__/insights-urls', '/api/__sitemap__/guanyin-lot-urls', '/api/__sitemap__/guandi-lot-urls'],
+    sources: [
+      '/api/__sitemap__/insights-urls',
+      '/api/__sitemap__/guanyin-lot-urls',
+      '/api/__sitemap__/guandi-lot-urls',
+      '/api/__sitemap__/wong-tai-sin-lot-urls',
+    ],
   },
 
   colorMode: {

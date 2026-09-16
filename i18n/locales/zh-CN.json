@@ -700,7 +700,9 @@
     "nativeShareCancelled": "已取消分享",
     "xShareHint": "支持原生分享时将附带分享图，否则在 X 新标签页中打开文案与链接",
     "hookGuandiLot": "我刚完成关帝灵签测算：{summary}，快来看看吧！",
-    "hookGuandiLotDefault": "刚完成一次关帝灵签测算，结果很有意思。"
+    "hookGuandiLotDefault": "刚完成一次关帝灵签测算，结果很有意思。",
+    "hookWongTaiSinLot": "我刚完成黄大仙灵签测算：{summary}，快来看看吧！",
+    "hookWongTaiSinLotDefault": "刚完成一次黄大仙灵签测算，结果很有意思。"
   },
   "natalAstro": {
     "title": "西洋占星本命盘",
@@ -1413,7 +1415,12 @@
     "guandiLotDesc": "免费在线关帝灵签抽签解签工具，完整100签签诗、圣意、东坡解、碧仙注、解曰与典故，输入问题即可抽取关公灵签并获取AI解签，仅供文化娱乐。",
     "guandiLotKeywords": "关帝灵签,关帝灵签在线抽签,关帝灵签解签,关帝灵签100签,关公灵签,关圣帝君灵签,签诗解签,ososn",
     "guandiLotOgTitle": "关帝灵签在线抽签解签_100签签诗详解",
-    "guandiLotOgDesc": "在线抽取关帝灵签，查看100签签诗、圣意、解曰与典故，并获取AI解签指引，仅供文化娱乐。"
+    "guandiLotOgDesc": "在线抽取关帝灵签，查看100签签诗、圣意、解曰与典故，并获取AI解签指引，仅供文化娱乐。",
+    "wongTaiSinLotTitle": "黄大仙灵签在线抽签解签_100签签诗详解与新解",
+    "wongTaiSinLotDesc": "2026黄大仙灵签线上抽签解签，完整整理100签签诗、典故、签解与运势指引，覆盖事业、感情、财运、健康，可查看第1-100签详解。",
+    "wongTaiSinLotKeywords": "黄大仙灵签,黄大仙灵签解签,黄大仙灵签新解,黄大仙灵签正解,黄大仙灵签2026,黄大仙灵签100签,黄大仙灵签线上,黄大仙灵签详解",
+    "wongTaiSinLotOgTitle": "黄大仙灵签在线抽签解签_100签签诗详解与新解",
+    "wongTaiSinLotOgDesc": "在线抽取黄大仙灵签，查看100签签诗、典故、签解与AI问事指引。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -12834,5 +12841,49 @@
     "seoTitle": "关帝灵签第{n}签详解：{title}",
     "seoDescription": "关帝灵签第{n}签「{title}」解签：{meaning} 页面整理签诗、圣意、东坡解、碧仙注、解曰与典故，并可继续在线求签。",
     "seoKeywords": "关帝灵签第{n}签,关帝灵签{n}详解,关帝灵签解签,{title},签诗,圣意,东坡解,碧仙注"
+  },
+  "wongTaiSinLot": {
+    "title": "黄大仙灵签",
+    "toolDesc": "在线抽取黄大仙灵签，获取签诗、典故、签解与运势指引。",
+    "disclaimer": "本工具基于黄大仙灵签传统文化生成参考结果，仅供文化娱乐与信仰参考，不构成任何决策、占卜或专业建议。请理性看待，重大决策请结合现实情况独立判断。",
+    "toolCta": "立即求签",
+    "subtitle": "诚心默念所问之事，抽取黄大仙百签中的一签。",
+    "questionLabel": "问题",
+    "questionPlaceholder": "请输入所问之事，如事业、感情、财运或健康",
+    "questionHint": "一事一问，问题越明确，解读越聚焦",
+    "drawing": "摇签中……",
+    "resultTitle": "黄大仙灵签结果",
+    "numberPrefix": "第",
+    "numberSuffix": "签",
+    "poemTitle": "签诗",
+    "allusionTitle": "典故",
+    "explanationTitle": "签解",
+    "adviceTitle": "运势指引",
+    "interpretation": "AI 解读",
+    "interpreting": "解读中……",
+    "reinterpret": "重新解读",
+    "copyResult": "复制结果",
+    "viewDetail": "查看签文详解",
+    "redraw": "重新抽取",
+    "questionRequired": "问题必填",
+    "drawFailed": "抽签失败",
+    "checkInput": "请检查输入",
+    "aiUnavailable": "AI 解读暂不可用，请稍后重试。"
+  },
+  "wongTaiSinLotDetail": {
+    "back": "返回黄大仙灵签",
+    "title": "黄大仙灵签第{n}签详解",
+    "poem": "签诗",
+    "allusion": "典故",
+    "explanation": "签解",
+    "advice": "运势指引",
+    "navigation": "黄大仙灵签导航",
+    "previous": "上一签",
+    "next": "下一签",
+    "lotNo": "第{n}签",
+    "draw": "在线求一签",
+    "seoTitle": "黄大仙灵签第{n}签详解：{title}",
+    "seoDescription": "黄大仙灵签第{n}签「{title}」解签：{meaning} 页面整理签诗、典故、签解与运势指引，并可继续在线求签。",
+    "seoKeywords": "黄大仙灵签第{n}签,黄大仙灵签{n}详解,黄大仙灵签解签,{title},签诗,典故,签解,运势指引"
   }
 }

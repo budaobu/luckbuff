@@ -1,5 +1,6 @@
 import guanyinLotData from '../../../app/data/guanyin-lots-100.json'
 import guandiLotData from '../../../app/data/guandi-lots-100.json'
+import wongTaiSinLotData from '../../../app/data/wong-tai-sin-lots-100.json'
 import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
@@ -12,6 +13,7 @@ export interface FortuneLot {
   poem: Record<string, string>
   explanation: Record<string, string>
   advice: Record<string, string>
+  allusion?: Record<string, string>
 }
 
 export interface DrawALotCalcResult {
@@ -28,6 +30,7 @@ export interface DrawALotCalcResult {
     poem: string
     explanation: string
     advice: string
+    allusion?: string
   }
 }
 
@@ -69,6 +72,7 @@ function makeFortune(
   explanation: Record<string, string>,
   advice: Record<string, string>,
   customLevel?: Record<string, string>,
+  allusion?: Record<string, string>,
 ): FortuneLot {
   return {
     number,
@@ -78,6 +82,7 @@ function makeFortune(
     poem,
     explanation,
     advice,
+    allusion,
   }
 }
 
@@ -140,6 +145,21 @@ const guandiFortunes: FortuneLot[] = guandiLotData.map(item => makeFortune(
   item.level,
 ))
 
+// 黄大仙灵签：100 签完整事实层，解释层采用 MIT 许可的配套数据
+
+const wongTaiSinFortunes: FortuneLot[] = wongTaiSinLotData.map(item => makeFortune(
+  item.id,
+  item.levelCode === 'upper'
+    ? 'upper'
+    : item.levelCode === 'lower' ? 'lower' : 'middle',
+  item.title,
+  item.poem,
+  item.explanation,
+  item.advice,
+  item.customLevel,
+  item.allusion,
+))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -171,6 +191,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '关帝灵签', 'zh-TW': '關帝靈簽', en: `Guandi Oracle` },
     count: guandiFortunes.length,
     fortunes: guandiFortunes,
+  },
+  {
+    id: 'wong-tai-sin',
+    name: { 'zh-CN': '黄大仙灵签', 'zh-TW': '黃大仙靈籤', en: 'Wong Tai Sin Oracle' },
+    count: wongTaiSinFortunes.length,
+    fortunes: wongTaiSinFortunes,
   },
 ]
 

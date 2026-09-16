@@ -87,6 +87,15 @@ for (const lot of guandiLots) {
   toolPathAliases[slug] = `/tools/guandi-lots/${lot.id}`
 }
 
+// 黄大仙灵签详情页：与观音/关帝保持同一 plural 动态路由规则
+const wongTaiSinLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'wong-tai-sin-lots-100.json'), 'utf-8'))
+const wongTaiSinTitleTemplate = lookup('wongTaiSinLotDetail.title')
+for (const lot of wongTaiSinLots) {
+  const slug = `wong-tai-sin-lot-${lot.id}`
+  tools[slug] ??= wongTaiSinTitleTemplate?.replace('{n}', String(lot.id)) || slug
+  toolPathAliases[slug] = `/tools/wong-tai-sin-lots/${lot.id}`
+}
+
 // ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
 const matchDir = resolve(ROOT, 'content', 'worldcup-predictions')
 for (const filename of readdirSync(matchDir)) {
