@@ -1420,7 +1420,12 @@
     "wongTaiSinLotDesc": "2026黄大仙灵签线上抽签解签，完整整理100签签诗、典故、签解与运势指引，覆盖事业、感情、财运、健康，可查看第1-100签详解。",
     "wongTaiSinLotKeywords": "黄大仙灵签,黄大仙灵签解签,黄大仙灵签新解,黄大仙灵签正解,黄大仙灵签2026,黄大仙灵签100签,黄大仙灵签线上,黄大仙灵签详解",
     "wongTaiSinLotOgTitle": "黄大仙灵签在线抽签解签_100签签诗详解与新解",
-    "wongTaiSinLotOgDesc": "在线抽取黄大仙灵签，查看100签签诗、典故、签解与AI问事指引。"
+    "wongTaiSinLotOgDesc": "在线抽取黄大仙灵签，查看100签签诗、典故、签解与AI问事指引。",
+    "yuelaoLotTitle": "月老灵签在线抽签_100签解签与姻缘详解",
+    "yuelaoLotDesc": "免费在线抽取月老灵签，完整覆盖100支姻缘签的签号、吉凶、集句签诗与原典出处，AI 结合所问之事生成签诗今译、问事指引和行动建议。",
+    "yuelaoLotKeywords": "月老灵签,月老灵签解签,月老灵签100签,月老灵签抽签,月下老人灵签,姻缘签,月老签,在线求姻缘签",
+    "yuelaoLotOgTitle": "月老灵签在线抽签_100签解签与姻缘详解",
+    "yuelaoLotOgDesc": "抽月老灵签看感情、暧昧、复合与婚姻启发：100签签诗、吉凶与AI解签一次呈现。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -12885,5 +12890,54 @@
     "seoTitle": "黄大仙灵签第{n}签详解：{title}",
     "seoDescription": "黄大仙灵签第{n}签「{title}」解签：{meaning} 页面整理签诗、典故、签解与运势指引，并可继续在线求签。",
     "seoKeywords": "黄大仙灵签第{n}签,黄大仙灵签{n}详解,黄大仙灵签解签,{title},签诗,典故,签解,运势指引"
+  },
+  "yuelaoLot": {
+    "title": "月老灵签",
+    "toolDesc": "在线抽取月老灵签，覆盖100签签诗、吉凶与AI姻缘解读。",
+    "subtitle": "写下感情或婚姻所问，从月老百签中求一支签。",
+    "disclaimer": "本工具基于传统月老灵签文化生成参考结果，仅供文化娱乐与心灵参考，不构成任何决策、占卜或专业建议。请理性看待，重大决策请结合现实情况独立判断。",
+    "questionLabel": "所问之事",
+    "questionPlaceholder": "如：想知道当前感情是否值得继续",
+    "questionHint": "一事一问，问题越具体，解读越聚焦",
+    "toolCta": "求月老签",
+    "interpreting": "月老解签中……",
+    "reinterpret": "重新解签",
+    "copyResult": "复制结果",
+    "viewDetail": "查看本签详解",
+    "redraw": "再求一签",
+    "questionRequired": "请先填写所问之事",
+    "drawFailed": "求签失败，请稍后再试",
+    "aiUnavailable": "AI 解读暂不可用，请稍后再试。"
+  },
+  "yuelaoPoster": {
+    "kicker": "月老灵签",
+    "serial": "姻缘签",
+    "numberLine": "月老灵签 第{number}签",
+    "questionFlag": "所问",
+    "noQuestion": "未填写所问之事",
+    "poemFlag": "签诗",
+    "sourceLabel": "原典出处",
+    "sourcePending": "出处未考",
+    "guidanceLabel": "问事指引",
+    "guidancePending": "AI 解读生成中"
+  },
+  "yuelaoLotDetail": {
+    "back": "返回求签",
+    "title": "月老灵签第{n}签详解",
+    "poem": "签诗",
+    "source": "原典出处",
+    "sourcePending": "此签通行本未见明确原典出处，保留待考。",
+    "factTitle": "这签怎么读",
+    "factBody": "先看吉凶等级给出的大势，再读签诗中的相遇、等待、沟通、抉择等意象。集句签诗常用经典语汇借喻情缘，不适合把单句直接当作必然结论。",
+    "aiTitle": "按你的问题解读",
+    "aiBody": "求签页会结合你填写的问题、签诗和吉凶，生成签诗今译、问事指引与行动建议。结果偏文化启发，不是感情或婚姻决策依据。",
+    "draw": "按我的问题求签",
+    "navigation": "月老灵签逐签导航",
+    "previous": "上一签",
+    "next": "下一签",
+    "lotNo": "第{n}签",
+    "seoTitle": "月老灵签第{n}签解签_姻缘详解",
+    "seoDescription": "月老灵签第{n}签详解：查看签诗、吉凶等级、原典出处与姻缘解读，理解第{n}签在感情、暧昧、复合与婚姻问题中的启发。",
+    "seoKeywords": "月老灵签第{n}签,月老灵签第{n}签解签,月老灵签第{n}签详解,月老灵签100签,姻缘签,月下老人灵签"
   }
 }

@@ -1420,7 +1420,12 @@
     "wongTaiSinLotDesc": "Draw Wong Tai Sin Oracle online. Explore 100 complete signs with poems, allusions, interpretations, fortune guidance and AI readings for career, love, wealth and health.",
     "wongTaiSinLotKeywords": "Wong Tai Sin Oracle,Wong Tai Sin fortune sticks,Wong Tai Sin lot meaning,100 lots,online oracle,AI interpretation",
     "wongTaiSinLotOgTitle": "Wong Tai Sin Oracle Online_Draw 100 Lots & AI Interpretation",
-    "wongTaiSinLotOgDesc": "Draw a Wong Tai Sin Oracle lot and read its poem, allusion, interpretation and AI guidance."
+    "wongTaiSinLotOgDesc": "Draw a Wong Tai Sin Oracle lot and read its poem, allusion, interpretation and AI guidance.",
+    "yuelaoLotTitle": "Yuelao Oracle Online_100 Love Signs & Meanings",
+    "yuelaoLotDesc": "Draw a free Yuelao Oracle online. Explore all 100 love signs with poems, fortune ranks, classical sources and an AI reading tailored to your question.",
+    "yuelaoLotKeywords": "Yuelao Oracle,Chinese love oracle,marriage oracle,Yuelao oracle online,100 love signs,Yue Lao oracle,relationship divination",
+    "yuelaoLotOgTitle": "Yuelao Oracle Online_100 Love Signs & Meanings",
+    "yuelaoLotOgDesc": "Draw the Yuelao Oracle for love, crushes, reconciliation and marriage: 100 poems, ranks and AI guidance in one tool."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -12862,5 +12867,54 @@
     "seoTitle": "Wong Tai Sin Oracle No. {n} Meaning: {title}",
     "seoDescription": "Wong Tai Sin Oracle No. {n}, “{title}”: {meaning} Read the poem, allusion, interpretation and fortune guidance, then draw online.",
     "seoKeywords": "Wong Tai Sin Oracle No. {n},Wong Tai Sin lot {n} meaning,{title},oracle poem,allusion,interpretation"
+  },
+  "yuelaoLot": {
+    "title": "Yuelao Oracle",
+    "toolDesc": "Draw a Yuelao oracle online with 100 poems, ranks and an AI love reading.",
+    "subtitle": "Ask your love or marriage question and draw one of the 100 Yuelao signs.",
+    "disclaimer": "This tool generates reference results based on traditional Yuelao oracle culture. It is for cultural entertainment and reflection only and is not professional, relationship, or life advice.",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "For example: should I continue this relationship?",
+    "questionHint": "One clear question gives a more focused reading.",
+    "toolCta": "Draw Yuelao Oracle",
+    "interpreting": "Reading the oracle……",
+    "reinterpret": "Read again",
+    "copyResult": "Copy result",
+    "viewDetail": "View sign details",
+    "redraw": "Draw again",
+    "questionRequired": "Please enter your question first",
+    "drawFailed": "The draw failed. Please try again.",
+    "aiUnavailable": "AI reading is temporarily unavailable. Please try again later."
+  },
+  "yuelaoPoster": {
+    "kicker": "Yuelao Oracle",
+    "serial": "Love Oracle",
+    "numberLine": "Yuelao Oracle No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "No question entered",
+    "poemFlag": "Poem",
+    "sourceLabel": "Classical source",
+    "sourcePending": "Source unverified",
+    "guidanceLabel": "Guidance",
+    "guidancePending": "Generating AI guidance"
+  },
+  "yuelaoLotDetail": {
+    "back": "Back to drawing",
+    "title": "Yuelao Oracle Sign {n} Meaning",
+    "poem": "Oracle poem",
+    "source": "Classical source",
+    "sourcePending": "The circulated edition does not give a clear classical source for this sign.",
+    "factTitle": "How to read this sign",
+    "factBody": "Start with the fortune rank, then read the poem for images of meeting, waiting, communication and choice. Quotation-based oracle poems use classical allusions, so a single line should not be treated as a fixed verdict.",
+    "aiTitle": "Reading for your question",
+    "aiBody": "The drawing page combines your question, poem and rank into a plain interpretation, situation guidance and practical suggestions. It offers cultural reflection, not relationship or marriage advice.",
+    "draw": "Draw for my question",
+    "navigation": "Sign-by-sign navigation",
+    "previous": "Previous",
+    "next": "Next",
+    "lotNo": "Sign {n}",
+    "seoTitle": "Yuelao Oracle Sign {n}_Love Meaning",
+    "seoDescription": "Yuelao Oracle Sign {n} meaning: view the poem, fortune rank, classical source and love guidance for relationship, crush, reconciliation and marriage questions.",
+    "seoKeywords": "Yuelao Oracle sign {n},Yuelao Oracle sign {n} meaning,Yuelao Oracle 100 signs,Chinese love oracle,marriage oracle"
   }
 }

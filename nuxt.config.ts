@@ -163,6 +163,7 @@ export default defineNuxtConfig({
       '/api/__sitemap__/guanyin-lot-urls',
       '/api/__sitemap__/guandi-lot-urls',
       '/api/__sitemap__/wong-tai-sin-lot-urls',
+      '/api/__sitemap__/yuelao-lot-urls',
     ],
   },
 

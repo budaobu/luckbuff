@@ -40,6 +40,7 @@ export interface ShareOptions {
     | 'mazu-lot'
     | 'guandi-lot'
     | 'wong-tai-sin-lot'
+    | 'yuelao-lot'
     | 'chenggu'
     | 'cezi-battle'
     | 'lenormand'
@@ -176,6 +177,7 @@ export function useShare() {
       'mazu-lot': '妈祖灵签',
       'guandi-lot': '关帝灵签',
       'wong-tai-sin-lot': '黄大仙灵签',
+      'yuelao-lot': '月老灵签',
       chenggu: '称骨算命',
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',

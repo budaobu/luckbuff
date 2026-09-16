@@ -1420,7 +1420,12 @@
     "wongTaiSinLotDesc": "2026黃大仙靈籤線上抽籤解籤，完整整理100籤籤詩、典故、籤解與白話運勢指引，覆蓋事業、感情、財運、健康，可查看第1-100籤詳解。",
     "wongTaiSinLotKeywords": "黃大仙靈籤,黃大仙靈籤解籤,黃大仙靈籤白話解,黃大仙靈籤線上,黃大仙靈籤2026,黃大仙靈籤100籤,黃大仙靈籤詳解",
     "wongTaiSinLotOgTitle": "黃大仙靈籤線上抽籤解籤_100籤籤詩白話解",
-    "wongTaiSinLotOgDesc": "線上抽取黃大仙靈籤，查看100籤籤詩、典故、籤解與AI問事指引。"
+    "wongTaiSinLotOgDesc": "線上抽取黃大仙靈籤，查看100籤籤詩、典故、籤解與AI問事指引。",
+    "yuelaoLotTitle": "月老靈籤線上抽籤_100籤解籤與姻緣詳解",
+    "yuelaoLotDesc": "免費線上抽取月老靈籤，完整覆蓋100支姻緣籤的籤號、吉凶、集句籤詩與原典出處，AI 結合所問之事生成籤詩今譯、問事指引和行動建議。",
+    "yuelaoLotKeywords": "月老靈籤,月老靈籤解籤,月老靈籤100籤,月老靈籤抽籤,月下老人靈籤,姻緣籤,月老籤,線上求姻緣籤",
+    "yuelaoLotOgTitle": "月老靈籤線上抽籤_100籤解籤與姻緣詳解",
+    "yuelaoLotOgDesc": "抽月老靈籤看感情、曖昧、復合與婚姻啟發：100籤籤詩、吉凶與AI解籤一次呈現。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -12884,5 +12889,54 @@
     "seoTitle": "黃大仙靈籤第{n}籤詳解：{title}",
     "seoDescription": "黃大仙靈籤第{n}籤「{title}」解籤：{meaning} 頁面整理籤詩、典故、籤解與白話運勢指引，並可繼續線上求籤。",
     "seoKeywords": "黃大仙靈籤第{n}籤,黃大仙靈籤{n}詳解,黃大仙靈籤解籤,{title},籤詩,典故,籤解,白話解"
+  },
+  "yuelaoLot": {
+    "title": "月老靈籤",
+    "toolDesc": "線上抽取月老靈籤，覆蓋100籤籤詩、吉凶與AI姻緣解讀。",
+    "subtitle": "寫下感情或婚姻所問，從月老百籤中求一支籤。",
+    "disclaimer": "本工具基於傳統月老靈籤文化生成參考結果，僅供文化娛樂與心靈參考，不構成任何決策、占卜或專業建議。請理性看待，重大決策請結合現實情況獨立判斷。",
+    "questionLabel": "所問之事",
+    "questionPlaceholder": "如：想知道目前感情是否值得繼續",
+    "questionHint": "一事一問，問題越具體，解讀越聚焦",
+    "toolCta": "求月老籤",
+    "interpreting": "月老解籤中……",
+    "reinterpret": "重新解籤",
+    "copyResult": "複製結果",
+    "viewDetail": "查看本籤詳解",
+    "redraw": "再求一籤",
+    "questionRequired": "請先填寫所問之事",
+    "drawFailed": "求籤失敗，請稍後再試",
+    "aiUnavailable": "AI 解讀暫不可用，請稍後再試。"
+  },
+  "yuelaoPoster": {
+    "kicker": "月老靈籤",
+    "serial": "姻緣籤",
+    "numberLine": "月老靈籤 第{number}籤",
+    "questionFlag": "所問",
+    "noQuestion": "未填寫所問之事",
+    "poemFlag": "籤詩",
+    "sourceLabel": "原典出處",
+    "sourcePending": "出處未考",
+    "guidanceLabel": "問事指引",
+    "guidancePending": "AI 解讀生成中"
+  },
+  "yuelaoLotDetail": {
+    "back": "返回求籤",
+    "title": "月老靈籤第{n}籤詳解",
+    "poem": "籤詩",
+    "source": "原典出處",
+    "sourcePending": "此籤通行本未見明確原典出處，保留待考。",
+    "factTitle": "這籤怎麼讀",
+    "factBody": "先看吉凶等級給出的大勢，再讀籤詩中的相遇、等待、溝通、抉擇等意象。集句籤詩常用經典語彙借喻情緣，不適合把單句直接當作必然結論。",
+    "aiTitle": "按你的問題解讀",
+    "aiBody": "求籤頁會結合你填寫的問題、籤詩和吉凶，生成籤詩今譯、問事指引與行動建議。結果偏文化啟發，不是感情或婚姻決策依據。",
+    "draw": "按我的問題求籤",
+    "navigation": "月老靈籤逐籤導覽",
+    "previous": "上一籤",
+    "next": "下一籤",
+    "lotNo": "第{n}籤",
+    "seoTitle": "月老靈籤第{n}籤解籤_姻緣詳解",
+    "seoDescription": "月老靈籤第{n}籤詳解：查看籤詩、吉凶等級、原典出處與姻緣解讀，理解第{n}籤在感情、曖昧、復合與婚姻問題中的啟發。",
+    "seoKeywords": "月老靈籤第{n}籤,月老靈籤第{n}籤解籤,月老靈籤第{n}籤詳解,月老靈籤100籤,姻緣籤,月下老人靈籤"
   }
 }
