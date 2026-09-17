@@ -719,7 +719,9 @@
     "hookWenshuLot": "I just drew a Manjushri Oracle lot: {summary}. Take a look!",
     "hookWenshuLotDefault": "I just drew a Manjushri Oracle lot and the result is insightful.",
     "hookTudigongLot": "I just drew a Tudigong Oracle lot: {summary}. Take a look!",
-    "hookTudigongLotDefault": "I just drew a Tudigong Oracle lot and the result is insightful."
+    "hookTudigongLotDefault": "I just drew a Tudigong Oracle lot and the result is insightful.",
+    "hookBaoshengLot": "I just drew a Baosheng Dadi Oracle lot: {summary}. Take a look!",
+    "hookBaoshengLotDefault": "I just drew a Baosheng Dadi Oracle lot and the result is insightful."
   },
   "natalAstro": {
     "title": "Western Natal Chart",
@@ -1457,7 +1459,12 @@
     "tudigongLotDesc": "Draw a free Tudigong (Earth God) Oracle online. Explore all 32 signs with ranks, poems, classical judgments, immortal notes and an AI reading for career, wealth, home or health questions.",
     "tudigongLotKeywords": "Tudigong Oracle,Earth God Oracle,Tudigong lot online,32 oracle signs,Chinese fortune sticks,oracle poem,oracle judgment,AI oracle reading",
     "tudigongLotOgTitle": "Tudigong Oracle Online_Draw 32 Signs & Poem Meanings",
-    "tudigongLotOgDesc": "Draw a Tudigong Oracle sign online and read its rank, poem, judgment, immortal note and AI guidance."
+    "tudigongLotOgDesc": "Draw a Tudigong Oracle sign online and read its rank, poem, judgment, immortal note and AI guidance.",
+    "baoshengLotTitle": "Baosheng Dadi Oracle Online_Draw 60 Signs & Judgments",
+    "baoshengLotDesc": "Draw a free Baosheng Dadi (Medicine King) Oracle online. Explore all 60 signs with poems, traditional category judgments and an AI reading for career, wealth, home or health questions.",
+    "baoshengLotKeywords": "Baosheng Dadi Oracle,Baosheng Dadi lot,Baoshengtai online oracle,60 oracle signs,Chinese fortune sticks,oracle poem,category judgments,AI oracle reading",
+    "baoshengLotOgTitle": "Baosheng Dadi Oracle Online_Draw 60 Signs & Judgments",
+    "baoshengLotOgDesc": "Draw a Baosheng Dadi Oracle sign online and read its poem, category judgments and AI guidance."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -13101,5 +13108,50 @@
     "seoTitle": "Tudigong Oracle Sign {n} Meaning_Poem & Judgment",
     "seoDescription": "Tudigong Oracle Sign {n}, {title}: {meaning} Read the poem, classical judgment, immortal note and practical guidance, then draw online.",
     "seoKeywords": "Tudigong Oracle sign {n},Tudigong Oracle sign {n} meaning,{title},32 oracle signs,oracle poem,oracle judgment"
+  },
+  "baoshengLot": {
+    "title": "Baosheng Dadi Oracle",
+    "toolDesc": "Draw Baosheng Dadi Oracle online with 60 poems, category judgments and AI reading.",
+    "subtitle": "Enter your question and draw one of Baosheng Dadi's 60 oracle signs.",
+    "disclaimer": "This tool presents traditional Baosheng Dadi Oracle culture for cultural and reflective reference only. It is not decision, divination or professional advice. For health concerns, seek qualified medical care.",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "For example: health or family outlook this month",
+    "questionHint": "One question at a time makes category judgments easier to compare",
+    "toolCta": "Draw Baosheng Dadi Oracle",
+    "drawing": "Drawing……",
+    "interpreting": "Reading……",
+    "reinterpret": "Read again",
+    "copyResult": "Copy result",
+    "viewDetail": "View sign details",
+    "redraw": "Draw again",
+    "questionRequired": "Please enter your question first",
+    "drawFailed": "The draw failed. Please try again.",
+    "aiUnavailable": "AI reading is temporarily unavailable. Please try again later."
+  },
+  "baoshengPoster": {
+    "kicker": "Baosheng Dadi Oracle",
+    "serial": "60 Signs",
+    "numberLine": "Baosheng Dadi Oracle No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "No question entered",
+    "poemFlag": "Poem",
+    "judgmentsLabel": "Category judgments",
+    "guidanceLabel": "Guidance",
+    "guidancePending": "Generating AI guidance"
+  },
+  "baoshengLotDetail": {
+    "back": "Back to Baosheng Dadi Oracle",
+    "title": "Baosheng Dadi Oracle Sign {n} Meaning",
+    "poem": "Oracle poem",
+    "judgments": "Traditional category judgments",
+    "advice": "Practical guidance",
+    "navigation": "Baosheng Dadi Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Baosheng Dadi Oracle Sign {n} Meaning_Poem & Judgments",
+    "seoDescription": "Baosheng Dadi Oracle Sign {n}: {poem}. Read the poem, traditional category judgments and practical guidance, then draw online. {judgments}",
+    "seoKeywords": "Baosheng Dadi Oracle sign {n},Baosheng Dadi Oracle sign {n} meaning,Baosheng Dadi 60 signs,oracle poem,category judgments"
   }
 }

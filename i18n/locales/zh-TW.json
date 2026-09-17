@@ -719,7 +719,9 @@
     "hookWenshuLot": "我剛抽取文殊菩薩靈籤：{summary}，快來看看吧！",
     "hookWenshuLotDefault": "剛抽取文殊菩薩靈籤，結果很有啟發。",
     "hookTudigongLot": "我剛抽取土地公靈籤：{summary}，快來看看吧！",
-    "hookTudigongLotDefault": "剛抽取土地公靈籤，結果很有啟發。"
+    "hookTudigongLotDefault": "剛抽取土地公靈籤，結果很有啟發。",
+    "hookBaoshengLot": "我剛抽取保生大帝靈籤：{summary}，快來看看吧！",
+    "hookBaoshengLotDefault": "剛抽取保生大帝靈籤，結果很有啟發。"
   },
   "natalAstro": {
     "title": "西洋占星本命盤",
@@ -1457,7 +1459,12 @@
     "tudigongLotDesc": "免費線上抽取土地公靈籤，完整整理32籤吉凶、籤詩、斷曰與米力仙注，AI結合事業、財運、家宅或健康問題生成解籤指引，僅供文化娛樂。",
     "tudigongLotKeywords": "土地公靈籤,土地公靈籤解籤,土地公靈籤線上抽籤,土地公靈籤32籤,土地公求籤,福德正神靈籤,籤詩詳解,線上抽籤解籤,ososn",
     "tudigongLotOgTitle": "土地公靈籤線上抽籤_32籤解籤與籤詩詳解",
-    "tudigongLotOgDesc": "線上抽取土地公靈籤，查看32籤吉凶、籤詩、斷曰與仙注，並取得AI問事指引。"
+    "tudigongLotOgDesc": "線上抽取土地公靈籤，查看32籤吉凶、籤詩、斷曰與仙注，並取得AI問事指引。",
+    "baoshengLotTitle": "保生大帝靈籤線上抽籤_60籤解籤與籤詩詳解",
+    "baoshengLotDesc": "免費線上抽取保生大帝靈籤，完整整理60籤籤詩與傳統分項斷語，AI結合事業、財運、家宅或健康問題生成解籤指引，僅供文化娛樂。",
+    "baoshengLotKeywords": "保生大帝靈籤,保生大帝靈籤解籤,保生大帝靈籤線上抽籤,保生大帝靈籤60籤,保生大帝求籤,保生大帝抽籤,大道公靈籤,籤詩詳解,分項斷語,ososn",
+    "baoshengLotOgTitle": "保生大帝靈籤線上抽籤_60籤解籤與籤詩詳解",
+    "baoshengLotOgDesc": "線上抽取保生大帝靈籤，查看60籤籤詩、分項斷語與AI問事指引。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -13123,5 +13130,50 @@
     "seoTitle": "土地公靈籤第{n}籤解籤_籤詩與斷曰詳解",
     "seoDescription": "土地公靈籤第{n}籤「{title}」詳解：{meaning} 頁面整理籤詩、斷曰、米力仙注與行動提示，並可繼續線上求籤。",
     "seoKeywords": "土地公靈籤第{n}籤,土地公靈籤第{n}籤解籤,土地公靈籤第{n}籤詳解,土地公靈籤32籤,{title},籤詩,斷曰"
+  },
+  "baoshengLot": {
+    "title": "保生大帝靈籤",
+    "toolDesc": "線上抽取保生大帝靈籤，覆蓋60籤籤詩、分項斷語與AI解讀。",
+    "subtitle": "寫下所問之事，從保生大帝六十籤中求一支籤。",
+    "disclaimer": "本工具基於傳統保生大帝靈籤文化生成參考結果，僅供文化娛樂與心靈參考，不構成任何決策、占卜或專業建議。健康問題請以正規醫療為主。",
+    "questionLabel": "所問之事",
+    "questionPlaceholder": "如：想了解近期健康和家人運勢",
+    "questionHint": "一事一問，問題越明確，解籤越能對照相關分項",
+    "toolCta": "求保生大帝籤",
+    "drawing": "搖籤中……",
+    "interpreting": "解籤中……",
+    "reinterpret": "重新解籤",
+    "copyResult": "複製結果",
+    "viewDetail": "查看本籤詳解",
+    "redraw": "再求一籤",
+    "questionRequired": "請先填寫所問之事",
+    "drawFailed": "求籤失敗，請稍後再試",
+    "aiUnavailable": "AI 解讀暫不可用，請稍後再試。"
+  },
+  "baoshengPoster": {
+    "kicker": "保生大帝靈籤",
+    "serial": "六十籤",
+    "numberLine": "保生大帝靈籤 第{number}籤",
+    "questionFlag": "所問",
+    "noQuestion": "未填寫所問之事",
+    "poemFlag": "籤詩",
+    "judgmentsLabel": "分項斷語",
+    "guidanceLabel": "問事指引",
+    "guidancePending": "AI 解讀生成中"
+  },
+  "baoshengLotDetail": {
+    "back": "返回保生大帝靈籤",
+    "title": "保生大帝靈籤第{n}籤詳解",
+    "poem": "籤詩",
+    "judgments": "傳統分項斷語",
+    "advice": "行動提示",
+    "navigation": "保生大帝靈籤導覽",
+    "previous": "上一籤",
+    "next": "下一籤",
+    "lotNo": "第{n}籤",
+    "draw": "線上求一籤",
+    "seoTitle": "保生大帝靈籤第{n}籤解籤_籤詩與分項斷語",
+    "seoDescription": "保生大帝靈籤第{n}籤詳解：{poem}。頁面整理籤詩、傳統分項斷語與行動提示，並可繼續線上求籤。{judgments}",
+    "seoKeywords": "保生大帝靈籤第{n}籤,保生大帝靈籤第{n}籤解籤,保生大帝靈籤第{n}籤詳解,保生大帝靈籤60籤,籤詩,分項斷語"
   }
 }

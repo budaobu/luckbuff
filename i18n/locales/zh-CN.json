@@ -719,7 +719,9 @@
     "hookWenshuLot": "我刚抽取文殊菩萨灵签：{summary}，快来看看吧！",
     "hookWenshuLotDefault": "刚抽取文殊菩萨灵签，结果很有启发。",
     "hookTudigongLot": "我刚抽取土地公灵签：{summary}，快来看看吧！",
-    "hookTudigongLotDefault": "刚抽取土地公灵签，结果很有启发。"
+    "hookTudigongLotDefault": "刚抽取土地公灵签，结果很有启发。",
+    "hookBaoshengLot": "我刚抽取保生大帝灵签：{summary}，快来看看吧！",
+    "hookBaoshengLotDefault": "刚抽取保生大帝灵签，结果很有启发。"
   },
   "natalAstro": {
     "title": "西洋占星本命盘",
@@ -1457,7 +1459,12 @@
     "tudigongLotDesc": "免费在线抽取土地公灵签，完整整理32签吉凶、签诗、断曰与米力仙注，AI结合事业、财运、家宅或健康问题生成解签指引，仅供文化娱乐。",
     "tudigongLotKeywords": "土地公灵签,土地公灵签解签,土地公灵签在线抽签,土地公灵签32签,土地公求签,福德正神灵签,签诗详解,在线抽签解签,ososn",
     "tudigongLotOgTitle": "土地公灵签在线抽签_32签解签与签诗详解",
-    "tudigongLotOgDesc": "在线抽取土地公灵签，查看32签吉凶、签诗、断曰与仙注，并获取AI问事指引。"
+    "tudigongLotOgDesc": "在线抽取土地公灵签，查看32签吉凶、签诗、断曰与仙注，并获取AI问事指引。",
+    "baoshengLotTitle": "保生大帝灵签在线抽签_60签解签与签诗详解",
+    "baoshengLotDesc": "免费在线抽取保生大帝灵签，完整整理60签签诗与传统分项断语，AI结合事业、财运、家宅或健康问题生成解签指引，仅供文化娱乐。",
+    "baoshengLotKeywords": "保生大帝灵签,保生大帝灵签解签,保生大帝灵签在线抽签,保生大帝灵签60签,保生大帝求签,保生大帝抽签,大道公灵签,签诗详解,分项断语,ososn",
+    "baoshengLotOgTitle": "保生大帝灵签在线抽签_60签解签与签诗详解",
+    "baoshengLotOgDesc": "在线抽取保生大帝灵签，查看60签签诗、分项断语与AI问事指引。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -13124,5 +13131,50 @@
     "seoTitle": "土地公灵签第{n}签解签_签诗与断曰详解",
     "seoDescription": "土地公灵签第{n}签「{title}」详解：{meaning} 页面整理签诗、断曰、米力仙注与行动提示，并可继续在线求签。",
     "seoKeywords": "土地公灵签第{n}签,土地公灵签第{n}签解签,土地公灵签第{n}签详解,土地公灵签32签,{title},签诗,断曰"
+  },
+  "baoshengLot": {
+    "title": "保生大帝灵签",
+    "toolDesc": "在线抽取保生大帝灵签，覆盖60签签诗、分项断语与AI解读。",
+    "subtitle": "写下所问之事，从保生大帝六十签中求一支签。",
+    "disclaimer": "本工具基于传统保生大帝灵签文化生成参考结果，仅供文化娱乐与心灵参考，不构成任何决策、占卜或专业建议。健康问题请以正规医疗为主。",
+    "questionLabel": "所问之事",
+    "questionPlaceholder": "如：想了解近期健康和家人运势",
+    "questionHint": "一事一问，问题越明确，解签越能对照相关分项",
+    "toolCta": "求保生大帝签",
+    "drawing": "摇签中……",
+    "interpreting": "解签中……",
+    "reinterpret": "重新解签",
+    "copyResult": "复制结果",
+    "viewDetail": "查看本签详解",
+    "redraw": "再求一签",
+    "questionRequired": "请先填写所问之事",
+    "drawFailed": "求签失败，请稍后再试",
+    "aiUnavailable": "AI 解读暂不可用，请稍后再试。"
+  },
+  "baoshengPoster": {
+    "kicker": "保生大帝灵签",
+    "serial": "六十签",
+    "numberLine": "保生大帝灵签 第{number}签",
+    "questionFlag": "所问",
+    "noQuestion": "未填写所问之事",
+    "poemFlag": "签诗",
+    "judgmentsLabel": "分项断语",
+    "guidanceLabel": "问事指引",
+    "guidancePending": "AI 解读生成中"
+  },
+  "baoshengLotDetail": {
+    "back": "返回保生大帝灵签",
+    "title": "保生大帝灵签第{n}签详解",
+    "poem": "签诗",
+    "judgments": "传统分项断语",
+    "advice": "行动提示",
+    "navigation": "保生大帝灵签导航",
+    "previous": "上一签",
+    "next": "下一签",
+    "lotNo": "第{n}签",
+    "draw": "在线求一签",
+    "seoTitle": "保生大帝灵签第{n}签解签_签诗与分项断语",
+    "seoDescription": "保生大帝灵签第{n}签详解：{poem}。页面整理签诗、传统分项断语与行动提示，并可继续在线求签。{judgments}",
+    "seoKeywords": "保生大帝灵签第{n}签,保生大帝灵签第{n}签解签,保生大帝灵签第{n}签详解,保生大帝灵签60签,签诗,分项断语"
   }
 }

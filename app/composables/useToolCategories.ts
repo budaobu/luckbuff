@@ -963,6 +963,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/tudigong-lot',
       },
       {
+        icon: 'i-heroicons-heart',
+        titleKey: 'baoshengLot.title',
+        descKey: 'baoshengLot.toolDesc',
+        ctaKey: 'baoshengLot.toolCta',
+        path: '/tools/baosheng-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',

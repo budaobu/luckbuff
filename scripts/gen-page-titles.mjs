@@ -123,6 +123,15 @@ for (const lot of tudigongLots) {
   toolPathAliases[slug] = `/tools/tudigong-lots/${lot.id}`
 }
 
+// 保生大帝灵签详情页：继续沿用 plural 动态路由规则。
+const baoshengLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'baosheng-lots-60.json'), 'utf-8'))
+const baoshengTitleTemplate = lookup('baoshengLotDetail.title')
+for (const lot of baoshengLots) {
+  const slug = `baosheng-lot-${lot.number}`
+  tools[slug] ??= baoshengTitleTemplate?.replace('{n}', String(lot.number)) || slug
+  toolPathAliases[slug] = `/tools/baosheng-lots/${lot.number}`
+}
+
 // ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
 const matchDir = resolve(ROOT, 'content', 'worldcup-predictions')
 for (const filename of readdirSync(matchDir)) {
