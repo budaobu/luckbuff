@@ -45,7 +45,7 @@ function lotType(locale: string) {
   }
 }
 
-function fortune(lot: YuelaoLot) {
+function fortune(lot: YuelaoLot): YuelaoLotResult['fortune'] {
   return {
     id: lot.id,
     rank: lot.rank,
@@ -56,7 +56,7 @@ function fortune(lot: YuelaoLot) {
 }
 
 export function getYuelaoLot(id: number, locale = 'zh-CN') {
-  const lot = yuelaoLotData.find(item => item.id === id)
+  const lot = yuelaoLotData.find(item => item.id === id) as YuelaoLot | undefined
   if (!lot) {
     throw createError({ statusCode: 404, statusMessage: 'Yuelao lot not found' })
   }

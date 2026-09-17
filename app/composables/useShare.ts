@@ -41,6 +41,7 @@ export interface ShareOptions {
     | 'guandi-lot'
     | 'wong-tai-sin-lot'
     | 'yuelao-lot'
+    | 'wenshu-lot'
     | 'chenggu'
     | 'cezi-battle'
     | 'lenormand'
@@ -178,6 +179,7 @@ export function useShare() {
       'guandi-lot': '关帝灵签',
       'wong-tai-sin-lot': '黄大仙灵签',
       'yuelao-lot': '月老灵签',
+      'wenshu-lot': '文殊菩萨灵签',
       chenggu: '称骨算命',
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',
@@ -349,6 +351,9 @@ export function useShare() {
       'wong-tai-sin-lot': summary
         ? t('share.hookWongTaiSinLot', { summary })
         : t('share.hookWongTaiSinLotDefault'),
+      'wenshu-lot': summary
+        ? t('share.hookWenshuLot', { summary })
+        : t('share.hookWenshuLotDefault'),
       chenggu: summary
         ? t('share.hookChenggu', { summary })
         : t('share.hookChengguDefault'),

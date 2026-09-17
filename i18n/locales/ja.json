@@ -399,7 +399,9 @@
     "aiFullReportTitle": "四柱推命 完全AI分析レポート"
   },
   "share": {
-    "textCopied": "コピーしました"
+    "textCopied": "コピーしました",
+    "hookWenshuLot": "文殊菩薩霊籤を引きました：{summary}。ぜひ見てください！",
+    "hookWenshuLotDefault": "文殊菩薩霊籤を引き、示唆ある結果を得ました。"
   },
   "seo": {
     "humanDesignTitle": "ヒューマンデザイン チャート｜無料計算とAI解釈",
@@ -436,7 +438,12 @@
     "yuelaoLotDesc": "月老霊籤を無料でオンライン抽選。100種の籤番号・吉凶・籤詩・出典を整理し、AIが相談内容に合わせて現代語訳と行動のヒントを出します。",
     "yuelaoLotKeywords": "月老霊籤,月老 占い,恋愛 籤,縁結び 占い,100籤,オンライン 占い,結婚 占い",
     "yuelaoLotOgTitle": "月老霊籤オンライン_100籤の恋愛解説",
-    "yuelaoLotOgDesc": "恋愛・復縁・結婚の相談に月老霊籤を引くと、籤詩・吉凶・AI解説を一度に表示します。"
+    "yuelaoLotOgDesc": "恋愛・復縁・結婚の相談に月老霊籤を引くと、籤詩・吉凶・AI解説を一度に表示します。",
+    "wenshuLotTitle": "文殊菩薩霊籤オンライン_100籤の学業解説",
+    "wenshuLotDesc": "文殊菩薩霊籤を無料でオンライン抽選。100種の籤詩・吉凶・聖意を整理し、AIが学業や仕事の相談に合わせた解説を表示します。",
+    "wenshuLotKeywords": "文殊菩薩霊籤,文殊菩薩 占い,学業 占い,100籤,オンライン 占い,知恵 占い",
+    "wenshuLotOgTitle": "文殊菩薩霊籤オンライン_100籤の学業解説",
+    "wenshuLotOgDesc": "文殊菩薩霊籤を引いて、籤詩・吉凶・聖意とAI解説を一度に確認できます。"
   },
   "thaiAstro": {
     "title": "タイ12ラーシー出生図",
@@ -928,5 +935,52 @@
     "seoTitle": "月老霊籤 第{n}籤_恋愛の意味",
     "seoDescription": "月老霊籤第{n}籤の意味を解説。籤詩・吉凶・出典と恋愛運のヒントを確認し、恋愛、復縁、結婚の相談に役立てます。",
     "seoKeywords": "月老霊籤 第{n}籤,月老霊籤 第{n}籤 意味,月老霊籤100籤,恋愛占い,縁結び占い"
+  },
+  "wenshuLot": {
+    "title": "文殊菩薩霊籤",
+    "toolDesc": "100種の文殊菩薩霊籤からオンライン抽選し、AIが知恵の視点で解説します。",
+    "subtitle": "学業・仕事・生活の相談を入力して、文殊菩薩百籤から一枚引きます。",
+    "disclaimer": "このツールは伝統的な文殊菩薩霊籤の文化に基づく参考結果です。娯楽・内省の目的に限り、判断や専門的な助言ではありません。",
+    "questionLabel": "相談内容",
+    "questionPlaceholder": "例：学習の進め方を調整すべきか知りたい",
+    "questionHint": "一問一答が明確です。具体的に書くほど解説が集中します。",
+    "toolCta": "文殊籤を引く",
+    "drawing": "抽選中……",
+    "interpreting": "解説を生成中……",
+    "reinterpret": "もう一度解説",
+    "copyResult": "結果をコピー",
+    "viewDetail": "この籤の詳細",
+    "redraw": "もう一度引く",
+    "questionRequired": "相談内容を入力してください",
+    "drawFailed": "抽選に失敗しました。少し待って再試行してください。",
+    "aiUnavailable": "AI解説は現在利用できません。後でもう一度お試しください。"
+  },
+  "wenshuPoster": {
+    "kicker": "文殊菩薩霊籤",
+    "serial": "知恵籤",
+    "numberLine": "文殊菩薩霊籤 第{number}籤",
+    "questionFlag": "相談",
+    "noQuestion": "相談未入力",
+    "poemFlag": "籤詩",
+    "meaningLabel": "聖意",
+    "meaningPending": "聖意未確認",
+    "guidanceLabel": "指引",
+    "guidancePending": "AI解説を生成中"
+  },
+  "wenshuLotDetail": {
+    "back": "文殊菩薩霊籤に戻る",
+    "title": "文殊菩薩霊籤 第{n}籤の意味",
+    "poem": "籤詩",
+    "sacredMeaning": "聖意",
+    "explanation": "解釈",
+    "advice": "行動の指針",
+    "navigation": "籤順ナビゲーション",
+    "previous": "前の籤",
+    "next": "次の籤",
+    "lotNo": "第{n}籤",
+    "draw": "オンラインで引く",
+    "seoTitle": "文殊菩薩霊籤 第{n}籤_籤詩と聖意の解説",
+    "seoDescription": "文殊菩薩霊籤第{n}籤「{title}」の解説。籤詩・聖意・解釈と行動の指針を確認し、オンラインで引き直せます。",
+    "seoKeywords": "文殊菩薩霊籤 第{n}籤,文殊菩薩霊籤 第{n}籤 意味,{title},文殊菩薩霊籤100籤,籤詩,聖意"
   }
 }

@@ -1,6 +1,7 @@
 import guanyinLotData from '../../../app/data/guanyin-lots-100.json'
 import guandiLotData from '../../../app/data/guandi-lots-100.json'
 import wongTaiSinLotData from '../../../app/data/wong-tai-sin-lots-100.json'
+import wenshuLotData from '../../../app/data/wenshu-lots-100.json'
 import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
@@ -14,6 +15,7 @@ export interface FortuneLot {
   explanation: Record<string, string>
   advice: Record<string, string>
   allusion?: Record<string, string>
+  sacredMeaning?: Record<string, string>
 }
 
 export interface DrawALotCalcResult {
@@ -31,6 +33,7 @@ export interface DrawALotCalcResult {
     explanation: string
     advice: string
     allusion?: string
+    sacredMeaning?: string
   }
 }
 
@@ -73,6 +76,7 @@ function makeFortune(
   advice: Record<string, string>,
   customLevel?: Record<string, string>,
   allusion?: Record<string, string>,
+  sacredMeaning?: Record<string, string>,
 ): FortuneLot {
   return {
     number,
@@ -83,6 +87,7 @@ function makeFortune(
     explanation,
     advice,
     allusion,
+    sacredMeaning,
   }
 }
 
@@ -160,6 +165,20 @@ const wongTaiSinFortunes: FortuneLot[] = wongTaiSinLotData.map(item => makeFortu
   item.allusion,
 ))
 
+// 文殊菩萨灵签：100 签事实层；网页长文解释未采用，指引为自写内容。
+
+const wenshuFortunes: FortuneLot[] = wenshuLotData.map(item => makeFortune(
+  item.id,
+  item.levelCode as FortuneLot['levelCode'],
+  item.title,
+  item.poem,
+  item.explanation,
+  item.advice,
+  undefined,
+  undefined,
+  item.sacredMeaning,
+))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -197,6 +216,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '黄大仙灵签', 'zh-TW': '黃大仙靈籤', en: 'Wong Tai Sin Oracle' },
     count: wongTaiSinFortunes.length,
     fortunes: wongTaiSinFortunes,
+  },
+  {
+    id: 'wenshu',
+    name: { 'zh-CN': '文殊菩萨灵签', 'zh-TW': '文殊菩薩靈籤', en: 'Manjushri Oracle' },
+    count: wenshuFortunes.length,
+    fortunes: wenshuFortunes,
   },
 ]
 
