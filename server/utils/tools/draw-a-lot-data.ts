@@ -2,6 +2,7 @@ import guanyinLotData from '../../../app/data/guanyin-lots-100.json'
 import guandiLotData from '../../../app/data/guandi-lots-100.json'
 import wongTaiSinLotData from '../../../app/data/wong-tai-sin-lots-100.json'
 import wenshuLotData from '../../../app/data/wenshu-lots-100.json'
+import dizangLotData from '../../../app/data/dizang-lots-60.json'
 import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
@@ -10,7 +11,7 @@ export interface FortuneLot {
   number: number
   title: Record<string, string>
   level: Record<string, string>
-  levelCode: 'upper' | 'upper-middle' | 'middle' | 'lower-middle' | 'lower'
+  levelCode: 'upper' | 'upper-middle' | 'middle' | 'lower-middle' | 'lower' | 'unranked'
   poem: Record<string, string>
   explanation: Record<string, string>
   advice: Record<string, string>
@@ -64,6 +65,10 @@ const LEVELS: Record<string, { label: Record<string, string>; code: FortuneLot['
   lower: {
     label: { 'zh-CN': '下签', 'zh-TW': '下簽', en: `Lower Fortune` },
     code: 'lower',
+  },
+  unranked: {
+    label: { 'zh-CN': '无固定吉凶', 'zh-TW': '無固定吉凶', en: `Unranked` },
+    code: 'unranked',
   },
 }
 
@@ -179,6 +184,20 @@ const wenshuFortunes: FortuneLot[] = wenshuLotData.map(item => makeFortune(
   item.sacredMeaning,
 ))
 
+// 地藏王菩萨灵签：60 签事实层；该体系不设统一吉凶等级，现代长文解释未搬运。
+
+const dizangFortunes: FortuneLot[] = dizangLotData.map(item => makeFortune(
+  item.id,
+  'unranked',
+  item.title,
+  item.poem,
+  item.explanation,
+  item.advice,
+  item.level,
+  undefined,
+  item.sacredMeaning,
+))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -222,6 +241,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '文殊菩萨灵签', 'zh-TW': '文殊菩薩靈籤', en: 'Manjushri Oracle' },
     count: wenshuFortunes.length,
     fortunes: wenshuFortunes,
+  },
+  {
+    id: 'dizang',
+    name: { 'zh-CN': '地藏王菩萨灵签', 'zh-TW': '地藏王菩薩靈籤', en: 'Dizang Oracle' },
+    count: dizangFortunes.length,
+    fortunes: dizangFortunes,
   },
 ]
 

@@ -8,42 +8,42 @@
     <div class="relative z-10 mx-auto max-w-2xl px-6 py-12">
       <div v-if="phase === 'form'">
         <header class="mb-8">
-          <p class="mb-2 block text-xs uppercase tracking-[0.2em] text-[var(--accent-muted)]">Manjushri Oracle</p>
+          <p class="mb-2 block text-xs uppercase tracking-[0.2em] text-[var(--accent-muted)]">Dizang Oracle</p>
           <h1 class="font-serif text-2xl font-bold tracking-tight text-[var(--text-primary)] md:text-3xl">
-            {{ $t('wenshuLot.title') }}
+            {{ $t('dizangLot.title') }}
           </h1>
-          <p class="mt-2 text-sm text-[var(--text-faint)]">{{ $t('wenshuLot.subtitle') }}</p>
+          <p class="mt-2 text-sm text-[var(--text-faint)]">{{ $t('dizangLot.subtitle') }}</p>
           <div class="mt-4 h-px w-12 bg-[var(--accent-border-hover)]" />
         </header>
 
         <div class="mb-5 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-3">
           <p class="text-center text-[11px] leading-relaxed text-[var(--text-faint)]">
-            {{ $t('wenshuLot.disclaimer') }}
+            {{ $t('dizangLot.disclaimer') }}
           </p>
         </div>
 
         <section class="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
           <div class="p-6">
             <div class="flex items-center justify-between gap-3">
-              <label class="text-xs font-medium text-[var(--text-muted)]" for="wenshu-question">
-                {{ $t('wenshuLot.questionLabel') }}
+              <label class="text-xs font-medium text-[var(--text-muted)]" for="dizang-question">
+                {{ $t('dizangLot.questionLabel') }}
               </label>
               <QuestionInspiration @select="value => question = value" />
             </div>
             <UTextarea
-              id="wenshu-question"
+              id="dizang-question"
               v-model="question"
               class="mt-2 w-full"
               :rows="3"
-              :placeholder="$t('wenshuLot.questionPlaceholder')"
+              :placeholder="$t('dizangLot.questionPlaceholder')"
               :ui="textareaUi"
             />
-            <p class="mt-2 text-[11px] text-[var(--text-faint)]">{{ $t('wenshuLot.questionHint') }}</p>
+            <p class="mt-2 text-[11px] text-[var(--text-faint)]">{{ $t('dizangLot.questionHint') }}</p>
             <UButton class="mt-6 w-full" color="warning" size="lg" block @click="draw">
               <template #leading>
-                <UIcon name="i-heroicons-academic-cap" class="h-5 w-5" />
+                <UIcon name="i-heroicons-globe-alt" class="h-5 w-5" />
               </template>
-              {{ $t('wenshuLot.toolCta') }}
+              {{ $t('dizangLot.toolCta') }}
             </UButton>
           </div>
         </section>
@@ -61,11 +61,11 @@
           </div>
           <div class="lot-shake absolute inset-0 rounded-b-3xl" />
         </div>
-        <p class="text-sm text-[var(--text-muted)]">{{ $t('wenshuLot.drawing') }}</p>
+        <p class="text-sm text-[var(--text-muted)]">{{ $t('dizangLot.drawing') }}</p>
       </div>
 
       <div v-else-if="result" class="pt-4">
-        <WenshuLotPoster :result="result" :ai-content="aiContent" />
+        <DizangLotPoster :result="result" :ai-content="aiContent" />
 
         <section v-if="aiSections.length" class="mt-5 space-y-3">
           <article
@@ -75,12 +75,12 @@
           >
             <h2 class="mb-2 text-sm font-semibold text-[var(--text-primary)]">{{ section.title }}</h2>
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div class="wsl-ai-content text-sm leading-7 text-[var(--text-body)]" v-html="renderMarkdown(section.content)" />
+            <div class="dzl-ai-content text-sm leading-7 text-[var(--text-body)]" v-html="renderMarkdown(section.content)" />
           </article>
         </section>
 
         <div class="mt-3 text-center">
-          <p v-if="aiStreaming" class="text-xs text-[var(--accent-muted)]">{{ $t('wenshuLot.interpreting') }}</p>
+          <p v-if="aiStreaming" class="text-xs text-[var(--accent-muted)]">{{ $t('dizangLot.interpreting') }}</p>
           <p v-else-if="aiError" class="text-xs text-red-400">{{ aiError }}</p>
           <UButton
             v-else-if="aiContent"
@@ -90,25 +90,25 @@
             variant="soft"
             @click="readLot"
           >
-            {{ $t('wenshuLot.reinterpret') }}
+            {{ $t('dizangLot.reinterpret') }}
           </UButton>
         </div>
 
         <nav class="mt-8 flex flex-wrap justify-center gap-3">
           <UButton color="warning" variant="soft" @click="copyResult">
-            {{ $t('wenshuLot.copyResult') }}
+            {{ $t('dizangLot.copyResult') }}
           </UButton>
           <AppShareButton
-            tool="wenshu-lot"
+            tool="dizang-lot"
             :disabled="aiStreaming"
-            :summary="`${result.lotType.name} 第${result.fortune.number}签 · ${result.fortune.level}`"
-            :filename="`wenshu-lot-${result.fortune.number}.png`"
+            :summary="`${result.lotType.name} 第${result.fortune.number}签 · ${result.fortune.title}`"
+            :filename="`dizang-lot-${result.fortune.number}.png`"
           />
-          <UButton color="warning" variant="soft" :to="localePath(`/tools/wenshu-lots/${result.fortune.number}`)">
-            {{ $t('wenshuLot.viewDetail') }}
+          <UButton color="warning" variant="soft" :to="localePath(`/tools/dizang-lots/${result.fortune.number}`)">
+            {{ $t('dizangLot.viewDetail') }}
           </UButton>
           <UButton color="neutral" variant="ghost" @click="reset">
-            {{ $t('wenshuLot.redraw') }}
+            {{ $t('dizangLot.redraw') }}
           </UButton>
         </nav>
       </div>
@@ -146,7 +146,7 @@ function renderMarkdown(text: string) {
 
 async function draw() {
   if (!question.value.trim()) {
-    toast.add({ title: t('wenshuLot.questionRequired'), color: 'error' })
+    toast.add({ title: t('dizangLot.questionRequired'), color: 'error' })
     return
   }
 
@@ -157,7 +157,7 @@ async function draw() {
 
   try {
     const [response] = await Promise.all([
-      $fetch<DrawALotCalcResult & { question: string }>('/api/tools/wenshu-lot/calc', {
+      $fetch<DrawALotCalcResult & { question: string }>('/api/tools/dizang-lot/calc', {
         method: 'POST',
         body: { question: question.value.trim(), locale: locale.value },
       }),
@@ -168,7 +168,7 @@ async function draw() {
     setTimeout(readLot, 200)
   } catch {
     phase.value = 'form'
-    toast.add({ title: t('wenshuLot.drawFailed'), color: 'error' })
+    toast.add({ title: t('dizangLot.drawFailed'), color: 'error' })
   }
 }
 
@@ -179,7 +179,7 @@ async function readLot() {
   aiStreaming.value = true
 
   try {
-    const response = await fetch('/api/tools/wenshu-lot/reading', {
+    const response = await fetch('/api/tools/dizang-lot/reading', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ result: result.value, locale: locale.value }),
@@ -204,7 +204,7 @@ async function readLot() {
       }
     }
   } catch {
-    aiError.value = t('wenshuLot.aiUnavailable')
+    aiError.value = t('dizangLot.aiUnavailable')
   } finally {
     aiStreaming.value = false
   }
@@ -217,9 +217,9 @@ async function copyResult() {
     `${result.value.lotType.name} · 第${fortune.number}签`,
     `${fortune.title} · ${fortune.level}`,
     fortune.poem,
-    `【解曰】\n${fortune.explanation}`,
-    `【圣意】\n${fortune.sacredMeaning}`,
-    `【行动指引】\n${fortune.advice}`,
+    `【签注】\n${fortune.sacredMeaning}`,
+    `【签象提示】\n${fortune.explanation}`,
+    `【行动提示】\n${fortune.advice}`,
     aiContent.value ? `【AI 解读】\n${aiContent.value}` : '',
   ].filter(Boolean).join('\n\n')
   await navigator.clipboard.writeText(text)
@@ -237,15 +237,15 @@ const textareaUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
 }
 
-const pageUrl = useLocalizedSeoUrl('/tools/wenshu-lot')
+const pageUrl = useLocalizedSeoUrl('/tools/dizang-lot')
 const siteName = 'ososn'
 
 useSeoMeta({
-  title: () => `${t('seo.wenshuLotTitle')} - ${siteName}`,
-  description: t('seo.wenshuLotDesc'),
-  keywords: t('seo.wenshuLotKeywords'),
-  ogTitle: () => `${t('seo.wenshuLotOgTitle')} - ${siteName}`,
-  ogDescription: t('seo.wenshuLotOgDesc'),
+  title: () => `${t('seo.dizangLotTitle')} - ${siteName}`,
+  description: t('seo.dizangLotDesc'),
+  keywords: t('seo.dizangLotKeywords'),
+  ogTitle: () => `${t('seo.dizangLotOgTitle')} - ${siteName}`,
+  ogDescription: t('seo.dizangLotOgDesc'),
   ogImage: 'https://www.ososn.com/og-image.png',
   ogType: 'website',
   ogUrl: pageUrl,
@@ -258,41 +258,12 @@ useHead(() => ({
     innerHTML: JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: `${t('seo.wenshuLotTitle')} - ${siteName}`,
+      name: `${t('seo.dizangLotTitle')} - ${siteName}`,
       url: pageUrl.value,
-      description: t('seo.wenshuLotDesc'),
-      mainEntity: {
-        '@type': 'SoftwareApplication',
-        name: t('wenshuLot.title'),
-        applicationCategory: 'LifestyleApplication',
-        operatingSystem: 'Any',
-        url: pageUrl.value,
-        description: t('seo.wenshuLotOgDesc'),
-        offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
-      },
+      description: t('seo.dizangLotDesc'),
+      inLanguage: locale.value,
+      isPartOf: { '@type': 'WebSite', name: 'LuckBuff', url: 'https://www.ososn.com' },
     }),
   }],
 }))
 </script>
-
-<style scoped>
-@keyframes lot-shake {
-  0%, 100% { transform: rotate(0deg); }
-  20% { transform: rotate(-8deg); }
-  40% { transform: rotate(7deg); }
-  60% { transform: rotate(-5deg); }
-  80% { transform: rotate(3deg); }
-}
-
-.lot-shake {
-  animation: lot-shake 1s ease-in-out;
-}
-
-.wsl-ai-content :deep(p) {
-  margin-bottom: 0.6em;
-}
-
-.wsl-ai-content :deep(p:last-child) {
-  margin-bottom: 0;
-}
-</style>

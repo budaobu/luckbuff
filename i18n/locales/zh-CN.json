@@ -1445,7 +1445,12 @@
     "wenshuLotDesc": "免费在线抽取文殊菩萨灵签，完整整理100签签诗、吉凶、解曰与圣意，AI结合学业、事业、财运或家运问题生成解签指引，仅供文化娱乐。",
     "wenshuLotKeywords": "文殊菩萨灵签,文殊菩萨灵签在线抽签,文殊菩萨灵签解签,文殊菩萨灵签100签,文殊菩萨求签,学业灵签,智慧签,在线抽签解签,ososn",
     "wenshuLotOgTitle": "文殊菩萨灵签在线抽签_100签解签与学业指引",
-    "wenshuLotOgDesc": "在线抽取文殊菩萨灵签，查看100签签诗、吉凶、圣意，并获取AI问事指引。"
+    "wenshuLotOgDesc": "在线抽取文殊菩萨灵签，查看100签签诗、吉凶、圣意，并获取AI问事指引。",
+    "dizangLotTitle": "地藏王菩萨灵签在线抽签_60签解签与签诗详解",
+    "dizangLotDesc": "免费在线抽取地藏王菩萨灵签，完整整理60签干支、签诗、签注与签象提示，AI结合婚姻、事业、财运或健康问题生成解签指引，仅供文化娱乐。",
+    "dizangLotKeywords": "地藏王菩萨灵签,地藏菩萨灵签,地藏王菩萨灵签在线抽签,地藏王菩萨灵签解签,地藏王菩萨灵签60签,地藏王灵签,地藏菩萨求签,签诗详解,ososn",
+    "dizangLotOgTitle": "地藏王菩萨灵签在线抽签_60签解签与签诗详解",
+    "dizangLotOgDesc": "在线抽取地藏王菩萨灵签，查看60签干支、签诗、签注与签象提示，并获取AI问事指引。"
   },
   "bazi": {
     "title": "四柱八字",
@@ -13018,5 +13023,52 @@
     "seoTitle": "文殊菩萨灵签第{n}签解签_签诗与圣意详解",
     "seoDescription": "文殊菩萨灵签第{n}签「{title}」详解：{meaning} 页面整理签诗、圣意、解曰与行动指引，并可继续在线求签。",
     "seoKeywords": "文殊菩萨灵签第{n}签,文殊菩萨灵签第{n}签解签,文殊菩萨灵签第{n}签详解,文殊菩萨灵签100签,{title},签诗,圣意"
+  },
+  "dizangLot": {
+    "title": "地藏王菩萨灵签",
+    "toolDesc": "在线抽取地藏王菩萨灵签，覆盖60签干支、签诗、签注与AI解读。",
+    "subtitle": "写下所问之事，从地藏王菩萨六十签中求一支签。",
+    "disclaimer": "本工具基于传统地藏王菩萨灵签文化生成参考结果，仅供文化娱乐与心灵参考，不构成任何决策、占卜或专业建议。请理性看待，重大决策请结合现实情况独立判断。",
+    "questionLabel": "所问之事",
+    "questionPlaceholder": "如：想了解当前事业是否适合推进",
+    "questionHint": "一事一问，问题越明确，解读越聚焦",
+    "toolCta": "求地藏签",
+    "drawing": "摇签中……",
+    "interpreting": "解签中……",
+    "reinterpret": "重新解签",
+    "copyResult": "复制结果",
+    "viewDetail": "查看本签详解",
+    "redraw": "再求一签",
+    "questionRequired": "请先填写所问之事",
+    "drawFailed": "求签失败，请稍后再试",
+    "aiUnavailable": "AI 解读暂不可用，请稍后再试。"
+  },
+  "dizangPoster": {
+    "kicker": "地藏王菩萨灵签",
+    "serial": "大愿签",
+    "numberLine": "地藏王菩萨灵签 第{number}签",
+    "questionFlag": "所问",
+    "noQuestion": "未填写所问之事",
+    "poemFlag": "签诗",
+    "meaningLabel": "签注",
+    "meaningPending": "此签签注待考",
+    "guidanceLabel": "问事指引",
+    "guidancePending": "AI 解读生成中"
+  },
+  "dizangLotDetail": {
+    "back": "返回地藏王菩萨灵签",
+    "title": "地藏王菩萨灵签第{n}签详解",
+    "poem": "签诗",
+    "sacredMeaning": "签注",
+    "signHint": "签象提示",
+    "advice": "行动提示",
+    "navigation": "地藏王菩萨灵签导航",
+    "previous": "上一签",
+    "next": "下一签",
+    "lotNo": "第{n}签",
+    "draw": "在线求一签",
+    "seoTitle": "地藏王菩萨灵签第{n}签解签_签诗与签注详解",
+    "seoDescription": "地藏王菩萨灵签第{n}签「{title}」详解：{meaning} 页面整理签诗、签注、签象提示与行动提示，并可继续在线求签。",
+    "seoKeywords": "地藏王菩萨灵签第{n}签,地藏王菩萨灵签第{n}签解签,地藏王菩萨灵签第{n}签详解,地藏王菩萨灵签60签,{title},签诗,签注"
   }
 }

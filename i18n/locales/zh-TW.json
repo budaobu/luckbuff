@@ -1445,7 +1445,12 @@
     "wenshuLotDesc": "免費線上抽取文殊菩薩靈籤，完整整理100籤籤詩、吉凶、解曰與聖意，AI結合學業、事業、財運或家運問題生成解籤指引，僅供文化娛樂。",
     "wenshuLotKeywords": "文殊菩薩靈籤,文殊菩薩靈籤線上抽籤,文殊菩薩靈籤解籤,文殊菩薩靈籤100籤,文殊菩薩求籤,學業靈籤,智慧籤,線上抽籤解籤,ososn",
     "wenshuLotOgTitle": "文殊菩薩靈籤線上抽籤_100籤解籤與學業指引",
-    "wenshuLotOgDesc": "線上抽取文殊菩薩靈籤，查看100籤籤詩、吉凶、聖意，並取得AI問事指引。"
+    "wenshuLotOgDesc": "線上抽取文殊菩薩靈籤，查看100籤籤詩、吉凶、聖意，並取得AI問事指引。",
+    "dizangLotTitle": "地藏王菩薩靈籤線上抽籤_60籤解籤與籤詩詳解",
+    "dizangLotDesc": "免費線上抽取地藏王菩薩靈籤，完整整理60籤干支、籤詩、籤註與籤象提示，AI結合婚姻、事業、財運或健康問題生成解籤指引，僅供文化娛樂。",
+    "dizangLotKeywords": "地藏王菩薩靈籤,地藏菩薩靈籤,地藏王菩薩靈籤線上抽籤,地藏王菩薩靈籤解籤,地藏王菩薩靈籤60籤,地藏王靈籤,地藏菩薩求籤,籤詩詳解,ososn",
+    "dizangLotOgTitle": "地藏王菩薩靈籤線上抽籤_60籤解籤與籤詩詳解",
+    "dizangLotOgDesc": "線上抽取地藏王菩薩靈籤，查看60籤干支、籤詩、籤註與籤象提示，並取得AI問事指引。"
   },
   "zhouyi": {
     "title": "梅花易數",
@@ -13017,5 +13022,52 @@
     "seoTitle": "文殊菩薩靈籤第{n}籤解籤_籤詩與聖意詳解",
     "seoDescription": "文殊菩薩靈籤第{n}籤「{title}」詳解：{meaning} 頁面整理籤詩、聖意、解曰與行動指引，並可繼續線上求籤。",
     "seoKeywords": "文殊菩薩靈籤第{n}籤,文殊菩薩靈籤第{n}籤解籤,文殊菩薩靈籤第{n}籤詳解,文殊菩薩靈籤100籤,{title},籤詩,聖意"
+  },
+  "dizangLot": {
+    "title": "地藏王菩薩靈籤",
+    "toolDesc": "線上抽取地藏王菩薩靈籤，覆蓋60籤干支、籤詩、籤註與AI解讀。",
+    "subtitle": "寫下所問之事，從地藏王菩薩六十籤中求一支籤。",
+    "disclaimer": "本工具基於傳統地藏王菩薩靈籤文化生成參考結果，僅供文化娛樂與心靈參考，不構成任何決策、占卜或專業建議。請理性看待，重大決策請結合現實情況獨立判斷。",
+    "questionLabel": "所問之事",
+    "questionPlaceholder": "如：想了解目前事業是否適合推進",
+    "questionHint": "一事一問，問題越明確，解讀越聚焦",
+    "toolCta": "求地藏籤",
+    "drawing": "搖籤中……",
+    "interpreting": "解籤中……",
+    "reinterpret": "重新解籤",
+    "copyResult": "複製結果",
+    "viewDetail": "查看本籤詳解",
+    "redraw": "再求一籤",
+    "questionRequired": "請先填寫所問之事",
+    "drawFailed": "求籤失敗，請稍後再試",
+    "aiUnavailable": "AI 解讀暫不可用，請稍後再試。"
+  },
+  "dizangPoster": {
+    "kicker": "地藏王菩薩靈籤",
+    "serial": "大願籤",
+    "numberLine": "地藏王菩薩靈籤 第{number}籤",
+    "questionFlag": "所問",
+    "noQuestion": "未填寫所問之事",
+    "poemFlag": "籤詩",
+    "meaningLabel": "籤註",
+    "meaningPending": "此籤籤註待考",
+    "guidanceLabel": "問事指引",
+    "guidancePending": "AI 解讀生成中"
+  },
+  "dizangLotDetail": {
+    "back": "返回地藏王菩薩靈籤",
+    "title": "地藏王菩薩靈籤第{n}籤詳解",
+    "poem": "籤詩",
+    "sacredMeaning": "籤註",
+    "signHint": "籤象提示",
+    "advice": "行動提示",
+    "navigation": "地藏王菩薩靈籤導覽",
+    "previous": "上一籤",
+    "next": "下一籤",
+    "lotNo": "第{n}籤",
+    "draw": "線上求一籤",
+    "seoTitle": "地藏王菩薩靈籤第{n}籤解籤_籤詩與籤註詳解",
+    "seoDescription": "地藏王菩薩靈籤第{n}籤「{title}」詳解：{meaning} 頁面整理籤詩、籤註、籤象提示與行動提示，並可繼續線上求籤。",
+    "seoKeywords": "地藏王菩薩靈籤第{n}籤,地藏王菩薩靈籤第{n}籤解籤,地藏王菩薩靈籤第{n}籤詳解,地藏王菩薩靈籤60籤,{title},籤詩,籤註"
   }
 }
