@@ -14,6 +14,7 @@
         </div>
 
         <AppShareButton
+          class="today-share"
           tool="jinri-huangli"
           :summary="shareSummary"
           filename="jinri-huangli-tear-calendar.png"
@@ -34,17 +35,17 @@
 
         <div
           v-if="initialLoading || advancing"
-          class="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2 rounded-full border border-white/15 bg-black/45 px-4 py-2 text-xs text-white/70"
+          class="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2 rounded-full border border-[#ffeecb]/24 bg-[#6d0810]/46 px-4 py-2 text-xs text-[#ffeecb] shadow-lg backdrop-blur-sm"
         >
           {{ initialLoading ? t('todayAlmanac.loading') : t('todayAlmanac.turning') }}
         </div>
 
         <div
           v-if="error"
-          class="absolute inset-0 flex items-center justify-center bg-[#171110]/82 px-6 text-center"
+            class="absolute inset-0 flex items-center justify-center rounded-[28px] bg-[#8f101a]/88 px-6 text-center"
         >
           <div>
-            <p class="text-sm text-white/80">{{ error }}</p>
+            <p class="text-sm text-[#ffeec9]">{{ error }}</p>
             <UButton
               class="mt-4"
               color="warning"
@@ -60,10 +61,10 @@
 
       <div class="mx-auto max-w-6xl px-5 pb-8 md:px-8">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <p class="text-xs text-white/50">
+          <p class="text-xs text-[#ffeec9]/72">
             {{ currentDay ? `${t('todayAlmanac.timezone')} · ${currentDay.timezone}` : '' }}
           </p>
-          <p class="text-xs text-white/45">
+          <p class="text-xs text-[#ffeec9]/68">
             {{ t('todayAlmanac.flipHint') }}
           </p>
         </div>
@@ -101,7 +102,7 @@
             </div>
           </div>
 
-          <dl class="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <dl class="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5">
             <div
               v-for="item in summaryItems"
               :key="item.label"
@@ -111,6 +112,40 @@
               <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">{{ item.value }}</dd>
             </div>
           </dl>
+
+          <div class="mt-6 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5">
+            <p class="text-xs text-[var(--text-faint)]">
+              {{ currentDay.dailyVerse.source }}
+            </p>
+            <p class="mt-2 font-serif text-base leading-8 text-[var(--text-body)]">
+              {{ currentDay.dailyVerse.text }}
+            </p>
+          </div>
+
+          <dl class="mt-6 grid gap-3 md:grid-cols-3">
+            <div
+              v-for="item in keyFields"
+              :key="item.label"
+              class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-4"
+            >
+              <dt class="text-xs text-[var(--text-faint)]">{{ item.label }}</dt>
+              <dd>
+                <p class="mt-1 text-sm font-medium leading-6 text-[var(--text-primary)] whitespace-pre-line">{{ item.value }}</p>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-3">
+          <div
+            v-for="item in fortuneItems"
+            :key="item.label"
+            class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] p-5"
+          >
+            <p class="text-xs text-[var(--text-faint)]">{{ item.label }}</p>
+            <p class="mt-2 text-lg font-semibold text-[var(--text-primary)]">{{ item.value }}</p>
+            <p class="mt-2 text-xs leading-5 text-[var(--text-muted)]">{{ item.hint }}</p>
+          </div>
         </div>
 
         <div class="grid gap-5 md:grid-cols-2">
@@ -312,7 +347,7 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 const siteName = 'ososn'
-const sceneRef = ref<{ startTear: () => boolean } | null>(null)
+const sceneRef = ref<{ startFlip: (side: 'left' | 'right') => boolean } | null>(null)
 const reportRoot = ref<HTMLElement | null>(null)
 const currentDay = ref<TodayAlmanac | null>(null)
 const nextDay = ref<TodayAlmanac | null>(null)
@@ -383,10 +418,54 @@ const summaryItems = computed(() => {
   const day = currentDay.value
   if (!day) return []
   return [
-    { label: t('todayAlmanac.dayGanZhi'), value: day.lunar.dayGanZhi },
+    { label: t('todayAlmanac.yearGanZhi'), value: day.lunar.yearGanZhi },
     { label: t('todayAlmanac.monthGanZhi'), value: day.lunar.monthGanZhi },
+    { label: t('todayAlmanac.dayGanZhi'), value: day.lunar.dayGanZhi },
     { label: t('todayAlmanac.jianChu'), value: day.jianChu },
     { label: t('todayAlmanac.chongSha'), value: `${day.chongDesc} ${day.sha}` },
+  ]
+})
+
+const keyFields = computed(() => {
+  const day = currentDay.value
+  if (!day) return []
+  return [
+    {
+      label: t('todayAlmanac.dayLu'),
+      value: day.dayLu || '—',
+    },
+    {
+      label: t('todayAlmanac.taiShen'),
+      value: day.taiShen || '—',
+    },
+    {
+      label: t('todayAlmanac.nobleHours'),
+      value: day.nobleHours
+        .map(hour => `${hour.label} ${hour.startTime}–${hour.endTime} · ${hour.ganZhi}`)
+        .join('\n') || '—',
+    },
+  ]
+})
+
+const fortuneItems = computed(() => {
+  const day = currentDay.value
+  if (!day) return []
+  return [
+    {
+      label: t('todayAlmanac.chongZodiac'),
+      value: day.chongShengXiao || '—',
+      hint: day.chongDesc,
+    },
+    {
+      label: t('todayAlmanac.luckyZodiacs'),
+      value: day.luckyZodiacs.map(item => `${item.zodiac}（${item.relation}）`).join('、') || '—',
+      hint: t('todayAlmanac.luckyZodiacRule'),
+    },
+    {
+      label: t('todayAlmanac.luckyNumbers'),
+      value: day.luckyNumbers.join(' · ') || '—',
+      hint: t('todayAlmanac.luckyNumberRule'),
+    },
   ]
 })
 
@@ -524,6 +603,14 @@ function compactAlmanacContext(day: TodayAlmanac) {
     `农历：${day.lunar.yearInChinese}年 ${day.lunar.monthInChinese}月${day.lunar.dayInChinese}`,
     `干支：${day.lunar.yearGanZhi}年 ${day.lunar.monthGanZhi}月 ${day.lunar.dayGanZhi}日；纳音 ${day.lunar.dayNaYin}`,
     `建除：${day.jianChu}；十二天神：${day.tianShen} ${day.tianShenLuck}（${day.tianShenType}）`,
+    `年柱：${day.lunar.yearGanZhi}；月柱：${day.lunar.monthGanZhi}；日柱：${day.lunar.dayGanZhi}`,
+    `日禄：${day.dayLu}`,
+    `每日胎神：${day.taiShen}`,
+    `贵人时：${day.nobleHours.map(hour => `${hour.label} ${hour.startTime}-${hour.endTime} ${hour.ganZhi}`).join('；') || '无'}`,
+    `今日冲生肖：${day.chongShengXiao}`,
+    `幸运生肖：${day.luckyZodiacs.map(item => `${item.zodiac}（${item.relation}）`).join('、')}`,
+    `今日吉数：${day.luckyNumbers.join('、')}`,
+    `${day.dailyVerse.source}：${day.dailyVerse.text}`,
     `宜：${day.yi.join('、')}`,
     `忌：${day.ji.join('、')}`,
     `吉神：${day.jiShen.join('、')}；凶煞：${day.xiongSha.join('、')}`,
@@ -569,7 +656,7 @@ async function loadCurrent() {
 
 function onAdvance() {
   if (advancing.value || !currentDay.value || !nextDay.value) return
-  if (sceneRef.value?.startTear()) advancing.value = true
+  if (sceneRef.value?.startFlip('right')) advancing.value = true
 }
 
 async function onSettled() {
@@ -774,11 +861,12 @@ useHead(() => ({
 .today-stage {
   position: relative;
   overflow: hidden;
-  color: #fffdf4;
+  color: #fff8ec;
   background:
-    radial-gradient(52rem 24rem at 10% -10%, rgba(255, 221, 168, 0.10), transparent 62%),
-    radial-gradient(40rem 22rem at 88% 4%, rgba(139, 43, 37, 0.16), transparent 66%),
-    linear-gradient(155deg, #2b1c14 0%, #191110 48%, #100b09 100%);
+    radial-gradient(70rem 34rem at 50% 0%, rgba(255, 141, 126, 0.30), transparent 62%),
+    radial-gradient(44rem 28rem at 12% 78%, rgba(84, 5, 13, 0.78), transparent 68%),
+    radial-gradient(52rem 32rem at 92% 70%, rgba(65, 4, 11, 0.66), transparent 70%),
+    linear-gradient(145deg, #cd1c26 0%, #9b111b 54%, #63080f 100%);
 }
 
 .today-stage-veil {
@@ -786,10 +874,12 @@ useHead(() => ({
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(255, 253, 244, 0.035) 1px, transparent 1px),
-    radial-gradient(46rem 20rem at 50% 118%, rgba(207, 164, 83, 0.11), transparent 64%);
-  background-size: 72px 100%, auto;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.72), transparent 72%);
+    repeating-linear-gradient(115deg, rgba(255, 226, 214, 0.05) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(28deg, rgba(55, 2, 7, 0.05) 0 1px, transparent 1px 7px),
+    radial-gradient(52rem 22rem at 50% 112%, rgba(46, 2, 6, 0.48), transparent 68%),
+    linear-gradient(180deg, rgba(255, 236, 226, 0.10), rgba(97, 7, 13, 0.12) 58%, rgba(35, 1, 4, 0.62));
+  background-size: auto, auto, auto, auto;
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.82) 72%, #000);
 }
 
 .today-stage-head {
@@ -801,11 +891,11 @@ useHead(() => ({
   gap: 20px;
   max-width: 72rem;
   margin: 0 auto;
-  padding: 36px 20px 18px;
+  padding: 38px 20px 20px;
 }
 
 .today-stage-eyebrow {
-  color: #e6b978;
+  color: #ffd894;
   font-size: 12px;
   font-weight: 650;
   letter-spacing: 0.24em;
@@ -818,12 +908,14 @@ useHead(() => ({
   font-weight: 700;
   line-height: 1.08;
   letter-spacing: 0;
+  color: #fff8ec;
+  text-shadow: 0 2px 14px rgba(52, 3, 7, 0.42);
 }
 
 .today-stage-subtitle {
   max-width: 38em;
   margin: 10px 0 0;
-  color: rgba(255, 253, 244, 0.64);
+  color: rgba(255, 244, 224, 0.74);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -831,6 +923,18 @@ useHead(() => ({
 .today-stage-head > :last-child {
   flex-shrink: 0;
   padding-top: 6px;
+}
+
+.today-stage :deep(.today-share button) {
+  border-color: rgba(255, 231, 193, 0.42);
+  background: rgba(94, 8, 15, 0.42);
+  color: #ffeec9 !important;
+  box-shadow: 0 8px 24px rgba(53, 2, 7, 0.28);
+}
+
+.today-stage :deep(.today-share button:hover) {
+  border-color: rgba(255, 231, 193, 0.72);
+  background: rgba(122, 10, 19, 0.56);
 }
 
 [data-ta-ai-target] {
