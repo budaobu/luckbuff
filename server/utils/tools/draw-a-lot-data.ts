@@ -7,6 +7,7 @@ import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
 import tudigongLotData from '../../../app/data/tudigong-lots-32.json'
+import baoshengLotData from '../../../app/data/baosheng-lots-60.json'
 
 export interface FortuneLot {
   number: number
@@ -18,6 +19,10 @@ export interface FortuneLot {
   advice: Record<string, string>
   allusion?: Record<string, string>
   sacredMeaning?: Record<string, string>
+  categoryJudgments?: Array<{
+    label: Record<string, string>
+    value: Record<string, string>
+  }>
 }
 
 export interface DrawALotCalcResult {
@@ -36,6 +41,7 @@ export interface DrawALotCalcResult {
     advice: string
     allusion?: string
     sacredMeaning?: string
+    categoryJudgments?: Array<{ label: string; value: string }>
   }
 }
 
@@ -215,6 +221,21 @@ const tudigongFortunes: FortuneLot[] = tudigongLotData.map(item => makeFortune(
   item.sacredMeaning,
 ))
 
+// 保生大帝灵签：台北保安宫/树林济安宫通行六十签事实层，含传统分项断语。
+
+const baoshengFortunes: FortuneLot[] = baoshengLotData.map(item => ({
+  ...makeFortune(
+    item.number,
+    'unranked',
+    item.title,
+    item.poem,
+    item.explanation,
+    item.advice,
+    item.level,
+  ),
+  categoryJudgments: item.categoryJudgments,
+}))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -270,6 +291,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '土地公灵签', 'zh-TW': '土地公靈籤', en: `Tudigong Oracle` },
     count: tudigongFortunes.length,
     fortunes: tudigongFortunes,
+  },
+  {
+    id: 'baoshengdadi',
+    name: { 'zh-CN': '保生大帝灵签', 'zh-TW': '保生大帝靈籤', en: 'Baosheng Dadi Oracle' },
+    count: baoshengFortunes.length,
+    fortunes: baoshengFortunes,
   },
 ]
 
