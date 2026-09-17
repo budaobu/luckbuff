@@ -956,6 +956,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/dizang-lot',
       },
       {
+        icon: 'i-heroicons-home',
+        titleKey: 'tudigongLot.title',
+        descKey: 'tudigongLot.toolDesc',
+        ctaKey: 'tudigongLot.toolCta',
+        path: '/tools/tudigong-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',

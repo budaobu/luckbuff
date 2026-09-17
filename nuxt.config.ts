@@ -166,6 +166,7 @@ export default defineNuxtConfig({
       '/api/__sitemap__/yuelao-lot-urls',
       '/api/__sitemap__/wenshu-lot-urls',
       '/api/__sitemap__/dizang-lot-urls',
+      '/api/__sitemap__/tudigong-lot-urls',
     ],
   },
 

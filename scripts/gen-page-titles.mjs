@@ -111,7 +111,16 @@ const dizangTitleTemplate = lookup('dizangLotDetail.title')
 for (const lot of dizangLots) {
   const slug = `dizang-lot-${lot.id}`
   tools[slug] ??= dizangTitleTemplate?.replace('{n}', String(lot.id)) || slug
-  toolPathAliases[slug] = `/tools/dizang-lots/${lot.id}`
+toolPathAliases[slug] = `/tools/dizang-lots/${lot.id}`
+}
+
+// 土地公灵签详情页：继续沿用 plural 动态路由规则。
+const tudigongLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'tudigong-lots-32.json'), 'utf-8'))
+const tudigongTitleTemplate = lookup('tudigongLotDetail.title')
+for (const lot of tudigongLots) {
+  const slug = `tudigong-lot-${lot.id}`
+  tools[slug] ??= tudigongTitleTemplate?.replace('{n}', String(lot.id)) || slug
+  toolPathAliases[slug] = `/tools/tudigong-lots/${lot.id}`
 }
 
 // ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
