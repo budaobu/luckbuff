@@ -1,5 +1,3 @@
-import type { LuopanProfileId, LuopanRingId } from '~/types/fengshui-luopan'
-
 export interface LuopanMountain {
   label: string
   kind: 'stem' | 'branch' | 'trigram'
@@ -73,9 +71,3 @@ export const TWENTY_FOUR_MOUNTAINS: LuopanMountain[] = [
 export const DIRECTIONAL_HEAVENLY_STEMS = TWENTY_FOUR_MOUNTAINS
   .map((mountain, index) => ({ ...mountain, degree: index * 15 }))
   .filter((mountain): mountain is LuopanMountain & { degree: number } => mountain.kind === 'stem')
-
-export const LUOPAN_PROFILES: Record<LuopanProfileId, LuopanRingId[]> = {
-  complete: ['trigrams', 'mountains', 'stems', 'branches', 'elements'],
-  reading: ['mountains', 'stems', 'branches', 'elements'],
-  compact: ['trigrams', 'mountains'],
-}

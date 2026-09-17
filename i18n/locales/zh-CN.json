@@ -775,11 +775,11 @@
     "natalAstroKeywords": "西洋占星本命盘,本命盘查询,本命盘怎么看,本命盘圆盘,星盘配置,西洋占星盘,本命盘上升,星盘排盘,十二宫相位",
     "natalAstroOgTitle": "西洋占星本命盘_本命盘查询与星盘配置_在线排盘",
     "natalAstroOgDesc": "免费生成西洋占星本命盘，看清十大行星、凯龙星、小行星、四轴、十二宫、相位、格局与星盘配置。",
-    "fengshuiLuopanTitle": "电子风水罗盘_手机3D罗盘方位排盘",
-    "fengshuiLuopanDesc": "用手机磁力计、陀螺仪与加速度计驱动的电子风水罗盘，实时查看方位角、二十四山、八卦、天干、地支与五行。",
-    "fengshuiLuopanKeywords": "电子风水罗盘,风水罗盘,3D罗盘,二十四山,八卦方位,手机罗盘,磁北方位",
+    "fengshuiLuopanTitle": "电子风水罗盘_完整盘层在线罗盘",
+    "fengshuiLuopanDesc": "在线电子风水罗盘，桌面可手动运行，手机可用传感器实时查看方位角、二十四山、八卦、天干、地支与五行。",
+    "fengshuiLuopanKeywords": "电子风水罗盘,风水罗盘,在线罗盘,二十四山,八卦方位,手机罗盘,磁北方位",
     "fengshuiLuopanOgTitle": "电子风水罗盘 | ososn",
-    "fengshuiLuopanOgDesc": "手机实时方向感知与传统风水罗盘盘层结合，查看二十四山与八卦对应。",
+    "fengshuiLuopanOgDesc": "完整传统罗盘盘层支持桌面手动操作与手机实时方向感知。",
     "mangpaiBaziTitle": "盲派八字排盘_十二神煞流年直断",
     "mangpaiBaziDesc": "盲派八字工具复用四柱大运排盘，新增十二神煞流年环，以取象、做功、宾主体用与应期解读六亲、事业、财运、婚姻与健康倾向；娱乐参考。",
     "mangpaiBaziKeywords": "盲派八字,盲派八字排盘,十二神煞,四柱八字,流年应期,六亲精断",
@@ -1979,11 +1979,12 @@
   },
   "fengshuiLuopan": {
     "title": "电子风水罗盘",
-    "subtitle": "用手机传感器驱动实体感 3D 罗盘，实时对应二十四山、八卦、干支与五行",
+    "subtitle": "用完整盘层复刻实体风水罗盘，实时对应二十四山、八卦、干支与五行",
     "action": {
       "start": "允许设备方向并开始",
       "retry": "重新尝试",
-      "recalibrate": "重新校准"
+      "recalibrate": "重新校准",
+      "manual": "切换手动模式"
     },
     "status": {
       "detecting": "正在检测设备能力",
@@ -1999,7 +2000,9 @@
       "initializingMessage": "传感器信号已可用，正在展开风水盘层并稳定指针。",
       "active": "罗盘已激活",
       "sensorError": "无法获取设备方向",
-      "sensorErrorMessage": "未收到可靠的绝对方向数据。请确认在真实移动设备上使用，并重新校准。"
+      "sensorErrorMessage": "未收到可靠的绝对方向数据。请确认在真实移动设备上使用，并重新校准。",
+      "manual": "手动罗盘",
+      "manualMessage": "拖动盘面或使用左右方向键设定方位。手动模式精度较低，手机传感器可提供磁北读数。"
     },
     "calibration": {
       "level": "保持手机水平",
@@ -2010,22 +2013,22 @@
       "stabilizeHint": "盘面正在稳定。请继续持稳手机，避免快速晃动。"
     },
     "desktop": {
-      "title": "请使用手机打开",
-      "lead": "电子风水罗盘需要调用手机内置传感器，桌面设备无法提供完整的方向感知能力。",
-      "explain": "电子风水罗盘并不是普通的网页指南针。它需要实时读取设备传感器数据，判断手机当前朝向，并将方向映射到二十四山、八卦等风水盘层。",
-      "magnetometer": "磁力计",
-      "magnetometerDesc": "感知地磁场方向，是判断磁北方向的核心传感器。",
-      "gyroscope": "陀螺仪",
-      "gyroscopeDesc": "感知设备旋转和角速度，让罗盘更平滑地跟随手机转动。",
-      "accelerometer": "加速度计",
-      "accelerometerDesc": "感知设备姿态和重力方向，帮助判断手机是否保持水平。",
-      "limit": "当前桌面浏览器环境无法可靠提供本工具所需要的完整传感器能力。",
+      "title": "桌面手动模式",
+      "lead": "桌面罗盘可以直接运行；没有磁力计时，由你手动设定当前朝向。",
+      "explain": "盘层、刻度和方位映射与完整罗盘一致。手动模式不会读取磁北，适合查看盘面结构和近似指向。",
+      "drag": "鼠标拖拽",
+      "dragDesc": "按住盘面左右拖动，即可旋转完整罗盘并更新方位读数。",
+      "keyboard": "键盘控制",
+      "keyboardDesc": "选中盘面后，用左右方向键微调，按住 Shift 可大步旋转。",
+      "sensor": "手机传感器",
+      "sensorDesc": "扫码在手机上打开，可使用磁力计获得实时磁北方位。",
       "scan": "使用手机扫码继续",
       "scanHint": "请使用手机 Safari / Chrome 等支持设备方向传感器的浏览器打开。"
     },
     "reading": {
       "heading": "当前磁北方位",
       "sensorNote": "手机传感器精度有限，读数为近似值",
+      "manualNote": "手动设定的近似方位，不代表设备当前磁北",
       "mountain": "二十四山",
       "trigram": "八卦",
       "element": "五行",

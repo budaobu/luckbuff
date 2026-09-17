@@ -1,5 +1,6 @@
 <template>
   <div class="flp-page">
+    <FengshuiLuopanBackground />
     <div class="flp-container">
       <header class="flp-header">
         <div>
@@ -15,18 +16,19 @@
 
       <ClientOnly>
         <main class="flp-workspace">
-          <section class="flp-stage" aria-live="polite">
+          <section class="flp-hero" aria-live="polite">
             <div class="flp-scene">
-              <FengshuiLuopanScene
+              <FengshuiLuopanDial
                 ref="sceneRef"
-                :variant="status === 'unsupported' ? 'showcase' : 'live'"
+                :interactive="status === 'manual'"
                 :status="status"
-                :visible-rings="visibleRings"
+                :visible-layers="visibleLayers"
+                @heading-change="handleManualHeading"
               />
             </div>
 
             <div
-              v-if="status !== 'unsupported' && status !== 'active'"
+              v-if="!['unsupported', 'manual', 'active'].includes(status)"
               class="flp-overlay"
               :class="`is-${status}`"
             >
@@ -61,6 +63,19 @@
                   {{ $t('fengshuiLuopan.action.retry') }}
                 </UButton>
 
+                <UButton
+                  v-if="status === 'sensor-error' || status === 'permission-denied'"
+                  color="neutral"
+                  variant="ghost"
+                  block
+                  @click="useManualMode"
+                >
+                  <template #leading>
+                    <UIcon name="i-heroicons-computer-desktop" />
+                  </template>
+                  {{ $t('fengshuiLuopan.action.manual') }}
+                </UButton>
+
                 <div v-if="status === 'calibrating'" class="flp-calibration">
                   <div class="flp-progress">
                     <span :style="{ width: `${Math.round(calibration.coverage * 100)}%` }" />
@@ -75,37 +90,52 @@
             </div>
           </section>
 
-          <aside v-if="status === 'unsupported'" class="flp-guide">
+          <aside v-if="status === 'manual'" class="flp-guide">
             <div class="flp-guide-main">
               <h2>{{ $t('fengshuiLuopan.desktop.title') }}</h2>
               <p class="flp-lead">{{ $t('fengshuiLuopan.desktop.lead') }}</p>
               <p>{{ $t('fengshuiLuopan.desktop.explain') }}</p>
 
+              <div class="flp-manual-reading">
+                <small>{{ $t('fengshuiLuopan.reading.heading') }}</small>
+                <strong>{{ Math.round(activeHeading ?? 0) }}°</strong>
+                <input
+                  class="flp-heading-slider"
+                  type="range"
+                  min="0"
+                  max="359"
+                  step="1"
+                  :value="activeHeading ?? 0"
+                  :aria-label="$t('fengshuiLuopan.reading.heading')"
+                  @input="handleSliderInput"
+                >
+                <span>{{ $t('fengshuiLuopan.reading.manualNote') }}</span>
+              </div>
+
               <dl class="flp-sensors">
                 <div>
                   <dt>
-                    <UIcon name="i-heroicons-signal" />
-                    {{ $t('fengshuiLuopan.desktop.magnetometer') }}
+                    <UIcon name="i-heroicons-cursor-arrow-rays" />
+                    {{ $t('fengshuiLuopan.desktop.drag') }}
                   </dt>
-                  <dd>{{ $t('fengshuiLuopan.desktop.magnetometerDesc') }}</dd>
+                  <dd>{{ $t('fengshuiLuopan.desktop.dragDesc') }}</dd>
                 </div>
                 <div>
                   <dt>
-                    <UIcon name="i-heroicons-arrow-uturn-right" />
-                    {{ $t('fengshuiLuopan.desktop.gyroscope') }}
+                    <UIcon name="i-heroicons-arrows-right-left" />
+                    {{ $t('fengshuiLuopan.desktop.keyboard') }}
                   </dt>
-                  <dd>{{ $t('fengshuiLuopan.desktop.gyroscopeDesc') }}</dd>
+                  <dd>{{ $t('fengshuiLuopan.desktop.keyboardDesc') }}</dd>
                 </div>
                 <div>
                   <dt>
-                    <UIcon name="i-heroicons-arrow-down-circle" />
-                    {{ $t('fengshuiLuopan.desktop.accelerometer') }}
+                    <UIcon name="i-heroicons-device-phone-mobile" />
+                    {{ $t('fengshuiLuopan.desktop.sensor') }}
                   </dt>
-                  <dd>{{ $t('fengshuiLuopan.desktop.accelerometerDesc') }}</dd>
+                  <dd>{{ $t('fengshuiLuopan.desktop.sensorDesc') }}</dd>
                 </div>
               </dl>
 
-              <p class="flp-limit">{{ $t('fengshuiLuopan.desktop.limit') }}</p>
             </div>
 
             <div class="flp-guide-action">
@@ -157,12 +187,6 @@
                 </button>
               </div>
 
-              <div class="flp-layers">
-                <label v-for="ring in ringOptions" :key="ring">
-                  <input v-model="selectedRings" type="checkbox" :value="ring">
-                  <span>{{ $t(`fengshuiLuopan.rings.${ring}`) }}</span>
-                </label>
-              </div>
             </section>
 
             <section class="flp-card">
@@ -197,21 +221,19 @@
 import type { ComponentPublicInstance } from 'vue'
 import { CalibrationEngine } from '~/utils/fengshui-luopan/calibration-engine'
 import { detectDeviceCapability } from '~/utils/fengshui-luopan/capability'
-import { LUOPAN_PROFILES } from '~/utils/fengshui-luopan/constants'
 import { OrientationEngine } from '~/utils/fengshui-luopan/orientation-engine'
 import { resolveLuopanDirection } from '~/utils/fengshui-luopan/engine'
+import { normalizeDegrees } from '~/utils/fengshui-luopan/heading'
 import type {
   CalibrationFeedback,
   DeviceCapability,
-  LuopanDirection,
   LuopanProfileId,
-  LuopanRingId,
   LuopanSample,
   LuopanStatus,
 } from '~/types/fengshui-luopan'
 
 type LuopanSceneInstance = ComponentPublicInstance & {
-  setHeading: (sample: LuopanSample) => void
+  setHeading: (value: LuopanSample | number) => void
 }
 
 const { t } = useI18n()
@@ -222,7 +244,6 @@ const sceneRef = ref<LuopanSceneInstance | null>(null)
 const status = ref<LuopanStatus>('detecting')
 const capability = ref<DeviceCapability | null>(null)
 const activeHeading = ref<number | null>(null)
-const direction = ref<LuopanDirection | null>(null)
 const calibration = ref<CalibrationFeedback>({
   phase: 'idle',
   coverage: 0,
@@ -231,10 +252,13 @@ const calibration = ref<CalibrationFeedback>({
   magneticDisturbance: false,
 })
 const activeProfile = ref<LuopanProfileId>('complete')
-const selectedRings = ref<LuopanRingId[]>([...LUOPAN_PROFILES.complete])
 const qrSvg = ref('')
 const profileOptions: LuopanProfileId[] = ['complete', 'reading', 'compact']
-const ringOptions: LuopanRingId[] = ['trigrams', 'mountains', 'stems', 'branches', 'elements']
+const luopanLayerProfiles: Record<LuopanProfileId, number[]> = {
+  complete: [0, 1, 2, 3, 4, 5, 6, 7],
+  reading: [1, 3, 5],
+  compact: [0, 1, 3],
+}
 
 let orientationEngine: OrientationEngine | null = null
 let calibrationEngine: CalibrationEngine | null = null
@@ -242,15 +266,16 @@ let sensorTimeout: ReturnType<typeof setTimeout> | null = null
 let initializationTimeout: number | null = null
 let lastUiUpdate = 0
 
-const visibleRings = computed(() => {
-  const profileRings = LUOPAN_PROFILES[activeProfile.value]
-  return ringOptions.filter(ring => profileRings.includes(ring) && selectedRings.value.includes(ring))
+const visibleLayers = computed(() => luopanLayerProfiles[activeProfile.value])
+
+const direction = computed(() => {
+  return activeHeading.value === null ? null : resolveLuopanDirection(activeHeading.value)
 })
 
 const statusTitle = computed(() => {
   const keys: Partial<Record<LuopanStatus, string>> = {
     detecting: 'detecting',
-    'browser-unsupported': 'browserUnsupported',
+    manual: 'manual',
     'permission-required': 'permissionRequired',
     'permission-denied': 'permissionDenied',
     calibrating: 'calibrating',
@@ -276,7 +301,7 @@ const statusMessage = computed(() => {
   }
   const keys: Partial<Record<LuopanStatus, string>> = {
     detecting: 'detectingMessage',
-    'browser-unsupported': 'browserUnsupportedMessage',
+    manual: 'manualMessage',
     'permission-required': 'permissionRequiredMessage',
     'permission-denied': 'permissionDeniedMessage',
     initializing: 'initializingMessage',
@@ -289,6 +314,7 @@ const statusIcon = computed(() => {
   const icons: Record<LuopanStatus, string> = {
     detecting: 'i-heroicons-ellipsis-horizontal-circle',
     unsupported: 'i-heroicons-computer-desktop',
+    manual: 'i-heroicons-computer-desktop',
     'browser-unsupported': 'i-heroicons-exclamation-triangle',
     'permission-required': 'i-heroicons-lock-closed',
     'permission-denied': 'i-heroicons-shield-exclamation',
@@ -325,6 +351,22 @@ function stopRealtime() {
   calibrationEngine = null
 }
 
+function handleManualHeading(heading: number) {
+  activeHeading.value = normalizeDegrees(heading)
+}
+
+function handleSliderInput(event: Event) {
+  const heading = normalizeDegrees((event.target as HTMLInputElement).valueAsNumber)
+  activeHeading.value = heading
+  sceneRef.value?.setHeading(heading)
+}
+
+function useManualMode() {
+  stopRealtime()
+  activeHeading.value = normalizeDegrees(activeHeading.value ?? 0)
+  status.value = 'manual'
+}
+
 async function generateQrCode() {
   const QRCode = await import('qrcode')
   qrSvg.value = await QRCode.toString(window.location.href, {
@@ -358,7 +400,6 @@ function handleSample(sample: LuopanSample) {
   if (now - lastUiUpdate > 120) {
     lastUiUpdate = now
     activeHeading.value = sample.heading
-    direction.value = resolveLuopanDirection(sample.heading)
   }
 }
 
@@ -424,13 +465,9 @@ function handleVisibilityChange() {
 onMounted(() => {
   const detected = detectDeviceCapability()
   capability.value = detected
-  if (!detected.isMobileLike) {
-    status.value = 'unsupported'
+  if (!detected.isMobileLike || !detected.canUseCompass) {
+    useManualMode()
     generateQrCode()
-    return
-  }
-  if (!detected.canUseCompass) {
-    status.value = 'browser-unsupported'
     return
   }
   status.value = 'permission-required'
@@ -455,6 +492,12 @@ useSeoMeta({
 })
 
 useHead(() => ({
+  htmlAttrs: {
+    'data-flp-dark': 'true',
+  },
+  meta: [
+    { name: 'theme-color', content: '#0c0c0c' },
+  ],
   script: [
     {
       type: 'application/ld+json',
@@ -463,7 +506,7 @@ useHead(() => ({
         '@type': 'SoftwareApplication',
         name: t('fengshuiLuopan.title'),
         applicationCategory: 'LifestyleApplication',
-        operatingSystem: 'Mobile Web',
+        operatingSystem: 'Web',
         url: pageUrl.value,
         description: t('seo.fengshuiLuopanDesc'),
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
@@ -474,16 +517,51 @@ useHead(() => ({
 </script>
 
 <style scoped>
+:global(html[data-flp-dark='true']) {
+  --surface-bg: rgb(12, 12, 12);
+  --surface-elevated: #151515;
+  --surface-card: rgba(255, 255, 255, 0.045);
+  --surface-card-hover: rgba(255, 255, 255, 0.07);
+  --surface-dropdown: #151515;
+  --surface-input: rgba(255, 255, 255, 0.07);
+  --text-primary: #dddddd;
+  --text-body: rgba(255, 255, 255, 0.85);
+  --text-muted: rgba(255, 255, 255, 0.72);
+  --text-faint: rgba(255, 255, 255, 0.62);
+  --text-placeholder: rgba(255, 255, 255, 0.45);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.18);
+  --border-medium: rgba(255, 255, 255, 0.2);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --overlay-bg: rgba(12, 12, 12, 0.72);
+  --shadow-panel: 0 16px 38px rgba(0, 0, 0, 0.32);
+}
+
 .flp-page {
-  min-height: 100vh;
-  background: var(--surface-bg);
+  --surface-bg: rgb(12, 12, 12);
+  --surface-card: rgba(255, 255, 255, 0.045);
+  --surface-input: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.18);
+  --text-primary: #e6e6e6;
+  --text-muted: rgba(230, 230, 230, 0.72);
+  --accent: #ff5a48;
+  --flp-dial-size: min(94vw, 66dvh);
+
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: rgb(12, 12, 12);
   color: var(--text-primary);
+  color-scheme: dark;
 }
 
 .flp-container {
-  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 28px 16px 56px;
+  padding: 18px 16px 56px;
 }
 
 .flp-header {
@@ -491,7 +569,7 @@ useHead(() => ({
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .flp-eyebrow {
@@ -504,7 +582,8 @@ useHead(() => ({
 }
 
 .flp-title {
-  font-size: clamp(1.45rem, 5vw, 2rem);
+  color: #dddddd;
+  font-size: clamp(1.3rem, 3vw, 1.65rem);
   line-height: 1.2;
 }
 
@@ -535,20 +614,22 @@ useHead(() => ({
   gap: 14px;
 }
 
-.flp-stage {
+.flp-hero {
+  --flp-dial-size: min(94vw, calc(100dvh - 190px));
+
   position: relative;
-  min-height: min(78vh, 560px);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 38%, rgba(255, 224, 158, 0.14), transparent 34%),
-    var(--surface-card);
+  height: var(--flp-dial-size);
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
 }
 
-.flp-scene {
+.flp-hero .flp-scene {
   position: absolute;
   inset: 0;
+  display: grid;
+  place-items: center;
 }
 
 .flp-overlay {
@@ -567,7 +648,7 @@ useHead(() => ({
   border: 1px solid var(--border-light);
   border-radius: 12px;
   background: color-mix(in srgb, var(--surface-card) 94%, transparent);
-  box-shadow: 0 12px 30px rgba(31, 22, 12, 0.1);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.32);
   text-align: center;
 }
 
@@ -677,8 +758,32 @@ useHead(() => ({
   font-size: 12px;
 }
 
-.flp-limit {
-  color: var(--accent) !important;
+.flp-manual-reading {
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--surface-input);
+}
+
+.flp-manual-reading small,
+.flp-manual-reading span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.flp-manual-reading strong {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.flp-heading-slider {
+  width: 100%;
+  height: 4px;
+  margin-top: 9px;
+  accent-color: var(--accent);
 }
 
 .flp-guide-action {
@@ -897,7 +1002,7 @@ useHead(() => ({
     gap: 9px;
   }
 
-  .flp-stage {
+  .flp-hero {
     min-height: min(64vh, 470px);
     border-radius: 12px;
   }

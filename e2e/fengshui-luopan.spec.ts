@@ -52,3 +52,34 @@ test('continuing orientation samples do not block initialization', async ({ brow
   await page.evaluate(id => clearInterval(id), dispatcherId)
   await context.close()
 })
+
+test('desktop manual luopan renders the full board and accepts heading control', async ({ page }) => {
+  test.setTimeout(15_000)
+  await page.goto(`${baseURL}/tools/fengshui-luopan`)
+
+  const dial = page.locator('.fengshui-dial')
+  await expect(dial).toBeVisible()
+  await expect(page.locator('.luopan-background')).toHaveCSS('background-color', 'rgb(12, 12, 12)')
+  expect(await dial.locator('text').count()).toBeGreaterThan(240)
+  await expect(dial.locator('.tianxin-cross line')).toHaveCount(2)
+  await expect(page.locator('.flp-overlay')).toBeHidden()
+  await expect(page.locator('.flp-manual-reading strong')).toHaveText('0°')
+
+  await dial.focus()
+  await page.keyboard.press('ArrowLeft')
+  await expect(page.locator('.flp-manual-reading strong')).toHaveText('358°')
+  await expect(dial.locator('.dial-motion').evaluate(node => node.style.transform))
+    .resolves
+    .toBe('rotate(-2deg)')
+
+  await page.keyboard.press('ArrowRight')
+  await page.keyboard.press('ArrowRight')
+  await expect(page.locator('.flp-manual-reading strong')).toHaveText('2°')
+
+  const slider = page.getByRole('slider')
+  await slider.fill('45')
+  await expect(page.locator('.flp-manual-reading strong')).toHaveText('45°')
+  await expect(dial.locator('.dial-motion').evaluate(node => node.style.transform))
+    .resolves
+    .toBe('rotate(45deg)')
+})
