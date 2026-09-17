@@ -19,6 +19,26 @@ export interface TodayAlmanacColorSet {
   reason: string
 }
 
+export interface TodayAlmanacNobleHour {
+  branch: string
+  label: string
+  startTime: string
+  endTime: string
+  ganZhi: string
+  tianShen: string
+  luck: '吉' | '凶' | '平'
+}
+
+export interface TodayAlmanacLuckyZodiac {
+  zodiac: string
+  relation: '六合' | '三合'
+}
+
+export interface TodayAlmanacVerse {
+  source: string
+  text: string
+}
+
 export interface TodayAlmanac {
   date: string
   isToday: boolean
@@ -79,6 +99,12 @@ export interface TodayAlmanac {
   }
   festivals: string[]
   hours: TodayAlmanacHour[]
+  dayLu: string
+  taiShen: string
+  nobleHours: TodayAlmanacNobleHour[]
+  luckyZodiacs: TodayAlmanacLuckyZodiac[]
+  luckyNumbers: number[]
+  dailyVerse: TodayAlmanacVerse
   colors: {
     dayWuxing: string
     daJi: TodayAlmanacColorSet

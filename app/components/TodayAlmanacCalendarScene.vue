@@ -4,55 +4,18 @@
     class="today-calendar-scene"
     :class="{ 'is-dragging': dragging, 'is-disabled': disabled }"
   >
-    <div class="scene-hint">
-      <UIcon name="i-lucide-hand" class="w-4 h-4" />
-      <span>{{ t('todayAlmanac.flipHint') }}</span>
-    </div>
-
-    <div ref="menuRef" class="scene-menu">
+    <div class="scene-menu">
       <button
         type="button"
-        class="menu-trigger"
-        :aria-expanded="menuOpen"
+        class="back-trigger"
         :disabled="disabled"
-        @click.stop="menuOpen = !menuOpen"
+        :aria-label="t('todayAlmanac.backToday')"
         @pointerdown.stop
+        @click.stop="backToToday"
       >
-        <UIcon name="i-lucide-book-open" class="w-4 h-4" />
-        <span>{{ t('todayAlmanac.pageMenu') }}</span>
+        <UIcon name="i-lucide-calendar-check" class="w-4 h-4" />
+        <span>{{ t('todayAlmanac.backToday') }}</span>
       </button>
-
-      <Transition name="menu-pop">
-        <div v-if="menuOpen" class="menu-panel" role="menu" @pointerdown.stop>
-          <button
-            type="button"
-            role="menuitem"
-            :disabled="disabled || !day || !nextDay"
-            @click.stop="startFlip('left')"
-          >
-            <UIcon name="i-lucide-corner-up-left" class="w-4 h-4" />
-            {{ t('todayAlmanac.flipLeft') }}
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            :disabled="disabled"
-            @click.stop="backToToday"
-          >
-            <UIcon name="i-lucide-calendar-check" class="w-4 h-4" />
-            {{ t('todayAlmanac.backToday') }}
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            :disabled="disabled || !day || !nextDay"
-            @click.stop="startFlip('right')"
-          >
-            <UIcon name="i-lucide-corner-up-right" class="w-4 h-4" />
-            {{ t('todayAlmanac.flipRight') }}
-          </button>
-        </div>
-      </Transition>
     </div>
   </div>
 </template>
@@ -71,10 +34,8 @@ const props = defineProps<Props>()
 const emit = defineEmits<{ advance: []; settled: []; today: [] }>()
 const { t, locale } = useI18n()
 const sceneRef = ref<HTMLDivElement>()
-const menuRef = ref<HTMLElement>()
 
 const dragging = ref(false)
-const menuOpen = ref(false)
 
 const PAGE_WIDTH = 4.5
 const PAGE_HEIGHT = 6.2
@@ -89,9 +50,9 @@ let scene: THREE.Scene | null = null
 let camera: THREE.PerspectiveCamera | null = null
 let calendarGroup: THREE.Group | null = null
 let frontPivot: THREE.Group | null = null
-let frontMaterial: THREE.MeshStandardMaterial | null = null
-let rearMaterial: THREE.MeshStandardMaterial | null = null
-let remnantMaterial: THREE.MeshStandardMaterial | null = null
+let frontMaterial: THREE.MeshPhysicalMaterial | null = null
+let rearMaterial: THREE.MeshPhysicalMaterial | null = null
+let remnantMaterial: THREE.MeshPhysicalMaterial | null = null
 let frontGeometry: THREE.PlaneGeometry | null = null
 let basePagePositions: Float32Array | null = null
 let paperBumpTexture: THREE.CanvasTexture | null = null
@@ -154,16 +115,16 @@ function createRollTexture() {
   if (!context) return null
 
   const gradient = context.createLinearGradient(0, 0, 0, canvas.height)
-  gradient.addColorStop(0, '#e5d7b8')
-  gradient.addColorStop(0.32, '#fffdf4')
-  gradient.addColorStop(0.62, '#f3ead4')
-  gradient.addColorStop(1, '#c8b58e')
+  gradient.addColorStop(0, '#d9dad2')
+  gradient.addColorStop(0.30, '#fdfdf9')
+  gradient.addColorStop(0.62, '#f4f5ee')
+  gradient.addColorStop(1, '#cdcfc4')
   context.fillStyle = gradient
   context.fillRect(0, 0, canvas.width, canvas.height)
 
   for (let i = 0; i < 1500; i += 1) {
     context.globalAlpha = Math.random() * 0.07
-    context.fillStyle = Math.random() > 0.85 ? '#8b2b25' : '#725d3d'
+    context.fillStyle = Math.random() > 0.86 ? '#037a4a' : '#8e8a7c'
     context.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 22, 1)
   }
   context.globalAlpha = 1
@@ -264,11 +225,13 @@ function wrapText(context: CanvasRenderingContext2D, text: string, maxWidth: num
 }
 
 function drawPaper(context: CanvasRenderingContext2D) {
-  context.fillStyle = '#fffdf4'
+  context.globalAlpha = 1
+  context.fillStyle = '#fcfdf8'
   context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
   for (let i = 0; i < 2600; i += 1) {
-    context.globalAlpha = Math.random() * 0.035
-    context.fillStyle = i % 4 === 0 ? '#9a7c55' : '#6b553d'
+    context.globalAlpha = Math.random() * 0.022
+    context.fillStyle = i % 3 === 0 ? '#c9d2c8' : '#d8ddd3'
     context.fillRect(Math.random() * CANVAS_WIDTH, Math.random() * CANVAS_HEIGHT, Math.random() * 4, Math.random() * 2)
   }
 
@@ -277,8 +240,8 @@ function drawPaper(context: CanvasRenderingContext2D) {
     const y = Math.random() * CANVAS_HEIGHT
     const radius = 30 + Math.random() * 100
     const stain = context.createRadialGradient(x, y, 0, x, y, radius)
-    stain.addColorStop(0, 'rgba(150,120,70,0.035)')
-    stain.addColorStop(1, 'rgba(150,120,70,0)')
+    stain.addColorStop(0, 'rgba(164,178,166,0.024)')
+    stain.addColorStop(1, 'rgba(164,178,166,0)')
     context.globalAlpha = 1
     context.fillStyle = stain
     context.beginPath()
@@ -298,188 +261,238 @@ function drawCell(
   lines: string[],
   accent: string,
 ) {
+  const compact = height < 180
+  context.fillStyle = 'rgba(255, 255, 252, 0.86)'
+  context.fillRect(x, y, width, height)
   context.strokeStyle = accent
-  context.lineWidth = 5
-  context.strokeRect(x, y, width, height)
-  context.lineWidth = 1.5
-  context.strokeRect(x + 9, y + 9, width - 18, height - 18)
+  context.lineWidth = 3
+  context.strokeRect(x + 1, y + 1, width - 2, height - 2)
+
+  context.strokeStyle = `${accent}9c`
+  context.lineWidth = 4
+  const mark = compact ? 24 : 34
+  context.beginPath()
+  context.moveTo(x + 12, y + 12 + mark)
+  context.lineTo(x + 12, y + 12)
+  context.lineTo(x + 12 + mark, y + 12)
+  context.moveTo(x + width - 12 - mark, y + height - 12)
+  context.lineTo(x + width - 12, y + height - 12)
+  context.lineTo(x + width - 12, y + height - 12 - mark)
+  context.stroke()
 
   context.fillStyle = accent
   context.textAlign = 'center'
   context.textBaseline = 'middle'
-  context.font = '700 37px "Noto Serif SC", "Songti SC", "SimSun", serif'
-  context.fillText(title, x + width / 2, y + 48)
-  context.strokeStyle = `${accent}55`
+  context.font = `700 ${compact ? 38 : 33}px "Noto Serif SC", "Songti SC", "SimSun", serif`
+  context.fillText(title, x + width / 2, compact ? y + 36 : y + 42)
+  context.strokeStyle = `${accent}30`
   context.lineWidth = 2
   context.beginPath()
-  context.moveTo(x + 32, y + 80)
-  context.lineTo(x + width - 32, y + 80)
+  context.moveTo(x + 30, compact ? y + 62 : y + 70)
+  context.lineTo(x + width - 30, compact ? y + 62 : y + 70)
   context.stroke()
 
-  context.fillStyle = '#4b3a29'
-  context.font = '400 25px "Noto Sans SC", ui-sans-serif, sans-serif'
+  context.fillStyle = '#303430'
+  context.font = `400 ${compact ? 34 : 30}px "Noto Sans SC", ui-sans-serif, sans-serif`
   lines.forEach((line, index) => {
-    const wrapped = wrapText(context, line, width - 45, 2)
+    const wrapped = wrapText(context, line, compact ? width - 30 : width - 50, 2)
     wrapped.forEach((text, lineIndex) => {
-      context.fillText(text, x + width / 2, y + 118 + index * 54 + lineIndex * 29)
+      const baseY = compact ? y + 92 : y + 114
+      const spacing = compact ? 42 : 46
+      context.fillText(text, x + width / 2, baseY + index * spacing + lineIndex * (compact ? 33 : 38))
     })
   })
 }
 
-function drawVerticalText(context: CanvasRenderingContext2D, text: string, x: number, startY: number, color: string) {
-  context.fillStyle = color
+function drawTinyPanel(
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  title: string,
+  subtitle: string,
+  color: string,
+) {
+  context.fillStyle = '#fffefa'
+  context.fillRect(x, y, width, height)
+  context.strokeStyle = color
+  context.lineWidth = 3
+  context.strokeRect(x + 1, y + 1, width - 2, height - 2)
+
   context.textAlign = 'center'
   context.textBaseline = 'middle'
-  context.font = '600 36px "Noto Serif SC", "Songti SC", "SimSun", serif'
-  Array.from(text).forEach((char, index) => context.fillText(char, x, startY + index * 47))
+  context.fillStyle = color
+  context.font = '700 54px "Noto Serif SC", "Songti SC", serif'
+  context.fillText(title, x + width / 2, y + height / 2 - 30)
+  context.fillStyle = '#303430'
+  context.font = '400 32px "Noto Sans SC", ui-sans-serif, sans-serif'
+  context.fillText(subtitle, x + width / 2, y + height / 2 + 34)
+}
+
+function drawHorizontalRegister(
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  title: string,
+  items: string[],
+  accent: string,
+) {
+  context.fillStyle = 'rgba(255, 255, 252, 0.9)'
+  context.fillRect(x, y, width, height)
+  context.strokeStyle = accent
+  context.lineWidth = 3
+  context.strokeRect(x + 1, y + 1, width - 2, height - 2)
+
+  const plaqueWidth = 148
+  context.fillStyle = `${accent}14`
+  context.fillRect(x + 18, y + 20, plaqueWidth, height - 40)
+  context.strokeStyle = `${accent}72`
+  context.lineWidth = 2
+  context.strokeRect(x + 18, y + 20, plaqueWidth, height - 40)
+
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.fillStyle = accent
+  context.font = '700 54px "Noto Serif SC", "Songti SC", "SimSun", serif'
+  context.fillText(title, x + 18 + plaqueWidth / 2, y + height / 2)
+
+  const contentX = x + plaqueWidth + 58
+  const contentWidth = x + width - contentX - 42
+  let text = items.filter(Boolean).slice(0, 6).join(' · ') || '—'
+  let fontSize = 48
+  context.fillStyle = '#303430'
+  while (fontSize > 26 && context.measureText(text).width > contentWidth) {
+    fontSize -= 2
+    context.font = `400 ${fontSize}px "Noto Sans SC", ui-sans-serif, sans-serif`
+  }
+
+  while (context.measureText(`${text}…`).width > contentWidth && text.length > 1) {
+    text = text.slice(0, -1)
+  }
+  if (text !== items.filter(Boolean).slice(0, 6).join(' · ')) text = `${text}…`
+
+  context.font = `400 ${fontSize}px "Noto Sans SC", ui-sans-serif, sans-serif`
+  context.fillText(text, contentX + contentWidth / 2, y + height / 2)
 }
 
 function drawAlmanacPage(canvas: HTMLCanvasElement, day: TodayAlmanac | null) {
   const context = canvas.getContext('2d')
   if (!context) return
   drawPaper(context)
-  const crimson = '#b4231d'
-  const green = '#256d47'
-  const ink = '#4b3a29'
-  const softInk = 'rgba(75,58,41,.72)'
+  const crimson = '#bf2026'
+  const green = '#037a4a'
+  const ink = '#303430'
 
-  // Reference-style folio frame.
-  context.strokeStyle = crimson
-  context.lineWidth = 12
+  context.strokeStyle = green
+  context.lineWidth = 6
   context.strokeRect(28, 26, CANVAS_WIDTH - 56, CANVAS_HEIGHT - 52)
   context.lineWidth = 2
   context.strokeRect(56, 54, CANVAS_WIDTH - 112, CANVAS_HEIGHT - 108)
-  context.lineWidth = 4
-  context.strokeRect(74, 72, CANVAS_WIDTH - 148, CANVAS_HEIGHT - 144)
 
-  // Header: solar month + year in a formal plaque.
+  // Month masthead: English solar label, Arabic year and month size.
   context.textAlign = 'center'
   context.textBaseline = 'middle'
-  context.fillStyle = crimson
-  context.font = '500 31px "Noto Serif SC", "Songti SC", serif'
-  context.fillText('·ososn·', CANVAS_WIDTH / 2, 110)
-  context.font = '700 92px "Noto Serif SC", "Songti SC", serif'
-  const solarMonth = day
-    ? new Date(`${day.date}T12:00:00Z`).toLocaleDateString(locale.value === 'en' ? 'en-US' : 'zh-CN', { month: 'long' }).toUpperCase()
-    : '———'
-  context.fillText(`${solarMonth} ${day?.date.slice(0, 4) ?? ''}`, CANVAS_WIDTH / 2, 194)
-  context.font = '600 42px "Noto Serif SC", "Songti SC", serif'
-  context.fillText(day ? `农历${day.lunar.monthInChinese}月` : '', CANVAS_WIDTH / 2, 266)
-  context.strokeStyle = 'rgba(180,35,29,.48)'
-  context.lineWidth = 4
-  context.beginPath()
-  context.moveTo(112, 316)
-  context.lineTo(CANVAS_WIDTH - 112, 316)
-  context.stroke()
+  context.fillStyle = green
+  context.font = '600 26px "Noto Sans SC", ui-sans-serif, sans-serif'
+  context.fillText('ososn', CANVAS_WIDTH / 2, 96)
 
-  // Vertical side notes, like printed couplets on an old tear-off calendar.
+  const solarDate = day ? new Date(`${day.date}T12:00:00Z`) : null
+  const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
+  const monthName = monthNames[solarDate?.getUTCMonth() ?? 0] || '———'
+  const largeMonths = [1, 3, 5, 7, 8, 10, 12]
+  const monthSize = largeMonths.includes((solarDate?.getUTCMonth() ?? 0) + 1) ? '大' : '小'
+  const chineseSolarMonths = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+  const localMonthLabel = locale.value === 'en'
+    ? `${monthName} ${monthSize === '大' ? 'LARGE' : 'SMALL'}`
+    : `${chineseSolarMonths[solarDate?.getUTCMonth() ?? 0] || '—'}${monthSize}`
+  const solarDay = day ? String(Number(day.date.slice(-2))) : '—'
+
+  context.fillStyle = green
+  context.font = '700 66px Georgia, "Noto Serif SC", "Songti SC", serif'
+  context.fillText(monthName, 310, 176)
+  context.font = '800 82px "Arial Black", Arial, "Noto Sans SC", sans-serif'
+  context.fillText(day ? day.date.slice(0, 4) : '———', 700, 178)
+  context.font = '700 47px "Noto Serif SC", "Songti SC", serif'
+  context.fillText(localMonthLabel, 1110, 180)
+  context.strokeStyle = `${green}66`
+  context.lineWidth = 2
+  context.strokeRect(78, 122, CANVAS_WIDTH - 156, 112)
+
   if (day) {
-    drawVerticalText(context, `喜神${day.positions.xi}`, 134, 430, green)
-    drawVerticalText(context, `财神${day.positions.cai}`, 184, 430, ink)
-    drawVerticalText(context, `福神${day.positions.fu}`, CANVAS_WIDTH - 134, 430, green)
-    drawVerticalText(context, `阳贵${day.positions.yangGui}`, CANVAS_WIDTH - 184, 430, ink)
+    const glyphCanvas = document.createElement('canvas')
+    glyphCanvas.width = 1180
+    glyphCanvas.height = 740
+    const glyphContext = glyphCanvas.getContext('2d')
+    if (glyphContext) {
+      glyphContext.textAlign = 'center'
+      glyphContext.textBaseline = 'middle'
+      glyphContext.font = `800 ${solarDay.length > 1 ? 610 : 690}px "Arial Black", Arial, "Noto Sans SC", sans-serif`
+      glyphContext.fillStyle = green
+      glyphContext.fillText(solarDay, glyphCanvas.width / 2, glyphCanvas.height / 2 + 22)
+      glyphContext.globalCompositeOperation = 'source-in'
+      const glyphGradient = glyphContext.createLinearGradient(0, 70, 0, glyphCanvas.height - 50)
+      glyphGradient.addColorStop(0, '#11a363')
+      glyphGradient.addColorStop(0.48, '#04794a')
+      glyphGradient.addColorStop(1, '#026139')
+      glyphContext.fillStyle = glyphGradient
+      glyphContext.fillRect(0, 0, glyphCanvas.width, glyphCanvas.height)
+      glyphContext.globalCompositeOperation = 'source-atop'
+      context.drawImage(glyphCanvas, (CANVAS_WIDTH - glyphCanvas.width) / 2, 258)
+    }
   }
 
-  // Giant solar day number is the dominant glyph.
-  const solarDay = day ? String(Number(day.date.slice(-2))) : '—'
-  context.save()
-  context.globalAlpha = 0.06
-  context.fillStyle = crimson
-  context.font = '700 580px "Noto Serif SC", "Songti SC", serif'
-  context.fillText(day?.lunar.shengXiao || '', CANVAS_WIDTH / 2, 720)
-  context.restore()
+  context.textAlign = 'center'
+  context.fillStyle = green
+  context.font = '700 32px "Noto Serif SC", "Songti SC", serif'
+  context.fillText(weekdayLabels.value[day?.weekday ?? 0] || '', CANVAS_WIDTH - 154, 554)
+  context.fillText(day ? `农历${day.lunar.monthInChinese}月` : '', 154, 554)
 
-  context.fillStyle = crimson
-  context.font = `700 ${solarDay.length > 1 ? 540 : 700}px "Noto Serif SC", "Songti SC", serif`
-  context.shadowColor = 'rgba(180,35,29,.18)'
-  context.shadowBlur = 34
-  context.fillText(solarDay, CANVAS_WIDTH / 2, 700)
-  context.shadowBlur = 0
+  // Summary row immediately below the numeral.
+  drawTinyPanel(context, 80, 1005, 370, 150, day?.lunar.yearGanZhi || '———', t('todayAlmanac.yearGanZhi'), green)
+  drawTinyPanel(context, 515, 1005, 370, 150, day?.lunar.monthGanZhi || '———', t('todayAlmanac.monthGanZhi'), green)
+  drawTinyPanel(context, 950, 1005, 370, 150, day?.lunar.dayGanZhi || '———', t('todayAlmanac.dayGanZhi'), crimson)
 
-  // Central triptych: lunar day, builder star, weekday.
-  drawCell(context, 205, 1015, 315, 165, day?.lunar.dayInChinese ? `${day.lunar.dayInChinese}日` : '—', [day ? `${day.lunar.yearGanZhi}年` : ''], crimson)
-  drawCell(context, 543, 1015, 315, 165, day?.jianChu || '—', [day ? `${day.tianShen} ${day.tianShenLuck}` : ''], green)
-  drawCell(context, 881, 1015, 315, 165, weekdayLabels.value[day?.weekday ?? 0] || '—', [day ? day.lunar.dayGanZhi : ''], crimson)
+  // One horizontal line each: avoid stacked vertical text.
+  drawHorizontalRegister(context, 80, 1190, 1240, 170, t('todayAlmanac.yi'), day?.yi.slice(0, 6) || [], green)
+  drawHorizontalRegister(context, 80, 1375, 1240, 170, t('todayAlmanac.ji'), day?.ji.slice(0, 6) || [], crimson)
 
-  // Main 宜 / 忌 block.
+  // Six supplementary registers, deliberately larger and sparser.
+  drawCell(context, 80, 1560, 390, 150, t('todayAlmanac.dayLu'), day ? [day.dayLu || '—'] : ['—'], ink)
+  drawCell(context, 505, 1560, 390, 150, t('todayAlmanac.taiShen'), day ? [day.taiShen || '—'] : ['—'], crimson)
   drawCell(
     context,
-    92,
-    1225,
-    585,
-    325,
-    t('todayAlmanac.yi'),
-    (day?.yi.slice(0, 5) || []).map((item, index) => `${index + 1}. ${item}`),
+    930,
+    1560,
+    390,
+    150,
+    t('todayAlmanac.nobleHours'),
+    day ? [day.nobleHours.map(hour => hour.label).join(' / ') || '—'] : ['—'],
+    green,
+  )
+  drawCell(context, 80, 1730, 390, 150, t('todayAlmanac.chongZodiac'), day ? [day.chongShengXiao || '—'] : ['—'], crimson)
+  drawCell(
+    context,
+    505,
+    1730,
+    390,
+    150,
+    t('todayAlmanac.luckyZodiacs'),
+    day ? [day.luckyZodiacs.map(item => item.zodiac).join(' ') || '—'] : ['—'],
     green,
   )
   drawCell(
     context,
-    723,
-    1225,
-    585,
-    325,
-    t('todayAlmanac.ji'),
-    (day?.ji.slice(0, 5) || []).map((item, index) => `${index + 1}. ${item}`),
-    crimson,
-  )
-
-  // Three practical columns.
-  const luckyHours = day?.hours.filter(hour => hour.luck === '吉').slice(0, 3) || []
-  drawCell(
-    context,
-    92,
-    1585,
-    395,
-    240,
-    t('todayAlmanac.luckyHours'),
-    luckyHours.map(hour => `${hour.startTime} ${hour.tianShen}`),
-    green,
-  )
-  drawCell(
-    context,
-    502,
-    1585,
-    395,
-    240,
-    t('todayAlmanac.directions'),
-    day
-      ? [
-          `${t('todayAlmanac.xiDirection')} ${day.positions.xi}`,
-          `${t('todayAlmanac.caiDirection')} ${day.positions.cai}`,
-          `${t('todayAlmanac.fuDirection')} ${day.positions.fu}`,
-        ]
-      : ['—'],
-    crimson,
-  )
-  drawCell(
-    context,
-    912,
-    1585,
-    395,
-    240,
-    t('todayAlmanac.colorTitle'),
-    day
-      ? [
-          day.colors.daJi.colors.slice(0, 2).join(' '),
-          day.colors.buYi.colors.slice(0, 2).join(' '),
-        ]
-      : ['—'],
+    930,
+    1730,
+    390,
+    150,
+    t('todayAlmanac.luckyNumbers'),
+    day ? [day.luckyNumbers.join(' · ') || '—'] : ['—'],
     ink,
   )
-
-  // Dense base line, preserving the traditional almanac feel.
-  context.textAlign = 'left'
-  context.fillStyle = ink
-  context.font = '400 25px "Noto Sans SC", ui-sans-serif, sans-serif'
-  context.fillText(day ? `${t('todayAlmanac.jiShen')} ${day.jiShen.slice(0, 5).join(' ')}` : '', 92, 1868)
-  context.fillText(day ? `${t('todayAlmanac.xiongSha')} ${day.xiongSha.slice(0, 5).join(' ')}` : '', 92, 1904)
-  context.textAlign = 'right'
-  context.fillText(day ? `${t('todayAlmanac.nineStar')} ${day.nineStar}` : '', CANVAS_WIDTH - 92, 1868)
-  context.fillText(day ? day.pengZuGan : '', CANVAS_WIDTH - 92, 1904)
-  context.textAlign = 'center'
-  context.fillStyle = softInk
-  context.font = '500 24px "Noto Sans SC", ui-sans-serif, sans-serif'
-  context.fillText(`ososn · ${day?.timezone || 'UTC+8'}`, CANVAS_WIDTH / 2, 1930)
 }
 
 function formatDate(date: string) {
@@ -496,11 +509,15 @@ function updateTextures() {
   const dayKey = props.day?.date || ''
   const nextKey = props.nextDay?.date || ''
   if (dayKey !== frontTextureKey) {
+    frontTexture?.dispose()
+    frontTexture = null
     frontTexture = createCanvasTexture(props.day)
     frontTextureKey = dayKey
     setTexture(frontTexture, frontMaterial)
   }
   if (nextKey !== rearTextureKey) {
+    rearTexture?.dispose()
+    rearTexture = null
     rearTexture = createCanvasTexture(props.nextDay)
     rearTextureKey = nextKey
     setTexture(rearTexture, rearMaterial)
@@ -577,7 +594,6 @@ function startFlip(side: 'left' | 'right'): boolean {
   if (phase !== 'idle' || !props.day || !props.nextDay) return false
   pointerId = null
   dragging.value = false
-  menuOpen.value = false
   flipSide = side
   flipTarget = 1
   commitFlip = true
@@ -587,14 +603,7 @@ function startFlip(side: 'left' | 'right'): boolean {
 }
 
 function backToToday() {
-  menuOpen.value = false
   emit('today')
-}
-
-function onDocumentPointerDown(event: PointerEvent) {
-  if (menuOpen.value && menuRef.value && !menuRef.value.contains(event.target as Node)) {
-    menuOpen.value = false
-  }
 }
 
 function onPointerDown(event: PointerEvent) {
@@ -602,10 +611,8 @@ function onPointerDown(event: PointerEvent) {
   if (!container || props.disabled || phase !== 'idle' || !props.day) return
   const rect = container.getBoundingClientRect()
   const xRatio = (event.clientX - rect.left) / rect.width
-  const yRatio = (event.clientY - rect.top) / rect.height
-  if (yRatio < 0.5 || (xRatio > 0.42 && xRatio < 0.58)) return
 
-  flipSide = xRatio <= 0.42 ? 'left' : 'right'
+  flipSide = xRatio < 0.5 ? 'left' : 'right'
   pointerId = event.pointerId
   pointerStartY = event.clientY
   pointerLastY = event.clientY
@@ -647,8 +654,9 @@ function resize() {
   renderer.setSize(width, height)
   camera.aspect = width / height
   const aspect = width / height
-  camera.position.set(0, 0.08, aspect < 0.62 ? 13.6 : aspect < 1 ? 12.8 : 12.2)
-  calendarGroup?.scale.setScalar(aspect < 0.62 ? 0.8 : 1)
+  camera.position.set(0, 0.34, aspect < 0.62 ? 13.8 : aspect < 1 ? 12.9 : 12.3)
+  camera.lookAt(0, -0.08, 0)
+  calendarGroup?.scale.setScalar(aspect < 0.62 ? 0.7 : 1)
   camera.updateProjectionMatrix()
 }
 
@@ -660,8 +668,8 @@ function createScene() {
 
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 50)
-  camera.position.set(0, 0.08, 12.2)
-  camera.lookAt(0, 0, 0)
+  camera.position.set(0, 0.34, 12.3)
+  camera.lookAt(0, -0.08, 0)
 
   renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -672,73 +680,117 @@ function createScene() {
   renderer.setSize(width, height)
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.0
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFShadowMap
   container.appendChild(renderer.domElement)
 
-  scene.add(new THREE.AmbientLight(0xfff4df, 1.16))
-  const key = new THREE.DirectionalLight(0xffe9c4, 1.55)
+  scene.add(new THREE.AmbientLight(0xffffff, 1.14))
+  const key = new THREE.DirectionalLight(0xffffff, 1.42)
   key.position.set(3.1, 3.8, 4.4)
-  const fill = new THREE.DirectionalLight(0xd8e3d2, 0.34)
+  key.castShadow = true
+  key.shadow.mapSize.set(1024, 1024)
+  key.shadow.camera.near = 1
+  key.shadow.camera.far = 20
+  key.shadow.camera.left = -6
+  key.shadow.camera.right = 6
+  key.shadow.camera.top = 6
+  key.shadow.camera.bottom = -6
+  key.shadow.bias = -0.0005
+  key.shadow.normalBias = 0.015
+  const fill = new THREE.DirectionalLight(0xf7f9ff, 0.28)
   fill.position.set(-4, 0.8, 2)
-  const rim = new THREE.DirectionalLight(0xffd2a8, 0.28)
+  const rim = new THREE.DirectionalLight(0xfff2e2, 0.22)
   rim.position.set(-2, 2.5, -3)
   scene.add(key, fill, rim)
 
+  const groundGeometry = new THREE.PlaneGeometry(22, 12)
+  const groundMaterial = new THREE.ShadowMaterial({ color: 0x39200f, opacity: 0.15 })
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial)
+  ground.rotation.x = -Math.PI / 2
+  ground.position.set(0, -3.28, 0.06)
+  ground.receiveShadow = true
+  scene.add(ground)
+
   paperBumpTexture = createPaperBumpTexture()
   calendarGroup = new THREE.Group()
-  calendarGroup.rotation.set(-0.035, -0.05, 0)
+  calendarGroup.rotation.set(-0.045, -0.09, 0.012)
   scene.add(calendarGroup)
 
   const backingGeometry = new THREE.BoxGeometry(PAGE_WIDTH + 0.12, PAGE_HEIGHT + 0.1, 0.035)
-  const backingMaterial = new THREE.MeshStandardMaterial({ color: 0x8b2b25, roughness: 0.68 })
+  const backingMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xf6f4ea,
+    roughness: 0.58,
+    clearcoat: 0.07,
+    clearcoatRoughness: 0.55,
+  })
   const backing = new THREE.Mesh(backingGeometry, backingMaterial)
   backing.position.z = -0.38
+  backing.castShadow = true
+  backing.receiveShadow = true
   calendarGroup.add(backing)
 
-  const stackGeometry = new THREE.BoxGeometry(PAGE_WIDTH + 0.05, PAGE_HEIGHT + 0.03, 0.3)
-  const stackMaterial = new THREE.MeshStandardMaterial({
-    color: 0xf2e8cf,
-    roughness: 0.84,
+  const stackGeometry = new THREE.BoxGeometry(PAGE_WIDTH + 0.10, PAGE_HEIGHT + 0.24, 0.68)
+  const stackMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xfaf8f1,
+    roughness: 0.92,
+    sheen: 0.24,
+    sheenRoughness: 0.78,
+    sheenColor: 0xfff4dc,
     bumpMap: paperBumpTexture,
     bumpScale: 0.024,
   })
   const stack = new THREE.Mesh(stackGeometry, stackMaterial)
-  stack.position.set(0, -0.02, -0.12)
+  stack.position.set(0, -0.09, -0.34)
+  stack.castShadow = true
+  stack.receiveShadow = true
   calendarGroup.add(stack)
 
   const rollTexture = createRollTexture()
-  const rollGeometry = new THREE.CylinderGeometry(0.34, 0.34, PAGE_WIDTH + 0.06, 72, 1, false)
-  const rollMaterial = new THREE.MeshStandardMaterial({
+  const rollGeometry = new THREE.CylinderGeometry(0.29, 0.29, PAGE_WIDTH + 0.34, 72, 1, false)
+  const rollMaterial = new THREE.MeshPhysicalMaterial({
     map: rollTexture,
     bumpMap: paperBumpTexture,
     bumpScale: 0.028,
     roughness: 0.76,
+    sheen: 0.2,
+    sheenColor: 0xffffff,
   })
   const paperRoll = new THREE.Mesh(rollGeometry, rollMaterial)
   paperRoll.rotation.z = Math.PI / 2
-  paperRoll.position.set(0, PAGE_PIVOT_Y + 0.1, 0.045)
+  paperRoll.position.set(0, PAGE_PIVOT_Y + 0.05, 0.035)
+  paperRoll.castShadow = true
   calendarGroup.add(paperRoll)
 
   const sheetGeometry = new THREE.PlaneGeometry(PAGE_WIDTH - 0.06, PAGE_HEIGHT, 24, 12)
   const rearPivot = new THREE.Group()
   rearPivot.position.set(0, PAGE_PIVOT_Y, 0.048)
-  rearMaterial = new THREE.MeshStandardMaterial({
+  rearMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
     roughness: 0.82,
+    sheen: 0.28,
+    sheenRoughness: 0.76,
+    sheenColor: 0xffffff,
     bumpMap: paperBumpTexture,
     bumpScale: 0.015,
     side: THREE.DoubleSide,
   })
   const rearSheet = new THREE.Mesh(sheetGeometry, rearMaterial)
   rearSheet.position.y = -PAGE_PIVOT_Y
+  rearSheet.castShadow = true
+  rearSheet.receiveShadow = true
   rearPivot.add(rearSheet)
   calendarGroup.add(rearPivot)
 
   frontPivot = new THREE.Group()
   frontPivot.position.set(0, PAGE_PIVOT_Y, 0.095)
-  frontMaterial = new THREE.MeshStandardMaterial({
+  frontMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
     roughness: 0.74,
     metalness: 0.01,
+    sheen: 0.34,
+    sheenRoughness: 0.68,
+    sheenColor: 0xffffff,
     bumpMap: paperBumpTexture,
     bumpScale: 0.022,
     side: THREE.DoubleSide,
@@ -750,10 +802,12 @@ function createScene() {
   basePagePositions = Float32Array.from(initialPositions as Float32Array)
   const frontSheet = new THREE.Mesh(frontGeometry, frontMaterial)
   frontSheet.position.y = -PAGE_PIVOT_Y
+  frontSheet.castShadow = true
+  frontSheet.receiveShadow = true
   frontPivot.add(frontSheet)
   calendarGroup.add(frontPivot)
 
-  remnantMaterial = new THREE.MeshStandardMaterial({
+  remnantMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
     roughness: 0.75,
     bumpMap: paperBumpTexture,
@@ -768,6 +822,8 @@ function createScene() {
   calendarGroup.add(remnantSheet)
 
   disposables.push(
+    groundGeometry,
+    groundMaterial,
     backingGeometry,
     backingMaterial,
     stackGeometry,
@@ -787,7 +843,6 @@ function createScene() {
   container.addEventListener('pointermove', onPointerMove)
   container.addEventListener('pointerup', onPointerUp)
   container.addEventListener('pointercancel', onPointerUp)
-  document.addEventListener('pointerdown', onDocumentPointerDown)
   resizeObserver = new ResizeObserver(resize)
   resizeObserver.observe(container)
   resize()
@@ -824,7 +879,9 @@ watch(() => [props.day?.date, props.nextDay?.date], () => {
 
 defineExpose({ startFlip })
 
-onMounted(createScene)
+onMounted(() => {
+  createScene()
+})
 
 onBeforeUnmount(() => {
   if (animationFrame !== null) cancelAnimationFrame(animationFrame)
@@ -833,7 +890,6 @@ onBeforeUnmount(() => {
   sceneRef.value?.removeEventListener('pointermove', onPointerMove)
   sceneRef.value?.removeEventListener('pointerup', onPointerUp)
   sceneRef.value?.removeEventListener('pointercancel', onPointerUp)
-  document.removeEventListener('pointerdown', onDocumentPointerDown)
   renderer?.dispose()
   disposables.forEach(item => item.dispose())
   disposables.length = 0
@@ -845,7 +901,7 @@ onBeforeUnmount(() => {
 .today-calendar-scene {
   position: relative;
   width: 100%;
-  height: min(76vh, 780px);
+  height: min(70vh, 690px);
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
@@ -865,22 +921,6 @@ onBeforeUnmount(() => {
   height: 100% !important;
 }
 
-.scene-hint {
-  position: absolute;
-  left: max(18px, env(safe-area-inset-left));
-  bottom: max(18px, env(safe-area-inset-bottom));
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 11px;
-  border: 1px solid rgba(255, 253, 244, 0.18);
-  border-radius: 999px;
-  background: rgba(31, 25, 20, 0.56);
-  color: rgba(255, 253, 244, 0.78);
-  font-size: 12px;
-  pointer-events: none;
-}
-
 .scene-menu {
   position: absolute;
   right: max(18px, env(safe-area-inset-right));
@@ -888,81 +928,39 @@ onBeforeUnmount(() => {
   z-index: 2;
 }
 
-.menu-trigger,
-.menu-panel button {
+.back-trigger {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  width: 100%;
-  border: 1px solid rgba(255, 253, 244, 0.2);
-  color: rgba(255, 253, 244, 0.88);
-  background: rgba(35, 26, 20, 0.76);
-  backdrop-filter: blur(12px);
-  cursor: pointer;
-  transition: border-color 160ms ease, background-color 160ms ease;
-}
-
-.menu-trigger {
   justify-content: center;
   gap: 7px;
   padding: 8px 13px;
+  border: 1px solid rgba(84, 58, 39, 0.16);
   border-radius: 999px;
+  color: rgba(63, 45, 31, 0.9);
+  background: rgba(255, 250, 238, 0.76);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
   font-size: 12px;
   white-space: nowrap;
+  transition: border-color 160ms ease, background-color 160ms ease;
 }
 
-.menu-trigger:hover,
-.menu-panel button:hover:not(:disabled) {
-  border-color: rgba(230, 189, 120, 0.54);
-  background: rgba(64, 45, 32, 0.86);
+.back-trigger:hover:not(:disabled) {
+  border-color: rgba(156, 66, 56, 0.36);
+  background: rgba(255, 252, 243, 0.9);
 }
 
-.menu-panel {
-  overflow: hidden;
-  margin-bottom: 8px;
-  border: 1px solid rgba(255, 253, 244, 0.14);
-  border-radius: 14px;
-  background: rgba(28, 20, 15, 0.88);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(16px);
-}
-
-.menu-panel button {
-  padding: 11px 14px;
-  border-width: 0 0 1px;
-  border-color: rgba(255, 253, 244, 0.08);
-  border-radius: 0;
-  font-size: 13px;
-}
-
-.menu-panel button:last-child {
-  border-bottom: 0;
-}
-
-.menu-panel button:disabled {
+.back-trigger:disabled {
   opacity: 0.42;
   cursor: not-allowed;
 }
 
-.menu-pop-enter-active,
-.menu-pop-leave-active {
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-
-.menu-pop-enter-from,
-.menu-pop-leave-to {
-  opacity: 0;
-  transform: translateY(8px) scale(0.97);
-}
-
 @media (max-width: 640px) {
   .today-calendar-scene {
-    height: min(66vh, 600px);
+    height: min(62vh, 540px);
   }
 
-  .scene-hint,
-  .menu-trigger {
+  .back-trigger {
     font-size: 11px;
   }
 }

@@ -4902,6 +4902,7 @@
     "timezone": "UTC+8",
     "yi": "Yi",
     "ji": "Ji",
+    "yearGanZhi": "Year Pillar",
     "dayGanZhi": "Day Pillar",
     "monthGanZhi": "Month Pillar",
     "jianChu": "Jian Chu",
@@ -4944,6 +4945,14 @@
     "festivals": "Festivals",
     "naYin": "Na Yin",
     "dayWuxing": "Day Stem Element",
+    "dayLu": "Day Lu",
+    "taiShen": "Daily Tai Shen",
+    "nobleHours": "Noble Hours",
+    "chongZodiac": "Clashing Zodiac",
+    "luckyZodiacs": "Lucky Zodiacs",
+    "luckyNumbers": "Lucky Numbers",
+    "luckyZodiacRule": "Derived from the day branch's six and three harmonies",
+    "luckyNumberRule": "Generated from Guigu nine-immortal values and the day stem element; range 1-49",
     "disclaimer": "This page is generated from traditional calendar methods. Almanac content is provided for cultural and educational entertainment only and is not advice for action, timing, or professional decisions."
   },
   "jinriYunshi": {

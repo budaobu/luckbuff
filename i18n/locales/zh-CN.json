@@ -4926,6 +4926,7 @@
     "timezone": "北京时间",
     "yi": "宜",
     "ji": "忌",
+    "yearGanZhi": "年柱",
     "dayGanZhi": "日柱",
     "monthGanZhi": "月柱",
     "jianChu": "建除十二神",
@@ -4968,6 +4969,14 @@
     "festivals": "节日",
     "naYin": "纳音",
     "dayWuxing": "日干五行",
+    "dayLu": "日禄",
+    "taiShen": "每日胎神",
+    "nobleHours": "贵人时",
+    "chongZodiac": "今日冲生肖",
+    "luckyZodiacs": "幸运生肖",
+    "luckyNumbers": "今日吉数",
+    "luckyZodiacRule": "按日支六合、三合推导",
+    "luckyNumberRule": "按鬼谷子九仙合数与日干五行生成，范围 1～49",
     "disclaimer": "本页面基于传统历法计算生成，黄历内容仅供文化娱乐与学习参考，不构成任何行事、择时或专业建议。重要安排请结合现实情况独立判断。"
   },
   "jinriYunshi": {
