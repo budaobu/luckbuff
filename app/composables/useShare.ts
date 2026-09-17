@@ -43,6 +43,7 @@ export interface ShareOptions {
     | 'yuelao-lot'
     | 'wenshu-lot'
     | 'dizang-lot'
+    | 'tudigong-lot'
     | 'chenggu'
     | 'cezi-battle'
     | 'lenormand'
@@ -182,6 +183,7 @@ export function useShare() {
       'yuelao-lot': '月老灵签',
       'wenshu-lot': '文殊菩萨灵签',
       'dizang-lot': '地藏王菩萨灵签',
+      'tudigong-lot': '土地公灵签',
       chenggu: '称骨算命',
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',
@@ -356,6 +358,9 @@ export function useShare() {
       'wenshu-lot': summary
         ? t('share.hookWenshuLot', { summary })
         : t('share.hookWenshuLotDefault'),
+      'tudigong-lot': summary
+        ? t('share.hookTudigongLot', { summary })
+        : t('share.hookTudigongLotDefault'),
       chenggu: summary
         ? t('share.hookChenggu', { summary })
         : t('share.hookChengguDefault'),

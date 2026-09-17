@@ -1,0 +1,962 @@
+[
+  {
+    "id": 1,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第1签",
+      "zh-TW": "第1籤"
+    },
+    "level": {
+      "zh-CN": "上上",
+      "zh-TW": "上上",
+      "en": "Top Fortune"
+    },
+    "poem": {
+      "zh-CN": "彩凤呈祥瑞，麒麟降帝都，祸除迎福至，喜气自然生。",
+      "zh-TW": "綵鳳呈祥瑞，麒麟降帝都，禍除迎福至，喜氣自然生。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：祸消福至、求官得位、求财大利、婚姻成就、 出行大吉、占病得安、做事大吉、考试得意。",
+      "zh-TW": "斷曰：禍消福至、求官得位、求財大利、婚姻成就、 出行大吉、占病得安、做事大吉、考試得意。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：如今喜得运、吉庆更遇新、财贵双双至、百事皆遂心。",
+      "zh-TW": "米力仙注：如今喜得運、吉慶更遇新、財貴雙雙至、百事皆遂心。"
+    }
+  },
+  {
+    "id": 2,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第2签",
+      "zh-TW": "第2籤"
+    },
+    "level": {
+      "zh-CN": "上平",
+      "zh-TW": "上平",
+      "en": "Above Average"
+    },
+    "poem": {
+      "zh-CN": "从革宜更变，时来合动迁，龙门鱼跃出，凡骨作神仙。",
+      "zh-TW": "從革宜更變，時來合動遷，龍門魚躍出，凡骨作神仙。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：行事得利、作事可成、占讼和吉、求官得位、 走失见近、婚姻成吉、运途渐吉、作事如意。",
+      "zh-TW": "斷曰：行事得利、作事可成、占訟和吉、求官得位、 走失見近、婚姻成吉、運途漸吉、作事如意。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：作事宜改变、急病亦安然、此卦宜动迁、出门便遇春。",
+      "zh-TW": "米力仙注：作事宜改變、急病亦安然、此卦宜動遷、出門便遇春。"
+    }
+  },
+  {
+    "id": 3,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第3签",
+      "zh-TW": "第3籤"
+    },
+    "level": {
+      "zh-CN": "中平",
+      "zh-TW": "中平",
+      "en": "Average"
+    },
+    "poem": {
+      "zh-CN": "动作因风便，求谋可托人，若逢戊己土，事事得遂心。",
+      "zh-TW": "動作因風便，求謀可託人，若逢戊己土，事事得遂心。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：出行吉利、谋事成就、占孕生男、家宅大吉、 运途渐转、占病不妨、作事如意、月令小吉。",
+      "zh-TW": "斷曰：出行吉利、謀事成就、占孕生男、家宅大吉、 運途漸轉、占病不妨、作事如意、月令小吉。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：福德扶佑、逢土发达、红莲正发、吉庆满庭。",
+      "zh-TW": "米力仙注：福德扶佑、逢土發達、紅蓮正發、吉慶滿庭。"
+    }
+  },
+  {
+    "id": 4,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第4签",
+      "zh-TW": "第4籤"
+    },
+    "level": {
+      "zh-CN": "小平",
+      "zh-TW": "小平",
+      "en": "Slightly Average"
+    },
+    "poem": {
+      "zh-CN": "船放江湖内，滩边获宝多，更宜将大用，灾散福来居。",
+      "zh-TW": "船放江湖內，灘邊獲寶多，更宜將大用，災散福來居。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：人口平安、作事小心、求财六分、六甲生男、 交易成吉、占讼和吉、行人得信、运途好转。",
+      "zh-TW": "斷曰：人口平安、作事小心、求財六分、六甲生男、 交易成吉、占訟和吉、行人得信、運途好轉。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：豁然所求昌、福财在门旁、好事成大吉、康宁免灾殃。",
+      "zh-TW": "米力仙注：豁然所求昌、福財在門旁、好事成大吉、康寧免災殃。"
+    }
+  },
+  {
+    "id": 5,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第5签",
+      "zh-TW": "第5籤"
+    },
+    "level": {
+      "zh-CN": "下下",
+      "zh-TW": "下下",
+      "en": "Lowest Fortune"
+    },
+    "poem": {
+      "zh-CN": "此签按南方，灾厄不可当，官司多不利，目下有灾殃。",
+      "zh-TW": "此籤按南方，災厄不可當，官司多不利，目下有災殃。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求谋有阻、出行平平、求财落空、占讼不和、 婚姻平常、寻人不见、家室小康、运途不好。",
+      "zh-TW": "斷曰：求謀有阻、出行平平、求財落空、占訟不和、 婚姻平常、尋人不見、家室小康、運途不好。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：凡事生犹豫、营谋总难成、所求皆不遂、遇此宜作福。",
+      "zh-TW": "米力仙注：凡事生猶豫、營謀總難成、所求皆不遂、遇此宜作福。"
+    }
+  },
+  {
+    "id": 6,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第6签",
+      "zh-TW": "第6籤"
+    },
+    "level": {
+      "zh-CN": "中平",
+      "zh-TW": "中平",
+      "en": "Average"
+    },
+    "poem": {
+      "zh-CN": "且安君子分，勿用小人言，凡事皆当谨，作福保安然。",
+      "zh-TW": "且安君子分，勿用小人言，凡事皆當謹，作福保安然。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：谋事不成、家运小康、作事不好、占讼不好、 考试不利、出行小心、行人成至、六甲生女。",
+      "zh-TW": "斷曰：謀事不成、家運小康、作事不好、占訟不好、 考試不利、出行小心、行人成至、六甲生女。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：作事不分明、作恶毁前程、求财无利息、惟有是非生。",
+      "zh-TW": "米力仙注：作事不分明、作惡毀前程、求財無利息、惟有是非生。"
+    }
+  },
+  {
+    "id": 7,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第7签",
+      "zh-TW": "第7籤"
+    },
+    "level": {
+      "zh-CN": "上上",
+      "zh-TW": "上上",
+      "en": "Top Fortune"
+    },
+    "poem": {
+      "zh-CN": "国治人安泰，家财渐渐兴，有财求望吉，有福亦平安。",
+      "zh-TW": "國治人安泰，家財漸漸興，有財求望吉，有福亦平安。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、作事成就、开市大吉、六甲生男、 求财十分、家宅大吉、占讼有理、运途如意。",
+      "zh-TW": "斷曰：求官得位、作事成就、開市大吉、六甲生男、 求財十分、家宅大吉、占訟有理、運途如意。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：布施及放生、积德厚无穷、修德增富贵、福德扶安康。",
+      "zh-TW": "米力仙注：佈施及放生、積德厚無窮、修德增富貴、福德扶安康。"
+    }
+  },
+  {
+    "id": 8,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第8签",
+      "zh-TW": "第8籤"
+    },
+    "level": {
+      "zh-CN": "上吉",
+      "zh-TW": "上吉",
+      "en": "Highly Auspicious"
+    },
+    "poem": {
+      "zh-CN": "好德承天佑，门招喜气新，有人相助力，获福尽欢欣。",
+      "zh-TW": "好德承天佑，門招喜氣新，有人相助力，獲福盡歡欣。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、求财十分、六甲生男、考试上一、 占病得安、婚姻成就、作事可成、运途如意。",
+      "zh-TW": "斷曰：求官得位、求財十分、六甲生男、考試上一、 占病得安、婚姻成就、作事可成、運途如意。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：福德由天赐、贵人齐进门、家宅多吉庆、福寿两双全。",
+      "zh-TW": "米力仙注：福德由天賜、貴人齊進門、家宅多吉慶、福壽兩雙全。"
+    }
+  },
+  {
+    "id": 9,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第9签",
+      "zh-TW": "第9籤"
+    },
+    "level": {
+      "zh-CN": "中吉",
+      "zh-TW": "中吉",
+      "en": "Moderately Auspicious"
+    },
+    "poem": {
+      "zh-CN": "目下如冬树，枯木未开花，看看春色动，渐渐发萌芽。",
+      "zh-TW": "目下如冬樹，枯木未開花，看看春色動，漸漸發萌芽。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官远吉、占病无妨、求财三分、六甲生女、 婚姻暂谈、寻人得见、考试得中、运途大吉。",
+      "zh-TW": "斷曰：求官遠吉、占病無妨、求財三分、六甲生女、 婚姻暫談、尋人得見、考試得中、運途大吉。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：今运尚未新、勤修降福来、遇春可作福、进禄称心怀。",
+      "zh-TW": "米力仙注：今運尚未新、勤修降福來、遇春可作福、進祿稱心懷。"
+    }
+  },
+  {
+    "id": 10,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第10签",
+      "zh-TW": "第10籤"
+    },
+    "level": {
+      "zh-CN": "中平",
+      "zh-TW": "中平",
+      "en": "Average"
+    },
+    "poem": {
+      "zh-CN": "时融逢和气，衰残物再兴，更逢微细雨，春色又还生。",
+      "zh-TW": "時融逢和氣，衰殘物再興，更逢微細雨，春色又還生。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：谋事可成、运途小吉、作事小心、求财八分、 交易和合、六甲生男、口舌无妨、婚姻成就。",
+      "zh-TW": "斷曰：謀事可成、運途小吉、作事小心、求財八分、 交易和合、六甲生男、口舌無妨、婚姻成就。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：逢凶可化吉、遇难莫着急、若见春色到、郁郁气自舒。",
+      "zh-TW": "米力仙注：逢兇可化吉、遇難莫著急、若見春色到、鬱郁氣自舒。"
+    }
+  },
+  {
+    "id": 11,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第11签",
+      "zh-TW": "第11籤"
+    },
+    "level": {
+      "zh-CN": "大吉",
+      "zh-TW": "大吉",
+      "en": "Great Fortune"
+    },
+    "poem": {
+      "zh-CN": "灾散福门开，无边喜气来，目下相逢处，须当得横财。",
+      "zh-TW": "災散福門開，無邊喜氣來，目下相逢處，須當得橫財。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、求财九分、六甲生男、婚姻成就、 家宅安康、运途如意、生意得利、贵人扶持。",
+      "zh-TW": "斷曰：求官得位、求財九分、六甲生男、婚姻成就、 家宅安康、運途如意、生意得利、貴人扶持。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：勤修福门开、作福灾自散、今番得相遇、赐与财宝归。",
+      "zh-TW": "米力仙注：勤修福門開、作福災自散、今番得相遇、賜與財寶歸。"
+    }
+  },
+  {
+    "id": 12,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第12签",
+      "zh-TW": "第12籤"
+    },
+    "level": {
+      "zh-CN": "上平",
+      "zh-TW": "上平",
+      "en": "Above Average"
+    },
+    "poem": {
+      "zh-CN": "进取逢通达，寒儒衣锦归，何人占取卦，凡事任意为。",
+      "zh-TW": "進取逢通達，寒儒衣錦歸，何人佔取卦，凡事任意為。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、占讼和吉、口舌无妨、作事可成、 求财八分、出行大吉、婚姻可成、运途大利。",
+      "zh-TW": "斷曰：求官得位、占訟和吉、口舌無妨、作事可成、 求財八分、出行大吉、婚姻可成、運途大利。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：时运逢通、进取有益、龙门奋跃、直上青云。",
+      "zh-TW": "米力仙注：時運逢通、進取有益、龍門奮躍、直上青雲。"
+    }
+  },
+  {
+    "id": 13,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第13签",
+      "zh-TW": "第13籤"
+    },
+    "level": {
+      "zh-CN": "下凶",
+      "zh-TW": "下兇",
+      "en": "Inauspicious"
+    },
+    "poem": {
+      "zh-CN": "井底观明月，见影却无形，钱财多散失，谨守得安宁。",
+      "zh-TW": "井底觀明月，見影卻無形，錢財多散失，謹守得安寧。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：谋事不成、交易不利、求财落空、寻人不见、 六甲生女、行人未至、生意不利、运途大凶。",
+      "zh-TW": "斷曰：謀事不成、交易不利、求財落空、尋人不見、 六甲生女、行人未至、生意不利、運途大凶。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：占得井观月、成事皆渺茫、出入空费力、提防小人刁。",
+      "zh-TW": "米力仙注：占得井觀月、成事皆渺茫、出入空費力、提防小人刁。"
+    }
+  },
+  {
+    "id": 14,
+    "levelCode": "lower-middle",
+    "title": {
+      "zh-CN": "第14签",
+      "zh-TW": "第14籤"
+    },
+    "level": {
+      "zh-CN": "下中",
+      "zh-TW": "下中",
+      "en": "Below Average"
+    },
+    "poem": {
+      "zh-CN": "心思多不定，求谋未得成，忍耐方为福，守分免灾星。",
+      "zh-TW": "心思多不定，求謀未得成，忍耐方為福，守分免災星。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：功名未遂、出行不宜、作事不成、占病难愈、 六甲生女、口舌临身、运途不好、凡事小吉。",
+      "zh-TW": "斷曰：功名未遂、出行不宜、作事不成、占病難愈、 六甲生女、口舌臨身、運途不好、凡事小吉。"
+    },
+    "advice": {
+      "zh-CN": "阻碍偏多；先缩小目标，补足准备与支援，再考虑新的行动。",
+      "zh-TW": "阻礙偏多；先縮小目標，補足準備與支援，再考慮新的行動。",
+      "en": "Obstacles are present; narrow the goal and strengthen preparation and support before acting."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：事多犹豫、是非难明、凡事莫图、安分耐守。",
+      "zh-TW": "米力仙注：事多猶豫、是非難明、凡事莫圖、安分耐守。"
+    }
+  },
+  {
+    "id": 15,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第15签",
+      "zh-TW": "第15籤"
+    },
+    "level": {
+      "zh-CN": "下凶",
+      "zh-TW": "下兇",
+      "en": "Inauspicious"
+    },
+    "poem": {
+      "zh-CN": "枯木逢霜雪，扁舟遇大风，惊心无可免，百事不行通。",
+      "zh-TW": "枯木逢霜雪，扁舟遇大風，驚心無可免，百事不行通。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求财不利、寻人不见、走失落空、六甲生男、 婚姻不成、占讼不和、运途不利、身体小康。",
+      "zh-TW": "斷曰：求財不利、尋人不見、走失落空、六甲生男、 婚姻不成、占訟不和、運途不利、身體小康。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：运逢玄武锋、是非口舌侵、谨防灾风火、户内人事逆。",
+      "zh-TW": "米力仙注：運逢玄武鋒、是非口舌侵、謹防災風火、戶內人事逆。"
+    }
+  },
+  {
+    "id": 16,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第16签",
+      "zh-TW": "第16籤"
+    },
+    "level": {
+      "zh-CN": "平吉",
+      "zh-TW": "平吉",
+      "en": "Fairly Auspicious"
+    },
+    "poem": {
+      "zh-CN": "日出临东海，光辉天下明，动用和合吉，百事自然成。",
+      "zh-TW": "日出臨東海，光輝天下明，動用和合吉，百事自然成。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、求财九分、作事可成、官讼和理、 口舌消散、光明上进、运途如意、婚姻成就。",
+      "zh-TW": "斷曰：求官得位、求財九分、作事可成、官訟和理、 口舌消散、光明上進、運途如意、婚姻成就。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：日出云散、阴霾已过、最宜进取、百事称心。",
+      "zh-TW": "米力仙注：日出雲散、陰霾已過、最宜進取、百事稱心。"
+    }
+  },
+  {
+    "id": 17,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第17签",
+      "zh-TW": "第17籤"
+    },
+    "level": {
+      "zh-CN": "中吉",
+      "zh-TW": "中吉",
+      "en": "Moderately Auspicious"
+    },
+    "poem": {
+      "zh-CN": "众恶皆消灭，端然福气生，如人行暗夜，今已得天明。",
+      "zh-TW": "眾惡皆消滅，端然福氣生，如人行暗夜，今已得天明。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：谋事暂成、作事平平、求财六分、婚姻平常、 身体小康、六甲生女、出行谋财、事事遂心。",
+      "zh-TW": "斷曰：謀事暫成、作事平平、求財六分、婚姻平常、 身體小康、六甲生女、出行謀財、事事遂心。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：运逢交替、吉凶渐明、百事求安、遇贵大吉。",
+      "zh-TW": "米力仙注：運逢交替、吉凶漸明、百事求安、遇貴大吉。"
+    }
+  },
+  {
+    "id": 18,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第18签",
+      "zh-TW": "第18籤"
+    },
+    "level": {
+      "zh-CN": "中平",
+      "zh-TW": "中平",
+      "en": "Average"
+    },
+    "poem": {
+      "zh-CN": "服药将身保，缠绵词讼连，百凡宜守旧，作福自然安。",
+      "zh-TW": "服藥將身保，纏綿詞訟連，百凡宜守舊，作福自然安。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：口舌无妨、谋事可成、凡事小心、求财七分、 求官得位、家运小康、六甲生男、占病无妨。",
+      "zh-TW": "斷曰：口舌無妨、謀事可成、凡事小心、求財七分、 求官得位、家運小康、六甲生男、占病無妨。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：青龙下野、遇吉不吉、遇凶不凶、作福自安。",
+      "zh-TW": "米力仙注：青龍下野、遇吉不吉、遇兇不兇、作福自安。"
+    }
+  },
+  {
+    "id": 19,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第19签",
+      "zh-TW": "第19籤"
+    },
+    "level": {
+      "zh-CN": "下下",
+      "zh-TW": "下下",
+      "en": "Lowest Fortune"
+    },
+    "poem": {
+      "zh-CN": "签中多恍惚，钱财暗里磨，恩深成怨去，人事不须知。",
+      "zh-TW": "籤中多恍惚，錢財暗裡磨，恩深成怨去，人事不須知。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：出行小心、婚姻不成、谋事不成、贵人不佳、 凡事不好、钱财落空、人口不安、家运不利。",
+      "zh-TW": "斷曰：出行小心、婚姻不成、謀事不成、貴人不佳、 凡事不好、錢財落空、人口不安、家運不利。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：五鬼当令、祸不单行、百事俱废、内外不安。",
+      "zh-TW": "米力仙注：五鬼當令、禍不單行、百事俱廢、內外不安。"
+    }
+  },
+  {
+    "id": 20,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第20签",
+      "zh-TW": "第20籤"
+    },
+    "level": {
+      "zh-CN": "上平",
+      "zh-TW": "上平",
+      "en": "Above Average"
+    },
+    "poem": {
+      "zh-CN": "根实枝叶茂，林多格式高，经荣多得利，兰蕙似蓬蒿。",
+      "zh-TW": "根實枝葉茂，林多格式高，經榮多得利，蘭蕙似蓬蒿。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：谋事成就、求官得位、出行大吉、月令平常、 身体小康、口舌消除、作事可成、家运如意。",
+      "zh-TW": "斷曰：謀事成就、求官得位、出行大吉、月令平常、 身體小康、口舌消除、作事可成、家運如意。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：拨云见月、家事清吉、丹桂花开、惊喜连连。",
+      "zh-TW": "米力仙注：撥雲見月、家事清吉、丹桂花開、驚喜連連。"
+    }
+  },
+  {
+    "id": 21,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第21签",
+      "zh-TW": "第21籤"
+    },
+    "level": {
+      "zh-CN": "上吉",
+      "zh-TW": "上吉",
+      "en": "Highly Auspicious"
+    },
+    "poem": {
+      "zh-CN": "求名居禄位，笼鸟得逃生，出入多财宝，更宜远方行。",
+      "zh-TW": "求名居祿位，籠鳥得逃生，出入多財寶，更宜遠方行。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：婚姻可成、谋事成就、求官得位、占讼和吉、 求财大利、口舌消散、作事可成、运途如意。",
+      "zh-TW": "斷曰：婚姻可成、謀事成就、求官得位、占訟和吉、 求財大利、口舌消散、作事可成、運途如意。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：求谋遂意、六畜兴旺、出外荣华、四时得利。",
+      "zh-TW": "米力仙注：求謀遂意、六畜興旺、出外榮華、四時得利。"
+    }
+  },
+  {
+    "id": 22,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第22签",
+      "zh-TW": "第22籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "明月清天上，今霄照绮筵，家家沾恩泽，万里净云烟。",
+      "zh-TW": "明月清天上，今霄照綺筵，家家霑恩澤，萬里淨雲煙。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：出行大吉、求官得位、口舌消散、婚姻成就、 凡事如意、事事遂心、生意得利、身体安康。",
+      "zh-TW": "斷曰：出行大吉、求官得位、口舌消散、婚姻成就、 凡事如意、事事遂心、生意得利、身體安康。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：明月当空、万里无云、财官两益、吉祥如意。",
+      "zh-TW": "米力仙注：明月當空、萬里無雲、財官兩益、吉祥如意。"
+    }
+  },
+  {
+    "id": 23,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第23签",
+      "zh-TW": "第23籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "福禄得安康，荣华保吉昌，所得皆遂意，千里共兰香。",
+      "zh-TW": "福祿得安康，榮華保吉昌，所得皆遂意，千里共蘭香。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：婚姻可成、先明上进、求财十分、交易大利、 作事成就、生意得利、六甲生男、家运平安。",
+      "zh-TW": "斷曰：婚姻可成、先明上進、求財十分、交易大利、 作事成就、生意得利、六甲生男、家運平安。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：灾去福来、家门安康、千里扬名、喜气连台。",
+      "zh-TW": "米力仙注：災去福來、家門安康、千里揚名、喜氣連臺。"
+    }
+  },
+  {
+    "id": 24,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第24签",
+      "zh-TW": "第24籤"
+    },
+    "level": {
+      "zh-CN": "下",
+      "zh-TW": "下",
+      "en": "Lower Fortune"
+    },
+    "poem": {
+      "zh-CN": "羸马登程去，饥人走远途，前人多阻厄，退后祸方无。",
+      "zh-TW": "羸馬登程去，飢人走遠途，前人多阻厄，退後禍方無。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：婚姻平平、六甲生女、求官不成、谋事不成、 凡事小心、走失不见、求财落空、运途不佳。",
+      "zh-TW": "斷曰：婚姻平平、六甲生女、求官不成、謀事不成、 凡事小心、走失不見、求財落空、運途不佳。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：朱雀临门、是非难辩、莫名其妙、进退两难。",
+      "zh-TW": "米力仙注：朱雀臨門、是非難辯、莫名其妙、進退兩難。"
+    }
+  },
+  {
+    "id": 25,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第25签",
+      "zh-TW": "第25籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "三姓俱相伴，祥光得共生，更宜分造化，百福自然亨。",
+      "zh-TW": "三姓俱相伴，祥光得共生，更宜分造化，百福自然亨。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：口舌消除、求官得位、六甲生男、凡事平常、 求财六分、作事小心、出行大吉、运途如意。",
+      "zh-TW": "斷曰：口舌消除、求官得位、六甲生男、凡事平常、 求財六分、作事小心、出行大吉、運途如意。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：三人同行、共享财富、理念同心、出入享通。",
+      "zh-TW": "米力仙注：三人同行、共享財富、理念同心、出入享通。"
+    }
+  },
+  {
+    "id": 26,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第26签",
+      "zh-TW": "第26籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "此签占太和，求谋喜事多，远人归古里，身乐得欢歌。",
+      "zh-TW": "此籤佔太和，求謀喜事多，遠人歸古裡，身樂得歡歌。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：口舌无妨、出行大利、谋事可成、求官得位、 事事遂心、作事成之、求财七分、家宅大吉。",
+      "zh-TW": "斷曰：口舌無妨、出行大利、謀事可成、求官得位、 事事遂心、作事成之、求財七分、家宅大吉。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：贵人相助、经营得意、旧人归建、更上成楼。",
+      "zh-TW": "米力仙注：貴人相助、經營得意、舊人歸建、更上成樓。"
+    }
+  },
+  {
+    "id": 27,
+    "levelCode": "upper",
+    "title": {
+      "zh-CN": "第27签",
+      "zh-TW": "第27籤"
+    },
+    "level": {
+      "zh-CN": "大吉",
+      "zh-TW": "大吉",
+      "en": "Great Fortune"
+    },
+    "poem": {
+      "zh-CN": "霖雨滋稼穑，何愁不倍收，自然心得乐，安居总无忧。",
+      "zh-TW": "霖雨滋稼穡，何愁不倍收，自然心得樂，安居總無憂。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：婚姻可就、占病无妨、口舌消除、出行大吉、 交易得意、谋事成就、求财七分、运途大吉。",
+      "zh-TW": "斷曰：婚姻可就、占病無妨、口舌消除、出行大吉、 交易得意、謀事成就、求財七分、運途大吉。"
+    },
+    "advice": {
+      "zh-CN": "顺势推进，及时落定关键事项；保持正直与感恩回馈，福气更易稳住。",
+      "zh-TW": "順勢推進，及時落定關鍵事項；保持正直與感恩回饋，福氣更易穩住。",
+      "en": "Move forward while conditions are favorable; secure key matters and reciprocate the support around you."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：福自天来、何须忧虑、宽心以待、吉祥安乐。",
+      "zh-TW": "米力仙注：福自天來、何須憂慮、寬心以待、吉祥安樂。"
+    }
+  },
+  {
+    "id": 28,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第28签",
+      "zh-TW": "第28籤"
+    },
+    "level": {
+      "zh-CN": "下",
+      "zh-TW": "下",
+      "en": "Lower Fortune"
+    },
+    "poem": {
+      "zh-CN": "迢递途中旅，云横日随山，羁心无可托，前后总皆难。",
+      "zh-TW": "迢遞途中旅，雲橫日隨山，羈心無可託，前後總皆難。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：求官得位、凡事小心、口舌临身、出行不利、 作事不成、婚事不好、六甲生女、身体小康。",
+      "zh-TW": "斷曰：求官得位、凡事小心、口舌臨身、出行不利、 作事不成、婚事不好、六甲生女、身體小康。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：白虎交重、盗贼灾殃、官刑丧事、意外刑伤。",
+      "zh-TW": "米力仙注：白虎交重、盜賊災殃、官刑喪事、意外刑傷。"
+    }
+  },
+  {
+    "id": 29,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第29签",
+      "zh-TW": "第29籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "畔中珠自见，石内玉争光，进财求望吉，有福不成殃。",
+      "zh-TW": "畔中珠自見，石內玉爭光，進財求望吉，有福不成殃。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：占病无妨、婚姻成就、谋事成功、口舌渐消、 贵人扶持、出行大利、光明上进、家运小康。",
+      "zh-TW": "斷曰：占病無妨、婚姻成就、謀事成功、口舌漸消、 貴人扶持、出行大利、光明上進、家運小康。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：石中隐玉、开发享通、有才有得、福禄无忧。",
+      "zh-TW": "米力仙注：石中隱玉、開發享通、有才有得、福祿無憂。"
+    }
+  },
+  {
+    "id": 30,
+    "levelCode": "upper-middle",
+    "title": {
+      "zh-CN": "第30签",
+      "zh-TW": "第30籤"
+    },
+    "level": {
+      "zh-CN": "吉",
+      "zh-TW": "吉",
+      "en": "Auspicious"
+    },
+    "poem": {
+      "zh-CN": "天兵诛贼寇，旌旗得胜回，功勋为将帅，门第有光辉。",
+      "zh-TW": "天兵誅賊寇，旌旗得勝回，功勳為將帥，門第有光輝。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：交友助成、口舌消除、婚姻可成、求官得位、 出行大吉、交易大利、作事可成、家运小康。",
+      "zh-TW": "斷曰：交友助成、口舌消除、婚姻可成、求官得位、 出行大吉、交易大利、作事可成、家運小康。"
+    },
+    "advice": {
+      "zh-CN": "机会向好，但条件仍需成熟；先补齐细节，再分步推进重要决定。",
+      "zh-TW": "機會向好，但條件仍需成熟；先補齊細節，再分步推進重要決定。",
+      "en": "Opportunities look promising but still need maturity; refine the details before major decisions."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：心诚正直、天人相助、财利两收、声名远播。",
+      "zh-TW": "米力仙注：心誠正直、天人相助、財利兩收、聲名遠播。"
+    }
+  },
+  {
+    "id": 31,
+    "levelCode": "middle",
+    "title": {
+      "zh-CN": "第31签",
+      "zh-TW": "第31籤"
+    },
+    "level": {
+      "zh-CN": "平",
+      "zh-TW": "平",
+      "en": "Neutral"
+    },
+    "poem": {
+      "zh-CN": "履薄登水池，危桥得渡时，重重忧险过，春色自芳菲。",
+      "zh-TW": "履薄登水池，危橋得渡時，重重憂險過，春色自芳菲。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：占病不愈、求官得位、月令不佳、出行小吉、 六甲生男、寻人不见、凡事小心、家运小康。",
+      "zh-TW": "斷曰：占病不愈、求官得位、月令不佳、出行小吉、 六甲生男、尋人不見、凡事小心、家運小康。"
+    },
+    "advice": {
+      "zh-CN": "进展平顺而有限；先守住现有基础，择要处理，不急于扩张。",
+      "zh-TW": "進展平順而有限；先守住現有基礎，擇要處理，不急於擴張。",
+      "en": "Progress is steady but limited; protect what works and focus on essentials without rushing expansion."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：行行有险地、步步有危机、关关有忧虑、历险莫迟疑。",
+      "zh-TW": "米力仙注：行行有險地、步步有危機、關關有憂慮、歷險莫遲疑。"
+    }
+  },
+  {
+    "id": 32,
+    "levelCode": "lower",
+    "title": {
+      "zh-CN": "第32签",
+      "zh-TW": "第32籤"
+    },
+    "level": {
+      "zh-CN": "下",
+      "zh-TW": "下",
+      "en": "Lower Fortune"
+    },
+    "poem": {
+      "zh-CN": "尘埋青钢钱，美玉陷淤泥，何时重出世，再得光辉显。",
+      "zh-TW": "塵埋青鋼錢，美玉陷淤泥，何時重出世，再得光輝顯。"
+    },
+    "explanation": {
+      "zh-CN": "断曰：占讼不好、婚姻不好、谋事不成、出行不利、 凡事小心、口舌祸端、财库落空、家运小康。",
+      "zh-TW": "斷曰：占訟不好、婚姻不好、謀事不成、出行不利、 凡事小心、口舌禍端、財庫落空、家運小康。"
+    },
+    "advice": {
+      "zh-CN": "现阶段宜守不宜进；先避开争端与冒险，处理风险后再谋转机。",
+      "zh-TW": "現階段宜守不宜進；先避開爭端與冒險，處理風險後再謀轉機。",
+      "en": "Favor consolidation over expansion; avoid disputes and risks, then seek a better opening."
+    },
+    "sacredMeaning": {
+      "zh-CN": "米力仙注：怀才却不遇、为财头点地、只因命与运、莫问名和利。",
+      "zh-TW": "米力仙注：懷才卻不遇、為財頭點地、只因命與運、莫問名和利。"
+    }
+  }
+]

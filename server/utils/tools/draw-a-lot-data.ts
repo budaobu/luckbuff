@@ -6,6 +6,7 @@ import dizangLotData from '../../../app/data/dizang-lots-60.json'
 import wealthGodLotData from '../../../app/data/wealth-god-lots-100.json'
 import sanshanLotData from '../../../app/data/sanshan-lots-61.json'
 import mazuLotData from '../../../app/data/mazu-lots-60.json'
+import tudigongLotData from '../../../app/data/tudigong-lots-32.json'
 
 export interface FortuneLot {
   number: number
@@ -198,6 +199,22 @@ const dizangFortunes: FortuneLot[] = dizangLotData.map(item => makeFortune(
   item.sacredMeaning,
 ))
 
+// 土地公灵签：32 签事实层，含签号、吉凶、签诗、断曰与米力仙注。
+
+const tudigongFortunes: FortuneLot[] = tudigongLotData.map(item => makeFortune(
+  item.id,
+  (item.levelCode === 'upper-middle'
+    ? 'upperMiddle'
+    : item.levelCode === 'lower-middle' ? 'lowerMiddle' : item.levelCode) as keyof typeof LEVELS,
+  item.title,
+  item.poem,
+  item.explanation,
+  item.advice,
+  item.level,
+  undefined,
+  item.sacredMeaning,
+))
+
 
 export const LOT_TYPES: LotType[] = [
   {
@@ -247,6 +264,12 @@ export const LOT_TYPES: LotType[] = [
     name: { 'zh-CN': '地藏王菩萨灵签', 'zh-TW': '地藏王菩薩靈籤', en: 'Dizang Oracle' },
     count: dizangFortunes.length,
     fortunes: dizangFortunes,
+  },
+  {
+    id: 'tudigong',
+    name: { 'zh-CN': '土地公灵签', 'zh-TW': '土地公靈籤', en: `Tudigong Oracle` },
+    count: tudigongFortunes.length,
+    fortunes: tudigongFortunes,
   },
 ]
 

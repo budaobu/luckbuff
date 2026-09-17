@@ -717,7 +717,9 @@
     "hookWongTaiSinLot": "I just drew a Wong Tai Sin oracle: {summary}. Take a look!",
     "hookWongTaiSinLotDefault": "I just drew a Wong Tai Sin oracle and the result is interesting.",
     "hookWenshuLot": "I just drew a Manjushri Oracle lot: {summary}. Take a look!",
-    "hookWenshuLotDefault": "I just drew a Manjushri Oracle lot and the result is insightful."
+    "hookWenshuLotDefault": "I just drew a Manjushri Oracle lot and the result is insightful.",
+    "hookTudigongLot": "I just drew a Tudigong Oracle lot: {summary}. Take a look!",
+    "hookTudigongLotDefault": "I just drew a Tudigong Oracle lot and the result is insightful."
   },
   "natalAstro": {
     "title": "Western Natal Chart",
@@ -1450,7 +1452,12 @@
     "dizangLotDesc": "Draw a free Dizang (Ksitigarbha) Oracle online. Explore all 60 signs with ganzhi titles, poems, notes, interpretations and an AI reading tailored to your question.",
     "dizangLotKeywords": "Dizang Oracle,Ksitigarbha Oracle,Dizang fortune sticks,Chinese oracle,60 oracle signs,Dizang lot online,oracle poem,AI oracle reading",
     "dizangLotOgTitle": "Dizang Oracle Online_Draw 60 Signs & Poem Meanings",
-    "dizangLotOgDesc": "Draw a Dizang Oracle sign online and read its ganzhi title, poem, note, interpretation and AI guidance."
+    "dizangLotOgDesc": "Draw a Dizang Oracle sign online and read its ganzhi title, poem, note, interpretation and AI guidance.",
+    "tudigongLotTitle": "Tudigong Oracle Online_Draw 32 Signs & Poem Meanings",
+    "tudigongLotDesc": "Draw a free Tudigong (Earth God) Oracle online. Explore all 32 signs with ranks, poems, classical judgments, immortal notes and an AI reading for career, wealth, home or health questions.",
+    "tudigongLotKeywords": "Tudigong Oracle,Earth God Oracle,Tudigong lot online,32 oracle signs,Chinese fortune sticks,oracle poem,oracle judgment,AI oracle reading",
+    "tudigongLotOgTitle": "Tudigong Oracle Online_Draw 32 Signs & Poem Meanings",
+    "tudigongLotOgDesc": "Draw a Tudigong Oracle sign online and read its rank, poem, judgment, immortal note and AI guidance."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -7337,12 +7344,12 @@
   },
   "drawALotTopic": {
     "title": "Divination Lots Tool",
-    "subtitle": "Draw Guanyin lots, Guandi lots, Manjushri lots, Japanese omikuji, Wealth God lots, Mazu lots and Jiaobei online with AI interpretation.",
-    "intro": "This page brings together Guanyin lots, Guandi lots, Manjushri lots, Japanese omikuji, Wealth God lots, Sanshanwang lots, Mazu lots, Zhuge Shenshu and Jiaobei. Choose a lot type, focus on your question and receive an AI interpretation.",
+    "subtitle": "Draw Guanyin lots, Guandi lots, Manjushri lots, Tudigong lots, Japanese omikuji, Wealth God lots, Mazu lots and Jiaobei online with AI interpretation.",
+    "intro": "This page brings together Guanyin lots, Guandi lots, Manjushri lots, Tudigong lots, Japanese omikuji, Wealth God lots, Sanshanwang lots, Mazu lots, Zhuge Shenshu and Jiaobei. Choose a lot type, focus on your question and receive an AI interpretation.",
     "recommended": "Recommended Tools",
     "guideTitle": "Guide",
     "guide1Title": "Choose a lot type",
-    "guide1Desc": "Guanyin lots suit general questions; Manjushri lots emphasize study and wisdom; Guandi lots emphasize loyalty, judgment and clear decisions; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
+    "guide1Desc": "Guanyin lots suit general questions; Manjushri lots emphasize study and wisdom; Guandi lots emphasize loyalty, judgment and clear decisions; Tudigong lots relate to home, business and local protection; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
     "guide2Title": "Focus sincerely on your question",
     "guide2Desc": "Before drawing, think your question through and focus on it sincerely. One question at a time; the clearer the question, the more focused the interpretation.",
     "guide3Title": "Interpret the lot rationally",
@@ -7351,7 +7358,7 @@
     "faq1Q": "What can I ask about?",
     "faq1A": "You can ask about career, relationships, wealth, health, travel and other life matters. We recommend one question at a time, as specific as possible.",
     "faq2Q": "What is the difference between the lot types?",
-    "faq2A": "Guanyin lots are general-purpose; Manjushri lots emphasize study, wisdom and judgment; Guandi lots emphasize loyalty and decision-making; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
+    "faq2A": "Guanyin lots are general-purpose; Manjushri lots emphasize study, wisdom and judgment; Guandi lots emphasize loyalty and decision-making; Tudigong lots relate to home, business and local protection; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
     "faq3Q": "Are the lots accurate?",
     "faq3A": "Lot poems and interpretations are generated from traditional culture and AI. They are for cultural entertainment and reference only, not a substitute for real-world judgment, professional advice or personal effort.",
     "faq4Q": "Can I draw lots multiple times in a row?",
@@ -13047,5 +13054,52 @@
     "seoTitle": "Dizang Oracle Sign {n} Meaning_Poem & Note",
     "seoDescription": "Dizang Oracle Sign {n}, {title}: {meaning} Read the ganzhi title, poem, note, sign hint and practical guidance, then draw online.",
     "seoKeywords": "Dizang Oracle sign {n},Dizang Oracle sign {n} meaning,{title},60 oracle signs,oracle poem,oracle note"
+  },
+  "tudigongLot": {
+    "title": "Tudigong Oracle",
+    "toolDesc": "Draw a Tudigong Oracle online with 32 ranks, poems, judgments and an AI reading.",
+    "subtitle": "Ask your question and draw one of the 32 Tudigong Oracle signs.",
+    "disclaimer": "This tool generates reference results based on traditional Tudigong Oracle culture. It is for cultural entertainment and reflection only and is not professional or life advice.",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "For example: is it a good time to move my home or business plan forward?",
+    "questionHint": "One clear question gives a more focused reading.",
+    "toolCta": "Draw Tudigong Oracle",
+    "drawing": "Drawing……",
+    "interpreting": "Reading……",
+    "reinterpret": "Read again",
+    "copyResult": "Copy result",
+    "viewDetail": "View sign details",
+    "redraw": "Draw again",
+    "questionRequired": "Please enter your question first",
+    "drawFailed": "The draw failed. Please try again.",
+    "aiUnavailable": "AI reading is temporarily unavailable. Please try again later."
+  },
+  "tudigongPoster": {
+    "kicker": "Tudigong Oracle",
+    "serial": "Fortune Oracle",
+    "numberLine": "Tudigong Oracle No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "No question entered",
+    "poemFlag": "Poem",
+    "meaningLabel": "Immortal note",
+    "meaningPending": "Note pending",
+    "guidanceLabel": "Guidance",
+    "guidancePending": "Generating AI guidance"
+  },
+  "tudigongLotDetail": {
+    "back": "Back to Tudigong Oracle",
+    "title": "Tudigong Oracle Sign {n} Meaning",
+    "poem": "Oracle poem",
+    "sacredMeaning": "Immortal note",
+    "signHint": "Classical judgment",
+    "advice": "Practical guidance",
+    "navigation": "Tudigong Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Tudigong Oracle Sign {n} Meaning_Poem & Judgment",
+    "seoDescription": "Tudigong Oracle Sign {n}, {title}: {meaning} Read the poem, classical judgment, immortal note and practical guidance, then draw online.",
+    "seoKeywords": "Tudigong Oracle sign {n},Tudigong Oracle sign {n} meaning,{title},32 oracle signs,oracle poem,oracle judgment"
   }
 }
