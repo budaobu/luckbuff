@@ -96,6 +96,15 @@ for (const lot of wongTaiSinLots) {
   toolPathAliases[slug] = `/tools/wong-tai-sin-lots/${lot.id}`
 }
 
+// 文殊菩萨灵签详情页：继续沿用 plural 动态路由规则。
+const wenshuLots = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'wenshu-lots-100.json'), 'utf-8'))
+const wenshuTitleTemplate = lookup('wenshuLotDetail.title')
+for (const lot of wenshuLots) {
+  const slug = `wenshu-lot-${lot.id}`
+  tools[slug] ??= wenshuTitleTemplate?.replace('{n}', String(lot.id)) || slug
+  toolPathAliases[slug] = `/tools/wenshu-lots/${lot.id}`
+}
+
 // ── 世界杯比赛详情页：内容文件在构建期生成，按比赛 slug 作为独立统计项 ──
 const matchDir = resolve(ROOT, 'content', 'worldcup-predictions')
 for (const filename of readdirSync(matchDir)) {

@@ -715,7 +715,9 @@
     "hookGuandiLot": "I just drew a Guandi oracle: {summary}. Take a look!",
     "hookGuandiLotDefault": "I just drew a Guandi oracle and the result is interesting.",
     "hookWongTaiSinLot": "I just drew a Wong Tai Sin oracle: {summary}. Take a look!",
-    "hookWongTaiSinLotDefault": "I just drew a Wong Tai Sin oracle and the result is interesting."
+    "hookWongTaiSinLotDefault": "I just drew a Wong Tai Sin oracle and the result is interesting.",
+    "hookWenshuLot": "I just drew a Manjushri Oracle lot: {summary}. Take a look!",
+    "hookWenshuLotDefault": "I just drew a Manjushri Oracle lot and the result is insightful."
   },
   "natalAstro": {
     "title": "Western Natal Chart",
@@ -1438,7 +1440,12 @@
     "yuelaoLotDesc": "Draw a free Yuelao Oracle online. Explore all 100 love signs with poems, fortune ranks, classical sources and an AI reading tailored to your question.",
     "yuelaoLotKeywords": "Yuelao Oracle,Chinese love oracle,marriage oracle,Yuelao oracle online,100 love signs,Yue Lao oracle,relationship divination",
     "yuelaoLotOgTitle": "Yuelao Oracle Online_100 Love Signs & Meanings",
-    "yuelaoLotOgDesc": "Draw the Yuelao Oracle for love, crushes, reconciliation and marriage: 100 poems, ranks and AI guidance in one tool."
+    "yuelaoLotOgDesc": "Draw the Yuelao Oracle for love, crushes, reconciliation and marriage: 100 poems, ranks and AI guidance in one tool.",
+    "wenshuLotTitle": "Manjushri Oracle Online_Draw 100 Lots & Wisdom Meanings",
+    "wenshuLotDesc": "Draw a free Manjushri Oracle online. Explore 100 signs with poems, fortune ranks, sacred meanings and AI guidance for study, career, wealth and general questions.",
+    "wenshuLotKeywords": "Manjushri Oracle,Wenshu oracle,Manjushri lot online,100 oracle signs,study oracle,wisdom oracle,Chinese fortune sticks,AI oracle reading",
+    "wenshuLotOgTitle": "Manjushri Oracle Online_Draw 100 Lots & Wisdom Meanings",
+    "wenshuLotOgDesc": "Draw a Manjushri Oracle lot online and read its poem, rank, sacred meaning and AI guidance."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -7322,12 +7329,12 @@
   },
   "drawALotTopic": {
     "title": "Divination Lots Tool",
-    "subtitle": "Draw Guanyin lots, Guandi lots, Japanese omikuji, Wealth God lots, Mazu lots and Jiaobei online with AI interpretation.",
-    "intro": "This page brings together Guanyin lots, Guandi lots, Japanese omikuji, Wealth God lots, Sanshanwang lots, Mazu lots, Zhuge Shenshu character lots and Jiaobei. Choose a lot type, focus sincerely on your question, draw a lot and receive AI interpretation. Results are for cultural entertainment only.",
+    "subtitle": "Draw Guanyin lots, Guandi lots, Manjushri lots, Japanese omikuji, Wealth God lots, Mazu lots and Jiaobei online with AI interpretation.",
+    "intro": "This page brings together Guanyin lots, Guandi lots, Manjushri lots, Japanese omikuji, Wealth God lots, Sanshanwang lots, Mazu lots, Zhuge Shenshu and Jiaobei. Choose a lot type, focus on your question and receive an AI interpretation.",
     "recommended": "Recommended Tools",
     "guideTitle": "Guide",
     "guide1Title": "Choose a lot type",
-    "guide1Desc": "Guanyin lots suit general questions; Guandi lots emphasize loyalty, judgment and clear decisions; Japanese omikuji covers nine ranks; Wealth God lots focus on money, while Sanshanwang and Mazu lots carry regional traditions.",
+    "guide1Desc": "Guanyin lots suit general questions; Manjushri lots emphasize study and wisdom; Guandi lots emphasize loyalty, judgment and clear decisions; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
     "guide2Title": "Focus sincerely on your question",
     "guide2Desc": "Before drawing, think your question through and focus on it sincerely. One question at a time; the clearer the question, the more focused the interpretation.",
     "guide3Title": "Interpret the lot rationally",
@@ -7336,7 +7343,7 @@
     "faq1Q": "What can I ask about?",
     "faq1A": "You can ask about career, relationships, wealth, health, travel and other life matters. We recommend one question at a time, as specific as possible.",
     "faq2Q": "What is the difference between the lot types?",
-    "faq2A": "Guanyin lots are general-purpose; Guandi lots emphasize loyalty and decision-making for career, disputes and choices; Japanese omikuji covers nine ranks; Wealth God lots focus on money; Sanshanwang and Mazu lots carry local cultural significance.",
+    "faq2A": "Guanyin lots are general-purpose; Manjushri lots emphasize study, wisdom and judgment; Guandi lots emphasize loyalty and decision-making; Japanese omikuji covers nine ranks; Wealth God lots focus on money.",
     "faq3Q": "Are the lots accurate?",
     "faq3A": "Lot poems and interpretations are generated from traditional culture and AI. They are for cultural entertainment and reference only, not a substitute for real-world judgment, professional advice or personal effort.",
     "faq4Q": "Can I draw lots multiple times in a row?",
@@ -12938,5 +12945,52 @@
     "seoTitle": "Yuelao Oracle Sign {n}_Love Meaning",
     "seoDescription": "Yuelao Oracle Sign {n} meaning: view the poem, fortune rank, classical source and love guidance for relationship, crush, reconciliation and marriage questions.",
     "seoKeywords": "Yuelao Oracle sign {n},Yuelao Oracle sign {n} meaning,Yuelao Oracle 100 signs,Chinese love oracle,marriage oracle"
+  },
+  "wenshuLot": {
+    "title": "Manjushri Oracle",
+    "toolDesc": "Draw a Manjushri Oracle online with 100 poems, sacred meanings and an AI wisdom reading.",
+    "subtitle": "Ask about study, career or life and draw one of the 100 Manjushri signs.",
+    "disclaimer": "This tool generates reference results based on traditional Manjushri Oracle culture. It is for cultural entertainment and reflection only and is not professional, academic, or life advice.",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "For example: should I adjust my study routine?",
+    "questionHint": "One clear question gives a more focused reading.",
+    "toolCta": "Draw Manjushri Oracle",
+    "drawing": "Drawing……",
+    "interpreting": "Reading……",
+    "reinterpret": "Read again",
+    "copyResult": "Copy result",
+    "viewDetail": "View sign details",
+    "redraw": "Draw again",
+    "questionRequired": "Please enter your question first",
+    "drawFailed": "The draw failed. Please try again.",
+    "aiUnavailable": "AI reading is temporarily unavailable. Please try again later."
+  },
+  "wenshuPoster": {
+    "kicker": "Manjushri Oracle",
+    "serial": "Wisdom Oracle",
+    "numberLine": "Manjushri Oracle No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "No question entered",
+    "poemFlag": "Poem",
+    "meaningLabel": "Sacred meaning",
+    "meaningPending": "Sacred meaning pending",
+    "guidanceLabel": "Guidance",
+    "guidancePending": "Generating AI guidance"
+  },
+  "wenshuLotDetail": {
+    "back": "Back to Manjushri Oracle",
+    "title": "Manjushri Oracle Sign {n} Meaning",
+    "poem": "Oracle poem",
+    "sacredMeaning": "Sacred meaning",
+    "explanation": "Classical note",
+    "advice": "Practical guidance",
+    "navigation": "Manjushri Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Manjushri Oracle Sign {n} Meaning_Poem & Sacred Intent",
+    "seoDescription": "Manjushri Oracle Sign {n}, “{title}”: {meaning} Read the poem, sacred meaning, classical note and practical guidance, then draw online.",
+    "seoKeywords": "Manjushri Oracle sign {n},Manjushri Oracle sign {n} meaning,{title},100 oracle signs,oracle poem,sacred meaning"
   }
 }

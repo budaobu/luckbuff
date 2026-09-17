@@ -942,6 +942,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/wong-tai-sin-lot',
       },
       {
+        icon: 'i-heroicons-academic-cap',
+        titleKey: 'wenshuLot.title',
+        descKey: 'wenshuLot.toolDesc',
+        ctaKey: 'wenshuLot.toolCta',
+        path: '/tools/wenshu-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',
