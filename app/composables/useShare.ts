@@ -42,6 +42,7 @@ export interface ShareOptions {
     | 'wong-tai-sin-lot'
     | 'yuelao-lot'
     | 'wenshu-lot'
+    | 'dizang-lot'
     | 'chenggu'
     | 'cezi-battle'
     | 'lenormand'
@@ -180,6 +181,7 @@ export function useShare() {
       'wong-tai-sin-lot': '黄大仙灵签',
       'yuelao-lot': '月老灵签',
       'wenshu-lot': '文殊菩萨灵签',
+      'dizang-lot': '地藏王菩萨灵签',
       chenggu: '称骨算命',
       'cezi-battle': '测字战斗',
       lenormand: '雷诺曼',

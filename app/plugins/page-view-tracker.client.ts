@@ -38,6 +38,7 @@ const GUANYIN_LOT_DETAIL_RE = /^\/tools\/guanyin-lots\/(\d{1,3})$/
 const GUANDI_LOT_DETAIL_RE = /^\/tools\/guandi-lots\/(\d{1,3})$/
 const WONG_TAI_SIN_LOT_DETAIL_RE = /^\/tools\/wong-tai-sin-lots\/(\d{1,3})$/
 const WENSHU_LOT_DETAIL_RE = /^\/tools\/wenshu-lots\/(\d{1,3})$/
+const DIZANG_LOT_DETAIL_RE = /^\/tools\/dizang-lots\/(\d{1,3})$/
 const TOOL_ROUTE_RE = /^\/tools\/([\w-]{1,80})\/?$/
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -51,6 +52,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const guandiMatch = clean.match(GUANDI_LOT_DETAIL_RE)
     const wongTaiSinMatch = clean.match(WONG_TAI_SIN_LOT_DETAIL_RE)
     const wenshuMatch = clean.match(WENSHU_LOT_DETAIL_RE)
+    const dizangMatch = clean.match(DIZANG_LOT_DETAIL_RE)
     const toolMatch = clean.match(TOOL_ROUTE_RE)
     if (matchMatch) {
       type = 'tool'
@@ -67,6 +69,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     } else if (wenshuMatch) {
       type = 'tool'
       slug = `wenshu-lot-${wenshuMatch[1]}`
+    } else if (dizangMatch) {
+      type = 'tool'
+      slug = `dizang-lot-${dizangMatch[1]}`
     } else if (toolMatch || REGISTERED_TOOL_PATHS.has(clean)) {
       type = 'tool'
       slug = toolMatch ? toolMatch[1]! : clean.slice(1).split('/')[1]!

@@ -949,6 +949,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/wenshu-lot',
       },
       {
+        icon: 'i-heroicons-globe-alt',
+        titleKey: 'dizangLot.title',
+        descKey: 'dizangLot.toolDesc',
+        ctaKey: 'dizangLot.toolCta',
+        path: '/tools/dizang-lot',
+      },
+      {
         icon: 'i-heroicons-numbered-list',
         titleKey: 'zhugeCezi.title',
         descKey: 'zhugeCezi.toolDesc',

@@ -1445,7 +1445,12 @@
     "wenshuLotDesc": "Draw a free Manjushri Oracle online. Explore 100 signs with poems, fortune ranks, sacred meanings and AI guidance for study, career, wealth and general questions.",
     "wenshuLotKeywords": "Manjushri Oracle,Wenshu oracle,Manjushri lot online,100 oracle signs,study oracle,wisdom oracle,Chinese fortune sticks,AI oracle reading",
     "wenshuLotOgTitle": "Manjushri Oracle Online_Draw 100 Lots & Wisdom Meanings",
-    "wenshuLotOgDesc": "Draw a Manjushri Oracle lot online and read its poem, rank, sacred meaning and AI guidance."
+    "wenshuLotOgDesc": "Draw a Manjushri Oracle lot online and read its poem, rank, sacred meaning and AI guidance.",
+    "dizangLotTitle": "Dizang Oracle Online_Draw 60 Signs & Poem Meanings",
+    "dizangLotDesc": "Draw a free Dizang (Ksitigarbha) Oracle online. Explore all 60 signs with ganzhi titles, poems, notes, interpretations and an AI reading tailored to your question.",
+    "dizangLotKeywords": "Dizang Oracle,Ksitigarbha Oracle,Dizang fortune sticks,Chinese oracle,60 oracle signs,Dizang lot online,oracle poem,AI oracle reading",
+    "dizangLotOgTitle": "Dizang Oracle Online_Draw 60 Signs & Poem Meanings",
+    "dizangLotOgDesc": "Draw a Dizang Oracle sign online and read its ganzhi title, poem, note, interpretation and AI guidance."
   },
   "bazi": {
     "title": "Four Pillars (Bazi)",
@@ -12995,5 +13000,52 @@
     "seoTitle": "Manjushri Oracle Sign {n} Meaning_Poem & Sacred Intent",
     "seoDescription": "Manjushri Oracle Sign {n}, “{title}”: {meaning} Read the poem, sacred meaning, classical note and practical guidance, then draw online.",
     "seoKeywords": "Manjushri Oracle sign {n},Manjushri Oracle sign {n} meaning,{title},100 oracle signs,oracle poem,sacred meaning"
+  },
+  "dizangLot": {
+    "title": "Dizang Oracle",
+    "toolDesc": "Draw a Dizang Oracle online with 60 ganzhi titles, poems, notes and an AI reading.",
+    "subtitle": "Ask your question and draw one of the 60 Dizang Oracle signs.",
+    "disclaimer": "This tool generates reference results based on traditional Dizang Oracle culture. It is for cultural entertainment and reflection only and is not professional or life advice.",
+    "questionLabel": "Your question",
+    "questionPlaceholder": "For example: is now a good time to move my career forward?",
+    "questionHint": "One clear question gives a more focused reading.",
+    "toolCta": "Draw Dizang Oracle",
+    "drawing": "Drawing……",
+    "interpreting": "Reading……",
+    "reinterpret": "Read again",
+    "copyResult": "Copy result",
+    "viewDetail": "View sign details",
+    "redraw": "Draw again",
+    "questionRequired": "Please enter your question first",
+    "drawFailed": "The draw failed. Please try again.",
+    "aiUnavailable": "AI reading is temporarily unavailable. Please try again later."
+  },
+  "dizangPoster": {
+    "kicker": "Dizang Oracle",
+    "serial": "Great Vow Oracle",
+    "numberLine": "Dizang Oracle No. {number}",
+    "questionFlag": "Question",
+    "noQuestion": "No question entered",
+    "poemFlag": "Poem",
+    "meaningLabel": "Note",
+    "meaningPending": "Note pending",
+    "guidanceLabel": "Guidance",
+    "guidancePending": "Generating AI guidance"
+  },
+  "dizangLotDetail": {
+    "back": "Back to Dizang Oracle",
+    "title": "Dizang Oracle Sign {n} Meaning",
+    "poem": "Oracle poem",
+    "sacredMeaning": "Oracle note",
+    "signHint": "Sign hint",
+    "advice": "Practical guidance",
+    "navigation": "Dizang Oracle navigation",
+    "previous": "Previous lot",
+    "next": "Next lot",
+    "lotNo": "Lot {n}",
+    "draw": "Draw a lot online",
+    "seoTitle": "Dizang Oracle Sign {n} Meaning_Poem & Note",
+    "seoDescription": "Dizang Oracle Sign {n}, {title}: {meaning} Read the ganzhi title, poem, note, sign hint and practical guidance, then draw online.",
+    "seoKeywords": "Dizang Oracle sign {n},Dizang Oracle sign {n} meaning,{title},60 oracle signs,oracle poem,oracle note"
   }
 }
