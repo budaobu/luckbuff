@@ -775,11 +775,11 @@
     "natalAstroKeywords": "natal chart calculator,natal chart free,natal chart houses,natal chart report,birth chart with houses and aspects,astrology natal chart online,star sign chart,free astrology chart",
     "natalAstroOgTitle": "Natal Chart Calculator_Natal Chart Houses and Aspects_Free Online",
     "natalAstroOgDesc": "Generate a complete Western natal chart with planets, asteroids, four angles, houses, aspects and patterns.",
-    "fengshuiLuopanTitle": "Electronic Feng Shui Luopan_Mobile 3D Direction Chart",
-    "fengshuiLuopanDesc": "A mobile 3D Feng Shui luopan powered by the magnetometer, gyroscope and accelerometer. See heading, 24 mountains, trigrams, stems, branches and five elements in real time.",
-    "fengshuiLuopanKeywords": "electronic feng shui luopan,feng shui compass,3D luopan,24 mountains,bagua direction,mobile compass,magnetic heading",
+    "fengshuiLuopanTitle": "Electronic Feng Shui Luopan_Full Board Online Compass",
+    "fengshuiLuopanDesc": "An online Feng Shui luopan with manual desktop control and mobile sensor orientation. See heading, 24 mountains, trigrams, stems, branches and five elements.",
+    "fengshuiLuopanKeywords": "electronic feng shui luopan,feng shui compass,online luopan,24 mountains,bagua direction,mobile compass,magnetic heading",
     "fengshuiLuopanOgTitle": "Electronic Feng Shui Luopan | ososn",
-    "fengshuiLuopanOgDesc": "Combine real-time phone orientation with traditional luopan rings for the 24 mountains and trigrams.",
+    "fengshuiLuopanOgDesc": "A full traditional luopan board with desktop manual control and live phone orientation.",
     "mangpaiBaziTitle": "Blind-School BaZi Chart & Twelve Year Gods",
     "mangpaiBaziDesc": "A blind-school BaZi tool that reuses four-pillar and luck-cycle calculations, maps twelve annual gods, and reads family, career, wealth, marriage, wellbeing tendencies and timing through imagery and work logic. Entertainment reference only.",
     "mangpaiBaziKeywords": "blind school bazi, BaZi chart, twelve year gods, four pillars, annual timing, family reading",
@@ -2131,11 +2131,12 @@
   },
   "fengshuiLuopan": {
     "title": "Electronic Feng Shui Luopan",
-    "subtitle": "Use mobile orientation sensors with a physical 3D luopan mapped to the 24 mountains, trigrams, stems, branches and elements",
+    "subtitle": "A full physical luopan board mapped to the 24 mountains, trigrams, stems, branches and elements",
     "action": {
       "start": "Allow device orientation and start",
       "retry": "Try again",
-      "recalibrate": "Recalibrate"
+      "recalibrate": "Recalibrate",
+      "manual": "Use manual mode"
     },
     "status": {
       "detecting": "Checking device capability",
@@ -2151,7 +2152,9 @@
       "initializingMessage": "Sensor data is available. Feng shui rings are expanding and the pointer is stabilizing.",
       "active": "Luopan active",
       "sensorError": "Unable to get device direction",
-      "sensorErrorMessage": "No reliable absolute orientation data was received. Use a real mobile device and recalibrate."
+      "sensorErrorMessage": "No reliable absolute orientation data was received. Use a real mobile device and recalibrate.",
+      "manual": "Manual luopan",
+      "manualMessage": "Drag the board or use the left and right arrow keys to set a bearing. Manual mode is approximate; a phone sensor provides magnetic north."
     },
     "calibration": {
       "level": "Keep the phone level",
@@ -2162,22 +2165,22 @@
       "stabilizeHint": "The board is settling. Keep the phone steady and avoid quick movements."
     },
     "desktop": {
-      "title": "Please open on your phone",
-      "lead": "The electronic Feng Shui luopan needs your phone's built-in sensors. A desktop device cannot provide complete direction awareness.",
-      "explain": "This is not an ordinary web compass. It reads device sensor data in real time, determines the phone's current facing and maps it to the 24 mountains, trigrams and other feng shui rings.",
-      "magnetometer": "Magnetometer",
-      "magnetometerDesc": "Senses Earth's magnetic field and is the core sensor for finding magnetic north.",
-      "gyroscope": "Gyroscope",
-      "gyroscopeDesc": "Senses rotation and angular velocity so the luopan follows the phone smoothly.",
-      "accelerometer": "Accelerometer",
-      "accelerometerDesc": "Senses posture and gravity to help determine whether the phone is level.",
-      "limit": "The current desktop browser environment cannot reliably provide the complete sensor capability this tool needs.",
+      "title": "Desktop manual mode",
+      "lead": "The desktop luopan runs directly. Without a magnetometer, you set the current facing manually.",
+      "explain": "Its rings, scale and direction mapping match the full board. Manual mode does not read magnetic north, so it is best for board structure and approximate bearings.",
+      "drag": "Mouse drag",
+      "dragDesc": "Press and drag the board horizontally to rotate the full luopan and update its bearing.",
+      "keyboard": "Keyboard control",
+      "keyboardDesc": "Focus the board, then use left and right arrows for fine control; hold Shift for larger steps.",
+      "sensor": "Phone sensor",
+      "sensorDesc": "Scan to open on a phone and use its magnetometer for a live magnetic heading.",
       "scan": "Scan with your phone to continue",
       "scanHint": "Open with mobile Safari, Chrome, or another browser that supports orientation sensors."
     },
     "reading": {
       "heading": "Current magnetic heading",
       "sensorNote": "Phone sensor precision is limited; the reading is approximate",
+      "manualNote": "Manually set approximate bearing, not the device's current magnetic north",
       "mountain": "24 Mountains",
       "trigram": "Trigram",
       "element": "Element",

@@ -1,10 +1,9 @@
-export type LuopanRingId = 'mountains' | 'stems' | 'branches' | 'elements' | 'trigrams'
-
 export type LuopanProfileId = 'complete' | 'reading' | 'compact'
 
 export type LuopanStatus =
   | 'detecting'
   | 'unsupported'
+  | 'manual'
   | 'browser-unsupported'
   | 'permission-required'
   | 'permission-denied'
