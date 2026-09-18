@@ -160,6 +160,7 @@ export default defineNuxtConfig({
     urls: sitemapUrls as any,
     sources: [
       '/api/__sitemap__/insights-urls',
+      '/api/__sitemap__/shelf-urls',
       '/api/__sitemap__/guanyin-lot-urls',
       '/api/__sitemap__/guandi-lot-urls',
       '/api/__sitemap__/wong-tai-sin-lot-urls',
