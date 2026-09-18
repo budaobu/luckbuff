@@ -413,6 +413,7 @@ const navItems = computed<NavItem[]>(() => [
   { label: t('nav.home'), to: '/', id: 'nav-home' },
   { label: t('todayAlmanac.title'), to: '/tools/jinri-huangli', id: 'nav-today-almanac' },
   { label: t('nav.toolsShort'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
+  { label: t('nav.shelf'), to: '/shelf', id: 'nav-shelf' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
 ])
 
