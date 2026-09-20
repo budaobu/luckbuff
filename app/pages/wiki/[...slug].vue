@@ -96,7 +96,8 @@ renderer.link = ({ href, title, tokens }) => {
   const safeHref = /^(https?:|mailto:|#|\/)/i.test(href) ? href : '#'
   const external = /^https?:/i.test(safeHref)
   const rel = external ? ' target="_blank" rel="noopener noreferrer"' : ''
-  return `<a href="${escapeHtml(safeHref)}"${titleAttribute}${rel}>${label}</a>`
+  const localizedHref = external ? safeHref : localePath(safeHref)
+  return `<a href="${escapeHtml(localizedHref)}"${titleAttribute}${rel}>${label}</a>`
 }
 
 const renderedContent = computed(() => marked.parse(entry.value.content, {

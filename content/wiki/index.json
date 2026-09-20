@@ -1,12 +1,12 @@
 {
   "generated": true,
-  "syncedAt": "2026-09-18T07:37:14.101Z",
-  "source": "https://www.qingnang.cc/wiki",
+  "syncedAt": "2026-09-20T08:29:32.040Z",
+  "source": "https://guanxiangzhai.com/learn; https://www.qingnang.cc/wiki",
   "integritySource": "https://www.qingnang.cc/sitemap.xml",
   "stats": {
     "discoveredPages": 84,
-    "savedPages": 84,
-    "addedPages": 0,
+    "savedPages": 95,
+    "addedPages": 11,
     "updatedPages": 0,
     "removedPages": 0,
     "downloadedResources": 0,
@@ -21,6 +21,238 @@
   },
   "failures": [],
   "entries": [
+    {
+      "sourcePath": "/wiki/shuxue/mingli/bazi",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "四柱八字",
+      "description": "四柱八字，又称子平命学，以人出生时刻所对应的年、月、日、时四组天干地支——共八个字——作为分析素材，通过阴阳五行的生克制化逻辑，推断个人性格特质、人生格局、六亲关系与运势走向。",
+      "category": "shuxue-mingli",
+      "categoryTitle": "术数概览 · 命理类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "命理类",
+        "日主为核心",
+        "格局取用",
+        "五行生克",
+        "大运流年",
+        "十神系统"
+      ],
+      "excerpt": "子平命学 · 流传最广的命理体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/mingli/ziwei",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "紫微斗数",
+      "description": "紫微斗数是中国传统命理学的两大核心体系之一。以出生年、月、日、时为依据，安置十二宫位，布列一百余颗星曜，通过星曜在宫位中的组合关系，判断个人命运格局、性格特质、六亲关系与人生各领域运势走向。",
+      "category": "shuxue-mingli",
+      "categoryTitle": "术数概览 · 命理类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "命理类",
+        "十四主星",
+        "十二宫位",
+        "四化飞星",
+        "三方四正",
+        "大限流年"
+      ],
+      "excerpt": "星命学 · 中国命理学双璧之一"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/mingli/qizheng",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "七政四余",
+      "description": "七政四余是中国传统术数中以「行星」为核心素材的星命推算体系，也是五术命类中最具域外色彩的一门学问。",
+      "category": "shuxue-mingli",
+      "categoryTitle": "术数概览 · 命理类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "命理类",
+        "七政行星",
+        "四余假想点",
+        "十二宫位",
+        "庙旺陷",
+        "命主星"
+      ],
+      "excerpt": "域外传承 · 中西天文命学融合体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/sanshi/qimen",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "奇门遁甲",
+      "description": "奇门遁甲是中国传统术数「三式」之首，也是中国古代最复杂、应用最广的预测与择时体系。以洛书九宫为空间框架，以六十甲子为时间坐标，将八门·九星·八神·三奇六仪同步布入九宫，形成一个「时间×空间×人事」三维合一的能量场模型。",
+      "category": "shuxue-sanshi",
+      "categoryTitle": "术数概览 · 占卜类（三式）",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "占卜类·三式",
+        "九宫八卦",
+        "八门",
+        "九星",
+        "八神",
+        "三奇六仪",
+        "阴遁阳遁"
+      ],
+      "excerpt": "三式之首 · 时间×空间×人事三维合一"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/sanshi/liuren",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "大六壬",
+      "description": "大六壬以壬水为宗，取月将（太阳所在宫次）加占卜时辰，起天地二盘，从中产生四课（干上神·支上神·第三课·第四课），再发三传（初传·中传·末传），配合十二天将（贵人·螣蛇·朱雀等）和十二地支神，推断事情的来龙去脉与吉凶结局。",
+      "category": "shuxue-sanshi",
+      "categoryTitle": "术数概览 · 占卜类（三式）",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "占卜类·三式",
+        "月将加时",
+        "四课三传",
+        "十二天将",
+        "十八课法",
+        "初传·中传·末传"
+      ],
+      "excerpt": "三式之首 · 逻辑最严密的人事占卜体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/sanshi/taiyi",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "太乙神数",
+      "description": "太乙神数是中国传统术数「三式」中层次最高、体系最宏观的一门，历代被尊为「三式之冠」。以「太乙星」为核心，统御十六神，以积年推算法推演每一时段的宇宙能量格局，主要用于预测国家兴衰、天下大势、战争胜负、自然灾异与年度气候变化。",
+      "category": "shuxue-sanshi",
+      "categoryTitle": "术数概览 · 占卜类（三式）",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "占卜类·三式",
+        "太乙星",
+        "十六神",
+        "八宫",
+        "积年算法",
+        "大小游",
+        "战格"
+      ],
+      "excerpt": "三式之冠 · 帝王国运预测之学"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/gua/meihua",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "梅花易数",
+      "description": "梅花易数是北宋理学大家邵雍（邵康节）所创的一套以「先天八卦数理」为基础的观物起卦·以象断事体系。与六爻纳甲不同，梅花易数不用蓍草铜钱，而是通过观察所见之物·听闻之声·所处之时，取数起卦，以卦象的体用生克关系推断吉凶。",
+      "category": "shuxue-gua",
+      "categoryTitle": "术数概览 · 卦类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "卦类",
+        "先天八卦数",
+        "体用生克",
+        "观物起卦",
+        "互卦·变卦",
+        "卦象取象"
+      ],
+      "excerpt": "观物起卦 · 以象断事 · 先天数理占卜体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/gua/liuyao",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "六爻",
+      "description": "六爻纳甲，又称「纳甲筮法」，是以《周易》六十四卦为框架，将天干地支·五行·六亲纳入六爻体系，通过铜钱摇卦得出六爻，配合日月冲克·六神·世应关系，推断具体事件吉凶的占卜体系。",
+      "category": "shuxue-gua",
+      "categoryTitle": "术数概览 · 卦类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "卦类",
+        "纳甲干支",
+        "六亲定位",
+        "六神辅断",
+        "世应主客",
+        "日月冲克",
+        "动变关系"
+      ],
+      "excerpt": "纳甲筮法 · 中国最系统完备的事件预测体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/gua/xiaocheng",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "小成图",
+      "description": "小成图以九宫数字为基础，问事者心中默想或随机取得一个数字，对照预先排好的九宫图表，查得对应的吉凶判断。结构极为简单，无需深厚基础，历代以附录形式收录于各类日用书与术数丛书中，是民间流传最广的简易占法之一。",
+      "category": "shuxue-gua",
+      "categoryTitle": "术数概览 · 卦类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "卦类",
+        "九宫数",
+        "图表对照",
+        "简易断法"
+      ],
+      "excerpt": "民间简易占法 · 以九宫数对照吉凶"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/other/jinkou",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "金口诀",
+      "description": "六壬神课金口诀，简称「金口诀」，是在大六壬体系基础上发展出的一套简化版六壬推算方法。以出生或起课时的年·月·日·时四柱天干地支为起课依据，直接推出初传·中传·末传三传，配合十二天将与五行生克，判断所问事项的吉凶走向。",
+      "category": "shuxue-other",
+      "categoryTitle": "术数概览 · 其他类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "其他类",
+        "四柱干支",
+        "三传结构",
+        "十二天将",
+        "贵人起课",
+        "初传·中传·末传"
+      ],
+      "excerpt": "四柱起课 · 三传速断 · 大六壬简化实用体系"
+    },
+    {
+      "sourcePath": "/wiki/shuxue/other/xiaoliuren",
+      "sourceUrl": "https://guanxiangzhai.com/learn",
+      "sourceName": "观象斋 · 术数概览",
+      "title": "小六壬",
+      "description": "小六壬是中国民间流传最广、使用最简便的占卜方法之一。不需要任何工具，以月份·日期·时辰三个数字依次在「大安·留连·速喜·赤口·小吉·空亡」六个宫位上起课，最终落在哪宫即以该宫性质断事。",
+      "category": "shuxue-other",
+      "categoryTitle": "术数概览 · 其他类",
+      "domain": "shuxue",
+      "tags": [
+        "术数概览",
+        "观象斋",
+        "其他类",
+        "六宫吉凶",
+        "月日时三步",
+        "掐指起课",
+        "大安·速喜·小吉",
+        "留连·赤口·空亡"
+      ],
+      "excerpt": "六宫起课 · 掐指速算 · 民间最简便占卜法"
+    },
     {
       "sourcePath": "/wiki/bazi/jichu/yinyang-wuxing",
       "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/yinyang-wuxing",
@@ -1414,6 +1646,19 @@
         "传统星学"
       ],
       "excerpt": "七政四余，又称「果老星宗」，是中国传统星命之学中以真实天象立盘的一支。它不看抽象的干支符号，而是把一个人出生时刻，日、月、五星与几个推算天体在黄道上的实际位置，连同二十八宿的宿度一并落进十二宫里，据此参详一生的格局与节律。在八字、紫微之外，它自成一套「看天说人」的坐标系。"
+    }
+  ],
+  "sources": [
+    {
+      "name": "观象斋 · 术数概览",
+      "url": "https://guanxiangzhai.com/learn",
+      "priority": true,
+      "entries": 11
+    },
+    {
+      "name": "青囊 Wiki",
+      "url": "https://www.qingnang.cc/wiki",
+      "entries": 84
     }
   ]
 }

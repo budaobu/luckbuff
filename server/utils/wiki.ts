@@ -129,7 +129,7 @@ function normalizeEntry(input: unknown, seo?: WikiSeo): WikiEntryMeta | null {
   if (!sourcePath.startsWith('/wiki/') || !title) return null
   return {
     sourcePath,
-    sourceUrl: text(item.sourceUrl, `https://www.qingnang.cc${sourcePath}`),
+    sourceUrl: text(item.sourceUrl),
     title,
     description: text(item.description),
     category: text(item.category),
