@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import type { ShelfBook } from '~~/server/utils/shelf'
+import type { ShelfSeoEntry } from '~~/server/utils/shelf'
 
 const { t } = useI18n()
 const query = ref('')
@@ -69,12 +70,13 @@ const activeCategory = ref('')
 const { data, error, pending, refresh } = await useAsyncData(
   'shelf-books',
   async () => {
-    const response = await $fetch<{ books: ShelfBook[] }>('/api/shelf/books')
-    return response.books
+    const response = await $fetch<{ books: ShelfBook[]; seo: ShelfSeoEntry }>('/api/shelf/books')
+    return response
   },
 )
 
-const books = computed(() => data.value || [])
+const books = computed(() => data.value?.books || [])
+const seo = computed(() => data.value?.seo)
 const categories = computed(() =>
   [...new Set(books.value.map(book => book.category).filter(Boolean))].sort((left, right) => left.localeCompare(right, 'zh-CN')))
 const filteredBooks = computed(() => {
@@ -90,18 +92,43 @@ const filteredBooks = computed(() => {
 
 const siteName = 'ososn'
 const pageUrl = useLocalizedSeoUrl('/shelf')
+const seoPath = useLocalizedSeoPath()
+const seoTitle = computed(() => seo.value?.seoTitle || t('shelf.seoTitle'))
+const seoDescription = computed(() => seo.value?.seoDescription || t('shelf.seoDescription'))
 
 useSeoMeta({
-  title: () => `${t('shelf.seoTitle')} - ${siteName}`,
-  description: () => t('shelf.seoDescription'),
-  ogTitle: () => `${t('shelf.seoTitle')} - ${siteName}`,
-  ogDescription: () => t('shelf.seoDescription'),
+  title: () => `${seoTitle.value} - ${siteName}`,
+  description: seoDescription,
+  keywords: () => seo.value?.keywords.join(', ') || t('shelf.seoDescription'),
+  ogTitle: () => `${seoTitle.value} - ${siteName}`,
+  ogDescription: seoDescription,
   ogUrl: pageUrl,
   ogType: 'website',
 })
 
 useHead(() => ({
   link: [{ rel: 'canonical', href: pageUrl.value }],
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: `${seoTitle.value} - ${siteName}`,
+      description: seoDescription.value,
+      url: pageUrl.value,
+      inLanguage: 'zh-CN',
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: books.value.length,
+        itemListElement: books.value.map((book, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: book.title,
+          url: seoPath(`/shelf/${book.id}`),
+        })),
+      },
+    }),
+  }],
 }))
 </script>
 

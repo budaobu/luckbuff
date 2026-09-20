@@ -41,14 +41,16 @@ watch(bookId, async () => {
 })
 
 const detail = computed(() => data.value)
+const seo = computed(() => detail.value?.seo)
 const pageUrl = useLocalizedSeoPath()
 const siteName = 'ososn'
-const title = computed(() => `${detail.value?.book.title || $t('shelf.title')} - ${$t('shelf.seoTitle')} - ${siteName}`)
-const description = computed(() => detail.value?.book.intro.slice(0, 155) || $t('shelf.seoDescription'))
+const title = computed(() => seo.value?.seoTitle || `${detail.value?.book.title || $t('shelf.title')} - ${$t('shelf.seoTitle')} - ${siteName}`)
+const description = computed(() => seo.value?.seoDescription || detail.value?.book.intro.slice(0, 155) || $t('shelf.seoDescription'))
 
 useSeoMeta({
   title,
   description,
+  keywords: () => seo.value?.keywords.join(', ') || detail.value?.book.title,
   ogTitle: title,
   ogDescription: description,
   ogUrl: () => pageUrl(`/shelf/${bookId.value}`),
@@ -67,6 +69,8 @@ useHead(() => ({
       inLanguage: 'zh-CN',
       numberOfPages: detail.value.chapters.length,
       description: detail.value.book.intro,
+      abstract: seo.value?.seoDescription,
+      keywords: seo.value?.keywords.join(', '),
       url: pageUrl(`/shelf/${bookId.value}`),
     }),
   }] : [],

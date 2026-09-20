@@ -11,6 +11,7 @@
     "preview": "NODE_OPTIONS='--no-deprecation' nuxt preview",
     "typecheck": "vue-tsc --noEmit",
     "shelf:sync": "node scripts/sync-shelf.mjs",
+    "shelf:seo": "node scripts/sync-shelf-seo.mjs",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {

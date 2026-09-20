@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path'
 const SHELF_DIR = resolve(process.cwd(), 'content', 'shelf')
 const INDEX_FILE = join(SHELF_DIR, 'index.json')
 const BOOKS_DIR = join(SHELF_DIR, 'books')
+const SEO_FILE = join(SHELF_DIR, 'seo.json')
 
 export interface ShelfBook {
   id: number
@@ -37,6 +38,15 @@ export interface ShelfBookDetail {
   chapterIndex: number
   sectionIndex: number
   sections: ShelfSection[]
+  seo: ShelfSeoEntry
+}
+
+export interface ShelfSeoEntry {
+  focusKeyword: string
+  seoTitle: string
+  seoDescription: string
+  keywords: string[]
+  matchType: 'exact' | 'enriched' | 'fallback'
 }
 
 interface StoredIndex {
@@ -63,6 +73,19 @@ interface StoredBook {
   chapters?: unknown
 }
 
+interface StoredSeoEntry {
+  focusKeyword?: unknown
+  seoTitle?: unknown
+  seoDescription?: unknown
+  keywords?: unknown
+  matchType?: unknown
+}
+
+interface StoredSeoIndex {
+  shelf?: unknown
+  books?: unknown
+}
+
 interface StoredBookInternal {
   syncedAt: string
   book: ShelfBook
@@ -74,12 +97,21 @@ interface StoredBookInternal {
   }>
 }
 
+interface ShelfSeoIndexInternal {
+  shelf: ShelfSeoEntry
+  books: Map<number, ShelfSeoEntry>
+}
+
 const indexCacheHost = globalThis as typeof globalThis & {
   __luckbuffShelfIndex?: { value: ShelfBook[] }
 }
 
 const bookCacheHost = globalThis as typeof globalThis & {
   __luckbuffShelfBooks?: Map<number, { value: StoredBookInternal }>
+}
+
+const seoCacheHost = globalThis as typeof globalThis & {
+  __luckbuffShelfSeo?: { value: ShelfSeoIndexInternal }
 }
 
 function invalidShelfData(message: string) {
@@ -92,6 +124,30 @@ function text(value: unknown, fallback = '') {
 
 function integer(value: unknown) {
   return typeof value === 'number' && Number.isInteger(value) ? value : null
+}
+
+function stringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+}
+
+function normalizeSeoEntry(input: unknown): ShelfSeoEntry {
+  const item = (input || {}) as StoredSeoEntry
+  const focusKeyword = text(item.focusKeyword)
+  const seoTitle = text(item.seoTitle)
+  const seoDescription = text(item.seoDescription)
+  const keywords = stringArray(item.keywords)
+  if (!focusKeyword || !seoTitle || !seoDescription || !keywords.length) {
+    throw invalidShelfData('本地书架 SEO 数据格式错误')
+  }
+
+  return {
+    focusKeyword,
+    seoTitle,
+    seoDescription,
+    keywords,
+    matchType: item.matchType === 'enriched' || item.matchType === 'fallback' ? item.matchType : 'exact',
+  }
 }
 
 function normalizeBook(input: unknown): ShelfBook {
@@ -170,6 +226,47 @@ export async function fetchShelfBooks(): Promise<ShelfBook[]> {
   return books
 }
 
+export async function fetchShelfSeo(): Promise<ShelfSeoIndexInternal> {
+  if (seoCacheHost.__luckbuffShelfSeo) {
+    return seoCacheHost.__luckbuffShelfSeo.value
+  }
+
+  let raw: string
+  try {
+    raw = await readFile(SEO_FILE, 'utf8')
+  }
+  catch {
+    throw createError({
+      statusCode: 503,
+      statusMessage: '书架 SEO 快照缺失',
+      message: '请先执行 pnpm shelf:seo 生成 content/shelf/seo.json。',
+    })
+  }
+
+  const parsed = JSON.parse(raw) as StoredSeoIndex
+  if (!parsed.shelf || !parsed.books || typeof parsed.books !== 'object') {
+    throw invalidShelfData('本地书架 SEO 索引格式错误')
+  }
+
+  const seo = {
+    shelf: normalizeSeoEntry(parsed.shelf),
+    books: new Map(Object.entries(parsed.books).map(([key, entry]) => {
+      const bookId = Number.parseInt(key, 10)
+      if (!Number.isInteger(bookId) || bookId <= 0) throw invalidShelfData('本地书架 SEO ID 无效')
+      return [bookId, normalizeSeoEntry(entry)]
+    })),
+  }
+  seoCacheHost.__luckbuffShelfSeo = { value: seo }
+  return seo
+}
+
+export async function fetchShelfSeoEntry(bookId: number): Promise<ShelfSeoEntry> {
+  const seo = await fetchShelfSeo()
+  const entry = seo.books.get(bookId)
+  if (!entry) throw invalidShelfData(`书籍 SEO 数据缺失：${bookId}`)
+  return entry
+}
+
 async function loadStoredBook(bookId: number): Promise<StoredBookInternal> {
   const cache = bookCacheHost.__luckbuffShelfBooks ??= new Map()
   const cached = cache.get(bookId)
@@ -210,6 +307,7 @@ export async function fetchShelfBook(
     chapterIndex,
     sectionIndex,
     sections: chapter.sections,
+    seo: await fetchShelfSeoEntry(bookId),
   }
 }
 

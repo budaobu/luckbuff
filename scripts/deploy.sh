@@ -106,6 +106,11 @@ rsync_retry --delete \
   "content/worldcup-predictions/" \
   "$SERVER:$REMOTE_DIR/content/worldcup-predictions/"
 
+echo "==> rsync content/shelf/ (generated classics snapshot)"
+rsync_retry --delete \
+  "content/shelf/" \
+  "$SERVER:$REMOTE_DIR/content/shelf/"
+
 echo "==> rsync content/insights/ (editor articles — no --delete: editors publish via /admin directly on the server)"
 rsync_retry \
   --exclude '.backups/' \
