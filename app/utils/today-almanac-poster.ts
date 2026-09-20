@@ -27,11 +27,17 @@ export interface TodayAlmanacPosterOptions {
 
 const WIDTH = 1024
 const HEIGHT = 1536
-const INK = '#4b3a29'
-const CRIMSON = '#8b2b25'
-const GOLD = '#cfa453'
+const RED = '#a5161b'
+const PAPER = '#fbf7ef'
 
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
+function roundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+) {
   ctx.beginPath()
   ctx.moveTo(x + radius, y)
   ctx.arcTo(x + width, y, x + width, y + height, radius)
@@ -41,67 +47,12 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: n
   ctx.closePath()
 }
 
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines = 2) {
-  const lines: string[] = []
-  let current = ''
-
-  for (const char of text) {
-    if (ctx.measureText(current + char).width > maxWidth && current) {
-      lines.push(current)
-      current = char
-      if (lines.length === maxLines) break
-    }
-    else {
-      current += char
-    }
+function fitText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
+  let value = text
+  while (value && ctx.measureText(value).width > maxWidth) {
+    value = value.slice(0, -1)
   }
-
-  if (lines.length < maxLines && current) lines.push(current)
-  if (lines.length === maxLines && current && lines[maxLines - 1] !== current) {
-    let last = lines[maxLines - 1] ?? ''
-    while (last && ctx.measureText(`${last}…`).width > maxWidth) {
-      last = last.slice(0, -1)
-      lines[maxLines - 1] = last
-    }
-    lines[maxLines - 1] = `${lines[maxLines - 1]}…`
-  }
-  return lines
-}
-
-function drawTornEdge(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, seed = 3) {
-  ctx.save()
-  ctx.shadowColor = 'rgba(38, 22, 12, 0.30)'
-  ctx.shadowBlur = 18
-  ctx.shadowOffsetY = 9
-  ctx.beginPath()
-  ctx.moveTo(x, y)
-  const steps = 38
-  for (let i = 1; i <= steps; i += 1) {
-    const progress = i / steps
-    const wave = Math.sin(progress * Math.PI * 7 + seed) * 15
-    const noise = Math.sin(i * 17.3 + seed) * 9 + Math.sin(i * 7.1) * 6
-    ctx.lineTo(x + progress * width, y + wave + noise)
-  }
-  ctx.lineTo(x + width, y + 64)
-  ctx.lineTo(x, y + 64)
-  ctx.closePath()
-  ctx.fillStyle = '#fffdf4'
-  ctx.fill()
-  ctx.restore()
-
-  ctx.strokeStyle = 'rgba(107,85,61,.30)'
-  ctx.lineWidth = 1.5
-  for (let i = 0; i < 52; i += 1) {
-    const progress = (i + 0.5) / 52
-    const px = x + progress * width
-    const py = y + Math.sin(progress * Math.PI * 7 + seed) * 15
-      + Math.sin(i * 17.3 + seed) * 9
-      + Math.sin(i * 7.1) * 6
-    ctx.beginPath()
-    ctx.moveTo(px, py)
-    ctx.lineTo(px + Math.sin(i * 3.7) * 7, py + 6 + (i % 3) * 3)
-    ctx.stroke()
-  }
+  return value
 }
 
 function drawPaperTexture(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
@@ -109,16 +60,150 @@ function drawPaperTexture(ctx: CanvasRenderingContext2D, x: number, y: number, w
   ctx.beginPath()
   ctx.rect(x, y, width, height)
   ctx.clip()
-  for (let i = 0; i < 240; i += 1) {
+  for (let i = 0; i < 300; i += 1) {
     const px = x + ((i * 137) % width)
     const py = y + ((i * 271) % height)
-    ctx.globalAlpha = 0.025
-    ctx.fillStyle = i % 3 ? '#6b553d' : '#9a7c55'
+    ctx.globalAlpha = 0.018
+    ctx.fillStyle = i % 3 ? '#8a6b50' : '#a5161b'
     ctx.beginPath()
-    ctx.arc(px, py, i % 5 ? 0.8 : 1.5, 0, Math.PI * 2)
+    ctx.arc(px, py, i % 7 ? 0.7 : 1.3, 0, Math.PI * 2)
     ctx.fill()
   }
   ctx.restore()
+}
+
+function englishMonth(date: string) {
+  const month = Number(date.split('-')[1])
+  const months = [
+    'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+    'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER',
+  ]
+  return months[month - 1] || ''
+}
+
+function chineseWeekday(weekday: number) {
+  return ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][weekday] || ''
+}
+
+function englishWeekday(weekday: number) {
+  return ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][weekday] || ''
+}
+
+function monthLengthMark(date: string) {
+  const [year, month] = date.split('-').map(Number)
+  if (!year || !month) return ''
+  const days = new Date(Date.UTC(year, month, 0)).getUTCDate()
+  return days === 31 ? '大' : '小'
+}
+
+function drawVerticalText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  size: number,
+  color: string,
+) {
+  ctx.save()
+  ctx.fillStyle = color
+  ctx.font = `700 ${size}px "Noto Serif SC", "Songti SC", serif`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'top'
+  Array.from(text).forEach((char, index) => {
+    ctx.fillText(char, x, y + index * (size + 8))
+  })
+  ctx.restore()
+}
+
+function drawHeaderCell(
+  ctx: CanvasRenderingContext2D,
+  value: string,
+  subValue: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const centerX = x + width / 2
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = RED
+  ctx.font = '700 31px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(fitText(ctx, value, width - 14), centerX, y + (subValue ? height / 2 - 12 : height / 2))
+  if (subValue) {
+    ctx.font = '700 17px "Noto Serif SC", "Songti SC", serif'
+    ctx.fillText(fitText(ctx, subValue, width - 14), centerX, y + height / 2 + 18)
+  }
+}
+
+function drawActivityColumn(
+  ctx: CanvasRenderingContext2D,
+  title: string,
+  values: string[],
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  const centerX = x + width / 2
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = RED
+  ctx.font = '800 50px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(title, centerX, y + 38)
+
+  ctx.font = '700 22px "Noto Serif SC", "Songti SC", serif'
+  values.slice(0, 4).forEach((value, index) => {
+    ctx.fillText(fitText(ctx, value, width - 10), centerX, y + 98 + index * 32)
+  })
+
+  ctx.beginPath()
+  ctx.moveTo(x + width, y)
+  ctx.lineTo(x + width, y + height)
+  ctx.stroke()
+}
+
+function drawHourGrid(
+  ctx: CanvasRenderingContext2D,
+  title: string,
+  hours: TodayAlmanac['hours'],
+  x: number,
+  y: number,
+) {
+  const cellWidth = 70
+  const cellHeight = 72
+  const gridWidth = cellWidth * 6 + 5 * 2
+  const centerX = x + gridWidth / 2
+
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = RED
+  ctx.font = '700 23px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(title, centerX, y + 10)
+
+  hours.slice(0, 12).forEach((hour, index) => {
+    const col = index % 6
+    const row = Math.floor(index / 6)
+    const cellX = x + col * (cellWidth + 2)
+    const cellY = y + 30 + row * (cellHeight + 12)
+    const isLucky = hour.luck === '吉'
+
+    if (isLucky) {
+      ctx.fillStyle = RED
+      ctx.fillRect(cellX, cellY, cellWidth, cellHeight)
+    }
+    else {
+      ctx.strokeStyle = RED
+      ctx.lineWidth = 2
+      ctx.strokeRect(cellX, cellY, cellWidth, cellHeight)
+    }
+
+    ctx.fillStyle = isLucky ? PAPER : RED
+    ctx.font = '800 27px "Noto Serif SC", "Songti SC", serif'
+    ctx.fillText(hour.zhi, cellX + cellWidth / 2, cellY + 23)
+    ctx.font = '700 17px "Noto Serif SC", "Songti SC", serif'
+    ctx.fillText(hour.startTime.slice(0, 2), cellX + cellWidth / 2, cellY + 52)
+  })
 }
 
 async function drawQrCode(ctx: CanvasRenderingContext2D, url: string, x: number, y: number, size: number) {
@@ -127,7 +212,7 @@ async function drawQrCode(ctx: CanvasRenderingContext2D, url: string, x: number,
     errorCorrectionLevel: 'M',
     margin: 0,
     width: size * 2,
-    color: { dark: '#40311fff', light: '#fffdf4ff' },
+    color: { dark: '#7f0d12ff', light: '#fbf7efff' },
   })
 
   const image = new Image()
@@ -152,168 +237,228 @@ export async function generateTodayAlmanacPoster(options: TodayAlmanacPosterOpti
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('Canvas 2D is unavailable')
 
-  const backdrop = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT)
-  backdrop.addColorStop(0, '#302116')
-  backdrop.addColorStop(0.52, '#211611')
-  backdrop.addColorStop(1, '#140e0b')
+  const backdrop = ctx.createLinearGradient(0, 0, 0, HEIGHT)
+  backdrop.addColorStop(0, '#717176')
+  backdrop.addColorStop(0.68, '#4f4f54')
+  backdrop.addColorStop(1, '#313135')
   ctx.fillStyle = backdrop
   ctx.fillRect(0, 0, WIDTH, HEIGHT)
 
-  const glow = ctx.createRadialGradient(180, 140, 30, 180, 140, 620)
-  glow.addColorStop(0, 'rgba(255, 221, 168, 0.11)')
-  glow.addColorStop(1, 'rgba(255, 221, 168, 0)')
-  ctx.fillStyle = glow
-  ctx.fillRect(0, 0, WIDTH, 760)
-
-  const ember = ctx.createRadialGradient(890, 360, 30, 890, 360, 480)
-  ember.addColorStop(0, 'rgba(139, 43, 37, 0.16)')
-  ember.addColorStop(1, 'rgba(139, 43, 37, 0)')
-  ctx.fillStyle = ember
-  ctx.fillRect(360, 0, WIDTH - 360, 880)
-
-  const boardX = 58
-  const boardY = 88
-  const boardWidth = WIDTH - 116
-  const boardHeight = 1110
-  ctx.fillStyle = '#4b3424'
-  roundRect(ctx, boardX, boardY, boardWidth, boardHeight, 32)
-  ctx.fill()
-
-  const railGradient = ctx.createLinearGradient(boardX, boardY - 24, boardX + boardWidth, boardY + 12)
-  railGradient.addColorStop(0, '#8d6134')
-  railGradient.addColorStop(0.45, '#e6bd6f')
-  railGradient.addColorStop(1, '#8d6134')
-  ctx.fillStyle = railGradient
-  roundRect(ctx, boardX + 26, boardY - 26, boardWidth - 52, 42, 21)
-  ctx.fill()
-
-  const paperX = boardX + 27
-  const paperY = boardY + 26
-  const paperWidth = boardWidth - 54
-  const paperHeight = boardHeight - 150
+  const paperX = 92
+  const paperY = 168
+  const paperWidth = 840
+  const paperHeight = 1078
   ctx.save()
-  roundRect(ctx, paperX, paperY, paperWidth, paperHeight, 10)
-  ctx.clip()
-  ctx.fillStyle = '#fffdf4'
+  ctx.shadowColor = 'rgba(12,12,14,.36)'
+  ctx.shadowBlur = 34
+  ctx.shadowOffsetY = 18
+  ctx.fillStyle = PAPER
   ctx.fillRect(paperX, paperY, paperWidth, paperHeight)
+  ctx.restore()
   drawPaperTexture(ctx, paperX, paperY, paperWidth, paperHeight)
 
-  ctx.fillStyle = CRIMSON
-  ctx.fillRect(paperX, paperY, paperWidth, 150)
-  ctx.fillStyle = 'rgba(255,255,255,.15)'
-  ctx.fillRect(paperX, paperY + 130, paperWidth, 20)
-
-  for (const holeX of [paperX + 210, paperX + paperWidth - 210]) {
-    ctx.fillStyle = '#fffdf4'
-    ctx.beginPath()
-    ctx.arc(holeX, paperY + 42, 13, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.strokeStyle = 'rgba(70,45,25,.3)'
-    ctx.lineWidth = 3
-    ctx.stroke()
-  }
-
-  const left = paperX + 46
-  const center = paperX + paperWidth / 2
-  ctx.textBaseline = 'middle'
-  ctx.fillStyle = '#fffdf4'
-  ctx.textAlign = 'left'
-  ctx.font = '500 28px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(options.labels.title, left, paperY + 50)
-  ctx.textAlign = 'left'
-  ctx.font = '700 48px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(options.day.date.replace(/-/g, ' / '), left, paperY + 110)
-
-  ctx.textAlign = 'center'
-  ctx.fillStyle = CRIMSON
-  ctx.font = '700 112px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(`${options.day.lunar.monthInChinese}月${options.day.lunar.dayInChinese}`, center, paperY + 250)
-
-  ctx.fillStyle = INK
-  ctx.font = '500 29px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(`${options.day.lunar.yearGanZhi}年 · ${options.day.lunar.monthGanZhi}月 · ${options.day.lunar.dayGanZhi}日`, center, paperY + 322)
-
-  ctx.fillStyle = '#7a6a52'
-  ctx.font = '400 23px "Noto Sans SC", ui-sans-serif, sans-serif'
-  ctx.fillText(`${options.labels.jianChu} ${options.day.jianChu} · ${options.day.tianShen} ${options.day.tianShenLuck} · ${options.labels.nineStar} ${options.day.nineStar}`, center, paperY + 368)
-
-  const columns = [
-    { title: options.labels.yi, values: options.day.yi.slice(0, 4), color: '#2f6a45' },
-    { title: options.labels.ji, values: options.day.ji.slice(0, 4), color: '#9a3428' },
-  ]
-  columns.forEach((column, index) => {
-    const width = 371
-    const x = paperX + 44 + index * (width + 24)
-    ctx.strokeStyle = column.color === '#2f6a45' ? 'rgba(47,106,69,.3)' : 'rgba(154,52,40,.3)'
-    ctx.lineWidth = 2
-    roundRect(ctx, x, paperY + 410, width, 224, 12)
-    ctx.stroke()
-    ctx.fillStyle = column.color
-    ctx.font = '700 33px "Noto Serif SC", "Songti SC", serif'
-    ctx.fillText(column.title, x + width / 2, paperY + 452)
-    ctx.fillStyle = INK
-    ctx.font = '400 24px "Noto Sans SC", ui-sans-serif, sans-serif'
-    column.values.forEach((value, valueIndex) => {
-      const lines = wrapText(ctx, `${valueIndex + 1}. ${value}`, width - 44, 1)
-      ctx.fillText(lines[0] ?? '', x + width / 2, paperY + 508 + valueIndex * 31)
-    })
-  })
-
-  ctx.textAlign = 'left'
-  ctx.fillStyle = INK
-  ctx.font = '700 28px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(options.labels.luckyHours, left, paperY + 692)
-  ctx.font = '400 23px "Noto Sans SC", ui-sans-serif, sans-serif'
-  options.day.hours.filter(hour => hour.luck === '吉').slice(0, 3).forEach((hour, index) => {
-    ctx.fillText(`${hour.startTime}-${hour.endTime} ${hour.tianShen}`, left, paperY + 738 + index * 34)
-  })
-
-  ctx.textAlign = 'right'
-  ctx.font = '700 28px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(options.labels.directions, paperX + paperWidth - 46, paperY + 692)
-  ctx.font = '400 23px "Noto Sans SC", ui-sans-serif, sans-serif'
-  const directions = [
-    `${options.labels.xiDirection} ${options.day.positions.xi}`,
-    `${options.labels.caiDirection} ${options.day.positions.cai}`,
-    `${options.labels.fuDirection} ${options.day.positions.fu}`,
-  ]
-  directions.forEach((value, index) => {
-    ctx.fillText(value, paperX + paperWidth - 46, paperY + 738 + index * 34)
-  })
-
-  ctx.strokeStyle = 'rgba(123,102,73,.26)'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(left, paperY + 860)
-  ctx.lineTo(paperX + paperWidth - 46, paperY + 860)
-  ctx.stroke()
-
-  ctx.textAlign = 'left'
-  ctx.fillStyle = '#6a5842'
-  ctx.font = '400 23px "Noto Sans SC", ui-sans-serif, sans-serif'
-  ctx.fillText(`${options.labels.chongSha} ${options.day.chongDesc} · ${options.day.sha}`, left, paperY + 905)
-  ctx.fillText(`${options.labels.luckyColor} ${options.day.colors.daJi.colors.join(' / ')}`, left, paperY + 948)
-  ctx.fillText(`${options.labels.avoidColor} ${options.day.colors.buYi.colors.join(' / ')}`, left, paperY + 991)
-  const season = options.day.season.jieQi || options.day.season.nextJieQi.name
-  ctx.fillText(`${options.labels.jieQi} ${season} · ${options.day.season.wuHou}`, left, paperY + 1034)
+  const railX = 60
+  const railY = 72
+  const railWidth = 904
+  const railHeight = 72
+  const railGradient = ctx.createLinearGradient(railX, railY, railX, railY + railHeight)
+  railGradient.addColorStop(0, '#fbfbf9')
+  railGradient.addColorStop(0.58, '#dcdcd9')
+  railGradient.addColorStop(1, '#b9b9b6')
+  ctx.save()
+  ctx.shadowColor = 'rgba(10,10,12,.22)'
+  ctx.shadowBlur = 14
+  ctx.shadowOffsetY = 6
+  ctx.fillStyle = railGradient
+  roundRect(ctx, railX, railY, railWidth, railHeight, 15)
+  ctx.fill()
   ctx.restore()
 
-  drawTornEdge(ctx, paperX, paperY + paperHeight - 12, paperWidth, Number(options.day.date.slice(-2)))
+  ctx.fillStyle = RED
+  roundRect(ctx, paperX + 20, railY + 55, paperWidth - 40, 14, 4)
+  ctx.fill()
+  for (const gripX of [railX + 118, railX + railWidth - 182]) {
+    const gripGradient = ctx.createLinearGradient(gripX, railY + 28, gripX + 64, railY + 42)
+    gripGradient.addColorStop(0, '#94949a')
+    gripGradient.addColorStop(0.5, '#e6e6e4')
+    gripGradient.addColorStop(1, '#8a8a90')
+    ctx.fillStyle = gripGradient
+    roundRect(ctx, gripX, railY + 28, 64, 14, 7)
+    ctx.fill()
+  }
+  ctx.fillStyle = '#85868b'
+  ctx.beginPath()
+  ctx.arc(WIDTH / 2, railY + railHeight / 2, 13, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.fillStyle = '#f3f3f1'
+  ctx.beginPath()
+  ctx.arc(WIDTH / 2, railY + railHeight / 2 - 2, 7, 0, Math.PI * 2)
+  ctx.fill()
 
-  ctx.strokeStyle = 'rgba(230,189,111,.30)'
-  ctx.lineWidth = 2
-  roundRect(ctx, paperX + 3, paperY, paperWidth - 6, paperHeight, 10)
+  const padding = 52
+  const left = paperX + padding
+  const right = paperX + paperWidth - padding
+  const center = WIDTH / 2
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = RED
+  ctx.textAlign = 'left'
+  ctx.font = '800 56px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(options.day.date.slice(0, 4), left, paperY + 66)
+  ctx.font = '700 22px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(options.day.lunar.yearInChinese, left, paperY + 105)
+
+  ctx.textAlign = 'center'
+  ctx.font = '800 46px "Noto Serif SC", Georgia, serif'
+  ctx.fillText(englishMonth(options.day.date), center, paperY + 70)
+
+  ctx.textAlign = 'right'
+  ctx.font = '800 48px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(`${options.day.lunar.monthInChinese}月${monthLengthMark(options.day.date)}`, right, paperY + 66)
+
+  ctx.fillStyle = RED
+  ctx.beginPath()
+  ctx.arc(left + 18, paperY + 172, 18, 0, Math.PI * 2)
+  ctx.fill()
+  drawVerticalText(ctx, '一帆风顺人安康', left + 18, paperY + 222, 23, RED)
+
+  ctx.save()
+  ctx.fillStyle = RED
+  roundRect(ctx, right - 58, paperY + 142, 58, 148, 5)
+  ctx.fill()
+  drawVerticalText(ctx, '旺丁旺财', right - 29, paperY + 160, 24, PAPER)
+  ctx.restore()
+
+  ctx.textAlign = 'center'
+  ctx.fillStyle = RED
+  const dayNumber = Number(options.day.date.split('-')[2])
+  ctx.font = '800 245px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(String(dayNumber), center, paperY + 265)
+
+  const gridX = paperX + 58
+  const gridY = paperY + 438
+  const gridWidth = paperWidth - 116
+  ctx.strokeStyle = RED
+  ctx.lineWidth = 3
+  ctx.strokeRect(gridX, gridY, gridWidth, 496)
+
+  const headerHeight = 88
+  const headerWidths = [168, 162, 242, 168]
+  let headerX = gridX
+  const headerItems = [
+    { value: options.day.lunar.yearGanZhi, subValue: '' },
+    { value: `${options.day.lunar.monthInChinese}月${monthLengthMark(options.day.date)}`, subValue: '' },
+    { value: `${options.day.lunar.dayInChinese}日`, subValue: '' },
+    { value: chineseWeekday(options.day.weekday), subValue: englishWeekday(options.day.weekday) },
+  ]
+  headerItems.forEach((item, index) => {
+    const width = headerWidths[index] ?? 0
+    drawHeaderCell(ctx, item.value, item.subValue, headerX, gridY, width, headerHeight)
+    if (index > 0) {
+      ctx.beginPath()
+      ctx.moveTo(headerX, gridY)
+      ctx.lineTo(headerX, gridY + headerHeight)
+      ctx.stroke()
+    }
+    headerX += width
+  })
+  ctx.beginPath()
+  ctx.moveTo(gridX, gridY + headerHeight)
+  ctx.lineTo(gridX + gridWidth, gridY + headerHeight)
   ctx.stroke()
 
-  await drawQrCode(ctx, options.url, WIDTH / 2 - 50, 1252, 100)
+  const bodyY = gridY + headerHeight
+  const bodyHeight = 252
+  const sideWidth = 138
+  const hoursX = gridX + sideWidth + 24
+  const hoursY = bodyY + 22
+  drawActivityColumn(ctx, options.labels.yi, options.day.yi, gridX, bodyY, sideWidth, bodyHeight)
+  drawActivityColumn(ctx, options.labels.ji, options.day.ji, gridX + gridWidth - sideWidth, bodyY, sideWidth, bodyHeight)
+  drawHourGrid(ctx, options.labels.luckyHours, options.day.hours, hoursX, hoursY)
+
+  const clashWidth = 102
+  const clashHeight = 34
+  ctx.fillStyle = RED
+  roundRect(ctx, center - clashWidth / 2, bodyY + bodyHeight - clashHeight - 4, clashWidth, clashHeight, 3)
+  ctx.fill()
+  ctx.fillStyle = PAPER
+  ctx.font = '800 22px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(`冲${options.day.chongShengXiao}`, center, bodyY + bodyHeight - clashHeight / 2 - 4)
+
+  const detailY = bodyY + bodyHeight
+  const detailHeight = 76
+  const details = [
+    options.day.lunar.dayGanZhi,
+    options.day.colors.dayWuxing,
+    options.day.xiu.name,
+    options.day.jianChu,
+  ]
+  const detailWidth = gridWidth / details.length
+  details.forEach((value, index) => {
+    drawHeaderCell(ctx, value, '', gridX + index * detailWidth, detailY, detailWidth, detailHeight)
+    if (index > 0) {
+      ctx.beginPath()
+      ctx.moveTo(gridX + index * detailWidth, detailY)
+      ctx.lineTo(gridX + index * detailWidth, detailY + detailHeight)
+      ctx.stroke()
+    }
+  })
+  ctx.beginPath()
+  ctx.moveTo(gridX, detailY)
+  ctx.lineTo(gridX + gridWidth, detailY)
+  ctx.stroke()
+
+  const directionY = detailY + detailHeight
+  const directionHeight = 80
+  const directionTexts = [
+    `${options.labels.caiDirection.replace('方位', '')}${options.day.positions.cai}`,
+    `${options.labels.xiDirection.replace('方位', '')}${options.day.positions.xi}`,
+    `煞${options.day.sha}`,
+  ]
+  const directionWidth = gridWidth / directionTexts.length
+  directionTexts.forEach((value, index) => {
+    drawHeaderCell(ctx, value, '', gridX + index * directionWidth, directionY, directionWidth, directionHeight)
+    if (index > 0) {
+      ctx.beginPath()
+      ctx.moveTo(gridX + index * directionWidth, directionY)
+      ctx.lineTo(gridX + index * directionWidth, directionY + directionHeight)
+      ctx.stroke()
+    }
+  })
+
+  const footerY = paperY + paperHeight - 84
+  ctx.textAlign = 'left'
+  ctx.fillStyle = RED
+  ctx.font = '700 27px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(`【${options.day.lunar.shengXiao}】年`, left, footerY)
+  ctx.font = '500 22px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText('百業興旺家富裕', left + 130, footerY)
+  ctx.fillStyle = RED
+  roundRect(ctx, right - 84, footerY - 24, 84, 48, 4)
+  ctx.fill()
+  ctx.fillStyle = PAPER
   ctx.textAlign = 'center'
+  ctx.font = '800 27px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText('通勝', right - 42, footerY)
+
+  const qrSize = 96
+  const qrY = paperY + paperHeight + 34
+  ctx.save()
+  ctx.shadowColor = 'rgba(0,0,0,.24)'
+  ctx.shadowBlur = 12
+  ctx.shadowOffsetY = 5
+  ctx.fillStyle = PAPER
+  roundRect(ctx, center - qrSize / 2 - 8, qrY - 8, qrSize + 16, qrSize + 16, 8)
+  ctx.fill()
+  ctx.restore()
+  await drawQrCode(ctx, options.url, center - qrSize / 2, qrY, qrSize)
+
   ctx.textBaseline = 'top'
-  ctx.fillStyle = 'rgba(255,253,244,.62)'
-  ctx.font = '500 22px "Noto Sans SC", ui-sans-serif, sans-serif'
-  ctx.fillText('ososn · www.ososn.com', WIDTH / 2, 1378)
-  ctx.fillStyle = 'rgba(255,253,244,.36)'
-  ctx.font = '400 19px "Noto Sans SC", ui-sans-serif, sans-serif'
-  ctx.fillText(options.labels.timezone, WIDTH / 2, 1416)
+  ctx.fillStyle = 'rgba(251,247,239,.78)'
+  ctx.font = '700 22px "Noto Sans SC", ui-sans-serif, sans-serif'
+  ctx.fillText('ososn · www.ososn.com', center, qrY + qrSize + 26)
+  ctx.fillStyle = 'rgba(251,247,239,.42)'
+  ctx.font = '400 18px "Noto Sans SC", ui-sans-serif, sans-serif'
+  ctx.fillText(options.labels.timezone, center, qrY + qrSize + 56)
 
   return canvas.toDataURL('image/png')
 }
