@@ -414,6 +414,7 @@ const navItems = computed<NavItem[]>(() => [
   { label: t('todayAlmanac.title'), to: '/tools/jinri-huangli', id: 'nav-today-almanac' },
   { label: t('nav.toolsShort'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
   { label: t('nav.shelf'), to: '/shelf', id: 'nav-shelf' },
+  { label: t('nav.graph'), to: '/graph', id: 'nav-graph' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
   { label: t('nav.wiki'), to: '/wiki', id: 'nav-wiki' },
 ])

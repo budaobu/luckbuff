@@ -12,7 +12,8 @@
     "language": "Current language: {lang}",
     "wiki": "Wiki",
     "insights": "Insights",
-    "shelf": "Shelf"
+    "shelf": "Shelf",
+    "graph": "Graphs"
   },
   "wiki": {
     "title": "Wiki",
@@ -13198,5 +13199,34 @@
     "seoTitle": "Baosheng Dadi Oracle Sign {n} Meaning_Poem & Judgments",
     "seoDescription": "Baosheng Dadi Oracle Sign {n}: {poem}. Read the poem, traditional category judgments and practical guidance, then draw online. {judgments}",
     "seoKeywords": "Baosheng Dadi Oracle sign {n},Baosheng Dadi Oracle sign {n} meaning,Baosheng Dadi 60 signs,oracle poem,category judgments"
+  },
+  "graph": {
+    "eyebrow": "Text & Diagram · Interactive",
+    "title": "Graphs",
+    "description": "Each core concept gets a hands-on diagram: build the complete image first, then connect it with texts and tools.",
+    "overview": "Graph index",
+    "count": "{n} interactive topics",
+    "browseHint": "Browse by knowledge line and open a cover to view details",
+    "categories": "Graph categories",
+    "all": "All",
+    "itemUnit": "topics",
+    "openAria": "Open the {title} graph",
+    "sealTop": "Graph",
+    "sealBottom": "Atlas",
+    "interactiveTag": "Interactive graph",
+    "enter": "Open",
+    "back": "Back to graphs",
+    "principle": "How it works",
+    "category": {
+      "基础知识": "Basics",
+      "阴阳五行": "Yin Yang & Five Phases",
+      "八卦": "Trigrams",
+      "命理": "Destiny",
+      "历法": "Calendar",
+      "奇门": "Qimen"
+    },
+    "seoTitle": "Interactive Knowledge Graphs",
+    "seoDescription": "Interactive diagrams for Five Phases, stems and branches, Yin Yang, trigrams, solar terms, Hetu Luoshu and Qimen, with animations and principles.",
+    "keywords": "interactive diagrams,Chinese metaphysics diagrams,Five Phases,heavenly stems,earthly branches,bagua,Qimen chart"
   }
 }

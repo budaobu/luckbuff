@@ -144,6 +144,14 @@ for (const filename of readdirSync(matchDir)) {
   toolPathAliases[slug] = `/prophet/match/${slug}`
 }
 
+// 图解详情页：本地数据快照中的每个交互图都是独立统计路由。
+const graphIndex = JSON.parse(readFileSync(resolve(ROOT, 'app', 'data', 'graph-charts.json'), 'utf-8'))
+for (const chart of graphIndex.charts) {
+  const slug = `graph-${chart.id}`
+  tools[slug] ??= chart.title
+  toolPathAliases[slug] = `/graph/${chart.id}`
+}
+
 // ── 专题页：HUB_PATHS 与 app/plugins/page-view-tracker.client.ts 保持一致 ──
 const trackerSrc = readFileSync(resolve(ROOT, 'app', 'plugins', 'page-view-tracker.client.ts'), 'utf-8')
 const hubBlock = trackerSrc.match(/HUB_PATHS\s*=\s*new Set\(\[([\s\S]*?)\]\)/)
