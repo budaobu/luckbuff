@@ -53,6 +53,7 @@ function scanContent(dir: string): Array<{ slug: string; summary: string; genera
   return results
 }
 const contentItems = scanContent(join(__dirname, 'content', 'worldcup-predictions'))
+const graphCharts: { charts: Array<{ id: string }> } = JSON.parse(readFileSync(join(__dirname, 'app', 'data', 'graph-charts.json'), 'utf-8'))
 // insights articles are served at runtime (editors publish via /admin);
 // their sitemap URLs come from the runtime source server/api/__sitemap__/insights-urls.ts
 
@@ -80,6 +81,12 @@ const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily'
 }
 
 const sitemapUrls = [
+  ...graphCharts.charts.map(chart => ({
+    loc: `/graph/${chart.id}`,
+    changefreq: 'weekly' as const,
+    priority: 0.7,
+    _i18nTransform: true,
+  })),
   ...contentItems.map(item => ({
     loc: `/prophet/match/${item.slug}`,
     lastmod: item.generatedAt || undefined,

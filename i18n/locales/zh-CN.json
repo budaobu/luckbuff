@@ -12,7 +12,8 @@
     "language": "当前语言：{lang}",
     "wiki": "Wiki",
     "insights": "命见",
-    "shelf": "书架"
+    "shelf": "书架",
+    "graph": "图解"
   },
   "wiki": {
     "title": "Wiki",
@@ -13221,5 +13222,34 @@
     "seoTitle": "保生大帝灵签第{n}签解签_签诗与分项断语",
     "seoDescription": "保生大帝灵签第{n}签详解：{poem}。页面整理签诗、传统分项断语与行动提示，并可继续在线求签。{judgments}",
     "seoKeywords": "保生大帝灵签第{n}签,保生大帝灵签第{n}签解签,保生大帝灵签第{n}签详解,保生大帝灵签60签,签诗,分项断语"
+  },
+  "graph": {
+    "eyebrow": "图文互证 · 交互演示",
+    "title": "图解",
+    "description": "每个核心概念配一张可动手操作的图，先建立整体图像，再回到文字与工具中对照。",
+    "overview": "图解总览",
+    "count": "{n} 项交互知识",
+    "browseHint": "按知识脉络浏览，点击封面进入图解详情",
+    "categories": "图解分类",
+    "all": "全部",
+    "itemUnit": "项",
+    "openAria": "打开{title}图解",
+    "sealTop": "图解",
+    "sealBottom": "图志",
+    "interactiveTag": "交互图解",
+    "enter": "进入",
+    "back": "返回图解",
+    "principle": "原理说明",
+    "category": {
+      "基础知识": "基础知识",
+      "阴阳五行": "阴阳五行",
+      "八卦": "八卦",
+      "命理": "命理",
+      "历法": "历法",
+      "奇门": "奇门"
+    },
+    "seoTitle": "交互知识图解",
+    "seoDescription": "浏览五行、天干地支、阴阳、八卦、节气、河洛与奇门九宫的交互图解，逐项查看图表动画与原理说明。",
+    "keywords": "知识图解,交互图解,五行图解,天干地支图解,八卦图解,奇门九宫图解"
   }
 }
