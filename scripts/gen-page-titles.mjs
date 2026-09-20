@@ -167,6 +167,17 @@ for (const path of pagePaths) {
   if (title) pages[slug] = title
 }
 
+// ── Wiki 词条详情页：同步索引生成，按词条路径作为独立统计项 ──
+const wikiIndexFile = resolve(ROOT, 'content', 'wiki', 'index.json')
+if (existsSync(wikiIndexFile)) {
+  const wikiIndex = JSON.parse(readFileSync(wikiIndexFile, 'utf-8'))
+  for (const entry of wikiIndex.entries || []) {
+    if (!entry.sourcePath?.startsWith('/wiki/')) continue
+    const slug = entry.sourcePath.slice('/wiki/'.length).replace(/\//g, '--')
+    pages[slug] ??= entry.title || slug
+  }
+}
+
 // ── 占卜提交：slug 来自 tool-submit-tracker 的 API 前缀，多数与工具页同名 ──
 const submitBlock = trackerSrc && readFileSync(resolve(ROOT, 'server', 'middleware', 'tool-submit-tracker.ts'), 'utf-8')
   .match(/TOOL_API_PREFIXES\s*=\s*\[([\s\S]*?)\]/)

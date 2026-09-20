@@ -17,8 +17,22 @@
     "closeMenu": "メニューを閉じる",
     "languageLabel": "言語",
     "language": "現在の言語：{lang}",
+    "wiki": "Wiki",
     "insights": "コラム",
     "shelf": "書架"
+  },
+  "wiki": {
+    "title": "Wiki",
+    "description": "術数の基礎用語を検索して読めます。",
+    "searchPlaceholder": "用語、タグ、分類を検索",
+    "categories": "Wiki分類",
+    "all": "すべて",
+    "count": "{n}件",
+    "empty": "一致する用語はありません。",
+    "back": "Wikiに戻る",
+    "related": "関連用語",
+    "seoTitle": "術数Wiki",
+    "seoDescription": "陰陽五行・天干地支・十神・紫微・奇門・六爻・大六壬などの基礎用語を閲覧できます。"
   },
   "shelf": {
     "title": "書架",

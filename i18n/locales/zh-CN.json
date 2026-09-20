@@ -10,8 +10,22 @@
     "closeMenu": "关闭菜单",
     "languageLabel": "语言",
     "language": "当前语言：{lang}",
+    "wiki": "Wiki",
     "insights": "命见",
     "shelf": "书架"
+  },
+  "wiki": {
+    "title": "Wiki",
+    "description": "检索并阅读术数基础词条。",
+    "searchPlaceholder": "搜索词条、标签或分类",
+    "categories": "Wiki 分类",
+    "all": "全部",
+    "count": "共 {n} 个词条",
+    "empty": "没有匹配的词条。",
+    "back": "返回 Wiki",
+    "related": "同类词条",
+    "seoTitle": "Wiki 术数基础词条库",
+    "seoDescription": "浏览阴阳五行、天干地支、十神、紫微、奇门、六爻、大六壬等术数基础词条。"
   },
   "shelf": {
     "title": "书架",

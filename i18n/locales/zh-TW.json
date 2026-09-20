@@ -10,8 +10,22 @@
     "closeMenu": "關閉選單",
     "languageLabel": "語言",
     "language": "當前語言：{lang}",
+    "wiki": "Wiki",
     "insights": "命見",
     "shelf": "書架"
+  },
+  "wiki": {
+    "title": "Wiki",
+    "description": "檢索並閱讀術數基礎詞條。",
+    "searchPlaceholder": "搜尋詞條、標籤或分類",
+    "categories": "Wiki 分類",
+    "all": "全部",
+    "count": "共 {n} 個詞條",
+    "empty": "沒有符合的詞條。",
+    "back": "返回 Wiki",
+    "related": "同類詞條",
+    "seoTitle": "Wiki 術數基礎詞條庫",
+    "seoDescription": "瀏覽陰陽五行、天干地支、十神、紫微、奇門、六爻、大六壬等術數基礎詞條。"
   },
   "shelf": {
     "title": "書架",

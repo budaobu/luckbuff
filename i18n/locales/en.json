@@ -10,8 +10,22 @@
     "closeMenu": "Close menu",
     "languageLabel": "Language",
     "language": "Current language: {lang}",
+    "wiki": "Wiki",
     "insights": "Insights",
     "shelf": "Shelf"
+  },
+  "wiki": {
+    "title": "Wiki",
+    "description": "Search and read foundational metaphysics entries.",
+    "searchPlaceholder": "Search entries, tags, or categories",
+    "categories": "Wiki categories",
+    "all": "All",
+    "count": "{n} entries",
+    "empty": "No matching entries.",
+    "back": "Back to Wiki",
+    "related": "Related entries",
+    "seoTitle": "Metaphysics Wiki",
+    "seoDescription": "Browse foundational entries for Yin Yang, Five Phases, Heavenly Stems, Earthly Branches, Zi Wei, Qimen, Liu Yao, and Liu Ren."
   },
   "shelf": {
     "title": "Shelf",
