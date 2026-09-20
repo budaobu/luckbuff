@@ -415,6 +415,7 @@ const navItems = computed<NavItem[]>(() => [
   { label: t('nav.toolsShort'), to: '/tools', dropdown: true, id: 'nav-tools-dropdown' },
   { label: t('nav.shelf'), to: '/shelf', id: 'nav-shelf' },
   { label: t('nav.insights'), to: '/insights', id: 'nav-insights' },
+  { label: t('nav.wiki'), to: '/wiki', id: 'nav-wiki' },
 ])
 
 type AppLanguageCode = 'zh-CN' | 'zh-TW' | 'en' | 'ja'

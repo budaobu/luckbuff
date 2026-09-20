@@ -106,6 +106,11 @@ rsync_retry --delete \
   "content/worldcup-predictions/" \
   "$SERVER:$REMOTE_DIR/content/worldcup-predictions/"
 
+echo "==> rsync content/wiki/ (generated wiki snapshot)"
+rsync_retry --delete \
+  "content/wiki/" \
+  "$SERVER:$REMOTE_DIR/content/wiki/"
+
 echo "==> rsync content/shelf/ (generated classics snapshot)"
 rsync_retry --delete \
   "content/shelf/" \

@@ -1,0 +1,1419 @@
+{
+  "generated": true,
+  "syncedAt": "2026-09-18T07:37:14.101Z",
+  "source": "https://www.qingnang.cc/wiki",
+  "integritySource": "https://www.qingnang.cc/sitemap.xml",
+  "stats": {
+    "discoveredPages": 84,
+    "savedPages": 84,
+    "addedPages": 0,
+    "updatedPages": 0,
+    "removedPages": 0,
+    "downloadedResources": 0,
+    "failedPages": 0,
+    "failedResources": 0
+  },
+  "integrity": {
+    "checked": true,
+    "missingFromLocal": [],
+    "missingFromSitemap": [],
+    "unresolvedWikiLinks": []
+  },
+  "failures": [],
+  "entries": [
+    {
+      "sourcePath": "/wiki/bazi/jichu/yinyang-wuxing",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/yinyang-wuxing",
+      "title": "阴阳五行",
+      "description": "五行不但有正常的生克（木生火，木克土），更有在极端情况下的反常克伐（见《滴天髓》精华）：",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "穷通宝鉴",
+        "命理约言"
+      ],
+      "excerpt": "五行不但有正常的生克（木生火，木克土），更有在极端情况下的反常克伐（见《滴天髓》精华）："
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/tiangan",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/tiangan",
+      "title": "十天干",
+      "description": "由《命理约言》与《子平真诠》总结合之大忌与大喜：",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "穷通宝鉴",
+        "命理约言"
+      ],
+      "excerpt": "由《命理约言》与《子平真诠》总结合之大忌与大喜："
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/dizhi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/dizhi",
+      "title": "十二地支",
+      "description": "地支，即命理之“地元”，象征厚土承载之静体、造化之内蕴状态、根基与幽邃之气。此乃天干施展生杀之底座。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "穷通宝鉴",
+        "命理约言"
+      ],
+      "excerpt": "地支，即命理之“地元”，象征厚土承载之静体、造化之内蕴状态、根基与幽邃之气。此乃天干施展生杀之底座。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/ganzhi-guanxi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/ganzhi-guanxi",
+      "title": "干支关系",
+      "description": "八字推演命理本质上就是一张图谱的解密。在这个图谱中，天干与天干、地支与地支不是孤立的，“天地交汇”的干支关系才是推演事物发展的引擎。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "穷通宝鉴",
+        "命理约言"
+      ],
+      "excerpt": "八字推演命理本质上就是一张图谱的解密。在这个图谱中，天干与天干、地支与地支不是孤立的，“天地交汇”的干支关系才是推演事物发展的引擎。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/gongwei",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/gongwei",
+      "title": "宫位与根苗花果",
+      "description": "八字的四个柱（年、月、日、时）构建了一棵大树的时间与空间生命周期模型。即便大运再顺遂，如果在不同的生命阶段，大树的特定部位遭遇严重克损，人生的那个时段也会面临相应的动荡。这是研判命局必须掌握的时空轴基石理念。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "命理约言"
+      ],
+      "excerpt": "八字的四个柱（年、月、日、时）构建了一棵大树的时间与空间生命周期模型。即便大运再顺遂，如果在不同的生命阶段，大树的特定部位遭遇严重克损，人生的那个时段也会面临相应的动荡。这是研判命局必须掌握的时空轴基石理念。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/rigan-wangshuai",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/rigan-wangshuai",
+      "title": "日干旺衰判定法",
+      "description": "前文提到了“扶抑”与“顺逆”，其大前提都建立在“准确判断日干究竟是身强还是身弱”之上。这是推断八字走向的第一道关卡，也是最容易失误的环节。《子平真诠》与《滴天髓》给出了森严的四道标尺，必须按顺序严格测算。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "命理约言"
+      ],
+      "excerpt": "前文提到了“扶抑”与“顺逆”，其大前提都建立在“准确判断日干究竟是身强还是身弱”之上。这是推断八字走向的第一道关卡，也是最容易失误的环节。《子平真诠》与《滴天髓》给出了森严的四道标尺，必须按顺序严格测算。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/yongshen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/yongshen",
+      "title": "用神总论",
+      "description": "如何捉得原局的大病并对症下药？“找到用神”不但是研判八字的通关密语，更是贯穿所有命理古籍最核心、最不可撼动的灵魂。不知“辨别用神”的核心原理，看格局就如同雾里看花。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "滴天髓",
+        "子平真诠",
+        "命理约言",
+        "穷通宝鉴"
+      ],
+      "excerpt": "如何捉得原局的大病并对症下药？“找到用神”不但是研判八字的通关密语，更是贯穿所有命理古籍最核心、最不可撼动的灵魂。不知“辨别用神”的核心原理，看格局就如同雾里看花。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/paipan-jieqi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/paipan-jieqi",
+      "title": "排盘与节气",
+      "description": "如果在算力底座中漏掉了历法坐标系，那么所有对命局格局调候的判断都可能是南辕北辙的。八字的“月柱”以及十二生肖，其分割点既不是农历的正月初一，也不是公历的1月1日，而是严格按照地球绕太阳运行周期的物理坐标系法则——“二十四节气”的重要界碑来划分。这是体现《穷通宝鉴》自然温度论命物理调候学说的最根本基石原理。",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "基础理论",
+        "历法",
+        "滴天髓",
+        "子平真诠",
+        "穷通宝鉴"
+      ],
+      "excerpt": "如果在算力底座中漏掉了历法坐标系，那么所有对命局格局调候的判断都可能是南辕北辙的。八字的“月柱”以及十二生肖，其分割点既不是农历的正月初一，也不是公历的1月1日，而是严格按照地球绕太阳运行周期的物理坐标系法则——“二十四节气”的重要界碑来划分。这是体现《穷通宝鉴》自然温度论命物理调候学说的最根本基石原理。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/jichu/sizhu-rumen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/jichu/sizhu-rumen",
+      "title": "八字四柱入门总论",
+      "description": "「八字」是中国传统命理中流传最广、体系最完整的一支，也常被称作「四柱」或「子平术」。它把一个人出生的年、月、日、时分别换算成干支，四组干支共八个字，落进四根柱子里，再以日柱天干为核心坐标，参详五行的旺衰、生克与格局。八字不看星曜，也不看天象，它是一套完全建立在干支符号之上的「能量结构」模型——这也是它与紫微斗数、…",
+      "category": "bazi-jichu",
+      "categoryTitle": "八字基础",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "四柱",
+        "入门",
+        "干支",
+        "十神",
+        "大运流年",
+        "传统命理"
+      ],
+      "excerpt": "「八字」是中国传统命理中流传最广、体系最完整的一支，也常被称作「四柱」或「子平术」。它把一个人出生的年、月、日、时分别换算成干支，四组干支共八个字，落进四根柱子里，再以日柱天干为核心坐标，参详五行的旺衰、生克与格局。八字不看星曜，也不看天象，它是一套完全建立在干支符号之上的「能量结构」模型——这也是它与紫微斗数、…"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/zhengguan",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/zhengguan",
+      "title": "正官",
+      "description": "这里的“不见”并非指八字里没有官星，而是指官星失去了作用（失令被伤，或者身弱官重无印化，财重生官压身）。官星不在此局中帮助命主，反而成了破神或毫无用处的闲神，这才是真正的“不见”与底层的格局。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "这里的“不见”并非指八字里没有官星，而是指官星失去了作用（失令被伤，或者身弱官重无印化，财重生官压身）。官星不在此局中帮助命主，反而成了破神或毫无用处的闲神，这才是真正的“不见”与底层的格局。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/qisha",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/qisha",
+      "title": "七杀（偏官）",
+      "description": "如果局中全盘是日主之气（如同木局），哪怕出现一个虚弱的七杀金，因为金太少无法压制全局木气反而惹怒木气，此时必须将其彻底干掉（去其寡）。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "如果局中全盘是日主之气（如同木局），哪怕出现一个虚弱的七杀金，因为金太少无法压制全局木气反而惹怒木气，此时必须将其彻底干掉（去其寡）。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/zhengyin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/zhengyin",
+      "title": "正印",
+      "description": "若命局本元虚衰急赖印星扶持，却逢财星将仅存之微弱印星连根摧毁，此乃典型之“贱格”。定局命主每因蝇头小利铸成滔天大错，品性卑劣。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "若命局本元虚衰急赖印星扶持，却逢财星将仅存之微弱印星连根摧毁，此乃典型之“贱格”。定局命主每因蝇头小利铸成滔天大错，品性卑劣。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/pianyin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/pianyin",
+      "title": "偏印（枭神）",
+      "description": "若全局气机拥堵，日主急需纯正之印星滋育，所临却尽是偏印，非但无温润长养之功，反因其僵化乖张之性，致使气势凝滞（金寒水冷之时，偏印之水毫无情义）。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "若全局气机拥堵，日主急需纯正之印星滋育，所临却尽是偏印，非但无温润长养之功，反因其僵化乖张之性，致使气势凝滞（金寒水冷之时，偏印之水毫无情义）。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/zhengcai",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/zhengcai",
+      "title": "正财",
+      "description": "意即：须得食伤绵绵相生（源泉不竭），须得日主底气充足（吞吐自如），地支常暗结财局（未见干戈而粮草已具），方能铸就敌国之富。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "意即：须得食伤绵绵相生（源泉不竭），须得日主底气充足（吞吐自如），地支常暗结财局（未见干戈而粮草已具），方能铸就敌国之富。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/piancai",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/piancai",
+      "title": "偏财",
+      "description": "《滴天髓》一语道破：若为偏财旺相之巨贾命局，自身气力羸弱，此时纵见少许[[劫财]]相助，理当“比劫帮身承财”，然若此劫财孱弱难任金山之重，终究落得贫寒结局。此乃“敌众我寡，不受降”。逢此必须顺应财势，委身从财（从财格）。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "《滴天髓》一语道破：若为偏财旺相之巨贾命局，自身气力羸弱，此时纵见少许[[劫财]]相助，理当“比劫帮身承财”，然若此劫财孱弱难任金山之重，终究落得贫寒结局。此乃“敌众我寡，不受降”。逢此必须顺应财势，委身从财（从财格）。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/shishen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/shishen",
+      "title": "食神",
+      "description": "食神，雅称“财库”、“寿星”，于传统命理中奉为福禄第一星曜，主衣食丰足、寿考绵长、福泽深厚及蕴藉之才情。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "食神，雅称“财库”、“寿星”，于传统命理中奉为福禄第一星曜，主衣食丰足、寿考绵长、福泽深厚及蕴藉之才情。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/shangguan",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/shangguan",
+      "title": "伤官",
+      "description": "若恃伤官生财以取富之局，伤官微弱而财星沉重，则伤官些微之火花，必为厚重财气掩息尽耗；若伤官强旺，日主孱弱，印星无力镇伏，则流于“耗散元气，狂妄至败”。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "若恃伤官生财以取富之局，伤官微弱而财星沉重，则伤官些微之火花，必为厚重财气掩息尽耗；若伤官强旺，日主孱弱，印星无力镇伏，则流于“耗散元气，狂妄至败”。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/bijian",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/bijian",
+      "title": "比肩",
+      "description": "此中真机明示，逢比劫聚党劫夺妻财之危局，苟八字暗藏一尊真金不怕火炼之[[正官]]，官星即可将比肩尽数收伏（官克比），鼎定财基。此谓“探囊取物于虎狼之伺”，手段绝高。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "此中真机明示，逢比劫聚党劫夺妻财之危局，苟八字暗藏一尊真金不怕火炼之[[正官]]，官星即可将比肩尽数收伏（官克比），鼎定财基。此谓“探囊取物于虎狼之伺”，手段绝高。"
+    },
+    {
+      "sourcePath": "/wiki/bazi/shishen/jiecai",
+      "sourceUrl": "https://www.qingnang.cc/wiki/bazi/shishen/jiecai",
+      "title": "劫财",
+      "description": "逢强悍无伦之劫财，原局用神（如正财星）非但镇暴无功，反激怒劫财致遭碾覆（敌不受降）。若满盘比劫，用神奄奄一息，定局为家道中落、破败萧条之命。",
+      "category": "bazi-shishen",
+      "categoryTitle": "八字十神",
+      "domain": "bazi",
+      "tags": [
+        "八字",
+        "十神",
+        "子平真诠",
+        "滴天髓",
+        "命理约言",
+        "核心理论"
+      ],
+      "excerpt": "逢强悍无伦之劫财，原局用神（如正财星）非但镇暴无功，反激怒劫财致遭碾覆（敌不受降）。若满盘比劫，用神奄奄一息，定局为家道中落、破败萧条之命。"
+    },
+    {
+      "sourcePath": "/wiki/liuyao/jichu/yinyang-bagua",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuyao/jichu/yinyang-bagua",
+      "title": "阴阳八卦与装卦法",
+      "description": "《增删卜易》诸般通神绝断之基，立乎【摇钱法起卦】与绝对准绳座标之布定。六爻研判断非随心妄起之幻念，乃高度严谨、法度森严之五行气机推演系统。若发局差讹，纵神明降世亦必谬以千里。",
+      "category": "liuyao-jichu",
+      "categoryTitle": "六爻基础",
+      "domain": "liuyao",
+      "tags": [
+        "六爻",
+        "基础",
+        "增删卜易"
+      ],
+      "excerpt": "《增删卜易》诸般通神绝断之基，立乎【摇钱法起卦】与绝对准绳座标之布定。六爻研判断非随心妄起之幻念，乃高度严谨、法度森严之五行气机推演系统。若发局差讹，纵神明降世亦必谬以千里。"
+    },
+    {
+      "sourcePath": "/wiki/liuyao/jichu/liuqin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuyao/jichu/liuqin",
+      "title": "六亲与世应",
+      "description": "如果在八字推演中核心是用神，那么在六爻推演中，绝对的时空原点就是【世应】，而刻画社会万事万物的核心工具就是【六亲】。在《增删卜易》的体系中，如果不先定下世爻与六亲的关系，满盘的地支排布不过是一团乱麻。",
+      "category": "liuyao-jichu",
+      "categoryTitle": "六爻基础",
+      "domain": "liuyao",
+      "tags": [
+        "六爻",
+        "基础",
+        "增删卜易"
+      ],
+      "excerpt": "如果在八字推演中核心是用神，那么在六爻推演中，绝对的时空原点就是【世应】，而刻画社会万事万物的核心工具就是【六亲】。在《增删卜易》的体系中，如果不先定下世爻与六亲的关系，满盘的地支排布不过是一团乱麻。"
+    },
+    {
+      "sourcePath": "/wiki/liuyao/jichu/liushen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuyao/jichu/liushen",
+      "title": "六神（青龙朱雀勾陈腾蛇白虎玄武）",
+      "description": "在《增删卜易》中，野鹤老人针对当时市井江湖术士的一种恶习进行了雷霆般的纠正——那就是“迷信六神吉凶”！",
+      "category": "liuyao-jichu",
+      "categoryTitle": "六爻基础",
+      "domain": "liuyao",
+      "tags": [
+        "六爻",
+        "基础",
+        "增删卜易"
+      ],
+      "excerpt": "在《增删卜易》中，野鹤老人针对当时市井江湖术士的一种恶习进行了雷霆般的纠正——那就是“迷信六神吉凶”！"
+    },
+    {
+      "sourcePath": "/wiki/liuyao/jichu/shensha",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuyao/jichu/shensha",
+      "title": "六爻神煞废存定论",
+      "description": "如果不立下这一条绝对死规，系统和推演者极容易陷入一种庞杂大杂烩的崩溃之中——那就是把八字命理中浩瀚上百种“天罗地网、灾煞、空亡神、孤辰寡宿”等抽象神鬼名词，生搬硬套砸在极为讲究物理五行硬派博弈的六爻里面！",
+      "category": "liuyao-jichu",
+      "categoryTitle": "六爻基础",
+      "domain": "liuyao",
+      "tags": [
+        "六爻",
+        "基础",
+        "增删卜易"
+      ],
+      "excerpt": "如果不立下这一条绝对死规，系统和推演者极容易陷入一种庞杂大杂烩的崩溃之中——那就是把八字命理中浩瀚上百种“天罗地网、灾煞、空亡神、孤辰寡宿”等抽象神鬼名词，生搬硬套砸在极为讲究物理五行硬派博弈的六爻里面！"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/xuankong-feixing",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/xuankong-feixing",
+      "title": "玄空飞星入门：三元九运与运山向三盘",
+      "description": "玄空飞星是清代以来最通行的一派理气堪舆，以沈竹礽《沈氏玄空学》为集大成。它的全部内容可以压缩成一句话：把「时间」（元运）与「空间」（坐向）叠在洛书九宫上，看九颗星各落何宫、当令与否。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "玄空飞星",
+        "三元九运",
+        "沈氏玄空学",
+        "基础"
+      ],
+      "excerpt": "玄空飞星是清代以来最通行的一派理气堪舆，以沈竹礽《沈氏玄空学》为集大成。它的全部内容可以压缩成一句话：把「时间」（元运）与「空间」（坐向）叠在洛书九宫上，看九颗星各落何宫、当令与否。"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/ershisi-shan",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/ershisi-shan",
+      "title": "二十四山与立向：正向、兼向、替卦、空亡",
+      "description": "堪舆的一切计算都从一个数字开始：向度。罗盘一圈三百六十度，分成二十四份，每份十五度，叫做「二十四山」。房子的「向」落在哪一山，「坐」就在正对面的那一山，一张飞星盘由此立起。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "二十四山",
+        "罗盘",
+        "替卦",
+        "沈氏玄空学",
+        "基础"
+      ],
+      "excerpt": "堪舆的一切计算都从一个数字开始：向度。罗盘一圈三百六十度，分成二十四份，每份十五度，叫做「二十四山」。房子的「向」落在哪一山，「坐」就在正对面的那一山，一张飞星盘由此立起。"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/bazhai",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/bazhai",
+      "title": "八宅大游年：东西四命宅与八游星",
+      "description": "八宅派是阳宅理气里最古老、也最简明的一派，以《八宅明镜》《阳宅三要》为代表。它不随元运变化，只看两件事：这座宅属东四还是西四，住的人属东四还是西四；相配则安，不配则以门、床头、书桌的朝向来补。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "八宅",
+        "命卦",
+        "东西四命",
+        "八宅明镜",
+        "基础"
+      ],
+      "excerpt": "八宅派是阳宅理气里最古老、也最简明的一派，以《八宅明镜》《阳宅三要》为代表。它不随元运变化，只看两件事：这座宅属东四还是西四，住的人属东四还是西四；相配则安，不配则以门、床头、书桌的朝向来补。"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/zibai-liunian",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/zibai-liunian",
+      "title": "紫白流年：年月飞星、五黄二黑、太岁三煞",
+      "description": "宅盘二十年一变，但每一年、每一月都有一颗星飞临各宫，叠在宅盘的山向星上——这就是「紫白」，古籍以《紫白诀》为宗。流年看的不是房子本身，而是今年哪一方宜静、哪一方宜动。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "紫白诀",
+        "流年",
+        "五黄",
+        "太岁",
+        "三煞",
+        "基础"
+      ],
+      "excerpt": "宅盘二十年一变，但每一年、每一月都有一颗星飞临各宫，叠在宅盘的山向星上——这就是「紫白」，古籍以《紫白诀》为宗。流年看的不是房子本身，而是今年哪一方宜静、哪一方宜动。"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/zeri",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/zeri",
+      "title": "通书择日入门：建除、黄道黑道、二十八宿",
+      "description": "入宅、搬家、安床、动土，古人都要「择日」。通行的择日法叫「通书择日」——就是老黄历那一套，以清代官修《协纪辨方书》为总纲。它不靠一颗星定吉凶，而是把好几套历法层叠起来过账，能同时满足多层的日子才算好日子。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "择日",
+        "通书",
+        "建除",
+        "黄道",
+        "二十八宿",
+        "基础"
+      ],
+      "excerpt": "入宅、搬家、安床、动土，古人都要「择日」。通行的择日法叫「通书择日」——就是老黄历那一套，以清代官修《协纪辨方书》为总纲。它不靠一颗星定吉凶，而是把好几套历法层叠起来过账，能同时满足多层的日子才算好日子。"
+    },
+    {
+      "sourcePath": "/wiki/kanyu/jichu/zhaixiang-shuoming",
+      "sourceUrl": "https://www.qingnang.cc/wiki/kanyu/jichu/zhaixiang-shuoming",
+      "title": "宅相参详使用说明：怎么测、怎么标、怎么读",
+      "description": "宅相参详把沈氏玄空飞星、八宅大游年、紫白流年与通书择日四样东西叠在一座房子上。第一次用，照下面五步走，三分钟起盘；看不懂盘面，看第二节；名词不认识，看第三节。",
+      "category": "kanyu-jichu",
+      "categoryTitle": "堪舆基础",
+      "domain": "kanyu",
+      "tags": [
+        "堪舆",
+        "宅相参详",
+        "使用说明",
+        "玄空飞星",
+        "八宅",
+        "基础"
+      ],
+      "excerpt": "宅相参详把沈氏玄空飞星、八宅大游年、紫白流年与通书择日四样东西叠在一座房子上。第一次用，照下面五步走，三分钟起盘；看不懂盘面，看第二节；名词不认识，看第三节。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/jichu/anxing",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/jichu/anxing",
+      "title": "安星法则与排盘基础",
+      "description": "紫微斗数的排盘，不同于八字纯粹依靠节气推算天干地支。紫微斗数是典型的“星命学”，它通过命主的出生时间（农历），运用一套严密的数学算法，将紫微星系和天府星系以及各种辅佐煞曜“安放”在十二宫位之中。",
+      "category": "ziwei-jichu",
+      "categoryTitle": "紫微基础",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "基础",
+        "排盘",
+        "核心理论"
+      ],
+      "excerpt": "紫微斗数的排盘，不同于八字纯粹依靠节气推算天干地支。紫微斗数是典型的“星命学”，它通过命主的出生时间（农历），运用一套严密的数学算法，将紫微星系和天府星系以及各种辅佐煞曜“安放”在十二宫位之中。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/jichu/minggong",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/jichu/minggong",
+      "title": "命宫",
+      "description": "断命宫，首先断的是性格，性格决定命运。",
+      "category": "ziwei-jichu",
+      "categoryTitle": "紫微基础",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十二宫",
+        "核心理论",
+        "基础"
+      ],
+      "excerpt": "断命宫，首先断的是性格，性格决定命运。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/jichu/sanfang-sizheng",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/jichu/sanfang-sizheng",
+      "title": "三方四正与夹宫法则",
+      "description": "紫微推演之妙，察一宫一星之吉凶，断不可拘泥于本宫方寸。紫微斗数实为玄妙之空间阵法，其气场之吞吐，皆由“三方四正”交会与“夹宫”辅弼所共铸。",
+      "category": "ziwei-jichu",
+      "categoryTitle": "紫微基础",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "基础",
+        "空间几何",
+        "核心理论"
+      ],
+      "excerpt": "紫微推演之妙，察一宫一星之吉凶，断不可拘泥于本宫方寸。紫微斗数实为玄妙之空间阵法，其气场之吞吐，皆由“三方四正”交会与“夹宫”辅弼所共铸。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/jichu/sihua",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/jichu/sihua",
+      "title": "天干四化底层逻辑",
+      "description": "在紫微斗数中，星曜是静态的本质，而四化（化禄、化权、化科、化忌）则是驱动星曜发生变化、产生吉凶碰撞的动态能量。",
+      "category": "ziwei-jichu",
+      "categoryTitle": "紫微基础",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "基础",
+        "核心理论",
+        "飞星"
+      ],
+      "excerpt": "在紫微斗数中，星曜是静态的本质，而四化（化禄、化权、化科、化忌）则是驱动星曜发生变化、产生吉凶碰撞的动态能量。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/jichu/ziwei-doushu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/jichu/ziwei-doushu",
+      "title": "紫微斗数总论",
+      "description": "紫微斗数是什么？它是中国传统命理中体系最完整的「星命之学」之一——把一个人出生的年月日时（依农历）换算成一张十二宫命盘，将十四颗主星与众多辅星、煞曜，依固定的数理逻辑安放进十二个宫位，再以宫位与星曜的组合关系，参详一生的格局与节律。与八字的纯干支符号不同，紫微斗数把人事拆进一张「看得见」的图像化命盘里，这也是它长…",
+      "category": "ziwei-jichu",
+      "categoryTitle": "紫微基础",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十二宫",
+        "主星",
+        "四化",
+        "大限流年",
+        "传统命理"
+      ],
+      "excerpt": "紫微斗数是什么？它是中国传统命理中体系最完整的「星命之学」之一——把一个人出生的年月日时（依农历）换算成一张十二宫命盘，将十四颗主星与众多辅星、煞曜，依固定的数理逻辑安放进十二个宫位，再以宫位与星曜的组合关系，参详一生的格局与节律。与八字的纯干支符号不同，紫微斗数把人事拆进一张「看得见」的图像化命盘里，这也是它长…"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/jumen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/jumen",
+      "title": "巨门",
+      "description": "巨门星，北斗第二星，化气为“暗”。紫微斗数中，巨门乃极具争议之异曜，象征口舌交锋、光暗遮蔽、诘问之辩与深幽钻研之能。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "争议星曜"
+      ],
+      "excerpt": "巨门星，北斗第二星，化气为“暗”。紫微斗数中，巨门乃极具争议之异曜，象征口舌交锋、光暗遮蔽、诘问之辩与深幽钻研之能。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/lianzhen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/lianzhen",
+      "title": "廉贞",
+      "description": "廉贞星，北斗第五星，乃紫微斗数中秉性至为幽冥曲折、幻化最是万端之奇星。身兼两道截然对立之化气：一曰“囚”（法度、底限、刑律），二曰“次桃花”（长袖善舞、风神魅惑、灵魂交响）。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "复杂星曜"
+      ],
+      "excerpt": "廉贞星，北斗第五星，乃紫微斗数中秉性至为幽冥曲折、幻化最是万端之奇星。身兼两道截然对立之化气：一曰“囚”（法度、底限、刑律），二曰“次桃花”（长袖善舞、风神魅惑、灵魂交响）。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/pojun",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/pojun",
+      "title": "破军",
+      "description": "破军星，北斗第七星，化气为“耗”。在紫微斗数中，破军代表着最极端的破坏与重建。如果说七杀是冲锋陷阵的将军，那么破军就是敢死队队长。他的任务不但是杀敌，更是要把旧有的城墙彻底炸毁。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "动星"
+      ],
+      "excerpt": "破军星，北斗第七星，化气为“耗”。在紫微斗数中，破军代表着最极端的破坏与重建。如果说七杀是冲锋陷阵的将军，那么破军就是敢死队队长。他的任务不但是杀敌，更是要把旧有的城墙彻底炸毁。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/qisha",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/qisha",
+      "title": "七杀",
+      "description": "七杀星，南斗第六星，化气为“将”。在紫微斗数中，七杀代表着最纯粹的杀伐决断、执行力与肃杀之气。它是命局中冲锋陷阵之大将，其本性毫无退让，唯有破釜沉舟。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "动星"
+      ],
+      "excerpt": "七杀星，南斗第六星，化气为“将”。在紫微斗数中，七杀代表着最纯粹的杀伐决断、执行力与肃杀之气。它是命局中冲锋陷阵之大将，其本性毫无退让，唯有破釜沉舟。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/taiyang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/taiyang",
+      "title": "太阳",
+      "description": "太阳星，中天斗星，化气为“贵”。在紫微斗数中，太阳乃光明、博爱、发散、施舍之绝对象征。与太阴（主富、主收敛）相背，太阳主贵（清望、尊荣），且永葆“燃烧真我，光耀大千”之外放真元。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "中天",
+        "贵气星"
+      ],
+      "excerpt": "太阳星，中天斗星，化气为“贵”。在紫微斗数中，太阳乃光明、博爱、发散、施舍之绝对象征。与太阴（主富、主收敛）相背，太阳主贵（清望、尊荣），且永葆“燃烧真我，光耀大千”之外放真元。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/taiyin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/taiyin",
+      "title": "太阴",
+      "description": "太阴星，即月华，紫微斗数中列为中天主星，化气为“富”，乃命盘中至关紧要之财星与田宅主。与太阳之“外发、主贵”遥相呼应，太阴司掌“藏精、蓄锐、主富”。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "中天",
+        "财星"
+      ],
+      "excerpt": "太阴星，即月华，紫微斗数中列为中天主星，化气为“富”，乃命盘中至关紧要之财星与田宅主。与太阳之“外发、主贵”遥相呼应，太阴司掌“藏精、蓄锐、主富”。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tanlang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tanlang",
+      "title": "贪狼",
+      "description": "贪狼星，北斗第一星，化气为“桃花”与“欲望”。在紫微斗数中，它是最复杂、最世俗，同时也是最具有“爆发力”的一颗星。它既代表了极致的物质与肉体享受，又在某些极端情况下代表着看破红尘的修仙悟道。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "欲望之星"
+      ],
+      "excerpt": "贪狼星，北斗第一星，化气为“桃花”与“欲望”。在紫微斗数中，它是最复杂、最世俗，同时也是最具有“爆发力”的一颗星。它既代表了极致的物质与肉体享受，又在某些极端情况下代表着看破红尘的修仙悟道。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tianfu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tianfu",
+      "title": "天府",
+      "description": "天府星，南斗第一星，紫微斗数尊之为“南斗帝星”与“财库之主”。若紫微乃开疆拓土之真主，天府则为镇国抚民、掌驭太仓之藩王与重臣。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "财库星"
+      ],
+      "excerpt": "天府星，南斗第一星，紫微斗数尊之为“南斗帝星”与“财库之主”。若紫微乃开疆拓土之真主，天府则为镇国抚民、掌驭太仓之藩王与重臣。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tianji",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tianji",
+      "title": "天机",
+      "description": "天机星，南斗第三星，紫微斗数界定为“智谋之星”与“变动之星”。化气曰“善”，主宰机变、思虑与巧算，然因常年高速运转，兼具神经敏锐与浮动不宁之特质。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "智慧星"
+      ],
+      "excerpt": "天机星，南斗第三星，紫微斗数界定为“智谋之星”与“变动之星”。化气曰“善”，主宰机变、思虑与巧算，然因常年高速运转，兼具神经敏锐与浮动不宁之特质。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tianliang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tianliang",
+      "title": "天梁",
+      "description": "天梁星，南斗第六星，化气曰“荫”与“寿”。在紫微斗数中，天梁乃一具“长者威仪”与“逢凶化吉”异能之正曜。主承先荫、医病解厄、以及古道热肠之高远境界。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "庇护星"
+      ],
+      "excerpt": "天梁星，南斗第六星，化气曰“荫”与“寿”。在紫微斗数中，天梁乃一具“长者威仪”与“逢凶化吉”异能之正曜。主承先荫、医病解厄、以及古道热肠之高远境界。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tiantong",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tiantong",
+      "title": "天同",
+      "description": "天同星，南斗第四星，化气为“福”，乃紫微斗数中首屈一指之福德正星。此星主和平、享乐、知足不辱与返璞归真之纯粹。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "福星"
+      ],
+      "excerpt": "天同星，南斗第四星，化气为“福”，乃紫微斗数中首屈一指之福德正星。此星主和平、享乐、知足不辱与返璞归真之纯粹。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/tianxiang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/tianxiang",
+      "title": "天相",
+      "description": "天相星，南斗第五星，化气为“印”。紫微斗数中，天相象征印绶、契约、公允之德及奉献之精诚。若紫微为九五之尊，天机为帷幄军师，天相便是执掌玉玺、布宣德音之当朝宰辅或内阁枢机。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "南斗",
+        "辅助星曜"
+      ],
+      "excerpt": "天相星，南斗第五星，化气为“印”。紫微斗数中，天相象征印绶、契约、公允之德及奉献之精诚。若紫微为九五之尊，天机为帷幄军师，天相便是执掌玉玺、布宣德音之当朝宰辅或内阁枢机。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/wuqu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/wuqu",
+      "title": "武曲",
+      "description": "武曲星，北斗第六星，化气为“财”，是紫微斗数中最大的正财星。但它与太阴（主静储）和天府（主库藏）不同，武曲的财是靠行动力、刚毅决断和实际操作赚来的。",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "财星"
+      ],
+      "excerpt": "武曲星，北斗第六星，化气为“财”，是紫微斗数中最大的正财星。但它与太阴（主静储）和天府（主库藏）不同，武曲的财是靠行动力、刚毅决断和实际操作赚来的。"
+    },
+    {
+      "sourcePath": "/wiki/ziwei/xingyao/ziwei",
+      "sourceUrl": "https://www.qingnang.cc/wiki/ziwei/xingyao/ziwei",
+      "title": "紫微",
+      "description": "紫微在十二宫必定与某些星曜同宫或对照，形成六种基本结构，也就是六种“皇帝的执政状态”：",
+      "category": "ziwei-xingyao",
+      "categoryTitle": "紫微星曜",
+      "domain": "ziwei",
+      "tags": [
+        "紫微斗数",
+        "十四主星",
+        "北斗",
+        "核心理论"
+      ],
+      "excerpt": "紫微在十二宫必定与某些星曜同宫或对照，形成六种基本结构，也就是六种“皇帝的执政状态”："
+    },
+    {
+      "sourcePath": "/wiki/qimen/jichu/sanqi-liuyi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/jichu/sanqi-liuyi",
+      "title": "三奇六仪总论",
+      "description": "奇门遁甲，“遁”的是“甲”。“甲”是十天干之首，代表最核心的统帅。因为统帅最为尊贵，决不可抛头露面受敌方攻击，所以要把“甲”隐藏起来（遁甲）。",
+      "category": "qimen-jichu",
+      "categoryTitle": "奇门基础",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "基础",
+        "核心理论",
+        "天干"
+      ],
+      "excerpt": "奇门遁甲，“遁”的是“甲”。“甲”是十天干之首，代表最核心的统帅。因为统帅最为尊贵，决不可抛头露面受敌方攻击，所以要把“甲”隐藏起来（遁甲）。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/jichu/xunkong-yima",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/jichu/xunkong-yima",
+      "title": "旬空与驿马",
+      "description": "在奇门遁甲中，如果说九宫八卦是舞台，三奇六仪是演员，那么旬空和驿马就是操控这场戏节奏的“隐形导演”。它们在盘面上不以单独的“星门神”形式存在，而是作为一种“时空状态（Buff/Debuff）”附着在某些宫位上。",
+      "category": "qimen-jichu",
+      "categoryTitle": "奇门基础",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "基础",
+        "核心理论",
+        "隐变量"
+      ],
+      "excerpt": "在奇门遁甲中，如果说九宫八卦是舞台，三奇六仪是演员，那么旬空和驿马就是操控这场戏节奏的“隐形导演”。它们在盘面上不以单独的“星门神”形式存在，而是作为一种“时空状态（Buff/Debuff）”附着在某些宫位上。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/jichu/dingju",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/jichu/dingju",
+      "title": "阴阳遁与二十四节气定局法",
+      "description": "奇门排盘之权舆，首在勘定当下之“时空造化极点”，即局数。奇门蕴含阳遁九局与阴遁九局，合为一十八局。定局之理，全赖天地交泰之度数（即二十四节气）与干支纪历。",
+      "category": "qimen-jichu",
+      "categoryTitle": "奇门基础",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "基础",
+        "排盘",
+        "核心理论"
+      ],
+      "excerpt": "奇门排盘之权舆，首在勘定当下之“时空造化极点”，即局数。奇门蕴含阳遁九局与阴遁九局，合为一十八局。定局之理，全赖天地交泰之度数（即二十四节气）与干支纪历。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/baihu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/baihu",
+      "title": "白虎",
+      "description": "奇门八神之列，白虎坐镇西方金地，乃诸神之中至为凶煞、凌厉之大凶神。其蕴藏天地间摧枯拉朽、雷霆暴击，及引动刑戮凶亡之高维杀阵。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "奇门八神之列，白虎坐镇西方金地，乃诸神之中至为凶煞、凌厉之大凶神。其蕴藏天地间摧枯拉朽、雷霆暴击，及引动刑戮凶亡之高维杀阵。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/dumen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/dumen",
+      "title": "杜门",
+      "description": "在奇门遁甲的人盘八门中，杜门位居东南巽四宫，属木。在古人的定义中，它是两平门（杜、景）之一，偏向于小凶。杜门的核心属性是“不通”与“隐藏”。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，杜门位居东南巽四宫，属木。在古人的定义中，它是两平门（杜、景）之一，偏向于小凶。杜门的核心属性是“不通”与“隐藏”。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/jing1men",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/jing1men",
+      "title": "惊门",
+      "description": "在奇门遁甲的人盘八门中，惊门位居正西方兑七宫，属金。它是“三大凶门”之一，代表着恐慌、惊吓、口舌是非、官司诉讼以及突发的变故。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，惊门位居正西方兑七宫，属金。它是“三大凶门”之一，代表着恐慌、惊吓、口舌是非、官司诉讼以及突发的变故。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/jing3men",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/jing3men",
+      "title": "景门",
+      "description": "在奇门遁甲的人盘八门中，景门位居正南方离九宫，属火。在古人的定义中，它是两平门（杜、景）之一，偏向于小吉。景门代表了文明、光明、虚华与文书信息。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，景门位居正南方离九宫，属火。在古人的定义中，它是两平门（杜、景）之一，偏向于小吉。景门代表了文明、光明、虚华与文书信息。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/jiudi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/jiudi",
+      "title": "九地",
+      "description": "在奇门遁甲大神盘中，九地被称为“坚固之神”与“潜伏之神”。它代表着宇宙中最深沉、最厚重、最稳固的向下收敛的磁场。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲大神盘中，九地被称为“坚固之神”与“潜伏之神”。它代表着宇宙中最深沉、最厚重、最稳固的向下收敛的磁场。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/jiutian",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/jiutian",
+      "title": "九天",
+      "description": "在奇门遁甲大神盘中，九天被称为“威悍之神”与“飞扬之神”。如果说九地是向下的、潜伏的基石，那么九天就是向上的、高飞的雄鹰。它代表着宇宙中一种极度扩张、高调、充满爆发力的向上磁场。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲大神盘中，九天被称为“威悍之神”与“飞扬之神”。如果说九地是向下的、潜伏的基石，那么九天就是向上的、高飞的雄鹰。它代表着宇宙中一种极度扩张、高调、充满爆发力的向上磁场。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/kaimen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/kaimen",
+      "title": "开门",
+      "description": "在奇门遁甲的人盘八门中，开门位居西北乾六宫，属金。它是“三吉门”中最顶级的大吉门。开门代表着创始、权力、公开、事业、官方以及一切通畅无阻的能量。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，开门位居西北乾六宫，属金。它是“三吉门”中最顶级的大吉门。开门代表着创始、权力、公开、事业、官方以及一切通畅无阻的能量。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/liuhe",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/liuhe",
+      "title": "六合",
+      "description": "在奇门遁甲的神盘（八神）中，六合位居东方木地，是“四大吉神”之一。它代表着宇宙中一种将分散的事物聚集、撮合、绑定在一起的高维磁场。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的神盘（八神）中，六合位居东方木地，是“四大吉神”之一。它代表着宇宙中一种将分散的事物聚集、撮合、绑定在一起的高维磁场。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/shangmen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/shangmen",
+      "title": "伤门",
+      "description": "在奇门遁甲的人盘八门中，伤门位居正东方震三宫，属木。在古人的定义中，它是“三凶门”之一，带有一种极为强烈的破坏、索取、竞争与碰撞的属性。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，伤门位居正东方震三宫，属木。在古人的定义中，它是“三凶门”之一，带有一种极为强烈的破坏、索取、竞争与碰撞的属性。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/shengmen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/shengmen",
+      "title": "生门",
+      "description": "奇门八门之内，生门镇守东北艮八宫，禀土气。于“开、休、生”三吉门中，生门蕴含万物升发、孳生、丰厚利禄，及枯木逢春之磅礴造化。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "奇门八门之内，生门镇守东北艮八宫，禀土气。于“开、休、生”三吉门中，生门蕴含万物升发、孳生、丰厚利禄，及枯木逢春之磅礴造化。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/simen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/simen",
+      "title": "死门",
+      "description": "在奇门遁甲人盘八门之中，死门位列西南坤二宫，禀土气。此乃“三凶门”之魁首，主终局、凝寂、万物凋零，以及深邃之寂灭渊蔽。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲人盘八门之中，死门位列西南坤二宫，禀土气。此乃“三凶门”之魁首，主终局、凝寂、万物凋零，以及深邃之寂灭渊蔽。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/taiyin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/taiyin",
+      "title": "太阴",
+      "description": "在奇门遁甲的神盘（八神）中，太阴被称为“荫护之神”与“隐秘之神”。它代表了宇宙中一种柔和、隐秘、在暗中提供保护与滋养的高维磁场。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的神盘（八神）中，太阴被称为“荫护之神”与“隐秘之神”。它代表了宇宙中一种柔和、隐秘、在暗中提供保护与滋养的高维磁场。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tengshe",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tengshe",
+      "title": "腾蛇",
+      "description": "列位八神，腾蛇为纯粹凶煞。其煞非在白刃交加之物理痛楚，而应于神魂慑伏、连环诈术，与跗骨之蛆般的羁绊纠葛。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "列位八神，腾蛇为纯粹凶煞。其煞非在白刃交加之物理痛楚，而应于神魂慑伏、连环诈术，与跗骨之蛆般的羁绊纠葛。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianchong",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianchong",
+      "title": "天冲星",
+      "description": "天冲星的吉凶完全取决于你是否需要“速度和力量”。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天冲星的吉凶完全取决于你是否需要“速度和力量”。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianfu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianfu",
+      "title": "天辅星",
+      "description": "天辅星位居东南巽四宫。它是一颗大吉星，是奇门遁甲中的“文曲星”与“教育之星”，代表着文化、修养、辅佐与春风化雨的柔和能量。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天辅星位居东南巽四宫。它是一颗大吉星，是奇门遁甲中的“文曲星”与“教育之星”，代表着文化、修养、辅佐与春风化雨的柔和能量。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianpeng",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianpeng",
+      "title": "天蓬星",
+      "description": "在奇门遁甲的天盘九星中，天蓬星（北斗贪狼星）本位在坎一宫，属水。在古代奇门遁甲中，天蓬星通常被定义为“大凶之星”，与杀人犯、大盗、破财高度绑定。但在现代预测中，它的象义得到了巨大的扩展，具有强烈的两面性。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的天盘九星中，天蓬星（北斗贪狼星）本位在坎一宫，属水。在古代奇门遁甲中，天蓬星通常被定义为“大凶之星”，与杀人犯、大盗、破财高度绑定。但在现代预测中，它的象义得到了巨大的扩展，具有强烈的两面性。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianqin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianqin",
+      "title": "天禽星",
+      "description": "天禽星位居中央中五宫。它是奇门九星中的至尊大吉星，代表着中正、皇权、以及平衡一切的绝对力量。由于中宫没有八卦方位，所以在排盘时，天禽星通常寄生在坤二宫（与天芮星同宫），或者按照特定流派随节气寄宫。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天禽星位居中央中五宫。它是奇门九星中的至尊大吉星，代表着中正、皇权、以及平衡一切的绝对力量。由于中宫没有八卦方位，所以在排盘时，天禽星通常寄生在坤二宫（与天芮星同宫），或者按照特定流派随节气寄宫。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianren",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianren",
+      "title": "天任星",
+      "description": "在奇门遁甲的天盘九星中，天任星位居东北艮八宫。它是一颗“大吉星”，代表着稳重、慈祥、任劳任怨、以及极为坚韧的抗压能力。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的天盘九星中，天任星位居东北艮八宫。它是一颗“大吉星”，代表着稳重、慈祥、任劳任怨、以及极为坚韧的抗压能力。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianrui",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianrui",
+      "title": "天芮星",
+      "description": "天芮星位居西南坤二宫。在奇门断局中，它是绝对的大凶星，被称为“病星”。只要天芮星出现在哪里，哪里就有了“病灶”（不一定是身体的病，也可能是项目的病、财务的病）。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天芮星位居西南坤二宫。在奇门断局中，它是绝对的大凶星，被称为“病星”。只要天芮星出现在哪里，哪里就有了“病灶”（不一定是身体的病，也可能是项目的病、财务的病）。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianxin",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianxin",
+      "title": "天心星",
+      "description": "天心星位居西北乾六宫。它是一颗极具权威的大吉星，代表着宇宙的核心运算能力、高级管理层、以及能救死扶伤的精湛医术。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天心星位居西北乾六宫。它是一颗极具权威的大吉星，代表着宇宙的核心运算能力、高级管理层、以及能救死扶伤的精湛医术。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianying",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianying",
+      "title": "天英星",
+      "description": "天英星位居正南离九宫。它是一颗中平偏凶的星，代表着烈火、光明、名气，但同时也是极为虚荣、暴躁和缺乏内涵的象征。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天英星位居正南离九宫。它是一颗中平偏凶的星，代表着烈火、光明、名气，但同时也是极为虚荣、暴躁和缺乏内涵的象征。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/tianzhu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/tianzhu",
+      "title": "天柱星",
+      "description": "天柱星位居正西兑七宫。它是一颗极为残暴的大凶星，代表着摧毁、杀戮、严重的口舌官司和突发的重大变故。它是支撑天地的柱子，一旦动摇，就是天崩地裂。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "九星",
+        "核心理论"
+      ],
+      "excerpt": "天柱星位居正西兑七宫。它是一颗极为残暴的大凶星，代表着摧毁、杀戮、严重的口舌官司和突发的重大变故。它是支撑天地的柱子，一旦动摇，就是天崩地裂。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/xiumen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/xiumen",
+      "title": "休门",
+      "description": "在奇门遁甲的人盘八门中，休门位居正北方坎一宫，属水。在“开、休、生”三吉门中，休门代表着从容不迫、休养生息的吉态。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八门",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的人盘八门中，休门位居正北方坎一宫，属水。在“开、休、生”三吉门中，休门代表着从容不迫、休养生息的吉态。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/xuanwu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/xuanwu",
+      "title": "玄武",
+      "description": "玄武主凶，常使人于懵懂不觉间遭逢财帛暗耗或情意悖离。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "玄武主凶，常使人于懵懂不觉间遭逢财帛暗耗或情意悖离。"
+    },
+    {
+      "sourcePath": "/wiki/qimen/sipan/zhifu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qimen/sipan/zhifu",
+      "title": "值符",
+      "description": "在奇门遁甲的神盘（八神）中，值符是绝对的最高领袖，被称为“八神之首”。神盘代表的是宇宙中一种无法看见但极为强大的“暗物质能量场”或“高维磁场”。",
+      "category": "qimen-sipan",
+      "categoryTitle": "奇门四盘",
+      "domain": "qimen",
+      "tags": [
+        "奇门遁甲",
+        "四盘",
+        "八神",
+        "核心理论"
+      ],
+      "excerpt": "在奇门遁甲的神盘（八神）中，值符是绝对的最高领袖，被称为“八神之首”。神盘代表的是宇宙中一种无法看见但极为强大的“暗物质能量场”或“高维磁场”。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/jichu/jigong",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/jichu/jigong",
+      "title": "十干寄宫法则",
+      "description": "在大六壬之天地盘中，所视者唯有“十二地支”（子丑寅卯辰巳午未申酉戌亥）。然则，尘世人事之推演，断不离表征人性命之“十天干”（甲乙丙丁戊己庚辛壬癸）。",
+      "category": "liuren-jichu",
+      "categoryTitle": "大六壬基础",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "基础",
+        "核心理论",
+        "十天干"
+      ],
+      "excerpt": "在大六壬之天地盘中，所视者唯有“十二地支”（子丑寅卯辰巳午未申酉戌亥）。然则，尘世人事之推演，断不离表征人性命之“十天干”（甲乙丙丁戊己庚辛壬癸）。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/jichu/yuejiang-zhanshi",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/jichu/yuejiang-zhanshi",
+      "title": "月将与占时定地盘",
+      "description": "大六壬的起盘，不需要求测者的生辰八字，只需要两个绝对的时间坐标：月将（太阳的位置）和占时（地球自转的位置，即求测瞬间的时辰）。",
+      "category": "liuren-jichu",
+      "categoryTitle": "大六壬基础",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "基础",
+        "核心理论",
+        "排盘"
+      ],
+      "excerpt": "大六壬的起盘，不需要求测者的生辰八字，只需要两个绝对的时间坐标：月将（太阳的位置）和占时（地球自转的位置，即求测瞬间的时辰）。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/kechuan/jiuzongmen",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/kechuan/jiuzongmen",
+      "title": "九宗门发用诀总览",
+      "description": "四课排定之后，四课犹若静态之阵图。事机究竟从何发端？孰为首要导火索？此即需仰仗“九宗门”之算法，自四课之中提取一“发用（初传）”。",
+      "category": "liuren-kechuan",
+      "categoryTitle": "大六壬课传",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "核心理论",
+        "四课三传",
+        "算法公式"
+      ],
+      "excerpt": "四课排定之后，四课犹若静态之阵图。事机究竟从何发端？孰为首要导火索？此即需仰仗“九宗门”之算法，自四课之中提取一“发用（初传）”。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/kechuan/sanchuan",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/kechuan/sanchuan",
+      "title": "三传演进逻辑",
+      "description": "通过“九宗门”的复杂算法，吾辈从四课之中提纲挈领，提取出“初传（发用）”。然此仅为机变之肇端。大六壬之所以膺受“人事之王”之誉，盖因其非徒研判既定之果，更能推演事物剥复更迭之完整轨迹。",
+      "category": "liuren-kechuan",
+      "categoryTitle": "大六壬课传",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "核心理论",
+        "四课三传",
+        "推演轨迹"
+      ],
+      "excerpt": "通过“九宗门”的复杂算法，吾辈从四课之中提纲挈领，提取出“初传（发用）”。然此仅为机变之肇端。大六壬之所以膺受“人事之王”之誉，盖因其非徒研判既定之果，更能推演事物剥复更迭之完整轨迹。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/kechuan/sike",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/kechuan/sike",
+      "title": "四课总论（主客关系）",
+      "description": "四课排立，大六壬之定局遂化作一场四方气运之生克角逐。凡吉凶休咎，悉依此四课五行之相薄。",
+      "category": "liuren-kechuan",
+      "categoryTitle": "大六壬课传",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "核心理论",
+        "四课",
+        "辩证法"
+      ],
+      "excerpt": "四课排立，大六壬之定局遂化作一场四方气运之生克角逐。凡吉凶休咎，悉依此四课五行之相薄。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/shenjiang/shier-tianjiang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/shenjiang/shier-tianjiang",
+      "title": "十二天将总论",
+      "description": "天地盘（十二地支）与四课三传，构筑事物之物理流衍；而十二天将，则为附着于此轨迹之上之“神识与潜隐能量”。其主宰事端之体性（端正或奸邪，显耀或隐匿），并昭示其背后是否有高维之力在暗中拨弄。",
+      "category": "liuren-shenjiang",
+      "categoryTitle": "大六壬神将",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "核心理论",
+        "神将",
+        "暗能量场"
+      ],
+      "excerpt": "天地盘（十二地支）与四课三传，构筑事物之物理流衍；而十二天将，则为附着于此轨迹之上之“神识与潜隐能量”。其主宰事端之体性（端正或奸邪，显耀或隐匿），并昭示其背后是否有高维之力在暗中拨弄。"
+    },
+    {
+      "sourcePath": "/wiki/liuren/shenjiang/yuejiang",
+      "sourceUrl": "https://www.qingnang.cc/wiki/liuren/shenjiang/yuejiang",
+      "title": "月将（十二神）精解",
+      "description": "探究了掌管幽隐能量之“十二天将（神盘）”后，吾等必当深究承载此等能量之物理形骸——天盘地支（即十二月将）。",
+      "category": "liuren-shenjiang",
+      "categoryTitle": "大六壬神将",
+      "domain": "liuren",
+      "tags": [
+        "大六壬",
+        "核心理论",
+        "月将",
+        "天盘地支"
+      ],
+      "excerpt": "探究了掌管幽隐能量之“十二天将（神盘）”后，吾等必当深究承载此等能量之物理形骸——天盘地支（即十二月将）。"
+    },
+    {
+      "sourcePath": "/wiki/qizheng/jichu/qizheng-siyu",
+      "sourceUrl": "https://www.qingnang.cc/wiki/qizheng/jichu/qizheng-siyu",
+      "title": "七政四余总论",
+      "description": "七政四余，又称「果老星宗」，是中国传统星命之学中以真实天象立盘的一支。它不看抽象的干支符号，而是把一个人出生时刻，日、月、五星与几个推算天体在黄道上的实际位置，连同二十八宿的宿度一并落进十二宫里，据此参详一生的格局与节律。在八字、紫微之外，它自成一套「看天说人」的坐标系。",
+      "category": "qizheng-jichu",
+      "categoryTitle": "果老星宗",
+      "domain": "qizheng",
+      "tags": [
+        "七政四余",
+        "果老星宗",
+        "星命",
+        "二十八宿",
+        "五重运限",
+        "传统星学"
+      ],
+      "excerpt": "七政四余，又称「果老星宗」，是中国传统星命之学中以真实天象立盘的一支。它不看抽象的干支符号，而是把一个人出生时刻，日、月、五星与几个推算天体在黄道上的实际位置，连同二十八宿的宿度一并落进十二宫里，据此参详一生的格局与节律。在八字、紫微之外，它自成一套「看天说人」的坐标系。"
+    }
+  ]
+}
