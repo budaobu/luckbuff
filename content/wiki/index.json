@@ -1,12 +1,12 @@
 {
   "generated": true,
-  "syncedAt": "2026-09-20T08:29:32.040Z",
-  "source": "https://guanxiangzhai.com/learn; https://www.qingnang.cc/wiki",
+  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "source": "https://guanxiangzhai.com/learn; https://www.qingnang.cc/wiki; LuckBuff Astrology & Jyotish Wiki",
   "integritySource": "https://www.qingnang.cc/sitemap.xml",
   "stats": {
     "discoveredPages": 84,
-    "savedPages": 95,
-    "addedPages": 11,
+    "savedPages": 118,
+    "addedPages": 34,
     "updatedPages": 0,
     "removedPages": 0,
     "downloadedResources": 0,
@@ -1646,9 +1646,429 @@
         "传统星学"
       ],
       "excerpt": "七政四余，又称「果老星宗」，是中国传统星命之学中以真实天象立盘的一支。它不看抽象的干支符号，而是把一个人出生时刻，日、月、五星与几个推算天体在黄道上的实际位置，连同二十八宿的宿度一并落进十二宫里，据此参详一生的格局与节律。在八字、紫微之外，它自成一套「看天说人」的坐标系。"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/birth-chart",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology Basics",
+      "title": "本命盘怎么读",
+      "description": "本命盘是出生时刻的星象快照，由行星、星座、宫位、相位和轴线组成。先看太阳、月亮、上升，再看行星落座落宫、宫主星和主要相位，最后整合主题。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星",
+        "本命盘",
+        "星盘",
+        "太阳星座",
+        "上升星座"
+      ],
+      "excerpt": "行星、星座、宫位与相位：读懂星象快照"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/houses",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology Basics",
+      "title": "占星十二宫",
+      "description": "占星十二宫把本命盘分成十二个生活领域，说明自我、金钱、沟通、家庭、关系、事业、潜意识等主题在哪里展开。掌握宫头、宫主星和宫位系统后再解读。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星",
+        "十二宫",
+        "宫位",
+        "本命盘",
+        "宫主星"
+      ],
+      "excerpt": "从第1宫到第12宫：读懂星盘的生活舞台"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/1st-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第1宫",
+      "description": "占星第1宫代表自我形象、身体、生命力、开端和第一反应。它连接上升点，说明一个人进入世界的方式与外在风格。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第1宫",
+        "第一宫含义",
+        "上升星座",
+        "本命盘第一宫",
+        "占星自我宫"
+      ],
+      "excerpt": "自我之宫：身份、身体、开端与第一印象"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/2nd-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第2宫",
+      "description": "占星第2宫代表收入、财产、可变现能力、价值观和安全感。它说明人如何建立资源，以及金钱与自我价值之间的关系。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第2宫",
+        "第二宫含义",
+        "本命盘财帛宫",
+        "占星金钱宫",
+        "第二宫行星"
+      ],
+      "excerpt": "价值之宫：收入、资源、身体感与安全感"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/3rd-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第3宫",
+      "description": "占星第3宫代表沟通、学习、写作、兄弟姊妹、邻里、短途移动和日常信息交换。它说明思维如何组织语言并连接身边环境。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第3宫",
+        "第三宫含义",
+        "占星沟通宫",
+        "本命盘学习",
+        "第三宫兄弟姊妹"
+      ],
+      "excerpt": "沟通之宫：学习、表达、近邻与短途移动"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/4th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第4宫",
+      "description": "占星第4宫代表家庭、私人空间、不动产、父母影响、家族记忆和情绪安全感。它是本命盘的根基，也标记天底和内在归属。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第4宫",
+        "第四宫含义",
+        "占星家庭宫",
+        "本命盘天底",
+        "第四宫不动产"
+      ],
+      "excerpt": "根基之宫：家庭、居所、父母与情绪根源"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/5th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第5宫",
+      "description": "占星第5宫代表创造表达、恋爱、娱乐、子女、投机性冒险和个人光芒。它说明人如何享受生命、被看见并参与创造。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第5宫",
+        "第五宫含义",
+        "占星恋爱宫",
+        "本命盘子女",
+        "第五宫创造"
+      ],
+      "excerpt": "创造之宫：恋爱、表达、玩乐、孩子与冒险"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/6th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第6宫",
+      "description": "占星第6宫代表日常工作、习惯、健康管理、服务、劳动流程和责任分配。它关注身体节奏如何支持可持续效率。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第6宫",
+        "第六宫含义",
+        "占星健康宫",
+        "本命盘工作",
+        "第六宫服务"
+      ],
+      "excerpt": "日常之宫：工作、习惯、健康、服务与流程"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/7th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第7宫",
+      "description": "占星第7宫代表婚姻、伴侣、合作方、客户、契约和公开的一对一关系。它说明投射、互补与平等协商的议题。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第7宫",
+        "第七宫含义",
+        "占星夫妻宫",
+        "本命盘伴侣",
+        "第七宫合作"
+      ],
+      "excerpt": "关系之宫：伴侣、契约、合作与公开对手"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/8th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第8宫",
+      "description": "占星第8宫代表共有财产、亲密信任、债务、继承、心理转化、危机与重生。它处理边界被穿越后的深层交换。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第8宫",
+        "第八宫含义",
+        "占星性宫",
+        "本命盘共有财产",
+        "第八宫危机"
+      ],
+      "excerpt": "转化之宫：共享资源、亲密、危机与深层改变"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/9th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第9宫",
+      "description": "占星第9宫代表长途旅行、高等教育、外语异国、出版传播、哲学信仰和意义系统。它把经验扩展成更完整的世界观。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第9宫",
+        "第九宫含义",
+        "占星远行宫",
+        "本命盘高等教育",
+        "第九宫哲学"
+      ],
+      "excerpt": "信念之宫：远行、高等教育、出版与世界观"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/10th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第10宫",
+      "description": "占星第10宫代表职业方向、社会成就、公众形象、权威关系、责任和长期声誉。它连接天顶，说明愿意被看见的贡献。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第10宫",
+        "第十宫含义",
+        "占星事业宫",
+        "本命盘天顶",
+        "第十宫声誉"
+      ],
+      "excerpt": "事业之宫：职业、公众角色、成就与权威"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/11th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "占星第11宫",
+      "description": "占星第11宫代表朋友、社群、组织、协作网络、集体目标、长期愿望和未来愿景。它说明个人如何在群体中交换资源与影响。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星第11宫",
+        "第十一宫含义",
+        "占星朋友宫",
+        "本命盘社群",
+        "第十一宫愿望"
+      ],
+      "excerpt": "群体之宫：朋友、社群、长期愿望与协作网络"
+    },
+    {
+      "sourcePath": "/wiki/astrology/basics/12th-house",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology Basics",
+      "title": "占星第12宫",
+      "description": "占星第12宫代表潜意识、独处、隐藏事务、梦境、疗愈与自我消解。它被称为隐秘之宫，关联退隐、内在整理、灵性经验和不愿公开的生命议题。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星",
+        "十二宫",
+        "第12宫",
+        "潜意识",
+        "本命盘"
+      ],
+      "excerpt": "隐秘之宫：潜意识、休养与内在转化"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/jyotish",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "什么是吠陀占星",
+      "description": "吠陀占星常称 Jyotish，是印度古典占星体系。它以恒星黄道为基础，把九曜、十二星座、十二宫位、二十七星宿、行星大运和分盘放进同一结构里解读。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "吠陀占星",
+        "Jyotish",
+        "恒星黄道",
+        "印度占星",
+        "二十七星宿"
+      ],
+      "excerpt": "恒星黄道体系：九曜、星宿、宫位与大运"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/vedic-vs-western",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "西洋占星与吠陀占星区别",
+      "description": "西洋占星常使用以春分点为起点的回归黄道；吠陀占星使用以恒星为参照的恒星黄道。由于岁差，同一行星在两体系中常相差约 24 度。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "西洋占星",
+        "吠陀占星",
+        "回归黄道",
+        "恒星黄道",
+        "Ayanamsa"
+      ],
+      "excerpt": "回归黄道与恒星黄道的坐标差异"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/vedic-chart",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星本命盘怎么读",
+      "description": "吠陀占星本命盘（D1/Rasi chart）以出生时刻的上升 Lagna 为起点，记录九曜在恒星黄道中的位置。它是宫位分析、月亮盘、分盘和大运判断的基础。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "吠陀占星本命盘",
+        "D1",
+        "Lagna",
+        "Rashi chart",
+        "月亮盘"
+      ],
+      "excerpt": "D1 上升盘、月亮盘、分盘与大运的基准"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/grahas",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星九曜",
+      "description": "吠陀占星的九曜是太阳、月亮、火星、水星、木星、金星、土星、罗睺 Rahu 和计都 Ketu。传统九曜框架不使用天王星、海王星、冥王星。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "吠陀占星九曜",
+        "九曜",
+        "罗睺",
+        "计都",
+        "Jyotish"
+      ],
+      "excerpt": "日月五星与罗睺、计都"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/rashis",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星十二星座",
+      "description": "吠陀占星的十二星座是恒星黄道中的白羊、金牛、双子、巨蟹、狮子、处女、天秤、天蝎、射手、摩羯、水瓶、双鱼。因 Ayanamsa 修正，它们的度数与西占星座不同。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "吠陀占星星座",
+        "十二 Rashi",
+        "恒星黄道",
+        "星座守护",
+        "印度占星"
+      ],
+      "excerpt": "恒星黄道十二 Rashi 与守护关系"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/bhavas",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星十二宫",
+      "description": "吠陀占星十二宫从上升 Lagna 开始计数，分别关联自我、财富、勇气、家庭、子女、疾病、伴侣、寿命、法、事业、收益与损耗解脱。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "吠陀占星宫位",
+        "十二宫",
+        "Bhava",
+        "Lagna",
+        "宫主星"
+      ],
+      "excerpt": "从 Lagna 展开的十二 Bhava"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/nakshatras",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星二十七星宿",
+      "description": "Nakshatra 是二十七个月宿，每宿 13 度 20 分。月亮所在星宿用于气质、命名传统、合婚和 Vimshottari Dasha 起点，在吠陀占星中非常关键。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "Nakshatra",
+        "二十七星宿",
+        "月亮星宿",
+        "Pada",
+        "吠陀占星"
+      ],
+      "excerpt": "Nakshatra、Pada 与月亮星宿"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/dashas",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星大运",
+      "description": "Dasha 是行星周期。最常用的 Vimshottari Dasha 总长 120 年，从月亮所在星宿的大运主星开始，首运剩余时间由月亮在该宿中的剩余度数决定。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "Dasha",
+        "Vimshottari Dasha",
+        "大运",
+        "副运",
+        "吠陀占星"
+      ],
+      "excerpt": "Vimshottari Dasha 与主运、副运"
+    },
+    {
+      "sourcePath": "/wiki/vedic-astrology/basics/navamsa",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "吠陀占星九分盘",
+      "description": "Navamsa（D9）把每个恒星星座分成九等份。它是吠陀占星的重要分盘，用于检验行星力量、婚姻议题、内在成熟和 D1 承诺能否兑现。",
+      "category": "vedic-astrology-basics",
+      "categoryTitle": "吠陀占星基础",
+      "domain": "vedic-astrology",
+      "tags": [
+        "Navamsa",
+        "D9",
+        "分盘",
+        "Vargottama",
+        "吠陀占星"
+      ],
+      "excerpt": "D9、行星力量与 Vargottama"
     }
   ],
   "sources": [
+    {
+      "name": "LuckBuff Astrology & Jyotish Wiki",
+      "url": "local://luckbuff/wiki",
+      "priority": true,
+      "entries": 23
+    },
     {
       "name": "观象斋 · 术数概览",
       "url": "https://guanxiangzhai.com/learn",
