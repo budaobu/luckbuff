@@ -4981,9 +4981,13 @@
     "hourPillar": "时柱",
     "sceneFallback": "通用"
   },
-  "todayAlmanac": {
+    "todayAlmanac": {
     "title": "今日黄历",
     "subtitle": "完整查看当日宜忌、吉时、方位、冲煞、颜色与节气信息。",
+    "dailyQuoteLabel": "今日吉句",
+    "quoteTraditional": "传统吉句",
+    "quoteDerived": "系统组合句",
+    "quoteFallback": "安全兜底句",
     "tearHint": "向下拖动撕开下一页",
     "tearAction": "撕开下一页",
     "flipHint": "从左下 / 右下角向上拖拽翻页",

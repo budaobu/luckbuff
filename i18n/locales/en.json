@@ -4957,9 +4957,13 @@
     "hourPillar": "Hour Pillar",
     "sceneFallback": "Scene Fallback"
   },
-  "todayAlmanac": {
+    "todayAlmanac": {
     "title": "Today's Chinese Almanac",
     "subtitle": "See today's Yi Ji, lucky hours, directions, clash details, colors, and solar-term information.",
+    "dailyQuoteLabel": "Daily auspicious quote",
+    "quoteTraditional": "Traditional quote",
+    "quoteDerived": "System-derived quote",
+    "quoteFallback": "Safe fallback quote",
     "tearHint": "Drag down to tear the next page",
     "tearAction": "Tear Next Page",
     "flipHint": "Drag up from the lower-left / lower-right corner",

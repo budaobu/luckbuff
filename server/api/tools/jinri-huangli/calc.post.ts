@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { GAN_WUXING, WUXING_KE, WUXING_SHENG } from '~/utils/bazi/constants'
+import { generateDailyAuspiciousQuote } from '~~/server/utils/daily-auspicious-quote'
 import type { TodayAlmanac } from '~/types/today-almanac'
 
 const PROJECT_ROOT = resolve(process.cwd())
@@ -129,6 +130,7 @@ def calc_day(date_str):
             'yearNaYin': lunar.getYearNaYin() or '',
             'monthNaYin': lunar.getMonthNaYin() or '',
             'dayNaYin': lunar.getDayNaYin() or '',
+            'yearShengXiao': lunar.getYearShengXiao() or '',
             'shengXiao': lunar.getDayShengXiao() or '',
         },
         'yi': compact(lunar.getDayYi()),
@@ -345,6 +347,8 @@ export default defineEventHandler(async (event): Promise<TodayAlmanac> => {
   const dayWuxing = GAN_WUXING[dayGan] || '木'
   const daJiWuxing = getShengWo(dayWuxing)
   const buYiWuxing = getKeWo(dayWuxing)
+  const xiu = engine.xiu || {}
+  const yi = engine.yi || []
 
   return {
     date,
@@ -352,7 +356,7 @@ export default defineEventHandler(async (event): Promise<TodayAlmanac> => {
     timezone: 'Asia/Shanghai',
     weekday: new Date(`${date}T12:00:00Z`).getUTCDay(),
     lunar: engine.lunar,
-    yi: engine.yi || [],
+    yi,
     ji: engine.ji || [],
     jiShen: engine.jiShen || [],
     xiongSha: engine.xiongSha || [],
@@ -368,7 +372,7 @@ export default defineEventHandler(async (event): Promise<TodayAlmanac> => {
     xunKong: engine.xunKong || '',
     nineStar: engine.nineStar || '',
     positions: engine.positions || {},
-    xiu: engine.xiu || {},
+    xiu,
     season: engine.season || {},
     festivals: engine.festivals || [],
     hours: engine.hours || [],
@@ -379,10 +383,16 @@ export default defineEventHandler(async (event): Promise<TodayAlmanac> => {
     luckyNumbers: Array.isArray(engine.luckyNumbers)
       ? engine.luckyNumbers.filter((value: unknown): value is number => Number.isInteger(value))
       : [],
-    dailyVerse: {
-      source: '二十八宿诗',
-      text: String(engine.xiu?.song || ''),
-    },
+    dailyQuote: generateDailyAuspiciousQuote({
+      dayStem: dayGan,
+      dayBranch: dayZhi,
+      jianxing: String(engine.jianChu || ''),
+      zhishen: String(engine.tianShen || ''),
+      zhishenType: String(engine.tianShenType || ''),
+      yi,
+      pengzuStemText: String(engine.pengZuGan || ''),
+      pengzuBranchText: String(engine.pengZuZhi || ''),
+    }),
     colors: {
       dayWuxing,
       daJi: colorSet(daJiWuxing, `生当日五行${dayWuxing}，为大吉贵人色`),
