@@ -91,7 +91,7 @@ const activeCategory = ref('')
 
 const { data, pending } = await useAsyncData(
   () => `wiki-index-${locale.value}`,
-  () => $fetch<WikiIndexResponse>('/api/wiki'),
+  () => $fetch<WikiIndexResponse>('/api/wiki', { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 
@@ -156,7 +156,7 @@ useHead(() => ({
       name: `${seoTitle.value} - ${siteName}`,
       description: seoDescription.value,
       url: pageUrl.value,
-      inLanguage: 'zh-CN',
+      inLanguage: locale.value,
       keywords: seo.value?.keywords.join(', '),
       mainEntity: {
         '@type': 'ItemList',
@@ -218,7 +218,7 @@ h1 {
 .filters {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: start;
   gap: 14px;
   margin: 32px 0 28px;
 }
@@ -280,6 +280,23 @@ h1 {
   border-color: var(--accent-border);
   background: var(--accent-bg);
   color: var(--accent);
+}
+
+@media (min-width: 861px) {
+  .search {
+    align-self: center;
+  }
+
+  .category-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding-bottom: 0;
+    row-gap: 7px;
+  }
+
+  .count {
+    padding-top: 7px;
+  }
 }
 
 .count {

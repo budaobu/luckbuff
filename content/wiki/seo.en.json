@@ -1,0 +1,31 @@
+{
+  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "source": {
+    "name": "Google Search Suggest",
+    "client": "firefox",
+    "locale": "en-US",
+    "region": "US",
+    "endpoint": "https://suggestqueries.google.com/complete/search"
+  },
+  "index": {
+    "focusKeyword": "astrology houses",
+    "matchType": "enriched",
+    "seoTitle": "Astrology Wiki: Western Houses & Vedic Jyotish",
+    "seoDescription": "Learn Western astrology houses, natal charts, the 12th house, Vedic Jyotish, nakshatras, dashas, Navamsa, and the difference between tropical and sidereal astrology.",
+    "keywords": [
+      "astrology houses",
+      "astrology houses meaning",
+      "astrology chart",
+      "what is the 12th house in astrology",
+      "12 houses in astrology and their meaning",
+      "what is vedic astrology",
+      "vedic astrology chart",
+      "western astrology vs vedic astrology",
+      "nakshatra astrology",
+      "dasha in astrology"
+    ],
+    "suggestions": [],
+    "topCandidates": []
+  },
+  "entries": {}
+}

@@ -1,7 +1,8 @@
-import { readWikiManifest } from '~~/server/utils/wiki'
+import { normalizeWikiLocale, readWikiManifest } from '~~/server/utils/wiki'
 
 export default defineEventHandler(async (event) => {
-  const manifest = await readWikiManifest()
+  const locale = normalizeWikiLocale(getQuery(event).locale)
+  const manifest = await readWikiManifest(locale)
   setResponseHeader(event, 'Cache-Control', 'public, max-age=60, stale-while-revalidate=600')
   return {
     syncedAt: manifest.syncedAt,

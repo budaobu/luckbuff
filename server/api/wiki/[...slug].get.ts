@@ -1,8 +1,9 @@
-import { readWikiEntry } from '~~/server/utils/wiki'
+import { normalizeWikiLocale, readWikiEntry } from '~~/server/utils/wiki'
 
 export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug') || ''
-  const entry = await readWikiEntry(slug.split('/').filter(Boolean))
+  const locale = normalizeWikiLocale(getQuery(event).locale)
+  const entry = await readWikiEntry(slug.split('/').filter(Boolean), locale)
   if (!entry) {
     throw createError({ statusCode: 404, statusMessage: 'Wiki entry not found' })
   }

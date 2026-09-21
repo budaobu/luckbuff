@@ -2,7 +2,12 @@
   <div class="wiki-entry-page">
     <main class="reading-column">
       <nav class="breadcrumb" aria-label="Breadcrumb">
-        <NuxtLink :to="localePath('/wiki')" :no-prefetch="true">
+        <NuxtLink
+          :to="localePath('/wiki')"
+          :no-prefetch="true"
+          class="inline-flex items-center gap-1.5"
+        >
+          <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" aria-hidden="true" />
           {{ $t('wiki.back') }}
         </NuxtLink>
         <span aria-hidden="true">/</span>
@@ -49,7 +54,7 @@ interface WikiDetailResponse {
 }
 
 const route = useRoute()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
 const slugSegments = computed(() => (
@@ -60,15 +65,15 @@ const requestPath = computed(() => `/api/wiki/${slugSegments.value.map(encodeURI
 const pageUrl = useLocalizedSeoUrl(() => `/wiki/${slugSegments.value.map(encodeURIComponent).join('/')}`)
 
 const { data, error } = await useAsyncData(
-  () => `wiki-entry-${slugSegments.value.join('/')}`,
+  () => `wiki-entry-${locale.value}-${slugSegments.value.join('/')}`,
   async () => {
     const [entry, index] = await Promise.all([
-      $fetch<WikiEntryDetail>(requestPath.value),
-      $fetch<{ entries: WikiEntryMeta[] }>('/api/wiki'),
+      $fetch<WikiEntryDetail>(requestPath.value, { query: { locale: locale.value } }),
+      $fetch<{ entries: WikiEntryMeta[] }>('/api/wiki', { query: { locale: locale.value } }),
     ])
     return { entry, entries: index.entries } satisfies WikiDetailResponse
   },
-  { server: true },
+  { server: true, watch: [locale] },
 )
 
 if (error.value || !data.value) {
@@ -139,7 +144,7 @@ useHead(() => ({
       alternativeHeadline: entry.value.title,
       description: seoDescription.value,
       articleSection: entry.value.categoryTitle,
-      inLanguage: 'zh-CN',
+      inLanguage: locale.value,
       url: pageUrl.value,
       keywords: seo.value?.keywords.join(', ') || entry.value.tags.join(', '),
     }),

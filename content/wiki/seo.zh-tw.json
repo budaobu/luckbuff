@@ -1,0 +1,27 @@
+{
+  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "source": {
+    "name": "LuckBuff localized wiki SEO",
+    "locale": "zh-TW",
+    "region": "TW"
+  },
+  "index": {
+    "focusKeyword": "占星 Wiki",
+    "matchType": "enriched",
+    "seoTitle": "占星 Wiki：西洋十二宮與吠陀占星",
+    "seoDescription": "學習西洋占星十二宮、本命盤、第12宮，以及吠陀占星的九曜、星座、宮位、星宿、大運與D9分盤。",
+    "keywords": [
+      "占星十二宮",
+      "占星第12宮",
+      "本命盤怎麼讀",
+      "吠陀占星",
+      "吠陀占星本命盤",
+      "Nakshatra",
+      "Vimshottari Dasha",
+      "D9分盤"
+    ],
+    "suggestions": [],
+    "topCandidates": []
+  },
+  "entries": {}
+}
