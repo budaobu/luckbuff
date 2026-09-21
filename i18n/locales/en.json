@@ -13204,6 +13204,77 @@
     "seoDescription": "Baosheng Dadi Oracle Sign {n}: {poem}. Read the poem, traditional category judgments and practical guidance, then draw online. {judgments}",
     "seoKeywords": "Baosheng Dadi Oracle sign {n},Baosheng Dadi Oracle sign {n} meaning,Baosheng Dadi 60 signs,oracle poem,category judgments"
   },
+  "zecheng": {
+    "title": "City Selection",
+    "subtitle": "Compare Ba Zi with a city through favorable directions, city Five Phases, lunar mansion correspondences and the Travel Horse.",
+    "badge": "Ba Zi City Selection",
+    "cta": "Compare city",
+    "tabCompare": "Single City",
+    "tabRank": "City Ranking",
+    "compareIntro": "Use your birth point as the reference and review direction, Travel Horse, lunar mansion and city-name accounts for one city.",
+    "rankIntro": "Use your birth point as the reference to score 39 major Chinese cities and show the top ten.",
+    "form": {
+      "birthYear": "Birth year",
+      "birthMonth": "Birth month",
+      "birthDay": "Birth day",
+      "hour": "Birth hour",
+      "hourUnknown": "Unknown / reference level",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "origin": "Birth reference point",
+      "target": "Target city",
+      "targetPlaceholder": "Hangzhou / London / New York",
+      "submit": "Compare this city",
+      "submitRank": "Create my city ranking"
+    },
+    "hours": {
+      "子": "Zi 23:00-01:00",
+      "丑": "Chou 01:00-03:00",
+      "寅": "Yin 03:00-05:00",
+      "卯": "Mao 05:00-07:00",
+      "辰": "Chen 07:00-09:00",
+      "巳": "Si 09:00-11:00",
+      "午": "Wu 11:00-13:00",
+      "未": "Wei 13:00-15:00",
+      "申": "Shen 15:00-17:00",
+      "酉": "You 17:00-19:00",
+      "戌": "Xu 19:00-21:00",
+      "亥": "Hai 21:00-23:00"
+    },
+    "result": {
+      "bearing": "Direction & distance",
+      "rank": "Major-city rank",
+      "sameCity": "Same city",
+      "noFenye": "No classical correspondence",
+      "suspended": "No evidence",
+      "chart": "Chart summary",
+      "favorable": "Favorable",
+      "unfavorable": "Avoid",
+      "xiuTitle": "Mansions & source"
+    },
+    "tracks": {
+      "fangwei": "Direction",
+      "yima": "Travel Horse",
+      "fenye": "Lunar mansion",
+      "ziwuxing": "City-name phases"
+    },
+    "rank": {
+      "title": "Top cities",
+      "pool": "{n} major cities scored"
+    },
+    "validation": {
+      "target": "Please enter a target city",
+      "failed": "City comparison is temporarily unavailable"
+    },
+    "disclaimer": "This modern reference model organizes classical lunar-mansion, favorable-direction and Travel-Horse rules for cultural study only. It is not relocation, study, or career advice.",
+    "seo": {
+      "title": "Ba Zi City Selection_Favorable Direction & City Five Phases",
+      "description": "Compare Ba Zi with a city online. Use favorable directions, city Five Phases, lunar mansion correspondences and the Travel Horse to explore suitable cities.",
+      "keywords": "Ba Zi city selection,Ba Zi favorable direction,city Five Phases,Chinese city Five Phases,Travel Horse Ba Zi,suitable city for development",
+      "ogTitle": "Ba Zi City Selection_Favorable Direction & City Five Phases"
+    }
+  },
   "graph": {
     "eyebrow": "Text & Diagram · Interactive",
     "title": "Graphs",

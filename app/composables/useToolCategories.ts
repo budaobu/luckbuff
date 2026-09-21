@@ -245,6 +245,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/new-school-bazi',
       },
       {
+        icon: 'i-heroicons-map-pin',
+        titleKey: 'zecheng.title',
+        descKey: 'zecheng.subtitle',
+        ctaKey: 'zecheng.cta',
+        path: '/tools/zecheng',
+      },
+      {
         icon: 'i-heroicons-sun',
         titleKey: 'thaiBuddha.title',
         descKey: 'thaiBuddha.subtitle',
@@ -1145,6 +1152,7 @@ const analysisToolCategories: ToolCategory[] = [
 const analysisToolPaths = [
   '/tools/qimen',
   '/tools/bazi',
+  '/tools/zecheng',
   '/tools/zwds',
   '/tools/zhouyi',
   '/tools/liuyao-divination',
