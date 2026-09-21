@@ -429,7 +429,7 @@ export async function generateTodayAlmanacPoster(options: TodayAlmanacPosterOpti
   ctx.textAlign = 'left'
   ctx.fillStyle = RED
   ctx.font = '700 27px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(`【${options.day.lunar.shengXiao}】年`, left, footerY)
+  ctx.fillText(`【${options.day.lunar.yearShengXiao}】年`, left, footerY)
   ctx.font = '500 22px "Noto Serif SC", "Songti SC", serif'
   ctx.fillText('百業興旺家富裕', left + 130, footerY)
   ctx.fillStyle = RED

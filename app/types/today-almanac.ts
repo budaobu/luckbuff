@@ -34,9 +34,14 @@ export interface TodayAlmanacLuckyZodiac {
   relation: '六合' | '三合'
 }
 
-export interface TodayAlmanacVerse {
-  source: string
+export interface TodayAlmanacDailyQuote {
   text: string
+  sourceType: 'traditional' | 'derived' | 'fallback'
+  sourceSystem: string[]
+  jianxing: string
+  zhishen: string
+  strength: 'strong' | 'normal' | 'neutral' | 'cautious'
+  relatedYi: string | null
 }
 
 export interface TodayAlmanac {
@@ -54,6 +59,7 @@ export interface TodayAlmanac {
     yearNaYin: string
     monthNaYin: string
     dayNaYin: string
+    yearShengXiao: string
     shengXiao: string
   }
   yi: string[]
@@ -104,7 +110,7 @@ export interface TodayAlmanac {
   nobleHours: TodayAlmanacNobleHour[]
   luckyZodiacs: TodayAlmanacLuckyZodiac[]
   luckyNumbers: number[]
-  dailyVerse: TodayAlmanacVerse
+  dailyQuote: TodayAlmanacDailyQuote
   colors: {
     dayWuxing: string
     daJi: TodayAlmanacColorSet

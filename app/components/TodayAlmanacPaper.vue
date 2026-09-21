@@ -1,10 +1,12 @@
 <template>
-  <article class="ta-paper" :aria-label="day ? day.date : t('todayAlmanac.loading')">
+  <article class="ta-paper" :class="{ 'is-tearing': isTearing }" :aria-label="day ? day.date : t('todayAlmanac.loading')">
     <div class="ta-paper-inner">
       <header class="ta-masthead">
         <div class="ta-masthead-main">
           <h1 class="ta-title">{{ t('todayAlmanac.title') }}</h1>
-          <p class="ta-subtitle">{{ t('todayAlmanac.subtitle') }}</p>
+          <p class="ta-quote-label">{{ t('todayAlmanac.dailyQuoteLabel') }}</p>
+          <p class="ta-quote-text">{{ day?.dailyQuote.text || t('todayAlmanac.loading') }}</p>
+          <p v-if="day" class="ta-quote-source">{{ dailyQuoteSource }}</p>
         </div>
         <div class="ta-actions">
           <slot name="actions" />
@@ -27,8 +29,7 @@
         </div>
         <div class="ta-hero-side">
           <div class="ta-seal">
-            <span>{{ day?.lunar.shengXiao || '—' }}</span>
-            <small>{{ day?.lunar.yearInChinese || '—' }}</small>
+            <span>{{ day?.lunar.yearShengXiao || '—' }}</span>
           </div>
           <dl class="ta-pillar-list">
             <div>
@@ -51,13 +52,13 @@
         </div>
       </section>
 
-      <section class="ta-advice" data-ta-ai-target>
-        <div class="ta-advice-column ta-yi">
+      <section class="ta-advice">
+        <div class="ta-advice-column ta-yi" data-ta-ai-target>
           <h2>{{ t('todayAlmanac.yi') }}</h2>
           <p>{{ day?.yi.join('、') || t('common.none') }}</p>
         </div>
 
-        <div class="ta-hours">
+        <div class="ta-hours" data-ta-ai-target>
           <h3>{{ t('todayAlmanac.luckyHours') }}</h3>
           <ol class="ta-hour-grid">
             <li
@@ -75,143 +76,134 @@
           </p>
         </div>
 
-        <div class="ta-advice-column ta-ji">
+        <div class="ta-advice-column ta-ji" data-ta-ai-target>
           <h2>{{ t('todayAlmanac.ji') }}</h2>
           <p>{{ day?.ji.join('、') || t('common.none') }}</p>
         </div>
       </section>
 
-      <section class="ta-cosmology" data-ta-ai-target>
+      <section class="ta-cosmology">
         <dl>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.jianChu') }}</dt>
             <dd>{{ day?.jianChu || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.tianShenType') }}</dt>
             <dd>{{ day ? `${day.tianShen} · ${day.tianShenLuck}` : '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.dayLu') }}</dt>
             <dd>{{ day?.dayLu || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.taiShen') }}</dt>
             <dd>{{ day?.taiShen || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.nobleHours') }}</dt>
             <dd>{{ nobleHoursText }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.luckyZodiacs') }}</dt>
             <dd>{{ luckyZodiacsText }}</dd>
           </div>
         </dl>
       </section>
 
-      <section class="ta-directions" data-ta-ai-target>
+      <section class="ta-directions">
         <dl>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.xiDirection') }}</dt>
             <dd>{{ day?.positions.xi || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.caiDirection') }}</dt>
             <dd>{{ day?.positions.cai || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.fuDirection') }}</dt>
             <dd>{{ day?.positions.fu || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.yangGui') }}</dt>
             <dd>{{ day?.positions.yangGui || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.yinGui') }}</dt>
             <dd>{{ day?.positions.yinGui || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.taiSui') }}</dt>
             <dd>{{ day?.positions.taiSui || '—' }}</dd>
           </div>
         </dl>
       </section>
 
-      <section class="ta-details" data-ta-ai-target>
+      <section class="ta-details">
         <dl>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.jiShen') }}</dt>
             <dd>{{ day?.jiShen.join('、') || t('common.none') }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.xiongSha') }}</dt>
             <dd>{{ day?.xiongSha.join('、') || t('common.none') }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.pengZu') }}</dt>
             <dd>{{ day ? `${day.pengZuGan}；${day.pengZuZhi}` : '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.xunKong') }}</dt>
             <dd>{{ day?.xunKong || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.nineStar') }}</dt>
             <dd>{{ day?.nineStar || '—' }}</dd>
           </div>
-          <div>
-            <dt>{{ t('todayAlmanac.xiu') }}</dt>
-            <dd>{{ xiuText }}</dd>
-          </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.jieQi') }}</dt>
             <dd>{{ jieQiText }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.hou') }}</dt>
             <dd>{{ day ? `${day.season.hou} · ${day.season.wuHou}` : '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.yueXiang') }}</dt>
             <dd>{{ day?.season.yueXiang || '—' }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.festivals') }}</dt>
             <dd>{{ day?.festivals.join('、') || t('common.none') }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.naYin') }}</dt>
             <dd>{{ naYinText }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.dayWuxing') }}</dt>
             <dd>{{ day?.colors.dayWuxing || '—' }}</dd>
           </div>
         </dl>
       </section>
 
-      <section class="ta-colors" data-ta-ai-target>
+      <section class="ta-colors">
         <dl>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.luckyColor') }}</dt>
             <dd>{{ day?.colors.daJi.colors.join('、') || t('common.none') }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.secondaryColor') }}</dt>
             <dd>{{ day?.colors.ciJi.colors.join('、') || t('common.none') }}</dd>
           </div>
-          <div>
+          <div data-ta-ai-target>
             <dt>{{ t('todayAlmanac.avoidColor') }}</dt>
             <dd>{{ day?.colors.buYi.colors.join('、') || t('common.none') }}</dd>
           </div>
         </dl>
-      </section>
-
-      <section class="ta-verse" data-ta-ai-target>
-        <h2>{{ day?.dailyVerse.source || t('todayAlmanac.xiu') }}</h2>
-        <p>{{ day?.dailyVerse.text || t('common.none') }}</p>
       </section>
 
       <footer class="ta-footer">
@@ -233,12 +225,16 @@
             type="button"
             class="ta-nav-button is-primary"
             :disabled="disabled || !day"
-            @click="emit('advance')"
+            @click="requestAdvance"
           >
             {{ t('todayAlmanac.tearAction') }}
           </button>
         </div>
       </footer>
+    </div>
+    <div aria-hidden="true" class="ta-tear-layer">
+      <i class="ta-tear-line" />
+      <i class="ta-tear-flap" />
     </div>
   </article>
 </template>
@@ -257,6 +253,8 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const isTearing = ref(false)
+let tearTimer: ReturnType<typeof setTimeout> | null = null
 
 const dayNumber = computed(() => {
   if (!props.day?.date) return '—'
@@ -281,10 +279,38 @@ const monthLengthMark = computed(() => {
   return locale.value === 'en' ? ` · ${days} days` : days === 31 ? '大' : '小'
 })
 
+function requestAdvance() {
+  if (props.disabled || isTearing.value) return
+  isTearing.value = true
+  emit('advance')
+  if (tearTimer) clearTimeout(tearTimer)
+  tearTimer = setTimeout(() => {
+    isTearing.value = false
+    tearTimer = null
+  }, 320)
+}
+
+onBeforeUnmount(() => {
+  if (tearTimer) clearTimeout(tearTimer)
+})
+
 const lunarText = computed(() => {
   const day = props.day
   if (!day) return '—'
   return `${day.lunar.yearInChinese}年 ${day.lunar.monthInChinese}月${day.lunar.dayInChinese}`
+})
+
+const dailyQuoteSource = computed(() => {
+  const day = props.day
+  if (!day) return ''
+
+  const sourceKey = day.dailyQuote.sourceType === 'traditional'
+    ? 'todayAlmanac.quoteTraditional'
+    : day.dailyQuote.sourceType === 'derived'
+      ? 'todayAlmanac.quoteDerived'
+      : 'todayAlmanac.quoteFallback'
+
+  return `${day.dailyQuote.sourceSystem.join(' × ')} · ${t(sourceKey)}`
 })
 
 const nobleHoursText = computed(() => {
@@ -295,12 +321,6 @@ const nobleHoursText = computed(() => {
 const luckyZodiacsText = computed(() => {
   const items = props.day?.luckyZodiacs || []
   return items.map(item => `${item.zodiac}（${item.relation}）`).join('、') || t('common.none')
-})
-
-const xiuText = computed(() => {
-  const day = props.day
-  if (!day) return '—'
-  return `${day.xiu.name} ${day.xiu.luck} · ${day.xiu.zheng} ${day.xiu.animal} · ${day.xiu.gong}${day.xiu.shou}`
 })
 
 const jieQiText = computed(() => {
@@ -330,7 +350,11 @@ function weekdayLabel(weekday: number) {
   --ta-muted: rgba(165, 22, 27, .72);
   --ta-line: rgba(165, 22, 27, .24);
   --ta-line-strong: rgba(165, 22, 27, .46);
+  --ta-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ta-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
+  position: relative;
+  overflow: hidden;
   width: min(720px, 100%);
   margin: 0 auto;
   color: var(--ta-ink);
@@ -378,6 +402,29 @@ function weekdayLabel(weekday: number) {
 .ta-actions {
   flex: 0 0 auto;
   padding-top: 4px;
+}
+
+.ta-quote-label {
+  margin: 6px 0 0;
+  color: var(--ta-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.ta-quote-text {
+  margin: 3px 0 0;
+  max-width: 34em;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.6;
+}
+
+.ta-quote-source {
+  margin: 4px 0 0;
+  color: var(--ta-muted);
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 .ta-hero {
@@ -452,12 +499,6 @@ function weekdayLabel(weekday: number) {
   font-size: 18px;
   font-weight: 700;
   line-height: 1;
-}
-
-.ta-seal small {
-  font-size: 10px;
-  line-height: 1;
-  opacity: .78;
 }
 
 .ta-pillar-list {
@@ -614,26 +655,8 @@ function weekdayLabel(weekday: number) {
   border-bottom: 1px solid rgba(165, 22, 27, .12);
 }
 
-.ta-verse {
-  padding: 14px 0 0;
-  text-align: center;
-}
-
-.ta-verse h2 {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .08em;
-}
-
-.ta-verse p {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.8;
-}
-
 .ta-footer {
-  padding: 18px 0 0;
+  padding: 14px 0 0;
   color: var(--ta-muted);
   font-size: 10px;
   line-height: 1.6;
@@ -667,6 +690,11 @@ function weekdayLabel(weekday: number) {
   font: inherit;
   font-size: 11px;
   cursor: pointer;
+  transition: transform 140ms var(--ta-ease-out);
+}
+
+.ta-nav-button:active:not(:disabled) {
+  transform: scale(.97);
 }
 
 .ta-nav-button.is-primary {
@@ -683,6 +711,116 @@ function weekdayLabel(weekday: number) {
 .ta-nav-button:focus-visible {
   outline: 2px solid var(--ta-ink);
   outline-offset: 2px;
+}
+
+.ta-tear-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ta-tear-line {
+  position: absolute;
+  top: 91%;
+  right: 5%;
+  left: 5%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, transparent 0 4px, rgba(165, 22, 27, .52) 4px 8px);
+  opacity: 0;
+  transform: scaleX(.42);
+}
+
+.ta-tear-flap {
+  position: absolute;
+  right: -3%;
+  bottom: -2%;
+  left: -3%;
+  height: 12%;
+  background:
+    linear-gradient(180deg, rgba(165, 22, 27, .18), rgba(255, 251, 242, .98) 24%, var(--ta-paper)),
+    var(--ta-paper);
+  box-shadow: 0 -10px 24px rgba(64, 12, 12, .18);
+  filter: drop-shadow(0 8px 12px rgba(64, 12, 12, .16));
+  clip-path: polygon(0 16%, 4% 4%, 9% 14%, 14% 2%, 19% 12%, 25% 4%, 31% 15%, 37% 5%, 43% 13%, 49% 3%, 55% 12%, 61% 4%, 67% 14%, 73% 5%, 79% 13%, 85% 4%, 91% 12%, 96% 5%, 100% 15%, 100% 100%, 0 100%);
+  opacity: 0;
+  transform-origin: 50% 0;
+  transform: translate3d(0, -8%, 0) rotate(0deg);
+}
+
+.is-tearing .ta-tear-layer {
+  animation: ta-tear-layer-opacity 260ms var(--ta-ease-out) both;
+}
+
+.is-tearing .ta-tear-line {
+  animation: ta-tear-line 180ms var(--ta-ease-in-out) both;
+}
+
+.is-tearing .ta-tear-flap {
+  animation: ta-tear-flap 260ms var(--ta-ease-out) both;
+}
+
+@keyframes ta-tear-layer-opacity {
+  0% { opacity: .18; }
+  28% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes ta-tear-line {
+  0% {
+    opacity: 0;
+    transform: scaleX(.42);
+  }
+  32% {
+    opacity: .9;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1.04);
+  }
+}
+
+@keyframes ta-tear-flap {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8%, 0) rotate(0deg);
+  }
+  22% {
+    opacity: .94;
+    transform: translate3d(0, 2%, 0) rotate(.24deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 60%, 0) rotate(-.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-nav-button {
+    transition: opacity 120ms ease;
+  }
+
+  .ta-nav-button:active:not(:disabled) {
+    transform: none;
+  }
+
+  .ta-tear-line,
+  .ta-tear-flap {
+    transform: none;
+  }
+
+  .is-tearing .ta-tear-line,
+  .is-tearing .ta-tear-flap {
+    animation: ta-tear-fade 140ms ease both;
+  }
+}
+
+@keyframes ta-tear-fade {
+  0% { opacity: .4; }
+  100% { opacity: 0; }
 }
 
 @media (max-width: 760px) {

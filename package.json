@@ -10,6 +10,7 @@
     "generate": "NODE_OPTIONS='--no-deprecation' nuxt generate",
     "preview": "NODE_OPTIONS='--no-deprecation' nuxt preview",
     "typecheck": "vue-tsc --noEmit",
+    "test:quote": "node --test --experimental-strip-types scripts/test-daily-auspicious-quote.ts",
     "shelf:sync": "node scripts/sync-shelf.mjs",
     "shelf:seo": "node scripts/sync-shelf-seo.mjs",
     "wiki:sync": "node scripts/sync-wiki.ts",
