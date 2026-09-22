@@ -582,6 +582,14 @@ const analysisToolCategories: ToolCategory[] = [
     sectionPath: '/shuangren-hepan',
     tools: [
       {
+        icon: 'i-heroicons-heart',
+        titleKey: 'lifePathPeidui.title',
+        descKey: 'lifePathPeidui.subtitle',
+        ctaKey: 'lifePathPeidui.submitBtn',
+        path: '/tools/lifepath-peidui',
+        recommended: true,
+      },
+      {
         icon: 'i-heroicons-briefcase',
         titleKey: 'baziShiyeHepan.title',
         descKey: 'baziShiyeHepan.toolDesc',
