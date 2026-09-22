@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "syncedAt": "2026-09-22T03:00:00.000Z",
   "source": {
     "name": "LuckBuff localized wiki SEO",
     "locale": "zh-TW",
@@ -23,5 +23,28 @@
     "suggestions": [],
     "topCandidates": []
   },
-  "entries": {}
+  "entries": {
+    "/wiki/astrology/basics/cusp": {
+      "focusKeyword": "占星交界點是什麼",
+      "matchType": "fallback",
+      "seoTitle": "占星交界點是什麼：星座與宮位交界",
+      "seoDescription": "交界點是星座或宮位之間的分界。本頁說明宮位交界與宮頭、太陽接近星座邊界的意義，以及「同時屬於兩個星座」的常見誤解。",
+      "keywords": [
+        "交界點",
+        "占星交界點是什麼",
+        "星座交界",
+        "宮位交界",
+        "宮頭"
+      ],
+      "query": "占星 交界點",
+      "queries": [
+        {
+          "query": "占星 交界點",
+          "suggestions": []
+        }
+      ],
+      "suggestions": [],
+      "topCandidates": []
+    }
+  }
 }

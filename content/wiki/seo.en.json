@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "syncedAt": "2026-09-22T03:00:00.000Z",
   "source": {
     "name": "Google Search Suggest",
     "client": "firefox",
@@ -27,5 +27,55 @@
     "suggestions": [],
     "topCandidates": []
   },
-  "entries": {}
+  "entries": {
+    "/wiki/astrology/basics/cusp": {
+      "focusKeyword": "what is a cusp in astrology",
+      "matchType": "exact",
+      "seoTitle": "What Is a Cusp in Astrology? Sign & House Cusps",
+      "seoDescription": "A cusp in astrology is the boundary between signs or houses. Learn house cusps, degrees near a sign change, and why a cusp Sun is not in two zodiac signs.",
+      "keywords": [
+        "what is a cusp in astrology",
+        "what is a house cusp in astrology",
+        "what is considered a cusp in astrology",
+        "what is a cusp sign in astrology",
+        "what degree is a cusp in astrology"
+      ],
+      "query": "what is a cusp in astrology",
+      "queries": [
+        {
+          "query": "what is a cusp in astrology",
+          "suggestions": [
+            "what is a cusp in astrology",
+            "what is a house cusp in astrology",
+            "what is considered a cusp in astrology",
+            "what is a cusp sign in astrology",
+            "what is a cusp baby in astrology",
+            "what degree is a cusp in astrology",
+            "what is a cusp in zodiac signs",
+            "what is a cusp in horoscope",
+            "what is 7th cusp in astrology",
+            "what is cusp chart in astrology"
+          ]
+        }
+      ],
+      "suggestions": [
+        "what is a cusp in astrology",
+        "what is a house cusp in astrology",
+        "what is considered a cusp in astrology",
+        "what is a cusp sign in astrology",
+        "what is a cusp baby in astrology",
+        "what degree is a cusp in astrology",
+        "what is a cusp in zodiac signs",
+        "what is a cusp in horoscope",
+        "what is 7th cusp in astrology",
+        "what is cusp chart in astrology"
+      ],
+      "topCandidates": [
+        {
+          "keyword": "what is a cusp in astrology",
+          "score": 720
+        }
+      ]
+    }
+  }
 }

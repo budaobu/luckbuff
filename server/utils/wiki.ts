@@ -258,7 +258,7 @@ export async function readWikiEntry(pathSegments: string[], locale: WikiLocale =
   const frontmatter = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
   if (!frontmatter) return null
 
-  const seo = await readWikiSeo()
+  const seo = await readWikiSeo(locale)
   const meta = normalizeEntry(JSON.parse(frontmatter[1]!), seo.entries.get(sourcePath))
   if (!meta || meta.sourcePath !== sourcePath) return null
   return { ...meta, content: frontmatter[2]!.trim() }

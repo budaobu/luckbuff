@@ -1,12 +1,12 @@
 {
   "generated": true,
-  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "syncedAt": "2026-09-22T03:00:00.000Z",
   "source": "https://guanxiangzhai.com/learn; https://www.qingnang.cc/wiki; LuckBuff Astrology & Jyotish Wiki",
   "integritySource": "https://www.qingnang.cc/sitemap.xml",
   "stats": {
     "discoveredPages": 84,
-    "savedPages": 118,
-    "addedPages": 34,
+    "savedPages": 119,
+    "addedPages": 35,
     "updatedPages": 0,
     "removedPages": 0,
     "downloadedResources": 0,
@@ -1648,6 +1648,24 @@
       "excerpt": "七政四余，又称「果老星宗」，是中国传统星命之学中以真实天象立盘的一支。它不看抽象的干支符号，而是把一个人出生时刻，日、月、五星与几个推算天体在黄道上的实际位置，连同二十八宿的宿度一并落进十二宫里，据此参详一生的格局与节律。在八字、紫微之外，它自成一套「看天说人」的坐标系。"
     },
     {
+      "sourcePath": "/wiki/astrology/basics/cusp",
+      "sourceUrl": "local://luckbuff/wiki",
+      "sourceName": "LuckBuff Astrology & Jyotish Wiki",
+      "title": "交界点",
+      "description": "交界点是两个星座或宫位之间的分界。宫位交界标记生活领域的起点；星座交界只说明出生位置接近边界，不代表太阳同时属于两个星座。",
+      "category": "astrology-basics",
+      "categoryTitle": "西洋占星基础",
+      "domain": "astrology",
+      "tags": [
+        "占星",
+        "交界点",
+        "星座交界",
+        "宫位交界",
+        "宫头"
+      ],
+      "excerpt": "星座与宫位的分界：边界度数、宫头与常见误解"
+    },
+    {
       "sourcePath": "/wiki/astrology/basics/birth-chart",
       "sourceUrl": "local://luckbuff/wiki",
       "sourceName": "LuckBuff Astrology Basics",
@@ -2067,7 +2085,7 @@
       "name": "LuckBuff Astrology & Jyotish Wiki",
       "url": "local://luckbuff/wiki",
       "priority": true,
-      "entries": 23
+      "entries": 24
     },
     {
       "name": "观象斋 · 术数概览",

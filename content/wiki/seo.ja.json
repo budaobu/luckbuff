@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-21T08:00:00.000Z",
+  "syncedAt": "2026-09-22T03:00:00.000Z",
   "source": {
     "name": "LuckBuff localized wiki SEO",
     "locale": "ja-JP",
@@ -23,5 +23,43 @@
     "suggestions": [],
     "topCandidates": []
   },
-  "entries": {}
+  "entries": {
+    "/wiki/astrology/basics/cusp": {
+      "focusKeyword": "占星術 カスプとは",
+      "matchType": "exact",
+      "seoTitle": "占星術 カスプとは：星座とハウスの境界",
+      "seoDescription": "占星術のカスプは星座またはハウスの境界です。ハウスカスプ、境界付近の度数、太陽が2星座に入るという誤解を整理します。",
+      "keywords": [
+        "占星術 カスプとは",
+        "西洋占星術 カスプ",
+        "占星術 ハウス の カスプ",
+        "カスプ 意味",
+        "ハウスの始点"
+      ],
+      "query": "占星術 カスプ",
+      "queries": [
+        {
+          "query": "占星術 カスプ",
+          "suggestions": [
+            "占星術 カスプとは",
+            "占星術 カスプ",
+            "占星術 ハウス の カスプ",
+            "西洋占星術 カスプ"
+          ]
+        }
+      ],
+      "suggestions": [
+        "占星術 カスプとは",
+        "占星術 カスプ",
+        "占星術 ハウス の カスプ",
+        "西洋占星術 カスプ"
+      ],
+      "topCandidates": [
+        {
+          "keyword": "占星術 カスプとは",
+          "score": 720
+        }
+      ]
+    }
+  }
 }
