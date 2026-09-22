@@ -58,6 +58,7 @@ export interface ShareOptions {
     | 'bazi-personality-map'
     | 'name-score'
     | 'shengxiao-peidui'
+    | 'lifePath-peidui'
     | 'parent-child-bazi'
     | 'marriage-xiangxing'
     | 'parenting-style'
@@ -199,6 +200,7 @@ export function useShare() {
       'bazi-personality-map': '八字人格图谱',
       'name-score': '姓名测试打分',
       'shengxiao-peidui': '生肖配对',
+      'lifePath-peidui': '生命灵数配对',
       'parent-child-bazi': '亲子八字合盘',
       'marriage-xiangxing': '婚姻相性测试',
       'parenting-style': '家庭教育风格测试',
