@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-20T00:25:34.744Z",
+  "syncedAt": "2026-09-22T03:00:00.000Z",
   "source": {
     "name": "Google Search Suggest",
     "client": "firefox",
@@ -93,6 +93,28 @@
     ]
   },
   "entries": {
+    "/wiki/astrology/basics/cusp": {
+      "focusKeyword": "占星交界点是什么",
+      "matchType": "fallback",
+      "seoTitle": "占星交界点是什么：星座与宫位交界",
+      "seoDescription": "交界点是星座或宫位之间的分界。本页说明宫位交界与宫头、太阳接近星座边界的含义，以及“同时属于两个星座”的常见误解。",
+      "keywords": [
+        "交界点",
+        "占星交界点是什么",
+        "星座交界",
+        "宫位交界",
+        "宫头"
+      ],
+      "query": "占星 交界点",
+      "queries": [
+        {
+          "query": "占星 交界点",
+          "suggestions": []
+        }
+      ],
+      "suggestions": [],
+      "topCandidates": []
+    },
     "/wiki/bazi/jichu/yinyang-wuxing": {
       "focusKeyword": "阴阳五行",
       "matchType": "exact",
