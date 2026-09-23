@@ -152,6 +152,15 @@ for (const chart of graphIndex.charts) {
   toolPathAliases[slug] = `/graph/${chart.id}`
 }
 
+// 星座运势详情页：十二个太阳星座分别作为独立统计路由。
+const horoscopeSlugs = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces']
+const horoscopeTitleTemplate = lookup('horoscope.detailStatTitle')
+for (const slug of horoscopeSlugs) {
+  const sign = lookup(`horoscope.signs.${slug}`) || slug
+  tools[`horoscope-${slug}`] ??= horoscopeTitleTemplate?.replace('{sign}', sign) || `horoscope-${slug}`
+  toolPathAliases[`horoscope-${slug}`] = `/fortune-telling/horoscope/${slug}`
+}
+
 // ── 专题页：HUB_PATHS 与 app/plugins/page-view-tracker.client.ts 保持一致 ──
 const trackerSrc = readFileSync(resolve(ROOT, 'app', 'plugins', 'page-view-tracker.client.ts'), 'utf-8')
 const hubBlock = trackerSrc.match(/HUB_PATHS\s*=\s*new Set\(\[([\s\S]*?)\]\)/)

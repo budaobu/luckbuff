@@ -55,6 +55,60 @@
     "seoTitle": "命理古籍書架",
     "seoDescription": "瀏覽傳統命理與術數古籍，按卷、節閱讀原文和譯文。"
   },
+  "horoscope": {
+    "eyebrow": "Daily Horoscope",
+    "title": "星座運勢",
+    "subtitle": "以當日天文位置與相位為證據，生成十二星座的綜合、愛情、工作、財運、健康與幸運參數。",
+    "cardDescription": "十二星座今日運勢、分項指數、月亮星座、相位依據與日曆訂閱。",
+    "cardCta": "查看今日運勢",
+    "viewDetail": "查看詳情",
+    "detailSuffix": "今日運勢",
+    "detailStatTitle": "{sign}今日運勢",
+    "loading": "正在載入今日星象…",
+    "loadFailed": "運勢資料載入失敗，請稍後重試。",
+    "updatedToday": "每日更新",
+    "signs": {
+      "aries": "牡羊座", "taurus": "金牛座", "gemini": "雙子座", "cancer": "巨蟹座",
+      "leo": "獅子座", "virgo": "處女座", "libra": "天秤座", "scorpio": "天蠍座",
+      "sagittarius": "射手座", "capricorn": "摩羯座", "aquarius": "水瓶座", "pisces": "雙魚座"
+    },
+    "fields": {
+      "overall": "綜合", "love": "愛情", "work": "工作", "wealth": "財運", "health": "健康",
+      "luckyNumber": "幸運數", "luckyColor": "幸運色", "moonSign": "月亮星座", "moonPhase": "月相",
+      "compatibility": "互動星座", "direction": "幸運方位"
+    },
+    "sections": {
+      "scores": "分項指數", "scoresSubtitle": "本地確定性規則生成", "sky": "當日星象", "skySubtitle": "12:00 Asia/Shanghai",
+      "positions": "行星星座", "aspects": "關鍵相位", "method": "計算口徑"
+    },
+    "empty": { "aspects": "今日無 6.5° 內主要相位。" },
+    "ai": {
+      "action": "AI 解讀", "title": "AI 解讀", "summary": "今日綜合摘要", "close": "關閉",
+      "connecting": "正在解讀星象訊號…", "error": "AI 解讀失敗，請稍後重試", "noResult": "AI 未回傳解讀結果",
+      "disclaimer": "解讀基於當日星座結構，僅供文化娛樂參考。", "fullReport": "完整分析報告",
+      "fullReportLogin": "完整分析報告 · 登入後可查看", "fullReportTitle": "完整星座運勢 AI 分析報告",
+      "loginRequired": "登入後可生成完整星座運勢 AI 分析報告。"
+    },
+    "phases": {
+      "new": "新月", "waxing-crescent": "娥眉月", "first-quarter": "上弦月", "waxing-gibbous": "盈凸月",
+      "full": "滿月", "waning-gibbous": "虧凸月", "last-quarter": "下弦月", "waning-crescent": "殘月"
+    },
+    "colors": {
+      "crimson": "緋紅", "amber": "琥珀", "emerald": "祖母綠", "sky": "天青", "indigo": "靛藍", "violet": "紫羅蘭",
+      "rose": "玫瑰", "slate": "岩灰", "gold": "鎏金", "teal": "青瓷", "mint": "薄荷", "coral": "珊瑚"
+    },
+    "directions": {
+      "east": "正東", "southeast": "東南", "south": "正南", "southwest": "西南",
+      "west": "正西", "northwest": "西北", "north": "正北", "northeast": "東北"
+    },
+    "calendar": {
+      "title": "訂閱日曆", "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
+      "sign": "星座", "range": "時間範圍", "today": "當天", "threeDays": "3天", "sevenDays": "7天",
+      "types": "運勢類型", "subscribe": "訂閱到日曆", "download": "下載 ICS", "copied": "訂閱連結已複製",
+      "copy": "複製 URL", "copyFailed": "複製失敗，請手動複製", "url": "訂閱日曆 URL",
+      "hint": "URL 使用 webcal 協議開啟本機日曆；ICS 也可手動匯入 Apple 日曆、Outlook、Google 日曆或 Android 日曆。"
+    }
+  },
   "common": {
     "start": "立即開始推演",
     "saveProfile": "保存生辰檔案",
@@ -813,6 +867,16 @@
     "summaryPoints": "個盤面點"
   },
   "seo": {
+    "horoscopeTopicTitle": "星座運勢今日查詢_十二星座愛情事業財運健康",
+    "horoscopeTopicDesc": "查看牡羊座到雙魚座今日星座運勢：綜合指數、幸運數、幸運色、愛情、工作、財運、健康，月亮星座與行星相位同屏，支援訂閱到本機日曆。",
+    "horoscopeTopicKeywords": "星座運勢,星座運勢今天,今日星座運勢,十二星座運勢,牡羊座運勢,愛情運勢,事業運勢,財運運勢,幸運色,幸運數",
+    "horoscopeTopicOgTitle": "星座運勢今日查詢_十二星座愛情事業財運健康",
+    "horoscopeTopicOgDesc": "十二星座今日運勢一鍵對比，涵蓋愛情、工作、財運、健康、幸運數、幸運色與星象依據。",
+    "horoscopeDetailTitle": "{sign}今日運勢_愛情事業財運健康解讀",
+    "horoscopeDetailDesc": "{date}{sign}今日運勢：綜合指數、愛情、工作、財運、健康、幸運數、幸運色與月亮星座、行星相位依據，登入可生成完整AI解讀。",
+    "horoscopeDetailKeywords": "{sign}今日運勢,{sign}運勢,星座運勢,愛情運勢,事業運勢,財運運勢,健康運勢,幸運數,幸運色",
+    "horoscopeDetailOgTitle": "{sign}今日運勢_愛情事業財運健康解讀",
+    "horoscopeDetailOgDesc": "{sign}今日星座運勢與星象證據一屏看完，可訂閱到 macOS、Windows、iOS、Android 日曆。",
     "humanDesignTitle": "人類圖排盤_人類圖免費查詢與AI解讀",
     "humanDesignDesc": "免費人類圖排盤工具，輸入出生日期、精確時間和時區生成九中心人體圖，完整查看64閘門、36通道、類型、權威、人生角色、定義與輪迴交叉，支援AI解讀。",
     "humanDesignKeywords": "人類圖,人類圖排盤,人類圖免費查詢,人類圖免費分析,人類圖解讀,人類圖類型,人類圖投射者,人類圖閘門,人類圖測試,人類圖分析免費,人類圖排盤網站,human design chart,human design calculator",

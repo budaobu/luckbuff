@@ -209,6 +209,14 @@ const analysisToolCategories: ToolCategory[] = [
     sectionPath: '/fortune-telling',
     tools: [
       {
+        icon: 'i-heroicons-sparkles',
+        titleKey: 'horoscope.title',
+        descKey: 'horoscope.cardDescription',
+        ctaKey: 'horoscope.cardCta',
+        path: '/fortune-telling/horoscope',
+        recommended: true,
+      },
+      {
         icon: 'i-heroicons-calendar-days',
         titleKey: 'home.toolBaziTitle',
         descKey: 'home.toolBaziDesc',
