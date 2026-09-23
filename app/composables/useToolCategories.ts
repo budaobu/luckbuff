@@ -700,6 +700,13 @@ const analysisToolCategories: ToolCategory[] = [
         path: '/tools/jinri-huangli',
       },
       {
+        icon: 'i-heroicons-calendar-days',
+        titleKey: 'almanacCalendar.title',
+        descKey: 'almanacCalendar.subtitle',
+        ctaKey: 'almanacCalendar.calendar.subscribe',
+        path: '/tools/almanac-calendar',
+      },
+      {
         icon: 'i-heroicons-sparkles',
         titleKey: 'home.toolJinriYunshiTitle',
         descKey: 'home.toolJinriYunshiDesc',

@@ -400,7 +400,10 @@ function weekdayLabel(weekday: number) {
 }
 
 .ta-actions {
+  display: flex;
   flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
   padding-top: 4px;
 }
 

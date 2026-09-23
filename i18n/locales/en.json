@@ -4,6 +4,7 @@
     "fortune2026": "2026 Fortune",
     "tools": "Tools",
     "toolsShort": "Tools",
+    "todayAlmanac": "Today",
     "prophet": "Prophet",
     "profiles": "My Profiles",
     "openMenu": "Open menu",
@@ -108,7 +109,52 @@
       "types": "Fortune types", "subscribe": "Subscribe", "download": "Download ICS", "copied": "Subscription URL copied",
       "copy": "Copy URL", "copyFailed": "Copy failed. Please copy manually.", "url": "Calendar subscription URL",
       "hint": "The URL opens your local calendar with webcal; the ICS file can also be imported into Apple Calendar, Outlook, Google Calendar or Android Calendar."
+    },
+    "faq": {
+      "title": "FAQ",
+      "q1": "How do I subscribe to the horoscope calendar?",
+      "a1": "Choose a sign, range, and fortune types, then select “Subscribe.” If webcal does not respond, copy the subscription URL and add it as a subscribed calendar in your calendar app.",
+      "q2": "Which calendar apps are supported?",
+      "a2": "Any calendar app that supports ICS subscriptions works, including Apple Calendar on macOS/iOS, Google Calendar, Outlook, and Android Calendar. Menu names can vary by system version.",
+      "q3": "What should I do if calendar alerts do not appear?",
+      "a3": "First make sure your system allows calendar notifications. Subscription calendars may start with alerts disabled; enable alerts for that subscription or all calendar events. You can also download the ICS and import it to set alerts locally.",
+      "q4": "What should I do if the subscription link stops working or will not refresh?",
+      "a4": "Copy the latest URL and make sure it still includes sign, range, and types, then remove the old subscription and add it again. If it still does not refresh, download and import the ICS."
     }
+  },
+  "almanacCalendar": {
+    "eyebrow": "Calendar Subscription",
+    "title": "Subscribe to Almanac & Holidays",
+    "subtitle": "Select daily Yi, Ji, or traditional festivals and 24 solar terms, then sync them to macOS, Windows, iOS, and Android calendars with a subscription URL.",
+    "types": {
+      "yi": "Yi activities",
+      "ji": "Ji activities",
+      "festivals": "Traditional festivals + 24 solar terms"
+    },
+    "calendar": {
+      "title": "Subscribe to calendar",
+      "subtitle": "Your selection creates a refreshable ICS subscription for the next 400 days.",
+      "types": "Subscription types",
+      "subscribe": "Subscribe in local calendar",
+      "download": "Download ICS",
+      "copied": "Subscription URL copied",
+      "copy": "Copy URL",
+      "copyFailed": "Copy failed. Please copy manually.",
+      "url": "Calendar subscription URL",
+      "hint": "The URL opens your local calendar with webcal; the ICS file can also be imported into Apple Calendar, Outlook, Google Calendar or Android Calendar."
+    },
+    "faq": {
+      "title": "FAQ",
+      "q1": "How do I subscribe to the almanac and solar-term calendar?",
+      "a1": "Select Yi activities, Ji activities, or traditional festivals and the 24 solar terms, then choose “Subscribe in local calendar.” If webcal does not respond, copy the URL and add it as a subscribed calendar in your calendar app. The feed covers the next 400 days.",
+      "q2": "Which calendar apps are supported?",
+      "a2": "Any calendar app that supports ICS subscriptions works, including Apple Calendar on macOS/iOS, Google Calendar, Outlook, and Android Calendar. Menu names can vary by system version.",
+      "q3": "What should I do if calendar alerts do not appear?",
+      "a3": "First make sure your system allows calendar notifications. Subscription calendars may start with alerts disabled; enable alerts for that subscription or all calendar events. You can also download the ICS and import it to set alerts locally.",
+      "q4": "What should I do if the subscription link stops working or will not refresh?",
+      "a4": "Copy the latest URL and make sure it still includes locale and types, then remove the old subscription and add it again. If it still does not refresh, download and import the ICS. The feed is recalculated daily at Beijing time."
+    },
+    "disclaimer": "Almanac content is calculated from traditional calendar methods and is provided for cultural and educational entertainment only; it is not advice for action, timing, or professional decisions."
   },
   "common": {
     "start": "Start Reading",
@@ -868,7 +914,7 @@
     "summaryPoints": "chart points"
   },
   "seo": {
-    "horoscopeTopicTitle": "Horoscope Today_All 12 Zodiac Love, Career & Money",
+    "horoscopeTopicTitle": "Horoscope Today_ICS File for All 12 Zodiac Love, Career & Money",
     "horoscopeTopicDesc": "Check today's horoscope for all 12 zodiac signs: overall score, lucky number, lucky color, love, work, money, health, moon sign and aspects with calendar subscription.",
     "horoscopeTopicKeywords": "horoscope today,horoscope daily,daily horoscope,zodiac horoscope,aries horoscope today,love horoscope,career horoscope,money horoscope,lucky number,lucky color",
     "horoscopeTopicOgTitle": "Horoscope Today_All 12 Zodiac Love, Career & Money",
@@ -1524,6 +1570,11 @@
     "fortuneCalendarKeywords": "fortune calendar,Chinese almanac calendar,daily fortune,auspicious dates,solar terms,monthly almanac,free almanac",
     "fortuneCalendarOgTitle": "Fortune Calendar_Monthly Almanac",
     "fortuneCalendarOgDesc": "Monthly calendar view of daily auspicious/inauspicious activities and fortune levels.",
+    "almanacCalendarTitle": "Chinese Almanac Calendar Subscription - ICS File, Yi Ji & Festivals",
+    "almanacCalendarDesc": "Subscribe to a Chinese almanac calendar with daily Yi and Ji activities, traditional festivals, and the 24 solar terms. Sync the URL to macOS, Windows, iOS, or Android calendars.",
+    "almanacCalendarKeywords": "chinese almanac calendar,calendar subscription,chinese holidays calendar subscription,lunar calendar subscription,24 solar terms calendar,subscribe calendar iphone,subscribe calendar android",
+    "almanacCalendarOgTitle": "Chinese Almanac Calendar Subscription",
+    "almanacCalendarOgDesc": "Sync daily Yi and Ji activities, traditional festivals, and 24 solar terms to your calendar.",
     "humorHermitTitle": "Humor Hermit_Free AI Fortune Analysis Tool",
     "humorHermitDesc": "Enter your birth info and the Humor Hermit will analyze your career, love and wealth with actionable advice and timing tips. Free to use.",
     "humorHermitKeywords": "Humor Hermit,AI fortune analysis,free reading,bazi analysis,career fortune,love fortune",
@@ -5102,7 +5153,8 @@
     "luckyNumbers": "Lucky Numbers",
     "luckyZodiacRule": "Derived from the day branch's six and three harmonies",
     "luckyNumberRule": "Generated from Guigu nine-immortal values and the day stem element; range 1-49",
-    "disclaimer": "This page is generated from traditional calendar methods. Almanac content is provided for cultural and educational entertainment only and is not advice for action, timing, or professional decisions."
+    "disclaimer": "This page is generated from traditional calendar methods. Almanac content is provided for cultural and educational entertainment only and is not advice for action, timing, or professional decisions.",
+    "subscribeCalendar": "Subscribe"
   },
   "jinriYunshi": {
     "knowledgeCard1Title": "Daily Fortune",
