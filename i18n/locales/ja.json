@@ -1,4 +1,59 @@
 {
+  "horoscope": {
+    "eyebrow": "Daily Horoscope",
+    "title": "星座運勢",
+    "subtitle": "当日の天文位置とアスペクトを根拠に、12星座の総合・恋愛・仕事・金運・健康と幸運パラメータを作成します。",
+    "cardDescription": "12星座の今日運勢、項目別指数、月星座、アスペクトとカレンダー登録。",
+    "cardCta": "今日の運勢を見る",
+    "viewDetail": "詳細を見る",
+    "detailSuffix": " 今日運勢",
+    "detailStatTitle": "{sign} 今日運勢",
+    "loading": "今日の星象を読み込み中…",
+    "loadFailed": "運勢データを読み込めません。後でもう一度お試しください。",
+    "updatedToday": "毎日更新",
+    "signs": {
+      "aries": "牡羊座", "taurus": "牡牛座", "gemini": "双子座", "cancer": "蟹座",
+      "leo": "獅子座", "virgo": "乙女座", "libra": "天秤座", "scorpio": "蠍座",
+      "sagittarius": "射手座", "capricorn": "山羊座", "aquarius": "水瓶座", "pisces": "魚座"
+    },
+    "fields": {
+      "overall": "総合", "love": "恋愛", "work": "仕事", "wealth": "金運", "health": "健康",
+      "luckyNumber": "ラッキーナンバー", "luckyColor": "ラッキーカラー", "moonSign": "月星座", "moonPhase": "月相",
+      "compatibility": "相性星座", "direction": "ラッキー方位"
+    },
+    "sections": {
+      "scores": "項目別指数", "scoresSubtitle": "ローカル決定論ルール", "sky": "当日の星象", "skySubtitle": "12:00 Asia/Shanghai",
+      "positions": "惑星星座", "aspects": "主要アスペクト", "method": "計算方法"
+    },
+    "empty": { "aspects": "今日は6.5°以内の主要アスペクトがありません。" },
+    "ai": {
+      "action": "AI解釈", "title": "AI解釈", "summary": "今日の総合まとめ", "close": "閉じる",
+      "connecting": "星象シグナルを解釈中…", "error": "AI解釈に失敗しました。後でお試しください。", "noResult": "AIから解釈が返されませんでした。",
+      "disclaimer": "当日の星座構造に基づく文化・娯楽向けの参考情報です。", "fullReport": "完全レポート",
+      "fullReportLogin": "完全レポート · ログイン後に表示", "fullReportTitle": "星座運勢AI完全レポート",
+      "loginRequired": "ログインすると星座運勢AI完全レポートを作成できます。"
+    },
+    "phases": {
+      "new": "新月", "waxing-crescent": "三日月", "first-quarter": "上弦の月", "waxing-gibbous": "十三夜月",
+      "full": "満月", "waning-gibbous": "寝待月", "last-quarter": "下弦の月", "waning-crescent": "有明月"
+    },
+    "colors": {
+      "crimson": "深紅", "amber": "琥珀", "emerald": "エメラルド", "sky": "空色", "indigo": "藍色", "violet": "スミレ色",
+      "rose": "ローズ", "slate": "スレート", "gold": "ゴールド", "teal": "青緑", "mint": "ミント", "coral": "コーラル"
+    },
+    "directions": {
+      "east": "東", "southeast": "南東", "south": "南", "southwest": "南西",
+      "west": "西", "northwest": "北西", "north": "北", "northeast": "北東"
+    },
+    "calendar": {
+      "title": "カレンダー登録", "subtitle": "星座・期間・運勢タイプを選び、macOS・Windows・iOS・Android のカレンダーに登録できます。",
+      "overallIndex": "総合指数",
+      "sign": "星座", "range": "期間", "today": "今日", "threeDays": "3日", "sevenDays": "7日",
+      "types": "運勢タイプ", "subscribe": "カレンダーに登録", "download": "ICSをダウンロード", "copied": "URLをコピーしました",
+      "copy": "URLをコピー", "copyFailed": "コピーに失敗しました。手動でコピーしてください。", "url": "カレンダー購読URL",
+      "hint": "URLはwebcalでローカルカレンダーを開きます。ICSはAppleカレンダー、Outlook、Googleカレンダー、Androidカレンダーにも登録できます。"
+    }
+  },
   "common": {
     "male": "男性",
     "female": "女性",
@@ -451,6 +506,16 @@
     "hookBaoshengLotDefault": "保生大帝霊籤を引き、示唆ある結果を得ました。"
   },
   "seo": {
+    "horoscopeTopicTitle": "星座運勢 今日_12星座の恋愛仕事金運健康",
+    "horoscopeTopicDesc": "牡羊座から魚座まで今日の星座運勢を確認。総合運、ラッキーナンバー、ラッキーカラー、恋愛、仕事、金運、健康、月星座とアスペクトを表示します。",
+    "horoscopeTopicKeywords": "星座運勢 今日,今日の運勢,12星座 運勢,牡羊座 運勢,恋愛運,仕事運,金運,健康運,ラッキーナンバー,ラッキーカラー",
+    "horoscopeTopicOgTitle": "星座運勢 今日_12星座の恋愛仕事金運健康",
+    "horoscopeTopicOgDesc": "12星座の今日の運勢を比較し、恋愛・仕事・金運・健康と星象の根拠を一覧できます。",
+    "horoscopeDetailTitle": "{sign} 今日運勢_恋愛仕事金運健康の解釈",
+    "horoscopeDetailDesc": "{date}の{sign}今日運勢。総合・恋愛・仕事・金運・健康・ラッキーナンバー・ラッキーカラーと月星座を確認できます。",
+    "horoscopeDetailKeywords": "{sign} 今日運勢,{sign} 運勢,星座運勢 今日,恋愛運,仕事運,金運,健康運,ラッキーナンバー,ラッキーカラー",
+    "horoscopeDetailOgTitle": "{sign} 今日運勢_恋愛仕事金運健康の解釈",
+    "horoscopeDetailOgDesc": "{sign}の今日運勢と星象の根拠を一画面で確認し、macOS・Windows・iOS・Android のカレンダーに登録できます。",
     "humanDesignTitle": "ヒューマンデザイン チャート｜無料計算とAI解釈",
     "humanDesignDesc": "生年月日・正確な時間・タイムゾーンから9センターのボディグラフを無料生成。64ゲート、36チャネル、タイプ、権威、プロファイル、インカネーションクロスをAIと一緒に確認できます。",
     "humanDesignKeywords": "ヒューマンデザイン,ヒューマンデザイン チャート,ヒューマンデザイン 無料,ヒューマンデザイン 計算,ヒューマンデザイン タイプ,ヒューマンデザイン 権威,ヒューマンデザイン ゲート,ヒューマンデザイン チャンネル,ヒューマンデザイン AI,human design chart,human design calculator",

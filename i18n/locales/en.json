@@ -55,6 +55,61 @@
     "seoTitle": "Metaphysics Classics Shelf",
     "seoDescription": "Browse traditional Chinese metaphysics books and read source text by volume and section."
   },
+  "horoscope": {
+    "eyebrow": "Daily Horoscope",
+    "title": "Horoscope Today",
+    "subtitle": "Evidence-backed daily scores for all 12 signs across love, work, money, health, luck and planetary aspects.",
+    "cardDescription": "Today's 12-sign rankings, category scores, moon context and calendar subscription.",
+    "cardCta": "View horoscope",
+    "viewDetail": "View detail",
+    "detailSuffix": " Horoscope Today",
+    "detailStatTitle": "{sign} Horoscope Today",
+    "loading": "Loading today's sky…",
+    "loadFailed": "Horoscope data is unavailable. Please try again.",
+    "updatedToday": "Updated daily",
+    "signs": {
+      "aries": "Aries", "taurus": "Taurus", "gemini": "Gemini", "cancer": "Cancer",
+      "leo": "Leo", "virgo": "Virgo", "libra": "Libra", "scorpio": "Scorpio",
+      "sagittarius": "Sagittarius", "capricorn": "Capricorn", "aquarius": "Aquarius", "pisces": "Pisces"
+    },
+    "fields": {
+      "overall": "Overall", "love": "Love", "work": "Work", "wealth": "Money", "health": "Health",
+      "luckyNumber": "Lucky number", "luckyColor": "Lucky color", "moonSign": "Moon sign", "moonPhase": "Moon phase",
+      "compatibility": "Connection", "direction": "Lucky direction"
+    },
+    "sections": {
+      "scores": "Category scores", "scoresSubtitle": "Deterministic local rules", "sky": "Today's sky", "skySubtitle": "12:00 Asia/Shanghai",
+      "positions": "Planet signs", "aspects": "Key aspects", "method": "Methodology"
+    },
+    "empty": { "aspects": "No major aspects within 6.5° today." },
+    "ai": {
+      "action": "AI reading", "title": "AI reading", "summary": "Today's summary", "close": "Close",
+      "connecting": "Reading astrological signals…", "error": "AI reading failed. Please try again.", "noResult": "AI returned no reading.",
+      "disclaimer": "Based on today's astrological structure; for cultural and entertainment reference only.", "fullReport": "Full report",
+      "fullReportLogin": "Full report · Sign in to view", "fullReportTitle": "Full Horoscope AI Report",
+      "loginRequired": "Sign in to generate the full horoscope AI report."
+    },
+    "phases": {
+      "new": "New Moon", "waxing-crescent": "Waxing Crescent", "first-quarter": "First Quarter", "waxing-gibbous": "Waxing Gibbous",
+      "full": "Full Moon", "waning-gibbous": "Waning Gibbous", "last-quarter": "Last Quarter", "waning-crescent": "Waning Crescent"
+    },
+    "colors": {
+      "crimson": "Crimson", "amber": "Amber", "emerald": "Emerald", "sky": "Sky Blue", "indigo": "Indigo", "violet": "Violet",
+      "rose": "Rose", "slate": "Slate", "gold": "Gold", "teal": "Teal", "mint": "Mint", "coral": "Coral"
+    },
+    "directions": {
+      "east": "East", "southeast": "Southeast", "south": "South", "southwest": "Southwest",
+      "west": "West", "northwest": "Northwest", "north": "North", "northeast": "Northeast"
+    },
+    "calendar": {
+      "title": "Subscribe to calendar", "subtitle": "Choose a sign, range and fortune types to subscribe in macOS, Windows, iOS or Android calendar clients.",
+      "overallIndex": "Overall index",
+      "sign": "Sign", "range": "Range", "today": "Today", "threeDays": "3 days", "sevenDays": "7 days",
+      "types": "Fortune types", "subscribe": "Subscribe", "download": "Download ICS", "copied": "Subscription URL copied",
+      "copy": "Copy URL", "copyFailed": "Copy failed. Please copy manually.", "url": "Calendar subscription URL",
+      "hint": "The URL opens your local calendar with webcal; the ICS file can also be imported into Apple Calendar, Outlook, Google Calendar or Android Calendar."
+    }
+  },
   "common": {
     "start": "Start Reading",
     "saveProfile": "Save Birth Profile",
@@ -813,6 +868,16 @@
     "summaryPoints": "chart points"
   },
   "seo": {
+    "horoscopeTopicTitle": "Horoscope Today_All 12 Zodiac Love, Career & Money",
+    "horoscopeTopicDesc": "Check today's horoscope for all 12 zodiac signs: overall score, lucky number, lucky color, love, work, money, health, moon sign and aspects with calendar subscription.",
+    "horoscopeTopicKeywords": "horoscope today,horoscope daily,daily horoscope,zodiac horoscope,aries horoscope today,love horoscope,career horoscope,money horoscope,lucky number,lucky color",
+    "horoscopeTopicOgTitle": "Horoscope Today_All 12 Zodiac Love, Career & Money",
+    "horoscopeTopicOgDesc": "Compare all zodiac signs for love, career, money, health, lucky numbers and evidence-based planetary aspects.",
+    "horoscopeDetailTitle": "{sign} Horoscope Today_Love, Career & Money Reading",
+    "horoscopeDetailDesc": "{date} {sign} horoscope today: overall, love, career, money, health, lucky number, lucky color, moon sign and aspects. Sign in for the full AI report.",
+    "horoscopeDetailKeywords": "{sign} horoscope today,{sign} horoscope,daily horoscope,love horoscope,career horoscope,money horoscope,health horoscope,lucky number,lucky color",
+    "horoscopeDetailOgTitle": "{sign} Horoscope Today_Love, Career & Money Reading",
+    "horoscopeDetailOgDesc": "See {sign}'s daily horoscope with astronomical evidence and subscribe on macOS, Windows, iOS or Android.",
     "humanDesignTitle": "Human Design Chart_Free Calculator & AI Reading",
     "humanDesignDesc": "Free Human Design chart calculator. Enter birth date, exact time and timezone to see a nine-center bodygraph, 64 gates, 36 channels, type, authority, profile, definition and incarnation cross.",
     "humanDesignKeywords": "human design chart,human design calculator,human design chart generator,human design free chart,human design chart free report,human design chart reading,human design gates and channels,human design type,human design profile,free human design chart calculator",

@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module'
+import { HOROSCOPE_SIGN_SLUGS } from './app/utils/horoscope/signs'
 import { dirname, join, relative, extname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readdirSync, readFileSync, existsSync } from 'node:fs'
@@ -72,6 +73,7 @@ const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily'
   '/special': { priority: 0.8 },
   '/prophet': { changefreq: 'daily', priority: 0.9 },
   '/insights': { changefreq: 'weekly', priority: 0.8 },
+  '/fortune-telling/horoscope': { changefreq: 'daily', priority: 0.9 },
   '/prophet/liuren-worldcup': { changefreq: 'daily', priority: 0.8 },
   '/prophet/qimen-worldcup': { changefreq: 'daily', priority: 0.8 },
   '/prophet/worldcup-champion-odds-2026': { changefreq: 'daily', priority: 0.8 },
@@ -81,6 +83,12 @@ const SITEMAP_OVERRIDES: Record<string, Partial<{ changefreq: 'weekly' | 'daily'
 }
 
 const sitemapUrls = [
+  ...HOROSCOPE_SIGN_SLUGS.map(slug => ({
+    loc: `/fortune-telling/horoscope/${slug}`,
+    changefreq: 'daily' as const,
+    priority: 0.8,
+    _i18nTransform: true,
+  })),
   ...graphCharts.charts.map(chart => ({
     loc: `/graph/${chart.id}`,
     changefreq: 'weekly' as const,
