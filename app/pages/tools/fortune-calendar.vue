@@ -182,6 +182,10 @@ function fortuneBadgeClass(level: string) {
   return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
 }
 
+function localDateKey(date = new Date()) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
 function selectDay(day: CalendarDay) {
   selectedDate.value = day.date
 }
@@ -220,7 +224,7 @@ async function fetchMonth() {
       body: { startDate, endDate },
     })
 
-    const todayStr = new Date().toISOString().slice(0, 10)
+    const todayStr = localDateKey()
     days.value = (Array.isArray(res) ? res : res.days || []).map((d: any) => ({
       date: d.date,
       dayNumber: Number(d.date.slice(8)),
@@ -233,6 +237,10 @@ async function fetchMonth() {
       fortuneLevel: d.tianShenLuck === '吉' ? 'ji' : d.tianShenLuck === '凶' ? 'xiong' : 'ping',
       isToday: d.date === todayStr,
     }))
+
+    if (days.value.some(d => d.isToday)) {
+      selectedDate.value = todayStr
+    }
   } catch (e) {
     console.error('Fortune calendar fetch error', e)
     days.value = []
