@@ -4,6 +4,7 @@
     "fortune2026": "2026运势",
     "tools": "推演工具",
     "toolsShort": "工具",
+    "todayAlmanac": "黄历",
     "prophet": "赛事预测",
     "profiles": "我的档案",
     "openMenu": "打开菜单",
@@ -108,7 +109,52 @@
       "types": "运势类型", "subscribe": "订阅到日历", "download": "下载 ICS", "copied": "订阅链接已复制",
       "copy": "复制 URL", "copyFailed": "复制失败，请手动复制", "url": "订阅日历 URL",
       "hint": "URL 使用 webcal 协议打开本机日历；ICS 也可手动导入 Apple 日历、Outlook、Google 日历或安卓日历。"
+    },
+    "faq": {
+      "title": "常见问题",
+      "q1": "如何订阅星座运势日历？",
+      "a1": "选择星座、时间范围和运势类型，点击「订阅到日历」；若 webcal 没有响应，可复制订阅 URL，在日历应用中新建订阅日历。",
+      "q2": "支持哪些日历应用？",
+      "a2": "支持符合 ICS 订阅标准的应用，包括 macOS / iOS Apple 日历、Google 日历、Outlook 和 Android 日历。不同系统版本的入口名称可能略有差异。",
+      "q3": "日历提醒不生效怎么办？",
+      "a3": "先确认系统允许日历通知；订阅日历的提醒策略可能默认关闭，可在日历应用中为该订阅或全部日历事件开启提醒，也可下载 ICS 后导入本地日历再设置提醒。",
+      "q4": "订阅链接失效或无法刷新怎么办？",
+      "a4": "复制页面上最新的 URL，确认其中包含 sign、range 和 types 参数；删除旧订阅后重新添加。若仍不刷新，可先下载 ICS 导入。"
     }
+  },
+  "almanacCalendar": {
+    "eyebrow": "Calendar Subscription",
+    "title": "订阅黄历与节假日",
+    "subtitle": "选择每日宜、忌或传统节日与二十四节气，用订阅 URL 同步到 macOS、Windows、iOS 和 Android 日历客户端。",
+    "types": {
+      "yi": "宜事项",
+      "ji": "忌事项",
+      "festivals": "传统节日 + 二十四节气"
+    },
+    "calendar": {
+      "title": "订阅日历",
+      "subtitle": "所选内容会生成一个可刷新的 ICS 订阅源，覆盖未来 400 天。",
+      "types": "订阅类型",
+      "subscribe": "订阅到本地日历",
+      "download": "下载 ICS",
+      "copied": "订阅链接已复制",
+      "copy": "复制 URL",
+      "copyFailed": "复制失败，请手动复制",
+      "url": "订阅日历 URL",
+      "hint": "URL 使用 webcal 协议打开本机日历；ICS 也可手动导入 Apple 日历、Outlook、Google 日历或安卓日历。"
+    },
+    "faq": {
+      "title": "常见问题",
+      "q1": "如何订阅黄历与节气日历？",
+      "a1": "选择宜事项、忌事项或传统节日与二十四节气，点击「订阅到本地日历」；若客户端没有响应，可复制 URL，在日历应用中新建订阅日历。订阅源覆盖未来 400 天。",
+      "q2": "支持哪些日历应用？",
+      "a2": "支持符合 ICS 订阅标准的应用，包括 macOS / iOS Apple 日历、Google 日历、Outlook 和 Android 日历。不同系统版本的入口名称可能略有差异。",
+      "q3": "日历提醒不生效怎么办？",
+      "a3": "先确认系统允许日历通知；订阅日历的提醒策略可能默认关闭，可在日历应用中为该订阅或全部日历事件开启提醒，也可下载 ICS 后导入本地日历再设置提醒。",
+      "q4": "订阅链接失效或无法刷新怎么办？",
+      "a4": "复制页面上最新的 URL，确认其中包含 locale 与 types 参数；删除旧订阅后重新添加。若仍不刷新，可先下载 ICS 导入。ICS 每天按北京时间重新计算。"
+    },
+    "disclaimer": "黄历内容基于传统历法计算，仅供文化娱乐与学习参考，不构成行事、择时或专业建议。"
   },
   "common": {
     "start": "立即开始推演",
@@ -868,7 +914,7 @@
     "summaryPoints": "个盘面点"
   },
   "seo": {
-    "horoscopeTopicTitle": "星座运势今日查询_十二星座爱情事业财运健康",
+    "horoscopeTopicTitle": "星座运势今日查询_ICS文件与十二星座爱情事业财运健康",
     "horoscopeTopicDesc": "查看白羊座到双鱼座今日星座运势：综合指数、幸运数、幸运色、爱情、工作、财运、健康，月亮星座与行星相位同屏，支持订阅到本地日历。",
     "horoscopeTopicKeywords": "星座运势,星座运势今天,今日星座运势,十二星座运势,白羊座运势,爱情运势,事业运势,财运运势,幸运色,幸运数",
     "horoscopeTopicOgTitle": "星座运势今日查询_十二星座爱情事业财运健康",
@@ -1524,6 +1570,11 @@
     "fortuneCalendarKeywords": "运势月历,黄历月历,每日宜忌,吉凶日历,节气,择日月历,免费黄历",
     "fortuneCalendarOgTitle": "运势月历_每日黄历宜忌",
     "fortuneCalendarOgDesc": "月历视图查看每日黄历宜忌与吉凶等级，轻松规划整月事项。",
+    "almanacCalendarTitle": "黄历订阅_ICS文件与今日宜忌节日节气日历",
+    "almanacCalendarDesc": "订阅黄历日历，将每日黄历宜忌、传统节日与二十四节气同步到 macOS、Windows、iOS 和 Android 日历，支持复制订阅 URL 与 ICS 导入。",
+    "almanacCalendarKeywords": "黄历订阅,黄历日历,订阅日历,黄历宜忌,农历日历,传统节日日历,二十四节气日历,节气日历,节假日日历订阅",
+    "almanacCalendarOgTitle": "黄历订阅_宜忌节日节气日历",
+    "almanacCalendarOgDesc": "把每日黄历宜忌、传统节日与二十四节气同步到本地日历客户端。",
     "humorHermitTitle": "幽默隐士_免费AI命理分析工具",
     "humorHermitDesc": "输入你的生辰信息，幽默隐士为你分析事业、感情、财运，提供具体建议和时机提示，免费使用。",
     "humorHermitKeywords": "幽默隐士,AI命理分析,免费算命,八字分析,事业运势,感情运势",
@@ -5127,6 +5178,8 @@
     "luckyZodiacRule": "按日支六合、三合推导",
     "luckyNumberRule": "按鬼谷子九仙合数与日干五行生成，范围 1～49",
     "disclaimer": "本页面基于传统历法计算生成，黄历内容仅供文化娱乐与学习参考，不构成任何行事、择时或专业建议。重要安排请结合现实情况独立判断。"
+    ,
+    "subscribeCalendar": "订阅日历"
   },
   "jinriYunshi": {
     "knowledgeCard1Title": "今日運勢",

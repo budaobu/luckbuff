@@ -14,6 +14,16 @@
           @today="loadCurrent"
         >
           <template #actions>
+            <NuxtLink
+              class="today-subscribe"
+              :to="localePath('/tools/almanac-calendar')"
+            >
+              <UIcon
+                name="i-heroicons-calendar"
+                class="h-3.5 w-3.5"
+              />
+              {{ t('todayAlmanac.subscribeCalendar') }}
+            </NuxtLink>
             <AppShareButton
               class="today-share"
               tool="jinri-huangli"
@@ -122,6 +132,7 @@ import type { TodayAlmanac } from '~/types/today-almanac'
 import { generateTodayAlmanacPoster } from '~/utils/today-almanac-poster'
 
 const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const route = useRoute()
 const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 const siteName = 'ososn'
@@ -541,6 +552,26 @@ useHead(() => ({
   font-family: "Noto Serif SC", "Songti SC", serif;
   font-size: 12px;
   box-shadow: none;
+}
+
+.today-subscribe {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  margin-right: 6px;
+  border: 1px solid rgba(165, 22, 27, .46);
+  border-radius: 1px;
+  background: transparent;
+  color: #a5161b;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.today-subscribe:hover {
+  background: #a5161b;
+  color: #f7f0e4;
 }
 
 .today-stage :deep(.today-share button:hover) {

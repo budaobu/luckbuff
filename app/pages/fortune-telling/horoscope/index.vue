@@ -50,6 +50,11 @@
       </section>
 
       <HoroscopeCalendarSubscriber v-if="data" :signs="data.signs.map(({ sign }) => sign)" class="horoscope-subscriber" />
+
+      <AppFaq
+        :title="$t('horoscope.faq.title')"
+        :items="faqItems"
+      />
     </div>
   </div>
 </template>
@@ -76,6 +81,25 @@ function zodiacName(index: number) {
 const siteName = useRuntimeConfig().public.siteName || 'ososn'
 const pageUrl = useLocalizedSeoUrl('/fortune-telling/horoscope')
 
+const faqItems = computed(() => [
+  {
+    question: t('horoscope.faq.q1'),
+    answer: t('horoscope.faq.a1'),
+  },
+  {
+    question: t('horoscope.faq.q2'),
+    answer: t('horoscope.faq.a2'),
+  },
+  {
+    question: t('horoscope.faq.q3'),
+    answer: t('horoscope.faq.a3'),
+  },
+  {
+    question: t('horoscope.faq.q4'),
+    answer: t('horoscope.faq.a4'),
+  },
+])
+
 useSeoMeta({
   title: () => `${t('seo.horoscopeTopicTitle')} - ${siteName}`,
   description: t('seo.horoscopeTopicDesc'),
@@ -89,25 +113,42 @@ useSeoMeta({
 })
 
 useHead(() => ({
-  script: [{
-    type: 'application/ld+json',
-    innerHTML: JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'WebPage',
-      name: `${t('seo.horoscopeTopicTitle')} - ${siteName}`,
-      url: pageUrl.value,
-      description: t('seo.horoscopeTopicDesc'),
-      mainEntity: {
-        '@type': 'ItemList',
-        itemListElement: data.value?.signs.map((row, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          name: row.sign.nameZh,
-          url: `${pageUrl.value}/${row.sign.slug}`,
-        })) ?? [],
-      },
-    }),
-  }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: `${t('seo.horoscopeTopicTitle')} - ${siteName}`,
+        url: pageUrl.value,
+        description: t('seo.horoscopeTopicDesc'),
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: data.value?.signs.map((row, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: row.sign.nameZh,
+            url: `${pageUrl.value}/${row.sign.slug}`,
+          })) ?? [],
+        },
+      }),
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqItems.value.map(item => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }),
+    },
+  ],
 }))
 </script>
 
