@@ -103,6 +103,7 @@
     },
     "calendar": {
       "title": "訂閱日曆", "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
+      "overallIndex": "綜合指數",
       "sign": "星座", "range": "時間範圍", "today": "當天", "threeDays": "3天", "sevenDays": "7天",
       "types": "運勢類型", "subscribe": "訂閱到日曆", "download": "下載 ICS", "copied": "訂閱連結已複製",
       "copy": "複製 URL", "copyFailed": "複製失敗，請手動複製", "url": "訂閱日曆 URL",

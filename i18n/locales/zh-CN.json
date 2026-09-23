@@ -103,6 +103,7 @@
     },
     "calendar": {
       "title": "订阅日历", "subtitle": "选择星座、时间范围与运势类型，订阅到 macOS、Windows、iOS、Android 本地日历客户端。",
+      "overallIndex": "综合指数",
       "sign": "星座", "range": "时间范围", "today": "当天", "threeDays": "3天", "sevenDays": "7天",
       "types": "运势类型", "subscribe": "订阅到日历", "download": "下载 ICS", "copied": "订阅链接已复制",
       "copy": "复制 URL", "copyFailed": "复制失败，请手动复制", "url": "订阅日历 URL",

@@ -103,6 +103,7 @@
     },
     "calendar": {
       "title": "Subscribe to calendar", "subtitle": "Choose a sign, range and fortune types to subscribe in macOS, Windows, iOS or Android calendar clients.",
+      "overallIndex": "Overall index",
       "sign": "Sign", "range": "Range", "today": "Today", "threeDays": "3 days", "sevenDays": "7 days",
       "types": "Fortune types", "subscribe": "Subscribe", "download": "Download ICS", "copied": "Subscription URL copied",
       "copy": "Copy URL", "copyFailed": "Copy failed. Please copy manually.", "url": "Calendar subscription URL",

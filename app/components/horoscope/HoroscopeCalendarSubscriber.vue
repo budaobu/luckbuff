@@ -8,9 +8,14 @@
     <form class="hcs-grid" @submit.prevent>
       <label>
         <span>{{ $t('horoscope.calendar.sign') }}</span>
-        <select v-model="sign" required>
-          <option v-for="item in signs" :key="item.slug" :value="item.slug">{{ $t(`horoscope.signs.${item.slug}`) }}</option>
-        </select>
+        <USelect
+          v-model="sign"
+          :items="signOptions"
+          value-key="value"
+          color="warning"
+          class="w-full"
+          :ui="selectUi"
+        />
       </label>
 
       <fieldset>
@@ -66,7 +71,7 @@ const calendarUrl = ref('')
 const copied = ref(false)
 
 const typeOptions = computed(() => [
-  { value: 'overall', label: t('horoscope.fields.overall') },
+  { value: 'overall', label: t('horoscope.calendar.overallIndex') },
   { value: 'lucky-number', label: t('horoscope.fields.luckyNumber') },
   { value: 'lucky-color', label: t('horoscope.fields.luckyColor') },
   { value: 'love', label: t('horoscope.fields.love') },
@@ -74,6 +79,18 @@ const typeOptions = computed(() => [
   { value: 'wealth', label: t('horoscope.fields.wealth') },
   { value: 'health', label: t('horoscope.fields.health') },
 ])
+
+const signOptions = computed(() => props.signs.map(sign => ({
+  label: t(`horoscope.signs.${sign.slug}`),
+  value: sign.slug,
+})))
+
+const selectUi = {
+  base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+  placeholder: 'text-[var(--text-placeholder)]',
+  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
+}
 
 function updateUrl() {
   if (import.meta.server) return
@@ -122,14 +139,14 @@ onMounted(updateUrl)
 .hcs-grid { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 14px; align-items: start; }
 .hcs label, .hcs fieldset { min-width: 0; border: 0; margin: 0; padding: 0; }
 .hcs label > span, .hcs legend { display: block; margin-bottom: 6px; color: var(--text-faint); font-size: 12px; }
-.hcs select, .hcs-url input { width: 100%; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-input); color: var(--text-primary); padding: 10px; }
+.hcs-url input { width: 100%; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-input); color: var(--text-primary); padding: 10px; }
 .hcs-segments { display: inline-grid; grid-template-columns: repeat(3, minmax(76px, auto)); overflow: hidden; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-input); }
 .hcs-segments button { min-height: 40px; border: 0; background: transparent; color: var(--text-muted); cursor: pointer; }
 .hcs-segments button.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
-.hcs-types { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px 12px; }
-.hcs-types label { display: flex; align-items: center; gap: 7px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-input); min-height: 38px; padding: 8px 10px; cursor: pointer; }
+.hcs-types { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px 12px; }
+.hcs-types label { display: flex; align-items: center; gap: 7px; border: 1px solid var(--border-light); border-radius: 8px; background: var(--surface-input); min-height: 44px; padding: 8px 10px; cursor: pointer; }
 .hcs-types input { accent-color: var(--accent); }
-.hcs-types span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hcs-types span { line-height: 1.35; white-space: normal; }
 .hcs-actions { display: flex; flex-wrap: wrap; gap: 9px; }
 .hcs-actions button, .hcs-actions a { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--accent-border); border-radius: 8px; background: var(--accent-bg); color: var(--accent); padding: 9px 13px; text-decoration: none; cursor: pointer; }
 .hcs-url span { display: block; margin-bottom: 6px; color: var(--text-faint); font-size: 12px; }

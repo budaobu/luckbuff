@@ -47,6 +47,7 @@
     },
     "calendar": {
       "title": "カレンダー登録", "subtitle": "星座・期間・運勢タイプを選び、macOS・Windows・iOS・Android のカレンダーに登録できます。",
+      "overallIndex": "総合指数",
       "sign": "星座", "range": "期間", "today": "今日", "threeDays": "3日", "sevenDays": "7日",
       "types": "運勢タイプ", "subscribe": "カレンダーに登録", "download": "ICSをダウンロード", "copied": "URLをコピーしました",
       "copy": "URLをコピー", "copyFailed": "コピーに失敗しました。手動でコピーしてください。", "url": "カレンダー購読URL",
