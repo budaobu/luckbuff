@@ -158,7 +158,7 @@ async function draw() {
   aiContent.value = ''
   aiError.value = null
   try {
-    result.value = await $fetch<YuelaoLotResult>('/api/tools/yuelao-lot/calc', {
+    result.value = await plainFetch<YuelaoLotResult>('/api/tools/yuelao-lot/calc', {
       method: 'POST',
       body: { question: question.value.trim(), locale: locale.value },
     })

@@ -139,7 +139,7 @@ async function handleSubmit() {
   if (!canSubmit.value) return
   try {
     const payload = { nameA: form.nameA.trim(), nameB: form.nameB.trim() }
-    result.value = await $fetch<NameCompatibilityResult>('/api/tools/name-compatibility/calc', { method: 'POST', body: payload })
+    result.value = await plainFetch<NameCompatibilityResult>('/api/tools/name-compatibility/calc', { method: 'POST', body: payload })
     phase.value = 'result'
     await nextTick()
     shareTargetRef.value = document.querySelector<HTMLElement>('.ncp') ?? undefined

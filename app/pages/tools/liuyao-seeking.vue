@@ -580,7 +580,7 @@ async function doPredict() {
       relationship: form.relationship.trim(),
     }
 
-    const chartResult = await $fetch<LiuYaoResult>('/api/tools/liuyao-seeking/chart', {
+    const chartResult = await plainFetch<LiuYaoResult>('/api/tools/liuyao-seeking/chart', {
       method: 'POST',
       body: payload,
     })

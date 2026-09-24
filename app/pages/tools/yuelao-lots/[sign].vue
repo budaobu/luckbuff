@@ -94,7 +94,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/yuelao-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `yuelao-lot-${sign.value}-${locale.value}`,
-  () => $fetch<YuelaoLotResponse>(`/api/tools/yuelao-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<YuelaoLotResponse>(`/api/tools/yuelao-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

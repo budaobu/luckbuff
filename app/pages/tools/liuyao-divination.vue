@@ -503,7 +503,7 @@ async function doPredict(castDate?: Date) {
       question: question.value.trim(),
     }
 
-    const chartResult = await $fetch<LiuYaoResult>('/api/liuyao-divination/chart', {
+    const chartResult = await plainFetch<LiuYaoResult>('/api/liuyao-divination/chart', {
       method: 'POST',
       body: payload,
     })

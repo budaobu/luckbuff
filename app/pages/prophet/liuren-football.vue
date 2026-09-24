@@ -163,7 +163,7 @@ async function submit() {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
       birthYear: birthYear.value,
     }
-    result.value = await $fetch<FootballPredictionResult>('/api/prophet/liuren-football', {
+    result.value = await plainFetch<FootballPredictionResult>('/api/prophet/liuren-football', {
       method: 'POST',
       body: payload,
     })

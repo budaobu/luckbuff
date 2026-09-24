@@ -129,7 +129,7 @@ async function handleSubmit(values: FormValues) {
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<ShichuSuimeiResult>('/api/tools/shichu-suimei/calc', {
+    result.value = await plainFetch<ShichuSuimeiResult>('/api/tools/shichu-suimei/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

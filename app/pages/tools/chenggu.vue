@@ -382,7 +382,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<ChengguResult>('/api/tools/chenggu/calc', {
+    const result = await plainFetch<ChengguResult>('/api/tools/chenggu/calc', {
       method: 'POST',
       body: {
         birthDate: form.birthDate,

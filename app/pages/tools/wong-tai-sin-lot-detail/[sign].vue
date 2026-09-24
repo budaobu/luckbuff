@@ -107,7 +107,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/wong-tai-sin-lots/${sign.value}
 
 const { data: lot, error } = await useAsyncData(
   () => `wong-tai-sin-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/wong-tai-sin-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/wong-tai-sin-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

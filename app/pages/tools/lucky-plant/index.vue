@@ -571,7 +571,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<LuckyPlantCalcResult>('/api/tools/lucky-plant/calc', {
+    const result = await plainFetch<LuckyPlantCalcResult>('/api/tools/lucky-plant/calc', {
       method: 'POST',
       body: {
         name: form.name.trim(),

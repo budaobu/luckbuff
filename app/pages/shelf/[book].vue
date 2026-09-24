@@ -21,12 +21,12 @@ if (!Number.isInteger(bookId.value) || bookId.value <= 0) {
   throw createError({ statusCode: 404, statusMessage: '书籍不存在' })
 }
 
-const { data, error, refresh } = await useAsyncData(
+const { data, error, refresh } = await useAsyncData<ShelfBookDetail>(
   `shelf-book-${bookId.value}`,
   async () => {
     const chapterQuery = Number.parseInt(String(route.query.chapter ?? '0'), 10)
     const sectionQuery = Number.parseInt(String(route.query.section ?? '0'), 10)
-    return await $fetch<ShelfBookDetail>(`/api/shelf/books/${bookId.value}`, {
+    return await plainFetch<ShelfBookDetail>(`/api/shelf/books/${bookId.value}`, {
       query: {
         chapter: Number.isInteger(chapterQuery) ? chapterQuery : 0,
         section: Number.isInteger(sectionQuery) ? sectionQuery : 0,

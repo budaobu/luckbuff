@@ -107,7 +107,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/dizang-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `dizang-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/dizang-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/dizang-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

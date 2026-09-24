@@ -338,7 +338,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<NumerologyCalcResult>('/api/tools/numerology/calc', {
+    const result = await plainFetch<NumerologyCalcResult>('/api/tools/numerology/calc', {
       method: 'POST',
       body: {
         name: form.name.trim(),

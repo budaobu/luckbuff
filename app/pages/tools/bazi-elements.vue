@@ -174,7 +174,7 @@ const shareTargetRef = ref<HTMLElement>()
 async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   try {
-    result.value = await $fetch<BaziElementsResult>('/api/tools/bazi-elements/calc', {
+    result.value = await plainFetch<BaziElementsResult>('/api/tools/bazi-elements/calc', {
       method: 'POST',
       body: values,
     })

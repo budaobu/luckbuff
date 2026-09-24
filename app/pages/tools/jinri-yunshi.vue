@@ -499,7 +499,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/jinri-yunshi/calc', {
+    const result = await plainFetch<CalcResult>('/api/jinri-yunshi/calc', {
       method: 'POST',
       body: {
         birthDate: formValues.value.birthDate,

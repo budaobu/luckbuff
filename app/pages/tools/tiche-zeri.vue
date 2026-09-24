@@ -405,7 +405,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/tools/tiche-zeri/calc', {
+    const result = await plainFetch<CalcResult>('/api/tools/tiche-zeri/calc', {
       method: 'POST',
       body: {
         startDate: form.startDate,

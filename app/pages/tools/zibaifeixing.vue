@@ -301,7 +301,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/tools/zibaifeixing/calc', {
+    const result = await plainFetch<CalcResult>('/api/tools/zibaifeixing/calc', {
       method: 'POST',
       body: {
         year: form.year,

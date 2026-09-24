@@ -124,7 +124,7 @@ async function handleSubmit(values: FormValues) {
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<BaziChartResult>('/api/tools/bazi-paipan/calc', {
+    result.value = await plainFetch<BaziChartResult>('/api/tools/bazi-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

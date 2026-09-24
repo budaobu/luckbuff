@@ -158,7 +158,7 @@ async function handleSubmit(values: FormValues) {
   error.value = null
 
   try {
-    result.value = await $fetch<MangpaiCalcResult>('/api/tools/mangpai-bazi/calc', {
+    result.value = await plainFetch<MangpaiCalcResult>('/api/tools/mangpai-bazi/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

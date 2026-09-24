@@ -499,7 +499,7 @@ const aiError = ref<string | null>(null)
 // 赛程数据
 // ============================================================
 const { data: fixturesData, status: fixturesStatus } = await useAsyncData('liuyao-worldcup-fixtures', () =>
-  $fetch<WorldCupFixturesData>('/api/prophet/worldcup-fixtures', { query: { lang: locale.value } })
+  plainFetch<WorldCupFixturesData>('/api/prophet/worldcup-fixtures', { query: { lang: locale.value } })
 )
 
 const fixturesLoading = computed(() => fixturesStatus.value === 'pending')
@@ -741,7 +741,7 @@ async function doPredict() {
       subject_away: subject.away?.id,
     }
 
-    const result = await $fetch<LiuYaoResult>('/api/liu-yao/predict', {
+    const result = await plainFetch<LiuYaoResult>('/api/liu-yao/predict', {
       method: 'POST',
       body: payload,
     })

@@ -273,7 +273,7 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await $fetch<ZhugeCeziResult>('/api/tools/zhuge-cezi/calc', {
+    const calcResult = await plainFetch<ZhugeCeziResult>('/api/tools/zhuge-cezi/calc', {
       method: 'POST',
       body: payload,
     })

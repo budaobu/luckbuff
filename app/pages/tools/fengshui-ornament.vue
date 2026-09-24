@@ -685,7 +685,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/tools/fengshui-ornament/calc', {
+    const result = await plainFetch<CalcResult>('/api/tools/fengshui-ornament/calc', {
       method: 'POST',
       body: {
         roomType: form.roomType,

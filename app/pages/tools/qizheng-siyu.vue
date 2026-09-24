@@ -45,7 +45,7 @@ async function startAnalysis() {
   abortController = new AbortController()
 
   try {
-    const result = await $fetch<QizhengSiyuChart>('/api/tools/qizheng-siyu/calc', {
+    const result = await plainFetch<QizhengSiyuChart>('/api/tools/qizheng-siyu/calc', {
       method: 'POST',
       body: {
         birthDate: formData.value.birthDate,

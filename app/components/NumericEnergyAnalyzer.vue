@@ -180,6 +180,11 @@ const props = defineProps<{ scenario: NumericEnergyScenario }>()
 const { t, locale } = useI18n()
 const toast = useToast()
 
+const requestNumericEnergyAnalysis = $fetch as unknown as (
+  url: '/api/tools/numeric-energy/calc',
+  options: { method: 'POST'; body: { scenario: NumericEnergyScenario; input: string } },
+) => Promise<NumericEnergyResult>
+
 const siteDomain = 'www.ososn.com'
 
 const phase = ref<'form' | 'result'>('form')
@@ -255,7 +260,7 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
-    analysis.value = await $fetch<NumericEnergyResult>('/api/tools/numeric-energy/calc', {
+    analysis.value = await requestNumericEnergyAnalysis('/api/tools/numeric-energy/calc', {
       method: 'POST',
       body: { scenario: props.scenario, input: input.value },
     })

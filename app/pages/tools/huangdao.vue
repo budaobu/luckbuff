@@ -529,7 +529,7 @@ async function handleSubmit() {
   phase.value = 'animating'
 
   try {
-    const result = await $fetch<HuangdaoDay[]>('/api/huangdao/calculate', {
+    const result = await plainFetch<HuangdaoDay[]>('/api/huangdao/calculate', {
       method: 'POST',
       body: {
         startDate: formValues.startDate,

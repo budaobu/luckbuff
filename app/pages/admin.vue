@@ -762,7 +762,8 @@ const previewHtml = computed(() => {
 })
 
 async function adminFetch<T>(url: string, opts?: any): Promise<T> {
-  return await $fetch<T>(url, opts)
+  const request = $fetch as unknown as (url: string, options?: any) => Promise<unknown>
+  return await request(url, opts) as T
 }
 
 // ── 标题关键词联想（Google Suggest） ──

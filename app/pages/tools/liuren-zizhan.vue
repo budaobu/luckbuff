@@ -256,7 +256,7 @@ async function handleSubmit() {
   startThumbAnimation()
 
   try {
-    const result = await $fetch<LiurenZizhanChart>('/api/tools/liuren-zizhan/chart', {
+    const result = await plainFetch<LiurenZizhanChart>('/api/tools/liuren-zizhan/chart', {
       method: 'POST',
       body: {
         char,

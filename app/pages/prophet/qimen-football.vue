@@ -146,7 +146,7 @@ async function submit() {
       castAt: form.castAt || new Date().toISOString(),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai',
     }
-    result.value = await $fetch<FootballPredictionResult>('/api/prophet/qimen-football', {
+    result.value = await plainFetch<FootballPredictionResult>('/api/prophet/qimen-football', {
       method: 'POST',
       body: payload,
     })

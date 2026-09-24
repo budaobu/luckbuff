@@ -1,5 +1,15 @@
 import { checkInsightsAdminAuth } from '~~/server/utils/insights-admin-auth'
 
+const fetchSuggestions = $fetch as unknown as (
+  url: 'https://suggestqueries.google.com/complete/search',
+  options: {
+    query: { client: string; q: string; hl: string }
+    headers: Record<string, string>
+    responseType: 'text'
+    timeout: number
+  },
+) => Promise<string>
+
 export default defineEventHandler(async (event) => {
   checkInsightsAdminAuth(event)
 
@@ -14,7 +24,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Google 返回的 content-type 是 text/html（GB2312），但 body 实为 UTF-8 JSON，
     // 按 text 取回后手动解析，避免 ofetch 按 content-type 放弃解析。
-    const raw = await $fetch<string>('https://suggestqueries.google.com/complete/search', {
+    const raw = await fetchSuggestions('https://suggestqueries.google.com/complete/search', {
       query: { client: 'firefox', q, hl },
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',

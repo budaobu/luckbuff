@@ -252,7 +252,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/liunian/calc', {
+    const result = await plainFetch<CalcResult>('/api/liunian/calc', {
       method: 'POST',
       body: {
         birthDate: formValues.value.birthDate,

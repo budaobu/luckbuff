@@ -115,7 +115,7 @@ async function handleSubmit(values: FormValues) {
   phase.value = 'loading'
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<RokuseiSenjutsuResult>('/api/tools/rokusei-senjutsu/calc', {
+    result.value = await plainFetch<RokuseiSenjutsuResult>('/api/tools/rokusei-senjutsu/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

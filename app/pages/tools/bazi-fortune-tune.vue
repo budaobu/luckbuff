@@ -279,7 +279,7 @@ async function fetchReading() {
   reading.value = null
 
   try {
-    const result = await $fetch<BaziFortuneTuneReading>('/api/bazi-fortune-tune/reading', {
+    const result = await plainFetch<BaziFortuneTuneReading>('/api/bazi-fortune-tune/reading', {
       method: 'POST',
       body: {
         chart: chart.value,

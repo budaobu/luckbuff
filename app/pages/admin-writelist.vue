@@ -199,6 +199,11 @@ interface WritelistResponse {
   items: WritelistItem[]
 }
 
+const requestAdminApi = $fetch as unknown as <T>(
+  url: string,
+  options?: Record<string, unknown>,
+) => Promise<T>
+
 const unauthorized = ref(false)
 const pending = ref(true)
 const loading = ref(false)
@@ -270,7 +275,7 @@ function formatDate(iso: string): string {
 async function load(page?: number, { silent = false }: { silent?: boolean } = {}) {
   if (!silent) loading.value = true
   try {
-    const data = await $fetch<WritelistResponse>('/api/admin/writelist', {
+    const data = await requestAdminApi<WritelistResponse>('/api/admin/writelist', {
       query: {
         page: page ?? currentPage.value,
         pageSize: PAGE_SIZE,
@@ -320,7 +325,7 @@ async function addTitle() {
   fatalError.value = ''
   addFeedback.value = ''
   try {
-    const res = await $fetch<{ added: WritelistItem[]; errors: { title: string; error: string }[] }>('/api/admin/writelist', {
+    const res = await requestAdminApi<{ added: WritelistItem[]; errors: { title: string; error: string }[] }>('/api/admin/writelist', {
       method: 'POST',
       body: { titles: raw },
     })
@@ -345,7 +350,7 @@ async function toggleMode() {
   fatalError.value = ''
   const next = !settings.autoPublish
   try {
-    const res = await $fetch<{ settings: { autoPublish: boolean } }>('/api/admin/writelist/settings', {
+    const res = await requestAdminApi<{ settings: { autoPublish: boolean } }>('/api/admin/writelist/settings', {
       method: 'PUT',
       body: { autoPublish: next },
     })
@@ -361,7 +366,7 @@ async function runOnce() {
   running.value = true
   fatalError.value = ''
   try {
-    const res = await $fetch<{ result: { processed: boolean; status?: string; error?: string } }>('/api/admin/writelist/run', { method: 'POST' })
+    const res = await requestAdminApi<{ result: { processed: boolean; status?: string; error?: string } }>('/api/admin/writelist/run', { method: 'POST' })
     if (res.result.status === 'failed') {
       fatalError.value = `本轮写作失败：${res.result.error || '未知错误'}`
     }
@@ -377,7 +382,7 @@ async function runOnce() {
 
 async function retry(item: WritelistItem) {
   try {
-    await $fetch(`/api/admin/writelist/${item.id}`, { method: 'POST', body: { action: 'retry' } })
+    await requestAdminApi(`/api/admin/writelist/${item.id}`, { method: 'POST', body: { action: 'retry' } })
     await load()
     schedulePoll()
   } catch (e: any) {
@@ -388,7 +393,7 @@ async function retry(item: WritelistItem) {
 async function removeItem(item: WritelistItem) {
   if (!confirm(`确定把「${item.title}」移出队列吗？`)) return
   try {
-    await $fetch(`/api/admin/writelist/${item.id}`, { method: 'DELETE' })
+    await requestAdminApi(`/api/admin/writelist/${item.id}`, { method: 'DELETE' })
     await load()
   } catch (e: any) {
     fatalError.value = e?.data?.statusMessage || '移除失败'

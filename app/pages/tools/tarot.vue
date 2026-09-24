@@ -323,7 +323,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<TarotDrawResult>('/api/tools/tarot/draw', {
+    const result = await plainFetch<TarotDrawResult>('/api/tools/tarot/draw', {
       method: 'POST',
       body: {
         spread: form.spread,

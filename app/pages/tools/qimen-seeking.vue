@@ -402,7 +402,7 @@ async function handleSubmit() {
   lastPayload.value = payload
 
   try {
-    const result = await $fetch<QimenPanType>('/api/tools/qimen/generate', {
+    const result = await plainFetch<QimenPanType>('/api/tools/qimen/generate', {
       method: 'POST',
       body: payload,
     })

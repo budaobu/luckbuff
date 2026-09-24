@@ -428,7 +428,7 @@ async function handleSubmit() {
 
   // 请求结果
   try {
-    const result = await $fetch<DrawALotCalcResult>('/api/tools/mazu-lot/calc', {
+    const result = await plainFetch<DrawALotCalcResult>('/api/tools/mazu-lot/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),

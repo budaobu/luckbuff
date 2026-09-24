@@ -212,7 +212,7 @@ async function handleSubmit() {
 
   phase.value = 'loading'
   try {
-    result.value = await $fetch<NatalAstroResult>('/api/tools/natal-astro/calc', {
+    result.value = await plainFetch<NatalAstroResult>('/api/tools/natal-astro/calc', {
       method: 'POST',
       body: {
         birthDate: form.birthDate,

@@ -286,7 +286,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<WugeCalcResult>('/api/tools/wuge/calc', {
+    const result = await plainFetch<WugeCalcResult>('/api/tools/wuge/calc', {
       method: 'POST',
       body: {
         name: form.name.trim(),

@@ -111,7 +111,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/baosheng-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `baosheng-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/baosheng-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/baosheng-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

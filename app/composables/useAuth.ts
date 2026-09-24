@@ -2,6 +2,21 @@ import { authClient } from '~/lib/auth-client'
 import { useProfilesStore } from '~/stores/profiles'
 import type { UserProfile } from '~/types/user'
 
+type ProfilesSyncResponse = { ok: boolean; count: number }
+type AccountProfilesResponse = { profiles: UserProfile[] }
+
+const requestProfilesSync = $fetch as unknown as (
+  url: '/api/profiles',
+  options: { method: 'POST'; body: { localProfiles: UserProfile[] } },
+) => Promise<ProfilesSyncResponse>
+const requestAccountProfiles = $fetch as unknown as (
+  url: '/api/profiles',
+) => Promise<AccountProfilesResponse>
+const pushAccountProfiles = $fetch as unknown as (
+  url: '/api/profiles',
+  options: { method: 'POST'; body: { localProfiles: UserProfile[] } },
+) => Promise<void>
+
 // Debounce timer + unsubscribe handle for the live profile sync. Module-level
 // singletons so repeated useAuth() calls / component mounts don't stack up
 // multiple subscriptions.
@@ -36,7 +51,7 @@ export function useAuth() {
     if (!isLoggedIn.value) return { ok: false }
     try {
       const local = (profilesStore.list ?? []) as UserProfile[]
-      const res = await $fetch<{ ok: boolean; count: number }>('/api/profiles', {
+      const res = await requestProfilesSync('/api/profiles', {
         method: 'POST',
         body: { localProfiles: local },
       })
@@ -51,7 +66,7 @@ export function useAuth() {
   async function hydrateProfilesFromAccount(): Promise<void> {
     if (!isLoggedIn.value) return
     try {
-      const res = await $fetch<{ profiles: UserProfile[] }>('/api/profiles')
+      const res = await requestAccountProfiles('/api/profiles')
       if (Array.isArray(res.profiles)) {
         // Guard so the hydration assignment doesn't retrigger a sync-back.
         isHydrating = true
@@ -69,7 +84,7 @@ export function useAuth() {
   async function pushProfilesToAccount(): Promise<void> {
     if (!isLoggedIn.value) return
     try {
-      await $fetch('/api/profiles', {
+      await pushAccountProfiles('/api/profiles', {
         method: 'POST',
         body: { localProfiles: (profilesStore.list ?? []) as UserProfile[] },
       })

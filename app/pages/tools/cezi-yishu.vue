@@ -302,7 +302,7 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await $fetch<CeziYishuResult>('/api/tools/cezi-yishu/calc', {
+    const calcResult = await plainFetch<CeziYishuResult>('/api/tools/cezi-yishu/calc', {
       method: 'POST',
       body: payload,
     })

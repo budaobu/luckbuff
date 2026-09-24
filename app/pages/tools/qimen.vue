@@ -227,7 +227,7 @@ async function handleSubmit(payload: any) {
   interpretError.value = null
 
   try {
-    const result = await $fetch<QimenChartResponse>('/api/qimen/chart', {
+    const result = await plainFetch<QimenChartResponse>('/api/qimen/chart', {
       method: 'POST',
       body: apiPayload,
     })

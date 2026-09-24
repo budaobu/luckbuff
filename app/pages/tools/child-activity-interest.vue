@@ -444,7 +444,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<ChildActivityInterestCalcResult>('/api/tools/child-activity-interest/calc', {
+    const result = await plainFetch<ChildActivityInterestCalcResult>('/api/tools/child-activity-interest/calc', {
       method: 'POST',
       body: {
         gender: form.gender,

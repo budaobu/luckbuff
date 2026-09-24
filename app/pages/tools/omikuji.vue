@@ -235,7 +235,7 @@ async function drawLot() {
   }, 900)
 
   try {
-    const drawn = await $fetch<OmikujiCalcResult>('/api/tools/omikuji/calc', {
+    const drawn = await plainFetch<OmikujiCalcResult>('/api/tools/omikuji/calc', {
       method: 'POST',
       body: { question: question.value.trim(), locale: locale.value },
     })

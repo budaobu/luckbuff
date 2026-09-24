@@ -395,7 +395,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/tools/wuxing-chuanyi/calc', {
+    const result = await plainFetch<CalcResult>('/api/tools/wuxing-chuanyi/calc', {
       method: 'POST',
       body: {
         birthDate: formValues.value.birthDate,
@@ -443,7 +443,7 @@ async function handleNextDay() {
   aiError.value = null
 
   try {
-    const result = await $fetch<CalcResult>('/api/tools/wuxing-chuanyi/calc', {
+    const result = await plainFetch<CalcResult>('/api/tools/wuxing-chuanyi/calc', {
       method: 'POST',
       body: {
         birthDate: formValues.value.birthDate,

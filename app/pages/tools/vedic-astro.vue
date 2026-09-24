@@ -92,7 +92,7 @@ async function handleSubmit() {
 
   phase.value = 'loading'
   try {
-    result.value = await $fetch<VedicPaipanResult>('/api/tools/vedic-paipan/calc', {
+    result.value = await plainFetch<VedicPaipanResult>('/api/tools/vedic-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: formData.value.birthDate,

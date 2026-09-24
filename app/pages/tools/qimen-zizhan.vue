@@ -242,7 +242,7 @@ async function handleSubmit() {
   resultStatus.value = 'idle'
 
   try {
-    const result = await $fetch<QimenZizhanChart>('/api/tools/qimen-zizhan/chart', {
+    const result = await plainFetch<QimenZizhanChart>('/api/tools/qimen-zizhan/chart', {
       method: 'POST',
       body: {
         char,

@@ -181,7 +181,7 @@ async function handleSubmit() {
 
   phase.value = 'loading'
   try {
-    result.value = await $fetch<LifePathCalcResult>('/api/tools/lifepath-peidui/calc', {
+    result.value = await plainFetch<LifePathCalcResult>('/api/tools/lifepath-peidui/calc', {
       method: 'POST',
       body: { ...people.value, locale: locale.value },
     })

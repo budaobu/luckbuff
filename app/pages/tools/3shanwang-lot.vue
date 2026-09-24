@@ -428,7 +428,7 @@ async function handleSubmit() {
 
   // 请求结果
   try {
-    const result = await $fetch<DrawALotCalcResult>('/api/tools/3shanwang-lot/calc', {
+    const result = await plainFetch<DrawALotCalcResult>('/api/tools/3shanwang-lot/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),

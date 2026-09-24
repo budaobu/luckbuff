@@ -211,7 +211,7 @@ async function handleSubmit() {
   phase.value = 'loading'
   try {
     const location = await resolveLocation(form.value.location)
-    result.value = await $fetch<TiebanPaipanResult>('/api/tools/tieban-paipan/calc', {
+    result.value = await plainFetch<TiebanPaipanResult>('/api/tools/tieban-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: form.value.birthDate,

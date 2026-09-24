@@ -405,7 +405,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    const result = await $fetch<BztiBirthdayPersonalityCalcResult>('/api/tools/bzti-birthday-personality/calc', {
+    const result = await plainFetch<BztiBirthdayPersonalityCalcResult>('/api/tools/bzti-birthday-personality/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

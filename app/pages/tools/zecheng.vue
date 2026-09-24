@@ -303,7 +303,7 @@ const form = ref({
 })
 
 const { data: optionData } = await useAsyncData('zecheng-options', () =>
-  $fetch<{ origins: CityOption[], targets: CityOption[] }>('/api/tools/zecheng/options'),
+  plainFetch<{ origins: CityOption[], targets: CityOption[] }>('/api/tools/zecheng/options'),
 )
 const origins = computed(() => optionData.value?.origins ?? [])
 
@@ -337,7 +337,7 @@ async function submit() {
   loading.value = true
   error.value = ''
   try {
-    result.value = await $fetch<ZechengResponse>('/api/tools/zecheng/analyze', {
+    result.value = await plainFetch<ZechengResponse>('/api/tools/zecheng/analyze', {
       method: 'POST',
       body: {
         birth: {
