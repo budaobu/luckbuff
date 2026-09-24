@@ -117,6 +117,7 @@
 
         <JiaobeiTossWorkbench
           ref="workbenchRef"
+          :tosses="calcResult?.fortune.combo.split('')"
           @complete="onWorkbenchComplete"
         />
       </div>
@@ -376,30 +377,32 @@ async function handleSubmit() {
   aiError.value = null
 
   workbenchRef.value?.reset()
-}
 
-async function onWorkbenchComplete(combo: string) {
   try {
     const result = await plainFetch<JiaobeiCalcResult>('/api/tools/jiaobei/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),
         locale: locale.value,
-        combo,
       },
     })
 
     calcResult.value = result
-    phase.value = 'result'
-    setTimeout(() => startAiStream(), 300)
   } catch (err: any) {
-    phase.value = 'tossing'
+    phase.value = 'form'
     toast.add({
       title: t('jiaobei.drawFail'),
       description: err.data?.message || err.message || t('jiaobei.checkInput'),
       color: 'error',
     })
   }
+}
+
+function onWorkbenchComplete() {
+  if (!calcResult.value) return
+
+  phase.value = 'result'
+  setTimeout(() => startAiStream(), 300)
 }
 
 async function startAiStream() {

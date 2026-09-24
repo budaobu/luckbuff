@@ -63,7 +63,7 @@
         color="warning"
         size="lg"
         block
-        :disabled="tossing"
+        :disabled="tossing || !isSequenceReady"
         class="relative overflow-hidden shadow-lg shadow-[#c9a227]/10 hover:shadow-[#c9a227]/20 transition-all duration-300 mt-4"
         @click="doToss"
       >
@@ -111,6 +111,7 @@
         <div
           v-for="(record, index) in tossRecords"
           :key="index"
+          data-testid="toss-record"
           class="flex items-center gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--surface-card)] px-3 py-2"
         >
           <div class="shrink-0 w-12 text-center">
@@ -138,6 +139,10 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps<{
+  tosses?: string[]
+}>()
+
 const { t } = useI18n()
 
 interface TossSide {
@@ -153,7 +158,7 @@ interface TossRecord {
 }
 
 const emit = defineEmits<{
-  complete: [combo: string]
+  complete: []
 }>()
 
 const JiaobeiSceneLazy = defineAsyncComponent(() => import('~/components/JiaobeiScene.vue'))
@@ -166,20 +171,13 @@ const lastToss = ref<TossRecord | null>(null)
 
 const currentToss = computed(() => tossRecords.length + 1)
 const completed = computed(() => tossRecords.length >= 3)
+const isSequenceReady = computed(() => props.tosses?.length === 3)
 
 const SYMBOL_WEIGHTS: { key: 'holy' | 'laugh' | 'yin'; char: string; labelKey: string }[] = [
   { key: 'holy', char: '圣', labelKey: 'jiaobei.tossHoly' },
   { key: 'laugh', char: '笑', labelKey: 'jiaobei.tossLaugh' },
   { key: 'yin', char: '阴', labelKey: 'jiaobei.tossYin' },
 ]
-
-function randomSymbol(): typeof SYMBOL_WEIGHTS[number] {
-  const r = Math.random()
-  // 圣杯 ~1/2, 笑杯 ~1/4, 阴杯 ~1/4 (two independent cups: P(one flat one convex)=1/2)
-  if (r < 0.5) return SYMBOL_WEIGHTS[0]!
-  if (r < 0.75) return SYMBOL_WEIGHTS[1]!
-  return SYMBOL_WEIGHTS[2]!
-}
 
 function buildTossRecord(symbol: { key: 'holy' | 'laugh' | 'yin'; char: string; labelKey: string }): TossRecord {
   let sides: TossSide[]
@@ -209,15 +207,24 @@ function buildTossRecord(symbol: { key: 'holy' | 'laugh' | 'yin'; char: string; 
 }
 
 function doToss() {
-  if (tossing.value || completed.value) return
+  const symbolChar = props.tosses?.[tossRecords.length]
+  if (tossing.value || completed.value || !symbolChar) return
+
   tossing.value = true
-  const symbol = randomSymbol()
+  const symbol = SYMBOL_WEIGHTS.find(s => s.char === symbolChar)
+  if (!symbol) {
+    tossing.value = false
+    return
+  }
+
   currentTossSymbol.value = symbol.char
   animationTrigger.value++
 }
 
 function onAnimationComplete() {
-  const symbol = SYMBOL_WEIGHTS.find(s => s.char === currentTossSymbol.value)!
+  const symbol = SYMBOL_WEIGHTS.find(s => s.char === currentTossSymbol.value)
+  if (!symbol) return
+
   const record = buildTossRecord(symbol)
   tossRecords.push(record)
   lastToss.value = record
@@ -229,8 +236,7 @@ function onAnimationComplete() {
 }
 
 function emitComplete() {
-  const combo = tossRecords.map(r => r.comboChar).join('')
-  emit('complete', combo)
+  emit('complete')
 }
 
 function reset() {
@@ -254,6 +260,5 @@ function resultClass(symbol: string) {
 defineExpose({
   reset,
   isComplete: () => tossRecords.length === 3,
-  getCombo: () => tossRecords.map(r => r.comboChar).join(''),
 })
 </script>

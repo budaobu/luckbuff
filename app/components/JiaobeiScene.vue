@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="jiaobei-scene" />
+  <div ref="container" class="jiaobei-scene" :data-state="animationState" />
 </template>
 
 <script setup lang="ts">
@@ -11,6 +11,7 @@ const props = defineProps<{
   toss?: string
   trigger?: number
   duration?: number
+  holdAfterComplete?: number
 }>()
 
 const emit = defineEmits<{
@@ -18,6 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const container = ref<HTMLDivElement>()
+const animationState = ref<'loading' | 'running' | 'settled'>('loading')
 const modelUrl = '/models/jiaobei/jiaobei.gltf'
 
 onMounted(async () => {
@@ -94,6 +96,7 @@ onMounted(async () => {
   let cupMaterial: THREE.Material | null = null
   let disposed = false
   let completed = false
+  let completeTimeoutId: number | null = null
   let rafId: number | null = null
   let startedAt = 0
   let settledAt = Number.POSITIVE_INFINITY
@@ -122,6 +125,7 @@ onMounted(async () => {
   onBeforeUnmount(() => {
     disposed = true
     if (rafId) cancelAnimationFrame(rafId)
+    if (completeTimeoutId !== null) window.clearTimeout(completeTimeoutId)
     resizeObserver?.disconnect()
     cups.forEach(cup => world.removeBody(cup.body))
     world.removeBody(physicsGround)
@@ -243,7 +247,10 @@ onMounted(async () => {
   function finish() {
     if (completed) return
     completed = true
-    emit('complete')
+    completeTimeoutId = window.setTimeout(() => {
+      completeTimeoutId = null
+      emit('complete')
+    }, Math.max(0, props.holdAfterComplete ?? 450))
   }
 
   function frame(now: number) {
@@ -267,6 +274,7 @@ onMounted(async () => {
     const duration = Math.max(1.8, Math.min(props.duration ?? 2200, 4000) / 1000)
     if ((elapsed >= duration && cupsAreStable()) || elapsed >= duration + 0.7) {
       renderOnce()
+      animationState.value = 'settled'
       finish()
       return
     }
@@ -279,6 +287,11 @@ onMounted(async () => {
     if (disposed || completed || cups.length === 0) return
     if (rafId) cancelAnimationFrame(rafId)
     completed = false
+    animationState.value = 'running'
+    if (completeTimeoutId !== null) {
+      window.clearTimeout(completeTimeoutId)
+      completeTimeoutId = null
+    }
     startedAt = performance.now()
     previousElapsed = 0
     settledAt = Number.POSITIVE_INFINITY
@@ -297,6 +310,7 @@ onMounted(async () => {
 
     prepareThrow(source)
     renderOnce()
+    animationState.value = 'running'
     startThrow()
   }
   catch (error) {
