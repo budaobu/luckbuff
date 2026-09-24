@@ -380,7 +380,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    const result = await $fetch<BaziPersonalityMapCalcResult>('/api/tools/bazi-personality-map/calc', {
+    const result = await plainFetch<BaziPersonalityMapCalcResult>('/api/tools/bazi-personality-map/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

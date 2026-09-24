@@ -162,7 +162,7 @@ async function handleSubmit() {
   phase.value = 'loading'
   isSubmitting.value = true
   try {
-    result.value = await $fetch<ThaiAstroChartResult>('/api/tools/thai-astro-paipan/calc', {
+    result.value = await plainFetch<ThaiAstroChartResult>('/api/tools/thai-astro-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: form.birthDate,

@@ -107,7 +107,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/wenshu-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `wenshu-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/wenshu-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/wenshu-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

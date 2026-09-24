@@ -103,7 +103,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/guanyin-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `guanyin-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/guanyin-lots/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/guanyin-lots/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

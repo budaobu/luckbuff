@@ -193,6 +193,10 @@ const props = defineProps<{
 const route = useRoute()
 const localePath = useLocalePath()
 const { t } = useI18n()
+const requestShelfChapter = $fetch as unknown as (
+  url: string,
+  options: { query: { chapter: number } },
+) => Promise<{ sections: ShelfSection[] }>
 const currentChapter = ref(props.initial.chapterIndex)
 const currentSection = ref(props.initial.sectionIndex)
 const chapterLoading = ref(false)
@@ -279,7 +283,7 @@ async function loadChapter(chapterIndex: number, sectionIndex: number) {
 
   try {
     if (!loadedSections[chapterIndex]) {
-      const response = await $fetch<{ sections: ShelfSection[] }>(
+      const response = await requestShelfChapter(
         `/api/shelf/books/${props.initial.book.id}/chapter`,
         { query: { chapter: chapterIndex } },
       )
@@ -313,7 +317,7 @@ async function toggleChapter(chapterIndex: number, retry = false) {
   sectionLoading.value = chapterIndex
   delete sectionErrors[chapterIndex]
   try {
-    const response = await $fetch<{ sections: ShelfSection[] }>(
+    const response = await requestShelfChapter(
       `/api/shelf/books/${props.initial.book.id}/chapter`,
       { query: { chapter: chapterIndex } },
     )

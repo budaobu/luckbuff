@@ -123,7 +123,7 @@ async function handleSubmit() {
 
   phase.value = 'loading'
   try {
-    result.value = await $fetch<HuangjiPaipanResult>('/api/tools/huangji-paipan/calc', {
+    result.value = await plainFetch<HuangjiPaipanResult>('/api/tools/huangji-paipan/calc', {
       method: 'POST',
       body: { year },
     })

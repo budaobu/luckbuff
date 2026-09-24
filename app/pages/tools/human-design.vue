@@ -212,7 +212,7 @@ async function handleSubmit() {
       location = await resolveLocation(form.location.trim())
     }
 
-    result.value = await $fetch<HumanDesignChartResult>('/api/tools/human-design/calc', {
+    result.value = await plainFetch<HumanDesignChartResult>('/api/tools/human-design/calc', {
       method: 'POST',
       body: {
         birthDate: form.birthDate,

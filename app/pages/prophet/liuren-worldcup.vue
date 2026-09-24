@@ -349,7 +349,7 @@ const toast = useToast()
 
 // ============ 赛程数据 ============
 const { data: fixturesData, status: fixturesStatus } = await useAsyncData('liuren-worldcup-fixtures', () =>
-  $fetch<WorldCupFixturesData>('/api/prophet/worldcup-fixtures', { query: { lang: locale.value } })
+  plainFetch<WorldCupFixturesData>('/api/prophet/worldcup-fixtures', { query: { lang: locale.value } })
 )
 
 const fixturesLoading = computed(() => fixturesStatus.value === 'pending')
@@ -493,7 +493,7 @@ async function handleSubmit() {
   interpretError.value = null
 
   try {
-    const res = await $fetch<LiurenChartData>('/api/prophet/liuren-worldcup/chart', {
+    const res = await plainFetch<LiurenChartData>('/api/prophet/liuren-worldcup/chart', {
       method: 'POST',
       body: {
         homeTeam: selectedMatch.value.homeTeam,

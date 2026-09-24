@@ -288,7 +288,7 @@ async function handleSubmit(payload: LiurenChartRequest) {
   interpretError.value = null
 
   try {
-    const result = await $fetch<LiurenChartResponse>('/api/liuren/chart', {
+    const result = await plainFetch<LiurenChartResponse>('/api/liuren/chart', {
       method: 'POST',
       body: payload,
     })

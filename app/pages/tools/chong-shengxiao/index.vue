@@ -500,7 +500,7 @@ onMounted(() => {
 })
 
 async function doCalc() {
-  const result = await $fetch<CalcResult>('/api/tools/chong-shengxiao/calc', {
+  const result = await plainFetch<CalcResult>('/api/tools/chong-shengxiao/calc', {
     method: 'POST',
     body: {
       birthDate: formValues.value.birthDate,

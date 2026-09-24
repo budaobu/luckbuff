@@ -151,7 +151,7 @@ async function handleSubmit() {
       throw new Error(t('thaiBuddha.locationFail'))
     }
 
-    result.value = await $fetch<ThaiBuddhaResult>('/api/tools/thai-buddha/calc', {
+    result.value = await plainFetch<ThaiBuddhaResult>('/api/tools/thai-buddha/calc', {
       method: 'POST',
       body: {
         birthDate: form.birthDate,

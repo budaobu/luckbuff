@@ -46,7 +46,7 @@ async function startAnalysis() {
   abortController = new AbortController()
 
   try {
-    const calcResult = await $fetch<import('~/types/astro-fortune-tune').AstroFortuneTuneCalcResult>('/api/tools/astro-fortune-tune/calc', {
+    const calcResult = await plainFetch<import('~/types/astro-fortune-tune').AstroFortuneTuneCalcResult>('/api/tools/astro-fortune-tune/calc', {
       method: 'POST',
       body: {
         birthDate: formData.value.birthDate,

@@ -38,7 +38,7 @@ async function startAnalysis() {
   abortController = new AbortController()
 
   try {
-    const calcResult = await $fetch<VedicHepanCalcResult>('/api/tools/vedic-hepan/calc', {
+    const calcResult = await plainFetch<VedicHepanCalcResult>('/api/tools/vedic-hepan/calc', {
       method: 'POST',
       body: {
         personA: {

@@ -124,7 +124,7 @@ async function handleSubmit(values: FormValues) {
   phase.value = 'loading'
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<SukuyoPaipanResult>('/api/tools/sukuyo-paipan/calc', {
+    result.value = await plainFetch<SukuyoPaipanResult>('/api/tools/sukuyo-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

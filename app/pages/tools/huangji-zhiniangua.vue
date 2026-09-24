@@ -228,7 +228,7 @@ async function runCalc(year: number) {
   aiError.value = null
 
   try {
-    const result = await $fetch<ZhinianguaResult>('/api/tools/huangji-zhiniangua/calc', {
+    const result = await plainFetch<ZhinianguaResult>('/api/tools/huangji-zhiniangua/calc', {
       method: 'POST',
       body: { year },
     })

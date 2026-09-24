@@ -263,7 +263,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    const result = await $fetch<ZipingBaziChart>('/api/tools/ziping-bazi/calc', {
+    const result = await plainFetch<ZipingBaziChart>('/api/tools/ziping-bazi/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

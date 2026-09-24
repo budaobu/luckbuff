@@ -171,7 +171,7 @@ async function handleSubmit() {
   try {
     const location = await resolveLocation(form.value.location)
     const timezone = location?.timezone || timeCardRef.value?.timezone || browserTimezone()
-    result.value = await $fetch<TaiyiPaipanResult>('/api/tools/taiyi-paipan/calc', {
+    result.value = await plainFetch<TaiyiPaipanResult>('/api/tools/taiyi-paipan/calc', {
       method: 'POST',
       body: {
         datetime,

@@ -233,7 +233,7 @@ async function drawLot() {
 
   try {
     const [response] = await Promise.all([
-      $fetch<DrawResult>('/api/tools/guandi-lot/calc', {
+      plainFetch<DrawResult>('/api/tools/guandi-lot/calc', {
         method: 'POST',
         body: { question: question.value.trim(), locale: locale.value },
       }),

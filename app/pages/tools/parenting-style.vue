@@ -365,7 +365,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    const result = await $fetch<ParentingStyleCalcResult>('/api/tools/parenting-style/calc', {
+    const result = await plainFetch<ParentingStyleCalcResult>('/api/tools/parenting-style/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

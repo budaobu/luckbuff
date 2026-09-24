@@ -309,7 +309,7 @@ function compactAlmanacContext(day: TodayAlmanac) {
 }
 
 async function fetchDay(date: string): Promise<TodayAlmanac> {
-  return $fetch<TodayAlmanac>('/api/tools/jinri-huangli/calc', {
+  return plainFetch<TodayAlmanac>('/api/tools/jinri-huangli/calc', {
     method: 'POST',
     body: { date },
   })

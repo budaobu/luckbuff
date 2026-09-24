@@ -65,10 +65,16 @@ import { HOROSCOPE_ZODIAC_SIGNS } from '~/utils/horoscope/signs'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
-const { data, error } = await useFetch<HoroscopeTopicResult>('/api/horoscope', {
-  key: 'horoscope-topic-today',
-  query: { locale },
-})
+const requestHoroscopeTopic = $fetch as unknown as (
+  url: '/api/horoscope',
+  options?: { query: { locale: string } },
+) => Promise<HoroscopeTopicResult>
+
+const { data, error } = await useAsyncData(
+  'horoscope-topic-today',
+  () => requestHoroscopeTopic('/api/horoscope', { query: { locale: locale.value } }),
+  { watch: [locale] },
+)
 
 function zodiacName(index: number) {
   return locale.value === 'en'

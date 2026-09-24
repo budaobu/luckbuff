@@ -539,7 +539,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<ParentChildBaziCalcResult>('/api/tools/parent-child-bazi/calc', {
+    const result = await plainFetch<ParentChildBaziCalcResult>('/api/tools/parent-child-bazi/calc', {
       method: 'POST',
       body: {
         parent: {

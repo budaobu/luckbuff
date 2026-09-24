@@ -470,7 +470,7 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await $fetch<XiaoLiurenResult>('/api/tools/xiao-liuren/calc', {
+    const calcResult = await plainFetch<XiaoLiurenResult>('/api/tools/xiao-liuren/calc', {
       method: 'POST',
       body: payload,
     })

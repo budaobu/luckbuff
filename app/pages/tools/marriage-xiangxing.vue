@@ -550,7 +550,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<MarriageXiangxingCalcResult>('/api/tools/marriage-xiangxing/calc', {
+    const result = await plainFetch<MarriageXiangxingCalcResult>('/api/tools/marriage-xiangxing/calc', {
       method: 'POST',
       body: {
         personA: {

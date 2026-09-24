@@ -99,7 +99,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/guandi-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `guandi-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/guandi-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/guandi-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

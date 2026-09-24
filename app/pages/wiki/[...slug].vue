@@ -68,8 +68,8 @@ const { data, error } = await useAsyncData(
   () => `wiki-entry-${locale.value}-${slugSegments.value.join('/')}`,
   async () => {
     const [entry, index] = await Promise.all([
-      $fetch<WikiEntryDetail>(requestPath.value, { query: { locale: locale.value } }),
-      $fetch<{ entries: WikiEntryMeta[] }>('/api/wiki', { query: { locale: locale.value } }),
+      plainFetch<WikiEntryDetail>(requestPath.value, { query: { locale: locale.value } }),
+      plainFetch<{ entries: WikiEntryMeta[] }>('/api/wiki', { query: { locale: locale.value } }),
     ])
     return { entry, entries: index.entries } satisfies WikiDetailResponse
   },

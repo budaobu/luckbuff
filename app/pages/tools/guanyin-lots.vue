@@ -353,7 +353,7 @@ async function handleSubmit() {
 
   // 请求结果
   try {
-    const result = await $fetch<DrawALotCalcResult>('/api/tools/guanyin-lots/calc', {
+    const result = await plainFetch<DrawALotCalcResult>('/api/tools/guanyin-lots/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),

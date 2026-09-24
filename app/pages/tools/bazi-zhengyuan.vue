@@ -304,7 +304,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    const result = await $fetch<BaziZhengyuanCalcResult>('/api/tools/bazi-zhengyuan/calc', {
+    const result = await plainFetch<BaziZhengyuanCalcResult>('/api/tools/bazi-zhengyuan/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

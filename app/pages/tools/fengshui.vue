@@ -413,7 +413,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<KanyuCalcResult>('/api/tools/fengshui/calc', {
+    const result = await plainFetch<KanyuCalcResult>('/api/tools/fengshui/calc', {
       method: 'POST',
       body: {
         gender: form.gender,

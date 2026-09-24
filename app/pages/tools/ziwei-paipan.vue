@@ -124,7 +124,7 @@ async function handleSubmit(values: FormValues) {
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<ZiweiChartResult>('/api/tools/ziwei-paipan/calc', {
+    result.value = await plainFetch<ZiweiChartResult>('/api/tools/ziwei-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

@@ -63,14 +63,19 @@
 import type { ShelfBook } from '~~/server/utils/shelf'
 import type { ShelfSeoEntry } from '~~/server/utils/shelf'
 
+interface ShelfBooksResponse {
+  books: ShelfBook[]
+  seo: ShelfSeoEntry
+}
+
 const { t } = useI18n()
 const query = ref('')
 const activeCategory = ref('')
 
-const { data, error, pending, refresh } = await useAsyncData(
+const { data, error, pending, refresh } = await useAsyncData<ShelfBooksResponse>(
   'shelf-books',
   async () => {
-    const response = await $fetch<{ books: ShelfBook[]; seo: ShelfSeoEntry }>('/api/shelf/books')
+    const response = await plainFetch<ShelfBooksResponse>('/api/shelf/books')
     return response
   },
 )

@@ -146,7 +146,7 @@ async function handleSubmit() {
   try {
     const location = await resolveLocation(form.value.location)
     const timezone = location?.timezone || timeCardRef.value?.timezone || browserTimezone()
-    result.value = await $fetch<QimenPaipanResult>('/api/tools/qimen-paipan/calc', {
+    result.value = await plainFetch<QimenPaipanResult>('/api/tools/qimen-paipan/calc', {
       method: 'POST',
       body: {
         datetime,

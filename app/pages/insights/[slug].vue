@@ -196,6 +196,17 @@ interface InsightListItem {
   readingTime: number
 }
 
+const requestInsightDetail = $fetch as unknown as (
+  url: string,
+) => Promise<InsightDetail>
+const requestInsightList = $fetch as unknown as (
+  url: string,
+) => Promise<{ articles: InsightListItem[] }>
+const requestInsightView = $fetch as unknown as (
+  url: string,
+  options: { method: 'POST' },
+) => Promise<{ total: number }>
+
 const route = useRoute()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -203,9 +214,9 @@ const localePath = useLocalePath()
 const slug = computed(() => route.params.slug as string)
 const pageUrl = useLocalizedSeoUrl(() => `/insights/${slug.value}`)
 
-const { data: article, pending, error } = await useAsyncData(
+const { data: article, pending, error } = await useAsyncData<InsightDetail>(
   () => `insight-${slug.value}-${locale.value}`,
-  () => $fetch<InsightDetail>(`/api/insights/${slug.value}?lang=${locale.value}`),
+  () => requestInsightDetail(`/api/insights/${slug.value}?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
 
@@ -309,7 +320,7 @@ onMounted(async () => {
     sessionStorage.setItem(key, '1')
   } catch { /* storage 不可用则照常计数 */ }
   try {
-    const res = await $fetch<{ total: number }>(`/api/insights/${slug.value}/view`, { method: 'POST' })
+    const res = await requestInsightView(`/api/insights/${slug.value}/view`, { method: 'POST' })
     viewCount.value = res.total
   } catch { /* 计数失败不影响阅读 */ }
 })
@@ -505,9 +516,9 @@ const sidebarTools = computed<InsightToolCard[]>(() => {
 })
 
 // ── 相关文章：按共享 tag 数打分，同分按发布日期，零分用最新发布兜底 ──
-const { data: insightList } = await useAsyncData(
+const { data: insightList } = await useAsyncData<{ articles: InsightListItem[] }>(
   () => `insights-list-${locale.value}`,
-  () => $fetch<{ articles: InsightListItem[] }>(`/api/insights?lang=${locale.value}`),
+  () => requestInsightList(`/api/insights?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
 

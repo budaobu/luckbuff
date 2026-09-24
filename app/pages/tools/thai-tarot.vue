@@ -131,7 +131,7 @@ async function handleSubmit() {
   phase.value = 'loading'
   isSubmitting.value = true
   try {
-    result.value = await $fetch<ThaiTarotResult>('/api/tools/thai-tarot/calc', {
+    result.value = await plainFetch<ThaiTarotResult>('/api/tools/thai-tarot/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),

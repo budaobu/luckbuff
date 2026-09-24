@@ -7,6 +7,10 @@ export interface GeoResult {
 
 const cache = new Map<string, { value: GeoResult; expiresAt: number }>()
 const TTL_MS = 24 * 60 * 60 * 1000
+const requestJson = $fetch as unknown as (
+  url: string,
+  options?: { params?: Record<string, unknown>; headers?: Record<string, string> },
+) => Promise<any>
 
 function isChinese(text: string): boolean {
   return /[一-龥]/.test(text)
@@ -15,7 +19,7 @@ function isChinese(text: string): boolean {
 async function viaOpenMeteo(query: string): Promise<GeoResult | null> {
   if (isChinese(query)) return null
   try {
-    const data = await $fetch<any>('https://geocoding-api.open-meteo.com/v1/search', {
+    const data = await requestJson('https://geocoding-api.open-meteo.com/v1/search', {
       params: { name: query, count: 1, language: 'en', format: 'json' },
     })
     const hit = data?.results?.[0]
@@ -33,7 +37,7 @@ async function viaOpenMeteo(query: string): Promise<GeoResult | null> {
 
 async function viaNominatim(query: string): Promise<GeoResult | null> {
   try {
-    const data = await $fetch<any[]>('https://nominatim.openstreetmap.org/search', {
+    const data = await requestJson('https://nominatim.openstreetmap.org/search', {
       params: { q: query, format: 'json', limit: 1, 'accept-language': 'zh' },
       headers: { 'User-Agent': 'luckbuff/1.0 (https://www.ososn.com)' },
     })
@@ -51,7 +55,7 @@ async function viaNominatim(query: string): Promise<GeoResult | null> {
 
 async function timezoneFromCoords(lat: number, lng: number): Promise<string | null> {
   try {
-    const data = await $fetch<any>('https://api.open-meteo.com/v1/forecast', {
+    const data = await requestJson('https://api.open-meteo.com/v1/forecast', {
       params: { latitude: lat, longitude: lng, timezone: 'auto', current: 'temperature_2m' },
     })
     return typeof data?.timezone === 'string' && data.timezone ? data.timezone : null

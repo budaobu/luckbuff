@@ -464,7 +464,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<FishTankCalcResult>('/api/tools/fengshui-fish-tank/calc', {
+    const result = await plainFetch<FishTankCalcResult>('/api/tools/fengshui-fish-tank/calc', {
       method: 'POST',
       body: {
         direction: form.direction,

@@ -837,7 +837,7 @@ async function generate() {
   generating.value = true
   try {
     const b = resolvedBirth.value
-    const res = await $fetch<NamingResult>('/api/tools/baby-naming/calc', {
+    const res = await plainFetch<NamingResult>('/api/tools/baby-naming/calc', {
       method: 'POST',
       body: {
         surname: form.surname.trim(),

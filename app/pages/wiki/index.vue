@@ -91,7 +91,7 @@ const activeCategory = ref('')
 
 const { data, pending } = await useAsyncData(
   () => `wiki-index-${locale.value}`,
-  () => $fetch<WikiIndexResponse>('/api/wiki', { query: { locale: locale.value } }),
+  () => plainFetch<WikiIndexResponse>('/api/wiki', { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

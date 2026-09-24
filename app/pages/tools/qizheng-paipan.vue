@@ -118,7 +118,7 @@ async function handleSubmit(values: FormValues) {
   phase.value = 'loading'
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<QizhengPaipanResult>('/api/tools/qizheng-paipan/calc', {
+    result.value = await plainFetch<QizhengPaipanResult>('/api/tools/qizheng-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,

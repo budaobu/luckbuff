@@ -107,7 +107,7 @@ const pageUrl = useLocalizedSeoUrl(() => `/tools/tudigong-lots/${sign.value}`)
 
 const { data: lot, error } = await useAsyncData(
   () => `tudigong-lot-${sign.value}-${locale.value}`,
-  () => $fetch<LotResponse>(`/api/tools/tudigong-lot/${sign.value}`, { query: { locale: locale.value } }),
+  () => plainFetch<LotResponse>(`/api/tools/tudigong-lot/${sign.value}`, { query: { locale: locale.value } }),
   { server: true, watch: [locale] },
 )
 

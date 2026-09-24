@@ -342,7 +342,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<LenormandDrawResult>('/api/tools/lenormand/draw', {
+    const result = await plainFetch<LenormandDrawResult>('/api/tools/lenormand/draw', {
       method: 'POST',
       body: {
         spread: form.spread,

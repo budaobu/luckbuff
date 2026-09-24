@@ -190,7 +190,7 @@ async function handleSubmit() {
   try {
     const location = await resolveLocation(form.value.location)
     const timezone = location?.timezone || timeCardRef.value?.timezone || browserTimezone()
-    result.value = await $fetch<LiurenPaipanResult>('/api/tools/liuren-paipan/calc', {
+    result.value = await plainFetch<LiurenPaipanResult>('/api/tools/liuren-paipan/calc', {
       method: 'POST',
       body: {
         datetime,

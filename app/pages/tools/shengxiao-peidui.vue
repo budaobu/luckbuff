@@ -358,7 +358,7 @@ const selectUi = {
 }
 
 async function doCalc() {
-  const result = await $fetch<CalcResult>('/api/tools/shengxiao-peidui/calc', {
+  const result = await plainFetch<CalcResult>('/api/tools/shengxiao-peidui/calc', {
     method: 'POST',
     body: {
       male: form.value.male,

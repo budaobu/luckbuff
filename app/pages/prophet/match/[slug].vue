@@ -230,9 +230,9 @@ function translateTeamName(name: string): string {
 const homeTeamName = computed(() => prediction.value ? translateTeamName(prediction.value.homeTeam) : '')
 const awayTeamName = computed(() => prediction.value ? translateTeamName(prediction.value.awayTeam) : '')
 
-const { data: prediction, pending, error } = await useAsyncData(
+const { data: prediction, pending, error } = await useAsyncData<WorldcupPrediction>(
   () => `match-prediction-${slug.value}-${locale.value}`,
-  () => $fetch<WorldcupPrediction>(`/api/prophet/worldcup-prediction/${slug.value}?lang=${locale.value}`),
+  () => plainFetch<WorldcupPrediction>(`/api/prophet/worldcup-prediction/${slug.value}?lang=${locale.value}`),
   { server: true, watch: [locale] }
 )
 

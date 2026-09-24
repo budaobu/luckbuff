@@ -380,7 +380,7 @@ async function handleSubmit() {
 
 async function onWorkbenchComplete(combo: string) {
   try {
-    const result = await $fetch<JiaobeiCalcResult>('/api/tools/jiaobei/calc', {
+    const result = await plainFetch<JiaobeiCalcResult>('/api/tools/jiaobei/calc', {
       method: 'POST',
       body: {
         question: form.question.trim(),

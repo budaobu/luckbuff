@@ -263,7 +263,7 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await $fetch<LiuyaoCeziResult>('/api/tools/liuyao-cezi/calc', {
+    const calcResult = await plainFetch<LiuyaoCeziResult>('/api/tools/liuyao-cezi/calc', {
       method: 'POST',
       body: payload,
     })

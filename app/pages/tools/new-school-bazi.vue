@@ -156,7 +156,7 @@ async function handleSubmit(values: FormValues) {
   aiError.value = null
 
   try {
-    chart.value = await $fetch<NewSchoolBaziChart>('/api/tools/new-school-bazi/calc', {
+    chart.value = await plainFetch<NewSchoolBaziChart>('/api/tools/new-school-bazi/calc', {
       method: 'POST',
       body: {
         gender: values.gender,

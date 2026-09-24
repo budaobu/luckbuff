@@ -134,6 +134,10 @@ interface CalendarDay {
 const loading = ref(true)
 const currentYear = ref(new Date().getFullYear())
 const currentMonth = ref(new Date().getMonth() + 1)
+const requestCalendarDays = $fetch as unknown as (
+  url: '/api/tools/fortune-calendar/days',
+  options: { method: 'POST'; body: { startDate: string; endDate: string } },
+) => Promise<any>
 const days = ref<CalendarDay[]>([])
 const selectedDate = ref<string | null>(null)
 
@@ -219,7 +223,7 @@ async function fetchMonth() {
   const endDate = `${currentYear.value}-${String(currentMonth.value).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`
 
   try {
-    const res = await $fetch<any>('/api/tools/fortune-calendar/days', {
+    const res = await requestCalendarDays('/api/tools/fortune-calendar/days', {
       method: 'POST',
       body: { startDate, endDate },
     })

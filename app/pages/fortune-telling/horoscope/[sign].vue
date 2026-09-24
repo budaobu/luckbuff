@@ -44,10 +44,16 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const slug = computed(() => String(route.params.sign))
 
-const { data: result, error } = await useFetch<HoroscopeResult>(() => `/api/horoscope/${slug.value}`, {
-  key: `horoscope-${slug.value}`,
-  query: { locale },
-})
+const requestHoroscopeDetail = $fetch as unknown as (
+  url: string,
+  options?: { query: { locale: string } },
+) => Promise<HoroscopeResult>
+
+const { data: result, error } = await useAsyncData(
+  `horoscope-${slug.value}`,
+  () => requestHoroscopeDetail(`/api/horoscope/${slug.value}`, { query: { locale: locale.value } }),
+  { watch: [slug, locale] },
+)
 
 const shareSummary = computed(() => {
   if (!result.value) return undefined

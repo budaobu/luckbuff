@@ -124,7 +124,7 @@ async function handleSubmit(values: FormValues) {
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await $fetch<ZibaifeixingResult>('/api/tools/zibaifeixing-paipan/calc', {
+    result.value = await plainFetch<ZibaifeixingResult>('/api/tools/zibaifeixing-paipan/calc', {
       method: 'POST',
       body: {
         date: values.birthDate,

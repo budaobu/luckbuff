@@ -324,7 +324,7 @@ async function handleSubmit() {
   aiError.value = null
 
   try {
-    const result = await $fetch<TaiyiChartResult>('/api/tools/taiyi/calc', {
+    const result = await plainFetch<TaiyiChartResult>('/api/tools/taiyi/calc', {
       method: 'POST',
       body: {
         birthYear: parsed.year,

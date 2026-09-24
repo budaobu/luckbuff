@@ -498,7 +498,7 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await $fetch<JinkoujueResult>('/api/tools/jinkoujue/calc', {
+    const calcResult = await plainFetch<JinkoujueResult>('/api/tools/jinkoujue/calc', {
       method: 'POST',
       body: payload,
     })

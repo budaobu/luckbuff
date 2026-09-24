@@ -1,9 +1,11 @@
 <template>
-  <div ref="container" class="jiaobei-scene w-full h-full" />
+  <div ref="container" class="jiaobei-scene" />
 </template>
 
 <script setup lang="ts">
 import * as THREE from 'three'
+import * as CANNON from 'cannon-es'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 const props = defineProps<{
   toss?: string
@@ -12,316 +14,304 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'complete'): void
+  complete: []
 }>()
 
 const container = ref<HTMLDivElement>()
+const modelUrl = '/models/jiaobei/jiaobei.gltf'
 
-onMounted(() => {
+onMounted(async () => {
   if (!container.value) return
 
-  const width = container.value.clientWidth
-  const height = container.value.clientHeight
+  const root = container.value
+  const width = root.clientWidth || 640
+  const height = root.clientHeight || 280
   const scene = new THREE.Scene()
-  scene.background = null
-
-  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
-  camera.position.set(0, 4.5, 7.5)
-  camera.lookAt(0, 0, 0)
+  const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 30)
+  camera.position.set(0, 2.8, 4.9)
+  camera.lookAt(0, 0.18, 0)
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setSize(width, height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
-  container.value.appendChild(renderer.domElement)
+  renderer.shadowMap.type = THREE.PCFShadowMap
+  renderer.toneMapping = THREE.ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.16
+  root.appendChild(renderer.domElement)
 
-  // Lights
-  const ambient = new THREE.AmbientLight(0xffffff, 0.6)
-  scene.add(ambient)
-  const dir = new THREE.DirectionalLight(0xfff4e0, 1.2)
-  dir.position.set(3, 6, 4)
-  dir.castShadow = true
-  dir.shadow.mapSize.set(1024, 1024)
-  scene.add(dir)
-  const rim = new THREE.DirectionalLight(0xe8d5ff, 0.5)
-  rim.position.set(-3, 2, -4)
-  scene.add(rim)
+  const ambient = new THREE.AmbientLight(0xfff8ec, 0.55)
+  const hemisphere = new THREE.HemisphereLight(0xfff6e3, 0x2a1a09, 0.85)
+  const keyLight = new THREE.DirectionalLight(0xfff1d5, 2.1)
+  keyLight.position.set(2.4, 5.2, 3.6)
+  keyLight.castShadow = true
+  keyLight.shadow.mapSize.set(1024, 1024)
+  keyLight.shadow.camera.left = -4
+  keyLight.shadow.camera.right = 4
+  keyLight.shadow.camera.top = 4
+  keyLight.shadow.camera.bottom = -4
+  const rimLight = new THREE.DirectionalLight(0xd9c8ff, 0.8)
+  rimLight.position.set(-3.2, 2, -4)
+  scene.add(ambient, hemisphere, keyLight, rimLight)
 
-  // Ground
-  const groundGeo = new THREE.PlaneGeometry(12, 12)
-  const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x1a1510,
-    roughness: 0.9,
-    metalness: 0,
-    transparent: true,
-    opacity: 0.35,
-  })
-  const ground = new THREE.Mesh(groundGeo, groundMat)
+  const groundGeometry = new THREE.CircleGeometry(3.0, 72)
+  const groundMaterial = new THREE.ShadowMaterial({ opacity: 0.16 })
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial)
   ground.rotation.x = -Math.PI / 2
-  ground.position.y = -0.02
   ground.receiveShadow = true
   scene.add(ground)
 
-  /**
-   * 真实筊杯几何特征：
-   * - 整体呈 3D 新月/半月形：中间圆润、两端渐尖
-   * - 俯视轮廓：外弧凸出、内弧凹入，交汇成两个尖角
-   * - 阳面（平面）：一侧整体平坦，略有木器打磨感
-   * - 阴面（凸面）：另一侧中央明显弧形凸起，向边缘和两端逐渐变薄
-   * - 比例：长约手掌大小，中部最宽最厚，尖端最薄
-   *
-   * 当前实现：用两个相交圆弧的差集作为俯视轮廓；
-   * 外弧半径 R、半张角 alpha，内弧半径 r、中心偏移 d，
-   * beta 由端点连续条件 R sin alpha = r sin beta 解出，
-   * d = R cos alpha - r cos beta 保证两端平滑汇成尖角。
-   */
-  function createCrescentShape() {
-    const R = 1.5
-    const alpha = 0.82
-    const r = 1.18
-    const beta = Math.asin(Math.min(1, (R / r) * Math.sin(alpha)))
-    const d = R * Math.cos(alpha) - r * Math.cos(beta)
+  const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -26, 0) })
+  world.broadphase = new CANNON.SAPBroadphase(world)
+  world.allowSleep = true
+  ;(world.solver as CANNON.GSSolver).iterations = 14
 
-    const shape = new THREE.Shape()
-    shape.absarc(0, 0, R, -alpha, alpha, false)
-    const hole = new THREE.Path()
-    hole.absarc(d, 0, r, beta, -beta, true)
-    shape.holes.push(hole)
-    return shape
-  }
+  const cupPhysics = new CANNON.Material('jiaobei-cup')
+  const groundPhysics = new CANNON.Material('jiaobei-ground')
+  world.addContactMaterial(new CANNON.ContactMaterial(cupPhysics, groundPhysics, {
+    friction: 0.32,
+    restitution: 0.26,
+  }))
+  world.addContactMaterial(new CANNON.ContactMaterial(cupPhysics, cupPhysics, {
+    friction: 0.24,
+    restitution: 0.2,
+  }))
 
-  function smoothstep(t: number) {
-    return t * t * (3 - 2 * t)
-  }
+  const physicsGround = new CANNON.Body({ mass: 0, material: groundPhysics })
+  physicsGround.addShape(new CANNON.Plane())
+  physicsGround.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
+  world.addBody(physicsGround)
 
-  function createCup() {
-    const shape = createCrescentShape()
-    const depth = 0.16
-    const extrudeSettings = {
-      depth,
-      bevelEnabled: true,
-      bevelSegments: 5,
-      steps: 4,
-      bevelSize: 0.03,
-      bevelThickness: 0.03,
-    }
-    const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings)
-    geo.center()
-
-    const pos = geo.attributes.position as THREE.BufferAttribute
-    const normal = geo.attributes.normal as THREE.BufferAttribute
-    const maxBulge = 1.0
-
-    // 阴面中央弧形凸起：中部最厚，向四边与两端逐渐变薄
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i)
-      const y = pos.getY(i)
-      const z = pos.getZ(i)
-
-      const angle = Math.atan2(y, x)
-      const radius = Math.sqrt(x * x + y * y)
-
-      // 沿外弧中轴线（angle≈0）凸起最强，向两尖端快速衰减
-      const angleFactor = Math.pow(Math.max(0, Math.cos(angle * 0.78)), 2.6)
-      // 在主体半径附近（约 0.9~1.2）凸起最强，过薄边缘处衰减
-      const radiusFactor = Math.exp(-Math.pow((radius - 1.0) / 0.3, 2))
-      const bulgeFactor = angleFactor * radiusFactor
-
-      // z 范围 [-depth/2, depth/2]，front（阳面）平坦，back（阴面）凸起
-      const normalizedZ = (z + depth / 2) / depth
-      const displacement = maxBulge * bulgeFactor * smoothstep(normalizedZ)
-
-      pos.setZ(i, z + displacement)
-    }
-
-    pos.needsUpdate = true
-    geo.computeVertexNormals()
-
-    // 第二步：按法线方向给阳面/阴面/侧壁分配颜色
-    const colors: number[] = []
-    const yangColor = new THREE.Color(0xdbbe8a)
-    const yinColor = new THREE.Color(0x7a5c2e)
-    const sideColor = new THREE.Color(0xa78954)
-
-    for (let i = 0; i < pos.count; i++) {
-      const nx = normal.getX(i)
-      const ny = normal.getY(i)
-      const nz = normal.getZ(i)
-
-      // 阳面法线大致朝 -Z（局部背面向下），阴面法线大致朝 +Z
-      if (nz < -0.45) {
-        colors.push(yangColor.r, yangColor.g, yangColor.b)
-      } else if (nz > 0.45) {
-        colors.push(yinColor.r, yinColor.g, yinColor.b)
-      } else {
-        colors.push(sideColor.r, sideColor.g, sideColor.b)
-      }
-    }
-    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-
-    const material = new THREE.MeshStandardMaterial({
-      vertexColors: true,
-      roughness: 0.55,
-      metalness: 0.05,
-    })
-
-    const mesh = new THREE.Mesh(geo, material)
-    mesh.castShadow = true
-    mesh.receiveShadow = true
-    return mesh
-  }
-
-  const cupA = createCup()
-  const cupB = createCup()
-  scene.add(cupA)
-  scene.add(cupB)
-
-  function easeOutBounce(t: number) {
-    const n1 = 7.5625
-    const d1 = 2.75
-    if (t < 1 / d1) return n1 * t * t
-    if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + 0.75
-    if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + 0.9375
-    return n1 * (t -= 2.625 / d1) * t + 0.984375
-  }
-
-  function easeOutQuad(t: number) { return 1 - (1 - t) * (1 - t) }
-
-  let rafId: number | null = null
-  let start = performance.now()
-  let duration = props.duration ?? 1500
+  const cups: {
+    mesh: THREE.Mesh
+    body: CANNON.Body
+    flatUp: boolean
+    homeX: number
+    yaw: number
+    target: THREE.Quaternion
+  }[] = []
+  let cupGeometry: THREE.BufferGeometry | null = null
+  let cupMaterial: THREE.Material | null = null
+  let disposed = false
   let completed = false
+  let rafId: number | null = null
+  let startedAt = 0
+  let settledAt = Number.POSITIVE_INFINITY
+  let previousElapsed = 0
+  let resizeObserver: ResizeObserver | null = null
 
-  function resetPose() {
-    cupA.position.set(-0.7, 0.15, 0)
-    cupB.position.set(0.7, 0.15, 0)
-    cupA.rotation.set(-Math.PI / 2, 0, -0.2)
-    cupB.rotation.set(-Math.PI / 2, 0, 0.2)
-  }
-
-  function computeTargetRotation(toss: string) {
-    // 阳面（平面）朝上：rotation.x = +PI/2；阴面（凸面）朝上：rotation.x = -PI/2
-    const flatUp = Math.PI / 2
-    const convexUp = -Math.PI / 2
-    const flatA = toss === '笑' || toss === '圣'
-    const flatB = toss === '笑'
-    return {
-      targetRotAX: flatA ? flatUp : convexUp,
-      targetRotBX: flatB ? flatUp : convexUp,
-    }
-  }
-
-  function normalizeAngle(a: number) {
-    const TWO_PI = Math.PI * 2
-    return a - TWO_PI * Math.round(a / TWO_PI)
-  }
-  function nearestAngle(from: number, to: number) {
-    return from + normalizeAngle(to - from)
-  }
-
-  function animate() {
-    if (!container.value) return
-    const now = performance.now()
-    const rawT = Math.min((now - start) / duration, 1)
-
-    if (rawT >= 1 && !completed) {
-      completed = true
-      emit('complete')
-    }
-
-    const { targetRotAX, targetRotBX } = computeTargetRotation(props.toss || '圣')
-
-    if (rawT < 0.25) {
-      const t = rawT / 0.25
-      cupA.position.set(-0.7, 0.15 + t * 1.8, 0)
-      cupB.position.set(0.7, 0.15 + t * 1.8, 0)
-      cupA.rotation.set(-Math.PI / 2 - t * 0.6, t * 2.5, -0.2 - t * 0.5)
-      cupB.rotation.set(-Math.PI / 2 - t * 0.6, -t * 2.5, 0.2 + t * 0.5)
-    } else if (rawT < 0.6) {
-      const t = (rawT - 0.25) / 0.35
-      const arc = Math.sin(t * Math.PI)
-      cupA.position.set(-0.7 - t * 1.4, 0.15 + 1.8 + arc * 2.4 - t * 1.8, -t * 0.8)
-      cupB.position.set(0.7 + t * 1.4, 0.15 + 1.8 + arc * 2.4 - t * 1.8, -t * 0.8)
-      cupA.rotation.set(-Math.PI + t * Math.PI * 3.5, t * Math.PI * 6, -0.7 - t * Math.PI * 2.5)
-      cupB.rotation.set(-Math.PI - t * Math.PI * 3.5, -t * Math.PI * 6, 0.7 + t * Math.PI * 2.5)
-    } else {
-      const t = Math.min((rawT - 0.6) / 0.4, 1)
-      const bounce = easeOutBounce(t)
-      const targetAX = -0.8
-      const targetBX = 0.8
-      const targetY = 0.15
-      const landY = targetY + (1 - bounce) * 1.2
-      cupA.position.set(targetAX, landY, 0.4)
-      cupB.position.set(targetBX, landY, -0.4)
-      const settleT = easeOutQuad(t)
-
-      // 归一化角度，避免落地时多余旋转
-      const startAX = normalizeAngle(-Math.PI + Math.PI * 3.5)
-      const startBX = normalizeAngle(-Math.PI - Math.PI * 3.5)
-      const startAY = normalizeAngle(Math.PI * 6)
-      const startBY = normalizeAngle(-Math.PI * 6)
-      const startAZ = normalizeAngle(-0.7 - Math.PI * 2.5)
-      const startBZ = normalizeAngle(0.7 + Math.PI * 2.5)
-
-      cupA.rotation.set(
-        THREE.MathUtils.lerp(startAX, nearestAngle(startAX, targetRotAX), settleT),
-        THREE.MathUtils.lerp(startAY, nearestAngle(startAY, 0), settleT),
-        THREE.MathUtils.lerp(startAZ, nearestAngle(startAZ, -0.15), settleT),
-      )
-      cupB.rotation.set(
-        THREE.MathUtils.lerp(startBX, nearestAngle(startBX, targetRotBX), settleT),
-        THREE.MathUtils.lerp(startBY, nearestAngle(startBY, 0), settleT),
-        THREE.MathUtils.lerp(startBZ, nearestAngle(startBZ, 0.15), settleT),
-      )
-    }
-
-    renderer.render(scene, camera)
-
-    if (rawT < 1 || !completed) {
-      rafId = requestAnimationFrame(animate)
-    }
-  }
-
-  function startAnimation() {
-    if (rafId) cancelAnimationFrame(rafId)
-    completed = false
-    duration = props.duration ?? 1500
-    start = performance.now()
-    resetPose()
-    rafId = requestAnimationFrame(animate)
-  }
-
-  resetPose()
-  startAnimation()
+  const convexUp = new THREE.Quaternion()
+  const flatUp = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI)
+  const temporaryEuler = new THREE.Euler()
+  const temporaryQuaternion = new THREE.Quaternion()
+  const temporaryVector = new THREE.Vector3()
 
   watch(() => props.trigger, () => {
-    startAnimation()
+    if (cups.length > 0) startThrow()
   }, { flush: 'post' })
 
-  const onResize = () => {
-    if (!container.value) return
-    const w = container.value.clientWidth
-    const h = container.value.clientHeight
-    camera.aspect = w / h
+  resizeObserver = new ResizeObserver(() => {
+    if (disposed || !root.clientWidth || !root.clientHeight) return
+    camera.aspect = root.clientWidth / root.clientHeight
     camera.updateProjectionMatrix()
-    renderer.setSize(w, h)
-  }
-  window.addEventListener('resize', onResize)
+    renderer.setSize(root.clientWidth, root.clientHeight)
+    renderOnce()
+  })
+  resizeObserver.observe(root)
 
   onBeforeUnmount(() => {
+    disposed = true
     if (rafId) cancelAnimationFrame(rafId)
-    window.removeEventListener('resize', onResize)
+    resizeObserver?.disconnect()
+    cups.forEach(cup => world.removeBody(cup.body))
+    world.removeBody(physicsGround)
+    cupGeometry?.dispose()
+    cupMaterial?.dispose()
+    groundGeometry.dispose()
+    groundMaterial.dispose()
     renderer.dispose()
-    container.value?.removeChild(renderer.domElement)
+    renderer.domElement.remove()
   })
+
+  function toThreeQuaternion(quaternion: CANNON.Quaternion) {
+    return temporaryQuaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w)
+  }
+
+  function syncCupMesh(mesh: THREE.Mesh, body: CANNON.Body) {
+    mesh.position.set(body.position.x, body.position.y, body.position.z)
+    mesh.quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w)
+  }
+
+  function createCup(mesh: THREE.Mesh, material: THREE.Material, homeX: number, flatUp: boolean) {
+    const visual = new THREE.Mesh(mesh.geometry, material)
+    visual.scale.setScalar(1.25)
+    visual.castShadow = true
+    visual.receiveShadow = true
+    scene.add(visual)
+
+    const body = new CANNON.Body({
+      mass: 0.18,
+      material: cupPhysics,
+      linearDamping: 0.16,
+      angularDamping: 0.26,
+      allowSleep: false,
+    })
+    body.addShape(new CANNON.Box(new CANNON.Vec3(0.66, 0.094, 0.25)))
+    world.addBody(body)
+    cups.push({
+      mesh: visual,
+      body,
+      flatUp,
+      homeX,
+      yaw: 0,
+      target: new THREE.Quaternion(),
+    })
+  }
+
+  function prepareThrow(template: THREE.Mesh) {
+    const result = props.toss ?? '圣'
+    const flatA = result === '圣' || result === '笑'
+    const flatB = result === '笑'
+
+    createCup(template, cupMaterial!, -0.82, flatA)
+    createCup(template, cupMaterial!, 0.82, flatB)
+
+    cups.forEach((cup, index) => {
+      cup.body.position.set(cup.homeX, 3.3 + index * 0.16, index === 0 ? -0.12 : 0.12)
+      temporaryEuler.set(
+        (Math.random() - 0.5) * 2.2,
+        index === 0 ? -0.5 : 0.5,
+        (Math.random() - 0.5) * 1.8,
+      )
+      cup.body.quaternion.setFromEuler(temporaryEuler.x, temporaryEuler.y, temporaryEuler.z)
+      cup.body.velocity.set((Math.random() - 0.5) * 0.5, -0.8, (Math.random() - 0.5) * 0.3)
+      cup.body.angularVelocity.set(
+        (Math.random() - 0.5) * 18,
+        (index === 0 ? -1 : 1) * (12 + Math.random() * 5),
+        (Math.random() - 0.5) * 15,
+      )
+      cup.body.wakeUp()
+      syncCupMesh(cup.mesh, cup.body)
+    })
+  }
+
+  function chooseTargetOrientation(cup: typeof cups[number]) {
+    const forward = temporaryVector.set(1, 0, 0).applyQuaternion(toThreeQuaternion(cup.body.quaternion)).clone()
+    cup.yaw = Math.atan2(forward.z, forward.x)
+    const faceRotation = cup.flatUp ? flatUp : convexUp
+    const yawRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), cup.yaw)
+    cup.target.copy(yawRotation).multiply(faceRotation)
+  }
+
+  function alignToResult(cup: typeof cups[number], dt: number) {
+    const body = cup.body
+    const current = toThreeQuaternion(body.quaternion).clone()
+    const error = cup.target.clone().multiply(current.clone().invert())
+    error.normalize()
+
+    const angle = 2 * Math.acos(THREE.MathUtils.clamp(Math.abs(error.w), -1, 1))
+    if (angle > 0.002) {
+      const sin = Math.sqrt(Math.max(1 - error.w * error.w, 1e-8))
+      temporaryVector.set(error.x / sin, error.y / sin, error.z / sin)
+      const correction = temporaryVector.clone().multiplyScalar(angle * 7.5)
+      body.angularVelocity.x = THREE.MathUtils.lerp(body.angularVelocity.x, correction.x, 0.18)
+      body.angularVelocity.y = THREE.MathUtils.lerp(body.angularVelocity.y, correction.y, 0.18)
+      body.angularVelocity.z = THREE.MathUtils.lerp(body.angularVelocity.z, correction.z, 0.18)
+    }
+    else {
+      body.angularVelocity.scale(0.82, body.angularVelocity)
+    }
+
+    const homeForceX = (cup.homeX - body.position.x) * 4.2
+    const homeForceZ = (0 - body.position.z) * 3.6
+    body.velocity.x = THREE.MathUtils.lerp(body.velocity.x, homeForceX, Math.min(dt * 5, 0.16))
+    body.velocity.z = THREE.MathUtils.lerp(body.velocity.z, homeForceZ, Math.min(dt * 5, 0.16))
+  }
+
+  function cupsAreStable() {
+    return cups.every(({ body }) => (
+      body.position.y < 0.28
+      && body.velocity.lengthSquared() < 0.008
+      && body.angularVelocity.lengthSquared() < 0.012
+    ))
+  }
+
+  function renderOnce() {
+    renderer.render(scene, camera)
+  }
+
+  function finish() {
+    if (completed) return
+    completed = true
+    emit('complete')
+  }
+
+  function frame(now: number) {
+    if (disposed) return
+    const elapsed = (now - startedAt) / 1000
+    const dt = Math.min(elapsed - previousElapsed, 1 / 30)
+    previousElapsed = elapsed
+
+    if (elapsed >= 0.58 && settledAt === Number.POSITIVE_INFINITY) {
+      settledAt = elapsed
+      cups.forEach(chooseTargetOrientation)
+    }
+
+    if (settledAt !== Number.POSITIVE_INFINITY) {
+      cups.forEach(cup => alignToResult(cup, dt))
+    }
+
+    world.step(1 / 120, dt, 5)
+    cups.forEach(cup => syncCupMesh(cup.mesh, cup.body))
+
+    const duration = Math.max(1.8, Math.min(props.duration ?? 2200, 4000) / 1000)
+    if ((elapsed >= duration && cupsAreStable()) || elapsed >= duration + 0.7) {
+      renderOnce()
+      finish()
+      return
+    }
+
+    renderOnce()
+    rafId = requestAnimationFrame(frame)
+  }
+
+  function startThrow() {
+    if (disposed || completed || cups.length === 0) return
+    if (rafId) cancelAnimationFrame(rafId)
+    completed = false
+    startedAt = performance.now()
+    previousElapsed = 0
+    settledAt = Number.POSITIVE_INFINITY
+    rafId = requestAnimationFrame(frame)
+  }
+
+  try {
+    const gltf = await new GLTFLoader().loadAsync(modelUrl)
+    const source = gltf.scene.getObjectByName('CupA') ?? gltf.scene.getObjectByName('CupB')
+    if (!(source instanceof THREE.Mesh)) {
+      throw new Error('Jiaobei GLB does not contain a cup mesh')
+    }
+
+    cupGeometry = source.geometry.clone()
+    cupMaterial = Array.isArray(source.material) ? source.material[0]! : source.material
+
+    prepareThrow(source)
+    renderOnce()
+    startThrow()
+  }
+  catch (error) {
+    console.error('Unable to load the jiaobei model', error)
+  }
+
 })
 </script>
 
 <style scoped>
 .jiaobei-scene {
+  width: 100%;
   min-height: 280px;
 }
+
 @media (max-width: 640px) {
   .jiaobei-scene {
     min-height: 220px;

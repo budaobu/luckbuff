@@ -467,7 +467,7 @@ async function handleSubmit() {
   lastFormValues.value = { ...payload }
 
   try {
-    const result = await $fetch<LiurenChartResponse>('/api/tools/liuren-seeking/chart', {
+    const result = await plainFetch<LiurenChartResponse>('/api/tools/liuren-seeking/chart', {
       method: 'POST',
       body: payload,
     })

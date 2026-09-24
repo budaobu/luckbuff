@@ -157,7 +157,7 @@ async function draw() {
 
   try {
     const [response] = await Promise.all([
-      $fetch<DrawALotCalcResult & { question: string }>('/api/tools/dizang-lot/calc', {
+      plainFetch<DrawALotCalcResult & { question: string }>('/api/tools/dizang-lot/calc', {
         method: 'POST',
         body: { question: question.value.trim(), locale: locale.value },
       }),

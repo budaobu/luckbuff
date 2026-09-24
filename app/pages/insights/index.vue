@@ -149,12 +149,23 @@ interface InsightListItem {
   readingTime: number
 }
 
+interface InsightListResponse {
+  total: number
+  categories: string[]
+  articles: InsightListItem[]
+}
+
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 
-const { data, status } = await useAsyncData(
+const requestInsights = $fetch as unknown as (
+  url: '/api/insights',
+  options: { query: { lang: string } },
+) => Promise<InsightListResponse>
+
+const { data, status } = await useAsyncData<InsightListResponse>(
   () => `insights-list-${locale.value}`,
-  () => $fetch<{ total: number; categories: string[]; articles: InsightListItem[] }>('/api/insights', {
+  () => requestInsights('/api/insights', {
     query: { lang: locale.value },
   }),
   { server: true, watch: [locale] }

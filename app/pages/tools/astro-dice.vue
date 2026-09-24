@@ -183,7 +183,7 @@ async function handleRoll() {
   aiError.value = null
 
   try {
-    const result = await $fetch<AstroDiceCalcResult>('/api/tools/astro-dice/calc', {
+    const result = await plainFetch<AstroDiceCalcResult>('/api/tools/astro-dice/calc', {
       method: 'POST',
       body: { locale: locale.value },
     })

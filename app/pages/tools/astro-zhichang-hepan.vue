@@ -30,7 +30,7 @@ async function startAnalysis() {
   abortController = new AbortController()
 
   try {
-    const calcResult = await $fetch<AstroZhichangCalcResult>('/api/tools/astro-zhichang-hepan/calc', {
+    const calcResult = await plainFetch<AstroZhichangCalcResult>('/api/tools/astro-zhichang-hepan/calc', {
       method: 'POST',
       body: {
         relationType: formData.value.relationType,
