@@ -49,18 +49,15 @@
         </div>
       </div>
 
-      <div v-else-if="phase === 'drawing'" class="flex min-h-[52vh] flex-col items-center justify-center gap-6">
-        <div class="relative h-44 w-28 rounded-b-3xl border-2 border-[var(--accent-border)] bg-[var(--accent-bg)]/20">
-          <div class="absolute inset-x-4 -top-14 bottom-2">
-            <span
-              v-for="stick in 16"
-              :key="stick"
-              class="absolute bottom-0 h-24 w-[4px] translate-x-1/2 rounded-full bg-[var(--accent)]/70"
-              :style="{ left: `${6 + (stick % 8) * 11}%`, opacity: 0.4 + (stick % 4) * 0.13 }"
-            />
-          </div>
-          <div class="lot-shake absolute inset-0 rounded-b-3xl" />
-        </div>
+      <div v-else-if="phase === 'animating'" class="flex min-h-[52vh] flex-col items-center justify-center gap-6">
+        <LotShakeAnimation
+          :trigger="lotShake.trigger.value"
+          :theme="lotShakeTheme"
+          :selected-sign="lotShake.selectedSign.value"
+          class="w-full max-w-xl"
+          @complete="lotShake.complete"
+          @error="lotShake.fail"
+        />
         <p class="text-sm text-[var(--text-muted)]">{{ $t('guandiLot.drawing') }}</p>
       </div>
 
@@ -193,7 +190,9 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 
-const phase = ref<'form' | 'drawing' | 'result'>('form')
+const phase = ref<'form' | 'animating' | 'result'>('form')
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('guandi')
 const question = ref('')
 const result = ref<DrawResult | null>(null)
 const aiContent = ref('')
@@ -225,24 +224,28 @@ async function drawLot() {
     return
   }
 
-  phase.value = 'drawing'
+  phase.value = 'animating'
   result.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiError.value = null
 
   try {
-    const [response] = await Promise.all([
-      plainFetch<DrawResult>('/api/tools/guandi-lot/calc', {
+    const resultPromise = plainFetch<DrawResult>('/api/tools/guandi-lot/calc', {
         method: 'POST',
         body: { question: question.value.trim(), locale: locale.value },
-      }),
-      new Promise(resolve => setTimeout(resolve, 1700)),
-    ])
+      })
+    const animationPromise = lotShake.play()
+    const response = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
+
+    lotShake.setSign(response.fortune.number)
+    await animationPromise
     result.value = response
     phase.value = 'result'
     setTimeout(startReading, 200)
   } catch (error: any) {
+    lotShake.cancel()
     phase.value = 'form'
     toast.add({
       title: t('guandiLot.drawFailed'),
@@ -358,19 +361,6 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.lot-shake {
-  background: linear-gradient(to bottom, var(--accent-bg) / 30, transparent);
-  animation: lot-shake 1.6s ease-in-out;
-}
-
-@keyframes lot-shake {
-  0%, 100% { transform: rotate(0deg); }
-  15% { transform: rotate(-14deg); }
-  35% { transform: rotate(12deg); }
-  55% { transform: rotate(-9deg); }
-  75% { transform: rotate(6deg); }
-}
-
 .ai-markdown :deep(p) {
   color: var(--text-body);
   font-size: 0.875rem;

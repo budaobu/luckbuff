@@ -104,53 +104,15 @@
       <!-- ============ 阶段 2：动画 ============ -->
       <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
         <div class="flex flex-col items-center gap-6">
-          <div class="relative w-32 h-52 flex items-start justify-center">
-            <!-- 地面阴影 -->
-            <div
-              v-if="animationStep >= 1"
-              class="ground-shadow absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/20 blur-sm"
-              :class="{ 'animate-shadow': animationStep === 1 }"
-            />
-
-            <!-- 签筒 -->
-            <div
-              class="lot-tube absolute top-4 left-1/2 -translate-x-1/2 rounded-b-2xl"
-              :class="{ 'animate-shake': animationStep === 0 }"
-            >
-              <!-- 内部签丛（置于裁剪容器之外，可伸出筒口） -->
-              <div class="absolute inset-x-3 -top-12 bottom-1 overflow-visible">
-                <div
-                  v-for="(stick, i) in bundleSticks"
-                  :key="i"
-                  class="bundle-stick"
-                  :style="{ left: `${stick.left}%`, height: `${stick.height}px`, opacity: stick.opacity }"
-                />
-              </div>
-              <!-- 筒身（裁剪区） -->
-              <div class="absolute inset-0 rounded-b-2xl border-2 border-[var(--accent-border)] overflow-hidden">
-                <!-- 筒身玻璃反光 -->
-                <div class="absolute inset-0 rounded-b-2xl bg-gradient-to-b from-[var(--accent-bg)]/30 via-transparent to-[var(--accent-bg)]/30" />
-                <div class="absolute inset-y-0 left-1 w-2 bg-gradient-to-r from-white/20 to-transparent rounded-l-lg" />
-                <div class="absolute inset-y-0 right-1 w-2 bg-gradient-to-l from-black/5 to-transparent rounded-r-lg" />
-                <!-- 筒口内壁 -->
-                <div class="absolute -top-1 left-1/2 -translate-x-1/2 w-[86%] h-4 rounded-[50%] bg-[var(--accent-bg)]/30 border border-[var(--accent-border)]" />
-              </div>
-              <!-- 筒口外沿（覆盖签丛顶部） -->
-              <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-[98%] h-5 rounded-[50%] border-2 border-[var(--accent-border)] bg-[var(--accent-bg)]/70 shadow-sm" />
-              <!-- 筒底 -->
-              <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[92%] h-4 rounded-[50%] border-2 border-[var(--accent-border)] bg-[var(--accent-bg)]/70" />
-            </div>
-
-            <!-- 掉出的签 -->
-            <div
-              v-if="animationStep >= 1"
-              class="lot-stick absolute top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-b from-[var(--accent)] to-[var(--accent)]/80 shadow-lg"
-              :class="{ 'animate-drop': animationStep === 1 }"
-            />
-          </div>
-          <p class="text-sm text-[var(--text-muted)] min-h-[1.25rem]">
-            {{ animationStep === 0 ? $t('sanshanwangLot.shaking') : $t('sanshanwangLot.dropping') }}
-          </p>
+          <LotShakeAnimation
+            :trigger="lotShake.trigger.value"
+            :theme="lotShakeTheme"
+            :selected-sign="lotShake.selectedSign.value"
+            class="w-full max-w-xl"
+            @complete="lotShake.complete"
+            @error="lotShake.fail"
+          />
+          <p class="min-h-[1.25rem] text-sm text-[var(--text-muted)]">{{ $t('sanshanwangLot.shaking') }}</p>
         </div>
       </div>
 
@@ -358,31 +320,10 @@ interface DrawALotCalcResult {
   question: string
 }
 
-const bundleSticks = [
-  { left: 8, height: 158, opacity: 0.6 },
-  { left: 16, height: 168, opacity: 0.5 },
-  { left: 24, height: 154, opacity: 0.65 },
-  { left: 32, height: 164, opacity: 0.55 },
-  { left: 40, height: 150, opacity: 0.7 },
-  { left: 48, height: 170, opacity: 0.5 },
-  { left: 56, height: 156, opacity: 0.65 },
-  { left: 64, height: 162, opacity: 0.55 },
-  { left: 72, height: 152, opacity: 0.6 },
-  { left: 80, height: 166, opacity: 0.5 },
-  { left: 12, height: 144, opacity: 0.45 },
-  { left: 28, height: 142, opacity: 0.4 },
-  { left: 44, height: 146, opacity: 0.45 },
-  { left: 60, height: 140, opacity: 0.4 },
-  { left: 76, height: 148, opacity: 0.45 },
-  { left: 20, height: 134, opacity: 0.35 },
-  { left: 36, height: 130, opacity: 0.35 },
-  { left: 52, height: 132, opacity: 0.35 },
-  { left: 68, height: 128, opacity: 0.35 },
-]
-
 const { t, locale } = useI18n()
 const phase = ref<'form' | 'animating' | 'result'>('form')
-const animationStep = ref<0 | 1>(0)
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('sanshanwang')
 const form = reactive({
   question: '',
 })
@@ -414,35 +355,31 @@ async function handleSubmit() {
   }
 
   phase.value = 'animating'
-  animationStep.value = 0
   calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiStarted.value = false
   aiError.value = null
 
-  // 摇动签筒
-  setTimeout(() => {
-    animationStep.value = 1
-  }, 900)
-
-  // 请求结果
   try {
-    const result = await plainFetch<DrawALotCalcResult>('/api/tools/3shanwang-lot/calc', {
-      method: 'POST',
-      body: {
-        question: form.question.trim(),
-        locale: locale.value,
-      },
-    })
+    const resultPromise = plainFetch<DrawALotCalcResult>('/api/tools/3shanwang-lot/calc', {
+        method: 'POST',
+        body: {
+          question: form.question.trim(),
+          locale: locale.value,
+        },
+      })
+    const animationPromise = lotShake.play()
+    const result = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
 
-    // 等掉签动画完成后再展示结果
-    setTimeout(() => {
-      calcResult.value = result
-      phase.value = 'result'
-      setTimeout(() => startAiStream(), 300)
-    }, 1800)
+    lotShake.setSign(result.fortune.number)
+    await animationPromise
+    calcResult.value = result
+    phase.value = 'result'
+    setTimeout(() => startAiStream(), 300)
   } catch (err: any) {
+    lotShake.cancel()
     phase.value = 'form'
     toast.add({
       title: t('sanshanwangLot.drawFail'),
@@ -516,7 +453,6 @@ async function startAiStream() {
 
 function resetForm() {
   phase.value = 'form'
-  animationStep.value = 0
   calcResult.value = null
   aiContent.value = ''
   aiStreaming.value = false
@@ -636,76 +572,6 @@ useHead(() => ({
 </script>
 
 <style scoped>
-.lot-tube {
-  width: 76px;
-  height: 112px;
-}
-
-.lot-stick {
-  width: 7px;
-  height: 88px;
-}
-
-.bundle-stick {
-  position: absolute;
-  bottom: 0;
-  width: 5px;
-  border-radius: 9999px;
-  background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 50%, transparent));
-  transform: translateX(-50%);
-}
-
-.inner-stick {
-  position: absolute;
-  bottom: 0;
-  width: 5px;
-  border-radius: 9999px;
-  background-color: var(--accent);
-}
-
-.ground-shadow {
-  width: 26px;
-  height: 7px;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  10% { transform: translateX(-50%) rotate(-22deg); }
-  20% { transform: translateX(-50%) rotate(20deg); }
-  30% { transform: translateX(-50%) rotate(-18deg); }
-  40% { transform: translateX(-50%) rotate(16deg); }
-  50% { transform: translateX(-50%) rotate(-12deg); }
-  60% { transform: translateX(-50%) rotate(10deg); }
-  70% { transform: translateX(-50%) rotate(-6deg); }
-  80% { transform: translateX(-50%) rotate(4deg); }
-  90% { transform: translateX(-50%) rotate(-2deg); }
-}
-
-.animate-shake {
-  animation: shake 0.85s ease-in-out;
-}
-
-@keyframes drop {
-  0% { opacity: 0; transform: translate(-50%, 0) rotate(0deg) scale(0.95); }
-  12% { opacity: 1; transform: translate(-50%, -38px) rotate(-16deg) scale(1); }
-  35% { transform: translate(-50%, -10px) rotate(-26deg) scale(1); }
-  100% { opacity: 1; transform: translate(-50%, 96px) rotate(58deg) scale(1); }
-}
-
-.animate-drop {
-  animation: drop 0.95s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes shadow {
-  0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
-  35% { opacity: 0.2; transform: translate(-50%, 0) scale(0.75); }
-  100% { opacity: 0.85; transform: translate(-50%, 0) scale(1); }
-}
-
-.animate-shadow {
-  animation: shadow 0.95s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
 .ai-section-content :deep(p) {
   margin-bottom: 0.6em;
   line-height: 1.75;
