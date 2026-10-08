@@ -24,9 +24,12 @@
 
         <section class="overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)]">
           <div class="p-6">
-            <label class="text-xs font-medium text-[var(--text-muted)]" for="yuelao-question">
-              {{ $t('yuelaoLot.questionLabel') }}
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-medium text-[var(--text-muted)]" for="yuelao-question">
+                {{ $t('yuelaoLot.questionLabel') }}
+              </label>
+              <QuestionInspiration @select="onQuestionSelect" />
+            </div>
             <UTextarea
               id="yuelao-question"
               v-model="question"
@@ -46,10 +49,16 @@
         </section>
       </div>
 
-      <div v-else-if="phase === 'animating'" class="flex min-h-[60vh] items-center justify-center">
-        <div class="relative h-52 w-32 rounded-b-2xl border-2 border-[var(--accent-border)] bg-[var(--accent-bg)]/30">
-          <div class="absolute inset-0 animate-pulse rounded-b-2xl bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-        </div>
+      <div v-else-if="phase === 'animating'" class="flex min-h-[52vh] flex-col items-center justify-center gap-6">
+        <LotShakeAnimation
+          :trigger="lotShake.trigger.value"
+          :theme="lotShakeTheme"
+          :selected-sign="lotShake.selectedSign.value"
+          class="w-full max-w-xl"
+          @complete="lotShake.complete"
+          @error="lotShake.fail"
+        />
+        <p class="text-sm text-[var(--text-muted)]">{{ $t('yuelaoLot.drawing') }}</p>
       </div>
 
       <div v-else-if="result" class="pt-4">
@@ -128,6 +137,8 @@ const localePath = useLocalePath()
 const toast = useToast()
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('yuelao')
 const question = ref('')
 const result = ref<YuelaoLotResult | null>(null)
 const aiContent = ref('')
@@ -153,18 +164,29 @@ async function draw() {
     toast.add({ title: t('yuelaoLot.questionRequired'), color: 'error' })
     return
   }
+
   phase.value = 'animating'
   result.value = null
   aiContent.value = ''
+  aiStreaming.value = false
   aiError.value = null
+
   try {
-    result.value = await plainFetch<YuelaoLotResult>('/api/tools/yuelao-lot/calc', {
-      method: 'POST',
-      body: { question: question.value.trim(), locale: locale.value },
-    })
+    const resultPromise = plainFetch<YuelaoLotResult>('/api/tools/yuelao-lot/calc', {
+        method: 'POST',
+        body: { question: question.value.trim(), locale: locale.value },
+      })
+    const animationPromise = lotShake.play()
+    const response = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
+
+    lotShake.setSign(response.fortune.id)
+    await animationPromise
+    result.value = response
     phase.value = 'result'
     setTimeout(readLot, 200)
   } catch {
+    lotShake.cancel()
     phase.value = 'form'
     toast.add({ title: t('yuelaoLot.drawFailed'), color: 'error' })
   }
@@ -228,6 +250,10 @@ function reset() {
 
 const textareaUi = {
   base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-placeholder)]',
+}
+
+function onQuestionSelect(value: string) {
+  question.value = value
 }
 
 const pageUrl = useLocalizedSeoUrl('/tools/yuelao-lot')

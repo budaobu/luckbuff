@@ -49,18 +49,15 @@
         </section>
       </div>
 
-      <div v-else-if="phase === 'drawing'" class="flex min-h-[52vh] flex-col items-center justify-center gap-6">
-        <div class="relative h-44 w-28 rounded-b-3xl border-2 border-[var(--accent-border)] bg-[var(--accent-bg)]/20">
-          <div class="absolute inset-x-4 -top-14 bottom-2">
-            <span
-              v-for="stick in 16"
-              :key="stick"
-              class="absolute bottom-0 h-24 w-[4px] translate-x-1/2 rounded-full bg-[var(--accent)]/70"
-              :style="{ left: `${6 + (stick % 8) * 11}%`, opacity: 0.4 + (stick % 4) * 0.13 }"
-            />
-          </div>
-          <div class="lot-shake absolute inset-0 rounded-b-3xl" />
-        </div>
+      <div v-else-if="phase === 'animating'" class="flex min-h-[52vh] flex-col items-center justify-center gap-6">
+        <LotShakeAnimation
+          :trigger="lotShake.trigger.value"
+          :theme="lotShakeTheme"
+          :selected-sign="lotShake.selectedSign.value"
+          class="w-full max-w-xl"
+          @complete="lotShake.complete"
+          @error="lotShake.fail"
+        />
         <p class="text-sm text-[var(--text-muted)]">{{ $t('dizangLot.drawing') }}</p>
       </div>
 
@@ -124,7 +121,9 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 
-const phase = ref<'form' | 'drawing' | 'result'>('form')
+const phase = ref<'form' | 'animating' | 'result'>('form')
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('dizang')
 const question = ref('')
 const result = ref<(DrawALotCalcResult & { question: string }) | null>(null)
 const aiContent = ref('')
@@ -150,23 +149,28 @@ async function draw() {
     return
   }
 
-  phase.value = 'drawing'
+  phase.value = 'animating'
   result.value = null
   aiContent.value = ''
+  aiStreaming.value = false
   aiError.value = null
 
   try {
-    const [response] = await Promise.all([
-      plainFetch<DrawALotCalcResult & { question: string }>('/api/tools/dizang-lot/calc', {
+    const resultPromise = plainFetch<DrawALotCalcResult & { question: string }>('/api/tools/dizang-lot/calc', {
         method: 'POST',
         body: { question: question.value.trim(), locale: locale.value },
-      }),
-      new Promise(resolve => setTimeout(resolve, 1500)),
-    ])
+      })
+    const animationPromise = lotShake.play()
+    const response = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
+
+    lotShake.setSign(response.fortune.number)
+    await animationPromise
     result.value = response
     phase.value = 'result'
     setTimeout(readLot, 200)
   } catch {
+    lotShake.cancel()
     phase.value = 'form'
     toast.add({ title: t('dizangLot.drawFailed'), color: 'error' })
   }

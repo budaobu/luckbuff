@@ -116,17 +116,18 @@
         </div>
       </div>
 
-      <!-- ============ 阶段 2：思考中动画 ============ -->
-      <div v-if="phase === 'animating'" class="flex flex-col items-center justify-center min-h-[60vh]">
-        <div class="relative w-24 h-24">
-          <ThinkingOrb state="solving" :size="64" class="absolute inset-0 m-auto" />
-          <div class="absolute inset-0 flex items-center justify-center">
-            <UIcon name="i-heroicons-swatch" class="w-8 h-8 text-[var(--accent)]" />
-          </div>
-        </div>
-        <p class="text-sm text-[var(--text-muted)] mt-6">{{ $t('zhugeCezi.calculating') }}</p>
+      <!-- ============ 阶段 2：摇签动画 ============ -->
+      <div v-if="phase === 'animating'" class="flex min-h-[60vh] flex-col items-center justify-center gap-6">
+        <LotShakeAnimation
+          :trigger="lotShake.trigger.value"
+          :theme="lotShakeTheme"
+          :selected-sign="lotShake.selectedSign.value"
+          class="w-full max-w-xl"
+          @complete="lotShake.complete"
+          @error="lotShake.fail"
+        />
+        <p class="text-sm text-[var(--text-muted)]">{{ $t('zhugeCezi.calculating') }}</p>
       </div>
-
       <!-- ============ 阶段 3：结果 ============ -->
       <div v-if="phase === 'result' && result">
         <!-- Section 标题 -->
@@ -230,6 +231,8 @@ import type { ZhugeCeziRequest, ZhugeCeziResult } from '~/types/zhuge-cezi'
 const { t, locale } = useI18n()
 
 const phase = ref<'form' | 'animating' | 'result'>('form')
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('zhuge')
 const result = ref<ZhugeCeziResult | null>(null)
 
 const form = reactive<{
@@ -273,16 +276,21 @@ async function handleSubmit() {
   }
 
   try {
-    const calcResult = await plainFetch<ZhugeCeziResult>('/api/tools/zhuge-cezi/calc', {
-      method: 'POST',
-      body: payload,
-    })
+    const resultPromise = plainFetch<ZhugeCeziResult>('/api/tools/zhuge-cezi/calc', {
+        method: 'POST',
+        body: payload,
+      })
+    const animationPromise = lotShake.play()
+    const calcResult = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
+
+    lotShake.setSign(calcResult.qianNumber)
+    await animationPromise
     result.value = calcResult
-    setTimeout(() => {
-      phase.value = 'result'
-      setTimeout(() => startAiStream(), 300)
-    }, 2500)
+    phase.value = 'result'
+    setTimeout(() => startAiStream(), 300)
   } catch (err: any) {
+    lotShake.cancel()
     phase.value = 'form'
     useToast().add({
       title: t('zhugeCezi.calcFail'),

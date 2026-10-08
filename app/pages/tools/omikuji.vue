@@ -63,20 +63,16 @@
         </section>
       </div>
 
-      <div v-else-if="phase === 'drawing'" class="flex min-h-[60vh] flex-col items-center justify-center">
-        <div class="relative flex h-52 w-36 items-start justify-center">
-          <div class="omikuji-box" :class="{ shake: animationStep === 0 }">
-            <span class="box-lid" />
-            <span class="box-face">
-              <span>{{ $t('omikuji.boxMark') }}</span>
-            </span>
-          </div>
-          <div class="omikuji-slip" :class="{ drop: animationStep === 1 }" />
-          <div class="box-shadow" :class="{ grow: animationStep === 1 }" />
-        </div>
-        <p class="mt-6 min-h-5 text-sm text-[var(--text-muted)]">
-          {{ animationStep === 0 ? $t('omikuji.shaking') : $t('omikuji.opening') }}
-        </p>
+      <div v-else-if="phase === 'animating'" class="flex min-h-[60vh] flex-col items-center justify-center">
+        <LotShakeAnimation
+          :trigger="lotShake.trigger.value"
+          :theme="lotShakeTheme"
+          :selected-sign="lotShake.selectedSign.value"
+          class="w-full max-w-xl"
+          @complete="lotShake.complete"
+          @error="lotShake.fail"
+        />
+        <p class="mt-6 min-h-5 text-sm text-[var(--text-muted)]">{{ $t('omikuji.shaking') }}</p>
       </div>
 
       <div v-else-if="result">
@@ -176,8 +172,9 @@ interface OmikujiCalcResult {
 const { t, locale } = useI18n()
 const toast = useToast()
 
-const phase = ref<'form' | 'drawing' | 'result'>('form')
-const animationStep = ref<0 | 1>(0)
+const phase = ref<'form' | 'animating' | 'result'>('form')
+const lotShake = useLotShake()
+const lotShakeTheme = useLotShakeTheme('omikuji')
 const question = ref('')
 const result = ref<OmikujiCalcResult | null>(null)
 const posterRef = ref<HTMLDivElement>()
@@ -223,29 +220,28 @@ async function drawLot() {
     return
   }
 
-  phase.value = 'drawing'
-  animationStep.value = 0
+  phase.value = 'animating'
   result.value = null
   aiContent.value = ''
   aiStreaming.value = false
   aiError.value = null
 
-  setTimeout(() => {
-    animationStep.value = 1
-  }, 900)
-
   try {
-    const drawn = await plainFetch<OmikujiCalcResult>('/api/tools/omikuji/calc', {
-      method: 'POST',
-      body: { question: question.value.trim(), locale: locale.value },
-    })
+    const resultPromise = plainFetch<OmikujiCalcResult>('/api/tools/omikuji/calc', {
+        method: 'POST',
+        body: { question: question.value.trim(), locale: locale.value },
+      })
+    const animationPromise = lotShake.play()
+    const drawn = await resultPromise
+    if (lotShake.error.value) throw new Error(lotShake.error.value)
 
-    setTimeout(() => {
-      result.value = drawn
-      phase.value = 'result'
-      setTimeout(() => startAiStream(), 250)
-    }, 1800)
+    lotShake.setSign(drawn.fortune.number)
+    await animationPromise
+    result.value = drawn
+    phase.value = 'result'
+    setTimeout(() => startAiStream(), 250)
   } catch (error: any) {
+    lotShake.cancel()
     phase.value = 'form'
     toast.add({
       title: t('omikuji.drawFailed'),
@@ -332,7 +328,6 @@ async function copyResult() {
 
 function resetForm() {
   phase.value = 'form'
-  animationStep.value = 0
   result.value = null
   aiContent.value = ''
   aiStreaming.value = false
@@ -376,91 +371,3 @@ useHead(() => ({
   }],
 }))
 </script>
-
-<style scoped>
-.omikuji-box {
-  position: absolute;
-  top: 52px;
-  left: 50%;
-  width: 96px;
-  height: 82px;
-  transform: translateX(-50%);
-}
-
-.box-face {
-  position: absolute;
-  inset: 12px 0 0;
-  display: grid;
-  place-items: center;
-  border: 2px solid var(--accent-border);
-  border-radius: 12px;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 20%, transparent), color-mix(in srgb, var(--accent) 6%, transparent));
-  color: var(--accent);
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.box-lid {
-  position: absolute;
-  top: 0;
-  left: -6px;
-  width: 108px;
-  height: 26px;
-  border: 2px solid var(--accent-border);
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--accent-bg) 70%, transparent);
-}
-
-.omikuji-slip {
-  position: absolute;
-  top: 66px;
-  left: 50%;
-  width: 40px;
-  height: 92px;
-  border: 1px solid var(--accent-border);
-  border-radius: 5px;
-  background: #fff;
-  opacity: 0;
-  transform: translate(-50%, -12px) rotate(-10deg);
-  box-shadow: 0 8px 18px rgb(0 0 0 / 14%);
-}
-
-.box-shadow {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  width: 72px;
-  height: 9px;
-  border-radius: 50%;
-  background: rgb(0 0 0 / 22%);
-  filter: blur(5px);
-  transform: translateX(-50%);
-}
-
-.shake {
-  animation: box-shake .85s ease-in-out;
-}
-
-.drop {
-  opacity: 1;
-  animation: slip-drop .95s cubic-bezier(.25, .46, .45, .94) forwards;
-}
-
-.grow {
-  opacity: .9;
-  transition: opacity .4s ease .3s;
-}
-
-@keyframes box-shake {
-  0%, 100% { transform: translateX(-50%) rotate(0); }
-  20% { transform: translateX(-54%) rotate(-4deg); }
-  45% { transform: translateX(-46%) rotate(4deg); }
-  70% { transform: translateX(-52%) rotate(-2deg); }
-}
-
-@keyframes slip-drop {
-  0% { opacity: 0; transform: translate(-50%, -30px) rotate(-12deg); }
-  30% { opacity: 1; }
-  100% { opacity: 1; transform: translate(-50%, 58px) rotate(5deg); }
-}
-</style>
