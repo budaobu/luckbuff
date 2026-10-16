@@ -18,6 +18,7 @@ export function useBaziPaipan3D(result: Ref<BaziChartResult | null>) {
     lifecycle: ref<Bazi3DLifecycle>('idle'),
     timelineProgress: ref(0),
     replayRequested: ref(0),
+    timelineControl: null as null | { seek: (seconds: number) => void, replay: () => void },
     rendererStats: ref<{ geometries: number, textures: number, programs: number } | null>(null),
     errorMessage: ref(''),
     model: computed((): BaziPaipan3DModel | null => result.value ? buildBaziPaipan3DModel(result.value) : null),

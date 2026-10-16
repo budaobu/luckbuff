@@ -4,6 +4,7 @@
     :data-state="controller.state.value"
     :data-lifecycle="controller.lifecycle.value"
     :data-timeline="controller.timelineProgress.value"
+    :data-intro="controller.introCompleted.value"
     :data-quality="controller.quality.value"
     :data-renderer-stats="rendererStatsText || undefined"
     :data-error="controller.errorMessage.value || undefined"
@@ -158,11 +159,7 @@ function selectScene(scene: 'compass' | 'galaxy' | 'tunnel') {
 }
 
 function replay() {
-  props.controller.scene.value = 'compass'
-  props.controller.introCompleted.value = false
-  props.controller.timelineProgress.value = 0
-  props.controller.lifecycle.value = 'playing'
-  props.controller.replayRequested.value += 1
+  props.controller.timelineControl?.replay()
 }
 
 function selectNeighborDayun(direction: -1 | 1) {

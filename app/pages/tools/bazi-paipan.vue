@@ -154,6 +154,19 @@ async function handleSubmit(values: FormValues) {
     bazi3D.selectedDayunIndex.value = result.value.dayuns.find(dayun => dayun.isCurrent)?.index
       ?? result.value.dayuns[0]?.index
       ?? 0
+    const chartSignature = [
+      result.value.birth.solarText,
+      result.value.birth.clockText,
+      result.value.birth.genderText,
+    ].join('|')
+    const settledKey = `bazi3d:settled:${chartSignature}`
+    try {
+      bazi3D.introCompleted.value = window.localStorage.getItem(settledKey) === '1'
+      window.localStorage.setItem(settledKey, '1')
+    }
+    catch {
+      bazi3D.introCompleted.value = false
+    }
     phase.value = 'result'
     await nextTick()
     window.scrollTo({ top: 0, behavior: 'smooth' })

@@ -186,7 +186,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     renderer.setSize(width, height)
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.05
+    renderer.toneMappingExposure = 0.92
     root.appendChild(renderer.domElement)
     resources.push(renderer)
 
@@ -194,6 +194,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     const environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture
     scene = new THREE.Scene()
     scene.environment = environment
+    scene.environmentIntensity = 0.52
     resources.push(pmremGenerator, environment)
 
     const atlasTexture = await new THREE.TextureLoader().loadAsync('/assets/bazi-paipan-3d/bazi-glyphs-sdf.png')
@@ -210,9 +211,9 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     camera.lookAt(0, 0, 0)
 
     scene.add(new THREE.HemisphereLight(0x7f8ea8, 0x150b05, 0.28))
-    const keyLight = new THREE.DirectionalLight(0xffd8a5, 2.4)
+    const keyLight = new THREE.DirectionalLight(0xffd8a5, 1.65)
     keyLight.position.set(3.2, 4.2, 4.8)
-    const backLight = new THREE.DirectionalLight(0x7fa2ff, 1.2)
+    const backLight = new THREE.DirectionalLight(0x7fa2ff, 0.78)
     backLight.position.set(-3.8, 1.5, -4.2)
     scene.add(backLight)
     scene.add(keyLight)
@@ -374,7 +375,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       })
     }
 
-    const relationLines: { material: ThreeNamespace.ShaderMaterial, relationId: string }[] = []
+    const relationLines: { mesh: ThreeNamespace.Mesh, material: ThreeNamespace.ShaderMaterial, relationId: string }[] = []
     for (const relation of model.relations) {
       const from = ELEMENT_POSITIONS[relation.from]
       const to = ELEMENT_POSITIONS[relation.to]
@@ -391,7 +392,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       const mesh = new THREE.Mesh(geometry, material)
       mesh.userData = { relationId: relation.id }
       galaxy.add(mesh)
-      relationLines.push({ material, relationId: relation.id })
+      relationLines.push({ mesh, material, relationId: relation.id })
     }
 
     const compass = new THREE.Group()
@@ -423,6 +424,11 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         mesh.rotation.x = Math.PI / 2
         instrumentRings.push(mesh)
       }
+      if (mesh.name === 'instrument_base') {
+        mesh.rotation.x = Math.PI / 2
+        mesh.position.z = -0.38
+        mesh.scale.setScalar(0.72)
+      }
     })
     compass.add(instrumentRoot)
     dracoLoader.dispose()
@@ -432,6 +438,15 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
       targetOpacity: number
     }[] = []
+    const plaqueGroups: ThreeNamespace.Group[] = []
+    const plaqueTargets: [number, number][] = [
+      [-1.06, 0.52],
+      [1.06, 0.52],
+      [-1.06, -0.48],
+      [1.06, -0.48],
+    ]
+    const plaqueLabels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[][] = []
+    const plaqueMaterials: ThreeNamespace.MeshPhysicalMaterial[] = []
     const tunnelHitMeshes: ThreeNamespace.Mesh[] = []
     const compassRadii = [2.35, 1.85, 1.35, 0.88]
 
@@ -450,17 +465,42 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       const ring = new THREE.Mesh(ringGeometry, ringMaterial)
       compass.add(ring)
 
-      const labels = [
-        { character: gan, angle: -Math.PI / 5 },
-        { character: zhi, angle: Math.PI / 5 },
-      ].map(({ character, angle }) => {
-        const isDayMasterStem = index === 2 && character.id === 'day-gan'
-        const label = createGlyphMesh(character.char, isDayMasterStem ? '#fff2ce' : '#e9eefa', 0.34)
-        const radius = compassRadii[index]!
-        label.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius, 0)
-        compass.add(label)
+      const plaqueGroup = new THREE.Group()
+      const [targetX, targetY] = plaqueTargets[index]!
+      plaqueGroup.position.set(targetX, targetY, 0.28)
+      const plaqueMaterial = new THREE.MeshPhysicalMaterial({
+        color: index === 2 ? '#2f7d5a' : '#226048',
+        roughness: 0.2,
+        metalness: 0,
+        clearcoat: 0.74,
+        clearcoatRoughness: 0.13,
+        emissive: new THREE.Color(index === 2 ? '#39a374' : '#267a58'),
+        emissiveIntensity: index === 2 ? 0.2 : 0.1,
+        transparent: true,
+        opacity: 0,
+      })
+      resources.push(plaqueMaterial)
+      plaqueMaterials.push(plaqueMaterial)
+      const plaque = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.82, 0.05), plaqueMaterial)
+      resources.push(plaque.geometry)
+      plaqueGroup.add(plaque)
+
+      const plaqueGlyphs = [
+        { character: gan, offsetX: -0.145 },
+        { character: zhi, offsetX: 0.145 },
+      ].map(({ character, offsetX }, glyphIndex) => {
+        const isDayMasterStem = index === 2 && glyphIndex === 0
+        const label = createGlyphMesh(character.char, isDayMasterStem ? '#fff8dd' : '#eefaf2', 0.3)
+        label.position.set(offsetX, -0.02, 0.042)
+        label.material.uniforms.uOpacity!.value = 0
+        plaqueGroup.add(label)
         return label
       })
+
+      compass.add(plaqueGroup)
+      plaqueGroups.push(plaqueGroup)
+      plaqueLabels.push(plaqueGlyphs)
+      const labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[] = []
 
       compassRings.push({ mesh: ring, labels, targetOpacity: index === 2 ? 0.96 : 0.78 })
     }
@@ -535,8 +575,9 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       compass.visible = mode === 'compass'
       galaxy.visible = mode === 'galaxy'
       tunnel.visible = mode === 'tunnel'
+      if (mode === 'compass' && timelinePaused) return
       if (mode === 'compass') {
-        if (state.introCompleted.value) {
+        if (state.introCompleted.value && !timelinePaused) {
           timelineTime = 6
           state.lifecycle.value = 'settled'
         }
@@ -544,6 +585,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       }
       else if (mode === 'galaxy') {
         camera.position.set(0, 0.5, 9.2)
+        clusterParticles.forEach(particle => particle.points.visible = true)
+        relationLines.forEach(line => line.mesh.visible = true)
+        starMeshes.forEach(object => object.visible = true)
+        texts.forEach(text => text.visible = true)
       }
     }
 
@@ -555,7 +600,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     if (quality === 'high') {
       const nextComposer = new EffectComposer(renderer)
       nextComposer.addPass(new RenderPass(scene, camera))
-      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.38, 0.58, 0.82)
+      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.22, 0.48, 0.86)
       nextComposer.addPass(bloomPass)
       composer = nextComposer
     }
@@ -647,8 +692,6 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       state.lifecycle.value = state.scene.value === 'tunnel'
         ? 'tunnel'
         : time >= 6 ? 'settled' : 'playing'
-      if (time < 6 && state.introCompleted.value && timelinePaused) state.introCompleted.value = false
-
       const instrumentScale = 0.86 + startup * 0.14
       instrumentRoot.scale.setScalar(instrumentScale)
       instrumentRings.forEach((ring, index) => {
@@ -658,24 +701,37 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         ring.rotation.z = reducedMotion ? 0 : direction * time * speed * (1 - settle * 0.88)
       })
 
-      compassRings.forEach((ring, index) => {
-        const radius = compassRadii[index]!
-        ring.labels.forEach((label, labelIndex) => {
-          const targetAngle = labelIndex === 0 ? -Math.PI / 5 : Math.PI / 5
-          const entrance = phaseProgress(time, 1.5 + index * 0.2, 2.55 + index * 0.2)
-          const angle = targetAngle + (1 - entrance) * (labelIndex === 0 ? 1.35 : -1.35)
-          const orbitRadius = radius + (1 - entrance) * 0.78
-          label.position.set(
-            Math.cos(angle) * orbitRadius,
-            Math.sin(angle) * orbitRadius,
-            (1 - entrance) * 0.45,
-          )
-          const visibility = Math.min(phaseProgress(time, 0, 0.7), entrance)
-          label.material.uniforms.uOpacity!.value = visibility
+      plaqueGroups.forEach((group, index) => {
+        const [targetX, targetY] = plaqueTargets[index]!
+        const entrance = phaseProgress(time, 1.5 + index * 0.16, 2.45 + index * 0.16)
+        group.position.set(
+          targetX,
+          targetY - (1 - entrance) * 0.52,
+          0.28 + (1 - entrance) * 0.34,
+        )
+        group.rotation.x = (1 - entrance) * -0.16
+        group.scale.setScalar(0.86 + entrance * 0.14)
+        plaqueMaterials[index]!.opacity = Math.min(startup + 0.18, 1) * (0.34 + entrance * 0.66)
+        plaqueLabels[index]!.forEach((label) => {
+          label.material.uniforms.uOpacity!.value = Math.min(startup * 0.8, entrance)
         })
       })
 
       galaxy.visible = state.scene.value === 'compass' && time >= 3 && time < 5.2
+      const showGalaxyEffects = galaxy.visible
+      const showGalaxyIdentity = state.scene.value === 'galaxy'
+      clusterParticles.forEach((particle) => {
+        particle.points.visible = showGalaxyEffects || showGalaxyIdentity
+      })
+      relationLines.forEach((line) => {
+        line.mesh.visible = showGalaxyEffects || showGalaxyIdentity
+      })
+      starMeshes.forEach((object) => {
+        object.visible = showGalaxyIdentity
+      })
+      texts.forEach((text) => {
+        text.visible = showGalaxyIdentity
+      })
       const shock = phaseProgress(time, 4.5, 5.55)
       shockwave.visible = shock > 0 && shock < 1
       shockwave.scale.setScalar(0.9 + shock * 2.5)
@@ -695,15 +751,35 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       if (time >= 6 && !state.introCompleted.value) state.introCompleted.value = true
     }
 
-    if (import.meta.dev) {
-      ;(window as unknown as { __bazi3dSeekTimeline?: (seconds: number) => void }).__bazi3dSeekTimeline = (seconds) => {
+    state.timelineControl = {
+      seek: (seconds) => {
+        renderer.setAnimationLoop(null)
         timelineTime = Math.min(Math.max(seconds, 0), 6)
         timelinePaused = true
         state.introCompleted.value = timelineTime >= 6
         state.scene.value = 'compass'
         applyScene('compass')
         applyInstrumentTimeline()
-      }
+        if (composer) composer.render()
+        else renderer.render(scene, camera)
+      },
+      replay: () => {
+        timelineTime = 0
+        timelinePaused = false
+        state.introCompleted.value = false
+        state.scene.value = 'compass'
+        state.lifecycle.value = 'playing'
+        applyScene('compass')
+        applyInstrumentTimeline()
+        renderer.setAnimationLoop(frame)
+      },
+    }
+    if (import.meta.dev) {
+      ;(window as unknown as { __bazi3dTimelineControl?: unknown }).__bazi3dTimelineControl = state.timelineControl
+    }
+
+    if (import.meta.dev) {
+      ;(window as unknown as { __bazi3dSeekTimeline?: (seconds: number) => void }).__bazi3dSeekTimeline = seconds => state.timelineControl?.seek(seconds)
     }
 
     function frame() {
@@ -739,7 +815,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       }
 
       if (state.scene.value !== 'tunnel') {
-        if (reducedMotion || state.introCompleted.value) timelineTime = 6
+        if ((reducedMotion || state.introCompleted.value) && !timelinePaused) timelineTime = 6
         else if (state.scene.value === 'compass' && !timelinePaused) timelineTime = Math.min(6, timelineTime + delta)
         else timelineTime = 6
         applyInstrumentTimeline()
