@@ -12300,6 +12300,12 @@
       "creativity": "创造力"
     }
   },
+  "bazi3d": {
+    "compass": "天地罗盘",
+    "galaxy": "五行星河",
+    "tunnel": "大运隧道",
+    "skip": "跳过动画"
+  },
   "baziChart": {
     "title": "八字排盘",
     "subtitle": "输入出生年月日、时辰、出生地点与性别，生成详细出生信息和命盘构成",

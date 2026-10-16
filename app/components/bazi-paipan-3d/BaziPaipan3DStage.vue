@@ -5,6 +5,20 @@
     :data-error="controller.errorMessage.value || undefined"
     aria-live="polite"
   >
+    <div class="b3d-toolbar">
+      <span data-testid="bazi-3d-scene">
+        {{ controller.scene.value === 'compass' ? $t('bazi3d.compass') : controller.scene.value === 'tunnel' ? $t('bazi3d.tunnel') : $t('bazi3d.galaxy') }}
+      </span>
+      <button
+        v-if="controller.scene.value === 'compass' && !controller.introCompleted.value"
+        type="button"
+        data-testid="bazi-3d-skip-intro"
+        @click="controller.introCompleted.value = true"
+      >
+        <UIcon name="i-heroicons-forward" class="h-3.5 w-3.5" />
+        {{ $t('bazi3d.skip') }}
+      </button>
+    </div>
     <div ref="stageRoot" class="b3d-canvas" data-testid="bazi-3d-canvas" aria-hidden="true" />
 
     <p v-if="controller.hoveredCharacterId.value" class="b3d-hover">
@@ -77,6 +91,43 @@ onBeforeUnmount(() => {
   border: 1px solid color-mix(in srgb, #8fa4d0 24%, transparent);
   border-radius: 10px;
   background: #05070e;
+}
+
+.b3d-toolbar {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.b3d-toolbar span {
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(5, 8, 16, 0.68);
+  color: #b9c4d9;
+  font-size: 12px;
+}
+
+.b3d-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(5, 8, 16, 0.78);
+  color: #e8eefc;
+  font-size: 12px;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.b3d-toolbar button:hover {
+  border-color: rgba(255, 216, 132, 0.46);
+  color: #fff2ce;
 }
 
 .b3d-canvas {

@@ -202,9 +202,58 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     scene.add(keyLight)
 
     const galaxy = new THREE.Group()
+    galaxy.visible = false
     scene.add(galaxy)
 
     const glowTexture = radialGlow(THREE, resources)
+    const glyphOrder = [...new Set('甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥')]
+
+    function createGlyphMesh(char: string, color: string, size = 0.56) {
+      const glyphIndex = glyphOrder.indexOf(char)
+      const glyphGeometry = new THREE.PlaneGeometry(size, size)
+      const uvAttribute = glyphGeometry.getAttribute('uv')
+      const column = glyphIndex % 6
+      const row = Math.floor(glyphIndex / 6)
+      for (let uvIndex = 0; uvIndex < uvAttribute.count; uvIndex += 1) {
+        uvAttribute.setXY(
+          uvIndex,
+          (column + uvAttribute.getX(uvIndex)) / 6,
+          1 - (row + 1 - uvAttribute.getY(uvIndex)) / 4,
+        )
+      }
+      resources.push(glyphGeometry)
+
+      const mesh = new THREE.Mesh(glyphGeometry, new THREE.ShaderMaterial({
+        uniforms: {
+          uAtlas: { value: atlasTexture },
+          uColor: { value: new THREE.Color(color) },
+          uOpacity: { value: 0 },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D uAtlas;
+          uniform vec3 uColor;
+          uniform float uOpacity;
+          varying vec2 vUv;
+          void main() {
+            float distance = texture2D(uAtlas, vUv).r;
+            float alpha = smoothstep(0.46, 0.54, distance);
+            gl_FragColor = vec4(uColor, alpha * uOpacity);
+          }
+        `,
+        transparent: true,
+        depthWrite: false,
+      }))
+      resources.push(mesh.material)
+      return mesh as ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>
+    }
+
     const particleMaterial = new THREE.PointsMaterial({
       vertexColors: true,
       size: quality === 'high' ? 0.058 : 0.075,
@@ -256,7 +305,6 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     const raycastMeshes: ThreeNamespace.Mesh[] = []
     const glowMaterials: { material: ThreeNamespace.SpriteMaterial, elementKey: ElementKey }[] = []
     const characterPositions = new Map<string, ThreeNamespace.Vector3>()
-    const glyphOrder = [...new Set('甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥')]
 
     for (const elementKey of ELEMENT_KEYS) {
       const members = model.characters.filter(character => character.elementKey === elementKey)
@@ -301,47 +349,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         galaxy.add(glow)
         starMeshes.push(glow)
 
-        const glyphIndex = glyphOrder.indexOf(character.char)
-        const glyphGeometry = new THREE.PlaneGeometry(0.56, 0.56)
-        const uvAttribute = glyphGeometry.getAttribute('uv')
-        const column = glyphIndex % 6
-        const row = Math.floor(glyphIndex / 6)
-        for (let uvIndex = 0; uvIndex < uvAttribute.count; uvIndex += 1) {
-          uvAttribute.setXY(
-            uvIndex,
-            (column + uvAttribute.getX(uvIndex)) / 6,
-            1 - (row + 1 - uvAttribute.getY(uvIndex)) / 4,
-          )
-        }
-        resources.push(glyphGeometry)
-
-        const text = new THREE.Mesh(glyphGeometry, new THREE.ShaderMaterial({
-          uniforms: {
-            uAtlas: { value: atlasTexture },
-            uColor: { value: new THREE.Color(character.isDayMaster ? '#fff2ce' : '#f4f8ff') },
-            uOpacity: { value: 1 },
-          },
-          vertexShader: `
-            varying vec2 vUv;
-            void main() {
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
-          fragmentShader: `
-            uniform sampler2D uAtlas;
-            uniform vec3 uColor;
-            uniform float uOpacity;
-            varying vec2 vUv;
-            void main() {
-              float distance = texture2D(uAtlas, vUv).r;
-              float alpha = smoothstep(0.46, 0.54, distance);
-              gl_FragColor = vec4(uColor, alpha * uOpacity);
-            }
-          `,
-          transparent: true,
-          depthWrite: false,
-        }))
+        const text = createGlyphMesh(character.char, character.isDayMaster ? '#fff2ce' : '#f4f8ff')
+        text.material.uniforms.uOpacity!.value = 1
         text.position.copy(center).add(new THREE.Vector3(0, 0.3, 0))
         text.userData = { characterId: character.id, elementKey }
         galaxy.add(text)
@@ -367,6 +376,45 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       mesh.userData = { relationId: relation.id }
       galaxy.add(mesh)
       relationLines.push({ material, relationId: relation.id })
+    }
+
+    const compass = new THREE.Group()
+    scene.add(compass)
+    const compassRings: {
+      mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
+      labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
+      targetOpacity: number
+    }[] = []
+    const compassRadii = [2.35, 1.85, 1.35, 0.88]
+
+    for (let index = 0; index < 4; index += 1) {
+      const gan = model.characters[index * 2]
+      const zhi = model.characters[index * 2 + 1]
+      if (!gan || !zhi) continue
+
+      const ringGeometry = new THREE.TorusGeometry(compassRadii[index]!, 0.018, 10, 128)
+      const ringMaterial = new THREE.MeshBasicMaterial({
+        color: index === 2 ? '#ffd884' : '#8ba0c8',
+        transparent: true,
+        opacity: 0,
+      })
+      resources.push(ringGeometry, ringMaterial)
+      const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+      compass.add(ring)
+
+      const labels = [
+        { character: gan, angle: -Math.PI / 5 },
+        { character: zhi, angle: Math.PI / 5 },
+      ].map(({ character, angle }) => {
+        const isDayMasterStem = index === 2 && character.id === 'day-gan'
+        const label = createGlyphMesh(character.char, isDayMasterStem ? '#fff2ce' : '#e9eefa', 0.34)
+        const radius = compassRadii[index]!
+        label.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius, 0)
+        compass.add(label)
+        return label
+      })
+
+      compassRings.push({ mesh: ring, labels, targetOpacity: index === 2 ? 0.96 : 0.78 })
     }
 
     if (quality === 'high') {
@@ -431,7 +479,28 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     const clock = new THREE.Clock()
     const cameraTarget = new THREE.Vector3()
+    camera.position.set(0, 0, 7)
     let hoverMix = 0
+    let transitionStart: number | null = null
+
+    function easeOutCubic(value: number) {
+      return 1 - (1 - value) ** 3
+    }
+
+    function finishCompass(elapsed: number) {
+      if (transitionStart !== null) return
+      transitionStart = elapsed
+      galaxy.visible = true
+    }
+
+    function setCompassProgress(index: number, progress: number) {
+      const ring = compassRings[index]
+      if (!ring) return
+      ring.mesh.material.opacity = ring.targetOpacity * progress
+      ring.mesh.scale.setScalar(0.92 + progress * 0.08)
+      ring.mesh.rotation.z = (1 - progress) * (index % 2 === 0 ? 0.7 : -0.7)
+      for (const label of ring.labels) label.material.uniforms.uOpacity!.value = progress
+    }
 
     function frame() {
       if (disposed) return
@@ -443,9 +512,45 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       hoverMix += ((hovered ? 1 : 0) - hoverMix) * Math.min(delta * 9, 1)
 
       if (!reducedMotion) {
-        galaxy.rotation.y = Math.sin(elapsed * 0.09) * 0.07
+        if (galaxy.visible) galaxy.rotation.y = Math.sin(elapsed * 0.09) * 0.07
+      }
+
+      if (compass.visible && transitionStart === null) {
+        if (reducedMotion || state.introCompleted.value) {
+          compassRings.forEach((_, index) => setCompassProgress(index, 1))
+          finishCompass(elapsed)
+        }
+        else {
+          compassRings.forEach((_, index) => {
+            const start = index * 0.52
+            setCompassProgress(index, easeOutCubic(Math.min(Math.max((elapsed - start) / 0.68, 0), 1)))
+          })
+          if (elapsed >= 2.52) finishCompass(elapsed)
+        }
+      }
+
+      if (transitionStart !== null) {
+        const progress = easeOutCubic(Math.min(Math.max((elapsed - transitionStart) / 0.78, 0), 1))
+        camera.position.set(0, 0.5, 7 + (9.2 - 7) * progress)
+        const fade = 1 - progress
+        for (const ring of compassRings) {
+          ring.mesh.material.opacity = ring.targetOpacity * fade
+          for (const label of ring.labels) label.material.uniforms.uOpacity!.value = fade
+        }
+        if (progress >= 1) {
+          compass.visible = false
+          transitionStart = null
+          state.introCompleted.value = true
+          state.scene.value = 'galaxy'
+        }
+      }
+      else if (galaxy.visible && !reducedMotion) {
         camera.position.x = Math.sin(elapsed * 0.13) * 0.35
         camera.position.y = 0.5 + Math.sin(elapsed * 0.11) * 0.13
+      }
+
+      for (const ring of compassRings) {
+        for (const label of ring.labels) label.quaternion.copy(camera.quaternion)
       }
       camera.lookAt(cameraTarget)
 

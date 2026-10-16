@@ -135,6 +135,10 @@ async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   lastFormValues.value = { ...values }
   phase.value = 'loading'
+  bazi3D.scene.value = 'compass'
+  bazi3D.introCompleted.value = false
+  bazi3D.hoveredCharacterId.value = null
+  bazi3D.selectedDayunIndex.value = 0
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
@@ -174,6 +178,10 @@ function handleSaveProfile(id: string, values: FormValues) {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
+  bazi3D.scene.value = 'galaxy'
+  bazi3D.introCompleted.value = false
+  bazi3D.hoveredCharacterId.value = null
+  bazi3D.selectedDayunIndex.value = 0
 }
 
 function formatOffset(minutes: number) {

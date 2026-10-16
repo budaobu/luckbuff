@@ -12276,6 +12276,12 @@
       "creativity": "Creativity"
     }
   },
+  "bazi3d": {
+    "compass": "Heaven & Earth Compass",
+    "galaxy": "Five Element River",
+    "tunnel": "Fortune Tunnel",
+    "skip": "Skip intro"
+  },
   "baziChart": {
     "title": "Bazi Chart",
     "subtitle": "Enter birth date, hour, place and gender to generate detailed birth data and natal structure",

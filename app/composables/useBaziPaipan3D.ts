@@ -12,8 +12,13 @@ export function useBaziPaipan3D(result: Ref<BaziChartResult | null>) {
     quality: ref<Bazi3DQuality>('high'),
     hoveredCharacterId: ref<string | null>(null),
     selectedDayunIndex: ref(0),
+    introCompleted: ref(false),
     rendererStats: ref<{ geometries: number, textures: number, programs: number } | null>(null),
     errorMessage: ref(''),
     model: computed((): BaziPaipan3DModel | null => result.value ? buildBaziPaipan3DModel(result.value) : null),
   }
+}
+
+export function skipBazi3DIntro(state: { introCompleted: Ref<boolean> }) {
+  state.introCompleted.value = true
 }
