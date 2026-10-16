@@ -1,0 +1,536 @@
+import type * as ThreeNamespace from 'three'
+import type { Pass } from 'three/examples/jsm/postprocessing/Pass.js'
+import type { BaziPaipan3DState } from '~/composables/useBaziPaipan3D'
+import type { BaziPaipan3DModel } from './model'
+import { ELEMENT_KEYS, type ElementKey } from './model'
+
+type ThreeObject = { dispose: () => void }
+type EffectComposerLike = {
+  addPass: (pass: Pass) => void
+  setSize: (width: number, height: number) => void
+  render: () => void
+}
+
+const ELEMENT_COLORS: Record<ElementKey, string> = {
+  wood: '#5fd895',
+  fire: '#ff7f68',
+  earth: '#e8b665',
+  metal: '#c7d3e5',
+  water: '#5d9bff',
+}
+
+const ELEMENT_POSITIONS: Record<ElementKey, [number, number, number]> = {
+  wood: [0, 0.3, -3.05],
+  fire: [2.9, 0.08, -0.94],
+  earth: [1.79, -0.14, 2.46],
+  metal: [-1.79, -0.1, 2.46],
+  water: [-2.9, 0.18, -0.94],
+}
+
+const GENERATION_ORDER: ElementKey[] = ['wood', 'fire', 'earth', 'metal', 'water']
+
+interface MountOptions {
+  root: HTMLElement
+  state: BaziPaipan3DState
+  model: BaziPaipan3DModel
+  reducedMotion: boolean
+}
+
+function qualityDpr(quality: 'high' | 'mid' | 'low') {
+  if (quality === 'high') return Math.min(window.devicePixelRatio || 1, 2)
+  return quality === 'mid' ? Math.min(window.devicePixelRatio || 1, 1.35) : 1
+}
+
+function detectQuality(): 'high' | 'mid' | 'low' {
+  const requested = new URLSearchParams(window.location.search).get('bazi3dQuality')
+  if (requested === 'high' || requested === 'mid' || requested === 'low') return requested
+
+  const navigatorWithMemory = navigator as Navigator & { deviceMemory?: number }
+  const cores = navigator.hardwareConcurrency || 4
+  if (cores <= 2 || (navigatorWithMemory.deviceMemory ?? 8) <= 2) return 'low'
+  if (cores <= 4 || (navigatorWithMemory.deviceMemory ?? 8) <= 4 || window.innerWidth < 640) return 'mid'
+  return 'high'
+}
+
+function radialGlow(THREE: typeof ThreeNamespace, resources: ThreeObject[]) {
+  const canvas = document.createElement('canvas')
+  canvas.width = 128
+  canvas.height = 128
+  const context = canvas.getContext('2d')
+  if (context) {
+    const gradient = context.createRadialGradient(64, 64, 0, 64, 64, 64)
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.92)')
+    gradient.addColorStop(0.32, 'rgba(255, 255, 255, 0.34)')
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+    context.fillStyle = gradient
+    context.fillRect(0, 0, 128, 128)
+  }
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  resources.push(texture)
+  return texture
+}
+
+function flowMaterial(
+  THREE: typeof ThreeNamespace,
+  resources: ThreeObject[],
+  color: string,
+  baseOpacity: number,
+) {
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      uColor: { value: new THREE.Color(color) },
+      uTime: { value: 0 },
+      uActive: { value: 1 },
+      uBaseOpacity: { value: baseOpacity },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 uColor;
+      uniform float uTime;
+      uniform float uActive;
+      uniform float uBaseOpacity;
+      varying vec2 vUv;
+      void main() {
+        float stream = pow(max(0.0, 1.0 - abs(fract(vUv.x * 3.0 - uTime * 0.62) - 0.5) * 3.2), 4.0);
+        float pulse = 0.38 + stream * 0.62;
+        gl_FragColor = vec4(uColor * (0.66 + stream * 0.9), uBaseOpacity * pulse * uActive);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+  resources.push(material)
+  return material
+}
+
+function curvedPoints(
+  THREE: typeof ThreeNamespace,
+  from: [number, number, number],
+  to: [number, number, number],
+  kind: 'generates' | 'controls',
+) {
+  const start = new THREE.Vector3(...from)
+  const end = new THREE.Vector3(...to)
+  const middle = start.clone().add(end).multiplyScalar(0.5)
+  const outward = middle.clone().setY(0).normalize().multiplyScalar(kind === 'generates' ? 0.58 : 1.08)
+  middle.add(outward)
+  middle.y += kind === 'generates' ? 0.46 : 0.14
+
+  if (kind === 'generates') return [start, middle, end]
+
+  const along = end.clone().sub(start).normalize()
+  const side = new THREE.Vector3().crossVectors(along, new THREE.Vector3(0, 1, 0)).normalize()
+  const points = [start]
+  for (let index = 1; index < 5; index += 1) {
+    const point = start.clone().lerp(end, index / 5)
+    point.addScaledVector(side, (index % 2 === 0 ? -1 : 1) * (0.16 - index * 0.018))
+    point.y += Math.sin(index * 2.1) * 0.08
+    points.push(point)
+  }
+  points.push(end)
+  return points
+}
+
+export async function mountBaziPaipan3D(options: MountOptions) {
+  const { root, state, model, reducedMotion } = options
+  const quality = detectQuality()
+  state.quality.value = quality
+
+  if (quality === 'low' || typeof WebGLRenderingContext === 'undefined') {
+    state.state.value = 'static'
+    return () => undefined
+  }
+
+  let disposed = false
+  const resources: ThreeObject[] = []
+  const texts: ThreeNamespace.Mesh<ThreeNamespace.BufferGeometry, ThreeNamespace.ShaderMaterial>[] = []
+  let renderer: ThreeNamespace.WebGLRenderer
+  let scene: ThreeNamespace.Scene
+  let camera: ThreeNamespace.PerspectiveCamera
+  let composer: EffectComposerLike | null = null
+  let bloomPass: Pass | null = null
+  let resizeObserver: ResizeObserver | null = null
+  let handlePointerMove: ((event: PointerEvent) => void) | null = null
+  let handleClearHover: (() => void) | null = null
+
+  try {
+    const THREE = await import('three')
+    const { EffectComposer } = await import('three/examples/jsm/postprocessing/EffectComposer.js')
+    const { RenderPass } = await import('three/examples/jsm/postprocessing/RenderPass.js')
+    const { UnrealBloomPass } = await import('three/examples/jsm/postprocessing/UnrealBloomPass.js')
+
+    const width = Math.max(root.clientWidth, 1)
+    const height = Math.max(root.clientHeight, 1)
+    renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: false,
+      powerPreference: 'high-performance',
+    })
+    renderer.setClearColor(0x05070e, 1)
+    renderer.setPixelRatio(qualityDpr(quality))
+    renderer.setSize(width, height)
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    root.appendChild(renderer.domElement)
+    resources.push(renderer)
+
+    const atlasTexture = await new THREE.TextureLoader().loadAsync('/assets/bazi-paipan-3d/bazi-glyphs-sdf.png')
+    atlasTexture.colorSpace = THREE.NoColorSpace
+    atlasTexture.generateMipmaps = true
+    atlasTexture.minFilter = THREE.LinearMipmapLinearFilter
+    atlasTexture.magFilter = THREE.LinearFilter
+    atlasTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy())
+    resources.push(atlasTexture)
+
+    scene = new THREE.Scene()
+    scene.fog = new THREE.FogExp2(0x05070e, 0.055)
+    camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100)
+    camera.position.set(0, 0.5, 9.2)
+    camera.lookAt(0, 0, 0)
+
+    scene.add(new THREE.AmbientLight(0x98b5ff, 0.8))
+    const keyLight = new THREE.DirectionalLight(0xbdd4ff, 1.15)
+    keyLight.position.set(3, 4, 5)
+    scene.add(keyLight)
+
+    const galaxy = new THREE.Group()
+    scene.add(galaxy)
+
+    const glowTexture = radialGlow(THREE, resources)
+    const particleMaterial = new THREE.PointsMaterial({
+      vertexColors: true,
+      size: quality === 'high' ? 0.058 : 0.075,
+      transparent: true,
+      opacity: 0.78,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+    resources.push(particleMaterial)
+
+    const clusterParticles: { points: ThreeNamespace.Points, elementKey: ElementKey }[] = []
+    for (const elementKey of ELEMENT_KEYS) {
+      const cluster = model.clusters.find(item => item.elementKey === elementKey)
+      if (!cluster) continue
+      const count = quality === 'high' ? 420 : 130
+      const positions = new Float32Array(count * 3)
+      const colors = new Float32Array(count * 3)
+      const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
+      const color = new THREE.Color(ELEMENT_COLORS[elementKey])
+      const clusterScale = 0.66 + Math.sqrt(cluster.percent / 100) * 1.28
+
+      for (let index = 0; index < count; index += 1) {
+        const angle = Math.random() * Math.PI * 2
+        const elevation = (Math.random() - 0.5) * Math.PI
+        const radius = clusterScale * (0.24 + Math.cbrt(Math.random()) * 0.76)
+        positions[index * 3] = center.x + Math.cos(angle) * Math.cos(elevation) * radius
+        positions[index * 3 + 1] = center.y + Math.sin(elevation) * radius * 0.64
+        positions[index * 3 + 2] = center.z + Math.sin(angle) * Math.cos(elevation) * radius
+        const variance = 0.66 + Math.random() * 0.5
+        colors[index * 3] = color.r * variance
+        colors[index * 3 + 1] = color.g * variance
+        colors[index * 3 + 2] = color.b * variance
+      }
+
+      const geometry = new THREE.BufferGeometry()
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      resources.push(geometry)
+      const points = new THREE.Points(geometry, particleMaterial)
+      points.userData = { elementKey, clusterScale }
+      galaxy.add(points)
+      clusterParticles.push({ points, elementKey })
+    }
+
+    const starGeometry = new THREE.SphereGeometry(1, 24, 18)
+    resources.push(starGeometry)
+    const starMaterials: ThreeNamespace.MeshBasicMaterial[] = []
+    const starMeshes: ThreeNamespace.Object3D[] = []
+    const raycastMeshes: ThreeNamespace.Mesh[] = []
+    const glowMaterials: { material: ThreeNamespace.SpriteMaterial, elementKey: ElementKey }[] = []
+    const characterPositions = new Map<string, ThreeNamespace.Vector3>()
+    const glyphOrder = [...new Set('甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥')]
+
+    for (const elementKey of ELEMENT_KEYS) {
+      const members = model.characters.filter(character => character.elementKey === elementKey)
+      members.forEach((character, memberIndex) => {
+        const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
+        const angle = (memberIndex / Math.max(members.length, 1)) * Math.PI * 2 + 0.5
+        const radius = 0.86 + (memberIndex % 2) * 0.22
+        center.x += Math.cos(angle) * radius
+        center.y += Math.sin(angle) * 0.44
+        center.z += Math.sin(angle) * radius
+
+        const material = new THREE.MeshBasicMaterial({
+          color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
+          transparent: true,
+          opacity: 0.98,
+        })
+        resources.push(material)
+        starMaterials.push(material)
+
+        const star = new THREE.Mesh(starGeometry, material)
+        star.position.copy(center)
+        star.scale.setScalar(character.isDayMaster ? 0.17 : 0.14)
+        star.userData = { characterId: character.id, elementKey, baseScale: star.scale.x }
+        galaxy.add(star)
+        starMeshes.push(star)
+        raycastMeshes.push(star)
+        characterPositions.set(character.id, center.clone())
+
+        const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: glowTexture,
+          color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
+          transparent: true,
+          opacity: character.isDayMaster ? 0.9 : 0.58,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }))
+        resources.push(glow.material)
+        glowMaterials.push({ material: glow.material, elementKey })
+        glow.position.copy(center)
+        glow.scale.setScalar(character.isDayMaster ? 0.95 : 0.66)
+        glow.userData = { characterId: character.id, baseOpacity: glow.material.opacity }
+        galaxy.add(glow)
+        starMeshes.push(glow)
+
+        const glyphIndex = glyphOrder.indexOf(character.char)
+        const glyphGeometry = new THREE.PlaneGeometry(0.56, 0.56)
+        const uvAttribute = glyphGeometry.getAttribute('uv')
+        const column = glyphIndex % 6
+        const row = Math.floor(glyphIndex / 6)
+        for (let uvIndex = 0; uvIndex < uvAttribute.count; uvIndex += 1) {
+          uvAttribute.setXY(
+            uvIndex,
+            (column + uvAttribute.getX(uvIndex)) / 6,
+            1 - (row + 1 - uvAttribute.getY(uvIndex)) / 4,
+          )
+        }
+        resources.push(glyphGeometry)
+
+        const text = new THREE.Mesh(glyphGeometry, new THREE.ShaderMaterial({
+          uniforms: {
+            uAtlas: { value: atlasTexture },
+            uColor: { value: new THREE.Color(character.isDayMaster ? '#fff2ce' : '#f4f8ff') },
+            uOpacity: { value: 1 },
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform sampler2D uAtlas;
+            uniform vec3 uColor;
+            uniform float uOpacity;
+            varying vec2 vUv;
+            void main() {
+              float distance = texture2D(uAtlas, vUv).r;
+              float alpha = smoothstep(0.46, 0.54, distance);
+              gl_FragColor = vec4(uColor, alpha * uOpacity);
+            }
+          `,
+          transparent: true,
+          depthWrite: false,
+        }))
+        text.position.copy(center).add(new THREE.Vector3(0, 0.3, 0))
+        text.userData = { characterId: character.id, elementKey }
+        galaxy.add(text)
+        texts.push(text)
+      })
+    }
+
+    const relationLines: { material: ThreeNamespace.ShaderMaterial, relationId: string }[] = []
+    for (const relation of model.relations) {
+      const from = ELEMENT_POSITIONS[relation.from]
+      const to = ELEMENT_POSITIONS[relation.to]
+      const points = curvedPoints(THREE, from, to, relation.kind)
+      const curve = new THREE.CatmullRomCurve3(points)
+      const geometry = new THREE.TubeGeometry(curve, quality === 'high' ? 84 : 44, relation.kind === 'generates' ? 0.024 : 0.018, 6, false)
+      const material = flowMaterial(
+        THREE,
+        resources,
+        relation.kind === 'generates' ? ELEMENT_COLORS[relation.to] : '#ff5f7e',
+        relation.kind === 'generates' ? 0.46 : 0.34,
+      )
+      resources.push(geometry)
+      const mesh = new THREE.Mesh(geometry, material)
+      mesh.userData = { relationId: relation.id }
+      galaxy.add(mesh)
+      relationLines.push({ material, relationId: relation.id })
+    }
+
+    if (quality === 'high') {
+      const nextComposer = new EffectComposer(renderer)
+      nextComposer.addPass(new RenderPass(scene, camera))
+      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.48, 0.72, 0.18)
+      nextComposer.addPass(bloomPass)
+      composer = nextComposer
+    }
+
+    const raycaster = new THREE.Raycaster()
+    const pointer = new THREE.Vector2()
+
+    function relatedElementKeys(hoveredId: string | null) {
+      const hovered = model.characters.find(character => character.id === hoveredId)
+      if (!hovered) return null
+      return new Set([
+        hovered.elementKey,
+        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 1) % GENERATION_ORDER.length]!,
+        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 4) % GENERATION_ORDER.length]!,
+        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 2) % GENERATION_ORDER.length]!,
+        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 3) % GENERATION_ORDER.length]!,
+      ])
+    }
+
+    function setPointer(event: PointerEvent) {
+      const bounds = root.getBoundingClientRect()
+      pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1
+      pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1
+    }
+
+    function hoverFromPointer(event: PointerEvent) {
+      setPointer(event)
+      raycaster.setFromCamera(pointer, camera)
+      const hits = raycaster.intersectObjects(raycastMeshes, false)
+      const characterId = hits[0]?.object.userData.characterId as string | undefined
+      state.hoveredCharacterId.value = characterId ?? null
+    }
+
+    function clearHover() {
+      state.hoveredCharacterId.value = null
+    }
+
+    function resize() {
+      if (disposed || !root.clientWidth || !root.clientHeight) return
+      const nextWidth = root.clientWidth
+      const nextHeight = root.clientHeight
+      camera.aspect = nextWidth / nextHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(nextWidth, nextHeight)
+      composer?.setSize(nextWidth, nextHeight)
+      bloomPass?.setSize(nextWidth, nextHeight)
+    }
+
+    resizeObserver = new ResizeObserver(resize)
+    resizeObserver.observe(root)
+    handlePointerMove = hoverFromPointer
+    handleClearHover = clearHover
+    root.addEventListener('pointermove', handlePointerMove)
+    root.addEventListener('pointerleave', handleClearHover)
+    root.addEventListener('click', handlePointerMove)
+
+    const clock = new THREE.Clock()
+    const cameraTarget = new THREE.Vector3()
+    let hoverMix = 0
+
+    function frame() {
+      if (disposed) return
+      const delta = Math.min(clock.getDelta(), 1 / 24)
+      const elapsed = clock.elapsedTime
+      const hoveredId = state.hoveredCharacterId.value
+      const hovered = model.characters.find(character => character.id === hoveredId) ?? null
+      const relatedKeys = relatedElementKeys(hoveredId)
+      hoverMix += ((hovered ? 1 : 0) - hoverMix) * Math.min(delta * 9, 1)
+
+      if (!reducedMotion) {
+        galaxy.rotation.y = Math.sin(elapsed * 0.09) * 0.07
+        camera.position.x = Math.sin(elapsed * 0.13) * 0.35
+        camera.position.y = 0.5 + Math.sin(elapsed * 0.11) * 0.13
+      }
+      camera.lookAt(cameraTarget)
+
+      for (const particle of clusterParticles) {
+        const cluster = model.clusters.find(item => item.elementKey === particle.elementKey)
+        if (!cluster) continue
+        const active = !relatedKeys || relatedKeys.has(particle.elementKey)
+        const targetOpacity = active ? 0.78 : 0.055
+        particlePointsOpacity(particle.points, targetOpacity, delta)
+        const baseScale = Number(particle.points.userData.clusterScale ?? 1)
+        const pulse = reducedMotion ? 1 : 1 + Math.sin(elapsed * 0.8 + particle.elementKey.length) * 0.015
+        particle.points.scale.setScalar(baseScale * pulse)
+      }
+
+      for (const material of starMaterials) {
+        const mesh = starMaterials.indexOf(material)
+        const elementKey = model.characters[mesh]?.elementKey
+        const active = !relatedKeys || (elementKey ? relatedKeys.has(elementKey) : true)
+        material.opacity += ((active ? 0.98 : 0.08) - material.opacity) * Math.min(delta * 9, 1)
+      }
+
+      for (const object of starMeshes) {
+        const mesh = object as ThreeNamespace.Mesh
+        if (mesh.isMesh !== true) continue
+        const elementKey = mesh.userData.elementKey as ElementKey
+        const active = !relatedKeys || relatedKeys.has(elementKey)
+        const baseScale = Number(mesh.userData.baseScale ?? 0.14)
+        mesh.scale.setScalar(baseScale * (hovered?.elementKey === elementKey ? 1.16 : active ? 1 : 0.92))
+      }
+
+      for (const glow of glowMaterials) {
+        const active = !relatedKeys || relatedKeys.has(glow.elementKey)
+        const baseOpacity = Number(glow.material.userData.baseOpacity ?? 0.58)
+        glow.material.opacity += ((active ? baseOpacity : 0.04) - glow.material.opacity) * Math.min(delta * 9, 1)
+      }
+
+      for (const text of texts) {
+        const elementKey = text.userData.elementKey as ElementKey
+        const active = !relatedKeys || relatedKeys.has(elementKey)
+        text.material.opacity += ((active ? 1 : 0.07) - text.material.opacity) * Math.min(delta * 9, 1)
+        text.quaternion.copy(camera.quaternion)
+      }
+
+      for (const line of relationLines) {
+        const active = !hovered || line.relationId.includes(hovered.elementKey)
+        const uniforms = line.material.uniforms
+        uniforms.uTime!.value = elapsed
+        const target = active ? 1 : 0.05
+        uniforms.uActive!.value += (target - uniforms.uActive!.value) * Math.min(delta * 9, 1)
+      }
+
+      if (composer) composer.render()
+      else renderer.render(scene, camera)
+
+      state.rendererStats.value = {
+        geometries: renderer.info.memory.geometries,
+        textures: renderer.info.memory.textures,
+        programs: renderer.info.programs?.length ?? 0,
+      }
+    }
+
+    renderer.setAnimationLoop(frame)
+    state.state.value = 'ready'
+  }
+  catch (error) {
+    state.state.value = 'static'
+    state.errorMessage.value = error instanceof Error ? error.message : 'WebGL initialization failed'
+    dispose()
+    return () => undefined
+  }
+
+  function dispose() {
+    disposed = true
+    resizeObserver?.disconnect()
+    if (handlePointerMove) root.removeEventListener('pointermove', handlePointerMove)
+    if (handleClearHover) root.removeEventListener('pointerleave', handleClearHover)
+    if (handlePointerMove) root.removeEventListener('click', handlePointerMove)
+    resources.slice().reverse().forEach(resource => resource.dispose())
+    renderer?.domElement.remove()
+  }
+
+  return dispose
+}
+
+function particlePointsOpacity(points: ThreeNamespace.Points, target: number, delta: number) {
+  const material = points.material as ThreeNamespace.PointsMaterial
+  material.opacity += (target - material.opacity) * Math.min(delta * 8, 1)
+}

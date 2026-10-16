@@ -48,6 +48,17 @@
       </section>
 
       <div v-else-if="result" class="bc-report">
+        <ClientOnly>
+          <BaziPaipan3DStage
+            :controller="bazi3D"
+            :result="result"
+          />
+          <template #fallback>
+            <div class="bc-3d-skeleton" aria-hidden="true">
+              <strong>{{ result.pillars.map(pillar => pillar.ganzhi).join(' ') }}</strong>
+            </div>
+          </template>
+        </ClientOnly>
         <BaziPaipanReport :result="result" />
       </div>
 
@@ -71,6 +82,8 @@
 <script setup lang="ts">
 import type { DiZhi } from '~/types/user'
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
+import BaziPaipan3DStage from '~/components/bazi-paipan-3d/BaziPaipan3DStage.vue'
+import { useBaziPaipan3D } from '~/composables/useBaziPaipan3D'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -89,6 +102,7 @@ interface FormValues {
 
 const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<BaziChartResult | null>(null)
+const bazi3D = useBaziPaipan3D(result)
 const formValues = ref<FormValues>({
   gender: 'male',
   birthDate: '',
@@ -332,6 +346,18 @@ useHead(() => ({
 .bc-report {
   display: grid;
   gap: 38px;
+}
+
+.bc-3d-skeleton {
+  display: grid;
+  min-height: clamp(360px, 48vh, 520px);
+  place-content: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: #070a12;
+  color: #e9eefa;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: clamp(28px, 4.4vw, 38px);
 }
 
 .bc-hero {
