@@ -12,6 +12,7 @@ export function useBaziPaipan3D(result: Ref<BaziChartResult | null>) {
     quality: ref<Bazi3DQuality>('high'),
     hoveredCharacterId: ref<string | null>(null),
     selectedDayunIndex: ref(0),
+    tunnelProgress: ref(0),
     introCompleted: ref(false),
     rendererStats: ref<{ geometries: number, textures: number, programs: number } | null>(null),
     errorMessage: ref(''),

@@ -427,6 +427,8 @@
     "compass": "天地盤",
     "galaxy": "五行星河",
     "tunnel": "大運トンネル",
+    "previous": "前の大運",
+    "next": "次の大運",
     "skip": "演出をスキップ"
   },
   "baziChart": {

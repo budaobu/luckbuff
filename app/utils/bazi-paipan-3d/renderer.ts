@@ -1,3 +1,4 @@
+import { watch } from 'vue'
 import type * as ThreeNamespace from 'three'
 import type { Pass } from 'three/examples/jsm/postprocessing/Pass.js'
 import type { BaziPaipan3DState } from '~/composables/useBaziPaipan3D'
@@ -161,6 +162,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
   let resizeObserver: ResizeObserver | null = null
   let handlePointerMove: ((event: PointerEvent) => void) | null = null
   let handleClearHover: (() => void) | null = null
+  let handleWheel: ((event: WheelEvent) => void) | null = null
 
   try {
     const THREE = await import('three')
@@ -385,6 +387,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
       targetOpacity: number
     }[] = []
+    const tunnelHitMeshes: ThreeNamespace.Mesh[] = []
     const compassRadii = [2.35, 1.85, 1.35, 0.88]
 
     for (let index = 0; index < 4; index += 1) {
@@ -416,6 +419,66 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
       compassRings.push({ mesh: ring, labels, targetOpacity: index === 2 ? 0.96 : 0.78 })
     }
+
+    const tunnel = new THREE.Group()
+    tunnel.visible = false
+    scene.add(tunnel)
+    const tunnelSpacing = 4.3
+    const tunnelRings: {
+      dayunIndex: number
+      isCurrent: boolean
+      mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
+      labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
+    }[] = []
+
+    model.dayuns.forEach((dayun, index) => {
+      const ringGeometry = new THREE.TorusGeometry(1.32, 0.022, 10, 128)
+      const ringMaterial = new THREE.MeshBasicMaterial({
+        color: dayun.isCurrent ? '#ffd884' : '#667795',
+        transparent: true,
+        opacity: 0.94,
+      })
+      resources.push(ringGeometry, ringMaterial)
+      const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+      ring.position.set(0, 0, -index * tunnelSpacing)
+      ring.userData = { dayunIndex: dayun.index }
+      tunnel.add(ring)
+
+      const hitGeometry = new THREE.TorusGeometry(1.32, 0.14, 8, 72)
+      const hitMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+      resources.push(hitGeometry, hitMaterial)
+      const hitMesh = new THREE.Mesh(hitGeometry, hitMaterial)
+      hitMesh.position.copy(ring.position)
+      hitMesh.userData = { dayunIndex: dayun.index }
+      tunnel.add(hitMesh)
+      tunnelHitMeshes.push(hitMesh)
+
+      const [gan, zhi] = [...dayun.ganzhi]
+      const labels = [
+        { character: gan, angle: -Math.PI / 5 },
+        { character: zhi, angle: Math.PI / 5 },
+      ].filter(item => item.character).map(({ character, angle }) => {
+        const label = createGlyphMesh(character!, dayun.isCurrent ? '#fff2ce' : '#dce5f4', 0.3)
+        label.material.uniforms.uOpacity!.value = 0.96
+        label.position.set(Math.cos(angle) * 1.32, Math.sin(angle) * 1.32, -index * tunnelSpacing)
+        tunnel.add(label)
+        return label
+      })
+
+      tunnelRings.push({ dayunIndex: dayun.index, isCurrent: dayun.isCurrent, mesh: ring, labels })
+    })
+
+    function applyScene(mode: 'compass' | 'galaxy' | 'tunnel') {
+      compass.visible = mode === 'compass'
+      galaxy.visible = mode === 'galaxy'
+      tunnel.visible = mode === 'tunnel'
+      if (mode === 'compass') compassRings.forEach((_, index) => setCompassProgress(index, 1))
+    }
+
+    watch(() => state.scene.value, (mode) => {
+      if (mode !== 'compass') state.introCompleted.value = true
+      applyScene(mode)
+    }, { immediate: true })
 
     if (quality === 'high') {
       const nextComposer = new EffectComposer(renderer)
@@ -449,6 +512,14 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     function hoverFromPointer(event: PointerEvent) {
       setPointer(event)
       raycaster.setFromCamera(pointer, camera)
+      if (state.scene.value === 'tunnel') {
+        state.hoveredCharacterId.value = null
+        if (event.type !== 'click') return
+        const tunnelHits = raycaster.intersectObjects(tunnelHitMeshes, false)
+        const dayunIndex = tunnelHits[0]?.object.userData.dayunIndex as number | undefined
+        if (dayunIndex !== undefined) state.selectedDayunIndex.value = dayunIndex
+        return
+      }
       const hits = raycaster.intersectObjects(raycastMeshes, false)
       const characterId = hits[0]?.object.userData.characterId as string | undefined
       state.hoveredCharacterId.value = characterId ?? null
@@ -456,6 +527,12 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     function clearHover() {
       state.hoveredCharacterId.value = null
+    }
+
+    function tunnelWheel(event: WheelEvent) {
+      if (state.scene.value !== 'tunnel') return
+      event.preventDefault()
+      state.tunnelProgress.value = Math.min(Math.max(state.tunnelProgress.value + event.deltaY / 1800, 0), 1)
     }
 
     function resize() {
@@ -473,15 +550,17 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     resizeObserver.observe(root)
     handlePointerMove = hoverFromPointer
     handleClearHover = clearHover
+    handleWheel = tunnelWheel
     root.addEventListener('pointermove', handlePointerMove)
     root.addEventListener('pointerleave', handleClearHover)
     root.addEventListener('click', handlePointerMove)
+    root.addEventListener('wheel', handleWheel, { passive: false })
 
-    const clock = new THREE.Clock()
     const cameraTarget = new THREE.Vector3()
     camera.position.set(0, 0, 7)
     let hoverMix = 0
     let transitionStart: number | null = null
+    let previousFrameTime = performance.now()
 
     function easeOutCubic(value: number) {
       return 1 - (1 - value) ** 3
@@ -504,8 +583,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     function frame() {
       if (disposed) return
-      const delta = Math.min(clock.getDelta(), 1 / 24)
-      const elapsed = clock.elapsedTime
+      const frameTime = performance.now()
+      const delta = Math.min((frameTime - previousFrameTime) / 1000, 1 / 24)
+      const elapsed = frameTime / 1000
+      previousFrameTime = frameTime
       const hoveredId = state.hoveredCharacterId.value
       const hovered = model.characters.find(character => character.id === hoveredId) ?? null
       const relatedKeys = relatedElementKeys(hoveredId)
@@ -513,6 +594,16 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
       if (!reducedMotion) {
         if (galaxy.visible) galaxy.rotation.y = Math.sin(elapsed * 0.09) * 0.07
+      }
+
+      if (tunnel.visible) {
+        const travel = Math.max(model.dayuns.length - 1, 0) * tunnelSpacing
+        const station = state.tunnelProgress.value * Math.max(model.dayuns.length - 1, 0) - 1.75
+        camera.position.set(0, 0, 0.5 - station * tunnelSpacing)
+        cameraTarget.set(0, 0, camera.position.z - 3)
+      }
+      else {
+        cameraTarget.set(0, 0, 0)
       }
 
       if (compass.visible && transitionStart === null) {
@@ -594,6 +685,13 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         text.quaternion.copy(camera.quaternion)
       }
 
+      for (const ring of tunnelRings) {
+        const selected = ring.dayunIndex === state.selectedDayunIndex.value
+        ring.mesh.material.color.set(ring.isCurrent ? '#ffd884' : selected ? '#a9bade' : '#667795')
+        ring.mesh.scale.setScalar(selected ? 1.08 : 1)
+        for (const label of ring.labels) label.quaternion.copy(camera.quaternion)
+      }
+
       for (const line of relationLines) {
         const active = !hovered || line.relationId.includes(hovered.elementKey)
         const uniforms = line.material.uniforms
@@ -628,6 +726,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     if (handlePointerMove) root.removeEventListener('pointermove', handlePointerMove)
     if (handleClearHover) root.removeEventListener('pointerleave', handleClearHover)
     if (handlePointerMove) root.removeEventListener('click', handlePointerMove)
+    if (handleWheel) root.removeEventListener('wheel', handleWheel)
     resources.slice().reverse().forEach(resource => resource.dispose())
     renderer?.domElement.remove()
   }

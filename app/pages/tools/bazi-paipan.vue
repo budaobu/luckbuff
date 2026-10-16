@@ -151,6 +151,9 @@ async function handleSubmit(values: FormValues) {
         location,
       },
     })
+    bazi3D.selectedDayunIndex.value = result.value.dayuns.find(dayun => dayun.isCurrent)?.index
+      ?? result.value.dayuns[0]?.index
+      ?? 0
     phase.value = 'result'
     await nextTick()
     window.scrollTo({ top: 0, behavior: 'smooth' })

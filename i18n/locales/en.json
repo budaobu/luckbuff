@@ -12280,6 +12280,8 @@
     "compass": "Heaven & Earth Compass",
     "galaxy": "Five Element River",
     "tunnel": "Fortune Tunnel",
+    "previous": "Previous fortune cycle",
+    "next": "Next fortune cycle",
     "skip": "Skip intro"
   },
   "baziChart": {

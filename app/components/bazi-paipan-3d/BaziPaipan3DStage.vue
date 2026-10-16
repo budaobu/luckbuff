@@ -2,13 +2,26 @@
   <section
     class="b3d"
     :data-state="controller.state.value"
+    :data-quality="controller.quality.value"
+    :data-renderer-stats="rendererStatsText || undefined"
     :data-error="controller.errorMessage.value || undefined"
     aria-live="polite"
   >
     <div class="b3d-toolbar">
-      <span data-testid="bazi-3d-scene">
-        {{ controller.scene.value === 'compass' ? $t('bazi3d.compass') : controller.scene.value === 'tunnel' ? $t('bazi3d.tunnel') : $t('bazi3d.galaxy') }}
-      </span>
+      <div class="b3d-tabs" role="tablist" :aria-label="$t('bazi3d.galaxy')">
+        <button
+          v-for="scene in ['compass', 'galaxy', 'tunnel'] as const"
+          :key="scene"
+          type="button"
+          role="tab"
+          :aria-selected="controller.scene.value === scene"
+          :data-testid="`bazi-3d-scene-${scene}`"
+          :class="{ 'is-active': controller.scene.value === scene }"
+          @click="selectScene(scene)"
+        >
+          {{ $t(`bazi3d.${scene}`) }}
+        </button>
+      </div>
       <button
         v-if="controller.scene.value === 'compass' && !controller.introCompleted.value"
         type="button"
@@ -20,6 +33,56 @@
       </button>
     </div>
     <div ref="stageRoot" class="b3d-canvas" data-testid="bazi-3d-canvas" aria-hidden="true" />
+
+    <label v-if="controller.scene.value === 'tunnel'" class="b3d-scroll">
+      <span class="sr-only">{{ $t('bazi3d.tunnel') }}</span>
+      <input
+        v-model.number="controller.tunnelProgress.value"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        data-testid="bazi-3d-tunnel-slider"
+      >
+    </label>
+
+    <aside
+      v-if="controller.scene.value === 'tunnel' && selectedDayun"
+      class="b3d-dayun"
+      data-testid="bazi-3d-selected-dayun"
+    >
+      <header>
+        <div class="b3d-dayun-title">
+          <strong>{{ selectedDayun.startYear }}-{{ selectedDayun.endYear }} {{ selectedDayun.ganzhi }}</strong>
+          <div>
+            <button
+              type="button"
+              :disabled="!previousDayun"
+              :aria-label="$t('bazi3d.previous')"
+              @click="selectNeighborDayun(-1)"
+            >
+              <UIcon name="i-heroicons-chevron-left" class="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              :disabled="!nextDayun"
+              :aria-label="$t('bazi3d.next')"
+              @click="selectNeighborDayun(1)"
+            >
+              <UIcon name="i-heroicons-chevron-right" class="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+        <span>{{ selectedDayun.startAge }}-{{ selectedDayun.endAge }}</span>
+        <em v-if="selectedDayun.isCurrent">{{ $t('baziChart.current') }}</em>
+      </header>
+      <div class="b3d-annuals">
+        <div v-for="year in selectedDayun.liunian" :key="year.year">
+          <strong>{{ year.year }} {{ year.ganzhi }}</strong>
+          <span>{{ year.intensity }}</span>
+        </div>
+      </div>
+    </aside>
 
     <p v-if="controller.hoveredCharacterId.value" class="b3d-hover">
       {{ hoveredCharacter?.char }} · {{ hoveredCharacter?.elementLabel }}
@@ -62,7 +125,31 @@ const fourPillars = computed(() => props.result.pillars.map(pillar => pillar.gan
 const hoveredCharacter = computed(() => props.controller.model.value?.characters.find(
   character => character.id === props.controller.hoveredCharacterId.value,
 ))
+const selectedDayun = computed(() => props.result.dayuns.find(
+  dayun => dayun.index === props.controller.selectedDayunIndex.value,
+))
+const previousDayun = computed(() => {
+  const index = props.result.dayuns.findIndex(dayun => dayun.index === props.controller.selectedDayunIndex.value)
+  return index > 0 ? props.result.dayuns[index - 1] : null
+})
+const nextDayun = computed(() => {
+  const index = props.result.dayuns.findIndex(dayun => dayun.index === props.controller.selectedDayunIndex.value)
+  return index >= 0 && index + 1 < props.result.dayuns.length ? props.result.dayuns[index + 1] : null
+})
 const isStatic = computed(() => ['static', 'error'].includes(props.controller.state.value))
+const rendererStatsText = computed(() => props.controller.rendererStats.value
+  ? JSON.stringify(props.controller.rendererStats.value)
+  : '')
+
+function selectScene(scene: 'compass' | 'galaxy' | 'tunnel') {
+  if (scene !== 'compass') props.controller.introCompleted.value = true
+  props.controller.scene.value = scene
+}
+
+function selectNeighborDayun(direction: -1 | 1) {
+  const target = direction === -1 ? previousDayun.value : nextDayun.value
+  if (target) props.controller.selectedDayunIndex.value = target.index
+}
 
 onMounted(async () => {
   const root = stageRoot.value
@@ -101,6 +188,30 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.b3d-tabs {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: rgba(5, 8, 16, 0.74);
+}
+
+.b3d-tabs button {
+  padding: 4px 8px;
+  color: #a7b2c8;
+  font-size: 12px;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.b3d-tabs button + button {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.b3d-tabs button.is-active {
+  background: rgba(255, 216, 132, 0.14);
+  color: #fff2ce;
 }
 
 .b3d-toolbar span {
@@ -168,6 +279,90 @@ onBeforeUnmount(() => {
     radial-gradient(circle at 22% 18%, rgba(74, 105, 188, 0.2), transparent 34%),
     radial-gradient(circle at 78% 78%, rgba(147, 73, 74, 0.14), transparent 36%),
     #070a12;
+}
+
+.b3d-scroll {
+  position: absolute;
+  z-index: 2;
+  bottom: 14px;
+  left: 50%;
+  width: min(78%, 360px);
+  transform: translateX(-50%);
+}
+
+.b3d-scroll input {
+  width: 100%;
+  accent-color: #ffd884;
+}
+
+.b3d-dayun {
+  position: absolute;
+  z-index: 2;
+  top: 52px;
+  right: 10px;
+  width: min(46vw, 230px);
+  max-height: calc(100% - 76px);
+  overflow: auto;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
+  background: rgba(5, 8, 16, 0.82);
+  color: #dbe3f2;
+  font-size: 12px;
+}
+
+.b3d-dayun header {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 7px;
+}
+
+.b3d-dayun-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.b3d-dayun-title div {
+  display: flex;
+  gap: 3px;
+}
+
+.b3d-dayun-title button {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #dce5f4;
+}
+
+.b3d-dayun-title button:disabled {
+  opacity: 0.34;
+}
+
+.b3d-dayun em {
+  width: fit-content;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: rgba(255, 216, 132, 0.16);
+  color: #fff2ce;
+  font-style: normal;
+}
+
+.b3d-annuals {
+  display: grid;
+  gap: 5px;
+}
+
+.b3d-annuals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  color: #b9c4d9;
 }
 
 .b3d-poster {

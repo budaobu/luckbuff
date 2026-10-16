@@ -12302,6 +12302,8 @@
     "compass": "天地羅盤",
     "galaxy": "五行星河",
     "tunnel": "大運隧道",
+    "previous": "上一大運",
+    "next": "下一大運",
     "skip": "跳過動畫"
   },
   "baziChart": {

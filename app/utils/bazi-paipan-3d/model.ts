@@ -42,6 +42,16 @@ export interface BaziPaipan3DModel {
   clusters: Bazi3DCluster[]
   relations: Bazi3DElementRelation[]
   dayMaster: Bazi3DCharacter
+  dayuns: {
+    index: number
+    ganzhi: string
+    startYear: number
+    endYear: number
+    startAge: number
+    endAge: number
+    isCurrent: boolean
+    liunianCount: number
+  }[]
 }
 
 function elementItem(result: BaziChartResult, key: ElementKey): BaziWuxingItem {
@@ -85,5 +95,16 @@ export function buildBaziPaipan3DModel(result: BaziChartResult): BaziPaipan3DMod
     relations.push({ id: `${from}-controls-${controls}`, kind: 'controls', from, to: controls })
   })
 
-  return { characters, clusters, relations, dayMaster }
+  const dayuns = result.dayuns.map(dayun => ({
+    index: dayun.index,
+    ganzhi: dayun.ganzhi,
+    startYear: dayun.startYear,
+    endYear: dayun.endYear,
+    startAge: dayun.startAge,
+    endAge: dayun.endAge,
+    isCurrent: dayun.isCurrent,
+    liunianCount: dayun.liunian.length,
+  }))
+
+  return { characters, clusters, relations, dayMaster, dayuns }
 }
