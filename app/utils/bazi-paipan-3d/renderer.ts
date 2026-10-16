@@ -169,6 +169,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     const { EffectComposer } = await import('three/examples/jsm/postprocessing/EffectComposer.js')
     const { RenderPass } = await import('three/examples/jsm/postprocessing/RenderPass.js')
     const { UnrealBloomPass } = await import('three/examples/jsm/postprocessing/UnrealBloomPass.js')
+    const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
+    const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
+    const { KTX2Loader } = await import('three/examples/jsm/loaders/KTX2Loader.js')
+    const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js')
 
     const width = Math.max(root.clientWidth, 1)
     const height = Math.max(root.clientHeight, 1)
@@ -181,8 +185,16 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     renderer.setPixelRatio(qualityDpr(quality))
     renderer.setSize(width, height)
     renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.05
     root.appendChild(renderer.domElement)
     resources.push(renderer)
+
+    const pmremGenerator = new THREE.PMREMGenerator(renderer)
+    const environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture
+    scene = new THREE.Scene()
+    scene.environment = environment
+    resources.push(pmremGenerator, environment)
 
     const atlasTexture = await new THREE.TextureLoader().loadAsync('/assets/bazi-paipan-3d/bazi-glyphs-sdf.png')
     atlasTexture.colorSpace = THREE.NoColorSpace
@@ -192,15 +204,17 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     atlasTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy())
     resources.push(atlasTexture)
 
-    scene = new THREE.Scene()
     scene.fog = new THREE.FogExp2(0x05070e, 0.055)
     camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100)
     camera.position.set(0, 0.5, 9.2)
     camera.lookAt(0, 0, 0)
 
-    scene.add(new THREE.AmbientLight(0x98b5ff, 0.8))
-    const keyLight = new THREE.DirectionalLight(0xbdd4ff, 1.15)
-    keyLight.position.set(3, 4, 5)
+    scene.add(new THREE.HemisphereLight(0x7f8ea8, 0x150b05, 0.28))
+    const keyLight = new THREE.DirectionalLight(0xffd8a5, 2.4)
+    keyLight.position.set(3.2, 4.2, 4.8)
+    const backLight = new THREE.DirectionalLight(0x7fa2ff, 1.2)
+    backLight.position.set(-3.8, 1.5, -4.2)
+    scene.add(backLight)
     scene.add(keyLight)
 
     const galaxy = new THREE.Group()
@@ -382,6 +396,37 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     const compass = new THREE.Group()
     scene.add(compass)
+    const dracoLoader = new DRACOLoader()
+      .setDecoderPath('/assets/bazi-paipan-3d/decoders/draco/')
+    const ktx2Loader = new KTX2Loader()
+      .setTranscoderPath('/assets/bazi-paipan-3d/decoders/basis/')
+      .detectSupport(renderer)
+    const instrumentLoader = new GLTFLoader()
+      .setDRACOLoader(dracoLoader)
+      .setKTX2Loader(ktx2Loader)
+    const instrumentGltf = await instrumentLoader.loadAsync('/assets/bazi-paipan-3d/instrument.glb')
+    const instrumentRoot = instrumentGltf.scene
+    instrumentRoot.name = 'instrumentRoot'
+    const instrumentRings: ThreeNamespace.Mesh[] = []
+    instrumentRoot.traverse((object) => {
+      const mesh = object as ThreeNamespace.Mesh
+      if (mesh.isMesh !== true) return
+      resources.push(mesh.geometry)
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+      for (const material of materials) {
+        resources.push(material)
+        for (const texture of Object.values(material).filter(value => value?.isTexture === true)) {
+          resources.push(texture as ThreeObject)
+        }
+      }
+      if (mesh.name.startsWith('ring_')) {
+        mesh.rotation.x = Math.PI / 2
+        instrumentRings.push(mesh)
+      }
+    })
+    compass.add(instrumentRoot)
+    dracoLoader.dispose()
+    ktx2Loader.dispose()
     const compassRings: {
       mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
       labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
@@ -419,6 +464,19 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
       compassRings.push({ mesh: ring, labels, targetOpacity: index === 2 ? 0.96 : 0.78 })
     }
+    for (const ring of compassRings) ring.mesh.visible = false
+    const shockwaveGeometry = new THREE.TorusGeometry(0.82, 0.014, 8, 128)
+    const shockwaveMaterial = new THREE.MeshBasicMaterial({
+      color: '#ffd884',
+      transparent: true,
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+    resources.push(shockwaveGeometry, shockwaveMaterial)
+    const shockwave = new THREE.Mesh(shockwaveGeometry, shockwaveMaterial)
+    shockwave.visible = false
+    compass.add(shockwave)
 
     const tunnel = new THREE.Group()
     tunnel.visible = false
@@ -469,16 +527,20 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     })
 
     const cameraTarget = new THREE.Vector3()
-    let transitionStart: number | null = null
+    let timelineTime = state.introCompleted.value ? 6 : 0
+    let timelinePaused = false
+    let replayToken = 0
 
     function applyScene(mode: 'compass' | 'galaxy' | 'tunnel') {
       compass.visible = mode === 'compass'
       galaxy.visible = mode === 'galaxy'
       tunnel.visible = mode === 'tunnel'
       if (mode === 'compass') {
-        if (state.introCompleted.value) transitionStart = null
-        camera.position.set(0, 0, 7)
-        compassRings.forEach((_, index) => setCompassProgress(index, 1))
+        if (state.introCompleted.value) {
+          timelineTime = 6
+          state.lifecycle.value = 'settled'
+        }
+        camera.position.set(0, 0, timelineTime >= 6 ? 7 : 8.4)
       }
       else if (mode === 'galaxy') {
         camera.position.set(0, 0.5, 9.2)
@@ -493,7 +555,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     if (quality === 'high') {
       const nextComposer = new EffectComposer(renderer)
       nextComposer.addPass(new RenderPass(scene, camera))
-      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.48, 0.72, 0.18)
+      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.38, 0.58, 0.82)
       nextComposer.addPass(bloomPass)
       composer = nextComposer
     }
@@ -574,19 +636,74 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       return 1 - (1 - value) ** 3
     }
 
-    function finishCompass(elapsed: number) {
-      if (transitionStart !== null) return
-      transitionStart = elapsed
-      galaxy.visible = true
+    function phaseProgress(time: number, start: number, end: number) {
+      return easeOutCubic(Math.min(Math.max((time - start) / (end - start), 0), 1))
     }
 
-    function setCompassProgress(index: number, progress: number) {
-      const ring = compassRings[index]
-      if (!ring) return
-      ring.mesh.material.opacity = ring.targetOpacity * progress
-      ring.mesh.scale.setScalar(0.92 + progress * 0.08)
-      ring.mesh.rotation.z = (1 - progress) * (index % 2 === 0 ? 0.7 : -0.7)
-      for (const label of ring.labels) label.material.uniforms.uOpacity!.value = progress
+    function applyInstrumentTimeline() {
+      const time = timelineTime
+      const startup = phaseProgress(time, 0, 1.5)
+      state.timelineProgress.value = Math.min(time / 6, 1)
+      state.lifecycle.value = state.scene.value === 'tunnel'
+        ? 'tunnel'
+        : time >= 6 ? 'settled' : 'playing'
+      if (time < 6 && state.introCompleted.value && timelinePaused) state.introCompleted.value = false
+
+      const instrumentScale = 0.86 + startup * 0.14
+      instrumentRoot.scale.setScalar(instrumentScale)
+      instrumentRings.forEach((ring, index) => {
+        const speed = 0.16 + index * 0.07
+        const direction = index % 2 === 0 ? 1 : -1
+        const settle = phaseProgress(time, 4.5 + index * 0.08, 5.7 + index * 0.08)
+        ring.rotation.z = reducedMotion ? 0 : direction * time * speed * (1 - settle * 0.88)
+      })
+
+      compassRings.forEach((ring, index) => {
+        const radius = compassRadii[index]!
+        ring.labels.forEach((label, labelIndex) => {
+          const targetAngle = labelIndex === 0 ? -Math.PI / 5 : Math.PI / 5
+          const entrance = phaseProgress(time, 1.5 + index * 0.2, 2.55 + index * 0.2)
+          const angle = targetAngle + (1 - entrance) * (labelIndex === 0 ? 1.35 : -1.35)
+          const orbitRadius = radius + (1 - entrance) * 0.78
+          label.position.set(
+            Math.cos(angle) * orbitRadius,
+            Math.sin(angle) * orbitRadius,
+            (1 - entrance) * 0.45,
+          )
+          const visibility = Math.min(phaseProgress(time, 0, 0.7), entrance)
+          label.material.uniforms.uOpacity!.value = visibility
+        })
+      })
+
+      galaxy.visible = state.scene.value === 'compass' && time >= 3 && time < 5.2
+      const shock = phaseProgress(time, 4.5, 5.55)
+      shockwave.visible = shock > 0 && shock < 1
+      shockwave.scale.setScalar(0.9 + shock * 2.5)
+      shockwaveMaterial.opacity = (1 - shock) * 0.38
+
+      const cameraZ = time < 1.5
+        ? 8.4 - phaseProgress(time, 0, 1.5) * 0.7
+        : time < 4.5
+          ? 7.7 - phaseProgress(time, 1.5, 4.5) * 0.35
+          : 7.35 - phaseProgress(time, 4.5, 6) * 0.35
+      camera.position.set(
+        reducedMotion ? 0 : Math.sin(time * 0.22) * 0.08 * (1 - phaseProgress(time, 4.5, 6)),
+        reducedMotion ? 0 : 0.18 * (1 - phaseProgress(time, 4.5, 6)),
+        cameraZ,
+      )
+
+      if (time >= 6 && !state.introCompleted.value) state.introCompleted.value = true
+    }
+
+    if (import.meta.dev) {
+      ;(window as unknown as { __bazi3dSeekTimeline?: (seconds: number) => void }).__bazi3dSeekTimeline = (seconds) => {
+        timelineTime = Math.min(Math.max(seconds, 0), 6)
+        timelinePaused = true
+        state.introCompleted.value = timelineTime >= 6
+        state.scene.value = 'compass'
+        applyScene('compass')
+        applyInstrumentTimeline()
+      }
     }
 
     function frame() {
@@ -595,6 +712,13 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       const delta = Math.min((frameTime - previousFrameTime) / 1000, 1 / 24)
       const elapsed = frameTime / 1000
       previousFrameTime = frameTime
+      if (state.replayRequested.value !== replayToken) {
+        replayToken = state.replayRequested.value
+        timelineTime = 0
+        timelinePaused = false
+        state.scene.value = 'compass'
+        state.lifecycle.value = 'playing'
+      }
       const hoveredId = state.hoveredCharacterId.value
       const hovered = model.characters.find(character => character.id === hoveredId) ?? null
       const relatedKeys = relatedElementKeys(hoveredId)
@@ -614,38 +738,11 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         cameraTarget.set(0, 0, 0)
       }
 
-      if (compass.visible && transitionStart === null && !state.introCompleted.value) {
-        if (reducedMotion) {
-          compassRings.forEach((_, index) => setCompassProgress(index, 1))
-          finishCompass(elapsed)
-        }
-        else {
-          compassRings.forEach((_, index) => {
-            const start = index * 0.52
-            setCompassProgress(index, easeOutCubic(Math.min(Math.max((elapsed - start) / 0.68, 0), 1)))
-          })
-          if (elapsed >= 2.52) finishCompass(elapsed)
-        }
-      }
-
-      if (transitionStart !== null) {
-        const progress = easeOutCubic(Math.min(Math.max((elapsed - transitionStart) / 0.78, 0), 1))
-        camera.position.set(0, 0.5, 7 + (9.2 - 7) * progress)
-        const fade = 1 - progress
-        for (const ring of compassRings) {
-          ring.mesh.material.opacity = ring.targetOpacity * fade
-          for (const label of ring.labels) label.material.uniforms.uOpacity!.value = fade
-        }
-        if (progress >= 1) {
-          compass.visible = false
-          transitionStart = null
-          state.introCompleted.value = true
-          state.scene.value = 'galaxy'
-        }
-      }
-      else if (galaxy.visible && !reducedMotion) {
-        camera.position.x = Math.sin(elapsed * 0.13) * 0.35
-        camera.position.y = 0.5 + Math.sin(elapsed * 0.11) * 0.13
+      if (state.scene.value !== 'tunnel') {
+        if (reducedMotion || state.introCompleted.value) timelineTime = 6
+        else if (state.scene.value === 'compass' && !timelinePaused) timelineTime = Math.min(6, timelineTime + delta)
+        else timelineTime = 6
+        applyInstrumentTimeline()
       }
 
       for (const ring of compassRings) {

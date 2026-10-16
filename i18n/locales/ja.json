@@ -429,6 +429,7 @@
     "tunnel": "大運トンネル",
     "previous": "前の大運",
     "next": "次の大運",
+    "replay": "再生",
     "skip": "演出をスキップ"
   },
   "baziChart": {

@@ -12282,6 +12282,7 @@
     "tunnel": "Fortune Tunnel",
     "previous": "Previous fortune cycle",
     "next": "Next fortune cycle",
+    "replay": "Replay",
     "skip": "Skip intro"
   },
   "baziChart": {

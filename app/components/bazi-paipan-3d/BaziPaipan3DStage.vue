@@ -2,6 +2,8 @@
   <section
     class="b3d"
     :data-state="controller.state.value"
+    :data-lifecycle="controller.lifecycle.value"
+    :data-timeline="controller.timelineProgress.value"
     :data-quality="controller.quality.value"
     :data-renderer-stats="rendererStatsText || undefined"
     :data-error="controller.errorMessage.value || undefined"
@@ -30,6 +32,15 @@
       >
         <UIcon name="i-heroicons-forward" class="h-3.5 w-3.5" />
         {{ $t('bazi3d.skip') }}
+      </button>
+      <button
+        v-if="controller.scene.value === 'compass' && controller.introCompleted.value"
+        type="button"
+        data-testid="bazi-3d-replay"
+        @click="replay"
+      >
+        <UIcon name="i-heroicons-arrow-path" class="h-3.5 w-3.5" />
+        {{ $t('bazi3d.replay') }}
       </button>
     </div>
     <div ref="stageRoot" class="b3d-canvas" data-testid="bazi-3d-canvas" aria-hidden="true" />
@@ -144,6 +155,14 @@ const rendererStatsText = computed(() => props.controller.rendererStats.value
 function selectScene(scene: 'compass' | 'galaxy' | 'tunnel') {
   if (scene !== 'compass') props.controller.introCompleted.value = true
   props.controller.scene.value = scene
+}
+
+function replay() {
+  props.controller.scene.value = 'compass'
+  props.controller.introCompleted.value = false
+  props.controller.timelineProgress.value = 0
+  props.controller.lifecycle.value = 'playing'
+  props.controller.replayRequested.value += 1
 }
 
 function selectNeighborDayun(direction: -1 | 1) {

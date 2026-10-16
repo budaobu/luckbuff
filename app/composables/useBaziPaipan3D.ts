@@ -3,6 +3,7 @@ import { buildBaziPaipan3DModel, type BaziPaipan3DModel } from '~/utils/bazi-pai
 
 export type Bazi3DQuality = 'high' | 'mid' | 'low'
 export type Bazi3DScene = 'compass' | 'galaxy' | 'tunnel'
+export type Bazi3DLifecycle = 'idle' | 'playing' | 'settled' | 'interactive' | 'tunnel' | 'fallback'
 export type BaziPaipan3DState = ReturnType<typeof useBaziPaipan3D>
 
 export function useBaziPaipan3D(result: Ref<BaziChartResult | null>) {
@@ -14,6 +15,9 @@ export function useBaziPaipan3D(result: Ref<BaziChartResult | null>) {
     selectedDayunIndex: ref(0),
     tunnelProgress: ref(0),
     introCompleted: ref(false),
+    lifecycle: ref<Bazi3DLifecycle>('idle'),
+    timelineProgress: ref(0),
+    replayRequested: ref(0),
     rendererStats: ref<{ geometries: number, textures: number, programs: number } | null>(null),
     errorMessage: ref(''),
     model: computed((): BaziPaipan3DModel | null => result.value ? buildBaziPaipan3DModel(result.value) : null),
