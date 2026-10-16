@@ -138,6 +138,9 @@ async function handleSubmit(values: FormValues) {
   bazi3D.scene.value = 'compass'
   bazi3D.introCompleted.value = false
   bazi3D.hoveredCharacterId.value = null
+  bazi3D.hoveredPillarKey.value = null
+  bazi3D.selectedPillarKey.value = null
+  bazi3D.selectedElementKey.value = null
   bazi3D.selectedDayunIndex.value = 0
 
   try {
@@ -197,6 +200,9 @@ function resetToForm() {
   bazi3D.scene.value = 'galaxy'
   bazi3D.introCompleted.value = false
   bazi3D.hoveredCharacterId.value = null
+  bazi3D.hoveredPillarKey.value = null
+  bazi3D.selectedPillarKey.value = null
+  bazi3D.selectedElementKey.value = null
   bazi3D.selectedDayunIndex.value = 0
 }
 

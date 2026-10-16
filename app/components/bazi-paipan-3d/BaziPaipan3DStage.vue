@@ -46,6 +46,71 @@
     </div>
     <div ref="stageRoot" class="b3d-canvas" data-testid="bazi-3d-canvas" aria-hidden="true" />
 
+    <aside
+      v-if="controller.scene.value === 'compass' && (selectedPillar || selectedElementData)"
+      class="b3d-detail"
+      data-testid="bazi-3d-detail"
+    >
+      <header>
+        <strong>
+          {{ selectedPillar ? selectedPillar.label : selectedElementData?.label }}
+        </strong>
+        <button
+          type="button"
+          data-testid="bazi-3d-clear-focus"
+          :aria-label="$t('bazi3d.clearFocus')"
+          @click="clearFocus"
+        >
+          <UIcon name="i-heroicons-x-mark" class="h-3.5 w-3.5" />
+        </button>
+      </header>
+
+      <div v-if="selectedPillar" class="b3d-detail-pillar" data-testid="bazi-3d-pillar-detail">
+        <p class="b3d-copy">{{ selectedPillar.gan }}{{ selectedPillar.zhi }}</p>
+        <dl>
+          <div>
+            <dt>{{ $t('baziChart.stemTenGod') }}</dt>
+            <dd class="b3d-copy">{{ selectedPillar.shishenGan }}</dd>
+          </div>
+          <div>
+            <dt>{{ $t('baziChart.hiddenStems') }}</dt>
+            <dd>
+              <span
+                v-for="hidden in selectedPillar.hiddenStems"
+                :key="`${selectedPillar.key}-${hidden.gan}-${hidden.type}`"
+                class="b3d-copy"
+              >
+                {{ hidden.gan }} · {{ hidden.type }} · {{ hidden.wuxing }} · {{ hidden.shishen }}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>{{ $t('baziChart.nayin') }}</dt>
+            <dd class="b3d-copy">{{ selectedPillar.nayin }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div v-if="selectedElementData" class="b3d-detail-element" data-testid="bazi-3d-element-detail">
+        <p class="b3d-copy">
+          {{ selectedElementData.label }} {{ selectedElementData.percent }}% · {{ selectedElementData.stateLabel }}
+        </p>
+      </div>
+
+      <div class="b3d-element-picker" role="group" :aria-label="$t('bazi3d.elementFocus')">
+        <button
+          v-for="cluster in controller.model.value?.clusters"
+          :key="cluster.elementKey"
+          type="button"
+          :data-testid="`bazi-3d-element-${cluster.elementKey}`"
+          :class="{ 'is-active': controller.selectedElementKey.value === cluster.elementKey }"
+          @click="toggleElement(cluster.elementKey)"
+        >
+          {{ cluster.label }}
+        </button>
+      </div>
+    </aside>
+
     <label v-if="controller.scene.value === 'tunnel'" class="b3d-scroll">
       <span class="sr-only">{{ $t('bazi3d.tunnel') }}</span>
       <input
@@ -137,6 +202,14 @@ const fourPillars = computed(() => props.result.pillars.map(pillar => pillar.gan
 const hoveredCharacter = computed(() => props.controller.model.value?.characters.find(
   character => character.id === props.controller.hoveredCharacterId.value,
 ))
+const selectedPillar = computed(() => props.result.pillars.find(
+  pillar => pillar.key === props.controller.selectedPillarKey.value,
+))
+const selectedElementData = computed(() => props.result.energy.wuxing.find((item) => {
+  return props.controller.model.value?.clusters.find(
+    cluster => cluster.elementKey === props.controller.selectedElementKey.value,
+  )?.label === item.label
+}))
 const selectedDayun = computed(() => props.result.dayuns.find(
   dayun => dayun.index === props.controller.selectedDayunIndex.value,
 ))
@@ -160,6 +233,17 @@ function selectScene(scene: 'compass' | 'galaxy' | 'tunnel') {
 
 function replay() {
   props.controller.timelineControl?.replay()
+}
+
+function toggleElement(elementKey: 'wood' | 'fire' | 'earth' | 'metal' | 'water') {
+  props.controller.selectedElementKey.value = props.controller.selectedElementKey.value === elementKey
+    ? null
+    : elementKey
+}
+
+function clearFocus() {
+  props.controller.selectedPillarKey.value = null
+  props.controller.selectedElementKey.value = null
 }
 
 function selectNeighborDayun(direction: -1 | 1) {
@@ -260,6 +344,82 @@ onBeforeUnmount(() => {
 .b3d-canvas {
   width: 100%;
   height: clamp(360px, 48vh, 520px);
+}
+
+.b3d-detail {
+  position: absolute;
+  z-index: 2;
+  top: 52px;
+  right: 10px;
+  width: min(46vw, 250px);
+  max-height: calc(100% - 66px);
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid rgba(255, 216, 132, 0.22);
+  border-radius: 8px;
+  background: rgba(5, 8, 16, 0.86);
+  color: #e9eefa;
+  font-size: 12px;
+}
+
+.b3d-detail header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.b3d-detail button {
+  color: #b9c4d9;
+}
+
+.b3d-detail dl {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+}
+
+.b3d-detail dt {
+  color: #a7b2c8;
+  font-size: 11px;
+}
+
+.b3d-detail dd {
+  margin: 2px 0 0;
+  line-height: 1.45;
+}
+
+.b3d-copy {
+  user-select: text;
+}
+
+.b3d-detail-element {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.b3d-element-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-top: 9px;
+}
+
+.b3d-element-picker button {
+  padding: 4px 0;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #c9d3e4;
+  font-size: 11px;
+}
+
+.b3d-element-picker button.is-active {
+  border-color: rgba(255, 216, 132, 0.42);
+  background: rgba(255, 216, 132, 0.13);
+  color: #fff2ce;
 }
 
 .b3d-canvas canvas {

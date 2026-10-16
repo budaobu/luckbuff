@@ -12282,6 +12282,9 @@
     "tunnel": "Fortune Tunnel",
     "previous": "Previous fortune cycle",
     "next": "Next fortune cycle",
+    "pillarDetail": "Pillar details",
+    "elementFocus": "Element focus",
+    "clearFocus": "Restore overview",
     "replay": "Replay",
     "skip": "Skip intro"
   },

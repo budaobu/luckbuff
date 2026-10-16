@@ -447,6 +447,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     ]
     const plaqueLabels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[][] = []
     const plaqueMaterials: ThreeNamespace.MeshPhysicalMaterial[] = []
+    const plaqueHitMeshes: ThreeNamespace.Mesh[] = []
     const tunnelHitMeshes: ThreeNamespace.Mesh[] = []
     const compassRadii = [2.35, 1.85, 1.35, 0.88]
 
@@ -483,7 +484,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       plaqueMaterials.push(plaqueMaterial)
       const plaque = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.82, 0.05), plaqueMaterial)
       resources.push(plaque.geometry)
+      plaque.name = `plaque_${gan.pillarKey}`
+      plaque.userData = { pillarKey: gan.pillarKey }
       plaqueGroup.add(plaque)
+      plaqueHitMeshes.push(plaque)
 
       const plaqueGlyphs = [
         { character: gan, offsetX: -0.145 },
@@ -637,6 +641,16 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         if (dayunIndex !== undefined) state.selectedDayunIndex.value = dayunIndex
         return
       }
+      if (state.scene.value === 'compass') {
+        const plaqueHits = raycaster.intersectObjects(plaqueHitMeshes, false)
+        const pillarKey = plaqueHits[0]?.object.userData.pillarKey as string | undefined
+        state.hoveredPillarKey.value = pillarKey ?? null
+        if (event.type === 'click') {
+          state.selectedPillarKey.value = pillarKey ?? null
+          if (!pillarKey) state.selectedElementKey.value = null
+        }
+        return
+      }
       const hits = raycaster.intersectObjects(raycastMeshes, false)
       const characterId = hits[0]?.object.userData.characterId as string | undefined
       state.hoveredCharacterId.value = characterId ?? null
@@ -644,6 +658,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     function clearHover() {
       state.hoveredCharacterId.value = null
+      state.hoveredPillarKey.value = null
     }
 
     function tunnelWheel(event: WheelEvent) {
@@ -675,6 +690,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     camera.position.set(0, 0, 7)
     let hoverMix = 0
+    let interactionMix = 0
     let previousFrameTime = performance.now()
 
     function easeOutCubic(value: number) {
@@ -762,6 +778,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         applyInstrumentTimeline()
         if (composer) composer.render()
         else renderer.render(scene, camera)
+        renderer.setAnimationLoop(frame)
       },
       replay: () => {
         timelineTime = 0
@@ -780,6 +797,32 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     if (import.meta.dev) {
       ;(window as unknown as { __bazi3dSeekTimeline?: (seconds: number) => void }).__bazi3dSeekTimeline = seconds => state.timelineControl?.seek(seconds)
+    }
+
+    if (import.meta.dev) {
+      ;(window as unknown as { __bazi3dDebug?: () => unknown }).__bazi3dDebug = () => JSON.parse(JSON.stringify({
+        pillars: model.pillars.map(pillar => ({
+          key: pillar.key,
+          ganzhi: pillar.ganzhi,
+          shishenGan: pillar.shishenGan,
+          hiddenStems: pillar.hiddenStems,
+          nayin: pillar.nayin,
+          position: plaqueGroups[model.pillars.findIndex(item => item.key === pillar.key)]?.position.toArray(),
+        })),
+        selectedPillarKey: state.selectedPillarKey.value,
+        selectedElementKey: state.selectedElementKey.value,
+        dayuns: model.dayuns.map(dayun => ({
+          index: dayun.index,
+          ganzhi: dayun.ganzhi,
+          isCurrent: dayun.isCurrent,
+          liunianCount: dayun.liunianCount,
+        })),
+        rendererInfo: {
+          geometries: renderer.info.memory.geometries,
+          textures: renderer.info.memory.textures,
+          calls: renderer.info.render.calls,
+        },
+      }))
     }
 
     function frame() {
@@ -819,6 +862,46 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         else if (state.scene.value === 'compass' && !timelinePaused) timelineTime = Math.min(6, timelineTime + delta)
         else timelineTime = 6
         applyInstrumentTimeline()
+
+        const selectedPillarIndex = model.pillars.findIndex(
+          pillar => pillar.key === state.selectedPillarKey.value,
+        )
+        interactionMix += ((selectedPillarIndex >= 0 ? 1 : 0) - interactionMix) * Math.min(delta * 7, 1)
+        if (selectedPillarIndex >= 0) {
+          const focus = plaqueGroups[selectedPillarIndex]!.position
+          camera.position.x = THREE.MathUtils.lerp(camera.position.x, focus.x * 0.34, interactionMix)
+          camera.position.y = THREE.MathUtils.lerp(camera.position.y, focus.y * 0.3 + 0.04, interactionMix)
+          camera.position.z = THREE.MathUtils.lerp(camera.position.z, 5.1, interactionMix)
+          cameraTarget.lerp(focus, interactionMix)
+        }
+
+        plaqueGroups.forEach((group, index) => {
+          const selected = index === selectedPillarIndex
+          const hovered = model.pillars[index]?.key === state.hoveredPillarKey.value
+          const targetZ = selected ? 0.64 : hovered ? 0.4 : 0.28
+          group.position.z += (targetZ - group.position.z) * Math.min(delta * 8, 1)
+          group.rotation.x += (selected ? -0.1 : 0 - group.rotation.x) * Math.min(delta * 8, 1)
+          const material = plaqueMaterials[index]!
+          material.opacity = selected
+            ? Math.max(material.opacity, 0.98)
+            : hovered ? Math.max(material.opacity, 0.82) : selectedPillarIndex >= 0 ? Math.max(material.opacity * 0.995, 0.46) : material.opacity
+          material.emissiveIntensity = selected ? 0.36 : hovered ? 0.22 : index === 2 ? 0.2 : 0.1
+        })
+
+        const selectedElement = state.selectedElementKey.value
+        if (state.scene.value === 'compass' && selectedElement) {
+          galaxy.visible = true
+          clusterParticles.forEach((particle) => {
+            particle.points.visible = particle.elementKey === selectedElement
+          })
+          relationLines.forEach((line) => {
+            line.mesh.visible = line.relationId.includes(selectedElement)
+          })
+          starMeshes.forEach(object => object.visible = false)
+          texts.forEach(text => text.visible = false)
+        }
+
+        if (selectedPillarIndex >= 0 && timelineTime >= 6) state.lifecycle.value = 'interactive'
       }
 
       for (const ring of compassRings) {

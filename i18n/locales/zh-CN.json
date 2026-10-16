@@ -12306,6 +12306,9 @@
     "tunnel": "大运隧道",
     "previous": "上一大运",
     "next": "下一大运",
+    "pillarDetail": "四柱详情",
+    "elementFocus": "五行聚焦",
+    "clearFocus": "恢复全景",
     "replay": "重播",
     "skip": "跳过动画"
   },

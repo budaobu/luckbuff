@@ -12304,6 +12304,9 @@
     "tunnel": "大運隧道",
     "previous": "上一大運",
     "next": "下一大運",
+    "pillarDetail": "四柱詳情",
+    "elementFocus": "五行聚焦",
+    "clearFocus": "恢復全景",
     "replay": "重播",
     "skip": "跳過動畫"
   },

@@ -1,4 +1,4 @@
-import type { BaziChartResult, BaziWuxingItem } from '~~/server/utils/tools/bazi-chart'
+import type { BaziChartPillar, BaziChartResult, BaziWuxingItem } from '~~/server/utils/tools/bazi-chart'
 
 export type ElementKey = 'wood' | 'fire' | 'earth' | 'metal' | 'water'
 
@@ -38,6 +38,7 @@ export interface Bazi3DElementRelation {
 }
 
 export interface BaziPaipan3DModel {
+  pillars: BaziChartPillar[]
   characters: Bazi3DCharacter[]
   clusters: Bazi3DCluster[]
   relations: Bazi3DElementRelation[]
@@ -106,5 +107,5 @@ export function buildBaziPaipan3DModel(result: BaziChartResult): BaziPaipan3DMod
     liunianCount: dayun.liunian.length,
   }))
 
-  return { characters, clusters, relations, dayMaster, dayuns }
+  return { pillars: result.pillars, characters, clusters, relations, dayMaster, dayuns }
 }
