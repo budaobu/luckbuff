@@ -468,11 +468,21 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       tunnelRings.push({ dayunIndex: dayun.index, isCurrent: dayun.isCurrent, mesh: ring, labels })
     })
 
+    const cameraTarget = new THREE.Vector3()
+    let transitionStart: number | null = null
+
     function applyScene(mode: 'compass' | 'galaxy' | 'tunnel') {
       compass.visible = mode === 'compass'
       galaxy.visible = mode === 'galaxy'
       tunnel.visible = mode === 'tunnel'
-      if (mode === 'compass') compassRings.forEach((_, index) => setCompassProgress(index, 1))
+      if (mode === 'compass') {
+        if (state.introCompleted.value) transitionStart = null
+        camera.position.set(0, 0, 7)
+        compassRings.forEach((_, index) => setCompassProgress(index, 1))
+      }
+      else if (mode === 'galaxy') {
+        camera.position.set(0, 0.5, 9.2)
+      }
     }
 
     watch(() => state.scene.value, (mode) => {
@@ -556,10 +566,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     root.addEventListener('click', handlePointerMove)
     root.addEventListener('wheel', handleWheel, { passive: false })
 
-    const cameraTarget = new THREE.Vector3()
     camera.position.set(0, 0, 7)
     let hoverMix = 0
-    let transitionStart: number | null = null
     let previousFrameTime = performance.now()
 
     function easeOutCubic(value: number) {
@@ -606,8 +614,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         cameraTarget.set(0, 0, 0)
       }
 
-      if (compass.visible && transitionStart === null) {
-        if (reducedMotion || state.introCompleted.value) {
+      if (compass.visible && transitionStart === null && !state.introCompleted.value) {
+        if (reducedMotion) {
           compassRings.forEach((_, index) => setCompassProgress(index, 1))
           finishCompass(elapsed)
         }
