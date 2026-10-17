@@ -163,6 +163,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
   let handlePointerMove: ((event: PointerEvent) => void) | null = null
   let handleClearHover: (() => void) | null = null
   let handleWheel: ((event: WheelEvent) => void) | null = null
+  let handlePointerDown: ((event: PointerEvent) => void) | null = null
+  let handlePointerUp: ((event: PointerEvent) => void) | null = null
+  let tunnelDragPointerId: number | null = null
+  let tunnelDragLastY = 0
 
   try {
     const THREE = await import('three')
@@ -526,34 +530,73 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     tunnel.visible = false
     scene.add(tunnel)
     const tunnelSpacing = 4.3
-    const tunnelRings: {
-      dayunIndex: number
-      isCurrent: boolean
-      mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
-      labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
-    }[] = []
+    const gateCount = model.dayuns.length
+    const gateGeometry = new THREE.TorusGeometry(1.32, 0.026, 12, 128)
+    const gateMaterial = new THREE.MeshStandardMaterial({
+      color: '#ffffff',
+      metalness: 0.84,
+      roughness: 0.26,
+      envMapIntensity: 0.72,
+    })
+    const gateRings = new THREE.InstancedMesh(gateGeometry, gateMaterial, gateCount)
+    gateRings.instanceMatrix.setUsage(THREE.StaticDrawUsage)
+    resources.push(gateGeometry, gateMaterial, gateRings)
+    tunnel.add(gateRings)
+    const currentGateGeometry = new THREE.TorusGeometry(0.18, 0.022, 10, 128)
+    const currentGateMaterial = new THREE.MeshBasicMaterial({
+      color: '#c07818',
+      transparent: true,
+      opacity: 0.9,
+      depthTest: false,
+      depthWrite: false,
+    })
+    const currentGateMarker = new THREE.Mesh(currentGateGeometry, currentGateMaterial)
+    currentGateMarker.renderOrder = 10
+    currentGateMarker.visible = false
+    resources.push(currentGateGeometry, currentGateMaterial)
+    tunnel.add(currentGateMarker)
 
-    model.dayuns.forEach((dayun, index) => {
-      const ringGeometry = new THREE.TorusGeometry(1.32, 0.022, 10, 128)
-      const ringMaterial = new THREE.MeshBasicMaterial({
-        color: dayun.isCurrent ? '#ffd884' : '#667795',
-        transparent: true,
-        opacity: 0.94,
-      })
-      resources.push(ringGeometry, ringMaterial)
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-      ring.position.set(0, 0, -index * tunnelSpacing)
-      ring.userData = { dayunIndex: dayun.index }
-      tunnel.add(ring)
+    const tickGeometry = new THREE.BoxGeometry(0.018, 0.095, 0.018)
+    const tickMaterial = new THREE.MeshStandardMaterial({
+      color: '#b9c7dd',
+      metalness: 0.52,
+      roughness: 0.32,
+    })
+    const gateTicks = new THREE.InstancedMesh(tickGeometry, tickMaterial, gateCount * 10)
+    gateTicks.instanceMatrix.setUsage(THREE.StaticDrawUsage)
+    resources.push(tickGeometry, tickMaterial, gateTicks)
+    tunnel.add(gateTicks)
+    const gateHitGeometry = new THREE.TorusGeometry(1.32, 0.14, 8, 72)
+    const gateHitMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+    const gateHitMesh = new THREE.InstancedMesh(gateHitGeometry, gateHitMaterial, gateCount)
+    gateHitMesh.userData = { dayunIndexes: model.dayuns.map(dayun => dayun.index) }
+    resources.push(gateHitGeometry, gateHitMaterial, gateHitMesh)
+    tunnel.add(gateHitMesh)
+    tunnelHitMeshes.push(gateHitMesh)
+    const tunnelLabels: { dayunIndex: number, labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[] }[] = []
 
-      const hitGeometry = new THREE.TorusGeometry(1.32, 0.14, 8, 72)
-      const hitMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
-      resources.push(hitGeometry, hitMaterial)
-      const hitMesh = new THREE.Mesh(hitGeometry, hitMaterial)
-      hitMesh.position.copy(ring.position)
-      hitMesh.userData = { dayunIndex: dayun.index }
-      tunnel.add(hitMesh)
-      tunnelHitMeshes.push(hitMesh)
+    const gateDummy = new THREE.Object3D()
+    model.dayuns.forEach((dayun, gateIndex) => {
+      gateDummy.position.set(0, 0, -gateIndex * tunnelSpacing)
+      gateDummy.rotation.set(0, 0, 0)
+      gateDummy.scale.setScalar(1)
+      gateDummy.updateMatrix()
+      gateRings.setMatrixAt(gateIndex, gateDummy.matrix)
+      gateHitMesh.setMatrixAt(gateIndex, gateDummy.matrix)
+      gateRings.setColorAt(gateIndex, new THREE.Color(dayun.isCurrent ? '#ffd884' : '#667795'))
+
+      for (let yearIndex = 0; yearIndex < 10; yearIndex++) {
+        const angle = Math.PI * 2 * yearIndex / 10 + Math.PI / 10
+        gateDummy.position.set(
+          Math.cos(angle) * 1.32,
+          Math.sin(angle) * 1.32,
+          -gateIndex * tunnelSpacing,
+        )
+        gateDummy.rotation.set(0, 0, angle + Math.PI / 2)
+        gateDummy.scale.setScalar(1)
+        gateDummy.updateMatrix()
+        gateTicks.setMatrixAt(gateIndex * 10 + yearIndex, gateDummy.matrix)
+      }
 
       const [gan, zhi] = [...dayun.ganzhi]
       const labels = [
@@ -562,13 +605,16 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       ].filter(item => item.character).map(({ character, angle }) => {
         const label = createGlyphMesh(character!, dayun.isCurrent ? '#fff2ce' : '#dce5f4', 0.3)
         label.material.uniforms.uOpacity!.value = 0.96
-        label.position.set(Math.cos(angle) * 1.32, Math.sin(angle) * 1.32, -index * tunnelSpacing)
+        label.position.set(Math.cos(angle) * 1.32, Math.sin(angle) * 1.32, -gateIndex * tunnelSpacing)
         tunnel.add(label)
         return label
       })
-
-      tunnelRings.push({ dayunIndex: dayun.index, isCurrent: dayun.isCurrent, mesh: ring, labels })
+      tunnelLabels.push({ dayunIndex: dayun.index, labels })
     })
+    gateRings.instanceMatrix.needsUpdate = true
+    gateHitMesh.instanceMatrix.needsUpdate = true
+    if (gateRings.instanceColor) gateRings.instanceColor.needsUpdate = true
+    gateTicks.instanceMatrix.needsUpdate = true
 
     const cameraTarget = new THREE.Vector3()
     let timelineTime = state.introCompleted.value ? 6 : 0
@@ -631,13 +677,21 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     }
 
     function hoverFromPointer(event: PointerEvent) {
+      if (tunnelDragPointerId !== null) {
+        moveTunnelDrag(event)
+        return
+      }
       setPointer(event)
       raycaster.setFromCamera(pointer, camera)
       if (state.scene.value === 'tunnel') {
         state.hoveredCharacterId.value = null
         if (event.type !== 'click') return
         const tunnelHits = raycaster.intersectObjects(tunnelHitMeshes, false)
-        const dayunIndex = tunnelHits[0]?.object.userData.dayunIndex as number | undefined
+        const hit = tunnelHits[0]
+        const dayunIndexes = hit?.object.userData.dayunIndexes as number[] | undefined
+        const dayunIndex = hit?.instanceId !== undefined
+          ? dayunIndexes?.[hit.instanceId]
+          : hit?.object.userData.dayunIndex as number | undefined
         if (dayunIndex !== undefined) state.selectedDayunIndex.value = dayunIndex
         return
       }
@@ -667,6 +721,39 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       state.tunnelProgress.value = Math.min(Math.max(state.tunnelProgress.value + event.deltaY / 1800, 0), 1)
     }
 
+    function tunnelCameraPosition(progress: number) {
+      const station = progress * Math.max(gateCount - 1, 0)
+      return new THREE.Vector3(0, 0, 1 - station * tunnelSpacing)
+    }
+
+    function moveTunnelDrag(event: PointerEvent) {
+      if (tunnelDragPointerId !== event.pointerId) return
+      const bounds = root.getBoundingClientRect()
+      const delta = event.clientY - tunnelDragLastY
+      tunnelDragLastY = event.clientY
+      state.tunnelProgress.value = Math.min(
+        Math.max(state.tunnelProgress.value + delta / (bounds.height * 0.68), 0),
+        1,
+      )
+      const nearestGate = Math.round(state.tunnelProgress.value * Math.max(gateCount - 1, 0))
+      state.selectedDayunIndex.value = model.dayuns[nearestGate]?.index ?? state.selectedDayunIndex.value
+    }
+
+    function tunnelPointerDown(event: PointerEvent) {
+      if (state.scene.value !== 'tunnel' || !event.isPrimary) return
+      tunnelDragPointerId = event.pointerId
+      tunnelDragLastY = event.clientY
+      root.setPointerCapture(event.pointerId)
+    }
+
+    function tunnelPointerUp(event: PointerEvent) {
+      if (tunnelDragPointerId !== event.pointerId) return
+      tunnelDragPointerId = null
+      root.releasePointerCapture(event.pointerId)
+      const nearestGate = Math.round(state.tunnelProgress.value * Math.max(gateCount - 1, 0))
+      state.selectedDayunIndex.value = model.dayuns[nearestGate]?.index ?? state.selectedDayunIndex.value
+    }
+
     function resize() {
       if (disposed || !root.clientWidth || !root.clientHeight) return
       const nextWidth = root.clientWidth
@@ -683,10 +770,14 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     handlePointerMove = hoverFromPointer
     handleClearHover = clearHover
     handleWheel = tunnelWheel
+    handlePointerDown = tunnelPointerDown
+    handlePointerUp = tunnelPointerUp
     root.addEventListener('pointermove', handlePointerMove)
     root.addEventListener('pointerleave', handleClearHover)
     root.addEventListener('click', handlePointerMove)
     root.addEventListener('wheel', handleWheel, { passive: false })
+    root.addEventListener('pointerdown', handlePointerDown)
+    root.addEventListener('pointerup', handlePointerUp)
 
     camera.position.set(0, 0, 7)
     let hoverMix = 0
@@ -790,6 +881,14 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         applyInstrumentTimeline()
         renderer.setAnimationLoop(frame)
       },
+      restoreOverview: () => {
+        timelinePaused = false
+        timelineTime = 6
+        state.introCompleted.value = true
+        applyScene('compass')
+        applyInstrumentTimeline()
+        renderer.setAnimationLoop(frame)
+      },
     }
     if (import.meta.dev) {
       ;(window as unknown as { __bazi3dTimelineControl?: unknown }).__bazi3dTimelineControl = state.timelineControl
@@ -801,6 +900,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
     if (import.meta.dev) {
       ;(window as unknown as { __bazi3dDebug?: () => unknown }).__bazi3dDebug = () => JSON.parse(JSON.stringify({
+        characters: model.characters,
+        clusters: model.clusters,
         pillars: model.pillars.map(pillar => ({
           key: pillar.key,
           ganzhi: pillar.ganzhi,
@@ -817,6 +918,17 @@ export async function mountBaziPaipan3D(options: MountOptions) {
           isCurrent: dayun.isCurrent,
           liunianCount: dayun.liunianCount,
         })),
+        tunnel: {
+          gateCount,
+          tickCount: gateTicks.count,
+          particleCount: clusterParticles.reduce(
+            (total, particle) => total + Number(particle.points.geometry.getAttribute('position').count),
+            0,
+          ),
+          entryProgress: state.tunnelEntryProgress.value,
+          progress: state.tunnelProgress.value,
+          currentGate: model.dayuns.find(dayun => dayun.isCurrent)?.index ?? null,
+        },
         rendererInfo: {
           geometries: renderer.info.memory.geometries,
           textures: renderer.info.memory.textures,
@@ -848,10 +960,51 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       }
 
       if (tunnel.visible) {
-        const travel = Math.max(model.dayuns.length - 1, 0) * tunnelSpacing
-        const station = state.tunnelProgress.value * Math.max(model.dayuns.length - 1, 0) - 1.75
-        camera.position.set(0, 0, 0.5 - station * tunnelSpacing)
-        cameraTarget.set(0, 0, camera.position.z - 3)
+        if (state.tunnelEntryProgress.value < 1) {
+          const next = Math.min(1, state.tunnelEntryProgress.value + delta / 1.5)
+          state.tunnelEntryProgress.value = next
+          const progress = phaseProgress(next, 0, 1)
+          if (progress < 0.48) {
+            camera.position.set(
+              THREE.MathUtils.lerp(0, 0, phaseProgress(progress, 0, 0.48)),
+              THREE.MathUtils.lerp(0.18, 0, phaseProgress(progress, 0, 0.48)),
+              THREE.MathUtils.lerp(7, 0.65, phaseProgress(progress, 0, 0.48)),
+            )
+            cameraTarget.set(0, 0, -2)
+          }
+          else {
+            const target = tunnelCameraPosition(state.tunnelProgress.value)
+            camera.position.copy(target.clone().lerp(new THREE.Vector3(0, 0, 0.65), 1 - phaseProgress(progress, 0.48, 1)))
+            cameraTarget.set(0, 0, camera.position.z - 3)
+          }
+          if (next >= 1) state.lifecycle.value = 'tunnel'
+        }
+        else {
+          camera.position.copy(tunnelCameraPosition(state.tunnelProgress.value))
+          cameraTarget.set(0, 0, camera.position.z - 3)
+        }
+        state.lifecycle.value = 'tunnel'
+
+        model.dayuns.forEach((dayun, gateIndex) => {
+          const selected = dayun.index === state.selectedDayunIndex.value
+          gateDummy.position.set(0, 0, -gateIndex * tunnelSpacing)
+          gateDummy.rotation.set(0, 0, 0)
+          gateDummy.scale.setScalar(selected ? 1.07 : dayun.isCurrent ? 1.035 : 1)
+          gateDummy.updateMatrix()
+          gateRings.setMatrixAt(gateIndex, gateDummy.matrix)
+          gateRings.setColorAt(
+            gateIndex,
+            new THREE.Color(dayun.isCurrent ? '#ffb43c' : selected ? '#d8ecff' : '#667795'),
+          )
+        })
+        gateRings.instanceMatrix.needsUpdate = true
+        if (gateRings.instanceColor) gateRings.instanceColor.needsUpdate = true
+        const currentGateIndex = model.dayuns.findIndex(dayun => dayun.isCurrent)
+        currentGateMarker.visible = currentGateIndex >= 0
+        if (currentGateIndex >= 0) {
+          currentGateMarker.position.set(0, 0, -currentGateIndex * tunnelSpacing - 0.6)
+          currentGateMarker.scale.setScalar(reducedMotion ? 1 : 1 + Math.sin(elapsed * 2.1) * 0.014)
+        }
       }
       else {
         cameraTarget.set(0, 0, 0)
@@ -949,11 +1102,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         text.quaternion.copy(camera.quaternion)
       }
 
-      for (const ring of tunnelRings) {
-        const selected = ring.dayunIndex === state.selectedDayunIndex.value
-        ring.mesh.material.color.set(ring.isCurrent ? '#ffd884' : selected ? '#a9bade' : '#667795')
-        ring.mesh.scale.setScalar(selected ? 1.08 : 1)
-        for (const label of ring.labels) label.quaternion.copy(camera.quaternion)
+      for (const gate of tunnelLabels) {
+        for (const label of gate.labels) label.quaternion.copy(camera.quaternion)
       }
 
       for (const line of relationLines) {
@@ -986,11 +1136,14 @@ export async function mountBaziPaipan3D(options: MountOptions) {
 
   function dispose() {
     disposed = true
+    renderer?.setAnimationLoop(null)
     resizeObserver?.disconnect()
     if (handlePointerMove) root.removeEventListener('pointermove', handlePointerMove)
     if (handleClearHover) root.removeEventListener('pointerleave', handleClearHover)
     if (handlePointerMove) root.removeEventListener('click', handlePointerMove)
     if (handleWheel) root.removeEventListener('wheel', handleWheel)
+    if (handlePointerDown) root.removeEventListener('pointerdown', handlePointerDown)
+    if (handlePointerUp) root.removeEventListener('pointerup', handlePointerUp)
     resources.slice().reverse().forEach(resource => resource.dispose())
     renderer?.domElement.remove()
   }

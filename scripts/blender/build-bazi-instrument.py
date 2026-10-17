@@ -1,5 +1,6 @@
 import math
 import os
+import subprocess
 
 import bpy
 
@@ -7,9 +8,8 @@ import bpy
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUTPUT_DIR = os.path.join(
     PROJECT_ROOT,
-    "public",
-    "assets",
-    "bazi-paipan-3d",
+    "scripts",
+    "blender",
     "instrument-source",
 )
 BLEND_PATH = os.path.join(PROJECT_ROOT, "scripts", "blender", "bazi-instrument.blend")
@@ -24,6 +24,8 @@ def reset_scene():
 def clean_output():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     for name in os.listdir(OUTPUT_DIR):
+        if name == ".gitignore":
+            continue
         os.remove(os.path.join(OUTPUT_DIR, name))
 
 
@@ -321,6 +323,9 @@ def build_instrument():
         export_yup=True,
     )
     bpy.ops.wm.save_as_mainfile(filepath=BLEND_PATH)
+
+    optimize_script = os.path.join(os.path.dirname(__file__), "optimize-bazi-instrument.mjs")
+    subprocess.run(["node", optimize_script], check=True, cwd=PROJECT_ROOT)
 
 
 if __name__ == "__main__":

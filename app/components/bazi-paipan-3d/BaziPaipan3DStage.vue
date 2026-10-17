@@ -6,6 +6,8 @@
     :data-timeline="controller.timelineProgress.value"
     :data-intro="controller.introCompleted.value"
     :data-quality="controller.quality.value"
+    :data-scene="controller.scene.value"
+    :data-tunnel-entry="controller.tunnelEntryProgress.value"
     :data-renderer-stats="rendererStatsText || undefined"
     :data-error="controller.errorMessage.value || undefined"
     aria-live="polite"
@@ -42,6 +44,24 @@
       >
         <UIcon name="i-heroicons-arrow-path" class="h-3.5 w-3.5" />
         {{ $t('bazi3d.replay') }}
+      </button>
+      <button
+        v-if="controller.scene.value === 'tunnel' && controller.tunnelEntryProgress.value < 1"
+        type="button"
+        data-testid="bazi-3d-skip-tunnel-entry"
+        @click="skipTunnelEntry"
+      >
+        <UIcon name="i-heroicons-forward" class="h-3.5 w-3.5" />
+        {{ $t('bazi3d.skip') }}
+      </button>
+      <button
+        v-if="controller.scene.value === 'tunnel'"
+        type="button"
+        data-testid="bazi-3d-exit-tunnel"
+        @click="exitTunnel"
+      >
+        <UIcon name="i-heroicons-arrow-left-circle" class="h-3.5 w-3.5" />
+        {{ $t('bazi3d.exitTunnel') }}
       </button>
     </div>
     <div ref="stageRoot" class="b3d-canvas" data-testid="bazi-3d-canvas" aria-hidden="true" />
@@ -120,6 +140,10 @@
         max="1"
         step="0.01"
         data-testid="bazi-3d-tunnel-slider"
+        @keydown.left.prevent="selectNeighborDayun(-1)"
+        @keydown.right.prevent="selectNeighborDayun(1)"
+        @keydown.up.prevent="selectNeighborDayun(-1)"
+        @keydown.down.prevent="selectNeighborDayun(1)"
       >
     </label>
 
@@ -188,7 +212,6 @@
 <script setup lang="ts">
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import type { BaziPaipan3DState } from '~/composables/useBaziPaipan3D'
-import { mountBaziPaipan3D } from '~/utils/bazi-paipan-3d/renderer'
 
 const props = defineProps<{
   controller: BaziPaipan3DState
@@ -226,9 +249,69 @@ const rendererStatsText = computed(() => props.controller.rendererStats.value
   ? JSON.stringify(props.controller.rendererStats.value)
   : '')
 
+const reducedMotion = ref(false)
+interface TunnelSelectionSnapshot {
+  pillarKey: string | null
+  elementKey: 'wood' | 'fire' | 'earth' | 'metal' | 'water' | null
+  dayunIndex: number
+  progress: number
+}
+let tunnelEntrySelection: TunnelSelectionSnapshot | null = null
+
 function selectScene(scene: 'compass' | 'galaxy' | 'tunnel') {
-  if (scene !== 'compass') props.controller.introCompleted.value = true
+  if (scene === 'tunnel') {
+    enterTunnel()
+    return
+  }
+  if (scene === 'compass') {
+    tunnelEntrySelection = null
+    props.controller.introCompleted.value = true
+    props.controller.scene.value = scene
+    props.controller.timelineControl?.seek(6)
+    return
+  }
   props.controller.scene.value = scene
+}
+
+function enterTunnel() {
+  if (!tunnelEntrySelection) {
+    tunnelEntrySelection = {
+      pillarKey: props.controller.selectedPillarKey.value,
+      elementKey: props.controller.selectedElementKey.value,
+      dayunIndex: props.controller.selectedDayunIndex.value,
+      progress: props.controller.tunnelProgress.value,
+    }
+  }
+
+  const currentDayun = props.result.dayuns.find(dayun => dayun.isCurrent)
+    ?? props.result.dayuns[0]
+  if (!currentDayun) return
+
+  props.controller.selectedDayunIndex.value = currentDayun.index
+  props.controller.tunnelProgress.value = props.result.dayuns.length > 1
+    ? (currentDayun.index - 1) / (props.result.dayuns.length - 1)
+    : 0
+  props.controller.introCompleted.value = true
+  props.controller.tunnelEntryProgress.value = reducedMotion.value ? 1 : 0
+  props.controller.scene.value = 'tunnel'
+  props.controller.lifecycle.value = 'tunnel'
+}
+
+function exitTunnel() {
+  const snapshot = tunnelEntrySelection
+  if (snapshot) {
+    props.controller.selectedPillarKey.value = snapshot.pillarKey
+    props.controller.selectedElementKey.value = snapshot.elementKey
+    props.controller.selectedDayunIndex.value = snapshot.dayunIndex
+    props.controller.tunnelProgress.value = snapshot.progress
+    tunnelEntrySelection = null
+  }
+  props.controller.scene.value = 'compass'
+  props.controller.timelineControl?.restoreOverview()
+}
+
+function skipTunnelEntry() {
+  props.controller.tunnelEntryProgress.value = 1
 }
 
 function replay() {
@@ -256,13 +339,15 @@ onMounted(async () => {
   const model = props.controller.model.value
   if (!root || !model) return
 
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  reducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const { mountBaziPaipan3D } = await import('~/utils/bazi-paipan-3d/renderer')
   dispose = await mountBaziPaipan3D({
     root,
     state: props.controller,
     model,
-    reducedMotion,
+    reducedMotion: reducedMotion.value,
   })
+  if (reducedMotion.value) props.controller.introCompleted.value = true
 })
 
 onBeforeUnmount(() => {
@@ -344,6 +429,10 @@ onBeforeUnmount(() => {
 .b3d-canvas {
   width: 100%;
   height: clamp(360px, 48vh, 520px);
+}
+
+.b3d[data-scene='tunnel'] .b3d-canvas {
+  touch-action: none;
 }
 
 .b3d-detail {

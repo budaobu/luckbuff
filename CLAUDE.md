@@ -83,3 +83,9 @@ PM2 by `scripts/deploy.sh`. `NUXT_PUBLIC_*` keys must be declared in
 - Keep Three.js and postprocessing behind runtime dynamic imports. The 22 ganzhi
   glyphs use the prebaked SDF atlas under `public/assets/bazi-paipan-3d/`; do not
   load a full CJK font or put 3D setup into the page's first-run bundle.
+- Regenerate `public/assets/bazi-paipan-3d/instrument.glb` with
+  `blender --background --factory-startup --python scripts/blender/build-bazi-instrument.py`,
+  then validate it with
+  `node scripts/blender/validate-bazi-instrument.mjs`. Keep `ring_01`–`ring_04`
+  intact; optimization may not flatten the scene graph. The optimizer needs
+  KTX-Software's `ktx` command on `PATH`.

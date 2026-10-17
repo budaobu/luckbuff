@@ -1,0 +1,61 @@
+{
+  "nodeNames": [
+    "instrument_base",
+    "instrument_stand",
+    "ring_01",
+    "ring_02",
+    "ring_03",
+    "ring_04",
+    "instrument_root"
+  ],
+  "requiredNodesPresent": true,
+  "triangles": 11484,
+  "maxTriangleCount": 80000,
+  "glbBytes": 476652,
+  "maxGlbBytes": 1048576,
+  "textures": [
+    {
+      "name": "InstrumentJadeNormal",
+      "mimeType": "image/ktx2",
+      "width": 512,
+      "height": 512,
+      "bytes": 782
+    },
+    {
+      "name": "InstrumentJadeAlbedo",
+      "mimeType": "image/ktx2",
+      "width": 512,
+      "height": 512,
+      "bytes": 31800
+    },
+    {
+      "name": "InstrumentJadeORM",
+      "mimeType": "image/ktx2",
+      "width": 256,
+      "height": 256,
+      "bytes": 39976
+    },
+    {
+      "name": "InstrumentBronzeNormal",
+      "mimeType": "image/ktx2",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 919
+    },
+    {
+      "name": "InstrumentBronzeAlbedo",
+      "mimeType": "image/ktx2",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 178758
+    },
+    {
+      "name": "InstrumentBronzeORM",
+      "mimeType": "image/ktx2",
+      "width": 512,
+      "height": 512,
+      "bytes": 163434
+    }
+  ],
+  "maxTextureSize": 2048
+}

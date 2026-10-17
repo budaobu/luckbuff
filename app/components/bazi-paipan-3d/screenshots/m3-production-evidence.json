@@ -1,0 +1,161 @@
+{
+  "url": "http://127.0.0.1:4175/tools/bazi-paipan?bazi3dQuality=high",
+  "status": 200,
+  "title": "免费八字排盘_八字命盘流年分析 - ososn",
+  "jsonLdTypes": [
+    "SoftwareApplication"
+  ],
+  "initialScriptCount": 8,
+  "initialThree": [],
+  "threeChunks": [
+    {
+      "file": "-MGUDD-H.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 732688,
+      "gz": 188041
+    },
+    {
+      "file": "BWOHgCP9.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 4636,
+      "gz": 2279
+    },
+    {
+      "file": "Bn2QPx_l.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 20851,
+      "gz": 8196
+    },
+    {
+      "file": "BvaqDlBC.js",
+      "signatures": [
+        "WebGLRenderer",
+        "EffectComposer",
+        "DRACOLoader",
+        "KTX2Loader",
+        "UnrealBloomPass"
+      ],
+      "raw": 23261,
+      "gz": 8539
+    },
+    {
+      "file": "D0Hajtm6.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 40075,
+      "gz": 10915
+    },
+    {
+      "file": "D9t7HxWd.js",
+      "signatures": [
+        "DRACOLoader",
+        "KTX2Loader"
+      ],
+      "raw": 45586,
+      "gz": 13713
+    },
+    {
+      "file": "DB1NS3Ns.js",
+      "signatures": [
+        "KTX2Loader"
+      ],
+      "raw": 60236,
+      "gz": 24466
+    },
+    {
+      "file": "DGZsLLf2.js",
+      "signatures": [
+        "DRACOLoader"
+      ],
+      "raw": 6744,
+      "gz": 2838
+    },
+    {
+      "file": "DJ6ALAgY.js",
+      "signatures": [
+        "UnrealBloomPass"
+      ],
+      "raw": 9403,
+      "gz": 2471
+    },
+    {
+      "file": "Dswbz8Fs.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 6009,
+      "gz": 2894
+    },
+    {
+      "file": "jf5_6H7t.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 6901,
+      "gz": 3188
+    },
+    {
+      "file": "sw1RP6Ce.js",
+      "signatures": [
+        "EffectComposer"
+      ],
+      "raw": 4770,
+      "gz": 1489
+    }
+  ],
+  "threeGzipTotal": 269029,
+  "assets": [
+    {
+      "file": "public/assets/bazi-paipan-3d/instrument.glb",
+      "raw": 476652,
+      "gz": 454353
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/bazi-glyphs-sdf.png",
+      "raw": 49751,
+      "gz": 47950
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/bazi-glyphs.json",
+      "raw": 391,
+      "gz": 223
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/bazi-glyphs.ttf",
+      "raw": 5108,
+      "gz": 4213
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/decoders/draco/draco_decoder.wasm",
+      "raw": 192420,
+      "gz": 63407
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/decoders/draco/draco_wasm_wrapper.js",
+      "raw": 58456,
+      "gz": 11688
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/decoders/basis/basis_transcoder.wasm",
+      "raw": 527333,
+      "gz": 244572
+    },
+    {
+      "file": "public/assets/bazi-paipan-3d/decoders/basis/basis_transcoder.js",
+      "raw": 57529,
+      "gz": 15081
+    }
+  ],
+  "assetRawTotal": 1367640,
+  "assetGzipTotal": 841487,
+  "consoleMessages": [],
+  "hydrationIssues": [],
+  "responseStatuses": []
+}

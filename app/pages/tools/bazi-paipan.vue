@@ -59,7 +59,10 @@
             </div>
           </template>
         </ClientOnly>
-        <BaziPaipanReport :result="result" />
+        <BaziPaipanReport
+          :result="result"
+          :active-dayun-index="bazi3D.selectedDayunIndex.value"
+        />
       </div>
 
       <div v-if="phase === 'result'" class="bc-actions">
@@ -73,6 +76,7 @@
           tool="bazi-paipan"
           :summary="shareSummary"
           filename="bazi-paipan-poster.png"
+          :share-image-factory="createBaziPaipanPoster"
         />
       </div>
     </div>
@@ -84,6 +88,7 @@ import type { DiZhi } from '~/types/user'
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import BaziPaipan3DStage from '~/components/bazi-paipan-3d/BaziPaipan3DStage.vue'
 import { useBaziPaipan3D } from '~/composables/useBaziPaipan3D'
+import { createBaziPaipanInstrumentPoster } from '~/utils/bazi-paipan-3d/poster'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -219,6 +224,17 @@ function shortDatetime(value: string) {
 }
 
 const siteName = 'ososn'
+
+async function createBaziPaipanPoster() {
+  if (!result.value) return null
+  return createBaziPaipanInstrumentPoster({
+    result: result.value,
+    currentDayun: result.value.dayuns.find(dayun => dayun.isCurrent)
+      ?? result.value.dayuns[0]
+      ?? null,
+    siteName,
+  })
+}
 
 const pageUrl = useLocalizedSeoUrl('/tools/bazi-paipan')
 
