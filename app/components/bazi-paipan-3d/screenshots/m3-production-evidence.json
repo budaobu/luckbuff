@@ -17,40 +17,20 @@
       "gz": 188041
     },
     {
-      "file": "BWOHgCP9.js",
+      "file": "BiSRpgww.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 6009,
+      "gz": 2895
+    },
+    {
+      "file": "CXr3KuC8.js",
       "signatures": [
         "WebGLRenderer"
       ],
       "raw": 4636,
       "gz": 2279
-    },
-    {
-      "file": "Bn2QPx_l.js",
-      "signatures": [
-        "WebGLRenderer"
-      ],
-      "raw": 20851,
-      "gz": 8196
-    },
-    {
-      "file": "BvaqDlBC.js",
-      "signatures": [
-        "WebGLRenderer",
-        "EffectComposer",
-        "DRACOLoader",
-        "KTX2Loader",
-        "UnrealBloomPass"
-      ],
-      "raw": 23261,
-      "gz": 8539
-    },
-    {
-      "file": "D0Hajtm6.js",
-      "signatures": [
-        "WebGLRenderer"
-      ],
-      "raw": 40075,
-      "gz": 10915
     },
     {
       "file": "D9t7HxWd.js",
@@ -86,20 +66,40 @@
       "gz": 2471
     },
     {
-      "file": "Dswbz8Fs.js",
-      "signatures": [
-        "WebGLRenderer"
-      ],
-      "raw": 6009,
-      "gz": 2894
-    },
-    {
-      "file": "jf5_6H7t.js",
+      "file": "DJYN-cK3.js",
       "signatures": [
         "WebGLRenderer"
       ],
       "raw": 6901,
       "gz": 3188
+    },
+    {
+      "file": "Dcawv-sU.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 20851,
+      "gz": 8195
+    },
+    {
+      "file": "Dh_IUenH.js",
+      "signatures": [
+        "WebGLRenderer",
+        "EffectComposer",
+        "DRACOLoader",
+        "KTX2Loader",
+        "UnrealBloomPass"
+      ],
+      "raw": 29079,
+      "gz": 10222
+    },
+    {
+      "file": "kqtwX_sw.js",
+      "signatures": [
+        "WebGLRenderer"
+      ],
+      "raw": 40075,
+      "gz": 10912
     },
     {
       "file": "sw1RP6Ce.js",
@@ -110,7 +110,7 @@
       "gz": 1489
     }
   ],
-  "threeGzipTotal": 269029,
+  "threeGzipTotal": 270709,
   "assets": [
     {
       "file": "public/assets/bazi-paipan-3d/instrument.glb",

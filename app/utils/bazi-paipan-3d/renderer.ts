@@ -21,11 +21,11 @@ const ELEMENT_COLORS: Record<ElementKey, string> = {
 }
 
 const ELEMENT_POSITIONS: Record<ElementKey, [number, number, number]> = {
-  wood: [0, 0.3, -3.05],
-  fire: [2.9, 0.08, -0.94],
-  earth: [1.79, -0.14, 2.46],
-  metal: [-1.79, -0.1, 2.46],
-  water: [-2.9, 0.18, -0.94],
+  wood: [0, 1.08, -3.18],
+  fire: [3.08, 0.26, -0.82],
+  earth: [1.9, -0.72, 2.58],
+  metal: [-1.9, -1.02, 2.58],
+  water: [-3.08, 0.08, -0.82],
 }
 
 const GENERATION_ORDER: ElementKey[] = ['wood', 'fire', 'earth', 'metal', 'water']
@@ -87,10 +87,13 @@ function flowMaterial(
       uBaseOpacity: { value: baseOpacity },
     },
     vertexShader: `
+      uniform float uTime;
       varying vec2 vUv;
       void main() {
         vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vec3 ribbon = position + normal * sin(uv.x * 18.8496 - uTime * 2.1)
+          * 0.026 * (1.0 - abs(uv.x - 0.5) * 1.6);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(ribbon, 1.0);
       }
     `,
     fragmentShader: `
@@ -275,34 +278,78 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       return mesh as ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>
     }
 
-    const particleMaterial = new THREE.PointsMaterial({
-      vertexColors: true,
-      size: quality === 'high' ? 0.058 : 0.075,
-      transparent: true,
-      opacity: 0.78,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-    })
-    resources.push(particleMaterial)
+    const createParticleMaterial = () => {
+      const material = new THREE.ShaderMaterial({
+        uniforms: {
+          uTime: { value: 0 },
+          uOpacity: { value: 0.62 },
+          uSize: { value: quality === 'high' ? 17 : 23 },
+          uPixelRatio: { value: qualityDpr(quality) },
+        },
+        vertexShader: `
+          attribute vec3 aSeed;
+          attribute vec3 aColor;
+          uniform float uTime;
+          uniform float uSize;
+          uniform float uPixelRatio;
+          varying vec3 vColor;
+          varying float vDepth;
+          void main() {
+            float speed = mix(0.12, 0.34, aSeed.z);
+            float angle = aSeed.x + uTime * speed;
+            float radius = mix(0.24, 1.0, aSeed.y);
+            vec3 orbit = vec3(
+              cos(angle) * radius,
+              sin(angle * 2.0 + aSeed.z * 6.2832) * (0.10 + aSeed.z * 0.10),
+              sin(angle) * radius * 0.62
+            );
+            vec4 mvPosition = modelViewMatrix * vec4(orbit, 1.0);
+            vColor = aColor;
+            vDepth = smoothstep(-10.0, -5.0, mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+            gl_PointSize = uSize * uPixelRatio * (0.42 + aSeed.z * 0.58) / max(-mvPosition.z, 0.1);
+          }
+        `,
+        fragmentShader: `
+          uniform float uOpacity;
+          varying vec3 vColor;
+          varying float vDepth;
+          void main() {
+            float distance = length(gl_PointCoord - 0.5);
+            float alpha = smoothstep(0.48, 0.08, distance) * uOpacity * mix(0.45, 1.0, vDepth);
+            if (alpha < 0.01) discard;
+            gl_FragColor = vec4(vColor * (0.34 + vDepth * 0.32), alpha * 0.82);
+          }
+        `,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+      resources.push(material)
+      return material
+    }
 
-    const clusterParticles: { points: ThreeNamespace.Points, elementKey: ElementKey }[] = []
+    const clusterParticles: {
+      points: ThreeNamespace.Points
+      material: ThreeNamespace.ShaderMaterial
+      elementKey: ElementKey
+      tilt: number
+    }[] = []
     for (const elementKey of ELEMENT_KEYS) {
       const cluster = model.clusters.find(item => item.elementKey === elementKey)
       if (!cluster) continue
       const count = quality === 'high' ? 420 : 130
-      const positions = new Float32Array(count * 3)
+      const placeholderPositions = new Float32Array(count * 3)
       const colors = new Float32Array(count * 3)
+      const seeds = new Float32Array(count * 3)
       const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
       const color = new THREE.Color(ELEMENT_COLORS[elementKey])
       const clusterScale = 0.66 + Math.sqrt(cluster.percent / 100) * 1.28
 
       for (let index = 0; index < count; index += 1) {
-        const angle = Math.random() * Math.PI * 2
-        const elevation = (Math.random() - 0.5) * Math.PI
-        const radius = clusterScale * (0.24 + Math.cbrt(Math.random()) * 0.76)
-        positions[index * 3] = center.x + Math.cos(angle) * Math.cos(elevation) * radius
-        positions[index * 3 + 1] = center.y + Math.sin(elevation) * radius * 0.64
-        positions[index * 3 + 2] = center.z + Math.sin(angle) * Math.cos(elevation) * radius
+        seeds[index * 3] = Math.random() * Math.PI * 2
+        seeds[index * 3 + 1] = Math.cbrt(Math.random())
+        seeds[index * 3 + 2] = Math.random()
         const variance = 0.66 + Math.random() * 0.5
         colors[index * 3] = color.r * variance
         colors[index * 3 + 1] = color.g * variance
@@ -310,13 +357,19 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       }
 
       const geometry = new THREE.BufferGeometry()
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      geometry.setAttribute('position', new THREE.BufferAttribute(placeholderPositions, 3))
+      geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3))
+      geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 3))
+      geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1.3)
       resources.push(geometry)
-      const points = new THREE.Points(geometry, particleMaterial)
+      const material = createParticleMaterial()
+      const points = new THREE.Points(geometry, material)
       points.userData = { elementKey, clusterScale }
+      points.position.copy(center)
+      points.scale.setScalar(clusterScale)
+      points.rotation.x = elementKey === 'wood' || elementKey === 'earth' ? -0.38 : 0.3
       galaxy.add(points)
-      clusterParticles.push({ points, elementKey })
+      clusterParticles.push({ points, material, elementKey, tilt: points.rotation.x })
     }
 
     const starGeometry = new THREE.SphereGeometry(1, 24, 18)
@@ -326,6 +379,11 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     const raycastMeshes: ThreeNamespace.Mesh[] = []
     const glowMaterials: { material: ThreeNamespace.SpriteMaterial, elementKey: ElementKey }[] = []
     const characterPositions = new Map<string, ThreeNamespace.Vector3>()
+    const characterOrbits: {
+      group: ThreeNamespace.Group
+      elementKey: ElementKey
+      speed: number
+    }[] = []
 
     for (const elementKey of ELEMENT_KEYS) {
       const members = model.characters.filter(character => character.elementKey === elementKey)
@@ -333,9 +391,24 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
         const angle = (memberIndex / Math.max(members.length, 1)) * Math.PI * 2 + 0.5
         const radius = 0.86 + (memberIndex % 2) * 0.22
-        center.x += Math.cos(angle) * radius
-        center.y += Math.sin(angle) * 0.44
-        center.z += Math.sin(angle) * radius
+        const characterOffset = new THREE.Vector3(
+          Math.cos(angle) * radius,
+          Math.sin(angle) * 0.44,
+          Math.sin(angle) * radius,
+        )
+        const orbit = new THREE.Group()
+        orbit.position.copy(center)
+        orbit.rotation.set(
+          (memberIndex % 2 === 0 ? 1 : -1) * 0.13,
+          angle,
+          (memberIndex % 2 === 0 ? -1 : 1) * 0.08,
+        )
+        galaxy.add(orbit)
+        characterOrbits.push({
+          group: orbit,
+          elementKey,
+          speed: character.isDayMaster ? 0.05 : 0.09 + memberIndex * 0.016,
+        })
 
         const material = new THREE.MeshBasicMaterial({
           color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
@@ -346,10 +419,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         starMaterials.push(material)
 
         const star = new THREE.Mesh(starGeometry, material)
-        star.position.copy(center)
+        star.position.copy(characterOffset)
         star.scale.setScalar(character.isDayMaster ? 0.17 : 0.14)
         star.userData = { characterId: character.id, elementKey, baseScale: star.scale.x }
-        galaxy.add(star)
+        orbit.add(star)
         starMeshes.push(star)
         raycastMeshes.push(star)
         characterPositions.set(character.id, center.clone())
@@ -358,23 +431,23 @@ export async function mountBaziPaipan3D(options: MountOptions) {
           map: glowTexture,
           color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
           transparent: true,
-          opacity: character.isDayMaster ? 0.9 : 0.58,
+          opacity: character.isDayMaster ? 0.58 : 0.32,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         }))
         resources.push(glow.material)
         glowMaterials.push({ material: glow.material, elementKey })
-        glow.position.copy(center)
-        glow.scale.setScalar(character.isDayMaster ? 0.95 : 0.66)
+        glow.position.copy(characterOffset)
+        glow.scale.setScalar(character.isDayMaster ? 0.68 : 0.44)
         glow.userData = { characterId: character.id, baseOpacity: glow.material.opacity }
-        galaxy.add(glow)
+        orbit.add(glow)
         starMeshes.push(glow)
 
         const text = createGlyphMesh(character.char, character.isDayMaster ? '#fff2ce' : '#f4f8ff')
         text.material.uniforms.uOpacity!.value = 1
-        text.position.copy(center).add(new THREE.Vector3(0, 0.3, 0))
+        text.position.copy(characterOffset).add(new THREE.Vector3(0, 0.3, 0))
         text.userData = { characterId: character.id, elementKey }
-        galaxy.add(text)
+        orbit.add(text)
         texts.push(text)
       })
     }
@@ -437,17 +510,185 @@ export async function mountBaziPaipan3D(options: MountOptions) {
     compass.add(instrumentRoot)
     dracoLoader.dispose()
     ktx2Loader.dispose()
+    const heavenGeometry = new THREE.SphereGeometry(1.64, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2.05)
+    const heavenMaterial = new THREE.MeshPhysicalMaterial({
+      color: '#082238',
+      roughness: 0.16,
+      metalness: 0.22,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    })
+    const heavenShell = new THREE.Mesh(heavenGeometry, heavenMaterial)
+    const heavenCageGeometry = new THREE.SphereGeometry(1.72, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2.1)
+    const heavenCageMaterial = new THREE.MeshBasicMaterial({
+      color: '#9db8dd',
+      wireframe: true,
+      transparent: true,
+      opacity: 0.035,
+      depthWrite: false,
+    })
+    const heavenCage = new THREE.Mesh(heavenCageGeometry, heavenCageMaterial)
+    const heavenRings: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshPhysicalMaterial>[] = []
+    for (let index = 0; index < 3; index += 1) {
+      const geometry = new THREE.TorusGeometry(1.58 + index * 0.08, 0.007, 6, 180)
+      const material = new THREE.MeshPhysicalMaterial({
+        color: index === 0 ? '#d4af6d' : '#a9c3e8',
+        metalness: 0.9,
+        roughness: 0.22,
+        transparent: true,
+        opacity: 0.58,
+      })
+      const ring = new THREE.Mesh(geometry, material)
+      ring.rotation.x = Math.PI / 2
+      ring.rotation.z = index * 0.72
+      resources.push(geometry, material)
+      heavenRings.push(ring)
+      compass.add(ring)
+    }
+    const earthGeometry = new THREE.CylinderGeometry(1.58, 1.78, 0.075, 96)
+    const earthMaterial = new THREE.MeshPhysicalMaterial({
+      color: '#06180f',
+      roughness: 0.24,
+      metalness: 0.06,
+      clearcoat: 0.64,
+      clearcoatRoughness: 0.22,
+    })
+    const earthDisc = new THREE.Mesh(earthGeometry, earthMaterial)
+    earthDisc.position.y = -0.88
+    const earthRings: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>[] = []
+    for (const radius of [1.08, 1.42, 1.66]) {
+      const geometry = new THREE.TorusGeometry(radius, 0.008, 6, 180)
+      const material = new THREE.MeshBasicMaterial({
+        color: radius > 1.5 ? '#d4af6d' : '#7fd8a8',
+        transparent: true,
+        opacity: radius > 1.5 ? 0.62 : 0.32,
+      })
+      const ring = new THREE.Mesh(geometry, material)
+      ring.rotation.x = Math.PI / 2
+      ring.position.y = -0.838
+      resources.push(geometry, material)
+      earthRings.push(ring)
+      compass.add(ring)
+    }
+    const axisGeometry = new THREE.CylinderGeometry(0.014, 0.018, 2.1, 20)
+    const axisMaterial = new THREE.MeshStandardMaterial({
+      color: '#b08135',
+      metalness: 0.94,
+      roughness: 0.24,
+    })
+    const compassAxis = new THREE.Mesh(axisGeometry, axisMaterial)
+    compassAxis.position.y = -0.05
+    const heavenCoreGeometry = new THREE.OctahedronGeometry(0.13)
+    const heavenCoreMaterial = new THREE.MeshPhysicalMaterial({
+      color: '#74e5b4',
+      emissive: new THREE.Color('#1f8f61'),
+      emissiveIntensity: 0.5,
+      metalness: 0.1,
+      roughness: 0.1,
+      clearcoat: 1,
+    })
+    const heavenCore = new THREE.Mesh(heavenCoreGeometry, heavenCoreMaterial)
+    heavenCore.position.y = 0.96
+    const earthCoreGeometry = new THREE.BoxGeometry(0.15, 0.15, 0.15)
+    const earthCoreMaterial = new THREE.MeshBasicMaterial({
+      color: '#d4af6d',
+      wireframe: true,
+      transparent: true,
+      opacity: 0.48,
+    })
+    const earthCore = new THREE.Mesh(earthCoreGeometry, earthCoreMaterial)
+    earthCore.position.y = -0.88
+    const needleGroup = new THREE.Group()
+    needleGroup.position.y = -0.8
+    const needleMaterial = new THREE.MeshStandardMaterial({
+      color: '#f4f8ff',
+      metalness: 0.68,
+      roughness: 0.18,
+      emissive: new THREE.Color('#28476f'),
+      emissiveIntensity: 0.12,
+    })
+    const southNeedleGeometry = new THREE.ConeGeometry(0.055, 0.34, 4)
+    const southNeedleMaterial = new THREE.MeshStandardMaterial({
+      color: '#e46a5a',
+      metalness: 0.36,
+      roughness: 0.2,
+      emissive: new THREE.Color('#952f24'),
+      emissiveIntensity: 0.3,
+    })
+    const southNeedle = new THREE.Mesh(southNeedleGeometry, southNeedleMaterial)
+    southNeedle.rotation.z = Math.PI / 2
+    southNeedle.position.x = -0.3
+    const northNeedle = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.34, 4), needleMaterial)
+    northNeedle.rotation.z = -Math.PI / 2
+    northNeedle.position.x = 0.3
+    const needleHubGeometry = new THREE.SphereGeometry(0.045, 20, 16)
+    const needleHubMaterial = new THREE.MeshStandardMaterial({
+      color: '#ffd884',
+      metalness: 0.88,
+      roughness: 0.18,
+      emissive: new THREE.Color('#8c5f1c'),
+      emissiveIntensity: 0.18,
+    })
+    const needleHub = new THREE.Mesh(needleHubGeometry, needleHubMaterial)
+    needleGroup.add(southNeedle, northNeedle, needleHub)
+    const compassGemGeometry = new THREE.OctahedronGeometry(0.16)
+    const compassGemMaterial = new THREE.MeshPhysicalMaterial({
+      color: '#2e8a63',
+      emissive: new THREE.Color('#1b7350'),
+      emissiveIntensity: 0.24,
+      metalness: 0.12,
+      roughness: 0.08,
+      clearcoat: 1,
+      clearcoatRoughness: 0.08,
+    })
+    const compassGem = new THREE.Mesh(compassGemGeometry, compassGemMaterial)
+    compassGem.position.z = 0.28
+    resources.push(
+      heavenGeometry,
+      heavenMaterial,
+      heavenCageGeometry,
+      heavenCageMaterial,
+      earthGeometry,
+      earthMaterial,
+      axisGeometry,
+      axisMaterial,
+      heavenCoreGeometry,
+      heavenCoreMaterial,
+      earthCoreGeometry,
+      earthCoreMaterial,
+      southNeedleGeometry,
+      southNeedleMaterial,
+      needleMaterial,
+      needleHubGeometry,
+      needleHubMaterial,
+      compassGemGeometry,
+      compassGemMaterial,
+    )
+    compass.add(
+      heavenShell,
+      heavenCage,
+      ...heavenRings,
+      earthDisc,
+      compassAxis,
+      heavenCore,
+      earthCore,
+      needleGroup,
+      compassGem,
+    )
     const compassRings: {
       mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
       labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
       targetOpacity: number
     }[] = []
     const plaqueGroups: ThreeNamespace.Group[] = []
+    const compactCompass = width / height < 0.9
     const plaqueTargets: [number, number][] = [
-      [-1.06, 0.52],
-      [1.06, 0.52],
-      [-1.06, -0.48],
-      [1.06, -0.48],
+      [0, compactCompass ? 1.02 : 1.38],
+      [compactCompass ? 1.08 : 1.48, 0.02],
+      [0, compactCompass ? -1.06 : -1.44],
+      [compactCompass ? -1.08 : -1.48, 0.02],
     ]
     const plaqueLabels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[][] = []
     const plaqueMaterials: ThreeNamespace.MeshPhysicalMaterial[] = []
@@ -475,18 +716,18 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       plaqueGroup.position.set(targetX, targetY, 0.28)
       const plaqueMaterial = new THREE.MeshPhysicalMaterial({
         color: index === 2 ? '#2f7d5a' : '#226048',
-        roughness: 0.2,
+        roughness: 0.34,
         metalness: 0,
-        clearcoat: 0.74,
-        clearcoatRoughness: 0.13,
+        clearcoat: 0.26,
+        clearcoatRoughness: 0.38,
         emissive: new THREE.Color(index === 2 ? '#39a374' : '#267a58'),
-        emissiveIntensity: index === 2 ? 0.2 : 0.1,
+        emissiveIntensity: index === 2 ? 0.12 : 0.07,
         transparent: true,
         opacity: 0,
       })
       resources.push(plaqueMaterial)
       plaqueMaterials.push(plaqueMaterial)
-      const plaque = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.82, 0.05), plaqueMaterial)
+      const plaque = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.78, 0.045), plaqueMaterial)
       resources.push(plaque.geometry)
       plaque.name = `plaque_${gan.pillarKey}`
       plaque.userData = { pillarKey: gan.pillarKey }
@@ -807,6 +1048,37 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         const settle = phaseProgress(time, 4.5 + index * 0.08, 5.7 + index * 0.08)
         ring.rotation.z = reducedMotion ? 0 : direction * time * speed * (1 - settle * 0.88)
       })
+      const meaningReveal = phaseProgress(time, 0.35, 2.2)
+      const meaningScale = 0.78 + meaningReveal * 0.22
+      heavenShell.scale.setScalar(meaningScale)
+      heavenCage.scale.setScalar(meaningScale)
+      heavenMaterial.opacity = 0.12 * meaningReveal
+      heavenCageMaterial.opacity = 0.035 * meaningReveal
+      heavenRings.forEach((ring, index) => {
+        const direction = index % 2 === 0 ? 1 : -1
+        const settle = phaseProgress(time, 4.6 + index * 0.1, 5.9 + index * 0.1)
+        ring.rotation.z = (index * 0.72)
+          + (reducedMotion ? 0 : direction * time * (0.14 + index * 0.05) * (1 - settle * 0.72))
+      })
+      earthRings.forEach((ring, index) => {
+        const settle = phaseProgress(time, 4.4 + index * 0.08, 5.8 + index * 0.08)
+        ring.rotation.z = (reducedMotion ? index * 0.2 : (index % 2 === 0 ? -1 : 1) * time * (0.08 + index * 0.04) * (1 - settle * 0.74))
+      })
+      const dayMasterDirection = Math.atan2(
+        ELEMENT_POSITIONS[model.dayMaster.elementKey][1]!,
+        ELEMENT_POSITIONS[model.dayMaster.elementKey][0]!,
+      )
+      const needleIntro = phaseProgress(time, 1.1, 3)
+      needleGroup.rotation.z = reducedMotion
+        ? dayMasterDirection
+        : THREE.MathUtils.lerp(dayMasterDirection - 1.15, dayMasterDirection, needleIntro)
+          + Math.sin(time * 0.8) * 0.035 * (1 - needleIntro * 0.5)
+      heavenCore.rotation.y = reducedMotion ? 0.4 : time * 0.24
+      heavenCore.scale.setScalar(0.92 + Math.sin(time * 1.1) * 0.04)
+      earthCore.rotation.x = reducedMotion ? 0.2 : time * 0.18
+      earthCore.rotation.y = reducedMotion ? 0.3 : time * 0.12
+      compassGem.rotation.x = reducedMotion ? 0.5 : time * 0.2
+      compassGem.rotation.y = reducedMotion ? 0.7 : time * 0.27
 
       plaqueGroups.forEach((group, index) => {
         const [targetX, targetY] = plaqueTargets[index]!
@@ -824,7 +1096,8 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         })
       })
 
-      galaxy.visible = state.scene.value === 'compass' && time >= 3 && time < 5.2
+      galaxy.visible = state.scene.value === 'galaxy'
+        || (state.scene.value === 'compass' && time >= 3 && time < 5.2)
       const showGalaxyEffects = galaxy.visible
       const showGalaxyIdentity = state.scene.value === 'galaxy'
       clusterParticles.forEach((particle) => {
@@ -844,16 +1117,26 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       shockwave.scale.setScalar(0.9 + shock * 2.5)
       shockwaveMaterial.opacity = (1 - shock) * 0.38
 
-      const cameraZ = time < 1.5
-        ? 8.4 - phaseProgress(time, 0, 1.5) * 0.7
-        : time < 4.5
-          ? 7.7 - phaseProgress(time, 1.5, 4.5) * 0.35
-          : 7.35 - phaseProgress(time, 4.5, 6) * 0.35
-      camera.position.set(
-        reducedMotion ? 0 : Math.sin(time * 0.22) * 0.08 * (1 - phaseProgress(time, 4.5, 6)),
-        reducedMotion ? 0 : 0.18 * (1 - phaseProgress(time, 4.5, 6)),
-        cameraZ,
-      )
+      if (state.scene.value === 'galaxy') {
+        camera.position.set(
+          reducedMotion ? 0.2 : Math.sin(time * 0.24) * 0.82,
+          reducedMotion ? 1.15 : 1.12 + Math.sin(time * 0.18) * 0.07,
+          9.55,
+        )
+        cameraTarget.set(0, 0.04, 0)
+      }
+      else {
+        const cameraZ = time < 1.5
+          ? 8.4 - phaseProgress(time, 0, 1.5) * 0.7
+          : time < 4.5
+            ? 7.7 - phaseProgress(time, 1.5, 4.5) * 0.35
+            : 7.35 - phaseProgress(time, 4.5, 6) * 0.35
+        camera.position.set(
+          reducedMotion ? 0 : Math.sin(time * 0.24) * 0.34 * (0.38 + 0.62 * (1 - phaseProgress(time, 4.5, 6))),
+          reducedMotion ? 0.08 : 0.3 - phaseProgress(time, 1.5, 6) * 0.14 + Math.sin(time * 0.17) * 0.06,
+          cameraZ,
+        )
+      }
 
       if (time >= 6 && !state.introCompleted.value) state.introCompleted.value = true
     }
@@ -956,7 +1239,10 @@ export async function mountBaziPaipan3D(options: MountOptions) {
       hoverMix += ((hovered ? 1 : 0) - hoverMix) * Math.min(delta * 9, 1)
 
       if (!reducedMotion) {
-        if (galaxy.visible) galaxy.rotation.y = Math.sin(elapsed * 0.09) * 0.07
+        if (galaxy.visible) {
+          galaxy.rotation.x = -0.1 + Math.sin(elapsed * 0.11) * 0.035
+          galaxy.rotation.y = Math.sin(elapsed * 0.13) * 0.17
+        }
       }
 
       if (tunnel.visible) {
@@ -1020,7 +1306,7 @@ export async function mountBaziPaipan3D(options: MountOptions) {
           pillar => pillar.key === state.selectedPillarKey.value,
         )
         interactionMix += ((selectedPillarIndex >= 0 ? 1 : 0) - interactionMix) * Math.min(delta * 7, 1)
-        if (selectedPillarIndex >= 0) {
+        if (state.scene.value === 'compass' && selectedPillarIndex >= 0) {
           const focus = plaqueGroups[selectedPillarIndex]!.position
           camera.position.x = THREE.MathUtils.lerp(camera.position.x, focus.x * 0.34, interactionMix)
           camera.position.y = THREE.MathUtils.lerp(camera.position.y, focus.y * 0.3 + 0.04, interactionMix)
@@ -1066,12 +1352,20 @@ export async function mountBaziPaipan3D(options: MountOptions) {
         const cluster = model.clusters.find(item => item.elementKey === particle.elementKey)
         if (!cluster) continue
         const active = !relatedKeys || relatedKeys.has(particle.elementKey)
-        const targetOpacity = active ? 0.78 : 0.055
-        particlePointsOpacity(particle.points, targetOpacity, delta)
+        const targetOpacity = active ? 0.68 : 0.05
+        particle.material.uniforms.uTime!.value = elapsed
+        particle.material.uniforms.uOpacity!.value += (targetOpacity - particle.material.uniforms.uOpacity!.value)
+          * Math.min(delta * 9, 1)
         const baseScale = Number(particle.points.userData.clusterScale ?? 1)
         const pulse = reducedMotion ? 1 : 1 + Math.sin(elapsed * 0.8 + particle.elementKey.length) * 0.015
         particle.points.scale.setScalar(baseScale * pulse)
+        if (!reducedMotion) particle.points.rotation.y += delta * 0.05
       }
+
+      characterOrbits.forEach((orbit) => {
+        const active = !relatedKeys || relatedKeys.has(orbit.elementKey)
+        orbit.group.rotation.y += delta * orbit.speed * (active ? 1 : 0.18)
+      })
 
       for (const material of starMaterials) {
         const mesh = starMaterials.indexOf(material)
