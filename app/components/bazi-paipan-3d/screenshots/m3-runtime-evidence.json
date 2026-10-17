@@ -1,0 +1,2575 @@
+{
+  "charts": [
+    {
+      "id": "balanced",
+      "expectedPillars": [
+        "丙午",
+        "辛卯",
+        "壬辰",
+        "庚子"
+      ],
+      "expectedCurrent": null,
+      "clusters": [
+        {
+          "elementKey": "wood",
+          "label": "木",
+          "percent": 22,
+          "favorable": true
+        },
+        {
+          "elementKey": "fire",
+          "label": "火",
+          "percent": 22,
+          "favorable": false
+        },
+        {
+          "elementKey": "earth",
+          "label": "土",
+          "percent": 17,
+          "favorable": true
+        },
+        {
+          "elementKey": "metal",
+          "label": "金",
+          "percent": 17,
+          "favorable": true
+        },
+        {
+          "elementKey": "water",
+          "label": "水",
+          "percent": 23,
+          "favorable": true
+        }
+      ],
+      "gates": {
+        "gateCount": 9,
+        "tickCount": 90,
+        "particleCount": 2100,
+        "entryProgress": 1,
+        "progress": 0,
+        "currentGate": null
+      },
+      "renderer": {
+        "geometries": 48,
+        "textures": 22,
+        "calls": 1
+      }
+    },
+    {
+      "id": "skewed",
+      "expectedPillars": [
+        "丙午",
+        "丁酉",
+        "戊申",
+        "丁巳"
+      ],
+      "expectedCurrent": null,
+      "clusters": [
+        {
+          "elementKey": "wood",
+          "label": "木",
+          "percent": 0,
+          "favorable": true
+        },
+        {
+          "elementKey": "fire",
+          "label": "火",
+          "percent": 50,
+          "favorable": true
+        },
+        {
+          "elementKey": "earth",
+          "label": "土",
+          "percent": 11,
+          "favorable": true
+        },
+        {
+          "elementKey": "metal",
+          "label": "金",
+          "percent": 37,
+          "favorable": true
+        },
+        {
+          "elementKey": "water",
+          "label": "水",
+          "percent": 2,
+          "favorable": false
+        }
+      ],
+      "gates": {
+        "gateCount": 9,
+        "tickCount": 90,
+        "particleCount": 2100,
+        "entryProgress": 1,
+        "progress": 0,
+        "currentGate": null
+      },
+      "renderer": {
+        "geometries": 48,
+        "textures": 22,
+        "calls": 1
+      }
+    },
+    {
+      "id": "conflict-current",
+      "expectedPillars": [
+        "丙午",
+        "辛卯",
+        "丁未",
+        "庚子"
+      ],
+      "expectedCurrent": 1,
+      "clusters": [
+        {
+          "elementKey": "wood",
+          "label": "木",
+          "percent": 25,
+          "favorable": true
+        },
+        {
+          "elementKey": "fire",
+          "label": "火",
+          "percent": 27,
+          "favorable": true
+        },
+        {
+          "elementKey": "earth",
+          "label": "土",
+          "percent": 16,
+          "favorable": true
+        },
+        {
+          "elementKey": "metal",
+          "label": "金",
+          "percent": 16,
+          "favorable": false
+        },
+        {
+          "elementKey": "water",
+          "label": "水",
+          "percent": 16,
+          "favorable": true
+        }
+      ],
+      "gates": {
+        "gateCount": 9,
+        "tickCount": 90,
+        "particleCount": 2100,
+        "entryProgress": 1,
+        "progress": 0,
+        "currentGate": 1
+      },
+      "renderer": {
+        "geometries": 48,
+        "textures": 22,
+        "calls": 1
+      }
+    }
+  ],
+  "viewport": {
+    "desktop": {
+      "initial": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "playing",
+          "quality": "high",
+          "intro": "false",
+          "timeline": "0.006944444444444444",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                0.8599999999999999,
+                0.5066666666666667
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.48,
+                -0.5,
+                0.5066666666666667
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.96,
+                0.5066666666666667
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.48,
+                -0.5,
+                0.5066666666666667
+              ]
+            }
+          ],
+          "selectedPillarKey": null,
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 48,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "selected": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "interactive",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.38,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.48,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.44,
+                0.4
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.48,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 48,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "tunnelSelected": {
+        "attrs": {
+          "scene": "tunnel",
+          "lifecycle": "tunnel",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-tunnel"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.38,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.48,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.44,
+                0.4
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.48,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0.75,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 70,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": "2086-2095 戊戌60-692086 丙午高波动2087 丁未中等波动2088 戊申平稳2089 己酉高波动2090 庚戌中等波动2091 辛亥中等波动2092 壬子高波动2093 癸丑高波动2094 甲寅平稳2095 乙卯高波动",
+        "activeReportDayun": "2086-2095 戊戌60-69伤官 / 伤官福星贵人华盖五鬼魁罡2086 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2087 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2088 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2089 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2090 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2091 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2092 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2093 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2094 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2095 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "restored": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "interactive",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.38,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.48,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.44,
+                0.4
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.48,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 70,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      }
+    },
+    "mobile": {
+      "initial": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "playing",
+          "quality": "high",
+          "intro": "false",
+          "timeline": "0.00010000000397364298",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                0.5,
+                0.6183679999351502
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.08,
+                -0.5,
+                0.6183679999351502
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.58,
+                0.6183679999351502
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.08,
+                -0.5,
+                0.6183679999351502
+              ]
+            }
+          ],
+          "selectedPillarKey": null,
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 48,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "selected": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "interactive",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.02,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.08,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.06,
+                0.3574719999313355
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.08,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 48,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "tunnelSelected": {
+        "attrs": {
+          "scene": "tunnel",
+          "lifecycle": "tunnel",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-tunnel"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.02,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.08,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.06,
+                0.34940800006866457
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.08,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0.75,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 70,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": "2086-2095 戊戌60-692086 丙午高波动2087 丁未中等波动2088 戊申平稳2089 己酉高波动2090 庚戌中等波动2091 辛亥中等波动2092 壬子高波动2093 癸丑高波动2094 甲寅平稳2095 乙卯高波动",
+        "activeReportDayun": "2086-2095 戊戌60-69伤官 / 伤官福星贵人华盖五鬼魁罡2086 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2087 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2088 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2089 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2090 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2091 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2092 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2093 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2094 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2095 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      },
+      "restored": {
+        "attrs": {
+          "scene": "compass",
+          "lifecycle": "interactive",
+          "quality": "high",
+          "intro": "true",
+          "timeline": "1",
+          "tunnelEntry": "1"
+        },
+        "activeTabs": [
+          "bazi-3d-scene-compass"
+        ],
+        "canvasCount": 1,
+        "debug": {
+          "characters": [
+            {
+              "id": "year-gan",
+              "char": "丙",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "year-zhi",
+              "char": "午",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "year",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-gan",
+              "char": "辛",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "month-zhi",
+              "char": "卯",
+              "elementKey": "wood",
+              "elementLabel": "木",
+              "pillarKey": "month",
+              "isDayMaster": false
+            },
+            {
+              "id": "day-gan",
+              "char": "丁",
+              "elementKey": "fire",
+              "elementLabel": "火",
+              "pillarKey": "day",
+              "isDayMaster": true
+            },
+            {
+              "id": "day-zhi",
+              "char": "未",
+              "elementKey": "earth",
+              "elementLabel": "土",
+              "pillarKey": "day",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-gan",
+              "char": "庚",
+              "elementKey": "metal",
+              "elementLabel": "金",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            },
+            {
+              "id": "hour-zhi",
+              "char": "子",
+              "elementKey": "water",
+              "elementLabel": "水",
+              "pillarKey": "hour",
+              "isDayMaster": false
+            }
+          ],
+          "clusters": [
+            {
+              "elementKey": "wood",
+              "label": "木",
+              "percent": 25,
+              "favorable": true
+            },
+            {
+              "elementKey": "fire",
+              "label": "火",
+              "percent": 27,
+              "favorable": true
+            },
+            {
+              "elementKey": "earth",
+              "label": "土",
+              "percent": 16,
+              "favorable": true
+            },
+            {
+              "elementKey": "metal",
+              "label": "金",
+              "percent": 16,
+              "favorable": false
+            },
+            {
+              "elementKey": "water",
+              "label": "水",
+              "percent": 16,
+              "favorable": true
+            }
+          ],
+          "pillars": [
+            {
+              "key": "year",
+              "ganzhi": "丙午",
+              "shishenGan": "劫财",
+              "hiddenStems": [
+                {
+                  "gan": "丁",
+                  "type": "本气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": true
+                },
+                {
+                  "gan": "己",
+                  "type": "中气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                1.02,
+                0.28
+              ]
+            },
+            {
+              "key": "month",
+              "ganzhi": "辛卯",
+              "shishenGan": "偏财",
+              "hiddenStems": [
+                {
+                  "gan": "乙",
+                  "type": "本气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": true
+                }
+              ],
+              "nayin": "松柏木",
+              "position": [
+                1.08,
+                0.02,
+                0.28
+              ]
+            },
+            {
+              "key": "day",
+              "ganzhi": "丁未",
+              "shishenGan": "比肩",
+              "hiddenStems": [
+                {
+                  "gan": "己",
+                  "type": "本气",
+                  "wuxing": "土",
+                  "shishen": "食神",
+                  "isMain": true
+                },
+                {
+                  "gan": "丁",
+                  "type": "中气",
+                  "wuxing": "火",
+                  "shishen": "比肩",
+                  "isMain": false
+                },
+                {
+                  "gan": "乙",
+                  "type": "余气",
+                  "wuxing": "木",
+                  "shishen": "偏印",
+                  "isMain": false
+                }
+              ],
+              "nayin": "天河水",
+              "position": [
+                0,
+                -1.06,
+                0.33990399986267095
+              ]
+            },
+            {
+              "key": "hour",
+              "ganzhi": "庚子",
+              "shishenGan": "正财",
+              "hiddenStems": [
+                {
+                  "gan": "癸",
+                  "type": "本气",
+                  "wuxing": "水",
+                  "shishen": "七杀",
+                  "isMain": true
+                }
+              ],
+              "nayin": "壁上土",
+              "position": [
+                -1.08,
+                0.02,
+                0.28
+              ]
+            }
+          ],
+          "selectedPillarKey": "day",
+          "selectedElementKey": null,
+          "dayuns": [
+            {
+              "index": 1,
+              "ganzhi": "壬辰",
+              "isCurrent": true,
+              "liunianCount": 10
+            },
+            {
+              "index": 2,
+              "ganzhi": "癸巳",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 3,
+              "ganzhi": "甲午",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 4,
+              "ganzhi": "乙未",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 5,
+              "ganzhi": "丙申",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 6,
+              "ganzhi": "丁酉",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 7,
+              "ganzhi": "戊戌",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 8,
+              "ganzhi": "己亥",
+              "isCurrent": false,
+              "liunianCount": 10
+            },
+            {
+              "index": 9,
+              "ganzhi": "庚子",
+              "isCurrent": false,
+              "liunianCount": 0
+            }
+          ],
+          "tunnel": {
+            "gateCount": 9,
+            "tickCount": 90,
+            "particleCount": 2100,
+            "entryProgress": 1,
+            "progress": 0,
+            "currentGate": 1
+          },
+          "rendererInfo": {
+            "geometries": 70,
+            "textures": 22,
+            "calls": 1
+          }
+        },
+        "selectedDayunText": null,
+        "activeReportDayun": "2026-2035 壬辰0-9当前正官 / 伤官金匮寡宿血刃天狗魁罡2026 丙午劫财 / 比肩高波动冲刑或多方引动增强，重大决定先拆分验证。劫财显象 · 竞争/协作 · 流年支火气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化午午刑 · 年柱 / 流年 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱禄神天厨贵人将星2027 丁未比肩 / 食神中等波动合绊或局部联动增强，安排前先确认资源与边界。比肩显象 · 自我/同辈 · 流年支土气势被引动午未合 · 年柱 / 日柱 · 主牵绊、合作、能量合化子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制红艳流霞金舆华盖金匮2028 戊申伤官 / 正财平稳结构引动较少，按原有节奏推进。伤官显象 · 创新/突破 · 流年支金气势被引动文昌流霞金舆学堂驿马劫煞孤辰丧门天德贵人2029 己酉食神 / 偏财高波动冲刑或多方引动增强，重大决定先拆分验证。食神显象 · 表达/输出 · 流年支金气势被引动卯酉冲 · 月柱 / 流年 · 主变动、冲击、位置被推动子酉破 · 时柱 / 流年 · 主松动、破局、原有连接变弱天乙贵人太极贵人文昌福星贵人红鸾2030 庚戌正财 / 伤官中等波动合绊或局部联动增强，安排前先确认资源与边界。正财显象 · 稳定/执行财 · 流年支土气势被引动卯戌合 · 月柱 / 流年 · 主牵绊、合作、能量合化未戌破 · 日柱 / 流年 · 主松动、破局、原有连接变弱福星贵人华盖五鬼魁罡2031 辛亥偏财 / 正官中等波动合绊或局部联动增强，安排前先确认资源与边界。偏财显象 · 机会/流动财 · 流年支水气势被引动亥卯未三合 · 流年 / 月柱 / 日柱 · 主协同、成局、力量汇聚天乙贵人劫煞2032 壬子正官 / 七杀高波动冲刑或多方引动增强，重大决定先拆分验证。正官显象 · 秩序/责任 · 流年支水气势被引动子午冲 · 时柱 / 年柱 · 主变动、冲击、位置被推动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦子未害 · 时柱 / 日柱 · 主暗耗、不顺、细节牵制福星贵人桃花灾煞大耗2033 癸丑七杀 / 食神高波动冲刑或多方引动增强，重大决定先拆分验证。七杀显象 · 压力/规则 · 流年支土气势被引动丑未冲 · 流年 / 日柱 · 主变动、冲击、位置被推动子丑合 · 时柱 / 流年 · 主牵绊、合作、能量合化丑午害 · 流年 / 年柱 · 主暗耗、不顺、细节牵制国印贵人飞刃龙德贵人2034 甲寅正印 / 正印平稳结构引动较少，按原有节奏推进。正印显象 · 学习/庇护 · 流年支木气势被引动国印贵人红艳亡神白虎月德贵人天医2035 乙卯偏印 / 偏印高波动冲刑或多方引动增强，重大决定先拆分验证。偏印显象 · 研究/直觉 · 流年支木气势被引动子卯刑 · 时柱 / 月柱 · 主内耗、规则压力、隐性摩擦卯午破 · 月柱 / 年柱 · 主松动、破局、原有连接变弱太极贵人桃花将星天喜"
+      }
+    }
+  },
+  "quality": {
+    "high": {
+      "attrs": {
+        "scene": "compass",
+        "lifecycle": "settled",
+        "quality": "high",
+        "intro": "true",
+        "timeline": "1",
+        "tunnelEntry": "1"
+      },
+      "particleCount": 2100,
+      "renderer": {
+        "geometries": 48,
+        "textures": 22,
+        "calls": 1
+      }
+    },
+    "mid": {
+      "attrs": {
+        "scene": "compass",
+        "lifecycle": "settled",
+        "quality": "mid",
+        "intro": "true",
+        "timeline": "1",
+        "tunnelEntry": "1"
+      },
+      "particleCount": 650,
+      "renderer": {
+        "geometries": 47,
+        "textures": 10,
+        "calls": 35
+      }
+    },
+    "low": {
+      "attrs": {
+        "scene": "compass",
+        "lifecycle": "idle",
+        "quality": "low",
+        "intro": "false",
+        "timeline": "0",
+        "tunnelEntry": "1"
+      },
+      "particleCount": 0,
+      "renderer": null
+    }
+  },
+  "reducedMotion": {
+    "compass": {
+      "scene": "compass",
+      "lifecycle": "settled",
+      "quality": "high",
+      "intro": "true",
+      "timeline": "1",
+      "tunnelEntry": "1"
+    },
+    "tunnel": {
+      "scene": "tunnel",
+      "lifecycle": "tunnel",
+      "quality": "high",
+      "intro": "true",
+      "timeline": "1",
+      "tunnelEntry": "1"
+    }
+  },
+  "leak": {
+    "before": {
+      "geometries": 48,
+      "textures": 22,
+      "calls": 1
+    },
+    "after": {
+      "geometries": 48,
+      "textures": 22,
+      "calls": 1
+    },
+    "canvasCount": 1
+  },
+  "poster": {
+    "dataUrlLength": 1418994
+  }
+}

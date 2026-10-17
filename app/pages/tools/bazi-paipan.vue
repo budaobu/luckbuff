@@ -48,7 +48,21 @@
       </section>
 
       <div v-else-if="result" class="bc-report">
-        <BaziPaipanReport :result="result" />
+        <ClientOnly>
+          <BaziPaipan3DStage
+            :controller="bazi3D"
+            :result="result"
+          />
+          <template #fallback>
+            <div class="bc-3d-skeleton" aria-hidden="true">
+              <strong>{{ result.pillars.map(pillar => pillar.ganzhi).join(' ') }}</strong>
+            </div>
+          </template>
+        </ClientOnly>
+        <BaziPaipanReport
+          :result="result"
+          :active-dayun-index="bazi3D.selectedDayunIndex.value"
+        />
       </div>
 
       <div v-if="phase === 'result'" class="bc-actions">
@@ -62,6 +76,7 @@
           tool="bazi-paipan"
           :summary="shareSummary"
           filename="bazi-paipan-poster.png"
+          :share-image-factory="createBaziPaipanPoster"
         />
       </div>
     </div>
@@ -71,6 +86,9 @@
 <script setup lang="ts">
 import type { DiZhi } from '~/types/user'
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
+import BaziPaipan3DStage from '~/components/bazi-paipan-3d/BaziPaipan3DStage.vue'
+import { useBaziPaipan3D } from '~/composables/useBaziPaipan3D'
+import { createBaziPaipanInstrumentPoster } from '~/utils/bazi-paipan-3d/poster'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -89,6 +107,7 @@ interface FormValues {
 
 const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<BaziChartResult | null>(null)
+const bazi3D = useBaziPaipan3D(result)
 const formValues = ref<FormValues>({
   gender: 'male',
   birthDate: '',
@@ -121,6 +140,13 @@ async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   lastFormValues.value = { ...values }
   phase.value = 'loading'
+  bazi3D.scene.value = 'compass'
+  bazi3D.introCompleted.value = false
+  bazi3D.hoveredCharacterId.value = null
+  bazi3D.hoveredPillarKey.value = null
+  bazi3D.selectedPillarKey.value = null
+  bazi3D.selectedElementKey.value = null
+  bazi3D.selectedDayunIndex.value = 0
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
@@ -133,6 +159,22 @@ async function handleSubmit(values: FormValues) {
         location,
       },
     })
+    bazi3D.selectedDayunIndex.value = result.value.dayuns.find(dayun => dayun.isCurrent)?.index
+      ?? result.value.dayuns[0]?.index
+      ?? 0
+    const chartSignature = [
+      result.value.birth.solarText,
+      result.value.birth.clockText,
+      result.value.birth.genderText,
+    ].join('|')
+    const settledKey = `bazi3d:settled:${chartSignature}`
+    try {
+      bazi3D.introCompleted.value = window.localStorage.getItem(settledKey) === '1'
+      window.localStorage.setItem(settledKey, '1')
+    }
+    catch {
+      bazi3D.introCompleted.value = false
+    }
     phase.value = 'result'
     await nextTick()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -160,6 +202,13 @@ function handleSaveProfile(id: string, values: FormValues) {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
+  bazi3D.scene.value = 'galaxy'
+  bazi3D.introCompleted.value = false
+  bazi3D.hoveredCharacterId.value = null
+  bazi3D.hoveredPillarKey.value = null
+  bazi3D.selectedPillarKey.value = null
+  bazi3D.selectedElementKey.value = null
+  bazi3D.selectedDayunIndex.value = 0
 }
 
 function formatOffset(minutes: number) {
@@ -175,6 +224,17 @@ function shortDatetime(value: string) {
 }
 
 const siteName = 'ososn'
+
+async function createBaziPaipanPoster() {
+  if (!result.value) return null
+  return createBaziPaipanInstrumentPoster({
+    result: result.value,
+    currentDayun: result.value.dayuns.find(dayun => dayun.isCurrent)
+      ?? result.value.dayuns[0]
+      ?? null,
+    siteName,
+  })
+}
 
 const pageUrl = useLocalizedSeoUrl('/tools/bazi-paipan')
 
@@ -332,6 +392,18 @@ useHead(() => ({
 .bc-report {
   display: grid;
   gap: 38px;
+}
+
+.bc-3d-skeleton {
+  display: grid;
+  min-height: clamp(360px, 48vh, 520px);
+  place-content: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: #070a12;
+  color: #e9eefa;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: clamp(28px, 4.4vw, 38px);
 }
 
 .bc-hero {

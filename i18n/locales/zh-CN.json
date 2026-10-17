@@ -12300,6 +12300,19 @@
       "creativity": "创造力"
     }
   },
+  "bazi3d": {
+    "compass": "天地罗盘",
+    "galaxy": "五行星河",
+    "tunnel": "大运隧道",
+    "previous": "上一大运",
+    "next": "下一大运",
+    "pillarDetail": "四柱详情",
+    "elementFocus": "五行聚焦",
+    "clearFocus": "恢复全景",
+    "exitTunnel": "退出隧道",
+    "replay": "重播",
+    "skip": "跳过动画"
+  },
   "baziChart": {
     "title": "八字排盘",
     "subtitle": "输入出生年月日、时辰、出生地点与性别，生成详细出生信息和命盘构成",

@@ -1,0 +1,119 @@
+{
+  "milestones": ["M1", "M2", "M3"],
+  "verification": {
+    "commands": {
+      "typecheck": "pnpm typecheck",
+      "build": "pnpm build",
+      "asset": "node scripts/blender/validate-bazi-instrument.mjs",
+      "runtime": "node output/verify-bazi3d.mjs",
+      "production": "node output/verify-production-bazi3d.mjs"
+    },
+    "lint": {
+      "status": "not-applicable",
+      "reason": "The project has no lint script and no ESLint dependency."
+    },
+    "baselines": {
+      "desktop": [
+        "m1-instrument-desktop-0p7.png",
+        "m1-instrument-desktop-2p2.png",
+        "m1-instrument-desktop-3p8.png",
+        "m1-instrument-desktop-6.png",
+        "m2-instrument-desktop-day-selected.png",
+        "m2-instrument-desktop-metal-selected.png",
+        "m3-galaxy-desktop.png",
+        "m3-galaxy-hover-desktop.png",
+        "m3-instrument-entry-mid-desktop.png",
+        "m3-instrument-settled-desktop.png",
+        "m3-instrument-selected-desktop.png",
+        "m3-tunnel-entry-mid-desktop.png",
+        "m3-tunnel-current-desktop.png",
+        "m3-tunnel-selected-desktop.png",
+        "m3-instrument-restored-desktop.png"
+      ],
+      "mobile": [
+        "m1-instrument-mobile-0p7.png",
+        "m1-instrument-mobile-2p2.png",
+        "m1-instrument-mobile-3p8.png",
+        "m1-instrument-mobile-6.png",
+        "m2-instrument-mobile-day-selected.png",
+        "m2-instrument-mobile-metal-selected.png",
+        "m3-galaxy-mobile.png",
+        "m3-instrument-entry-mid-mobile.png",
+        "m3-instrument-settled-mobile.png",
+        "m3-instrument-selected-mobile.png",
+        "m3-tunnel-entry-mid-mobile.png",
+        "m3-tunnel-current-mobile.png",
+        "m3-tunnel-selected-mobile.png",
+        "m3-instrument-restored-mobile.png"
+      ]
+    },
+    "visualChecklist": {
+      "instrumentPrimaryAndPillarsFocused": "pass",
+      "plaqueTextReadable": "pass",
+      "strongGlowCategoriesAtMostThree": "pass",
+      "bronzeJadeMetalMaterialContrast": "pass",
+      "fogAndParticlesDoNotOccludeText": "pass",
+      "currentDayunClearlyMarked": "pass"
+    },
+    "dataTruth": {
+      "balanced": {
+        "birthDate": "2026-03-19",
+        "pillars": ["丙午", "辛卯", "壬辰", "庚子"],
+        "clustersRangePercent": [17, 23],
+        "result": "pass"
+      },
+      "skewed": {
+        "birthDate": "2026-10-01",
+        "pillars": ["丙午", "丁酉", "戊申", "丁巳"],
+        "clustersRangePercent": [0, 50],
+        "result": "pass"
+      },
+      "conflictCurrent": {
+        "birthDate": "2026-04-03",
+        "pillars": ["丙午", "辛卯", "丁未", "庚子"],
+        "currentDayun": "壬辰",
+        "result": "pass"
+      },
+      "gateCount": 9,
+      "yearTickCount": 90
+    },
+    "quality": {
+      "high": { "particles": 2100, "maxParticles": 20000 },
+      "mid": { "particles": 650, "maxParticles": 8000 },
+      "low": { "realtimeCanvas": false, "domFallback": true }
+    },
+    "reducedMotion": {
+      "introSkipped": true,
+      "tunnelEntryInstant": true
+    },
+    "leak": {
+      "repeatCount": 10,
+      "operations": ["replay", "compass-galaxy", "compass-tunnel", "route"],
+      "geometriesBefore": 48,
+      "geometriesAfter": 48,
+      "texturesBefore": 22,
+      "texturesAfter": 22,
+      "canvasCount": 1,
+      "activeRequestAnimationFramesAfterTenMountUnmounts": 0
+    },
+    "production": {
+      "status": 200,
+      "hydrationIssues": [],
+      "consoleMessages": [],
+      "initialThreeScripts": [],
+      "threeGzipBytes": 270709,
+      "assetGzipBytes": 841487,
+      "seoTitle": "免费八字排盘_八字命盘流年分析 - ososn",
+      "jsonLdType": "SoftwareApplication"
+    },
+    "poster": {
+      "dataUrlLength": 1418994,
+      "screenshot": "m3-poster.png"
+    }
+  },
+  "remainingRisks": [
+    "Real-device frame rate was not measured; software-rendered Chromium used draw calls and particle counts as proxies.",
+    "WeChat in-app browser behavior was not tested.",
+    "KTX texture compression requires KTX-Software's ktx executable on PATH for asset regeneration."
+  ]
+}

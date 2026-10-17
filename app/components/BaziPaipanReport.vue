@@ -248,7 +248,12 @@
           </div>
         </div>
         <div class="bpr-card bpr-cycle-list">
-          <article v-for="cycle in result.dayuns" :key="cycle.index" :class="{ 'is-current': cycle.isCurrent }">
+          <article
+            v-for="cycle in result.dayuns"
+            :key="cycle.index"
+            :data-dayun-index="cycle.index"
+            :class="{ 'is-current': cycle.isCurrent, 'is-active': activeDayunIndex === cycle.index }"
+          >
             <header>
               <strong>{{ cycle.startYear }}-{{ cycle.endYear }} {{ cycle.ganzhi }}</strong>
               <span>{{ cycle.startAge }}-{{ cycle.endAge }}</span>
@@ -410,9 +415,11 @@ const props = withDefaults(defineProps<{
   result: BaziChartResult
   terminology?: 'bazi' | 'shichu-suimei'
   aiEndpoint?: string
+  activeDayunIndex?: number | null
 }>(), {
   terminology: 'bazi',
   aiEndpoint: '/api/tools/bazi-paipan/interpret',
+  activeDayunIndex: null,
 })
 const toast = useToast()
 const route = useRoute()
@@ -1270,6 +1277,11 @@ async function copyPillars() {
 
 .bpr-cycle-list .is-current {
   border-left-color: var(--accent);
+}
+
+.bpr-cycle-list .is-active {
+  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--warning-bg) 42%, transparent);
 }
 
 .bpr-cycle-list header {

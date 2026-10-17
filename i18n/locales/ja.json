@@ -423,6 +423,19 @@
       "creativity": "創造性"
     }
   },
+  "bazi3d": {
+    "compass": "天地盤",
+    "galaxy": "五行星河",
+    "tunnel": "大運トンネル",
+    "previous": "前の大運",
+    "next": "次の大運",
+    "pillarDetail": "四柱詳細",
+    "elementFocus": "五行フォーカス",
+    "clearFocus": "全体表示に戻る",
+    "exitTunnel": "トンネルを退出",
+    "replay": "再生",
+    "skip": "演出をスキップ"
+  },
   "baziChart": {
     "title": "四柱推命 排盤",
     "subtitle": "生年月日・時辰・出生地から命式と運勢構造を生成します。",
