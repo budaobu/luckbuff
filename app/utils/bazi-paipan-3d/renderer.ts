@@ -1,45 +1,84 @@
-import { watch } from 'vue'
-import type * as ThreeNamespace from 'three'
-import type { Pass } from 'three/examples/jsm/postprocessing/Pass.js'
+import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import type { BaziPaipan3DState } from '~/composables/useBaziPaipan3D'
-import type { BaziPaipan3DModel } from './model'
-import { ELEMENT_KEYS, type ElementKey } from './model'
+import type { BaziPaipan3DModel, ElementKey } from './model'
+import type {
+  CSS2DObject as CSS2DObjectInstance,
+  CSS2DRenderer as CSS2DRendererInstance,
+} from 'three/examples/jsm/renderers/CSS2DRenderer.js'
 
 type ThreeObject = { dispose: () => void }
-type EffectComposerLike = {
-  addPass: (pass: Pass) => void
-  setSize: (width: number, height: number) => void
-  render: () => void
-}
-
-const ELEMENT_COLORS: Record<ElementKey, string> = {
-  wood: '#5fd895',
-  fire: '#ff7f68',
-  earth: '#e8b665',
-  metal: '#c7d3e5',
-  water: '#5d9bff',
-}
-
-const ELEMENT_POSITIONS: Record<ElementKey, [number, number, number]> = {
-  wood: [0, 1.08, -3.18],
-  fire: [3.08, 0.26, -0.82],
-  earth: [1.9, -0.72, 2.58],
-  metal: [-1.9, -1.02, 2.58],
-  water: [-3.08, 0.08, -0.82],
-}
-
-const GENERATION_ORDER: ElementKey[] = ['wood', 'fire', 'earth', 'metal', 'water']
+type Three = typeof import('three')
+type Vector = import('three').Vector3
+type Mesh = import('three').Mesh
+type CSS2DObjectConstructor = typeof CSS2DObjectInstance
+type CSS2DRendererLike = CSS2DRendererInstance
 
 interface MountOptions {
   root: HTMLElement
   state: BaziPaipan3DState
+  result: BaziChartResult
   model: BaziPaipan3DModel
   reducedMotion: boolean
+  signal?: AbortSignal
+  labels?: Record<string, string>
+}
+
+export interface BaziPaipan3DMount {
+  dispose: () => void
+  resetView: () => void
+  setAutoRotate: (enabled: boolean) => void
+}
+
+const ELEMENT_COLORS: Record<ElementKey, number> = {
+  wood: 0x5fd895,
+  fire: 0xff7f68,
+  earth: 0xe8b665,
+  metal: 0xf1f5f9,
+  water: 0x5d9bff,
+}
+
+const ELEMENT_HEX: Record<ElementKey, string> = {
+  wood: '#4ade80',
+  fire: '#fb7185',
+  earth: '#fbbf24',
+  metal: '#f8fafc',
+  water: '#38bdf8',
+}
+
+const ELEMENT_ORDER: ElementKey[] = ['metal', 'water', 'wood', 'fire', 'earth']
+const PILLAR_KEYS = ['year', 'month', 'day', 'hour'] as const
+
+const GAN_ELEMENTS: Record<string, ElementKey> = {
+  甲: 'wood', 乙: 'wood', 丙: 'fire', 丁: 'fire', 戊: 'earth',
+  己: 'earth', 庚: 'metal', 辛: 'metal', 壬: 'water', 癸: 'water',
+}
+
+const ZHI_ELEMENTS: Record<string, ElementKey> = {
+  寅: 'wood', 卯: 'wood', 巳: 'fire', 午: 'fire',
+  辰: 'earth', 戌: 'earth', 丑: 'earth', 未: 'earth',
+  申: 'metal', 酉: 'metal', 亥: 'water', 子: 'water',
+}
+
+const ELEMENT_ZH: Record<ElementKey, string> = {
+  wood: '木',
+  fire: '火',
+  earth: '土',
+  metal: '金',
+  water: '水',
+}
+
+function elementKeyByLabel(label: string): ElementKey {
+  return (Object.entries(ELEMENT_ZH) as Array<[ElementKey, string]>)
+    .find(([, value]) => value === label)?.[0] ?? 'earth'
+}
+
+function ganElement(char = '金'): ElementKey {
+  return GAN_ELEMENTS[char] ?? 'metal'
 }
 
 function qualityDpr(quality: 'high' | 'mid' | 'low') {
-  if (quality === 'high') return Math.min(window.devicePixelRatio || 1, 2)
-  return quality === 'mid' ? Math.min(window.devicePixelRatio || 1, 1.35) : 1
+  return quality === 'high' ? Math.min(window.devicePixelRatio || 1, 2)
+    : quality === 'mid' ? Math.min(window.devicePixelRatio || 1, 1.35) : 1
 }
 
 function detectQuality(): 'high' | 'mid' | 'low' {
@@ -47,1405 +86,814 @@ function detectQuality(): 'high' | 'mid' | 'low' {
   if (requested === 'high' || requested === 'mid' || requested === 'low') return requested
 
   const navigatorWithMemory = navigator as Navigator & { deviceMemory?: number }
+  const connection = (navigator as Navigator & {
+    connection?: { saveData?: boolean, effectiveType?: string }
+  }).connection
   const cores = navigator.hardwareConcurrency || 4
+  if (connection?.saveData || connection?.effectiveType === 'slow-2g' || connection?.effectiveType === '2g') return 'low'
   if (cores <= 2 || (navigatorWithMemory.deviceMemory ?? 8) <= 2) return 'low'
-  if (cores <= 4 || (navigatorWithMemory.deviceMemory ?? 8) <= 4 || window.innerWidth < 640) return 'mid'
+  if (connection?.effectiveType === '3g') return 'mid'
+  if (cores <= 4 || window.innerWidth < 640) return 'mid'
   return 'high'
 }
 
-function radialGlow(THREE: typeof ThreeNamespace, resources: ThreeObject[]) {
-  const canvas = document.createElement('canvas')
-  canvas.width = 128
-  canvas.height = 128
-  const context = canvas.getContext('2d')
-  if (context) {
-    const gradient = context.createRadialGradient(64, 64, 0, 64, 64, 64)
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.92)')
-    gradient.addColorStop(0.32, 'rgba(255, 255, 255, 0.34)')
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
-    context.fillStyle = gradient
-    context.fillRect(0, 0, 128, 128)
-  }
-
-  const texture = new THREE.CanvasTexture(canvas)
-  texture.colorSpace = THREE.SRGBColorSpace
-  resources.push(texture)
-  return texture
+export async function prefetchBaziPaipan3D() {
+  if (typeof window === 'undefined' || detectQuality() === 'low') return
+  await Promise.all([import('three'), import('~/utils/bazi-paipan-3d/renderer')])
 }
 
-function flowMaterial(
-  THREE: typeof ThreeNamespace,
-  resources: ThreeObject[],
-  color: string,
-  baseOpacity: number,
-) {
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      uColor: { value: new THREE.Color(color) },
-      uTime: { value: 0 },
-      uActive: { value: 1 },
-      uBaseOpacity: { value: baseOpacity },
-    },
-    vertexShader: `
-      uniform float uTime;
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        vec3 ribbon = position + normal * sin(uv.x * 18.8496 - uTime * 2.1)
-          * 0.026 * (1.0 - abs(uv.x - 0.5) * 1.6);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(ribbon, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 uColor;
-      uniform float uTime;
-      uniform float uActive;
-      uniform float uBaseOpacity;
-      varying vec2 vUv;
-      void main() {
-        float stream = pow(max(0.0, 1.0 - abs(fract(vUv.x * 3.0 - uTime * 0.62) - 0.5) * 3.2), 4.0);
-        float pulse = 0.38 + stream * 0.62;
-        gl_FragColor = vec4(uColor * (0.66 + stream * 0.9), uBaseOpacity * pulse * uActive);
-      }
-    `,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
+function style(element: HTMLElement, rules: Partial<CSSStyleDeclaration>) {
+  Object.assign(element.style, rules)
+  return element
+}
+
+function chip(text: string, color: string, background = 'rgba(2, 6, 23, 0.86)', borderColor = 'rgba(148, 163, 184, 0.38)') {
+  const element = document.createElement('div')
+  element.className = 'bazi-3d-label'
+  element.textContent = text
+  return style(element, {
+    padding: '3px 7px',
+    border: `1px solid ${borderColor}`,
+    borderRadius: '5px',
+    background,
+    color,
+    fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+    fontSize: '10px',
+    fontWeight: '600',
+    lineHeight: '1.3',
+    whiteSpace: 'nowrap',
   })
-  resources.push(material)
-  return material
 }
 
-function curvedPoints(
-  THREE: typeof ThreeNamespace,
-  from: [number, number, number],
-  to: [number, number, number],
-  kind: 'generates' | 'controls',
-) {
-  const start = new THREE.Vector3(...from)
-  const end = new THREE.Vector3(...to)
-  const middle = start.clone().add(end).multiplyScalar(0.5)
-  const outward = middle.clone().setY(0).normalize().multiplyScalar(kind === 'generates' ? 0.58 : 1.08)
-  middle.add(outward)
-  middle.y += kind === 'generates' ? 0.46 : 0.14
-
-  if (kind === 'generates') return [start, middle, end]
-
-  const along = end.clone().sub(start).normalize()
-  const side = new THREE.Vector3().crossVectors(along, new THREE.Vector3(0, 1, 0)).normalize()
-  const points = [start]
-  for (let index = 1; index < 5; index += 1) {
-    const point = start.clone().lerp(end, index / 5)
-    point.addScaledVector(side, (index % 2 === 0 ? -1 : 1) * (0.16 - index * 0.018))
-    point.y += Math.sin(index * 2.1) * 0.08
-    points.push(point)
-  }
-  points.push(end)
-  return points
+function characterLabel(char: string, color: string, size = 30, glow: 'gold' | 'cyan' = 'gold') {
+  const element = document.createElement('div')
+  element.className = 'bazi-3d-label'
+  element.textContent = char
+  return style(element, {
+    color,
+    fontFamily: '"Noto Serif SC", "Songti SC", serif',
+    fontSize: `${size}px`,
+    fontWeight: '900',
+    lineHeight: '1',
+    textShadow: glow === 'cyan'
+      ? '0 0 12px rgba(56, 189, 248, 0.6), 0 3px 10px rgba(0, 0, 0, 0.86)'
+      : '0 0 12px rgba(245, 158, 11, 0.48), 0 3px 10px rgba(0, 0, 0, 0.86)',
+  })
 }
 
-export async function mountBaziPaipan3D(options: MountOptions) {
-  const { root, state, model, reducedMotion } = options
+function disposeResources(resources: ThreeObject[]) {
+  resources.slice().reverse().forEach((resource) => {
+    try {
+      resource.dispose()
+    }
+    catch {
+      // Disposal is best-effort during an aborted or failed mount.
+    }
+  })
+  resources.length = 0
+}
+
+export async function mountBaziPaipan3D(options: MountOptions): Promise<BaziPaipan3DMount> {
+  const { root, state, result, model, reducedMotion, signal, labels = {} } = options
   const quality = detectQuality()
   state.quality.value = quality
-
   if (quality === 'low' || typeof WebGLRenderingContext === 'undefined') {
     state.state.value = 'static'
-    return () => undefined
+    return { dispose: () => undefined, resetView: () => undefined, setAutoRotate: () => undefined }
   }
 
-  let disposed = false
   const resources: ThreeObject[] = []
-  const texts: ThreeNamespace.Mesh<ThreeNamespace.BufferGeometry, ThreeNamespace.ShaderMaterial>[] = []
-  let renderer: ThreeNamespace.WebGLRenderer
-  let scene: ThreeNamespace.Scene
-  let camera: ThreeNamespace.PerspectiveCamera
-  let composer: EffectComposerLike | null = null
-  let bloomPass: Pass | null = null
+  const clickable: Mesh[] = []
+  const nodes = new Map<string, Mesh>()
+  let disposed = false
+  let renderer: import('three').WebGLRenderer | null = null
+  let labelRenderer: CSS2DRendererLike | null = null
+  let controls: import('three/examples/jsm/controls/OrbitControls.js').OrbitControls | null = null
+  let stopSelectedWatcher: (() => void) | null = null
   let resizeObserver: ResizeObserver | null = null
+  let intersectionObserver: IntersectionObserver | null = null
+  let animationEnabled = false
+  let cameraAnimating = false
+  let autoRotateEnabled = !reducedMotion
+  let autoRotateResume = 0
+  let currentYearMesh: Mesh | null = null
   let handlePointerMove: ((event: PointerEvent) => void) | null = null
-  let handleClearHover: (() => void) | null = null
-  let handleWheel: ((event: WheelEvent) => void) | null = null
-  let handlePointerDown: ((event: PointerEvent) => void) | null = null
-  let handlePointerUp: ((event: PointerEvent) => void) | null = null
-  let tunnelDragPointerId: number | null = null
-  let tunnelDragLastY = 0
+  let handlePointerLeave: (() => void) | null = null
+  let handleClick: ((event: MouseEvent) => void) | null = null
+  let handleContextLost: ((event: Event) => void) | null = null
+  let handleVisibilityChange: (() => void) | null = null
+  let resetViewAction: () => void = () => undefined
+
+  const defaultCameraPosition = new (await import('three')).Vector3()
+  const defaultCameraTarget = new (await import('three')).Vector3()
+  const targetCameraPosition = new (await import('three')).Vector3()
+  const targetCameraTarget = new (await import('three')).Vector3()
+
+  const throwIfAborted = () => {
+    if (signal?.aborted) throw new DOMException('Bazi 3D mount aborted', 'AbortError')
+  }
+
+  function dispose() {
+    disposed = true
+    stopSelectedWatcher?.()
+    stopSelectedWatcher = null
+    renderer?.setAnimationLoop(null)
+    if (autoRotateResume) window.clearTimeout(autoRotateResume)
+    resizeObserver?.disconnect()
+    intersectionObserver?.disconnect()
+    if (handlePointerMove && renderer) renderer.domElement.removeEventListener('pointermove', handlePointerMove)
+    if (handlePointerLeave && renderer) renderer.domElement.removeEventListener('pointerleave', handlePointerLeave)
+    if (handleClick && renderer) renderer.domElement.removeEventListener('click', handleClick)
+    if (handleContextLost && renderer) renderer.domElement.removeEventListener('webglcontextlost', handleContextLost)
+    if (handleVisibilityChange) document.removeEventListener('visibilitychange', handleVisibilityChange)
+    controls?.dispose()
+    disposeResources(resources)
+    renderer?.domElement.remove()
+    labelRenderer?.domElement.remove()
+    controls = null
+    renderer = null
+    labelRenderer = null
+  }
 
   try {
+    throwIfAborted()
     const THREE = await import('three')
-    const { EffectComposer } = await import('three/examples/jsm/postprocessing/EffectComposer.js')
-    const { RenderPass } = await import('three/examples/jsm/postprocessing/RenderPass.js')
-    const { UnrealBloomPass } = await import('three/examples/jsm/postprocessing/UnrealBloomPass.js')
-    const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
-    const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
-    const { KTX2Loader } = await import('three/examples/jsm/loaders/KTX2Loader.js')
-    const { RoomEnvironment } = await import('three/examples/jsm/environments/RoomEnvironment.js')
+    const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js')
+    const { CSS2DRenderer, CSS2DObject } = await import('three/examples/jsm/renderers/CSS2DRenderer.js')
+    const { watch } = await import('vue')
+    defaultCameraPosition.set(0, 18, 38)
+    defaultCameraTarget.set(0, 1, 0)
+    targetCameraPosition.copy(defaultCameraPosition)
+    targetCameraTarget.copy(defaultCameraTarget)
+    throwIfAborted()
 
     const width = Math.max(root.clientWidth, 1)
     const height = Math.max(root.clientHeight, 1)
-    renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: false,
-      powerPreference: 'high-performance',
-    })
-    renderer.setClearColor(0x05070e, 1)
+    const scene = new THREE.Scene()
+    scene.background = new THREE.Color(0x03050b)
+    scene.fog = new THREE.FogExp2(0x03050b, 0.0025)
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
+    camera.position.copy(defaultCameraPosition)
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
     renderer.setPixelRatio(qualityDpr(quality))
     renderer.setSize(width, height)
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 0.92
+    renderer.toneMappingExposure = 1.25
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    renderer.domElement.style.cursor = 'grab'
     root.appendChild(renderer.domElement)
     resources.push(renderer)
 
-    const pmremGenerator = new THREE.PMREMGenerator(renderer)
-    const environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture
-    scene = new THREE.Scene()
-    scene.environment = environment
-    scene.environmentIntensity = 0.52
-    resources.push(pmremGenerator, environment)
+    labelRenderer = new CSS2DRenderer()
+    labelRenderer.setSize(width, height)
+    style(labelRenderer.domElement, { position: 'absolute', inset: '0', pointerEvents: 'none', zIndex: '1' })
+    root.appendChild(labelRenderer.domElement)
 
-    const atlasTexture = await new THREE.TextureLoader().loadAsync('/assets/bazi-paipan-3d/bazi-glyphs-sdf.png')
-    atlasTexture.colorSpace = THREE.NoColorSpace
-    atlasTexture.generateMipmaps = true
-    atlasTexture.minFilter = THREE.LinearMipmapLinearFilter
-    atlasTexture.magFilter = THREE.LinearFilter
-    atlasTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy())
-    resources.push(atlasTexture)
+    controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
+    controls.dampingFactor = 0.05
+    controls.enablePan = true
+    controls.autoRotate = autoRotateEnabled
+    controls.autoRotateSpeed = 0.6
+    controls.minDistance = 12
+    controls.maxDistance = 90
+    controls.maxPolarAngle = Math.PI / 2 + 0.05
+    controls.target.copy(defaultCameraTarget)
 
-    scene.fog = new THREE.FogExp2(0x05070e, 0.055)
-    camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100)
-    camera.position.set(0, 0.5, 9.2)
-    camera.lookAt(0, 0, 0)
+    scene.add(new THREE.AmbientLight(0x1e1b4b, 1.2))
+    const centerLight = new THREE.PointLight(0xf59e0b, 2.5, 60)
+    centerLight.position.set(0, 15, 0)
+    scene.add(centerLight)
+    const dirLight = new THREE.DirectionalLight(0x38bdf8, 2)
+    dirLight.position.set(20, 30, 20)
+    dirLight.castShadow = true
+    dirLight.shadow.mapSize.set(2048, 2048)
+    scene.add(dirLight)
+    const rimLight = new THREE.PointLight(0xf43f5e, 2, 50)
+    rimLight.position.set(-20, 10, -20)
+    scene.add(rimLight)
 
-    scene.add(new THREE.HemisphereLight(0x7f8ea8, 0x150b05, 0.28))
-    const keyLight = new THREE.DirectionalLight(0xffd8a5, 1.65)
-    keyLight.position.set(3.2, 4.2, 4.8)
-    const backLight = new THREE.DirectionalLight(0x7fa2ff, 0.78)
-    backLight.position.set(-3.8, 1.5, -4.2)
-    scene.add(backLight)
-    scene.add(keyLight)
-
-    const galaxy = new THREE.Group()
-    galaxy.visible = false
-    scene.add(galaxy)
-
-    const glowTexture = radialGlow(THREE, resources)
-    const glyphOrder = [...new Set('甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥')]
-
-    function createGlyphMesh(char: string, color: string, size = 0.56) {
-      const glyphIndex = glyphOrder.indexOf(char)
-      const glyphGeometry = new THREE.PlaneGeometry(size, size)
-      const uvAttribute = glyphGeometry.getAttribute('uv')
-      const column = glyphIndex % 6
-      const row = Math.floor(glyphIndex / 6)
-      for (let uvIndex = 0; uvIndex < uvAttribute.count; uvIndex += 1) {
-        uvAttribute.setXY(
-          uvIndex,
-          (column + uvAttribute.getX(uvIndex)) / 6,
-          1 - (row + 1 - uvAttribute.getY(uvIndex)) / 4,
-        )
-      }
-      resources.push(glyphGeometry)
-
-      const mesh = new THREE.Mesh(glyphGeometry, new THREE.ShaderMaterial({
-        uniforms: {
-          uAtlas: { value: atlasTexture },
-          uColor: { value: new THREE.Color(color) },
-          uOpacity: { value: 0 },
-        },
-        vertexShader: `
-          varying vec2 vUv;
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          uniform sampler2D uAtlas;
-          uniform vec3 uColor;
-          uniform float uOpacity;
-          varying vec2 vUv;
-          void main() {
-            float distance = texture2D(uAtlas, vUv).r;
-            float alpha = smoothstep(0.46, 0.54, distance);
-            gl_FragColor = vec4(uColor, alpha * uOpacity);
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-      }))
-      resources.push(mesh.material)
-      return mesh as ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>
+    const starCount = quality === 'high' ? 4000 : 1600
+    const starGeometry = new THREE.BufferGeometry()
+    const starPositions = new Float32Array(starCount * 3)
+    const starColors = new Float32Array(starCount * 3)
+    for (let index = 0; index < starCount; index += 1) {
+      const radius = 100 + Math.random() * 150
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(Math.random() * 2 - 1)
+      starPositions[index * 3] = radius * Math.sin(phi) * Math.cos(theta)
+      starPositions[index * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+      starPositions[index * 3 + 2] = radius * Math.cos(phi)
+      const color = new THREE.Color().setHSL(0.55 + Math.random() * 0.25, 0.8, 0.6 + Math.random() * 0.4)
+      starColors[index * 3] = color.r
+      starColors[index * 3 + 1] = color.g
+      starColors[index * 3 + 2] = color.b
     }
-
-    const createParticleMaterial = () => {
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-          uOpacity: { value: 0.62 },
-          uSize: { value: quality === 'high' ? 17 : 23 },
-          uPixelRatio: { value: qualityDpr(quality) },
-        },
-        vertexShader: `
-          attribute vec3 aSeed;
-          attribute vec3 aColor;
-          uniform float uTime;
-          uniform float uSize;
-          uniform float uPixelRatio;
-          varying vec3 vColor;
-          varying float vDepth;
-          void main() {
-            float speed = mix(0.12, 0.34, aSeed.z);
-            float angle = aSeed.x + uTime * speed;
-            float radius = mix(0.24, 1.0, aSeed.y);
-            vec3 orbit = vec3(
-              cos(angle) * radius,
-              sin(angle * 2.0 + aSeed.z * 6.2832) * (0.10 + aSeed.z * 0.10),
-              sin(angle) * radius * 0.62
-            );
-            vec4 mvPosition = modelViewMatrix * vec4(orbit, 1.0);
-            vColor = aColor;
-            vDepth = smoothstep(-10.0, -5.0, mvPosition.z);
-            gl_Position = projectionMatrix * mvPosition;
-            gl_PointSize = uSize * uPixelRatio * (0.42 + aSeed.z * 0.58) / max(-mvPosition.z, 0.1);
-          }
-        `,
-        fragmentShader: `
-          uniform float uOpacity;
-          varying vec3 vColor;
-          varying float vDepth;
-          void main() {
-            float distance = length(gl_PointCoord - 0.5);
-            float alpha = smoothstep(0.48, 0.08, distance) * uOpacity * mix(0.45, 1.0, vDepth);
-            if (alpha < 0.01) discard;
-            gl_FragColor = vec4(vColor * (0.34 + vDepth * 0.32), alpha * 0.82);
-          }
-        `,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      })
-      resources.push(material)
-      return material
-    }
-
-    const clusterParticles: {
-      points: ThreeNamespace.Points
-      material: ThreeNamespace.ShaderMaterial
-      elementKey: ElementKey
-      tilt: number
-    }[] = []
-    for (const elementKey of ELEMENT_KEYS) {
-      const cluster = model.clusters.find(item => item.elementKey === elementKey)
-      if (!cluster) continue
-      const count = quality === 'high' ? 420 : 130
-      const placeholderPositions = new Float32Array(count * 3)
-      const colors = new Float32Array(count * 3)
-      const seeds = new Float32Array(count * 3)
-      const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
-      const color = new THREE.Color(ELEMENT_COLORS[elementKey])
-      const clusterScale = 0.66 + Math.sqrt(cluster.percent / 100) * 1.28
-
-      for (let index = 0; index < count; index += 1) {
-        seeds[index * 3] = Math.random() * Math.PI * 2
-        seeds[index * 3 + 1] = Math.cbrt(Math.random())
-        seeds[index * 3 + 2] = Math.random()
-        const variance = 0.66 + Math.random() * 0.5
-        colors[index * 3] = color.r * variance
-        colors[index * 3 + 1] = color.g * variance
-        colors[index * 3 + 2] = color.b * variance
-      }
-
-      const geometry = new THREE.BufferGeometry()
-      geometry.setAttribute('position', new THREE.BufferAttribute(placeholderPositions, 3))
-      geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3))
-      geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 3))
-      geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1.3)
-      resources.push(geometry)
-      const material = createParticleMaterial()
-      const points = new THREE.Points(geometry, material)
-      points.userData = { elementKey, clusterScale }
-      points.position.copy(center)
-      points.scale.setScalar(clusterScale)
-      points.rotation.x = elementKey === 'wood' || elementKey === 'earth' ? -0.38 : 0.3
-      galaxy.add(points)
-      clusterParticles.push({ points, material, elementKey, tilt: points.rotation.x })
-    }
-
-    const starGeometry = new THREE.SphereGeometry(1, 24, 18)
-    resources.push(starGeometry)
-    const starMaterials: ThreeNamespace.MeshBasicMaterial[] = []
-    const starMeshes: ThreeNamespace.Object3D[] = []
-    const raycastMeshes: ThreeNamespace.Mesh[] = []
-    const glowMaterials: { material: ThreeNamespace.SpriteMaterial, elementKey: ElementKey }[] = []
-    const characterPositions = new Map<string, ThreeNamespace.Vector3>()
-    const characterOrbits: {
-      group: ThreeNamespace.Group
-      elementKey: ElementKey
-      speed: number
-    }[] = []
-
-    for (const elementKey of ELEMENT_KEYS) {
-      const members = model.characters.filter(character => character.elementKey === elementKey)
-      members.forEach((character, memberIndex) => {
-        const center = new THREE.Vector3(...ELEMENT_POSITIONS[elementKey])
-        const angle = (memberIndex / Math.max(members.length, 1)) * Math.PI * 2 + 0.5
-        const radius = 0.86 + (memberIndex % 2) * 0.22
-        const characterOffset = new THREE.Vector3(
-          Math.cos(angle) * radius,
-          Math.sin(angle) * 0.44,
-          Math.sin(angle) * radius,
-        )
-        const orbit = new THREE.Group()
-        orbit.position.copy(center)
-        orbit.rotation.set(
-          (memberIndex % 2 === 0 ? 1 : -1) * 0.13,
-          angle,
-          (memberIndex % 2 === 0 ? -1 : 1) * 0.08,
-        )
-        galaxy.add(orbit)
-        characterOrbits.push({
-          group: orbit,
-          elementKey,
-          speed: character.isDayMaster ? 0.05 : 0.09 + memberIndex * 0.016,
-        })
-
-        const material = new THREE.MeshBasicMaterial({
-          color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
-          transparent: true,
-          opacity: 0.98,
-        })
-        resources.push(material)
-        starMaterials.push(material)
-
-        const star = new THREE.Mesh(starGeometry, material)
-        star.position.copy(characterOffset)
-        star.scale.setScalar(character.isDayMaster ? 0.17 : 0.14)
-        star.userData = { characterId: character.id, elementKey, baseScale: star.scale.x }
-        orbit.add(star)
-        starMeshes.push(star)
-        raycastMeshes.push(star)
-        characterPositions.set(character.id, center.clone())
-
-        const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-          map: glowTexture,
-          color: character.isDayMaster ? '#ffd884' : ELEMENT_COLORS[elementKey],
-          transparent: true,
-          opacity: character.isDayMaster ? 0.58 : 0.32,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        }))
-        resources.push(glow.material)
-        glowMaterials.push({ material: glow.material, elementKey })
-        glow.position.copy(characterOffset)
-        glow.scale.setScalar(character.isDayMaster ? 0.68 : 0.44)
-        glow.userData = { characterId: character.id, baseOpacity: glow.material.opacity }
-        orbit.add(glow)
-        starMeshes.push(glow)
-
-        const text = createGlyphMesh(character.char, character.isDayMaster ? '#fff2ce' : '#f4f8ff')
-        text.material.uniforms.uOpacity!.value = 1
-        text.position.copy(characterOffset).add(new THREE.Vector3(0, 0.3, 0))
-        text.userData = { characterId: character.id, elementKey }
-        orbit.add(text)
-        texts.push(text)
-      })
-    }
-
-    const relationLines: { mesh: ThreeNamespace.Mesh, material: ThreeNamespace.ShaderMaterial, relationId: string }[] = []
-    for (const relation of model.relations) {
-      const from = ELEMENT_POSITIONS[relation.from]
-      const to = ELEMENT_POSITIONS[relation.to]
-      const points = curvedPoints(THREE, from, to, relation.kind)
-      const curve = new THREE.CatmullRomCurve3(points)
-      const geometry = new THREE.TubeGeometry(curve, quality === 'high' ? 84 : 44, relation.kind === 'generates' ? 0.024 : 0.018, 6, false)
-      const material = flowMaterial(
-        THREE,
-        resources,
-        relation.kind === 'generates' ? ELEMENT_COLORS[relation.to] : '#ff5f7e',
-        relation.kind === 'generates' ? 0.46 : 0.34,
-      )
-      resources.push(geometry)
-      const mesh = new THREE.Mesh(geometry, material)
-      mesh.userData = { relationId: relation.id }
-      galaxy.add(mesh)
-      relationLines.push({ mesh, material, relationId: relation.id })
-    }
-
-    const compass = new THREE.Group()
-    scene.add(compass)
-    const dracoLoader = new DRACOLoader()
-      .setDecoderPath('/assets/bazi-paipan-3d/decoders/draco/')
-    const ktx2Loader = new KTX2Loader()
-      .setTranscoderPath('/assets/bazi-paipan-3d/decoders/basis/')
-      .detectSupport(renderer)
-    const instrumentLoader = new GLTFLoader()
-      .setDRACOLoader(dracoLoader)
-      .setKTX2Loader(ktx2Loader)
-    const instrumentGltf = await instrumentLoader.loadAsync('/assets/bazi-paipan-3d/instrument.glb')
-    const instrumentRoot = instrumentGltf.scene
-    instrumentRoot.name = 'instrumentRoot'
-    const instrumentRings: ThreeNamespace.Mesh[] = []
-    instrumentRoot.traverse((object) => {
-      const mesh = object as ThreeNamespace.Mesh
-      if (mesh.isMesh !== true) return
-      resources.push(mesh.geometry)
-      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
-      for (const material of materials) {
-        resources.push(material)
-        for (const texture of Object.values(material).filter(value => value?.isTexture === true)) {
-          resources.push(texture as ThreeObject)
-        }
-      }
-      if (mesh.name.startsWith('ring_')) {
-        mesh.rotation.x = Math.PI / 2
-        instrumentRings.push(mesh)
-      }
-      if (mesh.name === 'instrument_base') {
-        mesh.rotation.x = Math.PI / 2
-        mesh.position.z = -0.38
-        mesh.scale.setScalar(0.72)
-      }
-    })
-    compass.add(instrumentRoot)
-    dracoLoader.dispose()
-    ktx2Loader.dispose()
-    const heavenGeometry = new THREE.SphereGeometry(1.64, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2.05)
-    const heavenMaterial = new THREE.MeshPhysicalMaterial({
-      color: '#082238',
-      roughness: 0.16,
-      metalness: 0.22,
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
+    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3))
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.6,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.12,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-    })
-    const heavenShell = new THREE.Mesh(heavenGeometry, heavenMaterial)
-    const heavenCageGeometry = new THREE.SphereGeometry(1.72, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2.1)
-    const heavenCageMaterial = new THREE.MeshBasicMaterial({
-      color: '#9db8dd',
-      wireframe: true,
-      transparent: true,
-      opacity: 0.035,
-      depthWrite: false,
-    })
-    const heavenCage = new THREE.Mesh(heavenCageGeometry, heavenCageMaterial)
-    const heavenRings: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshPhysicalMaterial>[] = []
-    for (let index = 0; index < 3; index += 1) {
-      const geometry = new THREE.TorusGeometry(1.58 + index * 0.08, 0.007, 6, 180)
-      const material = new THREE.MeshPhysicalMaterial({
-        color: index === 0 ? '#d4af6d' : '#a9c3e8',
-        metalness: 0.9,
-        roughness: 0.22,
-        transparent: true,
-        opacity: 0.58,
-      })
-      const ring = new THREE.Mesh(geometry, material)
-      ring.rotation.x = Math.PI / 2
-      ring.rotation.z = index * 0.72
-      resources.push(geometry, material)
-      heavenRings.push(ring)
-      compass.add(ring)
-    }
-    const earthGeometry = new THREE.CylinderGeometry(1.58, 1.78, 0.075, 96)
-    const earthMaterial = new THREE.MeshPhysicalMaterial({
-      color: '#06180f',
-      roughness: 0.24,
-      metalness: 0.06,
-      clearcoat: 0.64,
-      clearcoatRoughness: 0.22,
-    })
-    const earthDisc = new THREE.Mesh(earthGeometry, earthMaterial)
-    earthDisc.position.y = -0.88
-    const earthRings: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>[] = []
-    for (const radius of [1.08, 1.42, 1.66]) {
-      const geometry = new THREE.TorusGeometry(radius, 0.008, 6, 180)
-      const material = new THREE.MeshBasicMaterial({
-        color: radius > 1.5 ? '#d4af6d' : '#7fd8a8',
-        transparent: true,
-        opacity: radius > 1.5 ? 0.62 : 0.32,
-      })
-      const ring = new THREE.Mesh(geometry, material)
-      ring.rotation.x = Math.PI / 2
-      ring.position.y = -0.838
-      resources.push(geometry, material)
-      earthRings.push(ring)
-      compass.add(ring)
-    }
-    const axisGeometry = new THREE.CylinderGeometry(0.014, 0.018, 2.1, 20)
-    const axisMaterial = new THREE.MeshStandardMaterial({
-      color: '#b08135',
-      metalness: 0.94,
-      roughness: 0.24,
-    })
-    const compassAxis = new THREE.Mesh(axisGeometry, axisMaterial)
-    compassAxis.position.y = -0.05
-    const heavenCoreGeometry = new THREE.OctahedronGeometry(0.13)
-    const heavenCoreMaterial = new THREE.MeshPhysicalMaterial({
-      color: '#74e5b4',
-      emissive: new THREE.Color('#1f8f61'),
-      emissiveIntensity: 0.5,
-      metalness: 0.1,
-      roughness: 0.1,
-      clearcoat: 1,
-    })
-    const heavenCore = new THREE.Mesh(heavenCoreGeometry, heavenCoreMaterial)
-    heavenCore.position.y = 0.96
-    const earthCoreGeometry = new THREE.BoxGeometry(0.15, 0.15, 0.15)
-    const earthCoreMaterial = new THREE.MeshBasicMaterial({
-      color: '#d4af6d',
-      wireframe: true,
-      transparent: true,
-      opacity: 0.48,
-    })
-    const earthCore = new THREE.Mesh(earthCoreGeometry, earthCoreMaterial)
-    earthCore.position.y = -0.88
-    const needleGroup = new THREE.Group()
-    needleGroup.position.y = -0.8
-    const needleMaterial = new THREE.MeshStandardMaterial({
-      color: '#f4f8ff',
-      metalness: 0.68,
-      roughness: 0.18,
-      emissive: new THREE.Color('#28476f'),
-      emissiveIntensity: 0.12,
-    })
-    const southNeedleGeometry = new THREE.ConeGeometry(0.055, 0.34, 4)
-    const southNeedleMaterial = new THREE.MeshStandardMaterial({
-      color: '#e46a5a',
-      metalness: 0.36,
-      roughness: 0.2,
-      emissive: new THREE.Color('#952f24'),
-      emissiveIntensity: 0.3,
-    })
-    const southNeedle = new THREE.Mesh(southNeedleGeometry, southNeedleMaterial)
-    southNeedle.rotation.z = Math.PI / 2
-    southNeedle.position.x = -0.3
-    const northNeedle = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.34, 4), needleMaterial)
-    northNeedle.rotation.z = -Math.PI / 2
-    northNeedle.position.x = 0.3
-    const needleHubGeometry = new THREE.SphereGeometry(0.045, 20, 16)
-    const needleHubMaterial = new THREE.MeshStandardMaterial({
-      color: '#ffd884',
-      metalness: 0.88,
-      roughness: 0.18,
-      emissive: new THREE.Color('#8c5f1c'),
-      emissiveIntensity: 0.18,
-    })
-    const needleHub = new THREE.Mesh(needleHubGeometry, needleHubMaterial)
-    needleGroup.add(southNeedle, northNeedle, needleHub)
-    const compassGemGeometry = new THREE.OctahedronGeometry(0.16)
-    const compassGemMaterial = new THREE.MeshPhysicalMaterial({
-      color: '#2e8a63',
-      emissive: new THREE.Color('#1b7350'),
-      emissiveIntensity: 0.24,
-      metalness: 0.12,
-      roughness: 0.08,
-      clearcoat: 1,
-      clearcoatRoughness: 0.08,
-    })
-    const compassGem = new THREE.Mesh(compassGemGeometry, compassGemMaterial)
-    compassGem.position.z = 0.28
-    resources.push(
-      heavenGeometry,
-      heavenMaterial,
-      heavenCageGeometry,
-      heavenCageMaterial,
-      earthGeometry,
-      earthMaterial,
-      axisGeometry,
-      axisMaterial,
-      heavenCoreGeometry,
-      heavenCoreMaterial,
-      earthCoreGeometry,
-      earthCoreMaterial,
-      southNeedleGeometry,
-      southNeedleMaterial,
-      needleMaterial,
-      needleHubGeometry,
-      needleHubMaterial,
-      compassGemGeometry,
-      compassGemMaterial,
-    )
-    compass.add(
-      heavenShell,
-      heavenCage,
-      ...heavenRings,
-      earthDisc,
-      compassAxis,
-      heavenCore,
-      earthCore,
-      needleGroup,
-      compassGem,
-    )
-    const compassRings: {
-      mesh: ThreeNamespace.Mesh<ThreeNamespace.TorusGeometry, ThreeNamespace.MeshBasicMaterial>
-      labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[]
-      targetOpacity: number
-    }[] = []
-    const plaqueGroups: ThreeNamespace.Group[] = []
-    const compactCompass = width / height < 0.9
-    const plaqueTargets: [number, number][] = [
-      [0, compactCompass ? 1.02 : 1.38],
-      [compactCompass ? 1.08 : 1.48, 0.02],
-      [0, compactCompass ? -1.06 : -1.44],
-      [compactCompass ? -1.08 : -1.48, 0.02],
-    ]
-    const plaqueLabels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[][] = []
-    const plaqueMaterials: ThreeNamespace.MeshPhysicalMaterial[] = []
-    const plaqueHitMeshes: ThreeNamespace.Mesh[] = []
-    const tunnelHitMeshes: ThreeNamespace.Mesh[] = []
-    const compassRadii = [2.35, 1.85, 1.35, 0.88]
-
-    for (let index = 0; index < 4; index += 1) {
-      const gan = model.characters[index * 2]
-      const zhi = model.characters[index * 2 + 1]
-      if (!gan || !zhi) continue
-
-      const ringGeometry = new THREE.TorusGeometry(compassRadii[index]!, 0.018, 10, 128)
-      const ringMaterial = new THREE.MeshBasicMaterial({
-        color: index === 2 ? '#ffd884' : '#8ba0c8',
-        transparent: true,
-        opacity: 0,
-      })
-      resources.push(ringGeometry, ringMaterial)
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-      compass.add(ring)
-
-      const plaqueGroup = new THREE.Group()
-      const [targetX, targetY] = plaqueTargets[index]!
-      plaqueGroup.position.set(targetX, targetY, 0.28)
-      const plaqueMaterial = new THREE.MeshPhysicalMaterial({
-        color: index === 2 ? '#2f7d5a' : '#226048',
-        roughness: 0.34,
-        metalness: 0,
-        clearcoat: 0.26,
-        clearcoatRoughness: 0.38,
-        emissive: new THREE.Color(index === 2 ? '#39a374' : '#267a58'),
-        emissiveIntensity: index === 2 ? 0.12 : 0.07,
-        transparent: true,
-        opacity: 0,
-      })
-      resources.push(plaqueMaterial)
-      plaqueMaterials.push(plaqueMaterial)
-      const plaque = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.78, 0.045), plaqueMaterial)
-      resources.push(plaque.geometry)
-      plaque.name = `plaque_${gan.pillarKey}`
-      plaque.userData = { pillarKey: gan.pillarKey }
-      plaqueGroup.add(plaque)
-      plaqueHitMeshes.push(plaque)
-
-      const plaqueGlyphs = [
-        { character: gan, offsetX: -0.145 },
-        { character: zhi, offsetX: 0.145 },
-      ].map(({ character, offsetX }, glyphIndex) => {
-        const isDayMasterStem = index === 2 && glyphIndex === 0
-        const label = createGlyphMesh(character.char, isDayMasterStem ? '#fff8dd' : '#eefaf2', 0.3)
-        label.position.set(offsetX, -0.02, 0.042)
-        label.material.uniforms.uOpacity!.value = 0
-        plaqueGroup.add(label)
-        return label
-      })
-
-      compass.add(plaqueGroup)
-      plaqueGroups.push(plaqueGroup)
-      plaqueLabels.push(plaqueGlyphs)
-      const labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[] = []
-
-      compassRings.push({ mesh: ring, labels, targetOpacity: index === 2 ? 0.96 : 0.78 })
-    }
-    for (const ring of compassRings) ring.mesh.visible = false
-    const shockwaveGeometry = new THREE.TorusGeometry(0.82, 0.014, 8, 128)
-    const shockwaveMaterial = new THREE.MeshBasicMaterial({
-      color: '#ffd884',
-      transparent: true,
-      opacity: 0,
+      opacity: 0.8,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
-    resources.push(shockwaveGeometry, shockwaveMaterial)
-    const shockwave = new THREE.Mesh(shockwaveGeometry, shockwaveMaterial)
-    shockwave.visible = false
-    compass.add(shockwave)
+    const stars = new THREE.Points(starGeometry, starMaterial)
+    resources.push(starGeometry, starMaterial)
+    scene.add(stars)
 
-    const tunnel = new THREE.Group()
-    tunnel.visible = false
-    scene.add(tunnel)
-    const tunnelSpacing = 4.3
-    const gateCount = model.dayuns.length
-    const gateGeometry = new THREE.TorusGeometry(1.32, 0.026, 12, 128)
-    const gateMaterial = new THREE.MeshStandardMaterial({
-      color: '#ffffff',
-      metalness: 0.84,
-      roughness: 0.26,
-      envMapIntensity: 0.72,
-    })
-    const gateRings = new THREE.InstancedMesh(gateGeometry, gateMaterial, gateCount)
-    gateRings.instanceMatrix.setUsage(THREE.StaticDrawUsage)
-    resources.push(gateGeometry, gateMaterial, gateRings)
-    tunnel.add(gateRings)
-    const currentGateGeometry = new THREE.TorusGeometry(0.18, 0.022, 10, 128)
-    const currentGateMaterial = new THREE.MeshBasicMaterial({
-      color: '#c07818',
+    const floatCount = quality === 'high' ? 800 : 280
+    const floatGeometry = new THREE.BufferGeometry()
+    const floatPositions = new Float32Array(floatCount * 3)
+    for (let index = 0; index < floatPositions.length; index += 1) {
+      floatPositions[index] = index % 3 === 0 ? (Math.random() - 0.5) * 60
+        : index % 3 === 1 ? (Math.random() - 0.5) * 35 : (Math.random() - 0.5) * 60
+    }
+    floatGeometry.setAttribute('position', new THREE.BufferAttribute(floatPositions, 3))
+    const floatMaterial = new THREE.PointsMaterial({
+      size: 0.12,
+      color: 0x818cf8,
       transparent: true,
-      opacity: 0.9,
-      depthTest: false,
+      opacity: 0.4,
+      blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
-    const currentGateMarker = new THREE.Mesh(currentGateGeometry, currentGateMaterial)
-    currentGateMarker.renderOrder = 10
-    currentGateMarker.visible = false
-    resources.push(currentGateGeometry, currentGateMaterial)
-    tunnel.add(currentGateMarker)
+    const floatParticles = new THREE.Points(floatGeometry, floatMaterial)
+    resources.push(floatGeometry, floatMaterial)
+    scene.add(floatParticles)
 
-    const tickGeometry = new THREE.BoxGeometry(0.018, 0.095, 0.018)
-    const tickMaterial = new THREE.MeshStandardMaterial({
-      color: '#b9c7dd',
-      metalness: 0.52,
-      roughness: 0.32,
+    const floorGroup = new THREE.Group()
+    floorGroup.position.y = -3.5
+    scene.add(floorGroup)
+    const wxPositions = new Map<ElementKey, Vector>()
+    ELEMENT_ORDER.forEach((key, index) => {
+      const angle = -Math.PI / 2 + index * Math.PI * 2 / 5
+      wxPositions.set(key, new THREE.Vector3(Math.cos(angle) * 11, 0, Math.sin(angle) * 11))
     })
-    const gateTicks = new THREE.InstancedMesh(tickGeometry, tickMaterial, gateCount * 10)
-    gateTicks.instanceMatrix.setUsage(THREE.StaticDrawUsage)
-    resources.push(tickGeometry, tickMaterial, gateTicks)
-    tunnel.add(gateTicks)
-    const gateHitGeometry = new THREE.TorusGeometry(1.32, 0.14, 8, 72)
-    const gateHitMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
-    const gateHitMesh = new THREE.InstancedMesh(gateHitGeometry, gateHitMaterial, gateCount)
-    gateHitMesh.userData = { dayunIndexes: model.dayuns.map(dayun => dayun.index) }
-    resources.push(gateHitGeometry, gateHitMaterial, gateHitMesh)
-    tunnel.add(gateHitMesh)
-    tunnelHitMeshes.push(gateHitMesh)
-    const tunnelLabels: { dayunIndex: number, labels: ThreeNamespace.Mesh<ThreeNamespace.PlaneGeometry, ThreeNamespace.ShaderMaterial>[] }[] = []
-
-    const gateDummy = new THREE.Object3D()
-    model.dayuns.forEach((dayun, gateIndex) => {
-      gateDummy.position.set(0, 0, -gateIndex * tunnelSpacing)
-      gateDummy.rotation.set(0, 0, 0)
-      gateDummy.scale.setScalar(1)
-      gateDummy.updateMatrix()
-      gateRings.setMatrixAt(gateIndex, gateDummy.matrix)
-      gateHitMesh.setMatrixAt(gateIndex, gateDummy.matrix)
-      gateRings.setColorAt(gateIndex, new THREE.Color(dayun.isCurrent ? '#ffd884' : '#667795'))
-
-      for (let yearIndex = 0; yearIndex < 10; yearIndex++) {
-        const angle = Math.PI * 2 * yearIndex / 10 + Math.PI / 10
-        gateDummy.position.set(
-          Math.cos(angle) * 1.32,
-          Math.sin(angle) * 1.32,
-          -gateIndex * tunnelSpacing,
-        )
-        gateDummy.rotation.set(0, 0, angle + Math.PI / 2)
-        gateDummy.scale.setScalar(1)
-        gateDummy.updateMatrix()
-        gateTicks.setMatrixAt(gateIndex * 10 + yearIndex, gateDummy.matrix)
-      }
-
-      const [gan, zhi] = [...dayun.ganzhi]
-      const labels = [
-        { character: gan, angle: -Math.PI / 5 },
-        { character: zhi, angle: Math.PI / 5 },
-      ].filter(item => item.character).map(({ character, angle }) => {
-        const label = createGlyphMesh(character!, dayun.isCurrent ? '#fff2ce' : '#dce5f4', 0.3)
-        label.material.uniforms.uOpacity!.value = 0.96
-        label.position.set(Math.cos(angle) * 1.32, Math.sin(angle) * 1.32, -gateIndex * tunnelSpacing)
-        tunnel.add(label)
-        return label
-      })
-      tunnelLabels.push({ dayunIndex: dayun.index, labels })
+    const floorGeometry = new THREE.CylinderGeometry(13.5, 14, 0.4, 64)
+    const floorMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x090d16,
+      roughness: 0.2,
+      metalness: 0.9,
+      clearcoat: 1,
+      reflectivity: 0.8,
     })
-    gateRings.instanceMatrix.needsUpdate = true
-    gateHitMesh.instanceMatrix.needsUpdate = true
-    if (gateRings.instanceColor) gateRings.instanceColor.needsUpdate = true
-    gateTicks.instanceMatrix.needsUpdate = true
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial)
+    floor.position.y = -0.2
+    floor.receiveShadow = true
+    resources.push(floorGeometry, floorMaterial)
+    floorGroup.add(floor)
+    const trimGeometry = new THREE.TorusGeometry(13.4, 0.08, 16, 100)
+    const trimMaterial = new THREE.MeshStandardMaterial({
+      color: 0xf59e0b,
+      metalness: 0.9,
+      roughness: 0.1,
+      emissive: 0xb45309,
+      emissiveIntensity: 0.3,
+    })
+    const trim = new THREE.Mesh(trimGeometry, trimMaterial)
+    trim.rotation.x = Math.PI / 2
+    resources.push(trimGeometry, trimMaterial)
+    floorGroup.add(trim)
 
-    const cameraTarget = new THREE.Vector3()
-    let timelineTime = state.introCompleted.value ? 6 : 0
-    let timelinePaused = false
-    let replayToken = 0
-
-    function applyScene(mode: 'compass' | 'galaxy' | 'tunnel') {
-      compass.visible = mode === 'compass'
-      galaxy.visible = mode === 'galaxy'
-      tunnel.visible = mode === 'tunnel'
-      if (mode === 'compass' && timelinePaused) return
-      if (mode === 'compass') {
-        if (state.introCompleted.value && !timelinePaused) {
-          timelineTime = 6
-          state.lifecycle.value = 'settled'
-        }
-        camera.position.set(0, 0, timelineTime >= 6 ? 7 : 8.4)
-      }
-      else if (mode === 'galaxy') {
-        camera.position.set(0, 0.5, 9.2)
-        clusterParticles.forEach(particle => particle.points.visible = true)
-        relationLines.forEach(line => line.mesh.visible = true)
-        starMeshes.forEach(object => object.visible = true)
-        texts.forEach(text => text.visible = true)
-      }
+    const elementCount = (key: ElementKey) => {
+      const item = result.energy.wuxing.find(candidate => elementKeyByLabel(candidate.key) === key)
+      return item ? item.visibleCount : 0
     }
+    const shengParticles: Array<{ mesh: Mesh, curve: import('three').QuadraticBezierCurve3, offset: number }> = []
+    ELEMENT_ORDER.forEach((key, index) => {
+      const position = wxPositions.get(key)!
+      const count = elementCount(key)
+      const group = new THREE.Group()
+      group.position.copy(position)
+      const sphereGeometry = new THREE.SphereGeometry(0.6 + count * 0.15, quality === 'high' ? 32 : 18, quality === 'high' ? 24 : 12)
+      const sphereMaterial = new THREE.MeshPhysicalMaterial({
+        color: ELEMENT_COLORS[key],
+        emissive: ELEMENT_COLORS[key],
+        emissiveIntensity: 0.6,
+        roughness: 0.1,
+        metalness: 0.8,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0.95,
+      })
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+      sphere.castShadow = true
+      sphere.userData.nodeId = `element:${key}`
+      resources.push(sphereGeometry, sphereMaterial)
+      group.add(sphere)
+      clickable.push(sphere)
+      nodes.set(`element:${key}`, sphere)
 
-    watch(() => state.scene.value, (mode) => {
-      if (mode !== 'compass') state.introCompleted.value = true
-      applyScene(mode)
-    }, { immediate: true })
+      const auraGeometry = new THREE.SphereGeometry(1 + count * 0.18, 16, 12)
+      const auraMaterial = new THREE.MeshBasicMaterial({
+        color: ELEMENT_COLORS[key],
+        transparent: true,
+        opacity: 0.15,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide,
+        depthWrite: false,
+      })
+      resources.push(auraGeometry, auraMaterial)
+      group.add(new THREE.Mesh(auraGeometry, auraMaterial))
 
-    if (quality === 'high') {
-      const nextComposer = new EffectComposer(renderer)
-      nextComposer.addPass(new RenderPass(scene, camera))
-      bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.22, 0.48, 0.86)
-      nextComposer.addPass(bloomPass)
-      composer = nextComposer
+      const label = new CSS2DObject(chip(`${ELEMENT_ZH[key]} ${count}`, ELEMENT_HEX[key]))
+      label.position.set(0, 1.8 + count * 0.1, 0)
+      group.add(label)
+      floorGroup.add(group)
+
+      const nextKey = ELEMENT_ORDER[(index + 1) % 5]!
+      const next = wxPositions.get(nextKey)!
+      const mid = position.clone().add(next).multiplyScalar(0.5)
+      const control = mid.clone().add(mid.clone().normalize().multiplyScalar(4))
+      const curve = new THREE.QuadraticBezierCurve3(position, control, next)
+      const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(50))
+      const curveMaterial = new THREE.LineBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.45 })
+      resources.push(curveGeometry, curveMaterial)
+      floorGroup.add(new THREE.Line(curveGeometry, curveMaterial))
+
+      const dotCount = quality === 'high' ? 6 : 3
+      for (let dotIndex = 0; dotIndex < dotCount; dotIndex += 1) {
+        const dotGeometry = new THREE.SphereGeometry(0.12, 10, 8)
+        const dotMaterial = new THREE.MeshBasicMaterial({
+          color: 0x4ade80,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+        const dot = new THREE.Mesh(dotGeometry, dotMaterial)
+        resources.push(dotGeometry, dotMaterial)
+        floorGroup.add(dot)
+        shengParticles.push({ mesh: dot, curve, offset: dotIndex / dotCount })
+      }
+
+      const overcomeKey = ELEMENT_ORDER[(index + 2) % 5]!
+      const overcomeGeometry = new THREE.BufferGeometry().setFromPoints([position, wxPositions.get(overcomeKey)!])
+      const overcomeMaterial = new THREE.LineDashedMaterial({
+        color: 0xf43f5e,
+        dashSize: 0.5,
+        gapSize: 0.3,
+        transparent: true,
+        opacity: 0.5,
+      })
+      const overcomeLine = new THREE.Line(overcomeGeometry, overcomeMaterial)
+      overcomeLine.computeLineDistances()
+      resources.push(overcomeGeometry, overcomeMaterial)
+      floorGroup.add(overcomeLine)
+    })
+
+    const pillarGroup = new THREE.Group()
+    scene.add(pillarGroup)
+    const pillarCoordinates: Vector[] = []
+    const pillarX = [-7.5, -2.5, 2.5, 7.5]
+    model.pillars.forEach((pillar, index) => {
+      const ganKey = GAN_ELEMENTS[pillar.gan] ?? elementKeyByLabel(pillar.ganWuxing)
+      const zhiKey = ZHI_ELEMENTS[pillar.zhi] ?? elementKeyByLabel(pillar.zhiWuxing)
+      const x = pillarX[index] ?? 0
+      const group = new THREE.Group()
+      group.position.set(x, 0, 0)
+      pillarCoordinates[index] = new THREE.Vector3(x, 1.8, 0)
+
+      const bodyGeometry = new THREE.CylinderGeometry(0.7, 0.9, 8.5, quality === 'high' ? 24 : 14)
+      const bodyMaterial = new THREE.MeshPhysicalMaterial({
+        color: ELEMENT_COLORS[ganKey],
+        emissive: ELEMENT_COLORS[ganKey],
+        emissiveIntensity: pillar.key === 'day' ? 0.4 : 0.2,
+        roughness: 0.1,
+        metalness: 0.5,
+        clearcoat: 1,
+        transparent: true,
+        opacity: 0.35,
+      })
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial)
+      body.position.y = 1
+      body.castShadow = true
+      body.userData.nodeId = `pillar:${pillar.key}`
+      resources.push(bodyGeometry, bodyMaterial)
+      group.add(body)
+      clickable.push(body)
+      nodes.set(`pillar:${pillar.key}`, body)
+
+      const baseGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.5, 8)
+      const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.3 })
+      const base = new THREE.Mesh(baseGeometry, baseMaterial)
+      base.position.y = -3.2
+      base.receiveShadow = true
+      resources.push(baseGeometry, baseMaterial)
+      group.add(base)
+
+      const ganGeometry = new THREE.SphereGeometry(0.9, quality === 'high' ? 32 : 18, quality === 'high' ? 24 : 12)
+      const ganMaterial = new THREE.MeshPhysicalMaterial({
+        color: ELEMENT_COLORS[ganKey],
+        emissive: ELEMENT_COLORS[ganKey],
+        emissiveIntensity: pillar.key === 'day' ? 1.2 : 0.7,
+        roughness: 0.1,
+        metalness: 0.9,
+        clearcoat: 1,
+      })
+      const ganSphere = new THREE.Mesh(ganGeometry, ganMaterial)
+      ganSphere.position.y = 4.8
+      ganSphere.userData.nodeId = `pillar:${pillar.key}`
+      resources.push(ganGeometry, ganMaterial)
+      group.add(ganSphere)
+      clickable.push(ganSphere)
+
+      const zhiGeometry = new THREE.SphereGeometry(0.8, quality === 'high' ? 32 : 18, quality === 'high' ? 24 : 12)
+      const zhiMaterial = new THREE.MeshPhysicalMaterial({
+        color: ELEMENT_COLORS[zhiKey],
+        emissive: ELEMENT_COLORS[zhiKey],
+        emissiveIntensity: 0.7,
+        roughness: 0.15,
+        metalness: 0.8,
+        clearcoat: 1,
+      })
+      const zhiSphere = new THREE.Mesh(zhiGeometry, zhiMaterial)
+      zhiSphere.position.y = 1.8
+      zhiSphere.userData.nodeId = `pillar:${pillar.key}`
+      resources.push(zhiGeometry, zhiMaterial)
+      group.add(zhiSphere)
+      clickable.push(zhiSphere)
+
+      if (pillar.key === 'day') {
+        const crownGeometry = new THREE.TorusGeometry(1.3, 0.05, 16, 60)
+        const crownMaterial = new THREE.MeshBasicMaterial({
+          color: 0xf59e0b,
+          transparent: true,
+          opacity: 0.9,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+        const crown = new THREE.Mesh(crownGeometry, crownMaterial)
+        crown.rotation.x = Math.PI / 2
+        crown.position.y = 4.8
+        crown.userData.isCrown = true
+        resources.push(crownGeometry, crownMaterial)
+        group.add(crown)
+      }
+
+      const labelHost = style(document.createElement('div'), {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        gap: '5px',
+        textAlign: 'center',
+      })
+      labelHost.className = 'bazi-3d-label'
+      labelHost.append(
+        chip(pillar.label, '#a5b4fc', 'rgba(15, 23, 42, 0.9)', 'rgba(99, 102, 241, 0.5)'),
+        characterLabel(pillar.gan, ELEMENT_HEX[ganKey]),
+        characterLabel(pillar.zhi, ELEMENT_HEX[zhiKey], 24, 'cyan'),
+        chip(pillar.shishenGan, '#fbbf24', 'rgba(15, 23, 42, 0.84)', 'rgba(245, 158, 11, 0.5)'),
+      )
+      const label = new CSS2DObject(labelHost)
+      label.position.set(0, 3.2, 0)
+      group.add(label)
+      pillarGroup.add(group)
+    })
+
+    const signalGroup = new THREE.Group()
+    scene.add(signalGroup)
+    const signalParticles: Array<{ mesh: Mesh, p1: Vector, p2: Vector, offset: number }> = []
+    const seenSignals = new Set<string>()
+    result.relations
+      .filter(relation => relation.group === '地支' && relation.positions.length >= 2)
+      .filter((relation) => {
+        const id = `${relation.value}${relation.type}`
+        if (seenSignals.has(id)) return false
+        seenSignals.add(id)
+        return true
+      })
+      .slice(0, 2)
+      .forEach((relation) => {
+        const points = relation.positions
+          .map(label => PILLAR_KEYS.findIndex(key => result.pillars.find(pillar => pillar.key === key)?.label === label))
+          .filter(index => index >= 0)
+          .map(index => pillarCoordinates[index]!.clone())
+        if (points.length < 2) return
+        const supportive = /合|会/.test(relation.type)
+        const color = supportive ? 0x22c55e : 0xf43f5e
+        for (let index = 0; index < points.length - 1; index += 1) {
+          const p1 = points[index]!
+          const p2 = points[index + 1]!
+          const geometry = new THREE.BufferGeometry().setFromPoints([p1, p2])
+          const material = new THREE.LineDashedMaterial({ color, dashSize: 0.4, gapSize: 0.2 })
+          const line = new THREE.Line(geometry, material)
+          line.computeLineDistances()
+          resources.push(geometry, material)
+          signalGroup.add(line)
+
+          const particleCount = quality === 'high' ? 4 : 2
+          for (let particleIndex = 0; particleIndex < particleCount; particleIndex += 1) {
+            const particleGeometry = new THREE.SphereGeometry(0.1, 8, 8)
+            const particleMaterial = new THREE.MeshBasicMaterial({ color })
+            const mesh = new THREE.Mesh(particleGeometry, particleMaterial)
+            resources.push(particleGeometry, particleMaterial)
+            signalGroup.add(mesh)
+            signalParticles.push({ mesh, p1, p2, offset: particleIndex / particleCount })
+          }
+        }
+
+        const labelHost = chip(
+          `${relation.value}${relation.type}`,
+          supportive ? '#6ee7b7' : '#fda4af',
+          supportive ? 'rgba(6, 30, 23, 0.88)' : 'rgba(44, 6, 18, 0.88)',
+          supportive ? 'rgba(34, 197, 94, 0.6)' : 'rgba(244, 63, 94, 0.6)',
+        )
+        const label = new CSS2DObject(labelHost)
+        label.position.copy(points[0]!.clone().add(points[points.length - 1]!).multiplyScalar(0.5).setY(2.5))
+        signalGroup.add(label)
+      })
+
+    const dayunGroup = new THREE.Group()
+    scene.add(dayunGroup)
+    const dayunZ = 8.5
+    const dayunY = -4.5
+    const dayunStartX = -15
+    const dayunStep = Math.min(3.8, 34 / Math.max(result.dayuns.length - 1, 1))
+    const riverPoints: Vector[] = []
+    for (let index = 0; index <= 30; index += 1) {
+      const t = index / 30
+      riverPoints.push(new THREE.Vector3(dayunStartX - 2 + t * 34, dayunY + Math.sin(t * Math.PI * 2) * 0.4, dayunZ))
+    }
+    const riverCurve = new THREE.CatmullRomCurve3(riverPoints)
+    const riverGeometry = new THREE.TubeGeometry(riverCurve, 64, 0.08, 8, false)
+    const riverMaterial = new THREE.MeshBasicMaterial({
+      color: 0x6366f1,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+    resources.push(riverGeometry, riverMaterial)
+    dayunGroup.add(new THREE.Mesh(riverGeometry, riverMaterial))
+
+    result.dayuns.forEach((dayun) => {
+      const x = dayunStartX + dayun.index * dayunStep
+      const key = ganElement(dayun.ganzhi[0])
+      const group = new THREE.Group()
+      group.position.set(x, dayunY + 0.6, dayunZ)
+      const steleGeometry = new THREE.BoxGeometry(0.65, 1.5, 0.3)
+      const steleMaterial = new THREE.MeshPhysicalMaterial({
+        color: ELEMENT_COLORS[key],
+        emissive: ELEMENT_COLORS[key],
+        emissiveIntensity: dayun.isCurrent ? 1 : 0.3,
+        roughness: 0.1,
+        metalness: 0.8,
+        clearcoat: 1,
+      })
+      const stele = new THREE.Mesh(steleGeometry, steleMaterial)
+      stele.position.y = 0.75
+      stele.castShadow = true
+      stele.userData.nodeId = `dayun:${dayun.index}`
+      resources.push(steleGeometry, steleMaterial)
+      group.add(stele)
+      clickable.push(stele)
+      nodes.set(`dayun:${dayun.index}`, stele)
+
+      if (dayun.isCurrent) {
+        const ringGeometry = new THREE.TorusGeometry(0.75, 0.04, 12, 32)
+        const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.9 })
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+        ring.rotation.x = Math.PI / 2
+        ring.position.y = 1.6
+        ring.userData.isCurrentRing = true
+        resources.push(ringGeometry, ringMaterial)
+        group.add(ring)
+      }
+
+      const age = document.createElement('div')
+      age.textContent = `${dayun.startAge}-${dayun.endAge}`
+      style(age, { color: '#94a3b8', fontSize: '9px' })
+      const ganzhi = document.createElement('div')
+      ganzhi.textContent = dayun.ganzhi
+      style(ganzhi, { color: dayun.isCurrent ? '#fcd34d' : '#e2e8f0', fontSize: '13px', fontWeight: '800' })
+      const tenGod = document.createElement('div')
+      tenGod.textContent = dayun.shishenGan
+      style(tenGod, { color: '#a5b4fc', fontSize: '9px' })
+      const labelHost = style(document.createElement('div'), {
+        padding: '4px 6px',
+        border: dayun.isCurrent ? '1px solid rgba(251, 191, 36, 0.85)' : '1px solid rgba(30, 41, 59, 0.9)',
+        borderRadius: '6px',
+        background: dayun.isCurrent ? 'rgba(48, 24, 3, 0.92)' : 'rgba(2, 6, 23, 0.84)',
+        fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+        textAlign: 'center',
+      })
+      labelHost.className = 'bazi-3d-label'
+      labelHost.append(age, ganzhi, tenGod)
+      const label = new CSS2DObject(labelHost)
+      label.position.set(0, 2.3, 0)
+      group.add(label)
+      dayunGroup.add(group)
+    })
+
+    const currentDayun = result.dayuns.find(dayun => dayun.isCurrent)
+    const currentYear = currentDayun?.liunian.find(year => year.isCurrent)
+    if (currentDayun && currentYear) {
+      const x = dayunStartX + currentDayun.index * dayunStep
+      const position = new THREE.Vector3(x, dayunY + 3, dayunZ + 2.5)
+      const geometry = new THREE.SphereGeometry(0.55, 32, 24)
+      const material = new THREE.MeshPhysicalMaterial({
+        color: 0xf43f5e,
+        emissive: 0xf43f5e,
+        emissiveIntensity: 1.5,
+        roughness: 0.1,
+        metalness: 0.5,
+        clearcoat: 1,
+      })
+      currentYearMesh = new THREE.Mesh(geometry, material)
+      currentYearMesh.position.copy(position)
+      currentYearMesh.userData.nodeId = `liunian:${currentYear.year}`
+      resources.push(geometry, material)
+      dayunGroup.add(currentYearMesh)
+      clickable.push(currentYearMesh)
+      nodes.set(`liunian:${currentYear.year}`, currentYearMesh)
+
+      const linkGeometry = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(x, dayunY + 1.5, dayunZ),
+        position,
+      ])
+      const linkMaterial = new THREE.LineBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.6 })
+      resources.push(linkGeometry, linkMaterial)
+      dayunGroup.add(new THREE.Line(linkGeometry, linkMaterial))
+
+      const caption = document.createElement('div')
+      caption.textContent = `${currentYear.year}`
+      style(caption, { color: '#fecdd3', fontSize: '9px', fontWeight: '700' })
+      const ganzhi = document.createElement('div')
+      ganzhi.textContent = currentYear.ganzhi
+      style(ganzhi, { color: '#fcd34d', fontSize: '13px', fontWeight: '900' })
+      const labelHost = style(document.createElement('div'), {
+        padding: '5px 8px',
+        border: '1px solid rgba(244, 63, 94, 0.75)',
+        borderRadius: '6px',
+        background: 'rgba(52, 7, 20, 0.92)',
+        fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+        textAlign: 'center',
+      })
+      labelHost.className = 'bazi-3d-label'
+      labelHost.append(caption, ganzhi)
+      const label = new CSS2DObject(labelHost)
+      label.position.set(position.x, position.y + 1.2, position.z)
+      dayunGroup.add(label)
     }
 
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
 
-    function relatedElementKeys(hoveredId: string | null) {
-      const hovered = model.characters.find(character => character.id === hoveredId)
-      if (!hovered) return null
-      return new Set([
-        hovered.elementKey,
-        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 1) % GENERATION_ORDER.length]!,
-        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 4) % GENERATION_ORDER.length]!,
-        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 2) % GENERATION_ORDER.length]!,
-        GENERATION_ORDER[(GENERATION_ORDER.indexOf(hovered.elementKey) + 3) % GENERATION_ORDER.length]!,
-      ])
-    }
-
-    function setPointer(event: PointerEvent) {
-      const bounds = root.getBoundingClientRect()
+    function pickNode(event: MouseEvent) {
+      if (!renderer || event.target !== renderer.domElement) return null
+      const bounds = renderer.domElement.getBoundingClientRect()
       pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1
       pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1
-    }
-
-    function hoverFromPointer(event: PointerEvent) {
-      if (tunnelDragPointerId !== null) {
-        moveTunnelDrag(event)
-        return
-      }
-      setPointer(event)
       raycaster.setFromCamera(pointer, camera)
-      if (state.scene.value === 'tunnel') {
-        state.hoveredCharacterId.value = null
-        if (event.type !== 'click') return
-        const tunnelHits = raycaster.intersectObjects(tunnelHitMeshes, false)
-        const hit = tunnelHits[0]
-        const dayunIndexes = hit?.object.userData.dayunIndexes as number[] | undefined
-        const dayunIndex = hit?.instanceId !== undefined
-          ? dayunIndexes?.[hit.instanceId]
-          : hit?.object.userData.dayunIndex as number | undefined
-        if (dayunIndex !== undefined) state.selectedDayunIndex.value = dayunIndex
-        return
-      }
-      if (state.scene.value === 'compass') {
-        const plaqueHits = raycaster.intersectObjects(plaqueHitMeshes, false)
-        const pillarKey = plaqueHits[0]?.object.userData.pillarKey as string | undefined
-        state.hoveredPillarKey.value = pillarKey ?? null
-        if (event.type === 'click') {
-          state.selectedPillarKey.value = pillarKey ?? null
-          if (!pillarKey) state.selectedElementKey.value = null
-        }
-        return
-      }
-      const hits = raycaster.intersectObjects(raycastMeshes, false)
-      const characterId = hits[0]?.object.userData.characterId as string | undefined
-      state.hoveredCharacterId.value = characterId ?? null
+      return raycaster.intersectObjects(clickable, false)[0]?.object.userData.nodeId as string | undefined ?? null
     }
 
-    function clearHover() {
-      state.hoveredCharacterId.value = null
-      state.hoveredPillarKey.value = null
+    function moveCamera(position: Vector, target: Vector) {
+      targetCameraPosition.copy(position)
+      targetCameraTarget.copy(target)
+      cameraAnimating = true
     }
 
-    function tunnelWheel(event: WheelEvent) {
-      if (state.scene.value !== 'tunnel') return
+    function focusNode(nodeId: string) {
+      const object = nodes.get(nodeId)
+      if (!object || !controls) return
+      const focus = object.getWorldPosition(new THREE.Vector3())
+      if (nodeId.startsWith('pillar:')) moveCamera(new THREE.Vector3(focus.x, 6, 14), focus)
+      else if (nodeId.startsWith('element:')) moveCamera(new THREE.Vector3(focus.x, 2, focus.z + 12), focus)
+      else if (nodeId.startsWith('dayun:') || nodeId.startsWith('liunian:')) moveCamera(new THREE.Vector3(focus.x, -1, focus.z + 10), focus)
+      else moveCamera(new THREE.Vector3(focus.x, focus.y + 2, focus.z + 12), focus)
+    }
+
+    function resetView() {
+      state.selectedNodeId.value = 'overview'
+      moveCamera(defaultCameraPosition, defaultCameraTarget)
+    }
+    resetViewAction = resetView
+
+    handlePointerMove = (event) => {
+      const nodeId = pickNode(event)
+      state.hoveredNodeId.value = nodeId
+      if (renderer) renderer.domElement.style.cursor = nodeId ? 'pointer' : 'grab'
+    }
+    handlePointerLeave = () => {
+      state.hoveredNodeId.value = null
+      if (renderer) renderer.domElement.style.cursor = 'grab'
+    }
+    handleClick = (event) => {
+      state.selectedNodeId.value = pickNode(event) ?? 'overview'
+    }
+    handleContextLost = (event) => {
       event.preventDefault()
-      state.tunnelProgress.value = Math.min(Math.max(state.tunnelProgress.value + event.deltaY / 1800, 0), 1)
+      animationEnabled = false
+      renderer?.setAnimationLoop(null)
+      state.state.value = 'static'
+      state.errorMessage.value = 'WebGL context lost'
     }
 
-    function tunnelCameraPosition(progress: number) {
-      const station = progress * Math.max(gateCount - 1, 0)
-      return new THREE.Vector3(0, 0, 1 - station * tunnelSpacing)
-    }
+    renderer.domElement.addEventListener('pointermove', handlePointerMove)
+    renderer.domElement.addEventListener('pointerleave', handlePointerLeave)
+    renderer.domElement.addEventListener('click', handleClick)
+    renderer.domElement.addEventListener('webglcontextlost', handleContextLost)
+    controls.addEventListener('start', () => {
+      controls!.autoRotate = false
+      if (autoRotateResume) window.clearTimeout(autoRotateResume)
+    })
+    controls.addEventListener('end', () => {
+      if (autoRotateResume) window.clearTimeout(autoRotateResume)
+      autoRotateResume = window.setTimeout(() => {
+        controls!.autoRotate = autoRotateEnabled && (!state.selectedNodeId.value || state.selectedNodeId.value === 'overview')
+      }, 3200)
+    })
 
-    function moveTunnelDrag(event: PointerEvent) {
-      if (tunnelDragPointerId !== event.pointerId) return
-      const bounds = root.getBoundingClientRect()
-      const delta = event.clientY - tunnelDragLastY
-      tunnelDragLastY = event.clientY
-      state.tunnelProgress.value = Math.min(
-        Math.max(state.tunnelProgress.value + delta / (bounds.height * 0.68), 0),
-        1,
-      )
-      const nearestGate = Math.round(state.tunnelProgress.value * Math.max(gateCount - 1, 0))
-      state.selectedDayunIndex.value = model.dayuns[nearestGate]?.index ?? state.selectedDayunIndex.value
-    }
-
-    function tunnelPointerDown(event: PointerEvent) {
-      if (state.scene.value !== 'tunnel' || !event.isPrimary) return
-      tunnelDragPointerId = event.pointerId
-      tunnelDragLastY = event.clientY
-      root.setPointerCapture(event.pointerId)
-    }
-
-    function tunnelPointerUp(event: PointerEvent) {
-      if (tunnelDragPointerId !== event.pointerId) return
-      tunnelDragPointerId = null
-      root.releasePointerCapture(event.pointerId)
-      const nearestGate = Math.round(state.tunnelProgress.value * Math.max(gateCount - 1, 0))
-      state.selectedDayunIndex.value = model.dayuns[nearestGate]?.index ?? state.selectedDayunIndex.value
-    }
+    stopSelectedWatcher = watch(() => state.selectedNodeId.value, (nodeId) => {
+      if (controls) controls.autoRotate = autoRotateEnabled && (!nodeId || nodeId === 'overview')
+      if (!nodeId || nodeId === 'overview') moveCamera(defaultCameraPosition, defaultCameraTarget)
+      else focusNode(nodeId)
+    })
 
     function resize() {
-      if (disposed || !root.clientWidth || !root.clientHeight) return
-      const nextWidth = root.clientWidth
-      const nextHeight = root.clientHeight
-      camera.aspect = nextWidth / nextHeight
+      if (disposed || !root.clientWidth || !root.clientHeight || !renderer || !labelRenderer || !controls) return
+      camera.aspect = root.clientWidth / root.clientHeight
       camera.updateProjectionMatrix()
-      renderer.setSize(nextWidth, nextHeight)
-      composer?.setSize(nextWidth, nextHeight)
-      bloomPass?.setSize(nextWidth, nextHeight)
+      renderer.setSize(root.clientWidth, root.clientHeight)
+      labelRenderer.setSize(root.clientWidth, root.clientHeight)
     }
-
     resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(root)
-    handlePointerMove = hoverFromPointer
-    handleClearHover = clearHover
-    handleWheel = tunnelWheel
-    handlePointerDown = tunnelPointerDown
-    handlePointerUp = tunnelPointerUp
-    root.addEventListener('pointermove', handlePointerMove)
-    root.addEventListener('pointerleave', handleClearHover)
-    root.addEventListener('click', handlePointerMove)
-    root.addEventListener('wheel', handleWheel, { passive: false })
-    root.addEventListener('pointerdown', handlePointerDown)
-    root.addEventListener('pointerup', handlePointerUp)
 
-    camera.position.set(0, 0, 7)
-    let hoverMix = 0
-    let interactionMix = 0
-    let previousFrameTime = performance.now()
-
-    function easeOutCubic(value: number) {
-      return 1 - (1 - value) ** 3
+    function updateAnimationLoop() {
+      if (disposed || !renderer) return
+      const shouldRender = animationEnabled && document.visibilityState === 'visible' && !signal?.aborted
+      renderer.setAnimationLoop(shouldRender ? frame : null)
     }
 
-    function phaseProgress(time: number, start: number, end: number) {
-      return easeOutCubic(Math.min(Math.max((time - start) / (end - start), 0), 1))
-    }
+    intersectionObserver = new IntersectionObserver((entries) => {
+      animationEnabled = entries.some(entry => entry.isIntersecting)
+      updateAnimationLoop()
+    }, { threshold: 0 })
+    intersectionObserver.observe(root)
+    handleVisibilityChange = () => updateAnimationLoop()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    function applyInstrumentTimeline() {
-      const time = timelineTime
-      const startup = phaseProgress(time, 0, 1.5)
-      state.timelineProgress.value = Math.min(time / 6, 1)
-      state.lifecycle.value = state.scene.value === 'tunnel'
-        ? 'tunnel'
-        : time >= 6 ? 'settled' : 'playing'
-      const instrumentScale = 0.86 + startup * 0.14
-      instrumentRoot.scale.setScalar(instrumentScale)
-      instrumentRings.forEach((ring, index) => {
-        const speed = 0.16 + index * 0.07
-        const direction = index % 2 === 0 ? 1 : -1
-        const settle = phaseProgress(time, 4.5 + index * 0.08, 5.7 + index * 0.08)
-        ring.rotation.z = reducedMotion ? 0 : direction * time * speed * (1 - settle * 0.88)
-      })
-      const meaningReveal = phaseProgress(time, 0.35, 2.2)
-      const meaningScale = 0.78 + meaningReveal * 0.22
-      heavenShell.scale.setScalar(meaningScale)
-      heavenCage.scale.setScalar(meaningScale)
-      heavenMaterial.opacity = 0.12 * meaningReveal
-      heavenCageMaterial.opacity = 0.035 * meaningReveal
-      heavenRings.forEach((ring, index) => {
-        const direction = index % 2 === 0 ? 1 : -1
-        const settle = phaseProgress(time, 4.6 + index * 0.1, 5.9 + index * 0.1)
-        ring.rotation.z = (index * 0.72)
-          + (reducedMotion ? 0 : direction * time * (0.14 + index * 0.05) * (1 - settle * 0.72))
-      })
-      earthRings.forEach((ring, index) => {
-        const settle = phaseProgress(time, 4.4 + index * 0.08, 5.8 + index * 0.08)
-        ring.rotation.z = (reducedMotion ? index * 0.2 : (index % 2 === 0 ? -1 : 1) * time * (0.08 + index * 0.04) * (1 - settle * 0.74))
-      })
-      const dayMasterDirection = Math.atan2(
-        ELEMENT_POSITIONS[model.dayMaster.elementKey][1]!,
-        ELEMENT_POSITIONS[model.dayMaster.elementKey][0]!,
-      )
-      const needleIntro = phaseProgress(time, 1.1, 3)
-      needleGroup.rotation.z = reducedMotion
-        ? dayMasterDirection
-        : THREE.MathUtils.lerp(dayMasterDirection - 1.15, dayMasterDirection, needleIntro)
-          + Math.sin(time * 0.8) * 0.035 * (1 - needleIntro * 0.5)
-      heavenCore.rotation.y = reducedMotion ? 0.4 : time * 0.24
-      heavenCore.scale.setScalar(0.92 + Math.sin(time * 1.1) * 0.04)
-      earthCore.rotation.x = reducedMotion ? 0.2 : time * 0.18
-      earthCore.rotation.y = reducedMotion ? 0.3 : time * 0.12
-      compassGem.rotation.x = reducedMotion ? 0.5 : time * 0.2
-      compassGem.rotation.y = reducedMotion ? 0.7 : time * 0.27
-
-      plaqueGroups.forEach((group, index) => {
-        const [targetX, targetY] = plaqueTargets[index]!
-        const entrance = phaseProgress(time, 1.5 + index * 0.16, 2.45 + index * 0.16)
-        group.position.set(
-          targetX,
-          targetY - (1 - entrance) * 0.52,
-          0.28 + (1 - entrance) * 0.34,
-        )
-        group.rotation.x = (1 - entrance) * -0.16
-        group.scale.setScalar(0.86 + entrance * 0.14)
-        plaqueMaterials[index]!.opacity = Math.min(startup + 0.18, 1) * (0.34 + entrance * 0.66)
-        plaqueLabels[index]!.forEach((label) => {
-          label.material.uniforms.uOpacity!.value = Math.min(startup * 0.8, entrance)
-        })
-      })
-
-      galaxy.visible = state.scene.value === 'galaxy'
-        || (state.scene.value === 'compass' && time >= 3 && time < 5.2)
-      const showGalaxyEffects = galaxy.visible
-      const showGalaxyIdentity = state.scene.value === 'galaxy'
-      clusterParticles.forEach((particle) => {
-        particle.points.visible = showGalaxyEffects || showGalaxyIdentity
-      })
-      relationLines.forEach((line) => {
-        line.mesh.visible = showGalaxyEffects || showGalaxyIdentity
-      })
-      starMeshes.forEach((object) => {
-        object.visible = showGalaxyIdentity
-      })
-      texts.forEach((text) => {
-        text.visible = showGalaxyIdentity
-      })
-      const shock = phaseProgress(time, 4.5, 5.55)
-      shockwave.visible = shock > 0 && shock < 1
-      shockwave.scale.setScalar(0.9 + shock * 2.5)
-      shockwaveMaterial.opacity = (1 - shock) * 0.38
-
-      if (state.scene.value === 'galaxy') {
-        camera.position.set(
-          reducedMotion ? 0.2 : Math.sin(time * 0.24) * 0.82,
-          reducedMotion ? 1.15 : 1.12 + Math.sin(time * 0.18) * 0.07,
-          9.55,
-        )
-        cameraTarget.set(0, 0.04, 0)
-      }
-      else {
-        const cameraZ = time < 1.5
-          ? 8.4 - phaseProgress(time, 0, 1.5) * 0.7
-          : time < 4.5
-            ? 7.7 - phaseProgress(time, 1.5, 4.5) * 0.35
-            : 7.35 - phaseProgress(time, 4.5, 6) * 0.35
-        camera.position.set(
-          reducedMotion ? 0 : Math.sin(time * 0.24) * 0.34 * (0.38 + 0.62 * (1 - phaseProgress(time, 4.5, 6))),
-          reducedMotion ? 0.08 : 0.3 - phaseProgress(time, 1.5, 6) * 0.14 + Math.sin(time * 0.17) * 0.06,
-          cameraZ,
-        )
-      }
-
-      if (time >= 6 && !state.introCompleted.value) state.introCompleted.value = true
-    }
-
-    state.timelineControl = {
-      seek: (seconds) => {
-        renderer.setAnimationLoop(null)
-        timelineTime = Math.min(Math.max(seconds, 0), 6)
-        timelinePaused = true
-        state.introCompleted.value = timelineTime >= 6
-        state.scene.value = 'compass'
-        applyScene('compass')
-        applyInstrumentTimeline()
-        if (composer) composer.render()
-        else renderer.render(scene, camera)
-        renderer.setAnimationLoop(frame)
-      },
-      replay: () => {
-        timelineTime = 0
-        timelinePaused = false
-        state.introCompleted.value = false
-        state.scene.value = 'compass'
-        state.lifecycle.value = 'playing'
-        applyScene('compass')
-        applyInstrumentTimeline()
-        renderer.setAnimationLoop(frame)
-      },
-      restoreOverview: () => {
-        timelinePaused = false
-        timelineTime = 6
-        state.introCompleted.value = true
-        applyScene('compass')
-        applyInstrumentTimeline()
-        renderer.setAnimationLoop(frame)
-      },
-    }
-    if (import.meta.dev) {
-      ;(window as unknown as { __bazi3dTimelineControl?: unknown }).__bazi3dTimelineControl = state.timelineControl
-    }
-
-    if (import.meta.dev) {
-      ;(window as unknown as { __bazi3dSeekTimeline?: (seconds: number) => void }).__bazi3dSeekTimeline = seconds => state.timelineControl?.seek(seconds)
-    }
-
-    if (import.meta.dev) {
-      ;(window as unknown as { __bazi3dDebug?: () => unknown }).__bazi3dDebug = () => JSON.parse(JSON.stringify({
-        characters: model.characters,
-        clusters: model.clusters,
-        pillars: model.pillars.map(pillar => ({
-          key: pillar.key,
-          ganzhi: pillar.ganzhi,
-          shishenGan: pillar.shishenGan,
-          hiddenStems: pillar.hiddenStems,
-          nayin: pillar.nayin,
-          position: plaqueGroups[model.pillars.findIndex(item => item.key === pillar.key)]?.position.toArray(),
-        })),
-        selectedPillarKey: state.selectedPillarKey.value,
-        selectedElementKey: state.selectedElementKey.value,
-        dayuns: model.dayuns.map(dayun => ({
-          index: dayun.index,
-          ganzhi: dayun.ganzhi,
-          isCurrent: dayun.isCurrent,
-          liunianCount: dayun.liunianCount,
-        })),
-        tunnel: {
-          gateCount,
-          tickCount: gateTicks.count,
-          particleCount: clusterParticles.reduce(
-            (total, particle) => total + Number(particle.points.geometry.getAttribute('position').count),
-            0,
-          ),
-          entryProgress: state.tunnelEntryProgress.value,
-          progress: state.tunnelProgress.value,
-          currentGate: model.dayuns.find(dayun => dayun.isCurrent)?.index ?? null,
-        },
-        rendererInfo: {
-          geometries: renderer.info.memory.geometries,
-          textures: renderer.info.memory.textures,
-          calls: renderer.info.render.calls,
-        },
-      }))
-    }
-
+    const clock = new THREE.Clock()
     function frame() {
-      if (disposed) return
-      const frameTime = performance.now()
-      const delta = Math.min((frameTime - previousFrameTime) / 1000, 1 / 24)
-      const elapsed = frameTime / 1000
-      previousFrameTime = frameTime
-      if (state.replayRequested.value !== replayToken) {
-        replayToken = state.replayRequested.value
-        timelineTime = 0
-        timelinePaused = false
-        state.scene.value = 'compass'
-        state.lifecycle.value = 'playing'
-      }
-      const hoveredId = state.hoveredCharacterId.value
-      const hovered = model.characters.find(character => character.id === hoveredId) ?? null
-      const relatedKeys = relatedElementKeys(hoveredId)
-      hoverMix += ((hovered ? 1 : 0) - hoverMix) * Math.min(delta * 9, 1)
-
+      if (disposed || !renderer || !controls || !labelRenderer) return
+      const delta = clock.getDelta()
+      const elapsed = clock.getElapsedTime()
       if (!reducedMotion) {
-        if (galaxy.visible) {
-          galaxy.rotation.x = -0.1 + Math.sin(elapsed * 0.11) * 0.035
-          galaxy.rotation.y = Math.sin(elapsed * 0.13) * 0.17
-        }
+        stars.rotation.y = elapsed * 0.015
+        floatParticles.rotation.y = elapsed * 0.02
       }
-
-      if (tunnel.visible) {
-        if (state.tunnelEntryProgress.value < 1) {
-          const next = Math.min(1, state.tunnelEntryProgress.value + delta / 1.5)
-          state.tunnelEntryProgress.value = next
-          const progress = phaseProgress(next, 0, 1)
-          if (progress < 0.48) {
-            camera.position.set(
-              THREE.MathUtils.lerp(0, 0, phaseProgress(progress, 0, 0.48)),
-              THREE.MathUtils.lerp(0.18, 0, phaseProgress(progress, 0, 0.48)),
-              THREE.MathUtils.lerp(7, 0.65, phaseProgress(progress, 0, 0.48)),
-            )
-            cameraTarget.set(0, 0, -2)
-          }
-          else {
-            const target = tunnelCameraPosition(state.tunnelProgress.value)
-            camera.position.copy(target.clone().lerp(new THREE.Vector3(0, 0, 0.65), 1 - phaseProgress(progress, 0.48, 1)))
-            cameraTarget.set(0, 0, camera.position.z - 3)
-          }
-          if (next >= 1) state.lifecycle.value = 'tunnel'
-        }
-        else {
-          camera.position.copy(tunnelCameraPosition(state.tunnelProgress.value))
-          cameraTarget.set(0, 0, camera.position.z - 3)
-        }
-        state.lifecycle.value = 'tunnel'
-
-        model.dayuns.forEach((dayun, gateIndex) => {
-          const selected = dayun.index === state.selectedDayunIndex.value
-          gateDummy.position.set(0, 0, -gateIndex * tunnelSpacing)
-          gateDummy.rotation.set(0, 0, 0)
-          gateDummy.scale.setScalar(selected ? 1.07 : dayun.isCurrent ? 1.035 : 1)
-          gateDummy.updateMatrix()
-          gateRings.setMatrixAt(gateIndex, gateDummy.matrix)
-          gateRings.setColorAt(
-            gateIndex,
-            new THREE.Color(dayun.isCurrent ? '#ffb43c' : selected ? '#d8ecff' : '#667795'),
-          )
-        })
-        gateRings.instanceMatrix.needsUpdate = true
-        if (gateRings.instanceColor) gateRings.instanceColor.needsUpdate = true
-        const currentGateIndex = model.dayuns.findIndex(dayun => dayun.isCurrent)
-        currentGateMarker.visible = currentGateIndex >= 0
-        if (currentGateIndex >= 0) {
-          currentGateMarker.position.set(0, 0, -currentGateIndex * tunnelSpacing - 0.6)
-          currentGateMarker.scale.setScalar(reducedMotion ? 1 : 1 + Math.sin(elapsed * 2.1) * 0.014)
-        }
-      }
-      else {
-        cameraTarget.set(0, 0, 0)
-      }
-
-      if (state.scene.value !== 'tunnel') {
-        if ((reducedMotion || state.introCompleted.value) && !timelinePaused) timelineTime = 6
-        else if (state.scene.value === 'compass' && !timelinePaused) timelineTime = Math.min(6, timelineTime + delta)
-        else timelineTime = 6
-        applyInstrumentTimeline()
-
-        const selectedPillarIndex = model.pillars.findIndex(
-          pillar => pillar.key === state.selectedPillarKey.value,
-        )
-        interactionMix += ((selectedPillarIndex >= 0 ? 1 : 0) - interactionMix) * Math.min(delta * 7, 1)
-        if (state.scene.value === 'compass' && selectedPillarIndex >= 0) {
-          const focus = plaqueGroups[selectedPillarIndex]!.position
-          camera.position.x = THREE.MathUtils.lerp(camera.position.x, focus.x * 0.34, interactionMix)
-          camera.position.y = THREE.MathUtils.lerp(camera.position.y, focus.y * 0.3 + 0.04, interactionMix)
-          camera.position.z = THREE.MathUtils.lerp(camera.position.z, 5.1, interactionMix)
-          cameraTarget.lerp(focus, interactionMix)
-        }
-
-        plaqueGroups.forEach((group, index) => {
-          const selected = index === selectedPillarIndex
-          const hovered = model.pillars[index]?.key === state.hoveredPillarKey.value
-          const targetZ = selected ? 0.64 : hovered ? 0.4 : 0.28
-          group.position.z += (targetZ - group.position.z) * Math.min(delta * 8, 1)
-          group.rotation.x += (selected ? -0.1 : 0 - group.rotation.x) * Math.min(delta * 8, 1)
-          const material = plaqueMaterials[index]!
-          material.opacity = selected
-            ? Math.max(material.opacity, 0.98)
-            : hovered ? Math.max(material.opacity, 0.82) : selectedPillarIndex >= 0 ? Math.max(material.opacity * 0.995, 0.46) : material.opacity
-          material.emissiveIntensity = selected ? 0.36 : hovered ? 0.22 : index === 2 ? 0.2 : 0.1
-        })
-
-        const selectedElement = state.selectedElementKey.value
-        if (state.scene.value === 'compass' && selectedElement) {
-          galaxy.visible = true
-          clusterParticles.forEach((particle) => {
-            particle.points.visible = particle.elementKey === selectedElement
-          })
-          relationLines.forEach((line) => {
-            line.mesh.visible = line.relationId.includes(selectedElement)
-          })
-          starMeshes.forEach(object => object.visible = false)
-          texts.forEach(text => text.visible = false)
-        }
-
-        if (selectedPillarIndex >= 0 && timelineTime >= 6) state.lifecycle.value = 'interactive'
-      }
-
-      for (const ring of compassRings) {
-        for (const label of ring.labels) label.quaternion.copy(camera.quaternion)
-      }
-      camera.lookAt(cameraTarget)
-
-      for (const particle of clusterParticles) {
-        const cluster = model.clusters.find(item => item.elementKey === particle.elementKey)
-        if (!cluster) continue
-        const active = !relatedKeys || relatedKeys.has(particle.elementKey)
-        const targetOpacity = active ? 0.68 : 0.05
-        particle.material.uniforms.uTime!.value = elapsed
-        particle.material.uniforms.uOpacity!.value += (targetOpacity - particle.material.uniforms.uOpacity!.value)
-          * Math.min(delta * 9, 1)
-        const baseScale = Number(particle.points.userData.clusterScale ?? 1)
-        const pulse = reducedMotion ? 1 : 1 + Math.sin(elapsed * 0.8 + particle.elementKey.length) * 0.015
-        particle.points.scale.setScalar(baseScale * pulse)
-        if (!reducedMotion) particle.points.rotation.y += delta * 0.05
-      }
-
-      characterOrbits.forEach((orbit) => {
-        const active = !relatedKeys || relatedKeys.has(orbit.elementKey)
-        orbit.group.rotation.y += delta * orbit.speed * (active ? 1 : 0.18)
+      shengParticles.forEach((particle) => {
+        particle.mesh.position.copy(particle.curve.getPoint((elapsed * 0.25 + particle.offset) % 1))
       })
-
-      for (const material of starMaterials) {
-        const mesh = starMaterials.indexOf(material)
-        const elementKey = model.characters[mesh]?.elementKey
-        const active = !relatedKeys || (elementKey ? relatedKeys.has(elementKey) : true)
-        material.opacity += ((active ? 0.98 : 0.08) - material.opacity) * Math.min(delta * 9, 1)
+      signalParticles.forEach((particle) => {
+        particle.mesh.position.lerpVectors(particle.p1, particle.p2, (elapsed * 0.5 + particle.offset) % 1)
+      })
+      pillarGroup.traverse((object) => {
+        if (object.userData.isCrown === true) object.rotation.z += delta * 1.5
+      })
+      dayunGroup.traverse((object) => {
+        if (object.userData.isCurrentRing === true) object.rotation.z += delta * 1.5
+      })
+      if (currentYearMesh && !reducedMotion) currentYearMesh.scale.setScalar(1 + Math.sin(elapsed * 3.5) * 0.08)
+      if (cameraAnimating) {
+        camera.position.lerp(targetCameraPosition, 0.06)
+        controls.target.lerp(targetCameraTarget, 0.06)
+        if (camera.position.distanceTo(targetCameraPosition) < 0.1) cameraAnimating = false
       }
-
-      for (const object of starMeshes) {
-        const mesh = object as ThreeNamespace.Mesh
-        if (mesh.isMesh !== true) continue
-        const elementKey = mesh.userData.elementKey as ElementKey
-        const active = !relatedKeys || relatedKeys.has(elementKey)
-        const baseScale = Number(mesh.userData.baseScale ?? 0.14)
-        mesh.scale.setScalar(baseScale * (hovered?.elementKey === elementKey ? 1.16 : active ? 1 : 0.92))
-      }
-
-      for (const glow of glowMaterials) {
-        const active = !relatedKeys || relatedKeys.has(glow.elementKey)
-        const baseOpacity = Number(glow.material.userData.baseOpacity ?? 0.58)
-        glow.material.opacity += ((active ? baseOpacity : 0.04) - glow.material.opacity) * Math.min(delta * 9, 1)
-      }
-
-      for (const text of texts) {
-        const elementKey = text.userData.elementKey as ElementKey
-        const active = !relatedKeys || relatedKeys.has(elementKey)
-        text.material.opacity += ((active ? 1 : 0.07) - text.material.opacity) * Math.min(delta * 9, 1)
-        text.quaternion.copy(camera.quaternion)
-      }
-
-      for (const gate of tunnelLabels) {
-        for (const label of gate.labels) label.quaternion.copy(camera.quaternion)
-      }
-
-      for (const line of relationLines) {
-        const active = !hovered || line.relationId.includes(hovered.elementKey)
-        const uniforms = line.material.uniforms
-        uniforms.uTime!.value = elapsed
-        const target = active ? 1 : 0.05
-        uniforms.uActive!.value += (target - uniforms.uActive!.value) * Math.min(delta * 9, 1)
-      }
-
-      if (composer) composer.render()
-      else renderer.render(scene, camera)
-
-      state.rendererStats.value = {
-        geometries: renderer.info.memory.geometries,
-        textures: renderer.info.memory.textures,
-        programs: renderer.info.programs?.length ?? 0,
-      }
+      controls.update()
+      renderer.render(scene, camera)
+      labelRenderer.render(scene, camera)
     }
 
-    renderer.setAnimationLoop(frame)
     state.state.value = 'ready'
+    state.lifecycle.value = reducedMotion ? 'settled' : 'playing'
+    animationEnabled = true
+    updateAnimationLoop()
+    state.selectedNodeId.value = 'overview'
   }
   catch (error) {
-    state.state.value = 'static'
-    state.errorMessage.value = error instanceof Error ? error.message : 'WebGL initialization failed'
     dispose()
-    return () => undefined
+    if (!signal?.aborted) {
+      state.state.value = 'static'
+      state.errorMessage.value = error instanceof Error ? error.message : 'WebGL initialization failed'
+    }
+    return { dispose: () => undefined, resetView: () => undefined, setAutoRotate: () => undefined }
   }
 
-  function dispose() {
-    disposed = true
-    renderer?.setAnimationLoop(null)
-    resizeObserver?.disconnect()
-    if (handlePointerMove) root.removeEventListener('pointermove', handlePointerMove)
-    if (handleClearHover) root.removeEventListener('pointerleave', handleClearHover)
-    if (handlePointerMove) root.removeEventListener('click', handlePointerMove)
-    if (handleWheel) root.removeEventListener('wheel', handleWheel)
-    if (handlePointerDown) root.removeEventListener('pointerdown', handlePointerDown)
-    if (handlePointerUp) root.removeEventListener('pointerup', handlePointerUp)
-    resources.slice().reverse().forEach(resource => resource.dispose())
-    renderer?.domElement.remove()
+  return {
+    dispose,
+    resetView: resetViewAction,
+    setAutoRotate: (enabled: boolean) => {
+      autoRotateEnabled = enabled && !reducedMotion
+      if (controls) controls.autoRotate = autoRotateEnabled
+    },
   }
-
-  return dispose
-}
-
-function particlePointsOpacity(points: ThreeNamespace.Points, target: number, delta: number) {
-  const material = points.material as ThreeNamespace.PointsMaterial
-  material.opacity += (target - material.opacity) * Math.min(delta * 8, 1)
 }
