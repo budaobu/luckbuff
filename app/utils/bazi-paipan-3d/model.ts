@@ -1,4 +1,9 @@
-import type { BaziChartPillar, BaziChartResult, BaziWuxingItem } from '~~/server/utils/tools/bazi-chart'
+import type {
+  BaziChartPillar,
+  BaziChartResult,
+  BaziRelationSignal,
+  BaziWuxingItem,
+} from '~~/server/utils/tools/bazi-chart'
 
 export type ElementKey = 'wood' | 'fire' | 'earth' | 'metal' | 'water'
 
@@ -13,6 +18,12 @@ const ELEMENT_BY_LABEL = new Map<string, ElementKey>([
 ])
 
 const PILLAR_KEYS = ['year', 'month', 'day', 'hour'] as const
+const PILLAR_KEY_BY_LABEL = new Map<string, (typeof PILLAR_KEYS)[number]>([
+  ['年柱', 'year'],
+  ['月柱', 'month'],
+  ['日柱', 'day'],
+  ['时柱', 'hour'],
+])
 
 export interface Bazi3DCharacter {
   id: string
@@ -37,11 +48,21 @@ export interface Bazi3DElementRelation {
   to: ElementKey
 }
 
+export interface Bazi3DNatalRelation {
+  id: string
+  type: string
+  value: string
+  impact: string
+  intensity: BaziRelationSignal['intensity']
+  pillarKeys: Array<(typeof PILLAR_KEYS)[number]>
+}
+
 export interface BaziPaipan3DModel {
   pillars: BaziChartPillar[]
   characters: Bazi3DCharacter[]
   clusters: Bazi3DCluster[]
   relations: Bazi3DElementRelation[]
+  natalRelations: Bazi3DNatalRelation[]
   dayMaster: Bazi3DCharacter
   dayuns: {
     index: number
@@ -52,6 +73,8 @@ export interface BaziPaipan3DModel {
     endAge: number
     isCurrent: boolean
     liunianCount: number
+    liunianIntensities: Array<'平稳' | '中等波动' | '高波动'>
+    liunianCurrentFlags: boolean[]
   }[]
 }
 
@@ -105,7 +128,30 @@ export function buildBaziPaipan3DModel(result: BaziChartResult): BaziPaipan3DMod
     endAge: dayun.endAge,
     isCurrent: dayun.isCurrent,
     liunianCount: dayun.liunian.length,
+    liunianIntensities: dayun.liunian.map(year => year.intensity),
+    liunianCurrentFlags: dayun.liunian.map(year => year.isCurrent),
   }))
 
-  return { pillars: result.pillars, characters, clusters, relations, dayMaster, dayuns }
+  const natalRelations = result.relations
+    .map(relation => ({
+      id: relation.id,
+      type: relation.type,
+      value: relation.value,
+      impact: relation.impact,
+      intensity: relation.intensity,
+      pillarKeys: [...new Set(relation.positions
+        .map(position => PILLAR_KEY_BY_LABEL.get(position))
+        .filter((key): key is (typeof PILLAR_KEYS)[number] => Boolean(key)))],
+    }))
+    .filter(relation => relation.pillarKeys.length >= 2)
+
+  return {
+    pillars: result.pillars,
+    characters,
+    clusters,
+    relations,
+    natalRelations,
+    dayMaster,
+    dayuns,
+  }
 }

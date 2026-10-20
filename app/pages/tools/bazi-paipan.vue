@@ -1,6 +1,21 @@
 <template>
-  <div class="bc-page">
-    <div class="bc-container">
+  <div class="bc-page" :class="{ 'is-result': phase === 'result' }">
+    <div v-if="phase === 'result' && result" class="bc-fullscreen">
+      <ClientOnly>
+        <BaziPaipan3DStage
+          :controller="bazi3D"
+          :result="result"
+          @back="resetToForm"
+        />
+        <template #fallback>
+          <div class="bc-3d-skeleton" aria-hidden="true">
+            <strong>{{ result.pillars.map(pillar => pillar.ganzhi).join(' ') }}</strong>
+          </div>
+        </template>
+      </ClientOnly>
+    </div>
+
+    <div v-else class="bc-container">
       <header class="bc-header">
         <div>
           <p class="bc-eyebrow">Bazi Chart</p>
@@ -47,38 +62,6 @@
         <p>{{ $t('baziChart.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" class="bc-report">
-        <ClientOnly>
-          <BaziPaipan3DStage
-            :controller="bazi3D"
-            :result="result"
-          />
-          <template #fallback>
-            <div class="bc-3d-skeleton" aria-hidden="true">
-              <strong>{{ result.pillars.map(pillar => pillar.ganzhi).join(' ') }}</strong>
-            </div>
-          </template>
-        </ClientOnly>
-        <BaziPaipanReport
-          :result="result"
-          :active-dayun-index="bazi3D.selectedDayunIndex.value"
-        />
-      </div>
-
-      <div v-if="phase === 'result'" class="bc-actions">
-        <UButton color="warning" variant="soft" @click="resetToForm">
-          <template #leading>
-            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-          </template>
-          {{ $t('common.retry') }}
-        </UButton>
-        <AppShareButton
-          tool="bazi-paipan"
-          :summary="shareSummary"
-          filename="bazi-paipan-poster.png"
-          :share-image-factory="createBaziPaipanPoster"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -140,13 +123,13 @@ async function handleSubmit(values: FormValues) {
   formValues.value = { ...values }
   lastFormValues.value = { ...values }
   phase.value = 'loading'
-  bazi3D.scene.value = 'compass'
+  void import('~/utils/bazi-paipan-3d/renderer')
+    .then(({ prefetchBaziPaipan3D }) => prefetchBaziPaipan3D())
+    .catch(() => undefined)
+  bazi3D.scene.value = 'orbit'
   bazi3D.introCompleted.value = false
-  bazi3D.hoveredCharacterId.value = null
-  bazi3D.hoveredPillarKey.value = null
-  bazi3D.selectedPillarKey.value = null
-  bazi3D.selectedElementKey.value = null
-  bazi3D.selectedDayunIndex.value = 0
+  bazi3D.hoveredNodeId.value = null
+  bazi3D.selectedNodeId.value = null
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
@@ -202,13 +185,10 @@ function handleSaveProfile(id: string, values: FormValues) {
 function resetToForm() {
   phase.value = 'form'
   result.value = null
-  bazi3D.scene.value = 'galaxy'
+  bazi3D.scene.value = 'orbit'
   bazi3D.introCompleted.value = false
-  bazi3D.hoveredCharacterId.value = null
-  bazi3D.hoveredPillarKey.value = null
-  bazi3D.selectedPillarKey.value = null
-  bazi3D.selectedElementKey.value = null
-  bazi3D.selectedDayunIndex.value = 0
+  bazi3D.hoveredNodeId.value = null
+  bazi3D.selectedNodeId.value = null
 }
 
 function formatOffset(minutes: number) {
@@ -274,6 +254,18 @@ useHead(() => ({
   min-height: 100vh;
   background: var(--surface-bg);
   color: var(--text-primary);
+}
+
+.bc-page.is-result {
+  overflow: hidden;
+}
+
+.bc-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  background: #04060d;
 }
 
 .bc-container {
@@ -396,7 +388,7 @@ useHead(() => ({
 
 .bc-3d-skeleton {
   display: grid;
-  min-height: clamp(360px, 48vh, 520px);
+  min-height: 100dvh;
   place-content: center;
   border: 1px solid var(--border-subtle);
   border-radius: 10px;
