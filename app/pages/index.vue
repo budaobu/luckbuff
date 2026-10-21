@@ -5,28 +5,9 @@
     <!-- HERO -->
     <section class="home-hero">
       <div class="home-hero-background">
-        <picture class="absolute inset-0 block">
-          <source
-            media="(max-width: 767px)"
-            srcset="/hero-bg-mobile-1x-2026-08.webp"
-            width="640"
-            height="1138"
-          >
-          <img
-            src="/hero-bg-2026-08.webp"
-            width="1600"
-            height="900"
-            alt=""
-            fetchpriority="high"
-            decoding="async"
-            class="hero-image absolute inset-0 h-full w-full object-cover"
-          >
-        </picture>
+        <HeroHexagramField />
         <div class="home-hero-overlay" />
       </div>
-
-      <!-- 玄学氛围动效 -->
-      <MysticField />
 
       <div class="relative z-10 mx-auto grid w-full max-w-7xl gap-8 px-6 py-20 lg:grid-cols-[minmax(0, 1fr)_370px] lg:items-center lg:gap-12 lg:pb-24 lg:pt-28">
         <div class="hero-copy">
@@ -392,20 +373,6 @@ useSeoMeta({
 
 useHead(() => ({
   link: [
-    {
-      rel: 'preload',
-      as: 'image',
-      imagesrcset: '/hero-bg-mobile-1x-2026-08.webp',
-      media: '(max-width: 767px)',
-      fetchpriority: 'high',
-    },
-    {
-      rel: 'preload',
-      as: 'image',
-      href: '/hero-bg-2026-08.webp',
-      media: '(min-width: 768px)',
-      fetchpriority: 'high',
-    },
   ],
   script: [
     {
@@ -443,21 +410,19 @@ useHead(() => ({
   pointer-events: none;
 }
 
-.hero-image {
-  object-position: 72% 58%;
-  filter: saturate(0.86) contrast(1.04);
-}
-
 .home-hero-overlay {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(90deg,
-      color-mix(in srgb, var(--surface-bg) 92%, transparent) 0%,
-      color-mix(in srgb, var(--surface-bg) 82%, transparent) 34%,
-      color-mix(in srgb, var(--surface-bg) 32%, transparent) 72%,
+      color-mix(in srgb, var(--surface-bg) 90%, transparent) 0%,
+      color-mix(in srgb, var(--surface-bg) 70%, transparent) 32%,
+      color-mix(in srgb, var(--surface-bg) 18%, transparent) 70%,
       transparent 100%),
-    var(--hero-overlay);
+    linear-gradient(180deg,
+      transparent 54%,
+      color-mix(in srgb, var(--surface-bg) 38%, transparent) 88%,
+      color-mix(in srgb, var(--surface-bg) 66%, transparent) 100%);
 }
 
 .hero-copy {
@@ -883,17 +848,12 @@ useHead(() => ({
     min-height: calc(100svh - 4rem);
   }
 
-  .hero-image {
-    object-position: 48% 62%;
-  }
-
   .home-hero-overlay {
     background:
       linear-gradient(180deg,
-        color-mix(in srgb, var(--surface-bg) 62%, transparent) 0%,
-        color-mix(in srgb, var(--surface-bg) 78%, transparent) 48%,
-        color-mix(in srgb, var(--surface-bg) 98%, transparent) 100%),
-      var(--hero-overlay);
+        color-mix(in srgb, var(--surface-bg) 38%, transparent) 0%,
+        color-mix(in srgb, var(--surface-bg) 48%, transparent) 58%,
+        color-mix(in srgb, var(--surface-bg) 82%, transparent) 100%);
   }
 
   .hero-actions {
