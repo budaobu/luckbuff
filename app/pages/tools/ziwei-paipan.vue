@@ -49,20 +49,10 @@
       </section>
 
       <div v-else-if="result" class="zc-report">
-        <ZiweiPaipanReport :result="result" />
-      </div>
-
-      <div v-if="phase === 'result'" class="zc-actions">
-        <UButton color="warning" variant="soft" @click="resetToForm">
-          <template #leading>
-            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-          </template>
-          {{ $t('common.retry') }}
-        </UButton>
-        <AppShareButton
-          tool="ziwei-paipan"
-          :summary="shareSummary"
-          filename="ziwei-paipan-poster.png"
+        <ZiweiPaipanStarScene
+          :key="result.generatedAt"
+          :result="result"
+          @retry="resetToForm"
         />
       </div>
     </div>
@@ -99,11 +89,6 @@ const formValues = ref<FormValues>({
   birthProvince: '',
 })
 const lastFormValues = ref<Partial<FormValues>>({})
-const shareSummary = computed(() => {
-  if (!result.value) return undefined
-  return `${result.value.summary.fiveElementsClass} · ${result.value.summary.soulPalace}`
-})
-
 async function resolveLocation(name: string) {
   const direct = await resolveCityCoords(name)
   if (direct) return { name, ...direct }
