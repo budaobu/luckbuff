@@ -123,20 +123,10 @@
       </section>
 
       <div v-else-if="result" class="wn-report">
-        <NatalAstroReport :result="result" />
-      </div>
-
-      <div v-if="phase === 'result'" class="wn-actions">
-        <UButton color="warning" variant="soft" @click="resetToForm">
-          <template #leading>
-            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-          </template>
-          {{ $t('common.retry') }}
-        </UButton>
-        <AppShareButton
-          tool="natal-astro"
-          :summary="shareSummary"
-          filename="natal-astro-poster.png"
+        <NatalAstroStarScene
+          :key="result.generatedAt"
+          :result="result"
+          @retry="resetToForm"
         />
       </div>
     </div>
@@ -170,11 +160,6 @@ const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<NatalAstroResult | null>(null)
 
 const isValid = computed(() => !!(form.gender && form.birthDate && form.birthTime && form.birthCity.trim()))
-const shareSummary = computed(() => {
-  if (!result.value) return undefined
-  return `ASC ${result.value.angles.ascendant} · ${result.value.points.length} ${t('natalAstro.summaryPoints')}`
-})
-
 watch(calendarDate, (value) => {
   form.birthDate = value ? value.toString() : ''
 })
