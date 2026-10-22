@@ -17,7 +17,7 @@ import type {
   VargaChart,
 } from '@prisri/jyotish'
 import type { VedicChart, VedicDashaPeriod, VedicPlanet, VedicValidation } from '~~/app/types/vedic'
-import type { VedicPaipanPeriod, VedicPaipanResult, VedicPaipanSignPosition, VedicPaipanVarga } from '~~/app/types/vedic-paipan'
+import type { VedicPaipanAntarPeriod, VedicPaipanPeriod, VedicPaipanResult, VedicPaipanSignPosition, VedicPaipanVarga } from '~~/app/types/vedic-paipan'
 
 export interface VedicPaipanInput {
   birthDate: string
@@ -216,6 +216,13 @@ function mapPeriod(period: any): VedicPaipanPeriod {
   }
 }
 
+function mapAntarPeriod(period: any): VedicPaipanAntarPeriod {
+  return {
+    ...mapPeriod(period),
+    pratyantars: period.pratyantars?.map(mapPeriod),
+  }
+}
+
 function mapVarga(varga: VargaChart | undefined, key: string, ascendantSign: number): VedicPaipanVarga | null {
   if (!varga) return null
   const ascendant = signPosition(varga.ascendant.rashi, varga.ascendant.rashi)
@@ -374,7 +381,7 @@ export function calculateVedicPaipan(input: VedicPaipanInput): VedicPaipanResult
       currentPratyantar: kundli.dasha.currentPratyantar ? mapPeriod(kundli.dasha.currentPratyantar) : undefined,
       mahadashas: kundli.dasha.mahadashas.map((mahadasha: any) => ({
         ...mapPeriod(mahadasha),
-        antars: mahadasha.antars?.map(mapPeriod),
+        antars: mahadasha.antars?.map(mapAntarPeriod),
       })),
     },
     vargas,

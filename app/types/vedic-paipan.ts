@@ -73,13 +73,17 @@ export interface VedicPaipanPeriod {
   progressPercent?: number
 }
 
+export interface VedicPaipanAntarPeriod extends VedicPaipanPeriod {
+  pratyantars?: VedicPaipanPeriod[]
+}
+
 export interface VedicPaipanDasha {
   birthNakshatra: string
   nakshatraPada: number
   currentMahadasha?: VedicPaipanPeriod
   currentAntar?: VedicPaipanPeriod
   currentPratyantar?: VedicPaipanPeriod
-  mahadashas: (VedicPaipanPeriod & { antars?: VedicPaipanPeriod[] })[]
+  mahadashas: (VedicPaipanPeriod & { antars?: VedicPaipanAntarPeriod[] })[]
 }
 
 export interface VedicPaipanVarga {

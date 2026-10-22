@@ -1,6 +1,23 @@
 <template>
-  <div class="vc-page">
-    <div class="vc-container">
+  <div class="vc-page" :class="{ 'is-result': phase === 'result' && !!result }">
+    <div v-if="phase === 'result' && result" class="vs-fullscreen">
+      <ClientOnly>
+        <VedicAstro3DStage
+          :result="result"
+          @back="resetToForm"
+          @recalculate="resetToForm"
+        />
+        <template #fallback>
+          <div class="vs-skeleton">
+            <strong>{{ result.birth.location.name }}</strong>
+            <span>{{ result.birth.localText }}</span>
+            <span>正在装载 3D 吠陀星象……</span>
+          </div>
+        </template>
+      </ClientOnly>
+    </div>
+
+    <div v-else class="vc-container">
       <header class="vc-header">
         <div>
           <p class="vc-eyebrow">Vedic Chart</p>
@@ -58,6 +75,7 @@
 import type { VedicFormData } from '~/types/vedic'
 import type { UserProfile } from '~/types/user'
 import type { VedicPaipanResult } from '~/types/vedic-paipan'
+import VedicAstro3DStage from '~/components/vedic-astro-3d/VedicAstro3DStage.vue'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -184,6 +202,11 @@ useHead(() => ({
 
 <style scoped>
 .vc-page { min-height: 100vh; background: var(--surface-bg); color: var(--text-primary); }
+.vc-page.is-result { background: #03040a; overflow: hidden; }
+.vs-fullscreen { position: fixed; inset: 0; z-index: 1100; }
+.vs-skeleton { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; background: #03040a; color: #e8b860; }
+.vs-skeleton strong { font-size: 15px; letter-spacing: .12em; }
+.vs-skeleton span { color: #8a8fa8; font-size: 12px; }
 .vc-container { max-width: 1120px; margin: 0 auto; padding: 40px 20px 72px; }
 .vc-header { display: grid; gap: 18px; margin-bottom: 30px; position: relative; text-align: center; }
 .vc-eyebrow { margin-bottom: 8px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
