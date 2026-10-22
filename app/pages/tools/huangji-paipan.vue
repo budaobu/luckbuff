@@ -184,27 +184,32 @@ useHead(() => ({
 
 <style scoped>
 .hjp-page { min-height: 100vh; background: var(--surface-bg); color: var(--text-primary); }
-.hjp-container { width: 100%; max-width: 1160px; margin: 0 auto; padding: 40px 20px 72px; }
+.hjp-container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 40px 20px 72px; }
 .hjp-header { display: grid; gap: 18px; margin-bottom: 30px; position: relative; text-align: center; }
 .hjp-eyebrow { margin-bottom: 8px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-.hjp-title { margin: 0; font-size: 28px; line-height: 1.2; }
+.hjp-title { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; }
 .hjp-subtitle { max-width: 680px; margin: 10px 0 0; color: var(--text-muted); font-size: 14px; line-height: 1.7; }
-.hjp-back { position: absolute; top: 0; left: 0; display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 13px; }
+.hjp-back { position: absolute; top: 0; left: 0; display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 13px; text-decoration: none; }
 .hjp-back:hover { color: var(--accent); }
-.hjp-form-wrap { display: grid; grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 20px; align-items: start; }
-.hjp-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-card); padding: 20px; }
-.hjp-form-wrap h2 { margin: 0 0 18px; font-size: 16px; }
+.hjp-form-wrap { display: grid; gap: 20px; }
+.hjp-card { border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-card); padding: 24px; }
+.hjp-form-wrap h2 { margin: 0 0 18px; font-size: 18px; font-weight: 700; }
 .hjp-form-wrap label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 13px; }
 .hjp-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
 .hjp-presets button { border: 1px solid var(--border-subtle); border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 12px; padding: 6px 10px; }
 .hjp-presets button:hover { border-color: var(--accent-border-hover); color: var(--accent); }
-.hjp-hints { display: grid; gap: 12px; }
-.hjp-hints article { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface-card); padding: 14px; }
+.hjp-hints { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.hjp-hints article { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--surface-card); padding: 14px 16px; }
 .hjp-hints p { margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
-.hjp-loading { display: grid; place-items: center; gap: 14px; padding: 80px 0; }
+.hjp-loading { display: grid; place-items: center; gap: 12px; min-height: 240px; }
 .hjp-loading p { margin: 0; color: var(--text-muted); font-size: 14px; }
 .hjp-loading-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent); animation: hjp-pulse 1.2s ease-in-out infinite; }
-.hjp-actions { display: flex; justify-content: center; gap: 12px; margin-top: 28px; }
+.hjp-actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
 @keyframes hjp-pulse { 0%, 100% { opacity: .3; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.1); } }
-@media (max-width: 860px) { .hjp-form-wrap { grid-template-columns: 1fr; } .hjp-back { position: static; justify-self: center; } }
+@media (max-width: 900px) {
+  .hjp-container { padding: 28px 16px 56px; }
+  .hjp-title { font-size: 24px; }
+  .hjp-back { position: static; justify-self: center; }
+  .hjp-hints { grid-template-columns: 1fr; }
+}
 </style>

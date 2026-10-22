@@ -20,14 +20,21 @@
           <div class="hd-form-grid">
             <label>
               <span>{{ $t('profileForm.birthDate') }} <i>*</i></span>
-              <UInput
-                v-model="form.birthDate"
-                type="date"
-                color="warning"
-                required
-                class="w-full"
-                :ui="{ base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] text-[var(--text-primary)]' }"
-              />
+              <UPopover>
+                <UButton
+                  type="button"
+                  color="neutral"
+                  variant="outline"
+                  class="w-full justify-start"
+                  :class="{ 'hd-placeholder': !form.birthDate }"
+                >
+                  <UIcon name="i-heroicons-calendar" class="mr-2 h-4 w-4" />
+                  {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+                </UButton>
+                <template #content>
+                  <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                </template>
+              </UPopover>
             </label>
 
             <label>
@@ -107,26 +114,32 @@
 
       <div v-else-if="result" class="hd-report">
         <HumanDesignReport :result="result" />
-        <div class="hd-actions">
-          <UButton color="warning" variant="soft" @click="resetToForm">
-            <template #leading>
-              <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-            </template>
-            {{ $t('common.retry') }}
-          </UButton>
-        </div>
+      </div>
+      <div v-if="phase === 'result'" class="hd-actions">
+        <UButton color="warning" variant="soft" @click="resetToForm">
+          <template #leading>
+            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
+          </template>
+          {{ $t('common.retry') }}
+        </UButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import type { DateValue } from '@internationalized/date'
 import type { HumanDesignChartResult } from '~~/server/utils/tools/human-design'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
+
+const tz = getLocalTimeZone()
+const dateFormatter = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : 'zh-CN', { dateStyle: 'long' }))
+const calendarDate = shallowRef<DateValue>()
 
 interface FormValues {
   birthDate: string
@@ -178,6 +191,10 @@ const timezoneOptions = computed(() => {
     items.unshift({ label: `${t('humanDesign.deviceTimezone')} · ${detectedTimezone.value}`, value: detectedTimezone.value })
   }
   return items
+})
+
+watch(calendarDate, (value) => {
+  form.birthDate = value ? value.toString() : ''
 })
 
 onMounted(() => {
@@ -295,13 +312,13 @@ useHead(() => ({
 .hd-header {
   position: relative;
   display: grid;
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 18px;
+  margin-bottom: 30px;
   text-align: center;
 }
 
 .hd-eyebrow {
-  margin-bottom: 7px;
+  margin-bottom: 8px;
   color: var(--accent);
   font-size: 12px;
   font-weight: 700;
@@ -312,7 +329,7 @@ useHead(() => ({
 .hd-title {
   margin: 0;
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -333,20 +350,23 @@ useHead(() => ({
   gap: 6px;
   color: var(--text-muted);
   font-size: 13px;
+  text-decoration: none;
+}
+
+.hd-back:hover {
+  color: var(--accent);
 }
 
 .hd-form-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-  gap: 22px;
-  align-items: start;
+  gap: 20px;
 }
 
 .hd-card {
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   background: var(--surface-card);
-  padding: 22px;
+  padding: 24px;
 }
 
 .hd-form {
@@ -356,7 +376,8 @@ useHead(() => ({
 
 .hd-form h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .hd-form-grid {
@@ -365,8 +386,11 @@ useHead(() => ({
   gap: 14px;
 }
 
-.hd-form label,
-.hd-hint {
+.hd-placeholder {
+  color: var(--text-placeholder);
+}
+
+.hd-form label {
   display: grid;
   gap: 7px;
 }
@@ -384,32 +408,38 @@ useHead(() => ({
 
 .hd-hints {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .hd-hint {
-  padding: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px 16px;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--surface-card) 70%, transparent);
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.hd-hint .w-4 {
+.hd-hint .ui-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
   color: var(--accent);
 }
 
 .hd-hint p {
   margin: 0;
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.6;
 }
 
 .hd-loading {
   display: grid;
   justify-items: center;
-  gap: 16px;
-  padding: 72px 0;
+  gap: 12px;
+  min-height: 240px;
 }
 
 .hd-loading-dot {
@@ -428,12 +458,14 @@ useHead(() => ({
 
 .hd-report {
   display: grid;
-  gap: 18px;
 }
 
 .hd-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+  flex-wrap: wrap;
 }
 
 @keyframes pulse {
@@ -441,8 +473,21 @@ useHead(() => ({
   50% { opacity: 1; transform: scale(1); }
 }
 
-@media (max-width: 860px) {
-  .hd-form-layout {
+@media (max-width: 900px) {
+  .hd-container {
+    padding: 28px 16px 56px;
+  }
+
+  .hd-title {
+    font-size: 24px;
+  }
+
+  .hd-back {
+    position: static;
+    justify-self: center;
+  }
+
+  .hd-hints {
     grid-template-columns: 1fr;
   }
 
