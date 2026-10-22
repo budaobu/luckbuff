@@ -105,19 +105,19 @@
 
       <div v-else-if="result" class="tap-report">
         <ThaiAstroPaipanReport :result="result" />
-        <div class="tap-actions">
-          <UButton color="warning" variant="soft" @click="resetToForm">
-            <template #leading>
-              <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-            </template>
-            {{ $t('common.retry') }}
-          </UButton>
-          <AppShareButton
-            tool="thai-astro-paipan"
-            :summary="shareSummary"
-            filename="thai-astro-paipan-poster.png"
-          />
-        </div>
+      </div>
+      <div v-if="phase === 'result'" class="tap-actions">
+        <UButton color="warning" variant="soft" @click="resetToForm">
+          <template #leading>
+            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
+          </template>
+          {{ $t('common.retry') }}
+        </UButton>
+        <AppShareButton
+          tool="thai-astro-paipan"
+          :summary="shareSummary"
+          filename="thai-astro-paipan-poster.png"
+        />
       </div>
     </div>
   </div>
@@ -249,13 +249,13 @@ useHead(() => ({
 .tap-header {
   position: relative;
   display: grid;
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 18px;
+  margin-bottom: 30px;
   text-align: center;
 }
 
 .tap-eyebrow {
-  margin-bottom: 7px;
+  margin-bottom: 8px;
   color: var(--accent);
   font-size: 12px;
   font-weight: 700;
@@ -266,7 +266,7 @@ useHead(() => ({
 .tap-title {
   margin: 0;
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
 }
 
@@ -287,6 +287,7 @@ useHead(() => ({
   gap: 6px;
   color: var(--text-muted);
   font-size: 13px;
+  text-decoration: none;
 }
 
 .tap-back:hover {
@@ -295,13 +296,11 @@ useHead(() => ({
 
 .tap-form-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-  gap: 22px;
-  align-items: start;
+  gap: 20px;
 }
 
 .tap-card {
-  padding: 22px;
+  padding: 24px;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   background: var(--surface-card);
@@ -314,7 +313,8 @@ useHead(() => ({
 
 .tap-form h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .tap-form-grid {
@@ -323,8 +323,7 @@ useHead(() => ({
   gap: 14px;
 }
 
-.tap-form label,
-.tap-hint {
+.tap-form label {
   display: grid;
   gap: 7px;
 }
@@ -342,32 +341,38 @@ useHead(() => ({
 
 .tap-hints {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .tap-hint {
-  padding: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px 16px;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--surface-card) 70%, transparent);
+  background: var(--surface-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.tap-hint .w-4 {
+.tap-hint .ui-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
   color: var(--accent);
 }
 
 .tap-hint p {
   margin: 0;
-  color: var(--text-muted);
-  font-size: 12px;
-  line-height: 1.6;
 }
 
 .tap-loading {
   display: grid;
   justify-items: center;
-  gap: 16px;
-  padding: 72px 0;
+  gap: 12px;
+  min-height: 240px;
 }
 
 .tap-loading span {
@@ -380,13 +385,13 @@ useHead(() => ({
 
 .tap-report {
   display: grid;
-  gap: 30px;
 }
 
 .tap-actions {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 26px;
   flex-wrap: wrap;
 }
 
@@ -395,18 +400,23 @@ useHead(() => ({
   50% { opacity: 1; transform: scale(1); }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 900px) {
   .tap-container {
     padding: 28px 16px 56px;
   }
 
-  .tap-form-layout {
-    grid-template-columns: 1fr;
+  .tap-title {
+    font-size: 24px;
   }
 
   .tap-back {
     position: static;
+    justify-self: center;
     justify-content: center;
+  }
+
+  .tap-hints {
+    grid-template-columns: 1fr;
   }
 
   .tap-form-grid {
