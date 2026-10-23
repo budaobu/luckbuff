@@ -25,6 +25,7 @@ export default defineConfig({
       name: 'qizheng-kage-desktop',
       use: {
         ...devices['Desktop Chrome'],
+        hasTouch: false,
         viewport: { width: 1440, height: 900 },
         deviceScaleFactor: 1,
       },
