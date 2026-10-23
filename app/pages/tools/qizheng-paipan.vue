@@ -1,11 +1,17 @@
 <template>
   <div class="qzp-page">
+    <ClientOnly>
+      <QizhengPaipanBackdrop />
+    </ClientOnly>
     <div class="qzp-container">
-      <header class="qzp-header">
-        <div>
+      <header class="qzp-header" :class="{ 'is-result': phase === 'result' }">
+        <div class="qzp-hero-copy">
           <p class="qzp-eyebrow">Qi Zheng Si Yu</p>
           <h1 class="qzp-title">{{ $t('qizhengChart.title') }}</h1>
           <p class="qzp-subtitle">{{ $t('qizhengChart.subtitle') }}</p>
+          <span class="qzp-scroll-cue">
+            <UIcon name="i-heroicons-arrow-down" class="h-4 w-4" />
+          </span>
         </div>
         <NuxtLink :to="localePath('/chart')" class="qzp-back">
           <UIcon name="i-heroicons-arrow-left" class="h-3.5 w-3.5" />
@@ -13,7 +19,8 @@
         </NuxtLink>
       </header>
 
-      <section v-if="phase === 'form'" class="qzp-form-wrap">
+      <section v-if="phase === 'form'" v-reveal.stagger class="qzp-form-wrap">
+        <p class="qzp-stage-index">01</p>
         <div class="qzp-card qzp-form">
           <h2 class="qzp-card-title">{{ $t('qizhengChart.formTitle') }}</h2>
           <BaziForm
@@ -27,15 +34,18 @@
           />
         </div>
         <div class="qzp-hints">
-          <article class="qzp-hint">
+          <article data-reveal-child class="qzp-hint">
+            <span class="qzp-hint-index">02</span>
             <UIcon name="i-heroicons-clock" class="h-4 w-4" />
             <p>{{ $t('qizhengChart.hourHint') }}</p>
           </article>
-          <article class="qzp-hint">
+          <article data-reveal-child class="qzp-hint">
+            <span class="qzp-hint-index">03</span>
             <UIcon name="i-heroicons-map-pin" class="h-4 w-4" />
             <p>{{ $t('qizhengChart.locationHint') }}</p>
           </article>
-          <article class="qzp-hint">
+          <article data-reveal-child class="qzp-hint">
+            <span class="qzp-hint-index">04</span>
             <UIcon name="i-heroicons-shield-check" class="h-4 w-4" />
             <p>{{ $t('qizhengChart.privacyHint') }}</p>
           </article>
@@ -47,7 +57,7 @@
         <p>{{ $t('qizhengChart.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" class="qzp-report">
+      <div v-else-if="result" v-reveal class="qzp-report">
         <QizhengPaipanReport :result="result" />
       </div>
 
@@ -155,7 +165,8 @@ function resetToForm() {
   result.value = null
 }
 
-const siteName = 'ososn'
+const runtimeConfig = useRuntimeConfig()
+const siteName = runtimeConfig.public.siteName || 'ososn'
 
 const pageUrl = useLocalizedSeoUrl('/tools/qizheng-paipan')
 
@@ -192,48 +203,105 @@ useHead(() => ({
 
 <style scoped>
 .qzp-page {
+  position: relative;
   min-height: 100vh;
+  overflow: clip;
   background: var(--surface-bg);
-  color: var(--text-primary);
+  color: var(--text-body);
+  font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.qzp-page::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(70rem 42rem at 74% 4%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 62%),
+    radial-gradient(52rem 34rem at 10% 86%, color-mix(in srgb, var(--accent-purple) 5%, transparent), transparent 64%);
+  pointer-events: none;
 }
 
 .qzp-container {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 40px 20px 72px;
+  padding: 72px 24px 88px;
 }
 
 .qzp-header {
+  min-height: calc(100svh - 210px);
   display: grid;
-  gap: 18px;
-  margin-bottom: 30px;
+  align-items: center;
   position: relative;
-  text-align: center;
+  margin-bottom: 56px;
+}
+
+.qzp-hero-copy {
+  max-width: 780px;
 }
 
 .qzp-eyebrow {
-  margin-bottom: 8px;
+  display: block;
+  margin-bottom: 18px;
   color: var(--accent);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 
 .qzp-title {
   margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: clamp(40px, 5.4vw, 74px);
+  font-weight: 650;
+  line-height: 1.04;
 }
 
 .qzp-subtitle {
-  max-width: 680px;
-  margin: 10px 0 0;
+  max-width: 560px;
+  margin: 24px 0 0;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.7;
+}
+
+.qzp-scroll-cue {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  color: var(--text-muted);
+  transform: translateX(-50%);
+  animation: qzp-drift 3.2s ease-in-out infinite;
+}
+
+.qzp-header.is-result {
+  min-height: auto;
+  margin-bottom: 36px;
+}
+
+.qzp-header.is-result .qzp-back {
+  position: static;
+  justify-self: start;
+  margin-bottom: 16px;
+}
+
+.qzp-header.is-result .qzp-title {
+  font-size: clamp(28px, 3vw, 40px);
+}
+
+.qzp-header.is-result .qzp-subtitle,
+.qzp-header.is-result .qzp-scroll-cue {
+  display: none;
 }
 
 .qzp-back {
@@ -253,15 +321,27 @@ useHead(() => ({
 }
 
 .qzp-form-wrap {
+  position: relative;
   display: grid;
   gap: 20px;
+  margin-top: 36px;
+}
+
+.qzp-stage-index {
+  margin: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
 }
 
 .qzp-card {
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--surface-card);
-  padding: 24px;
+  box-shadow: var(--shadow-panel);
+  padding: 28px;
+  backdrop-filter: blur(18px);
 }
 
 .qzp-card-title {
@@ -276,16 +356,28 @@ useHead(() => ({
 }
 
 .qzp-hint {
+  position: relative;
   display: flex;
   gap: 10px;
   align-items: flex-start;
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--surface-card);
-  padding: 14px 16px;
+  padding: 16px 52px 16px 18px;
   color: var(--text-muted);
   font-size: 13px;
   line-height: 1.6;
+  backdrop-filter: blur(14px);
+}
+
+.qzp-hint-index {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--accent-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
 .qzp-hint .ui-icon {
@@ -295,9 +387,11 @@ useHead(() => ({
 }
 
 .qzp-loading {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
-  min-height: 240px;
+  min-height: 40vh;
   color: var(--text-muted);
 }
 
@@ -307,6 +401,12 @@ useHead(() => ({
   border-radius: 999px;
   background: var(--accent);
   animation: pulse 1.4s infinite;
+}
+
+.qzp-report,
+.qzp-actions {
+  position: relative;
+  z-index: 1;
 }
 
 .qzp-report {
@@ -320,23 +420,52 @@ useHead(() => ({
   margin-top: 26px;
 }
 
+@keyframes qzp-drift {
+  0%, 100% { opacity: 0.52; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 1; transform: translateX(-50%) translateY(6px); }
+}
+
 @keyframes pulse {
-  0%, 100% { opacity: .3; transform: scale(.8); }
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
   50% { opacity: 1; transform: scale(1); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .qzp-scroll-cue,
+  .qzp-loading-dot {
+    animation: none;
+  }
+}
+
 @media (max-width: 820px) {
+  .qzp-container {
+    padding: 48px 18px 64px;
+  }
+
+  .qzp-header {
+    min-height: calc(100svh - 250px);
+    margin-bottom: 40px;
+  }
+
+  .qzp-title {
+    font-size: clamp(34px, 11vw, 48px);
+  }
+
   .qzp-back {
     position: static;
     justify-self: center;
   }
 
-  .qzp-title {
-    font-size: 24px;
+  .qzp-card {
+    padding: 20px;
   }
 
   .qzp-hints {
     grid-template-columns: 1fr;
+  }
+
+  .qzp-scroll-cue {
+    bottom: -18px;
   }
 }
 </style>
