@@ -1,0 +1,678 @@
+{
+  "basic": {
+    "solarText": "1990-05-13 23:09",
+    "trueSolarText": "23:09",
+    "lunarText": "庚午年 四月十九 子时",
+    "zodiac": "马",
+    "locationName": "上海",
+    "timezone": "Asia/Shanghai · UTC+9",
+    "coordinates": "31.23, 121.47",
+    "genderText": "男",
+    "dayNight": "夜生",
+    "sunrise": "06:00",
+    "sunset": "19:41",
+    "moonrise": "22:57",
+    "moonset": "08:03",
+    "timeBasis": "时辰中点 + 真太阳时"
+  },
+  "pillars": [
+    {
+      "key": "year",
+      "label": "年柱",
+      "ganzhi": "庚午",
+      "nayin": "路旁土"
+    },
+    {
+      "key": "month",
+      "label": "月柱",
+      "ganzhi": "辛巳",
+      "nayin": "白蜡金"
+    },
+    {
+      "key": "day",
+      "label": "日柱",
+      "ganzhi": "己卯",
+      "nayin": "城头土"
+    },
+    {
+      "key": "hour",
+      "label": "时柱",
+      "ganzhi": "甲子",
+      "nayin": "海中金"
+    }
+  ],
+  "jieqi": {
+    "previous": "立夏 05-06 02:35",
+    "next": "芒种 06-06 06:46"
+  },
+  "liming": {
+    "lifePalace": "丑",
+    "lifeLord": "土",
+    "bodyPalace": "丑",
+    "bodyLord": "土",
+    "basis": "地平上升宫安命；太阴所在安身"
+  },
+  "planets": [
+    {
+      "key": "sun",
+      "name": "日",
+      "category": "七政",
+      "longitude": 52.5542,
+      "branch": "酉",
+      "branchDegree": 22.55,
+      "mansion": "胃",
+      "mansionDegree": 5.71,
+      "latitude": 0,
+      "distance": 1.01053003,
+      "speed": 0.9649,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "moon",
+      "name": "月",
+      "category": "七政",
+      "longitude": 273.899,
+      "branch": "丑",
+      "branchDegree": 3.9,
+      "mansion": "箕",
+      "mansionDegree": 2.72,
+      "latitude": -2.9919,
+      "distance": 0.00268666,
+      "speed": 12.097,
+      "isRetrograde": false,
+      "status": [
+        "失地"
+      ]
+    },
+    {
+      "key": "mercury",
+      "name": "水星",
+      "category": "七政",
+      "longitude": 38.3871,
+      "branch": "酉",
+      "branchDegree": 8.39,
+      "mansion": "娄",
+      "mansionDegree": 4.51,
+      "latitude": -2.122,
+      "distance": 0.58588916,
+      "speed": -0.2321,
+      "isRetrograde": true,
+      "status": [
+        "逆行"
+      ]
+    },
+    {
+      "key": "venus",
+      "name": "金星",
+      "category": "七政",
+      "longitude": 10.6391,
+      "branch": "戌",
+      "branchDegree": 10.64,
+      "mansion": "壁",
+      "mansionDegree": 1.57,
+      "latitude": -1.7362,
+      "distance": 1.02394439,
+      "speed": 1.1383,
+      "isRetrograde": false,
+      "status": [
+        "失地"
+      ]
+    },
+    {
+      "key": "mars",
+      "name": "火星",
+      "category": "七政",
+      "longitude": 346.9115,
+      "branch": "亥",
+      "branchDegree": 16.91,
+      "mansion": "危",
+      "mansionDegree": 13.65,
+      "latitude": -1.71,
+      "distance": 1.46803289,
+      "speed": 0.7432,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "jupiter",
+      "name": "木星",
+      "category": "七政",
+      "longitude": 99.1772,
+      "branch": "未",
+      "branchDegree": 9.18,
+      "mansion": "井",
+      "mansionDegree": 3.96,
+      "latitude": 0.14,
+      "distance": 5.84063848,
+      "speed": 0.1874,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "saturn",
+      "name": "土星",
+      "category": "七政",
+      "longitude": 295.2691,
+      "branch": "丑",
+      "branchDegree": 25.27,
+      "mansion": "斗",
+      "mansionDegree": 15.17,
+      "latitude": 0.1573,
+      "distance": 9.5127241,
+      "speed": -0.014,
+      "isRetrograde": true,
+      "status": [
+        "旺地",
+        "逆行"
+      ]
+    },
+    {
+      "key": "luohou",
+      "name": "罗睺",
+      "category": "四余",
+      "longitude": 131.4371,
+      "branch": "午",
+      "branchDegree": 11.44,
+      "mansion": "柳",
+      "mansionDegree": 1.22,
+      "latitude": 0,
+      "distance": null,
+      "speed": 0,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "jitu",
+      "name": "计都",
+      "category": "四余",
+      "longitude": 311.4371,
+      "branch": "子",
+      "branchDegree": 11.44,
+      "mansion": "牛",
+      "mansionDegree": 7.48,
+      "latitude": 0,
+      "distance": null,
+      "speed": 0,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "yuebo",
+      "name": "月孛",
+      "category": "四余",
+      "longitude": 231.2228,
+      "branch": "卯",
+      "branchDegree": 21.22,
+      "mansion": "氐",
+      "mansionDegree": 6.23,
+      "latitude": 0,
+      "distance": 0,
+      "speed": 0.1114,
+      "isRetrograde": false,
+      "status": []
+    },
+    {
+      "key": "ziqi",
+      "name": "紫炁",
+      "category": "四余",
+      "longitude": 65.5096,
+      "branch": "申",
+      "branchDegree": 5.51,
+      "mansion": "昴",
+      "mansionDegree": 6.18,
+      "latitude": 0,
+      "distance": null,
+      "speed": 0,
+      "isRetrograde": false,
+      "status": []
+    }
+  ],
+  "palaces": [
+    {
+      "name": "命宫",
+      "shortName": "命",
+      "branch": "丑",
+      "headLongitude": 270,
+      "lord": "土",
+      "stars": [
+        "月",
+        "土星"
+      ],
+      "shensha": []
+    },
+    {
+      "name": "财帛宫",
+      "shortName": "财",
+      "branch": "子",
+      "headLongitude": 300,
+      "lord": "土",
+      "stars": [
+        "计都"
+      ],
+      "shensha": []
+    },
+    {
+      "name": "兄弟宫",
+      "shortName": "兄",
+      "branch": "亥",
+      "headLongitude": 330,
+      "lord": "木",
+      "stars": [
+        "火星"
+      ],
+      "shensha": [
+        "空亡"
+      ]
+    },
+    {
+      "name": "田宅宫",
+      "shortName": "田",
+      "branch": "戌",
+      "headLongitude": 0,
+      "lord": "火",
+      "stars": [
+        "金星"
+      ],
+      "shensha": [
+        "华盖",
+        "空亡"
+      ]
+    },
+    {
+      "name": "男女宫",
+      "shortName": "男",
+      "branch": "酉",
+      "headLongitude": 30,
+      "lord": "金",
+      "stars": [
+        "日",
+        "水星"
+      ],
+      "shensha": [
+        "空亡"
+      ]
+    },
+    {
+      "name": "奴仆宫",
+      "shortName": "奴",
+      "branch": "申",
+      "headLongitude": 60,
+      "lord": "水",
+      "stars": [
+        "紫炁"
+      ],
+      "shensha": [
+        "驿马",
+        "空亡"
+      ]
+    },
+    {
+      "name": "夫妻宫",
+      "shortName": "夫",
+      "branch": "未",
+      "headLongitude": 90,
+      "lord": "月",
+      "stars": [
+        "木星"
+      ],
+      "shensha": []
+    },
+    {
+      "name": "疾厄宫",
+      "shortName": "疾",
+      "branch": "午",
+      "headLongitude": 120,
+      "lord": "日",
+      "stars": [
+        "罗睺"
+      ],
+      "shensha": []
+    },
+    {
+      "name": "迁移宫",
+      "shortName": "迁",
+      "branch": "巳",
+      "headLongitude": 150,
+      "lord": "水",
+      "stars": [],
+      "shensha": []
+    },
+    {
+      "name": "官禄宫",
+      "shortName": "官",
+      "branch": "辰",
+      "headLongitude": 180,
+      "lord": "金",
+      "stars": [],
+      "shensha": []
+    },
+    {
+      "name": "福德宫",
+      "shortName": "福",
+      "branch": "卯",
+      "headLongitude": 210,
+      "lord": "火",
+      "stars": [
+        "月孛"
+      ],
+      "shensha": [
+        "桃花",
+        "临官"
+      ]
+    },
+    {
+      "name": "相貌宫",
+      "shortName": "相",
+      "branch": "寅",
+      "headLongitude": 240,
+      "lord": "木",
+      "stars": [],
+      "shensha": []
+    }
+  ],
+  "relations": [
+    {
+      "type": "同宫",
+      "label": "日・水星 同宫",
+      "members": [
+        "日",
+        "水星"
+      ],
+      "orb": 14.17
+    },
+    {
+      "type": "对照",
+      "label": "日 对照 月孛",
+      "members": [
+        "日",
+        "月孛"
+      ],
+      "orb": 1.33
+    },
+    {
+      "type": "同宫",
+      "label": "月・土星 同宫",
+      "members": [
+        "月",
+        "土星"
+      ],
+      "orb": 21.37
+    },
+    {
+      "type": "三合",
+      "label": "水星 三合 木星",
+      "members": [
+        "水星",
+        "木星"
+      ],
+      "orb": 0.79
+    },
+    {
+      "type": "四正",
+      "label": "金星 四正刑 木星",
+      "members": [
+        "金星",
+        "木星"
+      ],
+      "orb": 1.46
+    },
+    {
+      "type": "三合",
+      "label": "金星 三合 计都",
+      "members": [
+        "金星",
+        "计都"
+      ],
+      "orb": 0.8
+    },
+    {
+      "type": "对照",
+      "label": "罗睺 对照 计都",
+      "members": [
+        "罗睺",
+        "计都"
+      ],
+      "orb": 0
+    }
+  ],
+  "keyShensha": [
+    {
+      "name": "桃花",
+      "branch": "卯",
+      "note": "人缘、审美与情感吸引"
+    },
+    {
+      "name": "驿马",
+      "branch": "申",
+      "note": "迁移、出差与节奏变化"
+    },
+    {
+      "name": "华盖",
+      "branch": "戌",
+      "note": "研究、孤独感与专注力"
+    },
+    {
+      "name": "临官",
+      "branch": "卯",
+      "note": "日主十二长生状态"
+    }
+  ],
+  "dayuns": [
+    {
+      "label": "1998-2007 壬午",
+      "detail": "8-17岁 · 正财 / 偏印",
+      "isCurrent": false
+    },
+    {
+      "label": "2008-2017 癸未",
+      "detail": "18-27岁 · 偏财 / 比肩",
+      "isCurrent": false
+    },
+    {
+      "label": "2018-2027 甲申",
+      "detail": "28-37岁 · 正官 / 伤官",
+      "isCurrent": true
+    },
+    {
+      "label": "2028-2037 乙酉",
+      "detail": "38-47岁 · 七杀 / 食神",
+      "isCurrent": false
+    },
+    {
+      "label": "2038-2047 丙戌",
+      "detail": "48-57岁 · 正印 / 劫财",
+      "isCurrent": false
+    },
+    {
+      "label": "2048-2057 丁亥",
+      "detail": "58-67岁 · 偏印 / 正财",
+      "isCurrent": false
+    },
+    {
+      "label": "2058-2067 戊子",
+      "detail": "68-77岁 · 劫财 / 偏财",
+      "isCurrent": false
+    },
+    {
+      "label": "2068-2077 己丑",
+      "detail": "78-87岁 · 比肩 / 比肩",
+      "isCurrent": false
+    },
+    {
+      "label": "2078-2087 庚寅",
+      "detail": "88-97岁 · 伤官 / 正官",
+      "isCurrent": false
+    }
+  ],
+  "flowYears": [
+    {
+      "year": 2026,
+      "age": 36,
+      "palace": "命宫",
+      "shortName": "命",
+      "ganzhi": "丙午",
+      "isCurrent": true
+    },
+    {
+      "year": 2027,
+      "age": 37,
+      "palace": "财帛宫",
+      "shortName": "财",
+      "ganzhi": "丁未",
+      "isCurrent": false
+    },
+    {
+      "year": 2028,
+      "age": 38,
+      "palace": "兄弟宫",
+      "shortName": "兄",
+      "ganzhi": "戊申",
+      "isCurrent": false
+    },
+    {
+      "year": 2029,
+      "age": 39,
+      "palace": "田宅宫",
+      "shortName": "田",
+      "ganzhi": "己酉",
+      "isCurrent": false
+    },
+    {
+      "year": 2030,
+      "age": 40,
+      "palace": "男女宫",
+      "shortName": "男",
+      "ganzhi": "庚戌",
+      "isCurrent": false
+    },
+    {
+      "year": 2031,
+      "age": 41,
+      "palace": "奴仆宫",
+      "shortName": "奴",
+      "ganzhi": "辛亥",
+      "isCurrent": false
+    },
+    {
+      "year": 2032,
+      "age": 42,
+      "palace": "夫妻宫",
+      "shortName": "夫",
+      "ganzhi": "壬子",
+      "isCurrent": false
+    },
+    {
+      "year": 2033,
+      "age": 43,
+      "palace": "疾厄宫",
+      "shortName": "疾",
+      "ganzhi": "癸丑",
+      "isCurrent": false
+    },
+    {
+      "year": 2034,
+      "age": 44,
+      "palace": "迁移宫",
+      "shortName": "迁",
+      "ganzhi": "甲寅",
+      "isCurrent": false
+    },
+    {
+      "year": 2035,
+      "age": 45,
+      "palace": "官禄宫",
+      "shortName": "官",
+      "ganzhi": "乙卯",
+      "isCurrent": false
+    },
+    {
+      "year": 2036,
+      "age": 46,
+      "palace": "福德宫",
+      "shortName": "福",
+      "ganzhi": "丙辰",
+      "isCurrent": false
+    },
+    {
+      "year": 2037,
+      "age": 47,
+      "palace": "相貌宫",
+      "shortName": "相",
+      "ganzhi": "丁巳",
+      "isCurrent": false
+    },
+    {
+      "year": 2038,
+      "age": 48,
+      "palace": "命宫",
+      "shortName": "命",
+      "ganzhi": "戊午",
+      "isCurrent": false
+    },
+    {
+      "year": 2039,
+      "age": 49,
+      "palace": "财帛宫",
+      "shortName": "财",
+      "ganzhi": "己未",
+      "isCurrent": false
+    },
+    {
+      "year": 2040,
+      "age": 50,
+      "palace": "兄弟宫",
+      "shortName": "兄",
+      "ganzhi": "庚申",
+      "isCurrent": false
+    },
+    {
+      "year": 2041,
+      "age": 51,
+      "palace": "田宅宫",
+      "shortName": "田",
+      "ganzhi": "辛酉",
+      "isCurrent": false
+    },
+    {
+      "year": 2042,
+      "age": 52,
+      "palace": "男女宫",
+      "shortName": "男",
+      "ganzhi": "壬戌",
+      "isCurrent": false
+    },
+    {
+      "year": 2043,
+      "age": 53,
+      "palace": "奴仆宫",
+      "shortName": "奴",
+      "ganzhi": "癸亥",
+      "isCurrent": false
+    },
+    {
+      "year": 2044,
+      "age": 54,
+      "palace": "夫妻宫",
+      "shortName": "夫",
+      "ganzhi": "甲子",
+      "isCurrent": false
+    },
+    {
+      "year": 2045,
+      "age": 55,
+      "palace": "疾厄宫",
+      "shortName": "疾",
+      "ganzhi": "乙丑",
+      "isCurrent": false
+    }
+  ],
+  "methodology": {
+    "engine": "celestine 0.2.1 + Astronomy Engine 2.1.19 + @openfate/bazi-engine 1.1.2",
+    "astronomy": "黄道回归制；默认黄道回回归宿度；罗计为南北交点反向命名",
+    "method": "时辰中点起盘，地平上升宫安命，太阴所在安身",
+    "time": "输入地点经度真太阳时校正",
+    "disclaimer": "七政四余存在盘制与流派差异；本结果仅作为结构化排盘证据，不构成人生决策依据。"
+  },
+  "generatedAt": "2026-10-23T06:55:05.661Z"
+}
