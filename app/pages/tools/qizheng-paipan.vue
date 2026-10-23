@@ -203,35 +203,11 @@ useHead(() => ({
 
 <style scoped>
 .qzp-page {
-  --qzp-night: #05070a;
-  --qzp-ink: #dfe7e0;
-  --qzp-muted: #9aa89f;
-  --qzp-line: rgba(223, 231, 224, 0.14);
-  --qzp-card: rgba(8, 12, 19, 0.78);
-  --qzp-gold: #d9b36a;
-
-  --surface-bg: var(--qzp-night);
-  --surface-card: var(--qzp-card);
-  --surface-input: rgba(13, 19, 28, 0.92);
-  --surface-card-hover: rgba(20, 27, 38, 0.94);
-  --surface-dropdown: #0b111a;
-  --border-subtle: var(--qzp-line);
-  --border-light: rgba(223, 231, 224, 0.12);
-  --border-medium: rgba(223, 231, 224, 0.2);
-  --text-primary: var(--qzp-ink);
-  --text-muted: var(--qzp-muted);
-  --text-faint: rgba(154, 168, 159, 0.78);
-  --text-placeholder: rgba(154, 168, 159, 0.62);
-  --accent: var(--qzp-gold);
-  --accent-bg: rgba(217, 179, 106, 0.14);
-  --accent-border: rgba(217, 179, 106, 0.28);
-  --accent-border-hover: rgba(217, 179, 106, 0.48);
-
   position: relative;
   min-height: 100vh;
   overflow: clip;
-  background: var(--qzp-night);
-  color: var(--qzp-ink);
+  background: var(--surface-bg);
+  color: var(--text-body);
   font-family: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -241,8 +217,8 @@ useHead(() => ({
   z-index: 0;
   inset: 0;
   background:
-    radial-gradient(70rem 42rem at 74% 4%, rgba(75, 97, 137, 0.18), transparent 62%),
-    radial-gradient(52rem 34rem at 10% 86%, rgba(50, 68, 104, 0.14), transparent 64%);
+    radial-gradient(70rem 42rem at 74% 4%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 62%),
+    radial-gradient(52rem 34rem at 10% 86%, color-mix(in srgb, var(--accent-purple) 5%, transparent), transparent 64%);
   pointer-events: none;
 }
 
@@ -270,7 +246,7 @@ useHead(() => ({
 .qzp-eyebrow {
   display: block;
   margin-bottom: 18px;
-  color: var(--qzp-gold);
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.24em;
@@ -287,7 +263,7 @@ useHead(() => ({
 .qzp-subtitle {
   max-width: 560px;
   margin: 24px 0 0;
-  color: var(--qzp-muted);
+  color: var(--text-muted);
   font-size: 16px;
   line-height: 1.7;
 }
@@ -301,9 +277,9 @@ useHead(() => ({
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid var(--qzp-line);
+  border: 1px solid var(--border-light);
   border-radius: 999px;
-  color: var(--qzp-muted);
+  color: var(--text-muted);
   transform: translateX(-50%);
   animation: qzp-drift 3.2s ease-in-out infinite;
 }
@@ -353,17 +329,17 @@ useHead(() => ({
 
 .qzp-stage-index {
   margin: 0;
-  color: var(--qzp-gold);
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.28em;
 }
 
 .qzp-card {
-  border: 1px solid var(--qzp-line);
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
-  background: var(--qzp-card);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-panel);
   padding: 28px;
   backdrop-filter: blur(18px);
 }
@@ -384,9 +360,9 @@ useHead(() => ({
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  border: 1px solid var(--qzp-line);
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
-  background: rgba(8, 12, 19, 0.64);
+  background: var(--surface-card);
   padding: 16px 52px 16px 18px;
   color: var(--text-muted);
   font-size: 13px;
@@ -398,7 +374,7 @@ useHead(() => ({
   position: absolute;
   top: 12px;
   right: 12px;
-  color: rgba(217, 179, 106, 0.66);
+  color: var(--accent-muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;

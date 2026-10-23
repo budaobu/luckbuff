@@ -40,24 +40,56 @@ onMounted(async () => {
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100)
     camera.position.set(0, 0, 12)
+    const isLightTheme = document.documentElement.classList.contains('light')
 
     const starCount = 850
     const positions = new Float32Array(starCount * 3)
+    const sizes = new Float32Array(starCount)
+    const alphas = new Float32Array(starCount)
     for (let index = 0; index < starCount; index += 1) {
       positions[index * 3] = (Math.random() - 0.5) * 42
       positions[(index * 3) + 1] = (Math.random() - 0.5) * 28
-      positions[(index * 3) + 2] = (Math.random() - 0.5) * 28 - 6
+      positions[(index * 3) + 2] = -8 - Math.random() * 14
+      sizes[index] = 0.12 + Math.random() * Math.random() * 0.24
+      alphas[index] = 0.24 + Math.random() * 0.42
     }
 
     const starGeometry = new THREE.BufferGeometry()
     starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    const starMaterial = new THREE.PointsMaterial({
-      color: 0xdfe8e0,
-      size: 0.055,
+    starGeometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1))
+    starGeometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1))
+    const starMaterial = new THREE.ShaderMaterial({
       transparent: true,
-      opacity: 0.58,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: isLightTheme ? THREE.NormalBlending : THREE.AdditiveBlending,
+      uniforms: {
+        uColor: { value: new THREE.Color(isLightTheme ? 0x3b352a : 0xdfe8e0) },
+        uPixelRatio: { value: renderer.getPixelRatio() },
+      },
+      vertexShader: `
+        attribute float aSize;
+        attribute float aAlpha;
+        uniform float uPixelRatio;
+        varying float vAlpha;
+
+        void main() {
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+          gl_PointSize = aSize * uPixelRatio * (240.0 / max(1.0, -mvPosition.z));
+          vAlpha = aAlpha;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor;
+        varying float vAlpha;
+
+        void main() {
+          float pointDistance = length(gl_PointCoord - vec2(0.5));
+          float alpha = (1.0 - smoothstep(0.28, 0.5, pointDistance)) * vAlpha;
+          if (alpha < 0.01) discard;
+          gl_FragColor = vec4(uColor, alpha);
+        }
+      `,
     })
     const stars = new THREE.Points(starGeometry, starMaterial)
     scene.add(stars)
@@ -66,7 +98,7 @@ onMounted(async () => {
     const orbitMaterial = new THREE.MeshBasicMaterial({
       color: 0xd9b36a,
       transparent: true,
-      opacity: 0.16,
+      opacity: isLightTheme ? 0.12 : 0.16,
     })
     const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial)
     orbit.rotation.set(Math.PI / 2.65, 0.2, 0)
@@ -77,6 +109,7 @@ onMounted(async () => {
       const width = canvas.clientWidth || window.innerWidth
       const height = canvas.clientHeight || window.innerHeight
       renderer.setSize(width, height, false)
+      starMaterial.uniforms.uPixelRatio!.value = renderer.getPixelRatio()
       camera.aspect = width / height
       camera.updateProjectionMatrix()
     }
@@ -141,12 +174,12 @@ onMounted(async () => {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(58rem 34rem at 72% 12%, rgba(76, 97, 138, 0.28), transparent 62%),
-    radial-gradient(46rem 30rem at 18% 78%, rgba(52, 72, 108, 0.22), transparent 64%),
-    radial-gradient(2px 2px at 18% 24%, rgba(223, 232, 224, 0.7), transparent 50%),
-    radial-gradient(1px 1px at 38% 62%, rgba(223, 232, 224, 0.45), transparent 50%),
-    radial-gradient(2px 2px at 74% 45%, rgba(217, 179, 106, 0.55), transparent 50%),
-    radial-gradient(1px 1px at 83% 76%, rgba(223, 232, 224, 0.4), transparent 50%);
+    radial-gradient(58rem 34rem at 72% 12%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 62%),
+    radial-gradient(46rem 30rem at 18% 78%, color-mix(in srgb, var(--accent-purple) 6%, transparent), transparent 64%),
+    radial-gradient(2px 2px at 18% 24%, color-mix(in srgb, var(--text-muted) 52%, transparent), transparent 50%),
+    radial-gradient(1px 1px at 38% 62%, color-mix(in srgb, var(--text-muted) 34%, transparent), transparent 50%),
+    radial-gradient(2px 2px at 74% 45%, color-mix(in srgb, var(--accent) 38%, transparent), transparent 50%),
+    radial-gradient(1px 1px at 83% 76%, color-mix(in srgb, var(--text-muted) 28%, transparent), transparent 50%);
   opacity: 1;
   transition: opacity 480ms ease;
 }

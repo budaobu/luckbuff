@@ -422,9 +422,9 @@ onBeforeUnmount(() => insightAbort?.abort())
 
 <style scoped>
 .qzpr {
-  --qzp-line: rgba(223, 231, 224, 0.12);
-  --qzp-card: rgba(8, 12, 19, 0.72);
-  --qzp-gold: #d9b36a;
+  --qzp-line: var(--border-subtle);
+  --qzp-card: var(--surface-card);
+  --qzp-gold: var(--accent);
 
   display: grid;
   gap: 72px;
@@ -483,7 +483,7 @@ onBeforeUnmount(() => insightAbort?.abort())
   border: 1px solid var(--qzp-line);
   border-radius: 8px;
   background: var(--qzp-card);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-panel);
   padding: 22px;
   backdrop-filter: blur(16px);
 }
@@ -499,7 +499,7 @@ onBeforeUnmount(() => insightAbort?.abort())
   position: absolute;
   inset: -60% -30% auto;
   height: 240px;
-  background: radial-gradient(circle, rgba(217, 179, 106, 0.1), transparent 66%);
+  background: radial-gradient(circle, var(--accent-faint), transparent 66%);
   pointer-events: none;
 }
 
@@ -536,7 +536,7 @@ onBeforeUnmount(() => insightAbort?.abort())
   position: absolute;
   top: 0;
   left: 0;
-  color: rgba(217, 179, 106, 0.72);
+  color: var(--accent-muted);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.24em;
@@ -748,7 +748,7 @@ onBeforeUnmount(() => insightAbort?.abort())
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(2, 4, 7, 0.72);
+  background: var(--overlay-bg);
   backdrop-filter: blur(8px);
 }
 
@@ -759,7 +759,8 @@ onBeforeUnmount(() => insightAbort?.abort())
   grid-template-rows: auto minmax(0, 1fr) auto auto;
   border: 1px solid var(--qzp-line);
   border-radius: 8px;
-  background: rgba(8, 12, 19, 0.96);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
 }
 
 .qzpr-insight-head {
@@ -798,6 +799,7 @@ onBeforeUnmount(() => insightAbort?.abort())
 }
 
 .qzpr-insight-content {
+  color: var(--text-body);
   white-space: pre-wrap;
   font-size: 14px;
   line-height: 1.7;
