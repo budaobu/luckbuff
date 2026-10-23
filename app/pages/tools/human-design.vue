@@ -1,7 +1,7 @@
 <template>
   <div class="hd-page">
-    <div class="hd-container">
-      <header class="hd-header">
+    <div class="hd-container" :class="{ 'is-stage': phase === 'result' }">
+      <header v-if="phase !== 'result'" class="hd-header">
         <div>
           <p class="hd-eyebrow">Human Design</p>
           <h1 class="hd-title">{{ $t('humanDesign.title') }}</h1>
@@ -112,16 +112,8 @@
         <p>{{ $t('humanDesign.calculating') }}</p>
       </section>
 
-      <div v-else-if="result" class="hd-report">
-        <HumanDesignReport :result="result" />
-      </div>
-      <div v-if="phase === 'result'" class="hd-actions">
-        <UButton color="warning" variant="soft" @click="resetToForm">
-          <template #leading>
-            <UIcon name="i-heroicons-arrow-path" class="h-4 w-4" />
-          </template>
-          {{ $t('common.retry') }}
-        </UButton>
+      <div v-else-if="result" class="hd-stage">
+        <HumanDesignHologram :result="result" @retry="resetToForm" />
       </div>
     </div>
   </div>
@@ -309,6 +301,22 @@ useHead(() => ({
   padding: 40px 20px 72px;
 }
 
+.hd-container.is-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  max-width: none;
+  width: 100%;
+  padding: 0;
+  background: #04050c;
+  overflow: hidden;
+}
+
+.hd-stage {
+  height: 100%;
+  overflow: hidden;
+}
+
 .hd-header {
   position: relative;
   display: grid;
@@ -458,14 +466,6 @@ useHead(() => ({
 
 .hd-report {
   display: grid;
-}
-
-.hd-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 26px;
-  flex-wrap: wrap;
 }
 
 @keyframes pulse {

@@ -114,6 +114,7 @@ export interface ShareOptions {
   | 'zibaifeixing-paipan'
   | 'omikuji'
   | 'horoscope'
+  | 'human-design'
   name?: string
   summary?: string
   /** 覆盖当前页面路径；一般留给特殊入口使用 */
@@ -162,6 +163,7 @@ export function useShare() {
       'wealth-god-lot': '五路财神签',
       omikuji: '日本御神签',
       horoscope: '星座运势',
+      'human-design': '人类图',
       'bazi-hunpan': '八字合盘',
       'bazi-naming': '八字起名',
       'bazi-wealth': '八字算财富',
