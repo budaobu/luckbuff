@@ -74,6 +74,14 @@
       </div>
     </section>
 
+    <section class="hd-scene-section">
+      <header class="hd-scene-label">
+        <h2>{{ $t('humanDesign.sceneTitle') }}</h2>
+        <p>{{ $t('humanDesign.sceneSubtitle') }}</p>
+      </header>
+      <HumanDesignHologram :result="result" />
+    </section>
+
     <section class="hd-section">
       <header class="hd-section-label">
         <h2>{{ $t('humanDesign.bodygraphTitle') }}</h2>
@@ -384,7 +392,9 @@ const summaryLabels = computed(() => ({
   },
 }))
 
-const strategyDetail = computed(() => t(`humanDesign.strategyDetail.${props.result.summary.strategy}`))
+const strategyDetail = computed(() => t(`humanDesign.strategyDetail.${
+  props.result.summary.strategy === 'respond-inform' ? 'respondInform' : props.result.summary.strategy
+}`))
 const authorityDetail = computed(() => t(`humanDesign.authorityDetail.${props.result.summary.authority}`))
 const profileMeaning = computed(() => t(`humanDesign.profiles.${props.result.summary.profile.replace('/', '_')}`))
 
@@ -718,6 +728,25 @@ onBeforeUnmount(() => {
   color: var(--text-muted);
   font-size: 13px;
   line-height: 1.7;
+}
+
+.hd-scene-section {
+  display: grid;
+  gap: 14px;
+}
+
+.hd-scene-label h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.hd-scene-label p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
 .hd-stack {

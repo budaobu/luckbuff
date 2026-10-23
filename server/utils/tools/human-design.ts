@@ -21,6 +21,8 @@ export interface HumanDesignActivation {
   gate: number
   line: number
   color: number
+  tone: number
+  base: number
   longitude: number
   retrograde: boolean
 }
@@ -116,6 +118,18 @@ const GATE_CENTER: Record<number, string> = {
 
 const RIGHT_ANGLE_PROFILES = new Set(['1/3', '1/4', '2/4', '2/5', '3/5', '3/6', '4/6'])
 const JUXTAPOSITION_PROFILES = new Set(['4/1'])
+function activationSublayers(longitude: number) {
+  const offset = ((longitude - 302) % 360 + 360) % 360
+  const gateArc = 360 / 64
+  const lineArc = gateArc / 6
+  const withinGate = offset % gateArc
+  const line = Math.floor(withinGate / lineArc) + 1
+  const withinLine = withinGate % lineArc
+  return {
+    tone: Math.floor((withinLine % (lineArc / 6)) / (lineArc / 36)) + 1,
+    base: Math.floor((withinLine % (lineArc / 36)) / (lineArc / 216)) + 1,
+  }
+}
 
 const TYPE_KEYS: Record<string, HumanDesignSummary['type']> = {
   manifestor: 'manifestor',
@@ -298,7 +312,7 @@ export function calculateHumanDesignChart(input: HumanDesignInput): HumanDesignC
   const activations: HumanDesignActivation[] = [
     ...raw.humanDesign.activations.personality,
     ...raw.humanDesign.activations.design,
-  ]
+  ].map(activation => ({ ...activation, ...activationSublayers(activation.longitude) }))
   const channels: HumanDesignChannel[] = raw.humanDesign.definedChannels.map(channel => ({
     key: channel.key,
     gates: [channel.gates[0], channel.gates[1]],
