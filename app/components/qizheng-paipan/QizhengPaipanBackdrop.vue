@@ -10,6 +10,10 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 const staticMode = ref(true)
 let cleanup: (() => void) | null = null
 
+function currentTheme() {
+  return document.documentElement.classList.contains('light') ? 'light' : 'dark'
+}
+
 onBeforeUnmount(() => {
   cleanup?.()
   cleanup = null
@@ -40,7 +44,7 @@ onMounted(async () => {
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100)
     camera.position.set(0, 0, 12)
-    const isLightTheme = document.documentElement.classList.contains('light')
+    let isLightTheme = currentTheme() === 'light'
 
     const starCount = 850
     const positions = new Float32Array(starCount * 3)
@@ -50,8 +54,8 @@ onMounted(async () => {
       positions[index * 3] = (Math.random() - 0.5) * 42
       positions[(index * 3) + 1] = (Math.random() - 0.5) * 28
       positions[(index * 3) + 2] = -8 - Math.random() * 14
-      sizes[index] = 0.12 + Math.random() * Math.random() * 0.24
-      alphas[index] = 0.24 + Math.random() * 0.42
+      sizes[index] = 0.16 + Math.random() * Math.random() * 0.32
+      alphas[index] = 0.38 + Math.random() * 0.42
     }
 
     const starGeometry = new THREE.BufferGeometry()
@@ -63,7 +67,7 @@ onMounted(async () => {
       depthWrite: false,
       blending: isLightTheme ? THREE.NormalBlending : THREE.AdditiveBlending,
       uniforms: {
-        uColor: { value: new THREE.Color(isLightTheme ? 0x3b352a : 0xdfe8e0) },
+        uColor: { value: new THREE.Color(isLightTheme ? 0x3b352a : 0xf7f4ea) },
         uPixelRatio: { value: renderer.getPixelRatio() },
       },
       vertexShader: `
@@ -94,11 +98,19 @@ onMounted(async () => {
     const stars = new THREE.Points(starGeometry, starMaterial)
     scene.add(stars)
 
+    const applyTheme = () => {
+      isLightTheme = currentTheme() === 'light'
+      starMaterial.blending = isLightTheme ? THREE.NormalBlending : THREE.AdditiveBlending
+      starMaterial.uniforms.uColor!.value.set(isLightTheme ? 0x3b352a : 0xf7f4ea)
+      starMaterial.needsUpdate = true
+      orbitMaterial.opacity = isLightTheme ? 0.12 : 0.22
+    }
+
     const orbitGeometry = new THREE.TorusGeometry(7.8, 0.012, 3, 180)
     const orbitMaterial = new THREE.MeshBasicMaterial({
       color: 0xd9b36a,
       transparent: true,
-      opacity: isLightTheme ? 0.12 : 0.16,
+      opacity: isLightTheme ? 0.12 : 0.22,
     })
     const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial)
     orbit.rotation.set(Math.PI / 2.65, 0.2, 0)
@@ -139,15 +151,19 @@ onMounted(async () => {
     }
 
     staticMode.value = false
+    applyTheme()
     resize()
     window.addEventListener('resize', resize, { passive: true })
     document.addEventListener('visibilitychange', handleVisibility)
+    const themeObserver = new MutationObserver(applyTheme)
+    themeObserver.observe(document.documentElement, { attributeFilter: ['class'] })
     frameId = window.requestAnimationFrame(renderFrame)
     cleanup = () => {
       running = false
       window.cancelAnimationFrame(frameId)
       window.removeEventListener('resize', resize)
       document.removeEventListener('visibilitychange', handleVisibility)
+      themeObserver.disconnect()
       starGeometry.dispose()
       starMaterial.dispose()
       orbitGeometry.dispose()
