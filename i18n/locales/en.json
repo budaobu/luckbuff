@@ -2898,7 +2898,8 @@
     "zhCN": "简体中文",
     "zhTW": "繁體中文",
     "en": "English",
-    "ja": "日本語"
+    "ja": "日本語",
+    "ko": "한국어"
   },
   "baziForm": {
     "selectProfile": "Select Profile",
@@ -11189,7 +11190,8 @@
     "zhCN": "简",
     "zhTW": "繁",
     "en": "EN",
-    "ja": "日"
+    "ja": "日",
+    "ko": "한"
   },
   "numericEnergyTopic": {
     "title": "Numeric Energy",

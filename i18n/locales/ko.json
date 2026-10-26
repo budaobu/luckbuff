@@ -1,4 +1,18 @@
 {
+  "language": {
+    "zhCN": "简体中文",
+    "zhTW": "繁體中文",
+    "en": "English",
+    "ja": "日本語",
+    "ko": "한국어"
+  },
+  "languageShort": {
+    "zhCN": "简",
+    "zhTW": "繁",
+    "en": "EN",
+    "ja": "日",
+    "ko": "한"
+  },
   "kyuseiKigaku": {
     "title": "구성학",
     "subtitle": "입춘과 절기 시각 기준으로 본명성, 월명성, 기울어진 궁, 연월일시반을 계산합니다.",
