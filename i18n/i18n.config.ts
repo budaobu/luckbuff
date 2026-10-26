@@ -1,5 +1,9 @@
 export default defineI18nConfig(() => ({
   legacy: false,
   locale: 'zh-CN',
-  fallbackLocale: 'zh-CN',
+  fallbackLocale: {
+    ja: ['en'],
+    ko: ['en'],
+    default: ['en'],
+  },
 }))

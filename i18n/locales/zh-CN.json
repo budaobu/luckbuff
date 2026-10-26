@@ -13603,5 +13603,141 @@
     "seoTitle": "交互知识图解",
     "seoDescription": "浏览五行、天干地支、阴阳、八卦、节气、河洛与奇门九宫的交互图解，逐项查看图表动画与原理说明。",
     "keywords": "知识图解,交互图解,五行图解,天干地支图解,八卦图解,奇门九宫图解"
+  },
+  "kyuseiKigaku": {
+    "title": "九星气学排盘",
+    "subtitle": "按精确立春与节气边界计算本命星、月命星、倾斜宫与年月日时四盘。",
+    "formTitle": "出生信息",
+    "submit": "开始排盘",
+    "hourHint": "选择出生时辰；子时按 23:00 起算。",
+    "locationHint": "填写地点可获得更准确的时区与节气边界。",
+    "privacyHint": "排盘仅用于文化参考，出生数据不会公开。",
+    "calculating": "正在生成九星盘...",
+    "requiredError": "请填写出生日期和时辰",
+    "fail": "排盘失败",
+    "pleaseRetry": "请稍后重试",
+    "natalTitle": "本命结构",
+    "natalSubtitle": "从本命星、月命星、日盘和时盘看核心节奏。",
+    "inclinedPalace": "倾斜宫",
+    "centerAdjusted": "本命星与月命星同入中宫，采用裏卦倾斜读法。",
+    "boardsTitle": "年月日时盘",
+    "boardsSubtitle": "四层九宫显示星曜飞布与需要留意的方位信号。",
+    "compatibilityTitle": "相性",
+    "compatibilitySubtitle": "先看本命星与月命星的关系，再看九星亲和。",
+    "internalRelation": "本命与月命关系",
+    "affinityTitle": "九星亲和",
+    "methodTitle": "计算口径",
+    "engine": "排盘引擎",
+    "yearBoundary": "年界",
+    "monthBoundary": "月界",
+    "disclaimer": "免责声明",
+    "ai": {
+      "title": "AI 解读",
+      "action": "点击获取 AI 解读",
+      "targetFallback": "盘面元素",
+      "connecting": "正在连接 AI...",
+      "error": "AI 解读失败，请重试。",
+      "noResult": "AI 未返回内容，请重试。",
+      "disclaimer": "AI 解读是文化参考，不构成现实决策建议。",
+      "fullReport": "生成完整报告",
+      "fullReportLogin": "登录后生成完整报告",
+      "fullReportTitle": "九星气学完整报告",
+      "loginRequired": "完整报告需要登录；局部解读仍可使用。",
+      "close": "关闭解读"
+    },
+    "stars": {
+      "year": "本命星",
+      "month": "月命星",
+      "day": "日命星",
+      "hour": "时命星"
+    },
+    "starNames": {
+      "1": "一白水星",
+      "2": "二黑土星",
+      "3": "三碧木星",
+      "4": "四绿木星",
+      "5": "五黄土星",
+      "6": "六白金星",
+      "7": "七赤金星",
+      "8": "八白土星",
+      "9": "九紫火星"
+    },
+    "elements": {
+      "water": "水",
+      "earth": "土",
+      "wood": "木",
+      "metal": "金",
+      "fire": "火"
+    },
+    "directions": {
+      "north": "北",
+      "south": "南",
+      "east": "东",
+      "west": "西",
+      "northeast": "东北",
+      "southeast": "东南",
+      "southwest": "西南",
+      "northwest": "西北",
+      "center": "中宫"
+    },
+    "palaces": {
+      "1": "坎宫",
+      "2": "坤宫",
+      "3": "震宫",
+      "4": "巽宫",
+      "5": "中宫",
+      "6": "乾宫",
+      "7": "兑宫",
+      "8": "艮宫",
+      "9": "离宫"
+    },
+    "boards": {
+      "year": "年盘",
+      "month": "月盘",
+      "day": "日盘",
+      "hour": "时盘"
+    },
+    "signals": {
+      "fiveYellow": "五黄杀",
+      "darkSword": "暗剑杀",
+      "yearBreaker": "岁破",
+      "monthBreaker": "月破",
+      "honmeiKill": "本命杀",
+      "honmeiTargetKill": "本命的杀"
+    },
+    "relations": {
+      "sameElement": "比和",
+      "nourishes": "生入",
+      "drains": "生出",
+      "controls": "剋出",
+      "controlledBy": "剋入"
+    },
+    "report": {
+      "birth": "出生",
+      "solarYear": "气学年份",
+      "location": "地点"
+    },
+    "seo": {
+      "kyuseiKigakuTitle": "九星气学排盘_在线计算_吉方位与相性",
+      "kyuseiKigakuDesc": "免费九星气学在线排盘，精确按立春与节气计算本命星、月命星、倾斜宫、年月日时盘、五黄杀、暗剑杀、岁破与相性。",
+      "kyuseiKigakuKeywords": "九星气学,九星气学怎么算,九星气学吉方位,九星气学 本命星 月命星,九星气学 相性,九星气学 计算,九星気学自动计算,九星气学排盘,九星気学 2026,九星气学",
+      "kyuseiKigakuOgTitle": "九星气学排盘_在线计算",
+      "kyuseiKigakuOgDesc": "生成九星气学本命盘与四层九宫方位盘，看清本命星、倾斜宫、吉凶方位和相性。"
+    },
+    "eyebrow": "九星気学",
+    "hours": {
+      "rat": "子时",
+      "ox": "丑时",
+      "tiger": "寅时",
+      "rabbit": "卯时",
+      "dragon": "辰时",
+      "snake": "巳时",
+      "horse": "午时",
+      "goat": "未时",
+      "monkey": "申时",
+      "rooster": "酉时",
+      "dog": "戌时",
+      "pig": "亥时"
+    }
   }
 }

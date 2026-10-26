@@ -1,0 +1,138 @@
+{
+  "kyuseiKigaku": {
+    "title": "구성학",
+    "subtitle": "입춘과 절기 시각 기준으로 본명성, 월명성, 기울어진 궁, 연월일시반을 계산합니다.",
+    "formTitle": "출생 정보",
+    "submit": "명반 만들기",
+    "hourHint": "출생 시간을 선택하세요. 자시는 23:00에 시작합니다.",
+    "locationHint": "장소를 입력하면 시간대와 절기 경계를 더 정확하게 처리합니다.",
+    "privacyHint": "문화 참고용이며 출생 정보는 공개되지 않습니다.",
+    "calculating": "구성학 명반을 만드는 중...",
+    "requiredError": "생년월일과 시간이 필요합니다",
+    "fail": "명반 생성 실패",
+    "pleaseRetry": "다시 시도해 주세요",
+    "natalTitle": "본명 구조",
+    "natalSubtitle": "본명성, 월명성, 일반, 시반에서 기본 리듬을 읽습니다.",
+    "inclinedPalace": "기울어진 궁",
+    "centerAdjusted": "본명성과 월명성이 중궁에서 만나 뒷궁 기울기로 읽습니다.",
+    "boardsTitle": "연반 · 월반 · 일반 · 시반",
+    "boardsSubtitle": "네 겹의 구궁반에 비성과 방위 신호를 표시합니다.",
+    "compatibilityTitle": "궁합",
+    "compatibilitySubtitle": "본명성과 월명성 관계를 먼저 보고 구성학 친화력을 확인합니다.",
+    "internalRelation": "본명과 월명 관계",
+    "affinityTitle": "구성학 친화력",
+    "methodTitle": "계산 기준",
+    "engine": "엔진",
+    "yearBoundary": "연도 경계",
+    "monthBoundary": "월 경계",
+    "disclaimer": "면책",
+    "ai": {
+      "title": "AI 해석",
+      "action": "선택하여 AI 해석",
+      "targetFallback": "명반 요소",
+      "connecting": "AI 연결 중...",
+      "error": "AI 해석에 실패했습니다. 다시 시도해 주세요.",
+      "noResult": "AI 응답이 없습니다. 다시 시도해 주세요.",
+      "disclaimer": "AI 해석은 문화 참고이며 실제 조언이 아닙니다.",
+      "fullReport": "전체 리포트 만들기",
+      "fullReportLogin": "로그인 후 전체 리포트",
+      "fullReportTitle": "구성학 전체 리포트",
+      "loginRequired": "전체 리포트에는 로그인이 필요합니다. 부분 해석은 계속 사용할 수 있습니다.",
+      "close": "해석 닫기"
+    },
+    "stars": {
+      "year": "본명성",
+      "month": "월명성",
+      "day": "일명성",
+      "hour": "시명성"
+    },
+    "starNames": {
+      "1": "일백수성",
+      "2": "이흑토성",
+      "3": "삼벽목성",
+      "4": "사록목성",
+      "5": "오황토성",
+      "6": "육백금성",
+      "7": "칠적금성",
+      "8": "팔백토성",
+      "9": "구자화성"
+    },
+    "elements": {
+      "water": "수",
+      "earth": "토",
+      "wood": "목",
+      "metal": "금",
+      "fire": "화"
+    },
+    "directions": {
+      "north": "북",
+      "south": "남",
+      "east": "동",
+      "west": "서",
+      "northeast": "북동",
+      "southeast": "남동",
+      "southwest": "남서",
+      "northwest": "북서",
+      "center": "중궁"
+    },
+    "palaces": {
+      "1": "감궁",
+      "2": "곤궁",
+      "3": "진궁",
+      "4": "손궁",
+      "5": "중궁",
+      "6": "건궁",
+      "7": "태궁",
+      "8": "간궁",
+      "9": "리궁"
+    },
+    "boards": {
+      "year": "연반",
+      "month": "월반",
+      "day": "일반",
+      "hour": "시반"
+    },
+    "signals": {
+      "fiveYellow": "오황살",
+      "darkSword": "암검살",
+      "yearBreaker": "세파",
+      "monthBreaker": "월파",
+      "honmeiKill": "본명살",
+      "honmeiTargetKill": "본명적살"
+    },
+    "relations": {
+      "sameElement": "비화",
+      "nourishes": "생입",
+      "drains": "생출",
+      "controls": "극출",
+      "controlledBy": "극입"
+    },
+    "report": {
+      "birth": "출생",
+      "solarYear": "기학 연도",
+      "location": "장소"
+    },
+    "seo": {
+      "kyuseiKigakuTitle": "구성학 명반 | 본명성과 방위 계산",
+      "kyuseiKigakuDesc": "구성학을 온라인으로 계산합니다. 입춘과 절기 기준으로 본명성, 월명성, 궁합, 연월일시반, 오황살, 암검살, 세파와 방위를 확인하세요.",
+      "kyuseiKigakuKeywords": "구성학,구성학 만세력,구성학이란,구성학 숫자 의미,구성학 적중률,구성학 본명성,구성학 풀이,구성학 프로그램,구성학 보는 법,구성학 방위",
+      "kyuseiKigakuOgTitle": "구성학 명반 계산",
+      "kyuseiKigakuOgDesc": "본명성, 월명성, 네 개의 구궁반과 궁합·방위 신호를 한 번에 확인하세요."
+    },
+    "eyebrow": "구성학",
+    "hours": {
+      "rat": "자시",
+      "ox": "축시",
+      "tiger": "인시",
+      "rabbit": "묘시",
+      "dragon": "진시",
+      "snake": "사시",
+      "horse": "오시",
+      "goat": "미시",
+      "monkey": "신시",
+      "rooster": "유시",
+      "dog": "술시",
+      "pig": "해시"
+    }
+  }
+}
