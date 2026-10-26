@@ -419,22 +419,17 @@ const navItems = computed<NavItem[]>(() => [
   { label: t('nav.wiki'), to: '/wiki', id: 'nav-wiki' },
 ])
 
-type AppLanguageCode = 'zh-CN' | 'zh-TW' | 'en' | 'ja'
+type AppLanguageCode = 'zh-CN' | 'zh-TW' | 'en' | 'ja' | 'ko'
 
 const baseLanguages = computed<Array<{ code: AppLanguageCode, name: string }>>(() => [
   { code: 'zh-CN', name: t('language.zhCN') },
   { code: 'zh-TW', name: t('language.zhTW') },
   { code: 'en', name: t('language.en') },
+  { code: 'ja', name: t('language.ja') },
+  { code: 'ko', name: t('language.ko') },
 ])
 
-const availableLanguages = computed(() => {
-  const languages = [...baseLanguages.value]
-  const routePath = route.path.replace(/^\/(?:zh-TW|en|ja)(?=\/|$)/, '')
-  if (routePath === '/tools/shichu-suimei' && switchLocalePath('ja')) {
-    languages.push({ code: 'ja', name: t('language.ja') })
-  }
-  return languages
-})
+const availableLanguages = computed(() => baseLanguages.value)
 
 const currentLangLabel = computed(() => {
   return availableLanguages.value.find(l => l.code === locale.value)?.name || t('language.zhCN')
@@ -445,6 +440,7 @@ const langShortMap: Record<string, string> = {
   'zh-TW': t('languageShort.zhTW'),
   'en': t('languageShort.en'),
   'ja': t('languageShort.ja'),
+  'ko': t('languageShort.ko'),
 }
 const currentLangShort = computed(() => langShortMap[locale.value] || '简')
 
