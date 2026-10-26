@@ -1653,5 +1653,141 @@
     "seoTitle": "インタラクティブ知識図解",
     "seoDescription": "五行・干支・陰陽・八卦・節気・河図洛書・奇門九宮のインタラクティブ図解を、アニメーションと原理説明つきで閲覧できます。",
     "keywords": "知識図解,インタラクティブ図解,五行図解,干支図解,八卦図解,奇門九宮図解"
+  },
+  "kyuseiKigaku": {
+    "title": "九星気学",
+    "subtitle": "立春と節気の時刻境界から本命星・月命星・傾斜宮・年月日時盤まで一度に計算します。",
+    "formTitle": "出生情報",
+    "submit": "排盤する",
+    "hourHint": "出生時刻を選択してください。子の刻は23:00開始です。",
+    "locationHint": "場所を入力すると、タイムゾーンと節気境界をより正確に処理します。",
+    "privacyHint": "文化的参考用です。出生情報は公開されません。",
+    "calculating": "九星盤を作成中...",
+    "requiredError": "生年月日と時刻は必須です",
+    "fail": "排盤できませんでした",
+    "pleaseRetry": "もう一度お試しください",
+    "natalTitle": "本命構造",
+    "natalSubtitle": "本命星・月命星・日盤・時盤から基本リズムを読みます。",
+    "inclinedPalace": "傾斜宮",
+    "centerAdjusted": "本命星と月命星が中宮で重なるため、裏卦の傾斜で読みます。",
+    "boardsTitle": "年盤・月盤・日盤・時盤",
+    "boardsSubtitle": "四つの九宮盤に飛星と注意したい方位信号を表示します。",
+    "compatibilityTitle": "相性",
+    "compatibilitySubtitle": "本命星と月命星の関係から九星の亲和を確認します。",
+    "internalRelation": "本命と月命の関係",
+    "affinityTitle": "九星の亲和",
+    "methodTitle": "計算方法",
+    "engine": "計算エンジン",
+    "yearBoundary": "年の境界",
+    "monthBoundary": "月の境界",
+    "disclaimer": "注意事項",
+    "ai": {
+      "title": "AI解説",
+      "action": "選択してAI解説",
+      "targetFallback": "盤面要素",
+      "connecting": "AIに接続中...",
+      "error": "AI解説に失敗しました。もう一度お試しください。",
+      "noResult": "AIから内容がありません。もう一度お試しください。",
+      "disclaimer": "AI解説は文化・自己理解の参考であり、現実の助言ではありません。",
+      "fullReport": "完全レポートを作成",
+      "fullReportLogin": "ログインして完全レポート",
+      "fullReportTitle": "九星気学 完全レポート",
+      "loginRequired": "完全レポートにはログインが必要です。部分解説は利用できます。",
+      "close": "解説を閉じる"
+    },
+    "stars": {
+      "year": "本命星",
+      "month": "月命星",
+      "day": "日命星",
+      "hour": "時命星"
+    },
+    "starNames": {
+      "1": "一白水星",
+      "2": "二黒土星",
+      "3": "三碧木星",
+      "4": "四緑木星",
+      "5": "五黄土星",
+      "6": "六白金星",
+      "7": "七赤金星",
+      "8": "八白土星",
+      "9": "九紫火星"
+    },
+    "elements": {
+      "water": "水",
+      "earth": "土",
+      "wood": "木",
+      "metal": "金",
+      "fire": "火"
+    },
+    "directions": {
+      "north": "北",
+      "south": "南",
+      "east": "東",
+      "west": "西",
+      "northeast": "北東",
+      "southeast": "南東",
+      "southwest": "南西",
+      "northwest": "北西",
+      "center": "中宮"
+    },
+    "palaces": {
+      "1": "坎宮",
+      "2": "坤宮",
+      "3": "震宮",
+      "4": "巽宮",
+      "5": "中宮",
+      "6": "乾宮",
+      "7": "兌宮",
+      "8": "艮宮",
+      "9": "離宮"
+    },
+    "boards": {
+      "year": "年盤",
+      "month": "月盤",
+      "day": "日盤",
+      "hour": "時盤"
+    },
+    "signals": {
+      "fiveYellow": "五黄殺",
+      "darkSword": "暗剣殺",
+      "yearBreaker": "歳破",
+      "monthBreaker": "月破",
+      "honmeiKill": "本命殺",
+      "honmeiTargetKill": "本命的殺"
+    },
+    "relations": {
+      "sameElement": "比和",
+      "nourishes": "生入",
+      "drains": "生出",
+      "controls": "剋出",
+      "controlledBy": "剋入"
+    },
+    "report": {
+      "birth": "生年月日",
+      "solarYear": "気学年",
+      "location": "場所"
+    },
+    "seo": {
+      "kyuseiKigakuTitle": "九星気学 自動計算｜本命星と吉方位",
+      "kyuseiKigakuDesc": "九星気学を自動計算。立春と節気の境界から本命星・月命星・傾斜宮・年盤・月盤・日盤・時盤、五黄殺・暗剣殺・歳破・相性まで確認できます。",
+      "kyuseiKigakuKeywords": "九星気学,九星気学 2026,九星気学 自動計算,九星気学 相性,九星気学 調べ方,九星気学とは,九星気学自動計算アプリ,九星気学 計算,九星気学 吉方位,九星気学 吉方位カレンダー",
+      "kyuseiKigakuOgTitle": "九星気学 自動計算",
+      "kyuseiKigakuOgDesc": "本命星・月命星・傾斜宮と四つの九宮盤から、吉方位・凶方位・相性まで確認できます。"
+    },
+    "eyebrow": "九星気学",
+    "hours": {
+      "rat": "子の刻",
+      "ox": "丑の刻",
+      "tiger": "寅の刻",
+      "rabbit": "卯の刻",
+      "dragon": "辰の刻",
+      "snake": "巳の刻",
+      "horse": "午の刻",
+      "goat": "未の刻",
+      "monkey": "申の刻",
+      "rooster": "酉の刻",
+      "dog": "戌の刻",
+      "pig": "亥の刻"
+    }
   }
 }

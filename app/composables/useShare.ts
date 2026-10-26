@@ -102,6 +102,7 @@ export interface ShareOptions {
   | 'thai-astro-paipan'
   | 'shichu-suimei'
   | 'qizheng-paipan'
+  | 'kyusei-kigaku'
   | 'natal-astro'
   | 'qimen-paipan'
   | 'tieban-paipan'
@@ -247,6 +248,7 @@ export function useShare() {
       'thai-astro-paipan': '泰国12星宿命盘',
       'shichu-suimei': '四柱推命排盘',
       'qizheng-paipan': '七政四余排盘',
+      'kyusei-kigaku': '九星气学排盘',
       'natal-astro': '西洋占星本命盘',
       'qimen-paipan': '奇门遁甲排盘',
       'tieban-paipan': '铁板神数排盘',

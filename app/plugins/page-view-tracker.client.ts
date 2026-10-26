@@ -34,7 +34,7 @@ const REGISTERED_TOOL_PATHS = new Set(
   toolCategories.flatMap(category => category.tools.map(tool => tool.path)),
 )
 
-const LOCALE_PREFIX = /^\/(?:zh-CN|zh-TW|en)(?=\/|$)/
+const LOCALE_PREFIX = /^\/(?:zh-CN|zh-TW|en|ja|ko)(?=\/|$)/
 const PROPHET_MATCH_RE = /^\/prophet\/match\/([\w-]{1,80})$/
 const GUANYIN_LOT_DETAIL_RE = /^\/tools\/guanyin-lots\/(\d{1,3})$/
 const GUANDI_LOT_DETAIL_RE = /^\/tools\/guandi-lots\/(\d{1,3})$/

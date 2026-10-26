@@ -13579,5 +13579,141 @@
     "seoTitle": "Interactive Knowledge Graphs",
     "seoDescription": "Interactive diagrams for Five Phases, stems and branches, Yin Yang, trigrams, solar terms, Hetu Luoshu and Qimen, with animations and principles.",
     "keywords": "interactive diagrams,Chinese metaphysics diagrams,Five Phases,heavenly stems,earthly branches,bagua,Qimen chart"
+  },
+  "kyuseiKigaku": {
+    "title": "Nine Star Ki Chart",
+    "subtitle": "Calculate the honmei star, month star, inclined palace and four boards from exact solar-term boundaries.",
+    "formTitle": "Birth details",
+    "submit": "Calculate chart",
+    "hourHint": "Choose the birth hour; Rat hour starts at 23:00.",
+    "locationHint": "Add a place for a more precise timezone and solar-term boundary.",
+    "privacyHint": "For cultural reference only; birth details are not published.",
+    "calculating": "Creating your Nine Star Ki chart...",
+    "requiredError": "Birth date and hour are required",
+    "fail": "Chart failed",
+    "pleaseRetry": "Please try again",
+    "natalTitle": "Natal structure",
+    "natalSubtitle": "Read your core rhythm from the year, month, day and hour stars.",
+    "inclinedPalace": "Inclined palace",
+    "centerAdjusted": "Both natal stars meet the center; the back-palace reading is applied.",
+    "boardsTitle": "Year, month, day and hour boards",
+    "boardsSubtitle": "Four nine-palace layers show flying stars and directional signals.",
+    "compatibilityTitle": "Compatibility",
+    "compatibilitySubtitle": "Start with the natal and month-star relation, then review star affinities.",
+    "internalRelation": "Natal and month relation",
+    "affinityTitle": "Star affinities",
+    "methodTitle": "Calculation basis",
+    "engine": "Engine",
+    "yearBoundary": "Year boundary",
+    "monthBoundary": "Month boundary",
+    "disclaimer": "Disclaimer",
+    "ai": {
+      "title": "AI interpretation",
+      "action": "Select for AI interpretation",
+      "targetFallback": "Chart element",
+      "connecting": "Connecting to AI...",
+      "error": "AI interpretation failed. Please try again.",
+      "noResult": "AI returned no content. Please try again.",
+      "disclaimer": "AI interpretation is cultural reference, not real-world advice.",
+      "fullReport": "Create full report",
+      "fullReportLogin": "Sign in for full report",
+      "fullReportTitle": "Complete Nine Star Ki report",
+      "loginRequired": "Sign in for the full report; targeted readings remain available.",
+      "close": "Close interpretation"
+    },
+    "stars": {
+      "year": "Honmei star",
+      "month": "Month star",
+      "day": "Day star",
+      "hour": "Hour star"
+    },
+    "starNames": {
+      "1": "One White Water",
+      "2": "Two Black Earth",
+      "3": "Three Blue Wood",
+      "4": "Four Green Wood",
+      "5": "Five Yellow Earth",
+      "6": "Six White Metal",
+      "7": "Seven Red Metal",
+      "8": "Eight White Earth",
+      "9": "Nine Purple Fire"
+    },
+    "elements": {
+      "water": "Water",
+      "earth": "Earth",
+      "wood": "Wood",
+      "metal": "Metal",
+      "fire": "Fire"
+    },
+    "directions": {
+      "north": "North",
+      "south": "South",
+      "east": "East",
+      "west": "West",
+      "northeast": "Northeast",
+      "southeast": "Southeast",
+      "southwest": "Southwest",
+      "northwest": "Northwest",
+      "center": "Center"
+    },
+    "palaces": {
+      "1": "Kan palace",
+      "2": "Kun palace",
+      "3": "Zhen palace",
+      "4": "Xun palace",
+      "5": "Center palace",
+      "6": "Qian palace",
+      "7": "Dui palace",
+      "8": "Gen palace",
+      "9": "Li palace"
+    },
+    "boards": {
+      "year": "Year board",
+      "month": "Month board",
+      "day": "Day board",
+      "hour": "Hour board"
+    },
+    "signals": {
+      "fiveYellow": "Five Yellow",
+      "darkSword": "Dark Sword",
+      "yearBreaker": "Year breaker",
+      "monthBreaker": "Month breaker",
+      "honmeiKill": "Honmei kill",
+      "honmeiTargetKill": "Honmei target kill"
+    },
+    "relations": {
+      "sameElement": "Same element",
+      "nourishes": "Nourishes",
+      "drains": "Drains",
+      "controls": "Controls",
+      "controlledBy": "Controlled by"
+    },
+    "report": {
+      "birth": "Birth",
+      "solarYear": "Kigaku year",
+      "location": "Location"
+    },
+    "seo": {
+      "kyuseiKigakuTitle": "Nine Star Ki Chart_Calculator and Compatibility",
+      "kyuseiKigakuDesc": "Free Nine Star Ki chart calculator. Find your honmei star, month star, inclined palace, year and month boards, lucky directions and compatibility from exact solar terms.",
+      "kyuseiKigakuKeywords": "nine star ki,nine star ki calculator,nine star ki 2026,nine star ki chart,nine star ki number meaning,nine star ki astrology,nine star ki reading free,nine star ki compatibility,9 star ki calculator,japanese nine star ki calculator",
+      "kyuseiKigakuOgTitle": "Nine Star Ki Chart Calculator",
+      "kyuseiKigakuOgDesc": "Generate your Nine Star Ki chart, four nine-palace boards, directional signals and star compatibility."
+    },
+    "eyebrow": "Nine Star Ki",
+    "hours": {
+      "rat": "Rat hour",
+      "ox": "Ox hour",
+      "tiger": "Tiger hour",
+      "rabbit": "Rabbit hour",
+      "dragon": "Dragon hour",
+      "snake": "Snake hour",
+      "horse": "Horse hour",
+      "goat": "Goat hour",
+      "monkey": "Monkey hour",
+      "rooster": "Rooster hour",
+      "dog": "Dog hour",
+      "pig": "Pig hour"
+    }
   }
 }

@@ -83,6 +83,13 @@ const chartingToolCategory: ToolCategory = {
       path: '/tools/qizheng-paipan',
     },
     {
+      icon: 'i-heroicons-viewfinder-circle',
+      titleKey: 'kyuseiKigaku.title',
+      descKey: 'kyuseiKigaku.subtitle',
+      ctaKey: 'kyuseiKigaku.submit',
+      path: '/tools/kyusei-kigaku',
+    },
+    {
       icon: 'i-heroicons-globe-alt',
       titleKey: 'natalAstro.title',
       descKey: 'natalAstro.subtitle',

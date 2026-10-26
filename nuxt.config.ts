@@ -166,6 +166,8 @@ export default defineNuxtConfig({
         { code: 'zh-CN', language: 'zh-CN', _sitemap: 'sitemap-zh-CN', _hreflang: 'zh-CN' },
         { code: 'zh-TW', language: 'zh-TW', _sitemap: 'sitemap-zh-TW', _hreflang: 'zh-TW' },
         { code: 'en', language: 'en', _sitemap: 'sitemap-en', _hreflang: 'en' },
+        { code: 'ja', language: 'ja-JP', _sitemap: 'sitemap-ja', _hreflang: 'ja-JP' },
+        { code: 'ko', language: 'ko-KR', _sitemap: 'sitemap-ko', _hreflang: 'ko-KR' },
       ],
     },
     defaults: {
@@ -202,6 +204,7 @@ export default defineNuxtConfig({
       { code: 'zh-TW', name: '繁體中文', file: 'zh-TW.json', language: 'zh-TW' },
       { code: 'en', name: 'English', file: 'en.json', language: 'en' },
       { code: 'ja', name: '日本語', file: 'ja.json', language: 'ja-JP' },
+      { code: 'ko', name: '한국어', file: 'ko.json', language: 'ko-KR' },
     ],
     defaultLocale: 'zh-CN',
     strategy: 'prefix_except_default',
