@@ -334,8 +334,32 @@ onBeforeUnmount(() => insightAbort?.abort())
 .kk-method dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; margin: 14px 0 0; }
 .kk-method dt { color: var(--text-faint); font-size: 12px; }
 .kk-method dd { margin: 4px 0 0; font-size: 13px; line-height: 1.55; }
-.kk-target { transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.kk-target { position: relative; cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.kk-target::after {
+  content: '✦';
+  position: absolute;
+  z-index: 5;
+  top: 5px;
+  right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-bg) 88%, var(--accent-bg));
+  color: var(--accent);
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
 .kk-target:hover, .kk-target:focus-visible { border-color: var(--accent-border-hover); background-color: color-mix(in srgb, var(--accent-bg) 58%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-bg) 68%, transparent); }
+.kk-target:hover::after, .kk-target:focus-visible::after { opacity: 1; transform: translateY(0); }
+.kk-target:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .kk-layer { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 20px; background: var(--overlay-bg); backdrop-filter: blur(8px); }
 .kk-insight { width: min(680px, 100%); max-height: min(78vh, 680px); display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--surface-elevated); }
 .kk-insight header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px; border-bottom: 1px solid var(--border-subtle); }
