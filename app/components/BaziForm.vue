@@ -58,30 +58,82 @@
       </div>
     </div>
 
-    <!-- 阳历生日 -->
+    <!-- 生日 -->
     <div class="space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
-        {{ $t('profileForm.birthDate') }}
+        {{ $t('baziForm.birthDateLabel') }}
         <span class="text-[var(--accent)]">*</span>
       </label>
-      <UPopover>
-        <UButton
-          color="neutral"
-          variant="outline"
-          class="w-full justify-start bg-[var(--surface-input)] border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] hover:border-[var(--border-medium)]"
-          :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
+      <div class="flex gap-2">
+        <button
+          v-for="option in calendarOptions"
+          :key="option.value"
+          type="button"
+          class="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors"
+          :class="calendarMode === option.value
+            ? 'border-[var(--accent-border-hover)] bg-[var(--accent-bg)] text-[var(--accent)]'
+            : 'border-[var(--border-light)] text-[var(--text-muted)] hover:border-[var(--border-medium)]'"
+          @click="setCalendarMode(option.value)"
         >
-          <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-          {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
-        </UButton>
-        <template #content>
-          <AppCalendar
-            v-model="calendarDate"
+          {{ $t(option.labelKey) }}
+        </button>
+      </div>
+      <div v-if="calendarMode === 'solar'">
+        <UPopover>
+          <UButton
+            color="neutral"
+            variant="outline"
+            class="w-full justify-start bg-[var(--surface-input)] border-[var(--border-light)] text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] hover:border-[var(--border-medium)]"
+            :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
+          >
+            <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
+            {{ selectedDateText }}
+          </UButton>
+          <template #content>
+            <AppCalendar
+              v-model="calendarDate"
+              color="warning"
+              class="p-2"
+            />
+          </template>
+        </UPopover>
+      </div>
+      <div v-else class="space-y-2">
+        <div class="grid grid-cols-3 gap-2">
+          <USelect
+            v-model="lunarYear"
+            :items="lunarYearOptions"
             color="warning"
-            class="p-2"
+            :ui="compactSelectUi"
           />
-        </template>
-      </UPopover>
+          <USelect
+            v-model="lunarMonth"
+            :items="lunarMonthOptions"
+            color="warning"
+            :ui="compactSelectUi"
+          />
+          <USelect
+            v-model="lunarDay"
+            :items="lunarDayOptions"
+            color="warning"
+            :ui="compactSelectUi"
+          />
+        </div>
+        <label class="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+          <input
+            v-model="lunarLeap"
+            type="checkbox"
+            class="accent-[var(--accent)]"
+          >
+          {{ $t('baziForm.leapMonth') }}
+        </label>
+      </div>
+      <p v-if="calendarMode === 'lunar' && lunarError" class="text-xs text-red-400">
+        {{ lunarError }}
+      </p>
+      <p v-else-if="calendarMode === 'lunar' && solarPreview" class="text-xs text-[var(--text-faint)]">
+        {{ solarPreview }}
+      </p>
       <p v-if="birthGanZhi" class="text-xs text-[var(--accent)] flex items-center gap-1">
         <UIcon name="i-heroicons-sparkles" class="w-3 h-3" />
         {{ birthGanZhi }}
@@ -95,8 +147,7 @@
         <span v-if="requireHour" class="text-[var(--accent)]">*</span>
       </label>
       <USelect
-        :model-value="useTimeIndex ? form.birthTimeIndex : form.birthHour"
-        @update:model-value="value => setHourValue(value)"
+        v-model="selectedHourValue"
         :items="hourOptions"
         :placeholder="$t('profileForm.birthHourPlaceholder')"
         color="warning"
@@ -190,7 +241,7 @@
       block
       :disabled="!isValid"
       class="mt-2 shadow-lg shadow-[#c9a227]/10 hover:shadow-[#c9a227]/20 transition-all duration-300"
-      @click="$emit('submit', { ...form })"
+      @click="$emit('submit', { ...form, birthHourUnknown })"
     >
       <template #leading>
         <UIcon name="i-heroicons-sparkles" class="w-5 h-5" />
@@ -203,6 +254,7 @@
 <script setup lang="ts">
 import type { DiZhi, UserProfile } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
+import { toGregorian, toLunar } from 'lunar'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
 
 interface FormValues {
@@ -214,6 +266,7 @@ interface FormValues {
   formerName: string
   formerNameChangedYear?: number
   birthProvince: string
+  birthHourUnknown?: boolean
 }
 
 interface Props {
@@ -252,6 +305,22 @@ const { t, locale } = useI18n()
 
 const selectedProfileId = ref<string | null>(null)
 
+const LUNAR_MONTHS = ['正月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '冬月', '腊月']
+const LUNAR_DAYS = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十']
+
+const calendarMode = ref<'solar' | 'lunar'>('solar')
+const birthHourUnknown = ref(false)
+const lunarYear = ref(new Date().getFullYear())
+const lunarMonth = ref(1)
+const lunarDay = ref(1)
+const lunarLeap = ref(false)
+const lunarError = ref('')
+
+const calendarOptions = [
+  { value: 'solar', labelKey: 'baziForm.calendarSolar' },
+  { value: 'lunar', labelKey: 'baziForm.calendarLunar' },
+] as const
+
 const form = reactive<FormValues>({
   gender: 'male',
   birthDate: '',
@@ -273,19 +342,36 @@ const hourOptions = computed(() => props.useTimeIndex
           : `${t(`ziweiChart.timeIndex${index}`)}（${String(index * 2 - 1).padStart(2, '0')}:00~${String(index * 2 + 1).padStart(2, '0')}:00）`,
       value: index,
     }))
-  : SHICHEN_OPTIONS.map(s => ({
-      label: locale.value === 'ja'
-        ? `${s.dizhi}時（${s.range}）`
-        : `${s.label}（${s.range}）`,
-      value: s.dizhi,
-    })))
+  : [
+      { label: t('baziForm.unknownHour'), value: 'unknown' },
+      ...SHICHEN_OPTIONS.map(s => ({
+        label: locale.value === 'ja'
+          ? `${s.dizhi}時（${s.range}）`
+          : `${s.label}（${s.range}）`,
+        value: s.dizhi,
+      })),
+    ])
 
-function setHourValue(value: DiZhi | number) {
+function setHourValue(value: string | number) {
+  birthHourUnknown.value = value === 'unknown'
   if (props.useTimeIndex) {
     form.birthTimeIndex = typeof value === 'number' ? value : undefined
     return
   }
-  form.birthHour = typeof value === 'string' ? value as DiZhi : undefined
+  form.birthHour = typeof value === 'string' && value !== 'unknown' ? value as DiZhi : undefined
+}
+
+const selectedHourValue = computed<string | number | undefined>({
+  get: () => birthHourUnknown.value
+    ? 'unknown'
+    : props.useTimeIndex ? form.birthTimeIndex : form.birthHour,
+  set: value => setHourValue(value ?? ''),
+})
+
+const compactSelectUi = {
+  base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
+  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-60',
+  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
 }
 
 const birthGanZhi = ref('')
@@ -294,6 +380,79 @@ const { dateToGanZhi } = useBaziCalc()
 const tz = getLocalTimeZone()
 const dateFormatter = computed(() => new DateFormatter(locale.value === 'ja' ? 'ja-JP' : 'zh-CN', { dateStyle: 'long' }))
 const calendarDate = ref<CalendarDate | undefined>(undefined)
+
+const lunarYearOptions = computed(() => Array.from({ length: 201 }, (_, index) => ({
+  label: String(1900 + index),
+  value: 1900 + index,
+})))
+const lunarMonthOptions = computed(() => Array.from({ length: 12 }, (_, index) => ({
+  label: LUNAR_MONTHS[index] ?? `${index + 1}月`,
+  value: index + 1,
+})))
+const lunarDayOptions = computed(() => Array.from({ length: 30 }, (_, index) => ({
+  label: LUNAR_DAYS[index] ?? `${index + 1}日`,
+  value: index + 1,
+})))
+
+const lunarSelectionText = computed(() => {
+  const month = LUNAR_MONTHS[lunarMonth.value - 1] ?? `${lunarMonth.value}月`
+  const day = LUNAR_DAYS[lunarDay.value - 1] ?? `${lunarDay.value}日`
+  return `${lunarYear.value}年${lunarLeap.value ? '闰' : ''}${month}${day}`
+})
+
+function syncLunarFromSolar(date?: { year: number, month: number, day: number }) {
+  if (!date) return
+  try {
+    const { lunar } = toLunar({ year: date.year, month: date.month, day: date.day })
+    lunarYear.value = lunar.year
+    lunarMonth.value = lunar.month
+    lunarDay.value = lunar.day
+    lunarLeap.value = Boolean(lunar.isLeapMonth)
+    lunarError.value = ''
+  } catch {
+    lunarError.value = t('baziForm.invalidLunarDate')
+  }
+}
+
+function setSolarFromLunar() {
+  lunarError.value = ''
+  try {
+    const result = toGregorian({
+      year: lunarYear.value,
+      month: lunarMonth.value,
+      day: lunarDay.value,
+      isLeapMonth: lunarLeap.value,
+    })
+    const date = ('date' in result ? result.date : result) as Date
+    calendarDate.value = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+  } catch {
+    lunarError.value = t('baziForm.invalidLunarDate')
+  }
+}
+
+function setCalendarMode(mode: 'solar' | 'lunar') {
+  calendarMode.value = mode
+  if (mode === 'lunar' && calendarDate.value) syncLunarFromSolar(calendarDate.value)
+  if (mode === 'solar') setSolarFromLunar()
+}
+
+const selectedDateText = computed(() => {
+  if (calendarMode.value === 'solar') {
+    return form.birthDate && calendarDate.value
+      ? dateFormatter.value.format(calendarDate.value.toDate(tz))
+      : t('profileForm.birthDatePlaceholder')
+  }
+  return lunarError.value
+    ? t('profileForm.birthDatePlaceholder')
+    : lunarSelectionText.value
+})
+
+const solarPreview = computed(() => {
+  if (!form.birthDate) return ''
+  const [year, month, day] = form.birthDate.split('-').map(Number)
+  if (!year || !month || !day) return ''
+  return dateFormatter.value.format(new CalendarDate(year, month, day).toDate(tz))
+})
 
 function syncBirthDateFromCalendar() {
   if (calendarDate.value) {
@@ -305,7 +464,12 @@ function syncBirthDateFromCalendar() {
 }
 
 watch(calendarDate, () => {
+  if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
   syncBirthDateFromCalendar()
+})
+
+watch([lunarYear, lunarMonth, lunarDay, lunarLeap], () => {
+  if (calendarMode.value === 'lunar') setSolarFromLunar()
 })
 
 function onBirthDateChange() {
@@ -327,7 +491,9 @@ function onBirthDateChange() {
 
 const isValid = computed(() => {
   if (props.minimal) return !!(form.birthDate)
-  const hourReady = props.useTimeIndex ? form.birthTimeIndex !== undefined : form.birthHour !== undefined
+  const hourReady = props.useTimeIndex
+    ? form.birthTimeIndex !== undefined || birthHourUnknown.value
+    : form.birthHour !== undefined || birthHourUnknown.value
   return !!(form.gender && form.birthDate && (!props.requireHour || hourReady))
 })
 
@@ -360,6 +526,7 @@ function selectProfile(profile: UserProfile) {
   form.birthTimeIndex = profile.birthTimeIndex ?? (profile.birthHour === undefined
     ? undefined
     : Math.max(0, ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'].indexOf(profile.birthHour)))
+  birthHourUnknown.value = Boolean(profile.birthHourUnknown)
   form.name = profile.name || ''
   form.formerName = profile.formerName || ''
   form.formerNameChangedYear = profile.formerNameChangedYear
@@ -373,6 +540,7 @@ function selectProfile(profile: UserProfile) {
   } else {
     calendarDate.value = undefined
   }
+  if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
   onBirthDateChange()
 }
 
@@ -392,6 +560,7 @@ watch(() => props.initialValues, (v) => {
         calendarDate.value = undefined
       }
     }
+    if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
     onBirthDateChange()
   }
 }, { immediate: true })

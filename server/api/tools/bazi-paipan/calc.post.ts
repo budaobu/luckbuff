@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: '出生日期、时辰和性别均为必填项' })
   }
 
-  if (!DI_ZHI.includes(body.birthHour as any)) {
+  if (body.birthHour !== 'unknown' && !DI_ZHI.includes(body.birthHour as any)) {
     throw createError({ statusCode: 400, statusMessage: '出生时辰无效' })
   }
 

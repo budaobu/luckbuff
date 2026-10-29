@@ -17,6 +17,10 @@ const ELEMENT_BY_LABEL = new Map<string, ElementKey>([
   ['水', 'water'],
 ])
 
+export function elementKeyByLabel(label: string): ElementKey {
+  return ELEMENT_BY_LABEL.get(label) ?? 'earth'
+}
+
 const PILLAR_KEYS = ['year', 'month', 'day', 'hour'] as const
 const PILLAR_KEY_BY_LABEL = new Map<string, (typeof PILLAR_KEYS)[number]>([
   ['年柱', 'year'],

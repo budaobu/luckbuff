@@ -156,7 +156,7 @@ async function buildPerson(input: ZechengInput, origin: ZechengCityRecord): Prom
     year = solar[0]!
     month = solar[1]!
     day = solar[2]!
-    effectiveHour = fullChart.birth.effectiveHour
+    effectiveHour = fullChart.birth.effectiveHour === 'unknown' ? selectedHour : fullChart.birth.effectiveHour
     solarTimeStatusText = fullChart.birth.solarTimeStatusText
   }
 
