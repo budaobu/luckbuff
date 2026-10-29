@@ -82,6 +82,7 @@ interface FormValues {
   gender: 'male' | 'female'
   birthDate: string
   birthHour?: DiZhi
+  birthHourUnknown?: boolean
   name: string
   formerName: string
   formerNameChangedYear?: number
@@ -114,8 +115,29 @@ async function resolveLocation(name: string) {
   return { name }
 }
 
+function applyResult(next: BaziChartResult) {
+  result.value = next
+  bazi3D.selectedDayunIndex.value = next.dayuns.find(dayun => dayun.isCurrent)?.index
+    ?? next.dayuns[0]?.index
+    ?? 0
+  const chartSignature = [
+    next.birth.solarText,
+    next.birth.clockText,
+    next.birth.genderText,
+  ].join('|')
+  const settledKey = `bazi3d:settled:${chartSignature}`
+  try {
+    bazi3D.introCompleted.value = window.localStorage.getItem(settledKey) === '1'
+    window.localStorage.setItem(settledKey, '1')
+  }
+  catch {
+    bazi3D.introCompleted.value = false
+  }
+  phase.value = 'result'
+}
+
 async function handleSubmit(values: FormValues) {
-  if (!values.birthDate || !values.birthHour) {
+  if (!values.birthDate || (!values.birthHour && !values.birthHourUnknown)) {
     toast.add({ title: t('baziChart.requiredError'), color: 'error' })
     return
   }
@@ -133,32 +155,16 @@ async function handleSubmit(values: FormValues) {
 
   try {
     const location = values.birthProvince ? await resolveLocation(values.birthProvince) : null
-    result.value = await plainFetch<BaziChartResult>('/api/tools/bazi-paipan/calc', {
+    const nextResult = await plainFetch<BaziChartResult>('/api/tools/bazi-paipan/calc', {
       method: 'POST',
       body: {
         birthDate: values.birthDate,
-        birthHour: values.birthHour,
+        birthHour: values.birthHourUnknown ? 'unknown' : values.birthHour,
         gender: values.gender,
         location,
       },
     })
-    bazi3D.selectedDayunIndex.value = result.value.dayuns.find(dayun => dayun.isCurrent)?.index
-      ?? result.value.dayuns[0]?.index
-      ?? 0
-    const chartSignature = [
-      result.value.birth.solarText,
-      result.value.birth.clockText,
-      result.value.birth.genderText,
-    ].join('|')
-    const settledKey = `bazi3d:settled:${chartSignature}`
-    try {
-      bazi3D.introCompleted.value = window.localStorage.getItem(settledKey) === '1'
-      window.localStorage.setItem(settledKey, '1')
-    }
-    catch {
-      bazi3D.introCompleted.value = false
-    }
-    phase.value = 'result'
+    applyResult(nextResult)
     await nextTick()
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -178,6 +184,7 @@ function handleSaveProfile(id: string, values: FormValues) {
     gender: values.gender,
     birthDate: values.birthDate,
     birthHour: values.birthHour,
+    birthHourUnknown: values.birthHourUnknown || undefined,
     birthProvince: values.birthProvince || undefined,
   })
 }
@@ -247,6 +254,17 @@ useHead(() => ({
     },
   ],
 }))
+
+onMounted(() => {
+  if (!new URLSearchParams(window.location.search).get('bazi3dE2E')) return
+  ;(window as Window & {
+    __baziPaipanPageE2E?: { setResult: (next: BaziChartResult) => void }
+  }).__baziPaipanPageE2E = { setResult: applyResult }
+})
+
+onBeforeUnmount(() => {
+  delete (window as Window & { __baziPaipanPageE2E?: unknown }).__baziPaipanPageE2E
+})
 </script>
 
 <style scoped>

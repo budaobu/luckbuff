@@ -24,7 +24,7 @@ export interface BaziChartLocation {
 
 export interface BaziChartInput {
   birthDate: string
-  birthHour: DiZhi
+  birthHour: DiZhi | 'unknown'
   gender: BaziChartGender
   location?: BaziChartLocation | null
 }
@@ -93,8 +93,8 @@ export interface BaziChartBirthInfo {
   equationOfTimeMinutes: number
   standardMeridian: number | null
   solarTimeAlgorithm: string | null
-  selectedHour: DiZhi
-  effectiveHour: DiZhi
+  selectedHour: DiZhi | 'unknown'
+  effectiveHour: DiZhi | 'unknown'
   genderText: string
   dayBoundaryChanged: boolean
   solarTerm: BaziSolarTerm
@@ -974,14 +974,15 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
     throw createError({ statusCode: 400, statusMessage: '出生年份需在 1900-2100' })
   }
 
-  const inputHour = HOUR_MIDPOINT[input.birthHour]
+  const hourKnown = input.birthHour !== 'unknown'
+  const inputHour: number | null = input.birthHour === 'unknown' ? null : HOUR_MIDPOINT[input.birthHour]
   const timezone = input.location?.timezone || 'Asia/Shanghai'
   const openChart = calculateBaziChart({
     year,
     month,
     day,
-    hour: inputHour,
-    minute: 0,
+    hour: inputHour ?? undefined,
+    minute: hourKnown ? 0 : undefined,
     gender: input.gender,
     timezoneId: timezone,
     longitude: input.location?.longitude,
@@ -995,7 +996,7 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
     month: calculation.month,
     day: calculation.day,
     hour: calculation.hour ?? inputHour,
-    minute: calculation.minute ?? 0,
+    minute: calculation.minute ?? (hourKnown ? 0 : null),
     gender: input.gender,
     tzOffsetMinutes: 480,
   }, { adjustPalacesPastZhongQi: true })
@@ -1035,13 +1036,17 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
   const relations = buildRelations(openChart, soulChart)
   const { shensha, combinations, pillarShensha } = buildShensha(soulChart)
   const currentYear = new Date().getFullYear()
-  const effectiveHour = openChart.solarTimeInfo
+  const effectiveHour: DiZhi | 'unknown' = !hourKnown
+    ? 'unknown'
+    : openChart.solarTimeInfo
     ? branchFromTime(Number(openChart.solarTimeInfo.trueSolarTime.slice(0, 2)), Number(openChart.solarTimeInfo.trueSolarTime.slice(3, 5)))
     : input.birthHour
   const dayBoundaryChanged = openChart.calendar.civilSolar.year !== calculation.year
     || openChart.calendar.civilSolar.month !== calculation.month
     || openChart.calendar.civilSolar.day !== calculation.day
-  const solarTimeStatus: BaziChartBirthInfo['solarTimeStatus'] = !openChart.solarTimeInfo
+  const solarTimeStatus: BaziChartBirthInfo['solarTimeStatus'] = !hourKnown
+    ? 'uncorrected'
+    : !openChart.solarTimeInfo
     ? (input.location?.name ? 'failed' : 'uncorrected')
     : effectiveHour !== input.birthHour || dayBoundaryChanged ? 'boundary' : 'corrected'
 
@@ -1087,10 +1092,10 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
     birth: {
       solarText: `${openChart.calendar.civilSolar.year}-${String(openChart.calendar.civilSolar.month).padStart(2, '0')}-${String(openChart.calendar.civilSolar.day).padStart(2, '0')}`,
       clockText: formatMinuteOfDay((openChart.calendar.civilSolar.hour ?? 0) * 60 + (openChart.calendar.civilSolar.minute ?? 0)),
-      trueSolarText: openChart.solarTimeInfo?.trueSolarTime ?? formatMinuteOfDay(inputHour * 60),
+      trueSolarText: openChart.solarTimeInfo?.trueSolarTime ?? (inputHour === null ? '时辰未知' : formatMinuteOfDay(inputHour * 60)),
       trueSolarDateTime: openChart.solarTimeInfo?.trueSolarDateTime ?? lunarSolar.toYmdHms(),
       lunarText: lunarText(openChart.calendar.lunar.month, openChart.calendar.lunar.day),
-      lunarDetail: `${lunar.getYearInGanZhiExact()}年 ${openChart.calendar.lunar.isLeapMonth ? '闰' : ''}${lunarText(openChart.calendar.lunar.month, openChart.calendar.lunar.day)} ${effectiveHour}时`,
+      lunarDetail: `${lunar.getYearInGanZhiExact()}年 ${openChart.calendar.lunar.isLeapMonth ? '闰' : ''}${lunarText(openChart.calendar.lunar.month, openChart.calendar.lunar.day)} ${effectiveHour === 'unknown' ? '时辰未知' : `${effectiveHour}时`}`,
       lunarGanzhi: lunar.getYearInGanZhiExact(),
       zodiac: openChart.calendar.zodiac,
       season: seasonFromLunarMonth(calculation.month),
@@ -1110,7 +1115,11 @@ export async function calculateBaziChartResult(input: BaziChartInput): Promise<B
         ? `${input.location.latitude.toFixed(4)}°${input.location.latitude >= 0 ? 'N' : 'S'}, ${input.location.longitude.toFixed(4)}°${input.location.longitude >= 0 ? 'E' : 'W'}`
         : null,
       solarTimeStatus,
-      solarTimeStatusText: !openChart.solarTimeInfo
+      solarTimeStatusText: !hourKnown
+        ? (input.location?.name
+          ? '时辰未知，已按三柱排盘；未生成时柱，也未做真太阳时校正。'
+          : '时辰未知，已按三柱排盘；未生成时柱，也未做真太阳时校正。')
+        : !openChart.solarTimeInfo
         ? (input.location?.name
           ? '出生地点未能解析坐标，已按所选时辰中值排盘，未做真太阳时校正。'
           : '未填出生地点，按所选时辰中值排盘，未做真太阳时校正。')
