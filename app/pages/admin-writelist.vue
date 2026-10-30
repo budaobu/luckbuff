@@ -17,9 +17,15 @@
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="text-xl font-bold text-white font-serif">命见 · 写作队列</h1>
-          <p class="text-xs text-neutral-500 mt-1">AI 按队列自动写作，每轮间隔 41~107 分钟随机</p>
+          <p class="text-xs text-neutral-500 mt-1">AI 按队列自动写作；每轮最多 8 条，轮间隔 41~107 分钟随机，重启后积压首批 45~90 秒</p>
         </div>
         <div class="flex items-center gap-2">
+          <button
+            v-if="failedCount > 0"
+            class="text-sm px-4 py-2 rounded-lg border border-red-500/40 bg-red-500/10 text-red-300 hover:border-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+            :disabled="retryingAll"
+            @click="retryAllFailed"
+          >{{ retryingAll ? '重试中…' : `重试全部失败 (${failedCount})` }}</button>
           <a
             href="/admin"
             class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
@@ -109,6 +115,9 @@
               <template v-if="item.model"> · {{ item.model }}</template>
             </p>
             <p v-if="item.error" class="text-xs text-red-400/90 mt-1 break-all">{{ item.error }}</p>
+            <p v-if="item.nextRetryAt" class="text-xs text-neutral-500 mt-1">
+              自动重试：{{ formatDate(item.nextRetryAt) }}
+            </p>
           </div>
           <div class="shrink-0 flex items-center gap-3">
             <a
@@ -187,6 +196,8 @@ interface WritelistItem {
   slug?: string
   model?: string
   error?: string
+  attempts?: number
+  nextRetryAt?: string
 }
 
 interface WritelistResponse {
@@ -196,6 +207,7 @@ interface WritelistResponse {
   page: number
   pageSize: number
   hasActiveItems: boolean
+  failedCount: number
   items: WritelistItem[]
 }
 
@@ -217,6 +229,8 @@ const settings = reactive({ autoPublish: false })
 const running = ref(false)
 const adding = ref(false)
 const toggling = ref(false)
+const retryingAll = ref(false)
+const failedCount = ref(0)
 const newTitle = ref('')
 const addFeedback = ref('')
 
@@ -287,6 +301,7 @@ async function load(page?: number, { silent = false }: { silent?: boolean } = {}
     settings.autoPublish = data.settings.autoPublish
     running.value = data.running
     hasActiveItems.value = data.hasActiveItems
+    failedCount.value = data.failedCount
     unauthorized.value = false
   } catch (e: any) {
     if (e?.response?.status === 401) {
@@ -387,6 +402,20 @@ async function retry(item: WritelistItem) {
     schedulePoll()
   } catch (e: any) {
     fatalError.value = e?.data?.statusMessage || '重试失败'
+  }
+}
+
+async function retryAllFailed() {
+  if (!confirm(`确定把 ${failedCount.value} 条失败主题全部重新入队吗？调度器会按当前模式继续写作。`)) return
+  retryingAll.value = true
+  try {
+    await requestAdminApi('/api/admin/writelist/retry-failed', { method: 'POST' })
+    await load(currentPage.value)
+    schedulePoll()
+  } catch (e: any) {
+    fatalError.value = e?.data?.statusMessage || '批量重试失败'
+  } finally {
+    retryingAll.value = false
   }
 }
 

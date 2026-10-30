@@ -12,6 +12,12 @@ import {
 } from '~~/server/utils/insights'
 import { runTranslationPipeline } from '~~/server/utils/insights/translate'
 import { inferRelatedTools } from '~~/server/utils/insights/related-tools'
+import {
+  canAutoRetryWritelistItem,
+  findNextWritelistCandidate,
+  isHardWritelistFailure,
+  nextWritelistRetryDelayMs,
+} from '~~/server/utils/insights/writelist-retry-policy'
 
 // AI 写作队列：主题进、文章出。持久化在 content/insights/.writelist-queue.json
 // （deploy.sh 对 content/insights 无 --delete 同步，且已 exclude 该文件，
@@ -28,6 +34,8 @@ export interface WritelistItem {
   slug?: string
   model?: string
   error?: string
+  attempts?: number
+  nextRetryAt?: string
 }
 
 export interface WritelistSettings {
@@ -62,6 +70,8 @@ export function readWritelist(): WritelistData {
           ...(typeof i.slug === 'string' ? { slug: i.slug } : {}),
           ...(typeof i.model === 'string' ? { model: i.model } : {}),
           ...(typeof i.error === 'string' ? { error: i.error } : {}),
+          ...(typeof i.attempts === 'number' && Number.isFinite(i.attempts) ? { attempts: i.attempts } : {}),
+          ...(typeof i.nextRetryAt === 'string' ? { nextRetryAt: i.nextRetryAt } : {}),
         })),
     }
   } catch {
@@ -139,9 +149,28 @@ export function retryWritelistItem(id: string): WritelistItem {
   if (item.status !== 'failed') throw new Error('只有失败的主题才能重试')
   item.status = 'pending'
   item.error = undefined
+  item.attempts = undefined
+  item.nextRetryAt = undefined
   item.updatedAt = new Date().toISOString()
   writeWritelist(data)
   return item
+}
+
+export function retryFailedWritelistItems(): WritelistItem[] {
+  const data = readWritelist()
+  const now = new Date().toISOString()
+  const retried: WritelistItem[] = []
+  for (const item of data.items) {
+    if (item.status !== 'failed') continue
+    item.status = 'pending'
+    item.error = undefined
+    item.attempts = undefined
+    item.nextRetryAt = undefined
+    item.updatedAt = now
+    retried.push(item)
+  }
+  if (retried.length) writeWritelist(data)
+  return retried
 }
 
 // 进程重启时把中断的 writing 重置回 pending（writeInsight 与队列落盘都是同步操作，
@@ -253,6 +282,7 @@ export interface ProcessResult {
   slug?: string
   model?: string
   error?: string
+  retryAfterMs?: number
 }
 
 let running = false
@@ -312,13 +342,12 @@ async function generateAndStore(queueTitle: string, autoPublish: boolean, items:
   return { slug, model }
 }
 
-// 每次取「待写」中创建时间最旧的一条处理；单条失败只标记失败，不阻塞后续。
+// 取最旧的待写项或到期可自动重试的失败项；单条失败只标记失败，不阻塞后续成功项。
 export async function processNextWritelistItem(): Promise<ProcessResult> {
   if (running) return { processed: false, reason: 'busy' }
   const data = readWritelist()
-  const item = data.items
-    .filter(i => i.status === 'pending')
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))[0]
+  const now = new Date()
+  const item = findNextWritelistCandidate(data.items, now)
   if (!item) return { processed: false, reason: 'empty' }
 
   running = true
@@ -326,6 +355,7 @@ export async function processNextWritelistItem(): Promise<ProcessResult> {
   try {
     item.status = 'writing'
     item.error = undefined
+    item.nextRetryAt = undefined
     item.updatedAt = new Date().toISOString()
     writeWritelist(data)
 
@@ -348,14 +378,61 @@ export async function processNextWritelistItem(): Promise<ProcessResult> {
     console.error(`[writelist] item ${id} ("${item.title}") failed: ${message}`)
     const fresh = readWritelist()
     const failed = fresh.items.find(i => i.id === id)
+    let retryAfterMs: number | null = null
     if (failed) {
+      const attempts = (failed.attempts ?? 0) + 1
+      retryAfterMs = isHardWritelistFailure(message)
+        ? null
+        : nextWritelistRetryDelayMs(attempts)
       failed.status = 'failed'
       failed.error = message
+      failed.attempts = attempts
+      failed.nextRetryAt = retryAfterMs === null
+        ? undefined
+        : new Date(Date.now() + retryAfterMs).toISOString()
       failed.updatedAt = new Date().toISOString()
       writeWritelist(fresh)
     }
-    return { processed: true, id, status: 'failed', error: message }
+    return { processed: true, id, status: 'failed', error: message, retryAfterMs: retryAfterMs ?? undefined }
   } finally {
     running = false
+  }
+}
+
+export interface WritelistBatchResult {
+  results: ProcessResult[]
+  processedCount: number
+  failedCount: number
+  hardFailure: boolean
+  retryAfterMs?: number
+}
+
+export async function processWritelistBatch(maxItems = 8): Promise<WritelistBatchResult> {
+  const size = Math.max(1, Math.min(Math.floor(maxItems) || 1, 20))
+  const results: ProcessResult[] = []
+  let failedCount = 0
+
+  for (let index = 0; index < size; index++) {
+    const result = await processNextWritelistItem()
+    results.push(result)
+    if (!result.processed) break
+    if (result.status !== 'failed') continue
+
+    // 一个失败先停下：硬错误要等人工修复，临时错误按 nextRetryAt 退避。
+    failedCount++
+    return {
+      results,
+      processedCount: results.length,
+      failedCount,
+      hardFailure: result.retryAfterMs === undefined,
+      retryAfterMs: result.retryAfterMs,
+    }
+  }
+
+  return {
+    results,
+    processedCount: results.filter(result => result.processed).length,
+    failedCount,
+    hardFailure: false,
   }
 }

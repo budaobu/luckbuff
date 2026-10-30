@@ -20,6 +20,7 @@ export default defineEventHandler((event) => {
     page,
     pageSize,
     hasActiveItems: items.some(i => i.status === 'pending' || i.status === 'writing'),
+    failedCount: items.filter(i => i.status === 'failed').length,
     items: items.slice((page - 1) * pageSize, page * pageSize),
   }
 })
