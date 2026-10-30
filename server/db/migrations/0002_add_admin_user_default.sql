@@ -1,0 +1,1 @@
+ALTER TABLE `admin_users` ADD `is_default` integer DEFAULT false NOT NULL;
