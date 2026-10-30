@@ -1,4 +1,8 @@
-import { verifyAdminCredentials, issueAdminSession, adminAuthConfigured } from '~~/server/utils/insights-admin-auth'
+import {
+  verifyAdminCredentials,
+  issueAdminSession,
+  adminAuthConfigured,
+} from '~~/server/utils/insights-admin-auth'
 
 const attempts = new Map<string, { count: number; resetAt: number }>()
 
@@ -25,10 +29,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<{ username?: string; password?: string; remember?: boolean }>(event)
-  if (!body?.username || !body?.password || !verifyAdminCredentials(body.username, body.password)) {
+  const adminUser = body?.username && body?.password
+    ? verifyAdminCredentials(body.username, body.password)
+    : null
+  if (!adminUser) {
     throw createError({ statusCode: 401, statusMessage: '用户名或密码错误' })
   }
 
-  issueAdminSession(event, body.remember !== false)
+  issueAdminSession(event, adminUser, body.remember !== false)
   return { ok: true }
 })

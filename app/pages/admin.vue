@@ -55,7 +55,7 @@
         </div>
         <div class="flex items-center gap-2">
           <button
-            v-if="view === 'editor' || view === 'stats'"
+            v-if="view === 'editor' || view === 'stats' || view === 'users'"
             class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
             @click="backToList"
           >
@@ -68,6 +68,12 @@
             >
               写作队列
             </a>
+            <button
+              class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
+              @click="openUsers"
+            >
+              用户管理
+            </button>
             <button
               class="text-sm px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-800 text-neutral-100 hover:border-neutral-400 hover:bg-neutral-700 transition-colors"
               @click="openStats"
@@ -203,6 +209,90 @@
               title="下一页"
               @click="goPage(currentPage + 1)"
             ><UIcon name="i-heroicons-chevron-right" class="w-4 h-4 block" /></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ 用户管理视图 ══════ -->
+      <div v-else-if="view === 'users'">
+        <div class="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 mb-4">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h2 class="text-sm font-medium text-neutral-200">{{ userEditing ? '编辑用户' : '新增用户' }}</h2>
+            <button
+              v-if="userEditing"
+              type="button"
+              class="text-xs text-neutral-400 hover:text-neutral-200"
+              @click="resetUserForm"
+            >取消编辑</button>
+          </div>
+          <form class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end" @submit.prevent="saveUser">
+            <label class="block">
+              <span class="text-xs text-neutral-500">用户名</span>
+              <input
+                v-model="userForm.username"
+                type="text"
+                required
+                :disabled="editingDefaultUser"
+                autocomplete="off"
+                class="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-lg px-3 py-2 text-sm text-neutral-100 focus:outline-none focus:border-amber-500/60"
+              >
+            </label>
+            <label class="block">
+              <span class="text-xs text-neutral-500">{{ userEditing ? '新密码（留空则不修改）' : '密码' }}</span>
+              <input
+                v-model="userForm.password"
+                type="password"
+                :required="!userEditing"
+                :autocomplete="userEditing ? 'new-password' : 'off'"
+                :placeholder="userEditing ? '至少 8 位' : '至少 8 位'"
+                class="mt-1 w-full bg-neutral-950 border border-neutral-800 rounded-lg px-3 py-2 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-amber-500/60"
+              >
+            </label>
+            <button
+              type="submit"
+              :disabled="usersSaving"
+              class="h-[38px] px-4 rounded-lg bg-amber-500/90 hover:bg-amber-400 text-black text-sm font-medium transition-colors disabled:opacity-50"
+            >
+              {{ usersSaving ? '保存中…' : (userEditing ? '保存修改' : '新增') }}
+            </button>
+          </form>
+          <p v-if="usersMessage" class="mt-3 text-xs" :class="usersOk ? 'text-emerald-400' : 'text-red-400'">
+            {{ usersMessage }}
+          </p>
+        </div>
+
+        <div v-if="usersPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
+        <div v-else class="rounded-xl border border-neutral-800 bg-neutral-900/60 divide-y divide-neutral-800">
+          <div
+            v-for="user in adminUsers"
+            :key="user.id"
+            class="flex items-center gap-3 px-4 py-3"
+          >
+            <div class="min-w-0 flex-1">
+              <p class="flex items-center gap-2 text-sm text-neutral-100">
+                <span class="truncate">{{ user.username }}</span>
+                <span
+                  v-if="user.isDefault"
+                  class="shrink-0 text-[11px] px-2 py-0.5 rounded-full border border-neutral-700 bg-neutral-800 text-neutral-400"
+                >缺省</span>
+              </p>
+              <p class="text-xs text-neutral-500 mt-0.5">
+                添加于 {{ formatDate(user.createdAt) }}
+                <template v-if="user.id === currentUserId"> · 当前登录</template>
+              </p>
+            </div>
+            <button
+              type="button"
+              class="text-xs text-neutral-400 hover:text-amber-400 transition-colors"
+              @click="startEditUser(user)"
+            >编辑</button>
+            <button
+              type="button"
+              class="text-xs text-red-400/80 hover:text-red-300 transition-colors disabled:opacity-40 disabled:hover:text-red-400/80"
+              :disabled="user.isDefault || user.id === currentUserId"
+              :title="user.isDefault ? '缺省管理员不能删除' : undefined"
+              @click="deleteUser(user)"
+            >删除</button>
           </div>
         </div>
       </div>
@@ -656,7 +746,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const PAGE_SIZE = 10
 
-const view = ref<'login' | 'list' | 'editor' | 'stats'>('login')
+const view = ref<'login' | 'list' | 'editor' | 'stats' | 'users'>('login')
 const articles = ref<AdminArticle[]>([])
 const totalAll = ref(0)
 const filteredTotal = ref(0)
@@ -742,6 +832,24 @@ const toolbarButtons = [
   { label: '🔗 链接', before: '[', after: '](https://)', hint: '插入链接' },
   { label: '— 分隔线', before: '\n\n---\n\n', after: '', hint: '水平分隔线' },
 ]
+
+interface AdminUserSummary {
+  id: string
+  username: string
+  isDefault: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+const adminUsers = ref<AdminUserSummary[]>([])
+const currentUserId = ref('')
+const usersPending = ref(false)
+const usersSaving = ref(false)
+const usersMessage = ref('')
+const usersOk = ref(true)
+const userEditing = ref(false)
+const editingDefaultUser = ref(false)
+const userForm = reactive({ id: '', username: '', password: '' })
 
 function categoryLabel(cat: string): string {
   return CATEGORY_LABELS[cat] || cat
@@ -905,11 +1013,110 @@ async function login() {
     await $fetch('/api/admin/login', { method: 'POST', body: { ...loginForm } })
     view.value = 'list'
     loginForm.password = ''
+    await loadCurrentUser()
     await loadList()
   } catch (e: any) {
     loginError.value = e?.data?.statusMessage || '登录失败，请稍后再试'
   } finally {
     loginPending.value = false
+  }
+}
+
+async function loadCurrentUser() {
+  try {
+    const res = await adminFetch<{ user?: { id: string } | null }>('/api/admin/session')
+    currentUserId.value = res.user?.id || ''
+  } catch { /* 路由层会处理登录失效 */ }
+}
+
+async function openUsers() {
+  view.value = 'users'
+  resetUserForm()
+  usersPending.value = true
+  usersMessage.value = ''
+  try {
+    await loadCurrentUser()
+    const data = await adminFetch<{ users: AdminUserSummary[]; currentUserId: string | null }>('/api/admin/users')
+    adminUsers.value = data.users
+    currentUserId.value = data.currentUserId || ''
+  } catch (e: any) {
+    if (e?.response?.status === 401) view.value = 'login'
+    else {
+      usersOk.value = false
+      usersMessage.value = e?.data?.statusMessage || '加载用户失败'
+    }
+  } finally {
+    usersPending.value = false
+  }
+}
+
+function resetUserForm() {
+  userEditing.value = false
+  editingDefaultUser.value = false
+  userForm.id = ''
+  userForm.username = ''
+  userForm.password = ''
+}
+
+function startEditUser(user: AdminUserSummary) {
+  userEditing.value = true
+  editingDefaultUser.value = user.isDefault
+  userForm.id = user.id
+  userForm.username = user.username
+  userForm.password = ''
+  usersMessage.value = ''
+}
+
+async function saveUser() {
+  usersSaving.value = true
+  usersMessage.value = ''
+  const changingOwnPassword = userEditing.value
+    && userForm.id === currentUserId.value
+    && userForm.password.length > 0
+  try {
+    const body = userEditing.value
+      ? {
+          username: userForm.username,
+          ...(userForm.password ? { password: userForm.password } : {}),
+        }
+      : { username: userForm.username, password: userForm.password }
+
+    if (userEditing.value) {
+      await adminFetch(`/api/admin/users/${userForm.id}`, { method: 'PUT', body })
+    } else {
+      await adminFetch('/api/admin/users', { method: 'POST', body })
+    }
+
+    if (changingOwnPassword) {
+      await logout()
+      loginError.value = '密码已更新，请重新登录'
+      return
+    }
+
+    usersOk.value = true
+    usersMessage.value = userEditing.value ? '用户已更新' : '用户已新增'
+    resetUserForm()
+    const data = await adminFetch<{ users: AdminUserSummary[] }>('/api/admin/users')
+    adminUsers.value = data.users
+  } catch (e: any) {
+    usersOk.value = false
+    usersMessage.value = e?.data?.statusMessage || '保存失败'
+  } finally {
+    usersSaving.value = false
+  }
+}
+
+async function deleteUser(user: AdminUserSummary) {
+  if (!confirm(`确定删除用户「${user.username}」吗？`)) return
+  try {
+    await adminFetch(`/api/admin/users/${user.id}`, { method: 'DELETE' })
+    usersOk.value = true
+    usersMessage.value = '用户已删除'
+    const data = await adminFetch<{ users: AdminUserSummary[] }>('/api/admin/users')
+    adminUsers.value = data.users
+  } catch (e: any) {
+    usersOk.value = false
+    usersMessage.value = e?.data?.statusMessage || '删除失败'
   }
 }
 
@@ -1344,7 +1551,8 @@ async function onImagePicked(e: Event) {
 onMounted(async () => {
   // Existing session cookie → straight to the list; otherwise show the login form
   try {
-    await $fetch('/api/admin/session')
+    const res = await adminFetch<{ user?: { id: string } | null }>('/api/admin/session')
+    currentUserId.value = res.user?.id || ''
     view.value = 'list'
     await loadList()
   } catch {

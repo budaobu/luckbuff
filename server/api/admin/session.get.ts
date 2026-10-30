@@ -1,6 +1,7 @@
-import { checkInsightsAdminAuth } from '~~/server/utils/insights-admin-auth'
+import { checkInsightsAdminAuth, getCurrentAdminUser } from '~~/server/utils/insights-admin-auth'
 
 export default defineEventHandler(async (event) => {
   checkInsightsAdminAuth(event)
-  return { ok: true }
+  const user = getCurrentAdminUser(event)
+  return { ok: true, user: user ? { id: user.id, username: user.username } : null }
 })
