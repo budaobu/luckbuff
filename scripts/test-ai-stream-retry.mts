@@ -29,6 +29,30 @@ describe('AI empty stream retry', () => {
     assert.equal(maxTokens, 8192)
   })
 
+  it('escalates to the configured budget when reasoning exhausts the endpoint budget', async () => {
+    const bodies: Array<Record<string, any>> = []
+    let calls = 0
+    const fetchLike = wrapFetchWithEmptyAiStreamRetry(async (_input, init) => {
+      calls++
+      const body = JSON.parse(String(init?.body))
+      bodies.push(body)
+      if (calls === 1) {
+        return sseResponse(['{"choices":[{"delta":{},"finish_reason":"length"}]}'])
+      }
+      return sseResponse(['{"choices":[{"delta":{"content":"升级后正常"}}]}'])
+    }, 'https://ai.example/v1/chat/completions', 100, 500)
+
+    const text = await readText(await fetchLike('https://ai.example/v1/chat/completions', {
+      method: 'POST',
+      body: JSON.stringify({ max_tokens: 100 }),
+    }))
+
+    assert.equal(calls, 2)
+    assert.equal(bodies[0]?.max_tokens, 100)
+    assert.equal(bodies[1]?.max_tokens, 500)
+    assert.match(text, /升级后正常/)
+  })
+
   it('retries once when the first completion has no text', async () => {
     let calls = 0
     const fetchLike = wrapFetchWithEmptyAiStreamRetry(async () => {

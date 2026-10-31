@@ -16,5 +16,6 @@ export default defineNitroPlugin(() => {
     originalFetch,
     config.aiBaseUrl as string,
     minOutputTokens,
+    configuredTokens,
   ) as typeof fetch
 })
