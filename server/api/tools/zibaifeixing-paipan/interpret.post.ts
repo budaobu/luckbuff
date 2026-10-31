@@ -52,9 +52,9 @@ function buildSystemPrompt(mode: InterpretMode, locale: string) {
 每段必须绑定年、月、日、时盘面证据；行动清单用 2-4 行“- ”开头。不要 JSON、Markdown 标题或开场白。`
 }
 
-function buildUserPrompt(body: InterpretBody) {
+function buildUserPrompt(body: InterpretBody, chartContext: string) {
   const lang = LANGUAGE_HOOKS[body.locale || 'zh-CN'] || LANGUAGE_HOOKS['zh-CN']!
-  const context = (body.chartContext || '').slice(0, 22000)
+  const context = chartContext.slice(0, 22000)
 
   if (body.mode === 'target') {
     const target = body.target || {}
@@ -114,7 +114,8 @@ export default defineEventHandler(async (event) => {
   const configuredTokens = Number(config.aiMaxTokens) || 8192
   const maxTokens = Math.min(mode === 'full' ? 12000 : 2048, configuredTokens)
   const systemPrompt = buildSystemPrompt(mode, locale)
-  const userPrompt = buildUserPrompt({ ...body!, mode })
+  const chartContext = compactZibaifeixingContext(body!.chart!)
+  const userPrompt = buildUserPrompt({ ...body!, mode }, chartContext)
   const upstreamBody = isOpenAi
     ? {
         model: config.aiModel,
@@ -177,6 +178,7 @@ export default defineEventHandler(async (event) => {
   const reader = upstream.body.getReader()
   const decoder = new TextDecoder()
   let buffer = ''
+  let emittedText = false
 
   try {
     while (true) {
@@ -196,7 +198,10 @@ export default defineEventHandler(async (event) => {
           const token = isOpenAi
             ? chunk.choices?.[0]?.delta?.content
             : (chunk.response ?? chunk.choices?.[0]?.delta?.content)
-          if (token) emit({ type: 'text', text: token })
+          if (token) {
+            emittedText = true
+            emit({ type: 'text', text: token })
+          }
         }
         catch { /* Ignore provider keep-alive lines. */ }
       }
@@ -206,6 +211,9 @@ export default defineEventHandler(async (event) => {
     emit({ type: 'error', message: `读取 AI 流失败：${error instanceof Error ? error.message : error}` })
   }
   finally {
+    if (!emittedText) {
+      emit({ type: 'error', message: 'AI 返回内容为空，请重试' })
+    }
     res.write('data: [DONE]\n\n')
     res.end()
   }

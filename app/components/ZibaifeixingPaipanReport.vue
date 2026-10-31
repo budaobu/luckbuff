@@ -384,7 +384,6 @@ async function streamInsight(payload: { mode: 'target' | 'full', target?: Record
       body: JSON.stringify({
         ...payload,
         chart: props.result,
-        chartContext: compactZibaifeixingContext(props.result),
         locale: locale.value,
       }),
     })
