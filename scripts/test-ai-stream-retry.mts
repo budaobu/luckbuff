@@ -15,6 +15,20 @@ async function readText(response: Response): Promise<string> {
 }
 
 describe('AI empty stream retry', () => {
+  it('raises output limits for reasoning models before first fetch', async () => {
+    let maxTokens: unknown
+    const fetchLike = wrapFetchWithEmptyAiStreamRetry(async (_input, init) => {
+      maxTokens = JSON.parse(String(init?.body)).max_tokens
+      return sseResponse(['{"choices":[{"delta":{"content":"正常"}}]}'])
+    }, 'https://ai.example/v1/chat/completions', 8192)
+
+    await readText(await fetchLike('https://ai.example/v1/chat/completions', {
+      method: 'POST',
+      body: JSON.stringify({ max_tokens: 2048 }),
+    }))
+    assert.equal(maxTokens, 8192)
+  })
+
   it('retries once when the first completion has no text', async () => {
     let calls = 0
     const fetchLike = wrapFetchWithEmptyAiStreamRetry(async () => {
