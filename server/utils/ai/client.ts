@@ -135,8 +135,8 @@ async function callAIJsonOnce(system: string, user: string, opts: CallAIJsonOpti
   const config = useRuntimeConfig()
   const provider = (config.aiProvider as string) || 'openai'
   const isOpenAi = isOpenAiProvider(provider)
-  let maxTokens = opts.maxTokens ?? (Number(config.aiMaxTokens) || 8192)
-  if (maxTokens > 327680) maxTokens = 8192
+  const configuredMaxTokens = Number(config.aiMaxTokens) || 8192
+  let maxTokens = Math.min(opts.maxTokens ?? configuredMaxTokens, configuredMaxTokens)
   const model = opts.model || config.aiModel
 
   const controller = new AbortController()
@@ -251,12 +251,20 @@ function isRetryableAIJsonError(error: unknown): boolean {
 // wait. One structural retry is cheaper than surfacing avoidable admin errors.
 export async function callAIJson(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
   let lastError: unknown
+  const configuredMaxTokens = Number(useRuntimeConfig().aiMaxTokens) || 8192
+  let attemptMaxTokens = Math.min(opts.maxTokens ?? configuredMaxTokens, configuredMaxTokens)
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      return await callAIJsonOnce(system, user, opts)
+      return await callAIJsonOnce(system, user, { ...opts, maxTokens: attemptMaxTokens })
     } catch (error) {
       lastError = error
       if (!isRetryableAIJsonError(error)) throw error
+      const message = error instanceof Error ? error.message : String(error)
+      const exhaustedBudget = /finish_reason=(length|max_tokens)/.test(message)
+      if (exhaustedBudget && attemptMaxTokens < configuredMaxTokens) {
+        console.warn(`[ai-json] output budget exhausted at ${attemptMaxTokens}; retrying with ${configuredMaxTokens}`)
+        attemptMaxTokens = configuredMaxTokens
+      }
     }
   }
   throw lastError
