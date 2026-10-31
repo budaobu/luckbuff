@@ -50,6 +50,27 @@ describe('AI empty stream retry', () => {
     assert.match(text, /AI 返回内容为空/)
   })
 
+  it('falls back to a non-stream completion after two empty streams', async () => {
+    let calls = 0
+    const bodies: unknown[] = []
+    const fetchLike = wrapFetchWithEmptyAiStreamRetry(async (_input, init) => {
+      calls++
+      bodies.push(JSON.parse(String(init?.body)))
+      if (calls <= 2) return sseResponse(['{}'])
+      return new Response(JSON.stringify({
+        choices: [{ message: { content: '非流式兜底' } }],
+      }), { status: 200, headers: { 'content-type': 'application/json' } })
+    }, 'https://ai.example/v1/chat/completions')
+
+    const text = await readText(await fetchLike('https://ai.example/v1/chat/completions', {
+      method: 'POST',
+      body: JSON.stringify({ prompt: 'test', stream: true }),
+    }))
+    assert.equal(calls, 3)
+    assert.equal(bodies[2]?.stream, false)
+    assert.match(text, /非流式兜底/)
+  })
+
   it('leaves non-stream responses untouched', async () => {
     let calls = 0
     const fetchLike = wrapFetchWithEmptyAiStreamRetry(async () => {
