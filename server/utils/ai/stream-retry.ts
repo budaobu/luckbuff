@@ -40,6 +40,7 @@ export function wrapFetchWithEmptyAiStreamRetry(fetchLike: FetchLike, upstreamUr
     }
 
     const retryInput = input instanceof Request ? input.clone() : input
+    const fallbackInput = input instanceof Request ? input.clone() : input
     const firstReader = response.body.getReader()
     const decoder = new TextDecoder()
     let buffer = ''
@@ -99,7 +100,38 @@ export function wrapFetchWithEmptyAiStreamRetry(fetchLike: FetchLike, upstreamUr
                 await pump(secondReader)
                 if (!hasContent && !downstreamClosed) {
                   console.error('[ai-stream] retry completion was also empty')
-                  controller?.enqueue(textEvent('AI 返回内容为空，请重试'))
+                  // The gateway sometimes hangs the stream until it closes
+                  // without choices, while the same request succeeds non-stream.
+                  let baseBody: Record<string, unknown> | null = null
+                  try {
+                    const rawBody = init?.body ?? (fallbackInput instanceof Request
+                      ? await fallbackInput.clone().text()
+                      : '')
+                    baseBody = typeof rawBody === 'string' && rawBody.trim()
+                      ? JSON.parse(rawBody)
+                      : null
+                  } catch { /* keep streaming-only behavior */ }
+
+                  if (baseBody && typeof baseBody === 'object') {
+                    const fallback = await fetchLike(fallbackInput, {
+                      ...init,
+                      body: JSON.stringify({ ...baseBody, stream: false }),
+                    })
+                    const payload = await fallback.json().catch(() => null) as {
+                      choices?: Array<{ message?: { content?: unknown } }>
+                      response?: unknown
+                    } | null
+                    const text = payload?.choices?.[0]?.message?.content ?? payload?.response
+                    if (fallback.ok && typeof text === 'string' && text.trim()) {
+                      controller?.enqueue(textEvent(text))
+                      hasContent = true
+                    } else if (!downstreamClosed) {
+                      const detail = typeof text === 'string' ? text.slice(0, 160) : ''
+                      controller?.enqueue(textEvent(`AI 服务暂时没有返回内容 (${fallback.status})${detail ? `: ${detail}` : ''}`))
+                    }
+                  } else if (!downstreamClosed) {
+                    controller?.enqueue(textEvent('AI 返回内容为空，请重试'))
+                  }
                 }
               }
             }
