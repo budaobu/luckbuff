@@ -213,6 +213,27 @@ ${source.content}`
   }
 }
 
+async function prepareRegeneration(slug: string) {
+  const source = readInsightRaw(slug, 'zh-CN')
+  if (!source) throw new Error('源文章不存在')
+  const hash = computeSourceHash(source)
+  const input: InsightWriteInput = {
+    slug,
+    title: source.title,
+    description: source.description,
+    category: source.category,
+    tags: source.tags,
+    publishedAt: source.publishedAt,
+    updatedAt: source.updatedAt,
+    author: source.author,
+    readingTime: source.readingTime,
+    draft: source.draft,
+    relatedTools: source.relatedTools,
+    content: source.content,
+  }
+  return { source, hash, input }
+}
+
 export function queueEnTranslation(slug: string, force = false): void {
   if (inflight.has(`en:${slug}`)) return
   const promise = translateEn(slug, force)
@@ -251,23 +272,7 @@ function applyEn(source: InsightWriteInput, hash: string): TranslationRunResult[
 // Manual regenerate from admin: force one language regardless of hash match,
 // honoring the mutex so a queued auto-translation isn't duplicated.
 export async function regenerateTranslation(slug: string, lang: TranslationLang, opts: { force?: boolean } = {}): Promise<void> {
-  const source = readInsightRaw(slug, 'zh-CN')
-  if (!source) throw new Error('源文章不存在')
-  const hash = computeSourceHash(source)
-  const input: InsightWriteInput = {
-    slug,
-    title: source.title,
-    description: source.description,
-    category: source.category,
-    tags: source.tags,
-    publishedAt: source.publishedAt,
-    updatedAt: source.updatedAt,
-    author: source.author,
-    readingTime: source.readingTime,
-    draft: source.draft,
-    relatedTools: source.relatedTools,
-    content: source.content,
-  }
+  const { hash, input } = await prepareRegeneration(slug)
 
   if (lang === 'zh-tw') {
     patchTranslationState(slug, 'zh-tw', { status: 'translating', hash })
@@ -276,4 +281,88 @@ export async function regenerateTranslation(slug: string, lang: TranslationLang,
   }
   patchTranslationState(slug, 'en', { status: 'translating', hash, error: null })
   queueEnTranslation(slug, opts.force === true)
+}
+
+// Used by batch operations: resolve only after the AI call and file write finish,
+// so the caller can process failures one at a time without hammering the API.
+export async function regenerateTranslationAndWait(slug: string, lang: TranslationLang): Promise<void> {
+  const { hash, input } = await prepareRegeneration(slug)
+
+  if (lang === 'zh-tw') {
+    patchTranslationState(slug, 'zh-tw', { status: 'translating', hash })
+    try {
+      await convertZhTw(input, hash)
+    } catch (error) {
+      patchTranslationState(slug, 'zh-tw', {
+        status: 'failed',
+        error: error instanceof Error ? error.message : String(error),
+      })
+      throw error
+    }
+    return
+  }
+
+  patchTranslationState(slug, 'en', { status: 'translating', hash, error: null })
+  await translateEn(slug, true)
+}
+
+export interface TranslationRetryItem {
+  slug: string
+  lang: TranslationLang
+}
+
+export interface TranslationRetryStatus {
+  running: boolean
+  total: number
+  completed: number
+  failed: number
+  current?: { slug: string, lang: TranslationLang }
+  startedAt?: string
+  finishedAt?: string
+}
+
+interface TranslationRetryQueue {
+  items: TranslationRetryItem[]
+  status: TranslationRetryStatus
+}
+
+let translationRetryQueue: TranslationRetryQueue | null = null
+let lastTranslationRetry: TranslationRetryStatus | null = null
+
+export function getTranslationRetryStatus(): TranslationRetryStatus | null {
+  return translationRetryQueue?.status ?? lastTranslationRetry
+}
+
+export function startTranslationRetry(items: TranslationRetryItem[]): TranslationRetryStatus {
+  if (translationRetryQueue) return translationRetryQueue.status
+  if (!items.length) return { running: false, total: 0, completed: 0, failed: 0 }
+
+  const status: TranslationRetryStatus = {
+    running: true,
+    total: items.length,
+    completed: 0,
+    failed: 0,
+    startedAt: new Date().toISOString(),
+  }
+  translationRetryQueue = { items, status }
+
+  void (async () => {
+    for (const item of items) {
+      translationRetryQueue!.status.current = item
+      try {
+        await regenerateTranslationAndWait(item.slug, item.lang)
+      } catch {
+        translationRetryQueue!.status.failed++
+      }
+      translationRetryQueue!.status.completed++
+    }
+
+    translationRetryQueue!.status.running = false
+    translationRetryQueue!.status.current = undefined
+    translationRetryQueue!.status.finishedAt = new Date().toISOString()
+    lastTranslationRetry = translationRetryQueue!.status
+    translationRetryQueue = null
+  })()
+
+  return status
 }

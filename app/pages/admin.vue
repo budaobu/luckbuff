@@ -127,6 +127,20 @@
               : 'border-neutral-700 bg-neutral-800 text-neutral-400 hover:border-neutral-500'"
             @click="filterEnPending = !filterEnPending"
           >英文未同步</button>
+          <button
+            type="button"
+            class="text-xs px-3 py-2 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-neutral-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            :disabled="translationRetry.running"
+            :title="translationRetry.current ? `正在重试：${translationRetry.current.slug}（${translationRetry.current.lang}）` : '按队列逐一重新生成所有失败翻译'"
+            @click="retryFailedTranslations"
+          >
+            {{ translationRetry.running ? `重试中 ${translationRetry.completed}/${translationRetry.total}` : '重试全部失败翻译' }}
+          </button>
+          <span
+            v-if="translationRetryMessage"
+            class="text-xs"
+            :class="translationRetryOk ? 'text-neutral-500' : 'text-red-400'"
+          >{{ translationRetryMessage }}</span>
         </div>
 
         <div v-if="listPending" class="text-sm text-neutral-500 py-12 text-center">加载中…</div>
@@ -715,6 +729,14 @@ interface TranslationEntry {
 
 type TranslationOverview = Record<TranslationLang, TranslationEntry>
 
+interface TranslationRetryStatus {
+  running: boolean
+  total: number
+  completed: number
+  failed: number
+  current?: { slug: string, lang: TranslationLang }
+}
+
 interface AdminArticle {
   slug: string
   title: string
@@ -813,6 +835,10 @@ const imageInput = ref<HTMLInputElement | null>(null)
 
 const translations = ref<TranslationOverview>(structuredClone(EMPTY_TRANSLATIONS))
 const regenerating = ref<TranslationLang | ''>('')
+const translationRetry = ref<TranslationRetryStatus>({ running: false, total: 0, completed: 0, failed: 0 })
+const translationRetryMessage = ref('')
+const translationRetryOk = ref(true)
+let translationRetryTimer: ReturnType<typeof setTimeout> | null = null
 const translationEditor = reactive({
   open: false,
   loading: false,
@@ -999,6 +1025,7 @@ function schedulePoll() {
 
 onBeforeUnmount(() => {
   if (pollTimer) clearTimeout(pollTimer)
+  if (translationRetryTimer) clearTimeout(translationRetryTimer)
 })
 
 // ── 登录 / 登出 ──
@@ -1170,6 +1197,7 @@ async function loadList(page?: number) {
   )) {
     schedulePoll()
   }
+  void refreshTranslationRetryStatus()
 }
 
 function resetForm() {
@@ -1395,6 +1423,51 @@ async function restore(file: string) {
 }
 
 // ── 多语言版本管理 ──
+
+async function refreshTranslationRetryStatus() {
+  try {
+    const res = await adminFetch<{ status: TranslationRetryStatus | null }>('/api/admin/translations/retry-failed')
+    if (res.status) {
+      translationRetry.value = res.status
+      if (res.status.running) scheduleTranslationRetryPoll()
+    }
+  } catch { /* keep the last known progress */ }
+}
+
+function scheduleTranslationRetryPoll() {
+  if (translationRetryTimer) return
+  translationRetryTimer = setTimeout(async () => {
+    translationRetryTimer = null
+    if (view.value !== 'list') return
+    await refreshTranslationRetryStatus()
+    if (translationRetry.value.running) scheduleTranslationRetryPoll()
+  }, 5000)
+}
+
+async function retryFailedTranslations() {
+  if (translationRetry.value.running) return
+  if (!confirm('按队列逐一重新生成所有失败翻译？服务端会顺序执行，不会并发请求 AI。')) return
+
+  translationRetryOk.value = true
+  translationRetryMessage.value = ''
+  try {
+    const res = await adminFetch<{ queued: number, status: TranslationRetryStatus }>(
+      '/api/admin/translations/retry-failed',
+      { method: 'POST' },
+    )
+    translationRetry.value = res.status
+    translationRetryMessage.value = res.queued
+      ? `已加入队列，将逐一处理 ${res.queued} 项`
+      : '没有失败翻译'
+    if (res.status.running) {
+      scheduleTranslationRetryPoll()
+      schedulePoll()
+    }
+  } catch (e: any) {
+    translationRetryOk.value = false
+    translationRetryMessage.value = e?.data?.statusMessage || e?.message || '启动重试失败'
+  }
+}
 
 async function refreshTranslations() {
   if (isNew.value || !editingSlug.value) return

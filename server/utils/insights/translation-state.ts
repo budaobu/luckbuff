@@ -62,7 +62,8 @@ export function deleteTranslationState(slug: string): void {
 
 // Transient 'translating' states older than this are presumed dead (process
 // restarted mid-translation) and reported as failed so the admin can retry.
-const STALE_TRANSLATING_MS = 10 * 60 * 1000
+// callAIJson keeps streamed calls alive for up to 20 minutes; leave overhead.
+const STALE_TRANSLATING_MS = 25 * 60 * 1000
 
 // Rebuild one language's state from its frontmatter (the source of truth),
 // preserving live transient info when it's still fresh.
