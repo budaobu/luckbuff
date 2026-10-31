@@ -9,6 +9,7 @@
     "dev": "NODE_OPTIONS='--no-deprecation' nuxt dev",
     "lint": "node scripts/check-kyusei-i18n.mjs",
     "test": "node --test --experimental-strip-types scripts/test-kyusei-kigaku.mts",
+    "test:ai-stream": "node --test --experimental-strip-types scripts/test-ai-stream-retry.mts",
     "test:writelist": "node --test --experimental-strip-types scripts/test-writelist-retry-policy.mts",
     "generate": "NODE_OPTIONS='--no-deprecation' nuxt generate",
     "preview": "NODE_OPTIONS='--no-deprecation' nuxt preview",
