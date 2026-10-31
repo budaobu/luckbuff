@@ -44,7 +44,94 @@ interface CallAIJsonOptions {
   model?: string
 }
 
-export async function callAIJson(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
+interface AICompletion {
+  content: string
+  finishReason?: string
+  raw?: unknown
+}
+
+async function readOpenAiStream(upstream: Response): Promise<AICompletion> {
+  const reader = upstream.body!.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+  let content = ''
+  let finishReason: string | undefined
+  let raw: unknown
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split(/\r?\n/)
+      buffer = lines.pop() ?? ''
+
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue
+        const payload = line.slice(5).trim()
+        if (!payload || payload === '[DONE]') continue
+
+        let chunk: any
+        try {
+          chunk = JSON.parse(payload)
+        } catch {
+          continue
+        }
+        raw = chunk
+        if (chunk.error) {
+          const message = chunk.error.message || chunk.error.code || 'AI streaming error'
+          throw new Error(`AI 流返回错误: ${message}`)
+        }
+
+        const choice = chunk.choices?.[0]
+        content += choice?.delta?.content ?? choice?.message?.content ?? ''
+        if (choice?.finish_reason) finishReason = choice.finish_reason
+      }
+    }
+  } finally {
+    reader.releaseLock()
+  }
+
+  return { content, finishReason, raw }
+}
+
+async function requestOpenAiJson(
+  config: { aiBaseUrl: unknown, aiApiKey: unknown },
+  model: string,
+  system: string,
+  user: string,
+  maxTokens: number,
+  signal: AbortSignal,
+): Promise<AICompletion> {
+  const upstream = await fetch(config.aiBaseUrl as string, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${config.aiApiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+      stream: true,
+      max_tokens: maxTokens,
+      response_format: { type: 'json_object' },
+    }),
+    signal,
+  })
+
+  if (!upstream.ok || !upstream.body) {
+    const text = await upstream.text().catch(() => '')
+    throw new Error(`AI 服务错误 (${upstream.status})${text ? ': ' + text.slice(0, 300) : ''}`)
+  }
+
+  return readOpenAiStream(upstream)
+}
+
+async function callAIJsonOnce(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
   const config = useRuntimeConfig()
   const provider = (config.aiProvider as string) || 'openai'
   const isOpenAi = isOpenAiProvider(provider)
@@ -52,61 +139,61 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
   if (maxTokens > 327680) maxTokens = 8192
   const model = opts.model || config.aiModel
 
-  const upstreamBody = isOpenAi
-    ? {
-        model,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: user },
-        ],
-        stream: false,
-        max_tokens: maxTokens,
-      }
-    : {
-        model,
-        prompt: `${system}\n\n${user}`,
-        stream: false,
-        options: { num_predict: maxTokens },
-      }
-
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), opts.timeoutMs ?? 15000)
+  // The compatible gateway can take over a minute before its first byte. A
+  // long ceiling also keeps large streamed translations from being cut midway.
+  const timeoutMs = Math.max(opts.timeoutMs ?? 300_000, 20 * 60_000)
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
-  let upstream: Response
-  try {
-    upstream = await fetch(config.aiBaseUrl as string, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.aiApiKey}`,
-      },
-      body: JSON.stringify(upstreamBody),
-      signal: controller.signal,
-    })
-  } finally {
-    clearTimeout(timeout)
+  let completion: AICompletion
+  if (isOpenAi) {
+    try {
+      completion = await requestOpenAiJson(config, model, system, user, maxTokens, controller.signal)
+    } finally {
+      clearTimeout(timeout)
+    }
+  } else {
+    const upstreamBody = {
+      model,
+      prompt: `${system}\n\n${user}`,
+      stream: false,
+      options: { num_predict: maxTokens },
+    }
+
+    let upstream: Response
+    try {
+      upstream = await fetch(config.aiBaseUrl as string, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${config.aiApiKey}`,
+        },
+        body: JSON.stringify(upstreamBody),
+        signal: controller.signal,
+      })
+    } finally {
+      clearTimeout(timeout)
+    }
+
+    if (!upstream.ok) {
+      const text = await upstream.text().catch(() => '')
+      throw new Error(`AI 服务错误 (${upstream.status})${text ? ': ' + text.slice(0, 300) : ''}`)
+    }
+
+    const parsed = await upstream.json().catch(() => null)
+    completion = {
+      content: parsed?.response ?? parsed?.message?.content ?? '',
+      finishReason: parsed?.done_reason,
+      raw: parsed,
+    }
   }
 
-  if (!upstream.ok) {
-    const text = await upstream.text().catch(() => '')
-    throw new Error(`AI 服务错误 (${upstream.status})${text ? ': ' + text.slice(0, 300) : ''}`)
-  }
-
-  const parsed = await upstream.json().catch(() => null)
-  if (!parsed) {
-    throw new Error('AI 返回解析失败')
-  }
-
-  const content = isOpenAi
-    ? parsed.choices?.[0]?.message?.content
-    : (parsed.response ?? parsed.message?.content)
-
-  if (typeof content !== 'string' || !content.trim()) {
-    throw new Error(`AI 返回内容为空 [debug: finish_reason=${parsed.choices?.[0]?.finish_reason}, raw=${JSON.stringify(parsed).slice(0, 500)}]`)
+  if (typeof completion.content !== 'string' || !completion.content.trim()) {
+    throw new Error(`AI 返回内容为空 [debug: finish_reason=${completion.finishReason}, raw=${JSON.stringify(completion.raw).slice(0, 500)}]`)
   }
 
   // Strip outer markdown fence (model may wrap despite instructions)
-  let cleaned = content.trim()
+  let cleaned = completion.content.trim()
   cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
 
   // Fast path
@@ -147,6 +234,30 @@ export async function callAIJson(system: string, user: string, opts: CallAIJsonO
       }
     }
     const parseMsg = fastErr instanceof Error ? fastErr.message : String(fastErr)
-    throw new Error(`AI 返回不是有效 JSON [debug: finish_reason=${parsed.choices?.[0]?.finish_reason}, parseErr=${parseMsg}, contentLen=${cleaned.length}, tail=${JSON.stringify(cleaned.slice(-200))}]`)
+    throw new Error(`AI 返回不是有效 JSON [debug: finish_reason=${completion.finishReason}, parseErr=${parseMsg}, contentLen=${cleaned.length}, tail=${JSON.stringify(cleaned.slice(-200))}]`)
   }
+}
+
+function isRetryableAIJsonError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error)
+  return message.includes('AI 返回内容为空')
+    || message.includes('AI 返回不是有效 JSON')
+    || message.includes('AI 流返回错误')
+    || message.includes('AI 服务错误 (429)')
+    || /AI 服务错误 \(5\d\d\)/.test(message)
+}
+
+// The gateway occasionally returns an empty/malformed completion after a long
+// wait. One structural retry is cheaper than surfacing avoidable admin errors.
+export async function callAIJson(system: string, user: string, opts: CallAIJsonOptions = {}): Promise<unknown> {
+  let lastError: unknown
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await callAIJsonOnce(system, user, opts)
+    } catch (error) {
+      lastError = error
+      if (!isRetryableAIJsonError(error)) throw error
+    }
+  }
+  throw lastError
 }

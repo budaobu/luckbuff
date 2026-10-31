@@ -243,6 +243,17 @@ interface GeneratedArticle {
   content: string
 }
 
+function normalizeArticleCategory(value: string): string {
+  const category = value.trim().toLowerCase().replace(/\s+/g, '-')
+  if ((INSIGHT_CATEGORIES as readonly string[]).includes(category)) return category
+
+  if (/^(metaph|numerolog|palm|physiognom|name|life-path)/.test(category)) return 'metaphysics-basics'
+  if (/^(deep|bazi|ziwei|tarot|meihua|liuyao|qimen|liuren)/.test(category)) return 'deep-reading'
+  if (/^(fengshui|home|house|bedroom|office)/.test(category)) return 'fengshui'
+  if (/^(astro|astrol|horoscope|zodiac|planet|star)/.test(category)) return 'astrology'
+  return 'culture'
+}
+
 function parseGeneratedArticle(raw: unknown): GeneratedArticle {
   if (!raw || typeof raw !== 'object') throw new Error('AI 返回不是对象')
   const obj = raw as Record<string, unknown>
@@ -257,9 +268,7 @@ function parseGeneratedArticle(raw: unknown): GeneratedArticle {
   if (!isValidSlug(article.slug)) throw new Error(`AI 返回的 slug 非法：${article.slug || '(空)'}`)
   if (!article.title) throw new Error('AI 返回的 title 为空')
   if (!article.description) throw new Error('AI 返回的 description 为空')
-  if (!(INSIGHT_CATEGORIES as readonly string[]).includes(article.category)) {
-    throw new Error(`AI 返回的 category 非法：${article.category || '(空)'}`)
-  }
+  article.category = normalizeArticleCategory(article.category)
   if (!article.tags.length) throw new Error('AI 返回的 tags 为空')
   if (article.content.length < 800) throw new Error(`AI 返回的正文过短（${article.content.length} 字符），不按完整文章处理`)
   return article
