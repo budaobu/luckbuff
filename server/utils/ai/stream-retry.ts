@@ -26,14 +26,38 @@ function textEvent(text: string): Uint8Array {
 // The AI gateway intermittently closes an SSE completion with no choices even
 // though the request is valid. Existing tool endpoints each have private SSE
 // loops, so retrying here repairs every reader without changing their behavior.
-export function wrapFetchWithEmptyAiStreamRetry(fetchLike: FetchLike, upstreamUrl: string): FetchLike {
+export function wrapFetchWithEmptyAiStreamRetry(
+  fetchLike: FetchLike,
+  upstreamUrl: string,
+  minOutputTokens = 8192,
+): FetchLike {
   return async (input, init) => {
     const requestUrl = typeof input === 'string'
       ? input
       : input instanceof URL
         ? input.href
         : input.url
-    const response = await fetchLike(input, init)
+    let requestInit = init
+    if (requestUrl === upstreamUrl && init?.body && typeof init.body === 'string') {
+      try {
+        const body = JSON.parse(init.body) as {
+          max_tokens?: unknown
+          options?: { num_predict?: unknown }
+        }
+        let changed = false
+        if (typeof body.max_tokens === 'number' && body.max_tokens < minOutputTokens) {
+          body.max_tokens = minOutputTokens
+          changed = true
+        }
+        if (typeof body.options?.num_predict === 'number' && body.options.num_predict < minOutputTokens) {
+          body.options.num_predict = minOutputTokens
+          changed = true
+        }
+        if (changed) requestInit = { ...init, body: JSON.stringify(body) }
+      } catch { /* leave non-JSON request bodies untouched */ }
+    }
+
+    const response = await fetchLike(input, requestInit)
     const contentType = response.headers.get('content-type') ?? ''
     if (requestUrl !== upstreamUrl || !response.ok || !response.body || !contentType.includes('text/event-stream')) {
       return response
@@ -91,7 +115,7 @@ export function wrapFetchWithEmptyAiStreamRetry(fetchLike: FetchLike, upstreamUr
 
             if (!hasContent && !downstreamClosed) {
               console.warn('[ai-stream] empty completion; retrying once')
-              const second = await fetchLike(retryInput, init)
+              const second = await fetchLike(retryInput, requestInit)
               if (!second.ok || !second.body) {
                 const detail = await second.text().catch(() => '')
                 controller?.enqueue(textEvent(`AI 服务暂时没有返回内容 (${second.status})${detail ? `: ${detail.slice(0, 160)}` : ''}`))
@@ -114,7 +138,7 @@ export function wrapFetchWithEmptyAiStreamRetry(fetchLike: FetchLike, upstreamUr
 
                   if (baseBody && typeof baseBody === 'object') {
                     const fallback = await fetchLike(fallbackInput, {
-                      ...init,
+                      ...requestInit,
                       body: JSON.stringify({ ...baseBody, stream: false }),
                     })
                     const payload = await fallback.json().catch(() => null) as {
