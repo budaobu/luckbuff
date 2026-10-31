@@ -1013,7 +1013,7 @@ function schedulePoll() {
   pollTimer = setTimeout(async () => {
     pollTimer = null
     if (view.value === 'list') {
-      await loadList()
+      await loadList(undefined, true)
       if (articles.value.some(a =>
         a.translations?.en?.status === 'translating' || a.translations?.['zh-tw']?.status === 'translating',
       )) {
@@ -1161,8 +1161,8 @@ interface ListResponse {
   articles: AdminArticle[]
 }
 
-async function loadList(page?: number) {
-  listPending.value = true
+async function loadList(page?: number, silent = false) {
+  if (!silent) listPending.value = true
   fatalError.value = ''
   try {
     const pending: string[] = []
