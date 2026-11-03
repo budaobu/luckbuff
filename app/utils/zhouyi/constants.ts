@@ -72,6 +72,28 @@ export const BAGUA_NAMES = ['乾', '兑', '离', '震', '巽', '坎', '艮', '�
 // 卦象符号
 export const BAGUA_SYMBOLS = ['☰', '☱', '☲', '☳', '☴', '☵', '☶', '☷']
 
+// 文王六十四卦通行短卦名
+export const LIUSHISI_GUA_SHORT_NAMES = [
+  '乾', '坤', '屯', '蒙', '需', '讼', '师', '比',
+  '小畜', '履', '泰', '否', '同人', '大有', '谦', '豫',
+  '随', '蛊', '临', '观', '噬嗑', '贲', '剥', '复',
+  '无妄', '大畜', '颐', '大过', '坎', '离', '咸', '恒',
+  '遁', '大壮', '晋', '明夷', '家人', '睽', '蹇', '解',
+  '损', '益', '夬', '姤', '萃', '升', '困', '井',
+  '革', '鼎', '震', '艮', '渐', '归妹', '丰', '旅',
+  '巽', '兑', '涣', '节', '中孚', '小过', '既济', '未济',
+]
+
+export const LIUSHISI_GUA_SHORT_NAME_MAP = Object.fromEntries(
+  LIUSHISI_GUA_SHORT_NAMES.map((name, index) => [index + 1, name]),
+) as Record<number, string>
+
+// Unicode 六十四卦符号与文王卦序一致
+export const LIUSHISI_GUA_SYMBOLS = Array.from(
+  { length: 64 },
+  (_, index) => String.fromCodePoint(0x4DC0 + index),
+)
+
 // 根据卦象 ID 获取卦信息
 export function getGuaById(id: number): GuaInfo | undefined {
   return LIUSHISI_GUA.find(g => g.id === id)
