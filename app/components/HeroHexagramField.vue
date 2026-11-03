@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import type { CanvasTexture, Color, ShaderMaterial, Vector2, WebGLRenderer } from 'three'
-import { BAGUA_NAMES, LIUSHISI_GUA, getYaoArray } from '~/utils/zhouyi/constants'
+import { BAGUA_NAMES, BAGUA_SYMBOLS, LIUSHISI_GUA, LIUSHISI_GUA_SHORT_NAME_MAP, LIUSHISI_GUA_SYMBOLS } from '~/utils/zhouyi/constants'
 
 const field = ref<HTMLDivElement>()
 const colorMode = useColorMode()
@@ -29,6 +29,26 @@ type HeroUniforms = {
   uDiskRadius: { value: number }
   uVerticalScale: { value: number }
 }
+
+type DiscHexagram = {
+  symbol: string
+  name: string
+}
+
+type BaguaRingItem = {
+  name: string
+  symbol: string
+}
+
+const DISC_HEXAGRAMS: DiscHexagram[] = LIUSHISI_GUA.map(hexagram => ({
+  symbol: LIUSHISI_GUA_SYMBOLS[hexagram.id - 1]!,
+  name: LIUSHISI_GUA_SHORT_NAME_MAP[hexagram.id] ?? hexagram.name,
+}))
+
+const BAGUA_RING: BaguaRingItem[] = BAGUA_NAMES.map((name, index) => ({
+  name,
+  symbol: BAGUA_SYMBOLS[index]!,
+}))
 
 onMounted(async () => {
   const container = field.value
@@ -72,74 +92,162 @@ onMounted(async () => {
 
     if (context) {
       const center = size / 2
-      const radius = 920
+      const radius = 1010
+      const coreRadius = 226
+      const taijiRadius = 138
+      const baguaInner = 308
+      const baguaOuter = 570
+      const hexagramInner = 710
+      const hexagramOuter = 920
       context.translate(center, center)
-      for (let index = 0; index < 18; index += 1) {
-        const progress = index / 17
-        const ringRadius = 170 + progress * (radius - 170)
-        context.strokeStyle = `rgba(255, 255, 255, ${index % 2 === 0 ? 0.14 : 0.08})`
-        context.lineWidth = index % 4 === 0 ? 2.2 : 1.4
-        context.beginPath()
-        context.arc(0, 0, ringRadius, 0, Math.PI * 2)
-        context.stroke()
-      }
 
-      context.strokeStyle = 'rgba(255, 255, 255, 0.18)'
-      context.lineWidth = 2
+      const baseGradient = context.createRadialGradient(0, 0, 60, 0, 0, radius)
+      baseGradient.addColorStop(0, 'rgba(255, 255, 255, 0.055)')
+      baseGradient.addColorStop(0.36, 'rgba(255, 255, 255, 0.03)')
+      baseGradient.addColorStop(1, 'rgba(255, 255, 255, 0.01)')
+      context.fillStyle = baseGradient
       context.beginPath()
       context.arc(0, 0, radius, 0, Math.PI * 2)
+      context.fill()
+
+      for (let index = 0; index < 64; index += 1) {
+        if (index % 2 === 1) continue
+        const startAngle = -Math.PI / 2 + (index / 64) * Math.PI * 2 + 0.005
+        const endAngle = -Math.PI / 2 + ((index + 1) / 64) * Math.PI * 2 - 0.005
+        context.fillStyle = 'rgba(255, 255, 255, 0.012)'
+        context.beginPath()
+        context.arc(0, 0, hexagramInner, startAngle, endAngle)
+        context.arc(0, 0, hexagramOuter, endAngle, startAngle, true)
+        context.closePath()
+        context.fill()
+      }
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.13)'
+      context.lineWidth = 2
+      context.beginPath()
+      context.arc(0, 0, hexagramOuter, 0, Math.PI * 2)
+      context.stroke()
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.07)'
+      context.lineWidth = 1.2
+      context.beginPath()
+      context.arc(0, 0, hexagramInner, 0, Math.PI * 2)
       context.stroke()
 
       context.strokeStyle = 'rgba(255, 255, 255, 0.06)'
-      context.lineWidth = 1.4
       for (let index = 0; index < 64; index += 1) {
         const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
         context.beginPath()
-        context.moveTo(Math.cos(angle) * 660, Math.sin(angle) * 660)
-        context.lineTo(Math.cos(angle) * 900, Math.sin(angle) * 900)
+        context.moveTo(Math.cos(angle) * (hexagramInner + 14), Math.sin(angle) * (hexagramInner + 14))
+        context.lineTo(Math.cos(angle) * (hexagramOuter - 12), Math.sin(angle) * (hexagramOuter - 12))
         context.stroke()
       }
 
-      context.fillStyle = 'rgba(255, 255, 255, 0.86)'
-      LIUSHISI_GUA.forEach((hexagram, index) => {
-        const yao = getYaoArray(hexagram)
-        const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
-        context.save()
-        context.translate(Math.cos(angle) * 750, Math.sin(angle) * 750)
-        context.rotate(angle)
-        yao.forEach((value, lineIndex) => {
-          const x = -42 + lineIndex * 16.8
-          if (value === 1) {
-            context.fillRect(x - 5, -36, 10, 72)
-          }
-          else {
-            context.fillRect(x - 5, -36, 10, 28)
-            context.fillRect(x - 5, 8, 10, 28)
-          }
-        })
-        context.restore()
-      })
-
-      context.fillStyle = 'rgba(255, 255, 255, 0.46)'
-      context.font = '500 50px "Noto Serif SC", "Songti SC", "SimSun", serif'
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      BAGUA_NAMES.forEach((name, index) => {
-        const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
+
+      DISC_HEXAGRAMS.forEach((hexagram, index) => {
+        const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
         context.save()
-        context.translate(Math.cos(angle) * 400, Math.sin(angle) * 400)
+        context.translate(Math.cos(angle) * 818, Math.sin(angle) * 818)
         context.rotate(angle + Math.PI / 2)
-        context.fillText(name, 0, 0)
+
+        context.fillStyle = 'rgba(255, 255, 255, 0.84)'
+        context.font = '400 48px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
+        context.fillText(hexagram.symbol, 0, -28)
+
+        context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+        context.font = '500 20px "Noto Serif SC", "Songti SC", "SimSun", serif'
+        context.fillText(hexagram.name, 0, 34)
         context.restore()
       })
 
-      context.fillStyle = 'rgba(255, 255, 255, 0.32)'
+      context.strokeStyle = 'rgba(255, 255, 255, 0.13)'
+      context.lineWidth = 1.4
       context.beginPath()
-      context.arc(0, 0, 150, 0, Math.PI * 2)
+      context.arc(0, 0, baguaOuter, 0, Math.PI * 2)
+      context.stroke()
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.06)'
+      context.lineWidth = 1.2
+      context.beginPath()
+      context.arc(0, 0, baguaInner, 0, Math.PI * 2)
+      context.stroke()
+
+      BAGUA_RING.forEach((_, sectorIndex) => {
+        if (sectorIndex % 2 === 1) return
+        const startAngle = -Math.PI / 2 + (sectorIndex / 8) * Math.PI * 2 + 0.014
+        const endAngle = -Math.PI / 2 + ((sectorIndex + 1) / 8) * Math.PI * 2 - 0.014
+        context.fillStyle = 'rgba(255, 255, 255, 0.024)'
+        context.beginPath()
+        context.arc(0, 0, baguaInner, startAngle, endAngle)
+        context.arc(0, 0, baguaOuter, endAngle, startAngle, true)
+        context.closePath()
+        context.fill()
+      })
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+      for (let index = 0; index < 8; index += 1) {
+        const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
+        context.beginPath()
+        context.moveTo(Math.cos(angle) * (baguaInner + 16), Math.sin(angle) * (baguaInner + 16))
+        context.lineTo(Math.cos(angle) * (baguaOuter - 16), Math.sin(angle) * (baguaOuter - 16))
+        context.stroke()
+      }
+
+      BAGUA_RING.forEach((item, index) => {
+        const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
+        context.save()
+        context.translate(Math.cos(angle) * 466, Math.sin(angle) * 466)
+        context.rotate(angle + Math.PI / 2)
+
+        context.fillStyle = 'rgba(255, 255, 255, 0.84)'
+        context.font = '400 48px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
+        context.fillText(item.symbol, 0, -23)
+
+        context.fillStyle = 'rgba(255, 255, 255, 0.64)'
+        context.font = '500 24px "Noto Serif SC", "Songti SC", "SimSun", serif'
+        context.fillText(item.name, 0, 27)
+        context.restore()
+      })
+
+      const coreGradient = context.createRadialGradient(-28, -34, 12, 0, 0, coreRadius)
+      coreGradient.addColorStop(0, 'rgba(255, 255, 255, 0.16)')
+      coreGradient.addColorStop(1, 'rgba(255, 255, 255, 0.05)')
+      context.fillStyle = coreGradient
+      context.beginPath()
+      context.arc(0, 0, coreRadius, 0, Math.PI * 2)
       context.fill()
-      context.fillStyle = 'rgba(0, 0, 0, 0.62)'
-      context.font = '600 132px "Noto Serif SC", "Songti SC", "SimSun", serif'
-      context.fillText('易', 0, 4)
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+      context.lineWidth = 1.6
+      context.beginPath()
+      context.arc(0, 0, coreRadius, 0, Math.PI * 2)
+      context.stroke()
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.42)'
+      context.lineWidth = 2.2
+      context.beginPath()
+      context.arc(0, 0, taijiRadius, 0, Math.PI * 2)
+      context.stroke()
+
+      context.strokeStyle = 'rgba(255, 255, 255, 0.68)'
+      context.lineWidth = 2
+      context.beginPath()
+      context.moveTo(0, -taijiRadius)
+      context.arc(0, -taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, false)
+      context.arc(0, taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, true)
+      context.stroke()
+
+      context.fillStyle = 'rgba(255, 255, 255, 0.72)'
+      context.beginPath()
+      context.arc(0, -taijiRadius / 2, 13, 0, Math.PI * 2)
+      context.fill()
+
+      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
+      context.beginPath()
+      context.arc(0, taijiRadius / 2, 13, 0, Math.PI * 2)
+      context.fill()
     }
 
     texture.colorSpace = THREE.SRGBColorSpace
@@ -239,7 +347,7 @@ onMounted(async () => {
         color += uDiscColor * pointerRing;
         alpha += pointerRing;
 
-        alpha *= smoothstep(0.0, 0.22, vUv.y);
+        alpha *= smoothstep(0.0, 0.05, vUv.y);
         if (alpha < 0.004) discard;
 
         gl_FragColor = vec4(color, clamp(alpha, 0.0, 0.9));
@@ -258,19 +366,19 @@ onMounted(async () => {
     const center = uniforms.uDiskCenter.value
 
     if (aspect < 0.8) {
-      center.set(0, -0.45)
-      uniforms.uDiskRadius.value = 1.1
-      uniforms.uVerticalScale.value = 0.74
+      center.set(0, 0.1)
+      uniforms.uDiskRadius.value = 0.52
+      uniforms.uVerticalScale.value = 0.96
     }
     else if (aspect < 1.15) {
-      center.set(aspect * 0.08, -0.7)
-      uniforms.uDiskRadius.value = 1.35
-      uniforms.uVerticalScale.value = 0.72
+      center.set(aspect * 0.04, 0.04)
+      uniforms.uDiskRadius.value = 0.55
+      uniforms.uVerticalScale.value = 0.98
     }
     else {
-      center.set(aspect * 0.18, -0.8)
-      uniforms.uDiskRadius.value = 1.75
-      uniforms.uVerticalScale.value = 0.68
+      center.set(aspect * 0.36, 0.05)
+      uniforms.uDiskRadius.value = 0.72
+      uniforms.uVerticalScale.value = 1
     }
 
     uniforms.uAspect.value = aspect
