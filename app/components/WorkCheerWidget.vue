@@ -167,7 +167,7 @@
           <div class="cheer-goal-list">
             <div v-for="item in snapshot.goals" :key="item.goal.id" class="cheer-goal">
               <div class="cheer-goal-title">
-                <span>{{ item.goal.name || $t('workCheer.goalPlaceholder') }}</span>
+                <span>{{ goalDisplay(item.goal) }}</span>
                 <strong>{{ settings.privacyMode ? '••••' : formatMoney(item.goal.amount) }}</strong>
               </div>
 
@@ -340,7 +340,12 @@
                 <button type="button" @click="addGoal">{{ $t('workCheer.add') }}</button>
               </div>
               <div v-for="(goal, index) in settings.goals" :key="goal.id" class="goal-editor">
-                <input v-model="goal.name" class="modal-input" maxlength="40" :placeholder="$t('workCheer.goalPlaceholder')">
+                <input
+                  v-model="goal.name"
+                  class="modal-input"
+                  maxlength="40"
+                  :placeholder="goalPlaceholder(goal)"
+                >
                 <div class="goal-editor-controls">
                     <input v-model.number="goal.amount" class="modal-input" type="number" min="0" step="10">
                   <button type="button" :disabled="index === 0" @click="moveGoal(index, -1)">
@@ -368,6 +373,7 @@
 </template>
 
 <script setup lang="ts">
+import type { WorkCheerGoal } from '~/composables/useWorkCheer'
 import { useWorkCheer } from '~/composables/useWorkCheer'
 
 const { t, locale } = useI18n()
@@ -424,6 +430,23 @@ const currencySymbol = computed(() => {
 })
 
 const amountChars = computed(() => (snapshot.value ? snapshot.value.todayEarned.toFixed(3).split('') : []))
+
+function defaultGoalLabel(goal: WorkCheerGoal) {
+  const key = goal.id === 'coffee'
+    ? 'coffee'
+    : goal.id === 'weekendTrip' || goal.id === 'reward'
+      ? 'weekendTrip'
+      : null
+  return key ? t(`workCheer.defaultGoal.${key}`) : t('workCheer.goalPlaceholder')
+}
+
+function goalDisplay(goal: WorkCheerGoal) {
+  return goal.name.trim() || defaultGoalLabel(goal)
+}
+
+function goalPlaceholder(goal: WorkCheerGoal) {
+  return goal.name.trim() ? goal.name : defaultGoalLabel(goal)
+}
 
 const currencyOptions = currencies.map(currency => ({ label: currency, value: currency }))
 

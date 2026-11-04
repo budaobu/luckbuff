@@ -63,8 +63,8 @@ export function createDefaultWorkCheerSettings(): WorkCheerSettings {
     currency: 'CNY',
     privacyMode: false,
     goals: [
-      { id: 'coffee', name: '', amount: 150 },
-      { id: 'reward', name: '', amount: 3000 },
+      { id: 'coffee', name: '', amount: 80 },
+      { id: 'weekendTrip', name: '', amount: 3000 },
     ],
   }
 }
@@ -145,11 +145,20 @@ export function useWorkCheer() {
       ? [...new Set(input.weekdays.filter(day => Number.isInteger(day) && day >= 0 && day <= 6))].sort()
       : base.weekdays
     const goals = Array.isArray(input.goals)
-      ? input.goals.slice(0, 20).map(goal => ({
-          id: String(goal?.id ?? `${Date.now()}-${Math.random()}`),
-          name: String(goal?.name ?? '').slice(0, 40),
-          amount: Math.min(Math.max(Number(goal?.amount) || 0, 0), 100_000_000),
-        })).filter(goal => goal.amount > 0)
+      ? input.goals.slice(0, 20).map((rawGoal) => {
+          const goal = {
+            id: String(rawGoal?.id ?? `${Date.now()}-${Math.random()}`),
+            name: String(rawGoal?.name ?? '').slice(0, 40),
+            amount: Math.min(Math.max(Number(rawGoal?.amount) || 0, 0), 100_000_000),
+          }
+
+          // Earlier releases shipped two unnamed demo goals. Give them the
+          // newer, more concrete defaults without touching fully custom goals.
+          if (!goal.name && goal.id === 'coffee' && goal.amount === 150) goal.amount = 80
+          if (!goal.name && goal.id === 'reward') goal.id = 'weekendTrip'
+
+          return goal
+        }).filter(goal => goal.amount > 0)
       : base.goals
 
     return {
@@ -328,7 +337,13 @@ export function useWorkCheer() {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        settings.value = normalizeSettings(JSON.parse(raw) as Partial<WorkCheerSettings>)
+        const oldSettings = JSON.parse(raw) as Partial<WorkCheerSettings>
+        settings.value = normalizeSettings(oldSettings)
+        const needsLegacyGoalMigration = Array.isArray(oldSettings.goals)
+          && oldSettings.goals.some(goal => !goal?.name && (goal?.id === 'coffee' || goal?.id === 'reward'))
+        if (needsLegacyGoalMigration) {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value))
+        }
         demoMode.value = false
         loadError.value = ''
       }

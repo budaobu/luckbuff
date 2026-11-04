@@ -12,6 +12,10 @@
     "goalsTitle": "奖励目标",
     "add": "新增",
     "goalPlaceholder": "例如：一顿好饭",
+    "defaultGoal": {
+      "coffee": "一杯好咖啡",
+      "weekendTrip": "周末小旅行"
+    },
     "settingsTitle": "工资与排班",
     "monthlySalary": "月薪",
     "cycleDay": "周期起始日",

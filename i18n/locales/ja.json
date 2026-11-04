@@ -12,6 +12,10 @@
     "goalsTitle": "ごほうび目標",
     "add": "追加",
     "goalPlaceholder": "おいしい食事、静かな週末",
+    "defaultGoal": {
+      "coffee": "おいしいコーヒー",
+      "weekendTrip": "週末の小旅行"
+    },
     "settingsTitle": "給与と勤務",
     "monthlySalary": "月給",
     "cycleDay": "期間の開始日",

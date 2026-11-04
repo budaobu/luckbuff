@@ -12,6 +12,10 @@
     "goalsTitle": "Reward goals",
     "add": "Add",
     "goalPlaceholder": "A good meal, a quiet weekend",
+    "defaultGoal": {
+      "coffee": "A nice coffee",
+      "weekendTrip": "Weekend trip"
+    },
     "settingsTitle": "Pay and schedule",
     "monthlySalary": "Monthly pay",
     "cycleDay": "Period starts on",
