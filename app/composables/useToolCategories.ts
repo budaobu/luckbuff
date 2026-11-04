@@ -1089,6 +1089,13 @@ const analysisToolCategories: ToolCategory[] = [
         recommended: true,
       },
       {
+        icon: 'i-heroicons-bolt',
+        titleKey: 'workCheer.title',
+        descKey: 'workCheer.subtitle',
+        ctaKey: 'common.start',
+        path: '/tools/slaves-encourager',
+      },
+      {
         icon: 'i-heroicons-cake',
         titleKey: 'bztiBirthdayPersonality.title',
         descKey: 'bztiBirthdayPersonality.subtitle',

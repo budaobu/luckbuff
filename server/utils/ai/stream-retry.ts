@@ -127,7 +127,10 @@ export function wrapFetchWithEmptyAiStreamRetry(
             if (!hasContent && !downstreamClosed) {
               // Reasoning models can exhaust a small endpoint budget before
               // emitting visible content. Escalate to the deployment maximum.
-              let retryBody: unknown
+              let retryBody: {
+                max_tokens?: unknown
+                options?: { num_predict?: unknown }
+              } | null
               try {
                 retryBody = requestInit?.body && typeof requestInit.body === 'string'
                   ? JSON.parse(requestInit.body)
