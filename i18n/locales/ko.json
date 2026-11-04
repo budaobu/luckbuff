@@ -12,6 +12,10 @@
     "goalsTitle": "보상 목표",
     "add": "추가",
     "goalPlaceholder": "맛있는 식사, 조용한 주말",
+    "defaultGoal": {
+      "coffee": "맛있는 커피",
+      "weekendTrip": "주말 여행"
+    },
     "settingsTitle": "급여와 근무",
     "monthlySalary": "월급",
     "cycleDay": "기간 시작일",
