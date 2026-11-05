@@ -13188,6 +13188,7 @@
     "dayChart": "昼チャート",
     "planetsTitle": "九曜と死星",
     "planetsSubtitle": "恒星黄経、ラーシー、ハウス、星宿、状態",
+    "housesTitle": "12ハウス",
     "body": "天体",
     "sign": "ラーシー",
     "degree": "度数",
@@ -13228,6 +13229,17 @@
     "aiFullReportLogin": "ログイン後に完全レポートを生成",
     "aiFullReportTitle": "タイ12ラーシー完全レポート",
     "aiLoginRequired": "完全レポートはログイン後に生成できます。",
+    "threeD": {
+      "play": "運行を開始",
+      "pause": "運行を一時停止",
+      "truePositions": "実際の位置に戻す",
+      "resetView": "ビューをリセット",
+      "reducedMotion": "動作を減らす設定が有効なため、天体は静止しています。",
+      "unavailable": "この環境では3D描画を利用できません。下の表に完全な結果を表示します。",
+      "detailTitle": "チャート詳細",
+      "detailHint": "天体またはハウスにカーソルを合わせるか、クリックしてください。",
+      "dataTables": "チャートデータ表"
+    },
     "bodies": {
       "sun": "太陽",
       "moon": "月",
