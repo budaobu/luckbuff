@@ -42,17 +42,17 @@
           <div class="ta-card ta-target" :data-ta-ai-label="`${$t('thaiAstro.ascendant')} ${signName(result.ascendant.signKey)}`">
             <span>{{ $t('thaiAstro.ascendant') }}</span>
             <strong>{{ signName(result.ascendant.signKey) }}</strong>
-            <small>{{ result.ascendant.degree }}° {{ result.ascendant.minute }}' · {{ result.ascendant.nakshatraTh }} p{{ result.ascendant.pada }}</small>
+            <small>{{ result.ascendant.degree }}° {{ result.ascendant.minute }}' · {{ mansionName(result.ascendant.nakshatraKey) }} p{{ result.ascendant.pada }}</small>
           </div>
           <div class="ta-card ta-target" :data-ta-ai-label="`${$t('thaiAstro.sunSign')} ${planetByKey('Sun') ? signName(planetByKey('Sun')!.signKey) : ''}`">
             <span>{{ $t('thaiAstro.sunSign') }}</span>
             <strong>{{ planetByKey('Sun') ? signName(planetByKey('Sun')!.signKey) : '—' }}</strong>
-            <small>{{ planetByKey('Sun')?.nakshatraTh }}</small>
+            <small>{{ mansionName(planetByKey('Sun')?.nakshatraKey) }}</small>
           </div>
           <div class="ta-card ta-target" :data-ta-ai-label="`${$t('thaiAstro.moonSign')} ${planetByKey('Moon') ? signName(planetByKey('Moon')!.signKey) : ''}`">
             <span>{{ $t('thaiAstro.moonSign') }}</span>
             <strong>{{ planetByKey('Moon') ? signName(planetByKey('Moon')!.signKey) : '—' }}</strong>
-            <small>{{ planetByKey('Moon')?.nakshatraTh }} p{{ planetByKey('Moon')?.pada }}</small>
+            <small>{{ mansionName(planetByKey('Moon')?.nakshatraKey) }} p{{ planetByKey('Moon')?.pada }}</small>
           </div>
           <div class="ta-card ta-target" :data-ta-ai-label="`${$t('thaiAstro.tanuseth')} ${result.tanuseth.bodyKey ? bodyName(result.tanuseth.bodyKey) : ''}`">
             <span>{{ $t('thaiAstro.tanuseth') }}</span>
@@ -98,7 +98,7 @@
               <span>{{ signName(planet.signKey) }}</span>
               <span>{{ formatDegree(planet) }}</span>
               <span>H{{ planet.house }} · {{ houseName(planet.houseKey) }}</span>
-              <span>{{ planet.nakshatraTh }} p{{ planet.pada }}</span>
+              <span>{{ mansionName(planet.nakshatraKey) }} p{{ planet.pada }}</span>
               <span class="ta-tags">
                 <em v-for="status in planet.statuses" :key="status">{{ statusName(status) }}</em>
                 <em v-if="planet.isRetrograde">R</em>
@@ -180,10 +180,10 @@
       </header>
       <div class="ta-stack">
         <div class="ta-grid-4">
-          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.weekday') }}</span><strong>{{ result.panchang.weekday }}</strong></div>
-          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.tithi') }}</span><strong>{{ result.panchang.tithi }}</strong><small>{{ result.panchang.paksha }}</small></div>
-          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.moonMansion') }}</span><strong>{{ result.panchang.moonNakshatra }}</strong><small>{{ result.panchang.yoga }}</small></div>
-          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.karana') }}</span><strong>{{ result.panchang.karana }}</strong></div>
+          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.weekday') }}</span><strong>{{ weekdayName(result.panchang.weekdayKey) }}</strong></div>
+          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.tithi') }}</span><strong>{{ panchangName('tithis', result.panchang.tithiKey) }}</strong><small>{{ panchangName('pakshas', result.panchang.pakshaKey) }}</small></div>
+          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.moonMansion') }}</span><strong>{{ mansionName(result.panchang.moonNakshatraKey) }}</strong><small>{{ panchangName('yogas', result.panchang.yogaKey) }}</small></div>
+          <div class="ta-card ta-target"><span>{{ $t('thaiAstro.karana') }}</span><strong>{{ panchangName('karanas', result.panchang.karanaKey) }}</strong></div>
         </div>
         <div class="ta-grid-2">
           <div class="ta-card ta-target"><span>{{ $t('thaiAstro.sunrise') }}</span><strong>{{ formatDateTime(result.panchang.sunrise) }}</strong></div>
@@ -346,6 +346,36 @@ const TRIYANGA_KEYS: Record<ThaiTriyangaKey, string> = {
   third: 'third',
 }
 
+const NAKSHATRA_LABEL_KEYS: Record<string, string> = {
+  ashwini: 'Ashwini',
+  bharani: 'Bharani',
+  krittika: 'Krittika',
+  rohini: 'Rohini',
+  mrigashira: 'Mrigashira',
+  ardra: 'Ardra',
+  punarvasu: 'Punarvasu',
+  pushya: 'Pushya',
+  ashlesha: 'Ashlesha',
+  magha: 'Magha',
+  purva_phalguni: 'Purva Phalguni',
+  uttara_phalguni: 'Uttara Phalguni',
+  hasta: 'Hasta',
+  chitra: 'Chitra',
+  swati: 'Swati',
+  vishakha: 'Vishakha',
+  anuradha: 'Anuradha',
+  jyeshtha: 'Jyeshtha',
+  mula: 'Mula',
+  purva_ashadha: 'Purva Ashadha',
+  uttara_ashadha: 'Uttara Ashadha',
+  shravana: 'Shravana',
+  dhanishta: 'Dhanishtha',
+  shatabhisha: 'Shatabhisha',
+  purva_bhadrapada: 'Purva Bhadrapada',
+  uttara_bhadrapada: 'Uttara Bhadrapada',
+  revati: 'Revati',
+}
+
 const TAKSA_ROLE_KEYS: Record<ThaiTaksaRole, string> = {
   attendant: 'attendant',
   longevity: 'longevity',
@@ -371,6 +401,19 @@ function houseName(key: ThaiHouseKey) {
 
 function statusName(key: ThaiStatusKey) {
   return t(`thaiAstro.statuses.${key}`)
+}
+
+function mansionName(key?: string | null) {
+  const labelKey = key ? NAKSHATRA_LABEL_KEYS[key] : null
+  return labelKey ? t(`vedic.chart.nakshatraNames.${labelKey}`) : key || '—'
+}
+
+function weekdayName(key?: string | null) {
+  return key ? t(`thaiAstro.panchangValues.weekdays.${key}`) : '—'
+}
+
+function panchangName(category: 'pakshas' | 'tithis' | 'yogas' | 'karanas', key?: string | null) {
+  return key ? t(`thaiAstro.panchangValues.${category}.${key}`) : '—'
 }
 
 function triyangaName(key: ThaiBodyKey) {
@@ -501,7 +544,7 @@ function handleReportKeydown(event: KeyboardEvent) {
 function compactContext() {
   const result = props.result
   const planets = result.planets.map(planet =>
-    `${bodyName(planet.key)} ${signName(planet.signKey)} ${planet.degree}° H${planet.house} ${planet.nakshatraTh}p${planet.pada}${planet.isRetrograde ? ' R' : ''}${planet.isTanuseth ? ' Tanuseth' : ''}`,
+    `${bodyName(planet.key)} ${signName(planet.signKey)} ${planet.degree}° H${planet.house} ${mansionName(planet.nakshatraKey)}p${planet.pada}${planet.isRetrograde ? ' R' : ''}${planet.isTanuseth ? ' Tanuseth' : ''}`,
   ).join('；')
   const houses = result.houses.map(house =>
     `H${house.number} ${houseName(house.key)} ${signName(house.signKey)} lord=${bodyName(house.signLordKey)} occupants=${house.occupants.map(bodyName).join('/') || '-'}`,
@@ -510,12 +553,12 @@ function compactContext() {
   return [
     `体系：泰国12星宿命盘（ราศี 12 นักษัตร）`,
     `出生：${result.input.birthDate} ${result.input.birthTime} ${result.input.location.timezone}；地点：${result.input.location.name}`,
-    `ลัคนา：${signName(result.ascendant.signKey)} ${result.ascendant.degree}° ${result.ascendant.nakshatraTh} p${result.ascendant.pada}`,
+    `${t('thaiAstro.ascendant')}：${signName(result.ascendant.signKey)} ${result.ascendant.degree}° ${mansionName(result.ascendant.nakshatraKey)} p${result.ascendant.pada}`,
     `ตนุเศษ：${bodyName(result.tanuseth.bodyKey)} #${result.tanuseth.number ?? '-'}`,
     `ดาว：${planets}`,
     `ภพ：${houses}`,
     `ทักษา：${bodyName(result.taksa.dayKey)}${result.taksa.nightChart ? '(night)' : ''} ${result.taksa.positions.map(item => `${taksaRoleName(item.role)}=${bodyName(item.bodyKey)}`).join('，')}`,
-    `Panchang：${result.panchang.weekday} ${result.panchang.tithi} ${result.panchang.paksha} ${result.panchang.moonNakshatra} ${result.panchang.yoga}`,
+    `Panchang：${weekdayName(result.panchang.weekdayKey)} ${panchangName('tithis', result.panchang.tithiKey)} ${panchangName('pakshas', result.panchang.pakshaKey)} ${mansionName(result.panchang.moonNakshatraKey)} ${panchangName('yogas', result.panchang.yogaKey)}`,
   ].join('\n')
 }
 
