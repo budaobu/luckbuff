@@ -104,6 +104,8 @@ export async function mountThaiAstro3D(
 
     const starCount = 900
     const starPositions = new Float32Array(starCount * 3)
+    const starPhases = new Float32Array(starCount)
+    const starSizes = new Float32Array(starCount)
     for (let index = 0; index < starCount; index += 1) {
       const radius = 42 + Math.random() * 32
       const theta = Math.random() * Math.PI * 2
@@ -111,16 +113,46 @@ export async function mountThaiAstro3D(
       starPositions[index * 3] = radius * Math.sin(phi) * Math.cos(theta)
       starPositions[(index * 3) + 1] = radius * Math.cos(phi)
       starPositions[(index * 3) + 2] = radius * Math.sin(phi) * Math.sin(theta)
+      starPhases[index] = Math.random() * Math.PI * 2
+      starSizes[index] = 0.7 + Math.random() * 1.4
     }
     const starGeometry = new THREE.BufferGeometry()
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3))
-    scene.add(new THREE.Points(starGeometry, new THREE.PointsMaterial({
-      color: 0x9fb4cc,
-      size: 0.13,
+    starGeometry.setAttribute('aPhase', new THREE.BufferAttribute(starPhases, 1))
+    starGeometry.setAttribute('aSize', new THREE.BufferAttribute(starSizes, 1))
+    const starUniforms = { uTime: { value: 0 } }
+    const starMaterial = new THREE.ShaderMaterial({
+      uniforms: starUniforms,
       transparent: true,
-      opacity: 0.55,
       depthWrite: false,
-    })))
+      blending: THREE.AdditiveBlending,
+      vertexShader: `
+        attribute float aPhase;
+        attribute float aSize;
+        varying float vPhase;
+
+        void main() {
+          vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * viewPosition;
+          gl_PointSize = aSize * (180.0 / max(1.0, -viewPosition.z));
+          vPhase = aPhase;
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        varying float vPhase;
+
+        void main() {
+          float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
+          float twinkle = 0.58 + 0.32 * sin(uTime * 1.25 + vPhase);
+          float alpha = smoothstep(0.5, 0.08, distanceFromCenter) * twinkle;
+          if (alpha < 0.01) discard;
+          vec3 starColor = mix(vec3(0.62, 0.71, 0.80), vec3(0.84, 0.91, 1.0), fract(vPhase * 0.159));
+          gl_FragColor = vec4(starColor, alpha);
+        }
+      `,
+    })
+    scene.add(new THREE.Points(starGeometry, starMaterial))
 
     function createRing(radius: number, opacity: number) {
       const points: import('three').Vector3[] = []
@@ -328,6 +360,7 @@ export async function mountThaiAstro3D(
 
     function restorePositions() {
       animationTime = 0
+      starUniforms.uTime.value = 0
       for (const item of planetObjects) {
         item.group.position.set(Math.cos(item.angle) * item.radius, item.y, Math.sin(item.angle) * item.radius)
         item.label.position.copy(item.group.position).setY(item.y + 0.78)
@@ -337,7 +370,9 @@ export async function mountThaiAstro3D(
     function frame() {
       if (disposed) return
       const now = performance.now()
-      animationTime += (now - lastFrameTime) / 1000 * 0.55
+      const deltaTime = Math.min(0.05, (now - lastFrameTime) / 1000)
+      animationTime += deltaTime * 0.55
+      starUniforms.uTime.value += deltaTime
       lastFrameTime = now
       for (const item of planetObjects) {
         const displayAngle = item.angle + animationTime

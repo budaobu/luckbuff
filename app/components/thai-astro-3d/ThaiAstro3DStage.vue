@@ -40,6 +40,22 @@
       <div class="ta3d-stage">
         <div ref="stageRoot" class="ta3d-canvas" data-testid="thai-astro-3d-stage" />
         <div
+          class="ta3d-meteors"
+          :class="{ 'is-running': isAnimating && !reducedMotion }"
+          aria-hidden="true"
+        >
+          <span
+            v-for="meteor in meteors"
+            :key="meteor.delay"
+            :style="{
+              '--x': meteor.x,
+              '--y': meteor.y,
+              '--delay': meteor.delay,
+              '--duration': meteor.duration,
+            }"
+          />
+        </div>
+        <div
           v-if="hovered"
           class="ta3d-tooltip"
           :style="{ left: `${Math.min(hovered.x + 16, windowWidth - 260)}px`, top: `${hovered.y + 16}px` }"
@@ -180,6 +196,14 @@ const chartError = ref('')
 const hovered = ref<ThaiAstro3DHover | null>(null)
 const selected = ref<ThaiAstro3DSelection | null>(null)
 const windowWidth = ref(1280)
+const meteors = [
+  { x: '8%', y: '13%', delay: '0.4s', duration: '5.4s' },
+  { x: '36%', y: '6%', delay: '2.1s', duration: '6.2s' },
+  { x: '63%', y: '11%', delay: '3.6s', duration: '5.8s' },
+  { x: '18%', y: '27%', delay: '4.9s', duration: '6.6s' },
+  { x: '48%', y: '21%', delay: '1.4s', duration: '5.1s' },
+  { x: '74%', y: '24%', delay: '5.8s', duration: '6.9s' },
+]
 
 const BODY_KEYS: Record<string, string> = {
   Sun: 'sun', Moon: 'moon', Mars: 'mars', Mercury: 'mercury', Jupiter: 'jupiter', Ketu: 'thaiKetu',
@@ -421,6 +445,58 @@ onBeforeUnmount(() => {
   display: block;
 }
 
+.ta3d-meteors {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ta3d-meteors span {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 180px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(207, 227, 255, 0.24),
+    rgba(226, 240, 255, 0.92),
+    #fff);
+  transform: rotate(-24deg) translateX(-210px);
+  opacity: 0;
+  animation: ta3d-meteor var(--duration) linear infinite;
+  animation-delay: var(--delay);
+  animation-play-state: paused;
+  will-change: transform, opacity;
+}
+
+.ta3d-meteors.is-running span {
+  animation-play-state: running;
+}
+
+@keyframes ta3d-meteor {
+  0% {
+    transform: rotate(-24deg) translateX(-210px);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.85;
+  }
+
+  72% {
+    opacity: 0.62;
+  }
+
+  100% {
+    transform: rotate(-24deg) translateX(390px);
+    opacity: 0;
+  }
+}
+
 .ta3d-tooltip {
   position: fixed;
   z-index: 50;
@@ -536,6 +612,10 @@ onBeforeUnmount(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ta3d-meteors {
+    display: none;
+  }
+
   .ta3d {
     scroll-behavior: auto;
   }
