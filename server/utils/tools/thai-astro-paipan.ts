@@ -82,11 +82,17 @@ export interface ThaiHouse {
 
 export interface ThaiPanchang {
   tithi: string
+  tithiKey: string
   paksha: string
+  pakshaKey: string
   moonNakshatra: string
+  moonNakshatraKey: string
   yoga: string
+  yogaKey: string
   karana: string
+  karanaKey: string
   weekday: string
+  weekdayKey: 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat'
   sunrise: string | null
   sunset: string | null
 }
@@ -215,6 +221,48 @@ const NAKSHATRA_KEYS = [
   'mula', 'purva_ashadha', 'uttara_ashadha', 'shravana', 'dhanishta', 'shatabhisha',
   'purva_bhadrapada', 'uttara_bhadrapada', 'revati',
 ]
+
+const TITHI_KEYS = [
+  'prathama', 'dwitiya', 'tritiya', 'chaturthi', 'panchami',
+  'shashthi', 'saptami', 'ashtami', 'navami', 'dashami',
+  'ekadashi', 'dwadashi', 'trayodashi', 'chaturdashi', 'purnima',
+  'prathama', 'dwitiya', 'tritiya', 'chaturthi', 'panchami',
+  'shashthi', 'saptami', 'ashtami', 'navami', 'dashami',
+  'ekadashi', 'dwadashi', 'trayodashi', 'chaturdashi', 'amavasya',
+]
+
+const PAKSHA_KEYS: Record<string, string> = {
+  shukla: 'shukla',
+  krishna: 'krishna',
+}
+
+function panchangPakshaKey(value: unknown) {
+  const name = String(value ?? '').trim().toLowerCase()
+  return PAKSHA_KEYS[name.split(/\s+/)[0] ?? ''] ?? ''
+}
+
+const YOGA_KEYS = [
+  'vishkambha', 'priti', 'ayushman', 'saubhagya', 'shobhana', 'atiganda',
+  'sukarman', 'dhriti', 'shula', 'ganda', 'vriddhi', 'dhruva', 'vyaghata',
+  'harshana', 'vajra', 'siddhi', 'vyatipata', 'variyana', 'parigha',
+  'shiva', 'siddha', 'sadhya', 'shubha', 'shukla', 'brahma', 'indra', 'vaidhriti',
+]
+
+const KARANA_KEY_BY_NAME: Record<string, string> = {
+  bava: 'bava',
+  balava: 'balava',
+  kaulava: 'kaulava',
+  taitila: 'taitila',
+  gara: 'gara',
+  vanija: 'vanija',
+  vishti: 'vishti',
+  shakuni: 'shakuni',
+  chatushpada: 'chatushpada',
+  naga: 'naga',
+  kimstughna: 'kimstughna',
+}
+
+const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
 
 const NAKSHATRA_LORD_KEYS = [
   'Ketu', 'Venus', 'Sun', 'Moon', 'Mars', 'Rahu',
@@ -381,6 +429,7 @@ function thaiWeekdayIndex(instant: Date, timeZone: string) {
     index: weekday === 'Wed' && hour >= 18 ? 4 : calendarIndex,
     nightChart: weekday === 'Wed' && hour >= 18,
     label: weekday,
+    calendarIndex,
   }
 }
 
@@ -513,6 +562,10 @@ export function calculateThaiAstroChart(input: ThaiAstroInput): ThaiAstroChartRe
 
   const offset = zoneOffsetMinutes(instant, timezone)
   const panchangRaw = getPanchangamDetails(instant, observer, { timezoneOffset: offset })
+  const moonPosition = kundli.planets.Moon
+  if (!moonPosition) throw new Error('星历缺少 Moon 位置')
+  const moonMansion = nakshatra(moonPosition.longitude)
+  const karanaName = String(panchangRaw.karana ?? '').toLowerCase()
 
   return {
     input: {
@@ -566,11 +619,17 @@ export function calculateThaiAstroChart(input: ThaiAstroInput): ThaiAstroChartRe
     },
     panchang: {
       tithi: String(panchangRaw.tithiName ?? panchangRaw.tithi ?? ''),
+      tithiKey: TITHI_KEYS[((Number(panchangRaw.tithi) - 1) % 30 + 30) % 30] ?? '',
       paksha: String(panchangRaw.paksha ?? ''),
+      pakshaKey: panchangPakshaKey(panchangRaw.paksha),
       moonNakshatra: String(panchangRaw.nakshatraName ?? ''),
+      moonNakshatraKey: moonMansion.key,
       yoga: String(panchangRaw.yogaName ?? ''),
+      yogaKey: YOGA_KEYS[(Number(panchangRaw.yoga) - 1 + 27) % 27] ?? '',
       karana: String(panchangRaw.karana ?? ''),
+      karanaKey: KARANA_KEY_BY_NAME[karanaName] ?? '',
       weekday: weekday.label,
+      weekdayKey: WEEKDAY_KEYS[weekday.calendarIndex] ?? 'sun',
       sunrise: panchangRaw.sunrise ? new Date(panchangRaw.sunrise).toISOString() : null,
       sunset: panchangRaw.sunset ? new Date(panchangRaw.sunset).toISOString() : null,
     },
