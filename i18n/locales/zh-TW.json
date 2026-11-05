@@ -13124,6 +13124,7 @@
     "dayChart": "日盤",
     "planetsTitle": "九曜與死星",
     "planetsSubtitle": "恆星黃經、星座、宮位、星宿與狀態",
+    "housesTitle": "十二宮位",
     "body": "星體",
     "sign": "星座",
     "degree": "度數",
@@ -13164,6 +13165,17 @@
     "aiFullReportLogin": "登入後產生完整報告",
     "aiFullReportTitle": "泰國12星宿命盤完整報告",
     "aiLoginRequired": "完整泰國命盤報告需要登入後產生。",
+    "threeD": {
+      "play": "開始運轉",
+      "pause": "暫停運轉",
+      "truePositions": "回到真實位置",
+      "resetView": "重設視角",
+      "reducedMotion": "已開啟減少動態效果，星曜保持靜止。",
+      "unavailable": "目前環境不支援 3D 渲染，下方表格保留完整排盤結果。",
+      "detailTitle": "盤面詳情",
+      "detailHint": "懸停或點擊星曜、宮位查看詳情。",
+      "dataTables": "排盤資料表"
+    },
     "bodies": {
       "sun": "太陽",
       "moon": "月亮",

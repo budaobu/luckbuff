@@ -13102,6 +13102,7 @@
     "dayChart": "Day chart",
     "planetsTitle": "Nine luminaries and Mrityu",
     "planetsSubtitle": "Sidereal longitude, Rasi, house, mansion and condition",
+    "housesTitle": "Twelve houses",
     "body": "Body",
     "sign": "Rasi",
     "degree": "Degree",
@@ -13142,6 +13143,17 @@
     "aiFullReportLogin": "Sign in for the full report",
     "aiFullReportTitle": "Thai 12 Rasi full report",
     "aiLoginRequired": "Sign in to generate the full Thai chart report.",
+    "threeD": {
+      "play": "Play motion",
+      "pause": "Pause motion",
+      "truePositions": "True positions",
+      "resetView": "Reset view",
+      "reducedMotion": "Motion is off because reduced motion is enabled.",
+      "unavailable": "3D rendering is unavailable. The chart tables below contain the complete result.",
+      "detailTitle": "Chart detail",
+      "detailHint": "Hover or click a body or house in the chart.",
+      "dataTables": "Chart data tables"
+    },
     "bodies": {
       "sun": "Sun",
       "moon": "Moon",

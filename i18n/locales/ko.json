@@ -13188,6 +13188,7 @@
     "dayChart": "일 차트",
     "planetsTitle": "9개의 빛나는 별자리와 미르티유",
     "planetsSubtitle": "별자리, 집성, 맨션, 상태에 따른 시간",
+    "housesTitle": "12하우스",
     "body": "몸",
     "sign": "별자리",
     "degree": "도",
@@ -13228,6 +13229,17 @@
     "aiFullReportLogin": "전체 보고서를 보려면 로그인하세요",
     "aiFullReportTitle": "태국 12별 전체 보고서",
     "aiLoginRequired": "전체 타이 차트 보고서를 생성하려면 로그인하세요.",
+    "threeD": {
+      "play": "운행 시작",
+      "pause": "운행 일시정지",
+      "truePositions": "실제 위치로 돌아가기",
+      "resetView": "시점 초기화",
+      "reducedMotion": "움직임 줄이기가 켜져 있어 천체가 정지 상태입니다.",
+      "unavailable": "이 환경에서는 3D 렌더링을 사용할 수 없습니다. 아래 표에 전체 결과가 있습니다.",
+      "detailTitle": "차트 상세",
+      "detailHint": "천체나 하우스에 커서를 올리거나 클릭하세요.",
+      "dataTables": "차트 데이터 표"
+    },
     "bodies": {
       "sun": "태양",
       "moon": "달",

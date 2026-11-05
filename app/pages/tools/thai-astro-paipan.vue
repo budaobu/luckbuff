@@ -138,7 +138,7 @@
       </section>
 
       <div v-else-if="result" class="tap-report">
-        <ThaiAstroPaipanReport :result="result" />
+        <ThaiAstro3DStage :result="result" />
       </div>
       <div v-if="phase === 'result'" class="tap-actions">
         <UButton color="warning" variant="soft" @click="resetToForm">
@@ -159,6 +159,7 @@
 
 <script setup lang="ts">
 import type { ThaiAstroChartResult } from '~~/server/utils/tools/thai-astro-paipan'
+import ThaiAstro3DStage from '~/components/thai-astro-3d/ThaiAstro3DStage.vue'
 import { DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date'
 
 const { t, locale } = useI18n()
@@ -454,6 +455,7 @@ useHead(() => ({
 
 .tap-report {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .tap-actions {
