@@ -72,7 +72,7 @@
       </aside>
     </div>
 
-    <details class="ta3d-data" :open="!!chartError">
+    <details class="ta3d-data" open>
       <summary>{{ t('thaiAstro.threeD.dataTables') }}</summary>
       <div class="ta3d-table-wrap">
         <table data-testid="thai-astro-planet-table">
