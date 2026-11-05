@@ -87,19 +87,21 @@
             />
           </label>
 
-          <label>
-            <span>{{ $t('thaiAstro.gender') }}</span>
-            <USelect
-              v-model="form.gender"
-              color="warning"
-              class="w-full"
-              :items="genderOptions"
-              :ui="{
-                base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] text-[var(--text-primary)]',
-                content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
-              }"
-            />
-          </label>
+          <div>
+            <span class="tap-gender-label">{{ $t('thaiAstro.gender') }}</span>
+            <div class="tap-gender" role="group" :aria-label="$t('thaiAstro.gender')">
+              <button
+                v-for="gender in genderOptions"
+                :key="gender.value"
+                type="button"
+                :class="{ active: form.gender === gender.value }"
+                :aria-pressed="form.gender === gender.value"
+                @click="form.gender = gender.value"
+              >
+                {{ gender.label }}
+              </button>
+            </div>
+          </div>
 
           <UButton
             type="submit"
@@ -407,6 +409,37 @@ useHead(() => ({
 .tap-form label i {
   color: var(--accent);
   font-style: normal;
+}
+
+.tap-gender-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tap-gender {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tap-gender button {
+  padding: 8px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--surface-input);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.tap-gender button.active {
+  border-color: var(--accent-border-hover);
+  background: var(--accent-bg);
+  color: var(--accent);
 }
 
 .tap-hints {

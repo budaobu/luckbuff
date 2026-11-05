@@ -345,6 +345,7 @@ function syncWindowWidth() {
 
 onMounted(async () => {
   reducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  isAnimating.value = !reducedMotion.value
   syncWindowWidth()
   window.addEventListener('resize', syncWindowWidth)
   await nextTick()
@@ -360,6 +361,7 @@ onMounted(async () => {
       chartError.value = message
     },
   })
+  mount.value?.setAnimating(isAnimating.value)
 })
 
 onBeforeUnmount(() => {
