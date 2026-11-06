@@ -227,7 +227,17 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['nanoid', '@internationalized/date', 'qrcode', 'marked', 'better-auth/vue', 'better-auth/client/plugins'],
+      include: [
+        'nanoid',
+        '@internationalized/date',
+        'qrcode',
+        'marked',
+        'better-auth/vue',
+        'better-auth/client/plugins',
+        'three/webgpu',
+        'three/tsl',
+        'three/examples/jsm/tsl/display/BloomNode.js',
+      ],
     },
     resolve: {
       alias: {

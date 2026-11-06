@@ -304,11 +304,10 @@
 </template>
 
 <script setup lang="ts">
-import * as THREE from 'three'
+import * as THREE from 'three/webgpu'
+import { pass } from 'three/tsl'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js'
 import type { HumanDesignActivation, HumanDesignChartResult } from '~~/server/utils/tools/human-design'
 import {
   COSMOS_ANGLE_CN,
@@ -530,13 +529,15 @@ function switchTab(tab: typeof activeTab.value) {
 
 let scene: THREE.Scene | null = null
 let camera: THREE.PerspectiveCamera | null = null
-let renderer: THREE.WebGLRenderer | null = null
+let renderer: THREE.WebGPURenderer | null = null
 let controls: OrbitControls | null = null
-let composer: EffectComposer | null = null
+let renderPipeline: THREE.RenderPipeline | null = null
 let resizeObserver: ResizeObserver | null = null
 let animationId = 0
 let clock: THREE.Clock | null = null
 let elapsed = 0
+let activeBuild = 0
+let backdropTexture: THREE.CanvasTexture | null = null
 let pulseCenter: string | null = null
 let pulseGeneKey: number | null = null
 let pulseGate: number | null = null
@@ -547,6 +548,13 @@ const geneKeyGroup = new THREE.Group()
 const centerMeshes: Record<string, THREE.Mesh> = {}
 const gateMeshes: Record<number, THREE.Mesh> = {}
 const gateHitMeshes: Record<number, THREE.Mesh> = {}
+const channelMaterial = new THREE.MeshBasicMaterial({
+  color: 0xf0c875,
+  transparent: true,
+  opacity: 0.78,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+})
 const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 let pointerDown: { x: number, y: number, time: number } | null = null
@@ -567,6 +575,81 @@ function makeSprite(text: string, color: string, scale = 1) {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }))
   sprite.scale.set(scale * 2.2, scale * 1.1, 1)
   return sprite
+}
+
+function buildBackdrop() {
+  const canvas = document.createElement('canvas')
+  canvas.width = 1024
+  canvas.height = 512
+  const context = canvas.getContext('2d')
+  if (!context) return
+
+  const sky = context.createLinearGradient(0, 0, 0, canvas.height)
+  sky.addColorStop(0, '#050810')
+  sky.addColorStop(0.38, '#07222d')
+  sky.addColorStop(0.62, '#251735')
+  sky.addColorStop(0.82, '#101a2d')
+  sky.addColorStop(1, '#03050b')
+  context.fillStyle = sky
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
+  const glows: Array<[number, number, number, string]> = [
+    [780, 170, 340, 'rgba(79, 216, 255, 0.16)'],
+    [310, 340, 390, 'rgba(232, 184, 96, 0.13)'],
+    [540, 430, 310, 'rgba(255, 107, 154, 0.08)'],
+    [180, 110, 300, 'rgba(167, 139, 250, 0.08)'],
+  ]
+  for (const [x, y, radius, color] of glows) {
+    const glow = context.createRadialGradient(x, y, 0, x, y, radius)
+    glow.addColorStop(0, color)
+    glow.addColorStop(1, 'rgba(4, 5, 12, 0)')
+    context.fillStyle = glow
+    context.fillRect(0, 0, canvas.width, canvas.height)
+  }
+
+  backdropTexture = new THREE.CanvasTexture(canvas)
+  backdropTexture.mapping = THREE.EquirectangularReflectionMapping
+  backdropTexture.colorSpace = THREE.SRGBColorSpace
+  if (scene) {
+    scene.background = backdropTexture
+    scene.backgroundIntensity = 0.72
+    scene.backgroundBlurriness = 0.08
+    scene.environment = backdropTexture
+    scene.environmentIntensity = 0.36
+    scene.fog = new THREE.FogExp2(0x06080f, 0.012)
+  }
+}
+
+function buildStage() {
+  const dais = new THREE.Mesh(
+    new THREE.RingGeometry(7.8, 13.4, 128),
+    new THREE.MeshBasicMaterial({
+      color: 0x4fd8ff,
+      transparent: true,
+      opacity: 0.022,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    }),
+  )
+  dais.rotation.x = -Math.PI / 2
+  dais.position.y = -7.4
+  bodygraphGroup.add(dais)
+
+  const innerDais = new THREE.Mesh(
+    new THREE.RingGeometry(5.2, 7.2, 96),
+    new THREE.MeshBasicMaterial({
+      color: 0xe8b860,
+      transparent: true,
+      opacity: 0.016,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    }),
+  )
+  innerDais.rotation.x = -Math.PI / 2
+  innerDais.position.y = -7.2
+  bodygraphGroup.add(innerDais)
 }
 
 function buildStarfield() {
@@ -598,42 +681,132 @@ function buildStarfield() {
   })))
 }
 
-function buildBodygraph() {
-  const grid = new THREE.GridHelper(20, 20, 0x1a2233, 0x0d1220)
-  grid.position.y = -6.8
-  bodygraphGroup.add(grid)
+function createCenterShape(key: string, width: number, height: number) {
+  const shape = new THREE.Shape()
+  const w = width / 2
+  const h = height / 2
 
+  if (key === 'head') {
+    shape.moveTo(0, h)
+    shape.lineTo(w * 1.08, -h * 0.82)
+    shape.lineTo(-w * 1.08, -h * 0.82)
+  }
+  else if (key === 'ajna') {
+    shape.moveTo(0, -h)
+    shape.lineTo(w * 1.08, h * 0.82)
+    shape.lineTo(-w * 1.08, h * 0.82)
+  }
+  else if (key === 'g') {
+    shape.moveTo(0, h * 1.12)
+    shape.lineTo(w * 1.12, 0)
+    shape.lineTo(0, -h * 1.12)
+    shape.lineTo(-w * 1.12, 0)
+  }
+  else if (key === 'heart') {
+    shape.moveTo(0, h)
+    shape.lineTo(w, -h * 0.7)
+    shape.lineTo(-w, -h * 0.7)
+  }
+  else if (key === 'spleen') {
+    shape.moveTo(w, -h)
+    shape.lineTo(w, h)
+    shape.lineTo(-w, h)
+  }
+  else if (key === 'solarplexus') {
+    shape.moveTo(-w, -h)
+    shape.lineTo(-w, h)
+    shape.lineTo(w, h)
+  }
+  else {
+    const radius = Math.min(w, h) * 0.28
+    shape.moveTo(-w + radius, -h)
+    shape.lineTo(w - radius, -h)
+    shape.absarc(w - radius, -h + radius, radius, -Math.PI / 2, 0)
+    shape.lineTo(w, h - radius)
+    shape.absarc(w - radius, h - radius, radius, 0, Math.PI / 2)
+    shape.lineTo(-w + radius, h)
+    shape.absarc(-w + radius, h - radius, radius, Math.PI / 2, Math.PI)
+    shape.lineTo(-w, -h + radius)
+    shape.absarc(-w + radius, -h + radius, radius, Math.PI, Math.PI * 1.5)
+  }
+
+  return shape
+}
+
+function centerMaterial(key: string) {
+  const status = cosmos.value.centerStatus[key]
+  const color = COSMOS_CENTERS[key]?.color ?? 0x445566
+  const defined = status === 'defined'
+  return new THREE.MeshPhysicalMaterial({
+    color: defined ? color : status === 'undefined' ? 0x2d3a4c : 0x202839,
+    emissive: defined ? color : 0x4fd8ff,
+    emissiveIntensity: defined ? 0.34 : status === 'undefined' ? 0.08 : 0.02,
+    roughness: 0.18,
+    metalness: 0.08,
+    transmission: defined ? 0.34 : 0.08,
+    thickness: 0.8,
+    ior: 1.42,
+    clearcoat: 0.68,
+    clearcoatRoughness: 0.18,
+    transparent: true,
+    opacity: defined ? 0.94 : status === 'undefined' ? 0.36 : 0.2,
+    side: THREE.DoubleSide,
+  })
+}
+
+function buildBodygraph() {
+  buildStage()
   for (const [key, center] of Object.entries(COSMOS_CENTERS)) {
     const status = cosmos.value.centerStatus[key]
-    const color = status === 'defined' ? center.color : 0x2a2f3e
-    const geometry = new THREE.BoxGeometry(center.layout.w, center.layout.h, 0.6)
-    const material = new THREE.MeshStandardMaterial({
-      color,
-      emissive: color,
-      emissiveIntensity: status === 'defined' ? 0.45 : 0.05,
-      roughness: 0.4,
-      metalness: 0.3,
-      transparent: true,
-      opacity: status === 'defined' ? 0.92 : status === 'undefined' ? 0.35 : 0.22,
-    })
+    const geometry = new THREE.ExtrudeGeometry(
+      createCenterShape(key, center.layout.w, center.layout.h),
+      {
+        depth: 0.58,
+        bevelEnabled: true,
+        bevelThickness: 0.07,
+        bevelSize: 0.045,
+        bevelSegments: 4,
+        curveSegments: 20,
+      },
+    )
+    geometry.center()
+    const material = centerMaterial(key)
     const mesh = new THREE.Mesh(geometry, material)
     mesh.position.set(center.layout.x, center.layout.y, 0)
     mesh.userData = { type: 'center', centerKey: key }
     bodygraphGroup.add(mesh)
     centerMeshes[key] = mesh
 
-    const label = makeSprite(center.cn, status === 'defined' ? '#e8b860' : '#5a6278', 0.9)
-    label.position.set(center.layout.x, center.layout.y, 0.5)
+    const edges = new THREE.LineSegments(
+      new THREE.EdgesGeometry(geometry, 20),
+      new THREE.LineBasicMaterial({
+        color: status === 'defined' ? center.color : 0x555f74,
+        transparent: true,
+        opacity: status === 'defined' ? 0.6 : 0.22,
+        blending: THREE.AdditiveBlending,
+      }),
+    )
+    mesh.add(edges)
+
+    const label = makeSprite(center.cn, status === 'defined' ? '#f4ead6' : '#94a1b8', 0.82)
+    label.position.set(center.layout.x, center.layout.y, 0.82)
     bodygraphGroup.add(label)
 
     center.gates.forEach((gate, index) => {
-      const x = center.layout.x - center.layout.w / 2 + 0.35 + (index % 5) * 0.42
-      const y = center.layout.y - center.layout.h / 2 - 0.28 - Math.floor(index / 5) * 0.34
+      const columns = Math.min(5, center.gates.length)
+      const row = Math.floor(index / 5)
+      const rowLength = Math.min(columns, center.gates.length - row * columns)
+      const x = center.layout.x - (rowLength - 1) * 0.19 + (index % columns) * 0.38
+      const y = center.layout.y + 0.26 - row * 0.24
       const active = cosmos.value.activatedGates.has(gate)
+      if (!active) return
       const hanging = cosmos.value.hangingGates.some(item => item.gate === gate)
-      const sprite = makeSprite(String(gate), active ? (hanging ? '#5ee7a8' : '#e8b860') : '#3a4155', 0.38)
-      sprite.position.set(x, y, 0.45)
-      bodygraphGroup.add(sprite)
+      const gateDot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.065, 14, 14),
+        new THREE.MeshBasicMaterial({ color: hanging ? 0x5ee7a8 : 0xe8b860 }),
+      )
+      gateDot.position.set(x, y, 0.58)
+      bodygraphGroup.add(gateDot)
     })
   }
 
@@ -644,25 +817,17 @@ function buildBodygraph() {
     const start = new THREE.Vector3(left.x, left.y, 0)
     const end = new THREE.Vector3(right.x, right.y, 0)
     const mid = start.clone().add(end).multiplyScalar(0.5)
-    mid.z += 1 + Math.random() * 0.4
-    const points = new THREE.QuadraticBezierCurve3(start, mid, end).getPoints(40)
-    bodygraphGroup.add(new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints(points),
-      new THREE.LineBasicMaterial({ color: 0xe8b860, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }),
-    ))
-  }
-
-  for (const hanging of cosmos.value.hangingGates) {
-    const layout = COSMOS_CENTERS[hanging.center]?.layout
-    if (!layout) continue
-    const start = new THREE.Vector3(layout.x, layout.y, 0)
-    const end = start.clone().add(new THREE.Vector3(0, 0, 1.6))
-    const line = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([start, end]),
-      new THREE.LineDashedMaterial({ color: 0x5ee7a8, dashSize: 0.08, gapSize: 0.06, transparent: true, opacity: 0.5 }),
+    mid.z = 1.25 + start.distanceTo(end) * 0.08
+    const inner = start.clone().lerp(end, 0.26)
+    inner.z = 0.42
+    const outer = start.clone().lerp(end, 0.74)
+    outer.z = 0.42
+    const curve = new THREE.CatmullRomCurve3([start, inner, mid, outer, end])
+    const channelTube = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 72, 0.085, 10, false),
+      channelMaterial,
     )
-    line.computeLineDistances()
-    bodygraphGroup.add(line)
+    bodygraphGroup.add(channelTube)
   }
 }
 
@@ -678,12 +843,36 @@ function buildGateWheel() {
   gateWheelGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(outer), new THREE.LineBasicMaterial({ color: 0x334455, transparent: true, opacity: 0.5 })))
   gateWheelGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(inner), new THREE.LineBasicMaterial({ color: 0x334455, transparent: true, opacity: 0.3 })))
 
+  const disc = new THREE.Mesh(
+    new THREE.RingGeometry(radius - 1.2, radius, 192),
+    new THREE.MeshBasicMaterial({
+      color: 0x1e2c43,
+      transparent: true,
+      opacity: 0.16,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    }),
+  )
+  gateWheelGroup.add(disc)
+
   for (let index = 0; index < 64; index += 1) {
     const gate = COSMOS_GATE_ORDER[index]!
     const startAngle = (COSMOS_GATE_41_START + index * COSMOS_GATE_ARC) * Math.PI / 180
     const midAngle = startAngle + COSMOS_GATE_ARC / 2 * Math.PI / 180
     const active = cosmos.value.activatedGates.has(gate)
     const color = COSMOS_CENTERS[gateCenter(gate)]?.color ?? 0x445566
+    const sector = new THREE.Mesh(
+      new THREE.RingGeometry(radius - 1.18, radius - 0.02, 2, 1, startAngle, COSMOS_GATE_ARC * Math.PI / 180),
+      new THREE.MeshBasicMaterial({
+        color: active ? color : 0x334155,
+        transparent: true,
+        opacity: active ? 0.24 : 0.08,
+        side: THREE.DoubleSide,
+        blending: active ? THREE.AdditiveBlending : THREE.NormalBlending,
+        depthWrite: false,
+      }),
+    )
+    gateWheelGroup.add(sector)
     gateWheelGroup.add(new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(Math.cos(startAngle) * (radius - 1.2), Math.sin(startAngle) * (radius - 1.2), 0),
@@ -715,7 +904,15 @@ function buildGateWheel() {
       gateHitMeshes[gate] = hitMesh
     }
   }
-  gateWheelGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), new THREE.MeshBasicMaterial({ color: 0xe8b860 })))
+  gateWheelGroup.add(new THREE.Mesh(
+    new THREE.SphereGeometry(0.3, 24, 24),
+    new THREE.MeshPhysicalMaterial({ color: 0xe8b860, emissive: 0xe8b860, emissiveIntensity: 0.8, roughness: 0.15, metalness: 0.28 }),
+  ))
+  const wheelHalo = new THREE.Mesh(
+    new THREE.SphereGeometry(0.52, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0xe8b860, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false }),
+  )
+  gateWheelGroup.add(wheelHalo)
 }
 
 function buildGeneKeys() {
@@ -729,7 +926,7 @@ function buildGeneKeys() {
     const color = geneKey.stage === '激活序列' ? 0xe8b860 : geneKey.stage === '金星序列' ? 0xff6b9d : 0x5ee7a8
     const sphere = new THREE.Mesh(
       new THREE.SphereGeometry(0.38, 20, 20),
-      new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.4 }),
+      new THREE.MeshPhysicalMaterial({ color, emissive: color, emissiveIntensity: 0.58, roughness: 0.16, metalness: 0.18, clearcoat: 0.6, transparent: true, opacity: 0.96 }),
     )
     sphere.position.set(x, y, z)
     sphere.userData = { type: 'genekey', index }
@@ -759,7 +956,7 @@ function buildGeneKeys() {
   })
   geneKeyGroup.add(new THREE.Mesh(
     new THREE.IcosahedronGeometry(0.6, 1),
-    new THREE.MeshStandardMaterial({ color: 0xe8b860, emissive: 0xe8b860, emissiveIntensity: 0.7, roughness: 0.2, metalness: 0.6 }),
+    new THREE.MeshPhysicalMaterial({ color: 0xe8b860, emissive: 0xe8b860, emissiveIntensity: 0.7, roughness: 0.12, metalness: 0.3, clearcoat: 0.7 }),
   ))
 }
 
@@ -905,9 +1102,9 @@ function animate() {
   const delta = clock?.getDelta() ?? 0.016
   elapsed += 0.006
   Object.entries(centerMeshes).forEach(([key, mesh], index) => {
-    const material = mesh.material as THREE.MeshStandardMaterial
+    const material = mesh.material as THREE.MeshPhysicalMaterial
     const defined = cosmos.value.centerStatus[key] === 'defined'
-    let intensity = (defined ? 0.45 : 0.05) + Math.sin(elapsed * 1.5 + index * 0.8) * 0.08
+    let intensity = (defined ? 0.34 : 0.05) + Math.sin(elapsed * 1.5 + index * 0.8) * 0.07
     if (key === pulseCenter) {
       intensity = 0.95 + Math.sin(elapsed * 4) * 0.4
       mesh.scale.setScalar(1 + Math.sin(elapsed * 3) * 0.06)
@@ -918,6 +1115,9 @@ function animate() {
     material.emissiveIntensity = intensity
     mesh.position.z = Math.sin(elapsed * 1.2 + index) * 0.05
   })
+
+  channelMaterial.opacity = 0.66 + Math.sin(elapsed * 2.1) * 0.14
+  if (bodygraphGroup.visible) bodygraphGroup.rotation.y = Math.sin(elapsed * 0.35) * 0.035
 
   geneKeyGroup.children.forEach((object, index) => {
     if (object.userData.type !== 'genekey') return
@@ -937,35 +1137,39 @@ function animate() {
   }
   gateWheelGroup.rotation.z += delta * 0.05
   controls?.update()
-  composer?.render()
+  renderPipeline?.render()
 }
 
 function resizeRenderer() {
   const root = rootRef.value
-  if (!root || !camera || !renderer || !composer) return
+  if (!root || !camera || !renderer) return
   const width = root.clientWidth
   const height = root.clientHeight
   camera.aspect = Math.max(width, 1) / Math.max(height, 1)
   camera.updateProjectionMatrix()
   renderer.setSize(width, height)
-  composer.setSize(width, height)
 }
 
-function buildScene() {
+async function buildScene() {
   const root = rootRef.value
   const canvas = stageRef.value
   if (!root || !canvas) return
   disposeScene()
+  const token = ++activeBuild
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x04050c)
-  scene.fog = new THREE.FogExp2(0x04050c, 0.015)
+  buildBackdrop()
   camera = new THREE.PerspectiveCamera(42, Math.max(root.clientWidth, 1) / Math.max(root.clientHeight, 1), 0.1, 300)
   camera.position.set(0, 2, 24)
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false })
+  renderer = new THREE.WebGPURenderer({
+    canvas,
+    antialias: true,
+    alpha: false,
+    forceWebGL: !('gpu' in navigator),
+  })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setSize(root.clientWidth, root.clientHeight)
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.1
+  renderer.toneMappingExposure = 1.14
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
   controls.dampingFactor = 0.06
@@ -974,13 +1178,15 @@ function buildScene() {
   controls.minDistance = 9
   controls.maxDistance = 45
   controls.target.set(0, 0.5, 0)
-  scene.add(new THREE.AmbientLight(0x223344, 1))
   const keyLight = new THREE.PointLight(0xe8b860, 120, 70)
   keyLight.position.set(8, 14, 12)
   scene.add(keyLight)
   const rimLight = new THREE.PointLight(0x4fd8ff, 80, 60)
   rimLight.position.set(-14, 4, -10)
   scene.add(rimLight)
+  const bounceLight = new THREE.PointLight(0xa78bfa, 55, 80)
+  bounceLight.position.set(-4, -10, 14)
+  scene.add(bounceLight)
   buildStarfield()
   mainGroup.add(bodygraphGroup, gateWheelGroup, geneKeyGroup)
   scene.add(mainGroup)
@@ -988,9 +1194,12 @@ function buildScene() {
   buildGateWheel()
   buildGeneKeys()
   setViewMode('bodygraph')
-  composer = new EffectComposer(renderer)
-  composer.addPass(new RenderPass(scene, camera))
-  composer.addPass(new UnrealBloomPass(new THREE.Vector2(root.clientWidth, root.clientHeight), 0.7, 0.5, 0.85))
+  await renderer.init()
+  if (token !== activeBuild) return
+  const scenePass = pass(scene, camera)
+  const scenePassColor = scenePass.getTextureNode('output')
+  renderPipeline = new THREE.RenderPipeline(renderer)
+  renderPipeline.outputNode = scenePassColor.add(bloom(scenePassColor, 0.52, 0.62, 0.72))
   resizeObserver = new ResizeObserver(resizeRenderer)
   resizeObserver.observe(root)
   resizeRenderer()
@@ -998,11 +1207,14 @@ function buildScene() {
 }
 
 function disposeScene() {
+  activeBuild += 1
   cancelAnimationFrame(animationId)
   resizeObserver?.disconnect()
   resizeObserver = null
   controls?.dispose()
-  composer?.dispose()
+  renderPipeline?.dispose()
+  backdropTexture?.dispose()
+  backdropTexture = null
   scene?.traverse((object) => {
     const mesh = object as THREE.Mesh & { material?: THREE.Material | THREE.Material[] }
     mesh.geometry?.dispose()
@@ -1016,7 +1228,7 @@ function disposeScene() {
   camera = null
   renderer = null
   controls = null
-  composer = null
+  renderPipeline = null
   Object.keys(centerMeshes).forEach((key) => { delete centerMeshes[key] })
   Object.keys(gateMeshes).forEach((key) => { delete gateMeshes[Number(key)] })
   Object.keys(gateHitMeshes).forEach((key) => { delete gateHitMeshes[Number(key)] })
@@ -1027,8 +1239,8 @@ function disposeScene() {
 }
 
 async function captureFrame() {
-  if (!composer) return null
-  composer.render()
+  if (!renderPipeline) return null
+  renderPipeline.render()
   return stageRef.value?.toDataURL('image/png')
 }
 
@@ -1046,16 +1258,16 @@ function handleKeydown(event: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeydown)
   window.addEventListener('pointerdown', handleGlobalPointerDown)
   try {
-    buildScene()
-    window.setTimeout(() => {
-      loading.value = false
-    }, 500)
+    await buildScene()
   }
-  catch {
+  catch (error) {
+    console.error('Human Design 3D stage failed to initialize:', error)
+  }
+  finally {
     loading.value = false
   }
 })
@@ -1066,11 +1278,17 @@ onBeforeUnmount(() => {
   disposeScene()
 })
 
-watch(() => props.result, () => {
+watch(() => props.result, async () => {
   selectedElement.value = null
   elementOpen.value = false
   closeModal()
-  nextTick(buildScene)
+  await nextTick()
+  try {
+    await buildScene()
+  }
+  catch (error) {
+    console.error('Human Design 3D stage failed to refresh:', error)
+  }
 })
 </script>
 
