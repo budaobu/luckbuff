@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <div v-if="profiles.length > 0" class="space-y-2">
+    <div v-if="showProfiles && profiles.length > 0" class="space-y-2">
       <label class="block text-sm text-[var(--text-muted)]">{{ $t('baziForm.selectProfile') }}</label>
       <div class="flex flex-wrap gap-2">
         <button
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div v-else class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+    <div v-else-if="showProfiles" class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
       <p class="text-sm text-[var(--text-faint)]">
         {{ $t('baziForm.noProfiles') }}<NuxtLink
           :to="localePath('/settings')"
@@ -64,12 +64,15 @@ import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@inter
 import type { DateValue } from '@internationalized/date'
 import type { UserProfile } from '~/types/user'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   birthDate: string
   selectedProfileId?: string | null
   dateLabel?: string
   required?: boolean
-}>()
+  showProfiles?: boolean
+}>(), {
+  showProfiles: true,
+})
 
 const emit = defineEmits<{
   'select-profile': [profile: UserProfile]

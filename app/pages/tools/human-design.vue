@@ -20,28 +20,21 @@
           <div class="hd-form-grid">
             <label>
               <span>{{ $t('profileForm.birthDate') }} <i>*</i></span>
-              <UPopover>
-                <UButton
-                  type="button"
-                  color="neutral"
-                  variant="outline"
-                  class="w-full justify-start"
-                  :class="{ 'hd-placeholder': !form.birthDate }"
-                >
-                  <UIcon name="i-heroicons-calendar" class="mr-2 h-4 w-4" />
-                  {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
-                </UButton>
-                <template #content>
-                  <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
-                </template>
-              </UPopover>
+              <ProfileBirthDateSelector
+                :birth-date="form.birthDate"
+                :show-profiles="false"
+                required
+                @update:birth-date="form.birthDate = $event"
+              />
             </label>
 
             <label>
               <span>{{ $t('humanDesign.birthTime') }} <i>*</i></span>
-              <UInput
-                v-model="form.birthTime"
-                type="time"
+              <UInputTime
+                v-model="birthTime"
+                granularity="minute"
+                :locale="uiLocale"
+                icon="i-heroicons-clock"
                 color="warning"
                 required
                 class="w-full"
@@ -120,8 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
-import type { DateValue } from '@internationalized/date'
+import type { Time } from '@internationalized/date'
 import type { HumanDesignChartResult } from '~~/server/utils/tools/human-design'
 
 const { t, locale } = useI18n()
@@ -129,9 +121,8 @@ const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
 
-const tz = getLocalTimeZone()
-const dateFormatter = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : 'zh-CN', { dateStyle: 'long' }))
-const calendarDate = shallowRef<DateValue>()
+const birthTime = shallowRef<Time>()
+const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 interface FormValues {
   birthDate: string
@@ -185,8 +176,8 @@ const timezoneOptions = computed(() => {
   return items
 })
 
-watch(calendarDate, (value) => {
-  form.birthDate = value ? value.toString() : ''
+watch(birthTime, (value) => {
+  form.birthTime = value ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}` : ''
 })
 
 onMounted(() => {
@@ -392,10 +383,6 @@ useHead(() => ({
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-}
-
-.hd-placeholder {
-  color: var(--text-placeholder);
 }
 
 .hd-form label {

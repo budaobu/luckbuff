@@ -27,12 +27,13 @@
 
           <div>
             <label for="tieban-birth-time">{{ $t('tiebanPaipan.birthTime') }}</label>
-            <UInput
+            <UInputTime
               id="tieban-birth-time"
-              v-model="form.birthTime"
-              type="time"
-              min="00:00"
-              max="23:59"
+              v-model="birthTime"
+              granularity="minute"
+              :locale="uiLocale"
+              icon="i-heroicons-clock"
+              color="warning"
               required
               class="w-full"
               :ui="{
@@ -128,12 +129,16 @@
 
 <script setup lang="ts">
 import type { TiebanPaipanResult } from '~~/app/types/tieban-paipan'
+import { parseTime } from '@internationalized/date'
+import type { Time } from '@internationalized/date'
 import type { UserProfile } from '~/types/user'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
+
+const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<TiebanPaipanResult | null>(null)
@@ -143,6 +148,12 @@ const form = ref({
   birthTime: '',
   location: '',
   gender: 'male' as 'male' | 'female',
+})
+const birthTime = computed<Time | undefined>({
+  get: () => form.value.birthTime ? parseTime(form.value.birthTime) : undefined,
+  set: value => form.value.birthTime = value
+    ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`
+    : '',
 })
 
 const shareSummary = computed(() => {
