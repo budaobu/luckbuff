@@ -61,15 +61,12 @@
 
           <div class="wn-field">
             <label>{{ $t('natalAstro.birthTimeLabel') }} <b>*</b></label>
-            <UInputTime
-              v-model="birthTime"
-              granularity="minute"
-              :locale="uiLocale"
-              icon="i-heroicons-clock"
-              color="warning"
+            <AppTimePicker
+              v-model="form.birthTime"
+              :placeholder="$t('profileForm.birthTimePlaceholder')"
+              :hour-placeholder="$t('thaiAstro.hourPlaceholder')"
+              :minute-placeholder="$t('thaiAstro.minutePlaceholder')"
               required
-              class="w-full"
-              :ui="{ base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] text-[var(--text-primary)]' }"
             />
             <label class="wn-checkbox">
               <input v-model="form.timeUncertain" type="checkbox">
@@ -128,17 +125,13 @@
 </template>
 
 <script setup lang="ts">
-import { parseTime } from '@internationalized/date'
-import type { Time } from '@internationalized/date'
 import type { UserProfile } from '~/types/user'
 import type { NatalAstroResult } from '~~/app/types/natal-astro'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { profiles, defaultProfile } = useProfiles()
-
-const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 const form = reactive({
   gender: 'male' as 'male' | 'female',
@@ -152,13 +145,6 @@ const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<NatalAstroResult | null>(null)
 
 const isValid = computed(() => !!(form.gender && form.birthDate && form.birthTime && form.birthCity.trim()))
-
-const birthTime = computed<Time | undefined>({
-  get: () => form.birthTime ? parseTime(form.birthTime) : undefined,
-  set: value => form.birthTime = value
-    ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`
-    : '',
-})
 
 function selectProfile(profile: UserProfile) {
   selectedProfileId.value = profile.id

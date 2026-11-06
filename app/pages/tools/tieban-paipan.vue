@@ -26,19 +26,13 @@
           />
 
           <div>
-            <label for="tieban-birth-time">{{ $t('tiebanPaipan.birthTime') }}</label>
-            <UInputTime
-              id="tieban-birth-time"
-              v-model="birthTime"
-              granularity="minute"
-              :locale="uiLocale"
-              icon="i-heroicons-clock"
-              color="warning"
+            <label>{{ $t('tiebanPaipan.birthTime') }}</label>
+            <AppTimePicker
+              v-model="form.birthTime"
+              :placeholder="$t('profileForm.birthTimePlaceholder')"
+              :hour-placeholder="$t('thaiAstro.hourPlaceholder')"
+              :minute-placeholder="$t('thaiAstro.minutePlaceholder')"
               required
-              class="w-full"
-              :ui="{
-                base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
-              }"
             />
           </div>
 
@@ -129,16 +123,12 @@
 
 <script setup lang="ts">
 import type { TiebanPaipanResult } from '~~/app/types/tieban-paipan'
-import { parseTime } from '@internationalized/date'
-import type { Time } from '@internationalized/date'
 import type { UserProfile } from '~/types/user'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
-
-const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<TiebanPaipanResult | null>(null)
@@ -149,13 +139,6 @@ const form = ref({
   location: '',
   gender: 'male' as 'male' | 'female',
 })
-const birthTime = computed<Time | undefined>({
-  get: () => form.value.birthTime ? parseTime(form.value.birthTime) : undefined,
-  set: value => form.value.birthTime = value
-    ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`
-    : '',
-})
-
 const shareSummary = computed(() => {
   if (!result.value) return undefined
   return `${result.value.natal.hexagram} · ${result.value.numbers.kaokeQuarter} · ${result.value.birth.minuteQuarter.label}`
