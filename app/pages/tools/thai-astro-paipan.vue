@@ -38,41 +38,13 @@
             </div>
             <div>
               <span>{{ $t('thaiAstro.birthTime') }} <i>*</i></span>
-              <UPopover>
-                <UButton
-                  type="button"
-                  color="neutral"
-                  variant="outline"
-                  class="w-full justify-start bg-[var(--surface-input)] text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)]"
-                  :class="{ 'text-[var(--text-placeholder)]': !form.birthTime }"
-                >
-                  <UIcon name="i-heroicons-clock" class="mr-2 h-4 w-4 text-[var(--text-faint)]" />
-                  {{ form.birthTime || $t('thaiAstro.birthTimePlaceholder') }}
-                </UButton>
-                <template #content>
-                  <div class="w-[220px] rounded-xl border border-[var(--border-light)] bg-[var(--surface-elevated)] p-3 shadow-2xl">
-                    <div class="flex items-center gap-2">
-                      <USelect
-                        v-model="selectedHour"
-                        :items="hourOptions"
-                        :placeholder="$t('thaiAstro.hourPlaceholder')"
-                        color="warning"
-                        class="flex-1"
-                        :ui="selectUi"
-                      />
-                      <span class="text-sm text-[var(--text-faint)]">:</span>
-                      <USelect
-                        v-model="selectedMinute"
-                        :items="minuteOptions"
-                        :placeholder="$t('thaiAstro.minutePlaceholder')"
-                        color="warning"
-                        class="flex-1"
-                        :ui="selectUi"
-                      />
-                    </div>
-                  </div>
-                </template>
-              </UPopover>
+              <AppTimePicker
+                v-model="form.birthTime"
+                :placeholder="$t('thaiAstro.birthTimePlaceholder')"
+                :hour-placeholder="$t('thaiAstro.hourPlaceholder')"
+                :minute-placeholder="$t('thaiAstro.minutePlaceholder')"
+                required
+              />
             </div>
           </div>
 
@@ -187,30 +159,6 @@ watch(calendarDate, (date) => {
     ? `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
     : ''
 })
-
-const hourOptions = Array.from({ length: 24 }, (_, hour) => ({
-  label: String(hour).padStart(2, '0'),
-  value: String(hour).padStart(2, '0'),
-}))
-
-const minuteOptions = Array.from({ length: 60 }, (_, minute) => ({
-  label: String(minute).padStart(2, '0'),
-  value: String(minute).padStart(2, '0'),
-}))
-
-const selectedHour = ref<string>()
-const selectedMinute = ref<string>()
-
-watch([selectedHour, selectedMinute], ([hour, minute]) => {
-  form.birthTime = hour && minute ? `${hour}:${minute}` : ''
-})
-
-const selectUi = {
-  base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
-  placeholder: 'text-[var(--text-placeholder)]',
-  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-[240px]',
-  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
-}
 
 const genderOptions = computed(() => [
   { label: t('thaiAstro.genderUnknown'), value: 'unknown' },

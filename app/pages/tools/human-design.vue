@@ -30,15 +30,12 @@
 
             <label>
               <span>{{ $t('humanDesign.birthTime') }} <i>*</i></span>
-              <UInputTime
-                v-model="birthTime"
-                granularity="minute"
-                :locale="uiLocale"
-                icon="i-heroicons-clock"
-                color="warning"
+              <AppTimePicker
+                v-model="form.birthTime"
+                :placeholder="$t('profileForm.birthTimePlaceholder')"
+                :hour-placeholder="$t('thaiAstro.hourPlaceholder')"
+                :minute-placeholder="$t('thaiAstro.minutePlaceholder')"
                 required
-                class="w-full"
-                :ui="{ base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] text-[var(--text-primary)]' }"
               />
             </label>
           </div>
@@ -113,16 +110,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Time } from '@internationalized/date'
 import type { HumanDesignChartResult } from '~~/server/utils/tools/human-design'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
-
-const birthTime = shallowRef<Time>()
-const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 interface FormValues {
   birthDate: string
@@ -174,10 +167,6 @@ const timezoneOptions = computed(() => {
     items.unshift({ label: `${t('humanDesign.deviceTimezone')} · ${detectedTimezone.value}`, value: detectedTimezone.value })
   }
   return items
-})
-
-watch(birthTime, (value) => {
-  form.birthTime = value ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}` : ''
 })
 
 onMounted(() => {
