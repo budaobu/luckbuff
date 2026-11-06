@@ -50,30 +50,24 @@
           </div>
 
           <div class="wn-field">
-            <label>{{ $t('profileForm.birthDate') }} <b>*</b></label>
-            <UPopover>
-              <UButton
-                type="button"
-                color="neutral"
-                variant="outline"
-                class="w-full justify-start"
-                :class="{ 'wn-placeholder': !form.birthDate }"
-              >
-                <UIcon name="i-heroicons-calendar" class="mr-2 h-4 w-4" />
-                {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
-              </UButton>
-              <template #content>
-                <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
-              </template>
-            </UPopover>
+            <ProfileBirthDateSelector
+              :birth-date="form.birthDate"
+              :show-profiles="false"
+              :date-label="$t('profileForm.birthDate')"
+              required
+              @update:birth-date="form.birthDate = $event"
+            />
           </div>
 
           <div class="wn-field">
             <label>{{ $t('natalAstro.birthTimeLabel') }} <b>*</b></label>
-            <UInput
-              v-model="form.birthTime"
-              type="time"
-              step="60"
+            <UInputTime
+              v-model="birthTime"
+              granularity="minute"
+              :locale="uiLocale"
+              icon="i-heroicons-clock"
+              color="warning"
+              required
               class="w-full"
               :ui="{ base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] text-[var(--text-primary)]' }"
             />
@@ -134,8 +128,8 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
-import type { DateValue } from '@internationalized/date'
+import { parseTime } from '@internationalized/date'
+import type { Time } from '@internationalized/date'
 import type { UserProfile } from '~/types/user'
 import type { NatalAstroResult } from '~~/app/types/natal-astro'
 
@@ -144,9 +138,7 @@ const localePath = useLocalePath()
 const toast = useToast()
 const { profiles, defaultProfile } = useProfiles()
 
-const tz = getLocalTimeZone()
-const dateFormatter = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : 'zh-CN', { dateStyle: 'long' }))
-const calendarDate = shallowRef<DateValue>()
+const uiLocale = computed(() => locale.value === 'en' ? 'en-US' : 'zh-CN')
 
 const form = reactive({
   gender: 'male' as 'male' | 'female',
@@ -160,18 +152,12 @@ const phase = ref<'form' | 'loading' | 'result'>('form')
 const result = ref<NatalAstroResult | null>(null)
 
 const isValid = computed(() => !!(form.gender && form.birthDate && form.birthTime && form.birthCity.trim()))
-watch(calendarDate, (value) => {
-  form.birthDate = value ? value.toString() : ''
-})
 
-watch(() => form.birthDate, (value) => {
-  try {
-    const parsed = value ? parseDate(value) : undefined
-    if (parsed?.toString() !== calendarDate.value?.toString()) calendarDate.value = parsed
-  }
-  catch {
-    calendarDate.value = undefined
-  }
+const birthTime = computed<Time | undefined>({
+  get: () => form.birthTime ? parseTime(form.birthTime) : undefined,
+  set: value => form.birthTime = value
+    ? `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`
+    : '',
 })
 
 function selectProfile(profile: UserProfile) {
@@ -179,14 +165,6 @@ function selectProfile(profile: UserProfile) {
   form.gender = profile.gender
   form.birthDate = profile.birthDate || ''
   form.birthCity = profile.birthProvince || ''
-  if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    }
-    catch {
-      calendarDate.value = undefined
-    }
-  }
 }
 
 async function handleSubmit() {
