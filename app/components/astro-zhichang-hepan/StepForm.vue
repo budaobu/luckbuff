@@ -130,7 +130,7 @@ const inputUi = {
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
               {{ form.personA.birthDate && calendarDateA ? df.format(calendarDateA.toDate(tz)) : $t('astroZhichangHepan.birthDatePlaceholder') }}
             </UButton>
-            <template #content><AppCalendar v-model="calendarDateA" color="warning" class="p-2" /></template>
+            <template #content><LazyAppCalendar v-model="calendarDateA" color="warning" class="p-2" /></template>
           </UPopover>
         </div>
         <div class="space-y-1.5">
@@ -181,7 +181,7 @@ const inputUi = {
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
               {{ form.personB.birthDate && calendarDateB ? df.format(calendarDateB.toDate(tz)) : $t('astroZhichangHepan.birthDatePlaceholder') }}
             </UButton>
-            <template #content><AppCalendar v-model="calendarDateB" color="warning" class="p-2" /></template>
+            <template #content><LazyAppCalendar v-model="calendarDateB" color="warning" class="p-2" /></template>
           </UPopover>
         </div>
         <div class="space-y-1.5">

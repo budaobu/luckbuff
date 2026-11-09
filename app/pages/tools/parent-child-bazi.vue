@@ -85,7 +85,7 @@
                       {{ form.parent.birthDate && parentCalendarDate ? df.format(parentCalendarDate.toDate(tz)) : $t('parentChildBazi.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <AppCalendar v-model="parentCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model="parentCalendarDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -162,7 +162,7 @@
                       {{ form.child.birthDate && childCalendarDate ? df.format(childCalendarDate.toDate(tz)) : $t('parentChildBazi.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <AppCalendar v-model="childCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model="childCalendarDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>

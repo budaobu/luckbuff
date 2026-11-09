@@ -195,7 +195,7 @@ watch(() => form.value.birthTime, (v) => {
           {{ form.birthDate || $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
-          <AppCalendar
+          <LazyAppCalendar
             v-model="dateModel"
             color="warning"
             class="p-2"

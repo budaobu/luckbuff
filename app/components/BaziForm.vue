@@ -90,7 +90,7 @@
             {{ selectedDateText }}
           </UButton>
           <template #content>
-            <AppCalendar
+            <LazyAppCalendar
               v-model="calendarDate"
               color="warning"
               class="p-2"

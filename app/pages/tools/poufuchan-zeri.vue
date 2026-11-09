@@ -48,7 +48,7 @@
                     {{ form.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('poufuchanZeri.startPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
                 <UPopover>
@@ -62,7 +62,7 @@
                     {{ form.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('poufuchanZeri.endPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -110,7 +110,7 @@
                     {{ mother.birthDate && motherCalendarDate ? df.format(motherCalendarDate.toDate(tz)) : $t('poufuchanZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="motherCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="motherCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -171,7 +171,7 @@
                     {{ father.birthDate && fatherCalendarDate ? df.format(fatherCalendarDate.toDate(tz)) : $t('poufuchanZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="fatherCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="fatherCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>

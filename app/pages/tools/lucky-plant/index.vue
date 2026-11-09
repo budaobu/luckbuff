@@ -118,7 +118,7 @@
                   {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('luckyPlant.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <AppCalendar
+                  <LazyAppCalendar
                     v-model="calendarDate"
                     color="warning"
                     class="p-2"

@@ -90,7 +90,7 @@
                   {{ form.birthdate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('numerology.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <AppCalendar
+                  <LazyAppCalendar
                     v-model="calendarDate"
                     color="warning"
                     class="p-2"

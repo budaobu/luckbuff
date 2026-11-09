@@ -52,7 +52,7 @@
             </UButton>
           </div>
 
-          <AppCalendar
+          <LazyAppCalendar
             v-model="calendarDate"
             color="warning"
             class="border-0 bg-transparent p-2 shadow-none"

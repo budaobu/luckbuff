@@ -48,7 +48,7 @@
                     {{ form.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('ticheZeri.startPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
                 <UPopover>
@@ -62,7 +62,7 @@
                     {{ form.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('ticheZeri.endPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -111,7 +111,7 @@
                     {{ owner.birthDate && ownerCalendarDate ? df.format(ownerCalendarDate.toDate(tz)) : $t('ticheZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="ownerCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="ownerCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
