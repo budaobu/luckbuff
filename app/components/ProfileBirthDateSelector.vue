@@ -46,7 +46,7 @@
           {{ birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
-          <AppCalendar
+          <LazyAppCalendar
             v-model="calendarDate"
             color="warning"
             :min-value="minDate"

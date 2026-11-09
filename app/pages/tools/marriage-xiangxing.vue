@@ -85,7 +85,7 @@
                       {{ form.personA.birthDate && personACalendarDate ? df.format(personACalendarDate.toDate(tz)) : $t('marriageXiangxing.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <AppCalendar v-model="personACalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model="personACalendarDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -162,7 +162,7 @@
                       {{ form.personB.birthDate && personBCalendarDate ? df.format(personBCalendarDate.toDate(tz)) : $t('marriageXiangxing.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <AppCalendar v-model="personBCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model="personBCalendarDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>

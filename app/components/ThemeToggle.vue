@@ -2,16 +2,16 @@
   <button
     class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all duration-200 border"
     :class="buttonClasses"
-    :title="mounted ? tooltip : ''"
-    :aria-label="mounted ? tooltip : ''"
+    :title="tooltip"
+    :aria-label="tooltip"
     @click="toggleTheme"
   >
-    <UIcon
-      v-if="mounted"
-      :name="isDark ? 'i-heroicons-moon' : 'i-heroicons-sun'"
-      class="w-3.5 h-3.5 transition-transform duration-300"
-      :class="{ 'rotate-12': !isDark }"
-    />
+    <span class="dark:hidden">
+      <UIcon name="i-heroicons-sun" class="w-3.5 h-3.5 rotate-12 transition-transform duration-300" />
+    </span>
+    <span class="hidden dark:block">
+      <UIcon name="i-heroicons-moon" class="w-3.5 h-3.5 transition-transform duration-300" />
+    </span>
     <span v-if="mounted" class="hidden sm:inline">{{ label }}</span>
   </button>
 </template>
@@ -20,11 +20,11 @@
 const colorMode = useColorMode()
 const { t } = useI18n()
 
-// preference 存于 localStorage，SSR 阶段无法得知；挂载前保持中性渲染避免 hydration 不一致
+// preference 存于 localStorage，SSR 阶段无法得知；图标交给 CSS 主题类，文字等挂载后再显示
 const mounted = ref(false)
 onMounted(() => { mounted.value = true })
 
-const isDark = computed(() => mounted.value && colorMode.value === 'dark')
+const isDark = computed(() => colorMode.value === 'dark')
 
 const tooltip = computed(() => {
   if (colorMode.preference === 'system') {

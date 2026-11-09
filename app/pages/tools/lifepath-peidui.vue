@@ -47,7 +47,7 @@
                   {{ formattedBirthDate(key) }}
                 </UButton>
                 <template #content>
-                  <AppCalendar v-model="calendarDates[key]" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model="calendarDates[key]" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </fieldset>

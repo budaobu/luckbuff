@@ -225,7 +225,7 @@ onMounted(() => {
           {{ local.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('vedic.form.birthDate') }}
         </UButton>
         <template #content>
-          <AppCalendar
+          <LazyAppCalendar
             v-model="calendarDate"
             color="warning"
             class="p-2"

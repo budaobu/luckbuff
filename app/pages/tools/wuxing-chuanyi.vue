@@ -53,7 +53,7 @@
                     {{ queryDate ? df.format(queryCalendarDate?.toDate(tz) || new Date()) : $t('wuxingChuanyi.queryDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="queryCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="queryCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
 

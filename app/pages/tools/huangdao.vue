@@ -108,7 +108,7 @@
                   {{ manualForm.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -171,7 +171,7 @@
                     {{ formValues.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('huangdao.startDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -188,7 +188,7 @@
                     {{ formValues.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('huangdao.endDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <AppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>

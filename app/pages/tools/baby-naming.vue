@@ -105,7 +105,7 @@
                       {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('babyNaming.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <AppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                   <USelect
