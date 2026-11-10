@@ -75,18 +75,24 @@
 | F-20 | 已完成 | `SansatempleExperience.vue` 页脚含非真实仪式说明与 sansatemple.com 灵感致谢。 |
 | F-21 | 已完成 | 全部交互有可聚焦按钮；念珠方向键；`TempleScene.vue` 支持 `prefers-reduced-motion`；提示均为文字。 |
 
+## 追加交付：寺庙地图
+
+- 新增可打开的寺庙地图面板，显示 12 个分区、当前所在区、顶部点位图和快速前往按钮。
+- 3D 场景扩展为入口、法堂、茶歇棚、清然堂、林间小径、池畔休息处、塔边步道、河边散步道、竹林、柿架、梵钟亭和工坊。
+- 所有新增地标仍为原创程序化 Three.js 几何，并在中/低档隐藏以保护预算。
+- 地图和分区文案已新增到五种语言；`sansatemple.map` key 集合在五份 locale 中一致。
+
 ## 偏离记录
 
 - SPEC 建议在 Blender 可用时生成 GLB。环境确有 Blender 5.2.2，但 P1 为控制首包和先验证完整交互，采用项目原创的 Three.js 程序化几何与顶点组合；所有资产登记在 `ASSETS.md`。后续替换精修模型时应继续走无头 Blender 生成流程。
-- 视觉重做后实测：高档 245 draw calls / 31,318 triangles / 6 textures；中档 144 / 13,942 / 6；低档 81 / 11,058 / 6。三档均在记录预算内，实测 JSON 见 `evidence/quality-metrics.json`。
-- 视觉重做后，低档实测 81 draw calls。为保留可识别的入口广场和必要坐垫，低档 draw call 预算按 SPEC 允许的 30% 上限内调整为 88（约 +10%）；三角面和纹理预算不变。
+- 加入大地图分区后，高档新增茶歇堂、竹林、柿架、梵钟亭和工坊等地标。中/低档隐藏这些高细节地标，以保持原有预算。高档 draw call 预算按 SPEC 允许的 30% 上限内调整为 275（约 +10%），低档调整为 88；三角面和纹理预算不变。
 
 ## 验证记录
 
 - `pnpm typecheck` 通过。
 - `pnpm lint` 通过。
 - `pnpm build` 通过，产物包含 `.output/server/chunks/routes/sansatemple/ws.mjs`。
-- `pnpm exec playwright test --config e2e/sansatemple.playwright.config.ts` 通过：4 passed, 4 skipped（skipped 是按桌面/手机项目过滤的同一用例）。
+- `pnpm exec playwright test --config e2e/sansatemple.playwright.config.ts` 通过：5 passed, 5 skipped（skipped 是按桌面/手机项目过滤的同一用例）。新增用例覆盖地图显示、当前位置、工坊传送和离开清理。
 - 生产构建本地预览验证：`/tools/sansatemple` HTTP 200；JSON-LD 与 viewport-fit 存在；`/api/sansatemple/channels` 正常；WebSocket join 返回 welcome；`/sitemap-zh-CN.xml` 包含工具 URL。
 
 ## 手动事项

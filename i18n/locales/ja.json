@@ -14151,6 +14151,25 @@
     }
   },
   "sansatemple": {
+    "map": {
+      "title": "寺廟マップ",
+      "current": "現在地",
+      "travel": "移動",
+      "zones": {
+        "entrance": "入り口",
+        "mainHall": "法堂",
+        "coffee": "茶席",
+        "teaHall": "清然堂",
+        "forest": "林の小道",
+        "pondRest": "池畔の休憩場",
+        "pagodaWalk": "塔の周辺路",
+        "riverside": "川辺の遊歩道",
+        "bamboo": "竹林",
+        "persimmon": "柿干し架",
+        "bell": "梵鐘亭",
+        "workshop": "作業場"
+      }
+    },
     "title": "オンライン寺廟",
     "subtitle": "静かに同じ堂に集う体験",
     "kicker": "Online Temple",

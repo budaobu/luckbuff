@@ -14065,6 +14065,25 @@
     }
   },
   "sansatemple": {
+    "map": {
+      "title": "Temple map",
+      "current": "Here",
+      "travel": "Go",
+      "zones": {
+        "entrance": "Entrance",
+        "mainHall": "Dharma hall",
+        "coffee": "Tea tables",
+        "teaHall": "Clearance Hall",
+        "forest": "Forest path",
+        "pondRest": "Pond rest",
+        "pagodaWalk": "Pagoda walk",
+        "riverside": "Riverside walk",
+        "bamboo": "Bamboo grove",
+        "persimmon": "Persimmon racks",
+        "bell": "Bell pavilion",
+        "workshop": "Workshop"
+      }
+    },
     "title": "Online Temple",
     "subtitle": "A quiet shared online experience",
     "kicker": "Online Temple",

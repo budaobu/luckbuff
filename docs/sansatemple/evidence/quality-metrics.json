@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-11-10T06:42:44.388Z",
+  "measuredAt": "2026-11-10T08:05:14.653Z",
   "records": [
     {
       "quality": "high",
-      "calls": 245,
-      "triangles": 31318,
+      "calls": 269,
+      "triangles": 39266,
       "textures": 6
     },
     {
@@ -22,7 +22,7 @@
   ],
   "budgets": {
     "high": {
-      "calls": 250,
+      "calls": 275,
       "triangles": 600000,
       "textures": 100
     },

@@ -86,6 +86,9 @@
           <UIcon name="i-lucide-chevron-down" class="size-3 opacity-60" />
         </button>
         <div class="sansa-top-actions">
+          <button type="button" data-testid="sansatemple-map" aria-haspopup="dialog" :aria-label="t('sansatemple.map.title')" @click="mapOpen = true">
+            <UIcon name="i-lucide-map" class="size-5" />
+          </button>
           <button type="button" data-testid="sansatemple-menu" aria-haspopup="dialog" :aria-label="t('sansatemple.menu')" @click="settingsOpen = true">
             <UIcon name="i-lucide-settings-2" class="size-5" />
           </button>
@@ -165,6 +168,42 @@
         <p>{{ meditationCountdown }}</p>
       </div>
 
+      <div v-if="mapOpen" class="sansa-map" role="dialog" aria-labelledby="sansa-map-title" data-testid="sansatemple-map-view">
+        <header>
+          <h2 id="sansa-map-title">{{ t('sansatemple.map.title') }}</h2>
+          <span data-testid="sansatemple-current-zone">{{ currentZoneLabel }}</span>
+          <button type="button" data-testid="sansatemple-map-close" @click="mapOpen = false">{{ t('sansatemple.close') }}</button>
+        </header>
+        <div class="sansa-map-board" aria-hidden="true">
+          <span class="sansa-map-river" />
+          <span class="sansa-map-road" />
+          <span
+            v-for="zone in mapZones"
+            :key="zone.key"
+            class="sansa-map-zone"
+            :class="{ current: currentZone.key === zone.key }"
+            :style="{ left: `${(zone.x + 22) / 44 * 100}%`, top: `${(zone.z + 22) / 56 * 100}%` }"
+          />
+          <span
+            class="sansa-map-you"
+            :style="{ left: `${(selfState.x + 22) / 44 * 100}%`, top: `${(selfState.z + 22) / 56 * 100}%` }"
+          />
+        </div>
+        <ul class="sansa-map-list">
+          <li v-for="zone in mapZones" :key="zone.key">
+            <button
+              type="button"
+              :data-testid="`sansatemple-zone-${zone.key}`"
+              :aria-current="currentZone.key === zone.key ? 'true' : undefined"
+              @click="travelTo(zone)"
+            >
+              <span>{{ t(`sansatemple.map.zones.${zone.key}`) }}</span>
+              <span>{{ currentZone.key === zone.key ? t('sansatemple.map.current') : t('sansatemple.map.travel') }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
       <div v-if="beadsOpen" class="sansa-beads" role="dialog" aria-labelledby="sansa-beads-title" data-testid="sansatemple-beads-view">
         <header>
           <h2 id="sansa-beads-title">{{ t('sansatemple.beads.title') }}</h2>
@@ -214,6 +253,7 @@ const webglFailed = ref(false)
 const sceneReady = ref(false)
 const sceneRef = ref<InstanceType<typeof TempleScene> | null>(null)
 const settingsOpen = ref(false)
+const mapOpen = ref(false)
 const beadsOpen = ref(false)
 const bowing = ref(false)
 const meditating = ref(false)
@@ -230,6 +270,21 @@ const beadCount = ref(0)
 const audioSettings = reactive(loadSansaAudioSettings())
 const audio = useSansatempleAudio()
 
+const mapZones = [
+  { key: 'entrance', x: 0, z: 25 },
+  { key: 'mainHall', x: 0, z: 0 },
+  { key: 'coffee', x: -14, z: 25 },
+  { key: 'teaHall', x: 14, z: 25 },
+  { key: 'forest', x: -19, z: 19 },
+  { key: 'pondRest', x: 13, z: 15 },
+  { key: 'pagodaWalk', x: -14, z: 8 },
+  { key: 'riverside', x: 0, z: -18 },
+  { key: 'bamboo', x: 18, z: -6 },
+  { key: 'persimmon', x: -18, z: -6 },
+  { key: 'bell', x: -10, z: -16 },
+  { key: 'workshop', x: 16, z: -16 },
+] as const
+
 const meditationOptions = [5, 10, 20]
 const allFull = computed(() => channelList.value.length > 0 && channelList.value.every(item => item.full))
 const noticeText = computed(() => {
@@ -240,6 +295,8 @@ const noticeText = computed(() => {
 })
 const channelCapacity = computed(() => channelList.value.find(item => item.id === selectedChannel.value)?.capacity || 50)
 const incenseCount = computed(() => connection.incense.value.filter(item => item.peerId === selfId.value).length)
+const currentZone = computed(() => [...mapZones].sort((a, b) => Math.hypot(a.x - selfState.value.x, a.z - selfState.value.z) - Math.hypot(b.x - selfState.value.x, b.z - selfState.value.z))[0]!)
+const currentZoneLabel = computed(() => t(`sansatemple.map.zones.${currentZone.value.key}`))
 const serviceActive = computed(() => Boolean(connection.service.value && Date.now() < connection.service.value.endsAt))
 const nextServiceLabel = computed(() => new Date(connection.nextServiceAt.value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
 const inHall = computed(() => selfState.value.z < 8.5)
@@ -355,6 +412,12 @@ function lightIncense() {
   connection.lightIncense()
   sceneRef.value?.setAction?.('incense')
   window.setTimeout(() => sceneRef.value?.setAction?.('idle'), 900)
+}
+
+function travelTo(zone: typeof mapZones[number]) {
+  sceneRef.value?.teleportTo(zone.x + 0.8, zone.z + 0.9)
+  notice.value = ''
+  mapOpen.value = false
 }
 
 function startMeditation(minutes: number) {
@@ -685,6 +748,7 @@ function leaveTemple() {
 
 .sansa-top-actions {
   display: flex;
+  gap: 6px;
   margin-left: auto;
 }
 
@@ -822,6 +886,156 @@ function leaveTemple() {
 .sansa-meditation p {
   font-size: 28px;
   color: #f1ece2;
+}
+
+.sansa-map {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 16px;
+  padding: max(64px, calc(env(safe-area-inset-top) + 64px)) 16px max(24px, calc(env(safe-area-inset-bottom) + 24px));
+  background: rgb(244 241 232 / 94%);
+  color: #463f38;
+}
+
+.sansa-map header {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sansa-map header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.sansa-map header span {
+  color: #6d645b;
+  font-size: 13px;
+}
+
+.sansa-map header button {
+  min-height: 36px;
+  margin-left: auto;
+  border: 1px solid rgb(70 63 56 / 16%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 64%);
+  color: inherit;
+  padding: 0 12px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sansa-map-board {
+  position: relative;
+  width: min(560px, 92vw);
+  height: min(42dvh, 440px);
+  overflow: hidden;
+  border: 1px solid rgb(70 63 56 / 18%);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 68% 72%, #a8caa2 0 18%, transparent 19%),
+    radial-gradient(circle at 30% 68%, #c98b58 0 16%, transparent 17%),
+    linear-gradient(135deg, #f2ead8, #ded0b4);
+  box-shadow: 0 18px 42px rgb(74 48 27 / 16%);
+}
+
+.sansa-map-river {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3%;
+  height: 10%;
+  background: linear-gradient(90deg, #75aeda, #5896c2);
+  opacity: .64;
+}
+
+.sansa-map-road {
+  position: absolute;
+  left: calc(50% - 9%);
+  top: 7%;
+  width: 18%;
+  height: 86%;
+  background: #959ba2;
+  opacity: .58;
+}
+
+.sansa-map-zone {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgb(255 255 255 / 82%);
+  border-radius: 50%;
+  background: #7c5c3d;
+  box-shadow: 0 3px 8px rgb(74 48 27 / 25%);
+}
+
+.sansa-map-zone.current {
+  background: #d9ad68;
+}
+
+.sansa-map-you {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #bf4b25;
+  box-shadow: 0 4px 12px rgb(74 48 27 / 35%);
+}
+
+.sansa-map-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: min(92vw, 680px);
+  max-height: min(28dvh, 240px);
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sansa-map-list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgb(70 63 56 / 14%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 62%);
+  color: inherit;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sansa-map-list button:hover {
+  background: rgb(255 255 255 / 88%);
+}
+
+.sansa-map-list button[aria-current="true"] {
+  border-color: #d9ad68;
+  background: rgb(217 173 104 / 16%);
+}
+
+.sansa-map-list span:last-child {
+  color: #6d645b;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .sansa-beads {

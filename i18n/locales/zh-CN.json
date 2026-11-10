@@ -14089,6 +14089,25 @@
     }
   },
   "sansatemple": {
+    "map": {
+      "title": "寺庙地图",
+      "current": "当前",
+      "travel": "前往",
+      "zones": {
+        "entrance": "入口",
+        "mainHall": "法堂",
+        "coffee": "茶歇座",
+        "teaHall": "清然堂",
+        "forest": "林间小径",
+        "pondRest": "池畔休息处",
+        "pagodaWalk": "塔边步道",
+        "riverside": "河边散步道",
+        "bamboo": "竹林",
+        "persimmon": "柿架",
+        "bell": "梵钟亭",
+        "workshop": "工坊"
+      }
+    },
     "title": "在线寺庙",
     "subtitle": "安静同堂的在线体验",
     "kicker": "Online Temple",

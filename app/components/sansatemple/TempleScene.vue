@@ -82,6 +82,7 @@ defineExpose({
   meditate,
   stopMeditate,
   setAction,
+  teleportTo,
   isInHall,
   isNearAltar,
   rendererInfo,
@@ -113,6 +114,7 @@ onMounted(() => {
   activeQuality.value = props.quality === 'auto' ? autoQuality() : props.quality
   applyQuality()
   buildWorld()
+  buildMapLandmarks()
   avatar = createAvatar('你')
   scene.add(avatar.group)
   bindEvents()
@@ -340,8 +342,8 @@ function buildWorld() {
     new THREE.MeshStandardMaterial({ color: 0x77652e, roughness: 0.84 }),
   ]
   const treePositions: Array<[number, number]> = [
-    [-10, 6], [11, 7], [-11, 12], [12, 16], [-12, 19], [12, 22], [-10, -1], [10, -2],
-    [-17, 8], [18, 11], [-18, 18], [19, 24], [-8, 28], [9, 28], [-14, 2], [16, 3],
+    [-10, 6], [11, 7], [-11, 12], [12, 16], [-12, 21], [12, 22], [-10, -1], [10, -2],
+    [-17, 8], [18, 11], [-24, 20], [19, 24], [-8, 28], [9, 28], [-14, 2], [16, 3],
   ]
   treePositions.forEach(([x, z], treeIndex) => {
     const tree = new THREE.Group()
@@ -494,6 +496,209 @@ function buildWorld() {
     scene?.add(visitor.group)
     staticDecor.push(visitor.group)
   })
+}
+
+const mapZones = [
+  { key: 'entrance', x: 0, z: 25 },
+  { key: 'mainHall', x: 0, z: 0 },
+  { key: 'coffee', x: -14, z: 25 },
+  { key: 'teaHall', x: 14, z: 25 },
+  { key: 'forest', x: -19, z: 19 },
+  { key: 'pondRest', x: 13, z: 15 },
+  { key: 'pagodaWalk', x: -14, z: 8 },
+  { key: 'riverside', x: 0, z: -18 },
+  { key: 'bamboo', x: 18, z: -6 },
+  { key: 'persimmon', x: -18, z: -6 },
+  { key: 'bell', x: -10, z: -16 },
+  { key: 'workshop', x: 16, z: -16 },
+] as const
+
+function buildMapLandmarks() {
+  if (!scene) return
+  const patchGeometry = new THREE.CircleGeometry(5.2, 28)
+  const patchMaterial = new THREE.MeshStandardMaterial({ color: 0xc49c68, roughness: 0.9 })
+  const zonePatches = new THREE.InstancedMesh(patchGeometry, patchMaterial, mapZones.length)
+  const patchMatrix = new THREE.Matrix4()
+  const flatQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0))
+  mapZones.forEach((zone, index) => {
+    patchMatrix.compose(new THREE.Vector3(zone.x, 0.08, zone.z), flatQuaternion, new THREE.Vector3(1, 1, 1))
+    zonePatches.setMatrixAt(index, patchMatrix)
+  })
+  zonePatches.instanceMatrix.needsUpdate = true
+  zonePatches.userData.qualityDetail = 'high'
+  scene.add(zonePatches)
+  staticDecor.push(zonePatches)
+
+  const markerGeometry = new THREE.CylinderGeometry(0.06, 0.08, 2.2, 6)
+  const markerMaterial = new THREE.MeshStandardMaterial({ color: 0x5d3f2a, roughness: 0.65 })
+  const zoneMarkers = new THREE.InstancedMesh(markerGeometry, markerMaterial, mapZones.length)
+  mapZones.forEach((zone, index) => {
+    patchMatrix.makeTranslation(zone.x, 1.1, zone.z)
+    zoneMarkers.setMatrixAt(index, patchMatrix)
+  })
+  zoneMarkers.instanceMatrix.needsUpdate = true
+  zoneMarkers.userData.qualityDetail = 'high'
+  scene.add(zoneMarkers)
+  staticDecor.push(zoneMarkers)
+
+  const clothMaterial = new THREE.MeshStandardMaterial({ color: 0xf0e6d2, roughness: 0.72 })
+  const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x634329, roughness: 0.62 })
+  const tileMaterial = new THREE.MeshStandardMaterial({ color: 0x495057, roughness: 0.45 })
+
+  const coffee = new THREE.Group()
+  const coffeeRoof = new THREE.Mesh(new THREE.BoxGeometry(5, 0.18, 4.2), clothMaterial)
+  coffeeRoof.position.y = 3
+  coffee.add(coffeeRoof)
+  for (const [x, z] of [[-2, -1.5], [2, -1.5], [-2, 1.5], [2, 1.5]] as Array<[number, number]>) {
+    const post = new THREE.Mesh(markerGeometry, woodMaterial)
+    post.position.set(x, 1.1, z)
+    coffee.add(post)
+  }
+  for (const [x, z] of [[-1.2, 0], [1.2, 0]] as Array<[number, number]>) {
+    const table = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.08, 18), woodMaterial)
+    table.position.set(x, 0.74, z)
+    coffee.add(table)
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.7, 8), woodMaterial)
+    stem.position.set(x, 0.35, z)
+    coffee.add(stem)
+  }
+  coffee.position.set(-14, 0, 25)
+  coffee.userData.qualityDetail = 'high'
+  scene.add(coffee)
+  staticDecor.push(coffee)
+
+  const teaHall = new THREE.Group()
+  const teaFloor = new THREE.Mesh(new THREE.BoxGeometry(7, 0.18, 6), new THREE.MeshStandardMaterial({ color: 0x8e7257, roughness: 0.84 }))
+  teaFloor.position.y = 0.16
+  teaHall.add(teaFloor)
+  const teaRoof = new THREE.Mesh(new THREE.CylinderGeometry(5.5, 5, 0.7, 4, 1), tileMaterial)
+  teaRoof.position.y = 3.5
+  teaRoof.rotation.y = Math.PI / 4
+  teaHall.add(teaRoof)
+  for (const [x, z] of [[-2.5, -2], [2.5, -2], [-2.5, 2], [2.5, 2]] as Array<[number, number]>) {
+    const column = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.24, 3, 10), woodMaterial)
+    column.position.set(x, 1.5, z)
+    teaHall.add(column)
+  }
+  teaHall.position.set(14, 0, 25)
+  teaHall.userData.qualityDetail = 'high'
+  scene.add(teaHall)
+  staticDecor.push(teaHall)
+
+  const forest = new THREE.Group()
+  const forestPath = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 16), new THREE.MeshStandardMaterial({ color: 0xa98258, roughness: 0.92 }))
+  forestPath.rotation.x = -Math.PI / 2
+  forestPath.position.y = 0.1
+  forest.add(forestPath)
+  const bambooGeometry = new THREE.CylinderGeometry(0.08, 0.1, 5.2, 6)
+  const bambooMaterial = new THREE.MeshStandardMaterial({ color: 0x6f8f4c, roughness: 0.68 })
+  const bamboo = new THREE.InstancedMesh(bambooGeometry, bambooMaterial, 36)
+  let bambooIndex = 0
+  for (let row = 0; row < 12; row += 1) {
+    for (const side of [-1, 1]) {
+      patchMatrix.makeTranslation(side * (2 + Math.random() * 0.7), 2.6, -7 + row * 1.2)
+      bamboo.setMatrixAt(bambooIndex, patchMatrix)
+      bambooIndex += 1
+    }
+  }
+  bamboo.instanceMatrix.needsUpdate = true
+  forest.add(bamboo)
+  forest.position.set(-19, 0, 19)
+  forest.userData.qualityDetail = 'high'
+  scene.add(forest)
+  staticDecor.push(forest)
+
+  const riverside = new THREE.Group()
+  const river = new THREE.Mesh(new THREE.PlaneGeometry(30, 6), new THREE.MeshStandardMaterial({ color: 0x4b91b7, roughness: 0.24, metalness: 0.06 }))
+  river.rotation.x = -Math.PI / 2
+  river.position.y = 0.12
+  riverside.add(river)
+  const bridge = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.2, 8), woodMaterial)
+  bridge.position.y = 0.6
+  riverside.add(bridge)
+  for (const [x, z] of [[-1, -3], [1, -3], [-1, 3], [1, 3]] as Array<[number, number]>) {
+    const pier = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.2, 0.2), woodMaterial)
+    pier.position.set(x, 0.3, z)
+    riverside.add(pier)
+  }
+  riverside.position.set(0, 0, -18)
+  riverside.userData.qualityDetail = 'high'
+  scene.add(riverside)
+  staticDecor.push(riverside)
+
+  const persimmon = new THREE.Group()
+  for (const axis of [-2.2, 0, 2.2]) {
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(5, 0.14, 0.14), woodMaterial)
+    beam.position.set(0, 2, axis)
+    persimmon.add(beam)
+  }
+  const persimmonGeometry = new THREE.SphereGeometry(0.16, 10, 8)
+  const persimmonMaterial = new THREE.MeshStandardMaterial({ color: 0xe8722d, roughness: 0.55 })
+  const fruits = new THREE.InstancedMesh(persimmonGeometry, persimmonMaterial, 42)
+  let fruitIndex = 0
+  for (const axis of [-2.2, 0, 2.2]) {
+    for (let index = 0; index < 14; index += 1) {
+      patchMatrix.makeTranslation(-2.2 + (index % 7) * 0.72, 2.24 + (index % 2) * 0.1, axis)
+      fruits.setMatrixAt(fruitIndex, patchMatrix)
+      fruitIndex += 1
+    }
+  }
+  fruits.instanceMatrix.needsUpdate = true
+  persimmon.add(fruits)
+  persimmon.position.set(-18, 0, -6)
+  persimmon.userData.qualityDetail = 'high'
+  scene.add(persimmon)
+  staticDecor.push(persimmon)
+
+  const bell = new THREE.Group()
+  const bellRoof = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.1, 0.55, 4, 1), tileMaterial)
+  bellRoof.position.y = 3.3
+  bellRoof.rotation.y = Math.PI / 4
+  bell.add(bellRoof)
+  for (const [x, z] of [[-1.5, -1.5], [1.5, -1.5], [-1.5, 1.5], [1.5, 1.5]] as Array<[number, number]>) {
+    const column = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 3, 8), woodMaterial)
+    column.position.set(x, 1.5, z)
+    bell.add(column)
+  }
+  const bellBody = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1.05, 1.35, 20), new THREE.MeshStandardMaterial({ color: 0x7b6f52, roughness: 0.35, metalness: 0.42 }))
+  bellBody.position.y = 1.9
+  bell.add(bellBody)
+  bell.position.set(-10, 0, -16)
+  bell.userData.qualityDetail = 'high'
+  scene.add(bell)
+  staticDecor.push(bell)
+
+  const workshop = new THREE.Group()
+  for (const [x, z] of [[-1.6, -1], [1.6, -1]] as Array<[number, number]>) {
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.18, 3.2, 0.18), woodMaterial)
+    frame.position.set(x, 1.6, z)
+    workshop.add(frame)
+    const brace = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.16, 0.16), woodMaterial)
+    brace.position.set(0, 3, z)
+    workshop.add(brace)
+  }
+  const roofTiles = new THREE.InstancedMesh(new THREE.BoxGeometry(0.5, 0.12, 0.7), tileMaterial, 24)
+  for (let index = 0; index < 24; index += 1) {
+    patchMatrix.makeTranslation(-0.5 + (index % 6) * 0.22, 0.25 + Math.floor(index / 6) * 0.14, -1 + (index % 3) * 0.8)
+    roofTiles.setMatrixAt(index, patchMatrix)
+  }
+  roofTiles.instanceMatrix.needsUpdate = true
+  workshop.add(roofTiles)
+  workshop.position.set(16, 0, -16)
+  workshop.userData.qualityDetail = 'high'
+  scene.add(workshop)
+  staticDecor.push(workshop)
+}
+
+function teleportTo(x: number, z: number) {
+  selfState.x = THREE.MathUtils.clamp(x, -20, 20)
+  selfState.z = THREE.MathUtils.clamp(z, -20, 32)
+  selfState.targetX = selfState.x
+  selfState.targetZ = selfState.z
+  seekingCushion = false
+  if (selfState.action !== 'meditating') selfState.action = 'idle'
+  avatar?.group.position.set(selfState.x, selfState.z > 8 ? 0.22 : 0, selfState.z)
+  emit('moved', { x: selfState.x, z: selfState.z, rotation: selfState.rotation, action: selfState.action })
 }
 
 function createAvatar(label: string, showLabel = true): AvatarParts {
@@ -723,11 +928,11 @@ function updateSelf(delta: number) {
   }
 
   if (selfState.z > 8) {
-    selfState.x = THREE.MathUtils.clamp(selfState.x, -2.9, 2.9)
-    selfState.z = THREE.MathUtils.clamp(selfState.z, 8, 27.5)
+    selfState.x = THREE.MathUtils.clamp(selfState.x, -18, 18)
+    selfState.z = THREE.MathUtils.clamp(selfState.z, 8, 31.5)
   } else {
-    selfState.x = THREE.MathUtils.clamp(selfState.x, -10, 10)
-    selfState.z = THREE.MathUtils.clamp(selfState.z, -5.5, 8)
+    selfState.x = THREE.MathUtils.clamp(selfState.x, -20, 20)
+    selfState.z = THREE.MathUtils.clamp(selfState.z, -20, 8)
   }
 
   if (avatar) {

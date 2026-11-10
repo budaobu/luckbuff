@@ -14151,6 +14151,25 @@
     }
   },
   "sansatemple": {
+    "map": {
+      "title": "사원 지도",
+      "current": "현재",
+      "travel": "이동",
+      "zones": {
+        "entrance": "입구",
+        "mainHall": "법당",
+        "coffee": "차 머무는 곳",
+        "teaHall": "청연당",
+        "forest": "숲길",
+        "pondRest": "연못 쉼터",
+        "pagodaWalk": "탑 주변 길",
+        "riverside": "강변 산책로",
+        "bamboo": "대나무 숲",
+        "persimmon": "감 말리는 덕장",
+        "bell": "범종각",
+        "workshop": "작업장"
+      }
+    },
     "title": "온라인 사원",
     "subtitle": "조용히 같은 법당에 머무는 경험",
     "kicker": "Online Temple",

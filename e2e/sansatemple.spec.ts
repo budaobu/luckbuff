@@ -169,6 +169,25 @@ test('two browser contexts share a hall without chat', async ({ browser }, testI
   expect(channels.find(channel => channel.id === '1')?.count).toBe(0)
 })
 
+test('map view shows zones and travels to a landmark', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'sansatemple-desktop', 'desktop map only')
+  await openTemple(page)
+  await page.getByTestId('sansatemple-map').click()
+  await expect(page.getByTestId('sansatemple-map-view')).toBeVisible()
+  await expect(page.getByTestId('sansatemple-current-zone')).toContainText('入口')
+  await page.screenshot({ path: `${evidence}/map-zones.png` })
+  await page.getByTestId('sansatemple-zone-workshop').click()
+  await page.getByTestId('sansatemple-map').click()
+  await expect(page.getByTestId('sansatemple-map-view')).toBeVisible()
+  await expect(page.getByTestId('sansatemple-current-zone')).toContainText('工坊')
+  await expect(page.locator('.sansa-stage')).toHaveAttribute('data-self-z', /-1[456]/)
+  await page.screenshot({ path: `${evidence}/map-workshop.png` })
+  await page.getByTestId('sansatemple-map-close').click()
+  await page.getByTestId('sansatemple-menu').click()
+  await page.getByTestId('sansatemple-leave').click()
+  await expect(page.getByTestId('sansatemple-channel-1')).toBeVisible()
+})
+
 test('records renderer budgets for three quality levels', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'sansatemple-desktop', 'desktop quality metrics only')
   await openTemple(page)
@@ -183,7 +202,7 @@ test('records renderer budgets for three quality levels', async ({ page }, testI
     await page.screenshot({ path: `${evidence}/quality-${quality}.png` })
     await page.getByRole('button', { name: '关闭' }).click()
   }
-  const budgets = { high: { calls: 250, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 88, triangles: 150_000, textures: 50 } }
+  const budgets = { high: { calls: 275, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 88, triangles: 150_000, textures: 50 } }
   for (const record of records) {
     const budget = budgets[record.quality as keyof typeof budgets]
     expect(record.calls).toBeLessThanOrEqual(budget.calls)

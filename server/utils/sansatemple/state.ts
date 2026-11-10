@@ -71,7 +71,9 @@ export function removeSansaSocket(id: string) {
 }
 
 export function sendSansa(peerId: string, payload: unknown) {
-  sockets.get(peerId)?.send(JSON.stringify(payload))
+  const socket = sockets.get(peerId)
+  if (!socket) return
+  Promise.resolve(socket.send(JSON.stringify(payload))).catch(() => {})
 }
 
 export function broadcastSansa(channelId: string, payload: unknown, excludeId?: string) {
