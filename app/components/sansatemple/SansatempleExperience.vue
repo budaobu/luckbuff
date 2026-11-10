@@ -79,11 +79,17 @@
       </ClientOnly>
 
       <header class="sansa-top">
-        <span data-testid="sansatemple-channel-label">{{ t('sansatemple.channels.name', { n: selectedChannel }) }}</span>
-        <span>{{ connection.connected.value ? `${Object.keys(connection.peers.value).length}/${channelCapacity}` : '' }}</span>
-        <button type="button" data-testid="sansatemple-menu" aria-haspopup="dialog" @click="settingsOpen = true">
-          {{ t('sansatemple.menu') }}
+        <button type="button" class="sansa-room-pill" data-testid="sansatemple-channel-label">
+          <UIcon name="i-lucide-map" class="size-4" />
+          <strong>{{ t('sansatemple.channels.name', { n: selectedChannel }) }}</strong>
+          <span>{{ connection.connected.value ? Object.keys(connection.peers.value).length : 0 }}</span>
+          <UIcon name="i-lucide-chevron-down" class="size-3 opacity-60" />
         </button>
+        <div class="sansa-top-actions">
+          <button type="button" data-testid="sansatemple-menu" aria-haspopup="dialog" :aria-label="t('sansatemple.menu')" @click="settingsOpen = true">
+            <UIcon name="i-lucide-settings-2" class="size-5" />
+          </button>
+        </div>
       </header>
 
       <aside v-if="settingsOpen" class="sansa-settings" role="dialog" aria-labelledby="sansa-settings-title">
@@ -119,19 +125,24 @@
 
       <nav class="sansa-controls" aria-label="Temple actions">
         <button type="button" data-testid="sansatemple-pray" :aria-pressed="bowing" :disabled="!inHall" @click="togglePray">
-          {{ t('sansatemple.actions.pray') }}
+          <UIcon name="i-lucide-heart-handshake" class="size-5" />
+          <span>{{ t('sansatemple.actions.pray') }}</span>
         </button>
         <button type="button" data-testid="sansatemple-beads" @click="beadsOpen = true">
-          {{ t('sansatemple.actions.beads') }}
+          <UIcon name="i-lucide-circle-dot" class="size-5" />
+          <span>{{ t('sansatemple.actions.beads') }}</span>
         </button>
         <button type="button" data-testid="sansatemple-reverence" @click="doReverence">
-          {{ t('sansatemple.actions.reverence') }}
+          <UIcon name="i-lucide-hand-heart" class="size-5" />
+          <span>{{ t('sansatemple.actions.reverence') }}</span>
         </button>
         <button type="button" data-testid="sansatemple-woodfish" :disabled="!inHall" @click="hitWoodfish">
-          {{ t('sansatemple.actions.woodfish') }}
+          <UIcon name="i-lucide-drum" class="size-5" />
+          <span>{{ t('sansatemple.actions.woodfish') }}</span>
         </button>
         <button type="button" data-testid="sansatemple-incense" :disabled="!nearAltar" @click="lightIncense">
-          {{ t('sansatemple.actions.incense') }}
+          <UIcon name="i-lucide-flame" class="size-5" />
+          <span>{{ t('sansatemple.actions.incense') }}</span>
         </button>
         <button
           v-for="minutes in meditationOptions"
@@ -141,7 +152,8 @@
           :disabled="!inHall || meditating"
           @click="startMeditation(minutes)"
         >
-          {{ t('sansatemple.actions.meditate', { n: minutes }) }}
+          <UIcon name="i-lucide-flower-2" class="size-5" />
+          <span>{{ t('sansatemple.actions.meditate', { n: minutes }) }}</span>
         </button>
       </nav>
 
@@ -605,7 +617,8 @@ function leaveTemple() {
   position: absolute;
   z-index: 4;
   border-radius: 6px;
-  background: rgb(17 24 38 / 86%);
+  background: rgb(248 245 238 / 88%);
+  color: #4b423a;
   padding: 8px 10px;
   font-size: 13px;
 }
@@ -625,7 +638,7 @@ function leaveTemple() {
   display: flex;
   gap: 8px;
   align-items: center;
-  color: #f0ece4;
+  color: #3f3831;
   font-size: 13px;
 }
 
@@ -637,7 +650,7 @@ function leaveTemple() {
   min-height: 38px;
   border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 6px;
-  background: rgb(17 24 38 / 84%);
+  background: rgb(248 245 238 / 86%);
   color: inherit;
   padding: 0 11px;
   font: inherit;
@@ -648,6 +661,43 @@ function leaveTemple() {
   margin-left: auto;
 }
 
+.sansa-room-pill {
+  display: inline-flex;
+  min-width: 118px;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 0 12px;
+  box-shadow: 0 5px 16px rgb(72 49 27 / 14%);
+}
+
+.sansa-room-pill strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.sansa-room-pill span {
+  min-width: 18px;
+  color: #68615a;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sansa-top-actions {
+  display: flex;
+  margin-left: auto;
+}
+
+.sansa-top-actions button {
+  display: grid;
+  width: 38px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: #4b423a;
+  box-shadow: 0 5px 16px rgb(72 49 27 / 14%);
+}
+
 .sansa-controls {
   position: absolute;
   z-index: 5;
@@ -655,13 +705,31 @@ function leaveTemple() {
   right: 10px;
   bottom: max(10px, env(safe-area-inset-bottom));
   display: flex;
-  gap: 7px;
+  justify-content: center;
+  gap: 4px;
   overflow-x: auto;
-  padding-bottom: 2px;
+  width: min(680px, calc(100vw - 20px));
+  margin: 0 auto;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(248 245 238 / 82%);
+  box-shadow: 0 9px 26px rgb(72 49 27 / 15%);
+  backdrop-filter: blur(12px);
 }
 
 .sansa-controls button {
   flex: 0 0 auto;
+  display: inline-flex;
+  min-width: 74px;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 9px;
+  color: #544b43;
+  font-size: 10px;
+  box-shadow: none;
 }
 
 .sansa-controls button:disabled {

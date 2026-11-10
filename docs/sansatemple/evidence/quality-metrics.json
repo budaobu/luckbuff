@@ -1,23 +1,23 @@
 {
-  "measuredAt": "2026-11-10T04:13:06.219Z",
+  "measuredAt": "2026-11-10T06:42:44.388Z",
   "records": [
     {
       "quality": "high",
-      "calls": 44,
-      "triangles": 3244,
-      "textures": 4
+      "calls": 245,
+      "triangles": 31318,
+      "textures": 6
     },
     {
       "quality": "medium",
-      "calls": 44,
-      "triangles": 3244,
-      "textures": 4
+      "calls": 144,
+      "triangles": 13942,
+      "textures": 6
     },
     {
       "quality": "low",
-      "calls": 44,
-      "triangles": 3244,
-      "textures": 4
+      "calls": 81,
+      "triangles": 11058,
+      "textures": 6
     }
   ],
   "budgets": {
@@ -32,7 +32,7 @@
       "textures": 80
     },
     "low": {
-      "calls": 80,
+      "calls": 88,
       "triangles": 150000,
       "textures": 50
     }

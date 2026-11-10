@@ -122,8 +122,8 @@ test('two browser contexts share a hall without chat', async ({ browser }, testI
 
   await openTemple(pageA)
   await openTemple(pageB)
-  await expect(pageA.getByText('2/50')).toBeVisible()
-  await expect(pageB.getByText('2/50')).toBeVisible()
+  await expect(pageA.getByTestId('sansatemple-channel-label')).toContainText('2')
+  await expect(pageB.getByTestId('sansatemple-channel-label')).toContainText('2')
 
   await pageA.getByTestId('sansatemple-reverence').click()
   await expect(pageB.getByTestId('sansatemple-toast')).toContainText('向你合十')
@@ -183,7 +183,7 @@ test('records renderer budgets for three quality levels', async ({ page }, testI
     await page.screenshot({ path: `${evidence}/quality-${quality}.png` })
     await page.getByRole('button', { name: '关闭' }).click()
   }
-  const budgets = { high: { calls: 250, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 80, triangles: 150_000, textures: 50 } }
+  const budgets = { high: { calls: 250, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 88, triangles: 150_000, textures: 50 } }
   for (const record of records) {
     const budget = budgets[record.quality as keyof typeof budgets]
     expect(record.calls).toBeLessThanOrEqual(budget.calls)

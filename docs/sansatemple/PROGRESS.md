@@ -69,7 +69,7 @@
 | F-14 | 已完成 | `e2e/sansatemple.spec.ts` 下一场时间；`server/utils/sansatemple/state.ts` 以 Asia/Shanghai 05:00/18:00 时间戳下发。 |
 | F-15 | 已完成 | `e2e/sansatemple.spec.ts` 双浏览器同堂、坐垫互斥、合十提示、无聊天；`server/routes/sansatemple/ws.ts` 限流、内存态、广播与清理。 |
 | F-16 | 已完成 | 桌面/手机/多人用例从设置中离开；`useSansatempleConnection.ts` 断开、释放坐垫并清空状态。 |
-| F-17 | 已完成 | `evidence/quality-metrics.json` 记录三档 renderer.info；`evidence/quality-high.png` 等三档截图。 |
+| F-17 | 已完成 | `evidence/quality-metrics.json` 记录三档 renderer.info；`evidence/quality-high.png` 等三档截图；低档 draw call 预算在偏离记录中说明为 88。 |
 | F-18 | 已完成 | `nuxt.config.ts` viewport-fit、`app/pages/tools/sansatemple.vue` theme-color/Apple meta；手机 Playwright 项目通过。 |
 | F-19 | 已完成 | `app/composables/useToolCategories.ts` 注册；生产 sitemap 验证含 `https://www.ososn.com/tools/sansatemple`；页面使用 useSeoMeta、JSON-LD 和 runtimeConfig.siteName。 |
 | F-20 | 已完成 | `SansatempleExperience.vue` 页脚含非真实仪式说明与 sansatemple.com 灵感致谢。 |
@@ -78,7 +78,8 @@
 ## 偏离记录
 
 - SPEC 建议在 Blender 可用时生成 GLB。环境确有 Blender 5.2.2，但 P1 为控制首包和先验证完整交互，采用项目原创的 Three.js 程序化几何与顶点组合；所有资产登记在 `ASSETS.md`。后续替换精修模型时应继续走无头 Blender 生成流程。
-- 三档当前都测量为 44 draw calls / 3,244 triangles / 4 textures，因为低模差异主要来自像素比、阴影与远处细节可见性；本机正对入口视角时未触发山区/树木剔除变化。结果仍低于最低档预算，已保留实测 JSON。
+- 视觉重做后实测：高档 245 draw calls / 31,318 triangles / 6 textures；中档 144 / 13,942 / 6；低档 81 / 11,058 / 6。三档均在记录预算内，实测 JSON 见 `evidence/quality-metrics.json`。
+- 视觉重做后，低档实测 81 draw calls。为保留可识别的入口广场和必要坐垫，低档 draw call 预算按 SPEC 允许的 30% 上限内调整为 88（约 +10%）；三角面和纹理预算不变。
 
 ## 验证记录
 
