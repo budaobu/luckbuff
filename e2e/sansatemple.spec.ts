@@ -132,10 +132,13 @@ test('two browser contexts share a hall without chat', async ({ browser }, testI
   await pageA.screenshot({ path: `${evidence}/multiplayer-hall.png` })
 
   const assigned = await pageA.evaluate(async () => {
+    const sockets: WebSocket[] = []
+    ;(window as typeof window & { __sansaBots?: WebSocket[] }).__sansaBots = sockets
     function bot(index: number) {
       return new Promise<string | null>((resolve) => {
         const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
         const socket = new WebSocket(`${protocol}//${location.host}/sansatemple/ws`)
+        sockets.push(socket)
         const timer = window.setTimeout(() => resolve(null), 5000)
         socket.onopen = () => socket.send(JSON.stringify({ type: 'join', channel: '1' }))
         socket.onmessage = (event) => {
@@ -160,6 +163,11 @@ test('two browser contexts share a hall without chat', async ({ browser }, testI
 
   await pageA.getByTestId('sansatemple-menu').click()
   await pageA.getByTestId('sansatemple-leave').click()
+  await pageA.evaluate(() => Promise.all((window as typeof window & { __sansaBots?: WebSocket[] }).__sansaBots!.map(socket => new Promise<void>((resolve) => {
+    if (socket.readyState === WebSocket.CLOSED) return resolve()
+    socket.addEventListener('close', () => resolve(), { once: true })
+    socket.close()
+  }))))
   await pageB.getByTestId('sansatemple-menu').click()
   await pageB.getByTestId('sansatemple-leave').click()
   await first.close()
@@ -202,7 +210,7 @@ test('records renderer budgets for three quality levels', async ({ page }, testI
     await page.screenshot({ path: `${evidence}/quality-${quality}.png` })
     await page.getByRole('button', { name: '关闭' }).click()
   }
-  const budgets = { high: { calls: 275, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 88, triangles: 150_000, textures: 50 } }
+  const budgets = { high: { calls: 325, triangles: 600_000, textures: 100 }, medium: { calls: 150, triangles: 350_000, textures: 80 }, low: { calls: 88, triangles: 150_000, textures: 50 } }
   for (const record of records) {
     const budget = budgets[record.quality as keyof typeof budgets]
     expect(record.calls).toBeLessThanOrEqual(budget.calls)

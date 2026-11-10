@@ -251,6 +251,6 @@ export function nextServiceAt(now = Date.now()): number {
 }
 
 export function sansaAction(value: unknown): SansaAction {
-  const allowed: SansaAction[] = ['idle', 'walking', 'praying', 'meditating', 'woodfish', 'incense']
+  const allowed: SansaAction[] = ['idle', 'walking', 'praying', 'meditating', 'woodfish', 'incense', 'reverence']
   return allowed.includes(value as SansaAction) ? value as SansaAction : 'idle'
 }

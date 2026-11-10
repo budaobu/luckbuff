@@ -379,7 +379,7 @@ function retry() {
   notice.value = ''
 }
 
-function onMoved(state: { x: number; z: number; rotation: number; action: 'idle' | 'walking' | 'praying' | 'meditating' | 'woodfish' | 'incense' }) {
+function onMoved(state: { x: number; z: number; rotation: number; action: SansaAction }) {
   selfState.value = state
   connection.sendState(state)
 }
@@ -397,6 +397,8 @@ function togglePray() {
 
 function doReverence() {
   connection.reverence()
+  sceneRef.value?.setAction('reverence')
+  window.setTimeout(() => sceneRef.value?.setAction(bowing.value ? 'praying' : meditating.value ? 'meditating' : 'idle'), 1300)
   if (!notice.value.startsWith('reverence:')) notice.value = ''
 }
 

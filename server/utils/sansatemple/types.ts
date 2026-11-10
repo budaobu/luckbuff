@@ -1,4 +1,4 @@
-export type SansaAction = 'idle' | 'walking' | 'praying' | 'meditating' | 'woodfish' | 'incense'
+export type SansaAction = 'idle' | 'walking' | 'praying' | 'meditating' | 'woodfish' | 'incense' | 'reverence'
 
 export interface SansaPeerState {
   id: string
