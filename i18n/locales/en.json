@@ -14063,5 +14063,76 @@
       "dog": "Dog hour",
       "pig": "Pig hour"
     }
+  },
+  "sansatemple": {
+    "title": "Online Temple",
+    "subtitle": "A quiet shared online experience",
+    "kicker": "Online Temple",
+    "noscript": "JavaScript is required to open the 3D hall.",
+    "webglFallback": "WebGL is not available, so a static poster is shown.",
+    "loading": "Loading channels",
+    "opening": "Opening the hall",
+    "failedTitle": "Cannot enter now",
+    "failedText": "The connection was not established. Please try again.",
+    "retry": "Reenter",
+    "enter": "Enter",
+    "menu": "Settings",
+    "close": "Close",
+    "leave": "Leave",
+    "disclaimer": "This is an online experience, not a real temple ceremony or blessing service.",
+    "inspiration": "Inspired by sansatemple.com",
+    "reverenceNotice": "{name} joins hands toward you",
+    "notices": {
+      "channelFull": "The channel is full. Please try again later.",
+      "connectionFailed": "Connection failed. Please reenter.",
+      "reconnectFailed": "Reconnection failed. Returned to the entrance."
+    },
+    "channels": {
+      "title": "Choose a channel",
+      "name": "Channel {n}",
+      "full": "Full",
+      "queue": "All channels are full; a queue notice is shown."
+    },
+    "settings": {
+      "title": "Sound & quality",
+      "master": "Master",
+      "environment": "Ambience",
+      "chanting": "Chanting",
+      "effects": "Effects",
+      "mode": "Chanting mode",
+      "personal": "Personal",
+      "common": "Shared",
+      "next": "Next: {time}",
+      "quality": "Quality",
+      "auto": "Auto",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "actions": {
+      "pray": "Bow",
+      "beads": "Beads",
+      "reverence": "Join hands",
+      "woodfish": "Wood fish",
+      "incense": "Incense",
+      "meditate": "Sit {n} min"
+    },
+    "states": {
+      "praying": "Bowing",
+      "incense": "Incense {n}/3"
+    },
+    "meditation": {
+      "remaining": "{time} left"
+    },
+    "beads": {
+      "title": "Prayer beads",
+      "advance": "Move one bead",
+      "reset": "Reset",
+      "localOnly": "The count stays on this device."
+    },
+    "seo": {
+      "title": "Online Temple_3D Hall Experience",
+      "description": "Enter a procedurally generated 3D temple to sit, bow, count beads, sound a wood fish, offer incense, and share the hall quietly."
+    }
   }
 }

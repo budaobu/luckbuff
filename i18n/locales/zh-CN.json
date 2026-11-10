@@ -14087,5 +14087,76 @@
       "dog": "戌时",
       "pig": "亥时"
     }
+  },
+  "sansatemple": {
+    "title": "在线寺庙",
+    "subtitle": "安静同堂的在线体验",
+    "kicker": "Online Temple",
+    "noscript": "需要启用 JavaScript 才能进入三维法堂。",
+    "webglFallback": "当前浏览器不支持 WebGL，已显示静态海报。",
+    "loading": "正在读取频道",
+    "opening": "正在打开法堂",
+    "failedTitle": "暂时无法进入",
+    "failedText": "连接没有建立，可以稍后重试。",
+    "retry": "重新进入",
+    "enter": "进入",
+    "menu": "设置",
+    "close": "关闭",
+    "leave": "离开",
+    "disclaimer": "这是在线体验，不是真实寺院的法会或祈福服务。",
+    "inspiration": "灵感来自 sansatemple.com",
+    "reverenceNotice": "{name} 向你合十",
+    "notices": {
+      "channelFull": "频道已满，请稍后再试。",
+      "connectionFailed": "连接失败，请重新进入。",
+      "reconnectFailed": "重连失败，已回到入口。"
+    },
+    "channels": {
+      "title": "选择频道",
+      "name": "频道 {n}",
+      "full": "满员",
+      "queue": "所有频道都已满，正在排队提示。"
+    },
+    "settings": {
+      "title": "声音与画质",
+      "master": "总开关",
+      "environment": "环境音",
+      "chanting": "诵经",
+      "effects": "音效",
+      "mode": "诵经方式",
+      "personal": "个人听",
+      "common": "共同听",
+      "next": "下一场：{time}",
+      "quality": "画质",
+      "auto": "自动",
+      "high": "高档",
+      "medium": "中档",
+      "low": "低档"
+    },
+    "actions": {
+      "pray": "拜佛",
+      "beads": "念珠",
+      "reverence": "合十",
+      "woodfish": "木鱼",
+      "incense": "烧香",
+      "meditate": "打坐 {n} 分"
+    },
+    "states": {
+      "praying": "正在拜佛",
+      "incense": "香 {n}/3"
+    },
+    "meditation": {
+      "remaining": "剩余 {time}"
+    },
+    "beads": {
+      "title": "念珠",
+      "advance": "拨一颗",
+      "reset": "归零",
+      "localOnly": "计数只保存在这台设备。"
+    },
+    "seo": {
+      "title": "在线寺庙_三维法堂共修体验",
+      "description": "进入程序生成的三维寺庙场景，在石径与法堂中静坐、拜佛、拨念珠、敲木鱼、烧香，并与同频道的人安静同堂。"
+    }
   }
 }

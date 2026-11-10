@@ -14149,5 +14149,76 @@
       "dog": "戌の刻",
       "pig": "亥の刻"
     }
+  },
+  "sansatemple": {
+    "title": "オンライン寺廟",
+    "subtitle": "静かに同じ堂に集う体験",
+    "kicker": "Online Temple",
+    "noscript": "3D の法堂を開くには JavaScript が必要です。",
+    "webglFallback": "WebGL に対応していないため、静止ポスターを表示しています。",
+    "loading": "チャンネルを読み込み中",
+    "opening": "法堂を開いています",
+    "failedTitle": "現在入れません",
+    "failedText": "接続できませんでした。あとでお試しください。",
+    "retry": "再入場",
+    "enter": "入る",
+    "menu": "設定",
+    "close": "閉じる",
+    "leave": "退出",
+    "disclaimer": "これはオンライン体験であり、実際の寺院の法会や祈願ではありません。",
+    "inspiration": "sansatemple.com から着想",
+    "reverenceNotice": "{name} さんが合掌しました",
+    "notices": {
+      "channelFull": "チャンネルが満員です。",
+      "connectionFailed": "接続に失敗しました。",
+      "reconnectFailed": "再接続できず、入り口に戻りました。"
+    },
+    "channels": {
+      "title": "チャンネルを選ぶ",
+      "name": "チャンネル {n}",
+      "full": "満員",
+      "queue": "すべてのチャンネルが満員のため、順番待ちです。"
+    },
+    "settings": {
+      "title": "音と画質",
+      "master": "全体",
+      "environment": "環境音",
+      "chanting": "読経",
+      "effects": "効果音",
+      "mode": "読経モード",
+      "personal": "個人",
+      "common": "共同",
+      "next": "次回：{time}",
+      "quality": "画質",
+      "auto": "自動",
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "actions": {
+      "pray": "礼拝",
+      "beads": "数珠",
+      "reverence": "合掌",
+      "woodfish": "木魚",
+      "incense": "線香",
+      "meditate": "{n}分座禅"
+    },
+    "states": {
+      "praying": "礼拝中",
+      "incense": "線香 {n}/3"
+    },
+    "meditation": {
+      "remaining": "残り {time}"
+    },
+    "beads": {
+      "title": "数珠",
+      "advance": "一つ進める",
+      "reset": "リセット",
+      "localOnly": "回数はこの端末だけに保存します。"
+    },
+    "seo": {
+      "title": "オンライン寺廟_3D法堂体験",
+      "description": "手続き的に生成した 3D 寺院で、石畳と法堂を歩き、静座や礼拝、数珠、木魚、線香を体験できます。"
+    }
   }
 }

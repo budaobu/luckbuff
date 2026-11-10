@@ -256,6 +256,9 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    experimental: {
+      websocket: true,
+    },
     routeRules: {
       '/paipan': { redirect: { to: '/chart', statusCode: 308 } },
       '/zh-CN/paipan': { redirect: { to: '/chart', statusCode: 308 } },
@@ -305,7 +308,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
       ],
     },
   },
