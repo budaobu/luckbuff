@@ -4,31 +4,19 @@
     class="hero-hex-field"
     aria-hidden="true"
     data-state="loading"
-  />
+  >
+    <canvas ref="stage" class="hero-hex-canvas" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { CanvasTexture, Color, ShaderMaterial, Vector2, WebGLRenderer } from 'three'
+import type { Material, Mesh } from 'three/webgpu'
 import { BAGUA_NAMES, BAGUA_SYMBOLS, LIUSHISI_GUA, LIUSHISI_GUA_SHORT_NAME_MAP, LIUSHISI_GUA_SYMBOLS } from '~/utils/zhouyi/constants'
 
 const field = ref<HTMLDivElement>()
-const colorMode = useColorMode()
+const stage = ref<HTMLCanvasElement>()
 
 let disposeScene: (() => void) | null = null
-let setDiscColor: (() => void) | null = null
-
-type HeroUniforms = {
-  uTime: { value: number }
-  uResolution: { value: Vector2 }
-  uAspect: { value: number }
-  uTexture: { value: CanvasTexture }
-  uDiscColor: { value: Color }
-  uMouse: { value: Vector2 }
-  uEnergy: { value: number }
-  uDiskCenter: { value: Vector2 }
-  uDiskRadius: { value: number }
-  uVerticalScale: { value: number }
-}
 
 type DiscHexagram = {
   symbol: string
@@ -50,473 +38,448 @@ const BAGUA_RING: BaguaRingItem[] = BAGUA_NAMES.map((name, index) => ({
   symbol: BAGUA_SYMBOLS[index]!,
 }))
 
+function createPlateCanvas() {
+  const size = 2048
+  const canvas = document.createElement('canvas')
+  canvas.width = size
+  canvas.height = size
+  const context = canvas.getContext('2d', { alpha: false })
+  if (!context) return canvas
+
+  const radius = 1000
+  const baguaInner = 300
+  const baguaOuter = 560
+  const hexagramInner = 690
+  const hexagramOuter = 910
+  const taijiRadius = 130
+  context.translate(size / 2, size / 2)
+
+  const wood = context.createRadialGradient(-320, -340, 100, 0, 0, radius)
+  wood.addColorStop(0, '#5c3a1e')
+  wood.addColorStop(0.42, '#37220f')
+  wood.addColorStop(0.82, '#21130a')
+  wood.addColorStop(1, '#120a05')
+  context.fillStyle = wood
+  context.beginPath()
+  context.arc(0, 0, radius, 0, Math.PI * 2)
+  context.fill()
+
+  context.globalAlpha = 0.07
+  context.lineWidth = 2
+  for (let index = 0; index < 150; index += 1) {
+    const angle = index * Math.PI / 75
+    const start = radius * (0.1 + (index % 5) * 0.04)
+    const end = radius * (0.48 + (index % 7) * 0.07)
+    context.strokeStyle = index % 3 === 0 ? '#c68a4a' : '#88552a'
+    context.beginPath()
+    context.arc(0, 0, start + (end - start) / 2, angle - 0.13, angle + 0.13)
+    context.stroke()
+  }
+  context.globalAlpha = 1
+
+  const faceLight = context.createRadialGradient(-220, -220, 70, 0, 0, radius)
+  faceLight.addColorStop(0, 'rgba(255, 214, 144, 0.15)')
+  faceLight.addColorStop(0.62, 'rgba(255, 214, 144, 0.03)')
+  faceLight.addColorStop(1, 'rgba(0, 0, 0, 0.22)')
+  context.fillStyle = faceLight
+  context.beginPath()
+  context.arc(0, 0, radius, 0, Math.PI * 2)
+  context.fill()
+
+  for (let index = 0; index < 64; index += 1) {
+    const startAngle = -Math.PI / 2 + (index / 64) * Math.PI * 2
+    const endAngle = -Math.PI / 2 + ((index + 1) / 64) * Math.PI * 2
+    if (index % 2 === 0) {
+      context.fillStyle = 'rgba(246, 212, 140, 0.035)'
+      context.beginPath()
+      context.arc(0, 0, hexagramInner, startAngle + 0.006, endAngle - 0.006)
+      context.arc(0, 0, hexagramOuter, endAngle - 0.006, startAngle + 0.006, true)
+      context.closePath()
+      context.fill()
+    }
+    context.strokeStyle = 'rgba(225, 182, 111, 0.18)'
+    context.lineWidth = 2
+    context.beginPath()
+    context.moveTo(Math.cos(startAngle) * (hexagramInner + 16), Math.sin(startAngle) * (hexagramInner + 16))
+    context.lineTo(Math.cos(startAngle) * (hexagramOuter - 14), Math.sin(startAngle) * (hexagramOuter - 14))
+    context.stroke()
+  }
+
+  context.textAlign = 'center'
+  context.textBaseline = 'middle'
+  context.shadowColor = 'rgba(0, 0, 0, 0.58)'
+  context.shadowBlur = 10
+  context.shadowOffsetY = 4
+
+  DISC_HEXAGRAMS.forEach((hexagram, index) => {
+    const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
+    context.save()
+    context.translate(Math.cos(angle) * 800, Math.sin(angle) * 800)
+    context.rotate(angle + Math.PI / 2)
+    context.fillStyle = '#f2cf8d'
+    context.font = '400 54px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
+    context.fillText(hexagram.symbol, 0, -28)
+    context.fillStyle = 'rgba(240, 205, 143, 0.66)'
+    context.font = '500 24px "Noto Serif SC", "Songti SC", "SimSun", serif'
+    context.fillText(hexagram.name, 0, 36)
+    context.restore()
+  })
+
+  context.shadowBlur = 8
+  for (let index = 0; index < 8; index += 1) {
+    const startAngle = -Math.PI / 2 + (index / 8) * Math.PI * 2
+    const endAngle = -Math.PI / 2 + ((index + 1) / 8) * Math.PI * 2
+    if (index % 2 === 0) {
+      context.fillStyle = 'rgba(246, 212, 140, 0.05)'
+      context.beginPath()
+      context.arc(0, 0, baguaInner, startAngle + 0.018, endAngle - 0.018)
+      context.arc(0, 0, baguaOuter, endAngle - 0.018, startAngle + 0.018, true)
+      context.closePath()
+      context.fill()
+    }
+    context.strokeStyle = 'rgba(210, 170, 105, 0.22)'
+    context.lineWidth = 3
+    context.beginPath()
+    context.moveTo(Math.cos(startAngle) * (baguaInner + 20), Math.sin(startAngle) * (baguaInner + 20))
+    context.lineTo(Math.cos(startAngle) * (baguaOuter - 20), Math.sin(startAngle) * (baguaOuter - 20))
+    context.stroke()
+  }
+
+  BAGUA_RING.forEach((item, index) => {
+    const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
+    context.save()
+    context.translate(Math.cos(angle) * 445, Math.sin(angle) * 445)
+    context.rotate(angle + Math.PI / 2)
+    context.fillStyle = '#f5d392'
+    context.font = '400 54px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
+    context.fillText(item.symbol, 0, -25)
+    context.fillStyle = 'rgba(238, 201, 139, 0.72)'
+    context.font = '500 28px "Noto Serif SC", "Songti SC", "SimSun", serif'
+    context.fillText(item.name, 0, 30)
+    context.restore()
+  })
+
+  context.shadowBlur = 16
+  context.shadowOffsetY = 6
+  const boss = context.createRadialGradient(-46, -58, 16, 0, 0, 250)
+  boss.addColorStop(0, '#493019')
+  boss.addColorStop(0.7, '#2a1a0c')
+  boss.addColorStop(1, '#160d06')
+  context.fillStyle = boss
+  context.beginPath()
+  context.arc(0, 0, 244, 0, Math.PI * 2)
+  context.fill()
+
+  context.strokeStyle = 'rgba(248, 217, 146, 0.82)'
+  context.lineWidth = 7
+  context.beginPath()
+  context.arc(0, 0, taijiRadius, 0, Math.PI * 2)
+  context.stroke()
+  context.strokeStyle = 'rgba(248, 217, 146, 0.72)'
+  context.lineWidth = 6
+  context.beginPath()
+  context.moveTo(0, -taijiRadius)
+  context.arc(0, -taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, false)
+  context.arc(0, taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, true)
+  context.stroke()
+
+  context.fillStyle = '#f7d895'
+  context.beginPath()
+  context.arc(0, -taijiRadius / 2, 20, 0, Math.PI * 2)
+  context.fill()
+  context.fillStyle = 'rgba(247, 216, 149, 0.3)'
+  context.beginPath()
+  context.arc(0, taijiRadius / 2, 20, 0, Math.PI * 2)
+  context.fill()
+  context.shadowColor = 'transparent'
+
+  const plateEdge = context.createRadialGradient(0, 0, radius - 34, 0, 0, radius)
+  plateEdge.addColorStop(0, 'rgba(0, 0, 0, 0)')
+  plateEdge.addColorStop(0.72, 'rgba(70, 45, 18, 0.3)')
+  plateEdge.addColorStop(1, 'rgba(12, 7, 3, 0.72)')
+  context.fillStyle = plateEdge
+  context.beginPath()
+  context.arc(0, 0, radius, 0, Math.PI * 2)
+  context.fill()
+
+  return canvas
+}
+
 onMounted(async () => {
   const container = field.value
-  if (!container) return
+  const canvas = stage.value
+  if (!container || !canvas) return
 
   let disposed = false
-  const THREE = await import('three')
+  const [THREE, { RoomEnvironment }] = await Promise.all([
+    import('three/webgpu'),
+    import('three/examples/jsm/environments/RoomEnvironment.js'),
+  ])
   if (disposed || !container.isConnected) return
 
   const hero = container.closest('.home-hero')
   let width = container.clientWidth || 960
   let height = container.clientHeight || 640
-  let renderer: WebGLRenderer | null = null
 
   try {
-    renderer = new THREE.WebGLRenderer({
+    const renderer = new THREE.WebGPURenderer({
+      canvas,
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
+      forceWebGL: !('gpu' in navigator),
     })
-  }
-  catch {
-    container.dataset.state = 'fallback'
-    return
-  }
 
-  const gl = renderer
-  gl.outputColorSpace = THREE.SRGBColorSpace
-  gl.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8))
-  gl.setSize(width, height)
-  gl.domElement.classList.add('hero-hex-canvas')
-  container.appendChild(gl.domElement)
+    const plateTexture = new THREE.CanvasTexture(createPlateCanvas())
+    plateTexture.colorSpace = THREE.SRGBColorSpace
+    plateTexture.anisotropy = 8
+    plateTexture.minFilter = THREE.LinearMipmapLinearFilter
+    plateTexture.generateMipmaps = true
+    plateTexture.needsUpdate = true
 
-  function createHexagramTexture() {
-    const size = 2048
-    const canvas = document.createElement('canvas')
-    canvas.width = size
-    canvas.height = size
-    const context = canvas.getContext('2d')
-    const texture = new THREE.CanvasTexture(canvas)
+    renderer.outputColorSpace = THREE.SRGBColorSpace
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.08
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8))
+    renderer.setSize(width, height)
 
-    if (context) {
-      const center = size / 2
-      const radius = 1010
-      const coreRadius = 226
-      const taijiRadius = 138
-      const baguaInner = 308
-      const baguaOuter = 570
-      const hexagramInner = 710
-      const hexagramOuter = 920
-      context.translate(center, center)
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(34, width / Math.max(height, 1), 0.1, 50)
+    camera.position.set(0, 0.45, 9.8)
+    camera.lookAt(0, 0.05, 0)
 
-      const baseGradient = context.createRadialGradient(0, 0, 60, 0, 0, radius)
-      baseGradient.addColorStop(0, 'rgba(255, 255, 255, 0.055)')
-      baseGradient.addColorStop(0.36, 'rgba(255, 255, 255, 0.03)')
-      baseGradient.addColorStop(1, 'rgba(255, 255, 255, 0.01)')
-      context.fillStyle = baseGradient
-      context.beginPath()
-      context.arc(0, 0, radius, 0, Math.PI * 2)
-      context.fill()
+    const pmremGenerator = new THREE.PMREMGenerator(renderer)
+    const environmentScene = new RoomEnvironment()
+    const environment = pmremGenerator.fromScene(environmentScene, 0.04).texture
+    scene.environment = environment
+    scene.environmentIntensity = 0.38
+    pmremGenerator.dispose()
+    environmentScene.dispose()
 
-      for (let index = 0; index < 64; index += 1) {
-        if (index % 2 === 1) continue
-        const startAngle = -Math.PI / 2 + (index / 64) * Math.PI * 2 + 0.005
-        const endAngle = -Math.PI / 2 + ((index + 1) / 64) * Math.PI * 2 - 0.005
-        context.fillStyle = 'rgba(255, 255, 255, 0.012)'
-        context.beginPath()
-        context.arc(0, 0, hexagramInner, startAngle, endAngle)
-        context.arc(0, 0, hexagramOuter, endAngle, startAngle, true)
-        context.closePath()
-        context.fill()
+    const keyLight = new THREE.DirectionalLight(0xfff0cf, 2.3)
+    keyLight.position.set(4.5, 5.2, 6.8)
+    scene.add(keyLight)
+    const warmLight = new THREE.PointLight(0xf0b869, 11, 30)
+    warmLight.position.set(-5.2, -1.2, 5.6)
+    scene.add(warmLight)
+    const rimLight = new THREE.PointLight(0x8fb6ff, 8, 32)
+    rimLight.position.set(2.4, 4.6, -5.4)
+    scene.add(rimLight)
+    scene.add(new THREE.HemisphereLight(0xfff3d4, 0x25150a, 0.55))
+
+    const woodFace = new THREE.MeshPhysicalMaterial({
+      map: plateTexture,
+      bumpMap: plateTexture,
+      bumpScale: 0.04,
+      color: 0x9a7350,
+      roughness: 0.34,
+      metalness: 0.08,
+      clearcoat: 0.82,
+      clearcoatRoughness: 0.18,
+    })
+    const brass = new THREE.MeshPhysicalMaterial({
+      color: 0xd9ab5e,
+      roughness: 0.2,
+      metalness: 1,
+      clearcoat: 0.35,
+      clearcoatRoughness: 0.24,
+    })
+    const darkWood = new THREE.MeshPhysicalMaterial({
+      color: 0x392315,
+      roughness: 0.48,
+      metalness: 0.05,
+      clearcoat: 0.35,
+    })
+    const faceMaterial = new THREE.MeshPhysicalMaterial({
+      map: plateTexture,
+      bumpMap: plateTexture,
+      bumpScale: 0.025,
+      roughness: 0.3,
+      metalness: 0.08,
+      clearcoat: 0.78,
+      clearcoatRoughness: 0.16,
+    })
+
+    const parallaxGroup = new THREE.Group()
+    const plateAssembly = new THREE.Group()
+    plateAssembly.rotation.set(-0.15, 0.12, 0)
+
+    const plateGeometry = new THREE.CylinderGeometry(2.46, 2.4, 0.17, 256)
+    const plateMesh = new THREE.Mesh(plateGeometry, [darkWood, woodFace, darkWood])
+    plateMesh.rotation.x = Math.PI / 2
+    plateMesh.position.z = -0.035
+    plateAssembly.add(plateMesh)
+
+    const outerRim = new THREE.Mesh(new THREE.TorusGeometry(2.46, 0.11, 64, 384), brass)
+    outerRim.position.z = 0.055
+    plateAssembly.add(outerRim)
+    const innerRim = new THREE.Mesh(new THREE.TorusGeometry(1.94, 0.032, 32, 256), brass)
+    innerRim.position.z = 0.082
+    plateAssembly.add(innerRim)
+
+    const faceGeometry = new THREE.CircleGeometry(2.44, 256)
+    const faceMesh = new THREE.Mesh(faceGeometry, faceMaterial)
+    faceMesh.position.z = 0.075
+    plateAssembly.add(faceMesh)
+
+    parallaxGroup.add(plateAssembly)
+    scene.add(parallaxGroup)
+
+    const basePosition = new THREE.Vector3(2.1, 0.12, 0)
+    const pointerTarget = new THREE.Vector2(0, 0)
+    const targetPosition = basePosition.clone()
+
+    function layout() {
+      const aspect = width / Math.max(height, 1)
+      if (aspect < 0.8) {
+        basePosition.set(0, -0.15, 0)
+        parallaxGroup.scale.setScalar(0.5)
       }
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.13)'
-      context.lineWidth = 2
-      context.beginPath()
-      context.arc(0, 0, hexagramOuter, 0, Math.PI * 2)
-      context.stroke()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.07)'
-      context.lineWidth = 1.2
-      context.beginPath()
-      context.arc(0, 0, hexagramInner, 0, Math.PI * 2)
-      context.stroke()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.06)'
-      for (let index = 0; index < 64; index += 1) {
-        const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
-        context.beginPath()
-        context.moveTo(Math.cos(angle) * (hexagramInner + 14), Math.sin(angle) * (hexagramInner + 14))
-        context.lineTo(Math.cos(angle) * (hexagramOuter - 12), Math.sin(angle) * (hexagramOuter - 12))
-        context.stroke()
+      else if (aspect < 1.15) {
+        basePosition.set(aspect * 0.3, -0.05, 0)
+        parallaxGroup.scale.setScalar(0.64)
       }
+      else {
+        basePosition.set(2.35, 0.14, 0)
+        parallaxGroup.scale.setScalar(0.72)
+      }
+      camera.aspect = aspect
+      camera.updateProjectionMatrix()
+    }
 
-      context.textAlign = 'center'
-      context.textBaseline = 'middle'
+    layout()
+    targetPosition.copy(basePosition)
 
-      DISC_HEXAGRAMS.forEach((hexagram, index) => {
-        const angle = -Math.PI / 2 + (index / 64) * Math.PI * 2
-        context.save()
-        context.translate(Math.cos(angle) * 818, Math.sin(angle) * 818)
-        context.rotate(angle + Math.PI / 2)
+    function readPointer(event: PointerEvent) {
+      if (!hero) return
+      const rect = hero.getBoundingClientRect()
+      if (!rect.width || !rect.height) return
+      pointerTarget.set(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -(((event.clientY - rect.top) / rect.height) * 2 - 1),
+      )
+    }
 
-        context.fillStyle = 'rgba(255, 255, 255, 0.84)'
-        context.font = '400 48px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
-        context.fillText(hexagram.symbol, 0, -28)
+    function onPointerMove(event: Event) {
+      if (event instanceof PointerEvent) readPointer(event)
+    }
 
-        context.fillStyle = 'rgba(255, 255, 255, 0.5)'
-        context.font = '500 20px "Noto Serif SC", "Songti SC", "SimSun", serif'
-        context.fillText(hexagram.name, 0, 34)
-        context.restore()
+    function onPointerLeave() {
+      pointerTarget.set(0, 0)
+    }
+
+    hero?.addEventListener('pointermove', onPointerMove, { passive: true })
+    hero?.addEventListener('pointerleave', onPointerLeave, { passive: true })
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let animationId = 0
+    let lastFrame = performance.now()
+    let elapsed = 0
+    let visible = true
+    let running = false
+
+    function renderOnce() {
+      void renderer.renderAsync(scene, camera)
+    }
+
+    function tick(now: number) {
+      animationId = requestAnimationFrame(tick)
+      const frameDelta = now - lastFrame
+      if (!visible || frameDelta < 22) return
+
+      lastFrame = now
+      elapsed += Math.min(frameDelta / 1000, 0.1)
+      targetPosition.set(
+        basePosition.x + pointerTarget.x * 0.42,
+        basePosition.y + pointerTarget.y * 0.3,
+        basePosition.z,
+      )
+      parallaxGroup.position.lerp(targetPosition, 0.09)
+      parallaxGroup.rotation.y += ((0.12 + pointerTarget.x * 0.18) - parallaxGroup.rotation.y) * 0.08
+      plateAssembly.rotation.z = elapsed * 0.055
+      void renderer.renderAsync(scene, camera)
+    }
+
+    function startAnimation() {
+      if (running || motionQuery.matches) return
+      running = true
+      animationId = requestAnimationFrame(tick)
+    }
+
+    function stopAnimation() {
+      if (!running) return
+      running = false
+      cancelAnimationFrame(animationId)
+      plateAssembly.rotation.z = 0
+      parallaxGroup.rotation.set(-0.15, 0.12, 0)
+      parallaxGroup.position.copy(basePosition)
+      renderOnce()
+    }
+
+    function onMotionChange() {
+      if (motionQuery.matches) stopAnimation()
+      else startAnimation()
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      const nextWidth = container.clientWidth
+      const nextHeight = container.clientHeight
+      if (!nextWidth || !nextHeight) return
+      width = nextWidth
+      height = nextHeight
+      renderer.setSize(width, height)
+      layout()
+      targetPosition.copy(basePosition)
+      renderOnce()
+    })
+    resizeObserver.observe(hero || container)
+
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      visible = entries[0]?.isIntersecting ?? true
+    }, { threshold: 0 })
+    visibilityObserver.observe(hero || container)
+
+    motionQuery.addEventListener('change', onMotionChange)
+
+    disposeScene = () => {
+      disposed = true
+      hero?.removeEventListener('pointermove', onPointerMove)
+      hero?.removeEventListener('pointerleave', onPointerLeave)
+      motionQuery.removeEventListener('change', onMotionChange)
+      resizeObserver.disconnect()
+      visibilityObserver.disconnect()
+      stopAnimation()
+      scene.traverse((object) => {
+        const mesh = object as Mesh & { material?: Material | Material[] }
+        mesh.geometry?.dispose()
+        if (Array.isArray(mesh.material)) mesh.material.forEach(material => material.dispose())
+        else mesh.material?.dispose()
       })
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.13)'
-      context.lineWidth = 1.4
-      context.beginPath()
-      context.arc(0, 0, baguaOuter, 0, Math.PI * 2)
-      context.stroke()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.06)'
-      context.lineWidth = 1.2
-      context.beginPath()
-      context.arc(0, 0, baguaInner, 0, Math.PI * 2)
-      context.stroke()
-
-      BAGUA_RING.forEach((_, sectorIndex) => {
-        if (sectorIndex % 2 === 1) return
-        const startAngle = -Math.PI / 2 + (sectorIndex / 8) * Math.PI * 2 + 0.014
-        const endAngle = -Math.PI / 2 + ((sectorIndex + 1) / 8) * Math.PI * 2 - 0.014
-        context.fillStyle = 'rgba(255, 255, 255, 0.024)'
-        context.beginPath()
-        context.arc(0, 0, baguaInner, startAngle, endAngle)
-        context.arc(0, 0, baguaOuter, endAngle, startAngle, true)
-        context.closePath()
-        context.fill()
-      })
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.12)'
-      for (let index = 0; index < 8; index += 1) {
-        const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
-        context.beginPath()
-        context.moveTo(Math.cos(angle) * (baguaInner + 16), Math.sin(angle) * (baguaInner + 16))
-        context.lineTo(Math.cos(angle) * (baguaOuter - 16), Math.sin(angle) * (baguaOuter - 16))
-        context.stroke()
-      }
-
-      BAGUA_RING.forEach((item, index) => {
-        const angle = -Math.PI / 2 + (index / 8) * Math.PI * 2
-        context.save()
-        context.translate(Math.cos(angle) * 466, Math.sin(angle) * 466)
-        context.rotate(angle + Math.PI / 2)
-
-        context.fillStyle = 'rgba(255, 255, 255, 0.84)'
-        context.font = '400 48px "Noto Serif Symbols 2", "Noto Serif Symbols", "Songti SC", "STSong", "SimSun", serif'
-        context.fillText(item.symbol, 0, -23)
-
-        context.fillStyle = 'rgba(255, 255, 255, 0.64)'
-        context.font = '500 24px "Noto Serif SC", "Songti SC", "SimSun", serif'
-        context.fillText(item.name, 0, 27)
-        context.restore()
-      })
-
-      const coreGradient = context.createRadialGradient(-28, -34, 12, 0, 0, coreRadius)
-      coreGradient.addColorStop(0, 'rgba(255, 255, 255, 0.16)')
-      coreGradient.addColorStop(1, 'rgba(255, 255, 255, 0.05)')
-      context.fillStyle = coreGradient
-      context.beginPath()
-      context.arc(0, 0, coreRadius, 0, Math.PI * 2)
-      context.fill()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.12)'
-      context.lineWidth = 1.6
-      context.beginPath()
-      context.arc(0, 0, coreRadius, 0, Math.PI * 2)
-      context.stroke()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.42)'
-      context.lineWidth = 2.2
-      context.beginPath()
-      context.arc(0, 0, taijiRadius, 0, Math.PI * 2)
-      context.stroke()
-
-      context.strokeStyle = 'rgba(255, 255, 255, 0.68)'
-      context.lineWidth = 2
-      context.beginPath()
-      context.moveTo(0, -taijiRadius)
-      context.arc(0, -taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, false)
-      context.arc(0, taijiRadius / 2, taijiRadius / 2, -Math.PI / 2, Math.PI / 2, true)
-      context.stroke()
-
-      context.fillStyle = 'rgba(255, 255, 255, 0.72)'
-      context.beginPath()
-      context.arc(0, -taijiRadius / 2, 13, 0, Math.PI * 2)
-      context.fill()
-
-      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
-      context.beginPath()
-      context.arc(0, taijiRadius / 2, 13, 0, Math.PI * 2)
-      context.fill()
+      plateTexture.dispose()
+      environment.dispose()
+      void renderer.dispose()
     }
 
-    texture.colorSpace = THREE.SRGBColorSpace
-    texture.anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy())
-    texture.minFilter = THREE.LinearMipmapLinearFilter
-    texture.generateMipmaps = true
-    texture.needsUpdate = true
-    return texture
-  }
-
-  const hexagramTexture: CanvasTexture = createHexagramTexture()
-  const darkDisc = new THREE.Color(0.94, 0.78, 0.42)
-  const lightDisc = new THREE.Color(0.46, 0.38, 0.22)
-  const initialUniforms = {
-    uTime: { value: 0 },
-    uResolution: { value: new THREE.Vector2(width, height) },
-    uAspect: { value: width / Math.max(height, 1) },
-    uTexture: { value: hexagramTexture },
-    uDiscColor: { value: darkDisc.clone() },
-    uMouse: { value: new THREE.Vector2(0.5, 0.2) },
-    uEnergy: { value: 0.34 },
-    uDiskCenter: { value: new THREE.Vector2(0.8, 0.02) },
-    uDiskRadius: { value: 0.78 },
-      uVerticalScale: { value: 0.68 },
-  }
-
-  const material: ShaderMaterial = new THREE.ShaderMaterial({
-    transparent: true,
-    depthTest: false,
-    depthWrite: false,
-    uniforms: initialUniforms,
-    vertexShader: `
-      varying vec2 vUv;
-
-      void main() {
-        vUv = uv;
-        gl_Position = vec4(position.xy, 0.0, 1.0);
-      }
-    `,
-    fragmentShader: `
-      precision highp float;
-
-      uniform float uTime;
-      uniform float uAspect;
-      uniform sampler2D uTexture;
-      uniform vec3 uDiscColor;
-      uniform vec2 uMouse;
-      uniform float uEnergy;
-      uniform vec2 uDiskCenter;
-      uniform float uDiskRadius;
-      uniform float uVerticalScale;
-      varying vec2 vUv;
-
-      void main() {
-        vec2 p = (vUv * 2.0 - 1.0) * vec2(uAspect, 1.0);
-        vec2 pointerDelta = p - uMouse;
-        float pointerDistance = length(pointerDelta);
-        vec2 pointerDirection = pointerDistance > 0.0001
-          ? pointerDelta / pointerDistance
-          : vec2(0.0);
-
-        float traveling = sin(pointerDistance * 24.0 - uTime * 2.8);
-        float standing = sin(pointerDistance * 16.0 + uTime * 1.1);
-        float wave = (traveling * 0.72 + standing * 0.28)
-          * exp(-pointerDistance * 3.8)
-          * uEnergy;
-
-        vec2 diskLocal = p - uDiskCenter;
-        diskLocal += pointerDirection * wave * 0.028;
-
-        vec2 discPlane = vec2(diskLocal.x, diskLocal.y / uVerticalScale);
-        float rotation = -uTime * 0.018;
-        float sine = sin(rotation);
-        float cosine = cos(rotation);
-        discPlane = mat2(cosine, -sine, sine, cosine) * discPlane;
-
-        vec2 diskUv = discPlane / uDiskRadius * 0.5 + 0.5;
-        float symbol = texture2D(uTexture, diskUv).a;
-        float diskDistance = length(discPlane);
-        float discMask = smoothstep(uDiskRadius + 0.012, uDiskRadius - 0.008, diskDistance);
-
-        float highlight = abs(wave);
-        vec3 color = uDiscColor * (0.28 + symbol * 0.82);
-        float alpha = symbol * discMask * (0.78 + highlight * 0.46);
-
-        vec2 projectedDisk = p - uDiskCenter;
-        projectedDisk.y /= uVerticalScale;
-        float haloDistance = max(length(projectedDisk) - uDiskRadius, 0.0);
-        float haloRings = sin(haloDistance * 9.0 - uTime * 0.35) * 0.5 + 0.5;
-        float halo = exp(-haloDistance * 5.0) * (0.028 + haloRings * 0.018);
-        color += uDiscColor * halo;
-        alpha += halo;
-
-        float pointerRing = abs(sin(pointerDistance * 13.0 - uTime * 2.2))
-          * exp(-pointerDistance * 2.8)
-          * uEnergy * 0.14;
-        color += uDiscColor * pointerRing;
-        alpha += pointerRing;
-
-        alpha *= smoothstep(0.0, 0.05, vUv.y);
-        if (alpha < 0.004) discard;
-
-        gl_FragColor = vec4(color, clamp(alpha, 0.0, 0.9));
-      }
-    `,
-  })
-  const uniforms = material.uniforms as HeroUniforms
-
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material)
-  const scene = new THREE.Scene()
-  const camera = new THREE.Camera()
-  scene.add(mesh)
-
-  function layout() {
-    const aspect = width / Math.max(height, 1)
-    const center = uniforms.uDiskCenter.value
-
-    if (aspect < 0.8) {
-      center.set(0, 0.1)
-      uniforms.uDiskRadius.value = 0.52
-      uniforms.uVerticalScale.value = 0.96
-    }
-    else if (aspect < 1.15) {
-      center.set(aspect * 0.04, 0.04)
-      uniforms.uDiskRadius.value = 0.55
-      uniforms.uVerticalScale.value = 0.98
-    }
-    else {
-      center.set(aspect * 0.36, 0.05)
-      uniforms.uDiskRadius.value = 0.72
-      uniforms.uVerticalScale.value = 1
+    await renderer.init()
+    if (disposed || !container.isConnected) {
+      disposeScene?.()
+      disposeScene = null
+      return
     }
 
-    uniforms.uAspect.value = aspect
-    uniforms.uResolution.value.set(width, height)
-  }
-
-  setDiscColor = () => {
-    uniforms.uDiscColor.value.copy(colorMode.value === 'dark' ? darkDisc : lightDisc)
-  }
-  setDiscColor()
-  layout()
-
-  const targetPointer = new THREE.Vector2(0.5, 0.2)
-  let targetEnergy = 0.34
-  let pointerRaf = 0
-
-  function readPointer(event: PointerEvent) {
-    if (!hero) return
-    const rect = hero.getBoundingClientRect()
-    if (!rect.width || !rect.height) return
-
-    const normalizedX = ((event.clientX - rect.left) / rect.width) * 2 - 1
-    const normalizedY = -(((event.clientY - rect.top) / rect.height) * 2 - 1)
-    const nextX = normalizedX * (width / Math.max(height, 1))
-    const moved = targetPointer.distanceTo(new THREE.Vector2(nextX, normalizedY))
-    targetPointer.set(nextX, normalizedY)
-    targetEnergy = Math.min(1, targetEnergy + moved * 3.5 + 0.1)
-  }
-
-  function onPointerMove(event: Event) {
-    if (event instanceof PointerEvent) readPointer(event)
-  }
-
-  function onPointerLeave() {
-    targetEnergy = 0.22
-  }
-
-  hero?.addEventListener('pointermove', onPointerMove, { passive: true })
-  hero?.addEventListener('pointerleave', onPointerLeave, { passive: true })
-
-  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  let animationId = 0
-  let lastFrame = performance.now()
-  let elapsed = 0
-  let visible = true
-  let running = false
-
-  function renderOnce() {
-    gl.render(scene, camera)
-  }
-
-  function tick(now: number) {
-    animationId = requestAnimationFrame(tick)
-    const frameDelta = now - lastFrame
-    if (!visible || frameDelta < 33) return
-
-    lastFrame = now
-    elapsed += Math.min(frameDelta / 1000, 0.1)
-    pointerRaf += 1
-
-    const pointer = uniforms.uMouse.value
-    pointer.lerp(targetPointer, 0.14)
-    const energy = uniforms.uEnergy.value
-    const settled = pointerRaf > 18 ? targetEnergy : Math.min(1, targetEnergy + 0.16)
-    uniforms.uEnergy.value = energy + (settled - energy) * 0.12
-    targetEnergy *= 0.965
-
-    uniforms.uTime.value = elapsed
-    gl.render(scene, camera)
-  }
-
-  function startAnimation() {
-    if (running || motionQuery.matches) return
-    running = true
-    animationId = requestAnimationFrame(tick)
-  }
-
-  function stopAnimation() {
-    if (!running) return
-    running = false
-    cancelAnimationFrame(animationId)
-    uniforms.uTime.value = 0
-    uniforms.uEnergy.value = 0.3
-    renderOnce()
-  }
-
-  function onMotionChange() {
-    if (motionQuery.matches) stopAnimation()
+    container.dataset.state = 'ready'
+    if (motionQuery.matches) renderOnce()
     else startAnimation()
   }
-
-  const resizeObserver = new ResizeObserver(() => {
-    const nextWidth = container.clientWidth
-    const nextHeight = container.clientHeight
-    if (!nextWidth || !nextHeight) return
-    width = nextWidth
-    height = nextHeight
-    gl.setSize(width, height)
-    layout()
-    renderOnce()
-  })
-  resizeObserver.observe(hero || container)
-
-  const visibilityObserver = new IntersectionObserver((entries) => {
-    visible = entries[0]?.isIntersecting ?? true
-  }, { threshold: 0 })
-  visibilityObserver.observe(hero || container)
-
-  motionQuery.addEventListener('change', onMotionChange)
-  container.dataset.state = 'ready'
-
-  if (motionQuery.matches) renderOnce()
-  else startAnimation()
-
-  disposeScene = () => {
-    disposed = true
-    hero?.removeEventListener('pointermove', onPointerMove)
-    hero?.removeEventListener('pointerleave', onPointerLeave)
-    motionQuery.removeEventListener('change', onMotionChange)
-    resizeObserver.disconnect()
-    visibilityObserver.disconnect()
-    stopAnimation()
-    mesh.geometry.dispose()
-    material.dispose()
-    hexagramTexture.dispose()
-    gl.dispose()
-    gl.domElement.remove()
+  catch (error) {
+    console.warn('Hero hexagram renderer unavailable.', error)
+    container.dataset.state = 'fallback'
   }
 })
 
 onBeforeUnmount(() => {
   disposeScene?.()
   disposeScene = null
-  setDiscColor = null
-})
-
-watch(() => colorMode.value, () => {
-  setDiscColor?.()
 })
 </script>
 
@@ -524,6 +487,7 @@ watch(() => colorMode.value, () => {
 .hero-hex-field {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
