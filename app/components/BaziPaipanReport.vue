@@ -6,7 +6,7 @@
     @keydown.enter.prevent="handleReportKeydown"
     @keydown.space.prevent="handleReportKeydown"
   >
-      <section class="bpr-card bpr-hero">
+      <section v-if="isSectionVisible('chart')" class="bpr-card bpr-hero">
         <p v-if="props.terminology === 'shichu-suimei'" class="bpr-system">
           {{ $t(reportKey('system')) }}
         </p>
@@ -45,7 +45,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('chart')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('chartTitle')) }}</h2>
         <p>{{ $t(reportKey('chartSubtitle')) }}</p>
@@ -142,7 +142,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('elements')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('wuxingTitle')) }}</h2>
         <p>{{ $t(reportKey('energySubtitle')) }}</p>
@@ -185,7 +185,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('relations')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('signalTitle')) }}</h2>
         <p>{{ $t(reportKey('signalSubtitle')) }}</p>
@@ -227,7 +227,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('cycles')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('dayunTitle')) }}</h2>
         <p>{{ $t(reportKey('dayunSubtitle')) }}</p>
@@ -283,7 +283,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('elements')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('structureTitle')) }}</h2>
         <p>{{ $t(reportKey('structureSubtitle')) }}</p>
@@ -416,10 +416,12 @@ const props = withDefaults(defineProps<{
   terminology?: 'bazi' | 'shichu-suimei'
   aiEndpoint?: string
   activeDayunIndex?: number | null
+  section?: 'all' | 'chart' | 'elements' | 'cycles' | 'relations'
 }>(), {
   terminology: 'bazi',
   aiEndpoint: '/api/tools/bazi-paipan/interpret',
   activeDayunIndex: null,
+  section: 'all',
 })
 const toast = useToast()
 const route = useRoute()
@@ -428,6 +430,10 @@ const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 
 const fourPillars = computed(() => props.result.pillars.map(pillar => pillar.ganzhi).join(' '))
 const reportRoot = ref<HTMLElement | null>(null)
+
+function isSectionVisible(section: 'chart' | 'elements' | 'cycles' | 'relations') {
+  return props.section === 'all' || props.section === section
+}
 
 const insightOpen = ref(false)
 const insightMode = ref<'target' | 'full'>('target')

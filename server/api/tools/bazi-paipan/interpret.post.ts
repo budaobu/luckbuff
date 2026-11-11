@@ -1,7 +1,22 @@
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
+import { calculateBaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import { getAuthSession } from '~~/server/utils/auth-session'
+import {
+  buildBaziChenyu,
+  buildBaziTopicLens,
+  isBaziPaipanTopic,
+  type BaziPaipanTopic,
+  type BaziTopicLens,
+} from '~~/server/utils/tools/bazi-paipan-topic-lens'
+import type { TodayAlmanac } from '~/types/today-almanac'
+import { $fetch } from 'ofetch'
+import {
+  resolveBaziLensDate,
+  validateBaziBirthInput,
+  type BaziPaipanBirthInput,
+} from './lens.post'
 
-type InterpretMode = 'target' | 'full'
+type InterpretMode = 'target' | 'full' | 'topic'
 
 interface InterpretTarget {
   selector?: string
@@ -16,29 +31,57 @@ interface InterpretBody {
   chart?: BaziChartResult
   chartContext?: string
   target?: InterpretTarget
-  locale?: 'zh-CN' | 'zh-TW' | 'en'
+  locale?: 'zh-CN' | 'zh-TW' | 'en' | 'ja' | 'ko'
+  topic?: string
+  date?: string
+  birth?: BaziPaipanBirthInput
 }
 
-const LANGUAGE_HOOKS: Record<string, { system: string; user: string }> = {
+type Locale = NonNullable<InterpretBody['locale']>
+
+const LANGUAGE_HOOKS: Record<Locale, { system: string; user: string; limit: string }> = {
   'zh-CN': {
     system: '请使用简体中文输出。',
     user: '请使用简体中文输出所有内容。',
+    limit: '控制在 140-220 个汉字。',
   },
   'zh-TW': {
     system: '請使用繁體中文輸出。',
     user: '請使用繁體中文輸出所有內容。',
+    limit: '控制在 140-220 個漢字。',
   },
   en: {
     system: 'Please output in English.',
     user: 'Please output all content in English.',
+    limit: 'Use 90-150 English words.',
+  },
+  ja: {
+    system: '日本語で出力してください。',
+    user: 'すべて日本語で出力してください。',
+    limit: '140〜220字程度にしてください。',
+  },
+  ko: {
+    system: '한국어로 출력해 주세요.',
+    user: '모든 내용을 한국어로 출력해 주세요.',
+    limit: '140~220자 정도로 작성하세요.',
   },
 }
 
+function languageHook(locale?: string) {
+  return LANGUAGE_HOOKS[(locale || 'zh-CN') as Locale] ?? LANGUAGE_HOOKS['zh-CN']!
+}
+
 function buildSystemPrompt(mode: InterpretMode, locale: string) {
-  const lang = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
-  const shared = `你是“幽默隐士”，一位见多识广的八字命理解析大师。
-风格：结论先行、简洁务实、温和通透；能把传统术语翻译成现实场景，不卖焦虑、不给宿命论。
-规则：只基于命盘结构解读，不预测确定事件，不用绝对断语，不提供医疗、法律或投资建议。${lang.system}`
+  const lang = languageHook(locale)
+  const shared = `你是命盘室的掌柜，负责把八字结构讲成能用的当日建议。
+风格：结论先行、简短口语、有一点干幽默；不装文言，不卖焦虑。
+边界：只依据服务端给的切片，不编造黄历、神煞或宜忌；不恐吓，不断言生死、疾病、破财，不用绝对化断语。${lang.system}`
+
+  if (mode === 'topic') {
+    return `${shared}
+
+输出一段尝鲜版解读，直接进入正文；不要标题、列表、提问、开场白或总结。${lang.limit}`
+  }
 
   if (mode === 'target') {
     return `${shared}
@@ -62,19 +105,16 @@ function buildSystemPrompt(mode: InterpretMode, locale: string) {
 每段必须绑定命盘证据；行动清单用 2-4 行“- ”开头。不要 JSON、Markdown 标题、代码块或多余开场白。`
 }
 
-function buildUserPrompt(body: InterpretBody) {
-  const locale = body.locale || 'zh-CN'
-  const lang = LANGUAGE_HOOKS[locale] || LANGUAGE_HOOKS['zh-CN']!
+function buildTargetPrompt(body: InterpretBody, locale: Locale) {
+  const lang = languageHook(locale)
   const context = (body.chartContext || '').slice(0, 22000)
+  const target = body.target || {}
+  const label = (target.label || '命盘元素').slice(0, 160)
+  const section = (target.section || '命盘').slice(0, 120)
+  const group = (target.group || '').slice(0, 120)
+  const content = (target.content || '').slice(0, 2600)
 
-  if (body.mode === 'target') {
-    const target = body.target || {}
-    const label = (target.label || '命盘元素').slice(0, 160)
-    const section = (target.section || '命盘').slice(0, 120)
-    const group = (target.group || '').slice(0, 120)
-    const content = (target.content || '').slice(0, 2600)
-
-    return `请解读以下八字命盘元素。
+  return `请解读以下八字命盘元素。
 
 【所在区域】${section}${group ? ` / ${group}` : ''}
 【元素标签】${label}
@@ -84,14 +124,25 @@ function buildUserPrompt(body: InterpretBody) {
 ${context}
 
 只解读该元素与命局的直接关系，忽略无关部分。${lang.user}`
-  }
+}
 
+function buildFullPrompt(body: InterpretBody, locale: Locale) {
+  const lang = languageHook(locale)
   return `请基于以下完整八字命盘摘要，生成全盘 AI 分析报告。
 
 【完整命盘】
-${context}
+${(body.chartContext || '').slice(0, 22000)}
 
 请覆盖全部结构信号、五行十神、格局喜忌、关系与神煞，并给出现实化行动建议。${lang.user}`
+}
+
+function buildTopicPrompt(lens: BaziTopicLens, locale: Locale) {
+  const lang = languageHook(locale)
+  return `请基于以下服务端切片，生成该题的今日尝鲜版解读。
+
+${lens.aiContext}
+
+要求：先给结论，再给一条现实校准；引用至少两个切片证据；不要输出“服务端切片”这个词。${lang.user}`
 }
 
 function validateChart(chart: BaziChartResult | undefined) {
@@ -103,11 +154,33 @@ function validateChart(chart: BaziChartResult | undefined) {
     && Array.isArray(chart.dayuns)
 }
 
+async function resolveTopicLens(body: InterpretBody, topic: BaziPaipanTopic) {
+  validateBaziBirthInput(body.birth!)
+  const date = resolveBaziLensDate(body.date)
+  const chart = await calculateBaziChartResult({
+    birthDate: body.birth!.birthDate,
+    birthHour: body.birth!.birthHour as any,
+    gender: body.birth!.gender,
+    location: body.birth!.location?.name ? body.birth!.location : null,
+  })
+  const almanac = await $fetch<TodayAlmanac>('/api/tools/jinri-huangli/calc', {
+    method: 'POST',
+    body: { date },
+  }).catch(() => undefined)
+
+  return buildBaziTopicLens({ chart, topic, date, almanac })
+}
+
 export default defineEventHandler(async (event) => {
   const body = await readBody<InterpretBody>(event)
-  const mode = body?.mode === 'full' ? 'full' : 'target'
+  const topic = isBaziPaipanTopic(body?.topic) ? body.topic : null
+  const mode: InterpretMode = topic ? 'topic' : body?.mode === 'full' ? 'full' : 'target'
+  let topicLens: BaziTopicLens | null = null
 
-  if (!validateChart(body?.chart)) {
+  if (topic) {
+    topicLens = await resolveTopicLens(body!, topic)
+  }
+  else if (!validateChart(body?.chart)) {
     throw createError({ statusCode: 400, statusMessage: 'Missing or invalid Bazi chart' })
   }
   if (mode === 'target' && !body?.target?.label?.trim()) {
@@ -124,9 +197,13 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const isOpenAi = config.aiProvider === 'openai' || config.aiProvider === 'newapi' || config.aiProvider === 'gptniux'
   const configuredTokens = Number(config.aiMaxTokens) || 8192
-  const maxTokens = Math.min(mode === 'full' ? 12000 : 2048, configuredTokens)
+  const maxTokens = Math.min(mode === 'full' ? 12000 : mode === 'topic' ? 520 : 2048, configuredTokens)
   const systemPrompt = buildSystemPrompt(mode, locale)
-  const userPrompt = buildUserPrompt({ ...body!, mode })
+  const userPrompt = mode === 'topic' && topicLens
+    ? buildTopicPrompt(topicLens, locale)
+    : mode === 'full'
+      ? buildFullPrompt(body!, locale)
+      : buildTargetPrompt(body!, locale)
 
   const upstreamBody = isOpenAi
     ? {
@@ -162,6 +239,8 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  if (topicLens) emit({ type: 'chenyu', text: buildBaziChenyu(topicLens.topic, topicLens) })
+
   let upstream: Response
   try {
     upstream = await fetch(config.aiBaseUrl as string, {
@@ -171,6 +250,7 @@ export default defineEventHandler(async (event) => {
         Authorization: `Bearer ${config.aiApiKey}`,
       },
       body: JSON.stringify(upstreamBody),
+      signal: AbortSignal.timeout(18000),
     })
   }
   catch (error) {
@@ -212,7 +292,7 @@ export default defineEventHandler(async (event) => {
           const token = isOpenAi
             ? chunk.choices?.[0]?.delta?.content
             : (chunk.response ?? chunk.choices?.[0]?.delta?.content)
-          if (token) emit({ type: 'text', text: token })
+          if (token) emit({ type: mode === 'topic' ? 'reading' : 'text', text: token })
         }
         catch { /* Ignore provider keep-alive lines. */ }
       }

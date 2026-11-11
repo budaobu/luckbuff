@@ -9,6 +9,7 @@ interface Props {
   filename: string
   disabled?: boolean
   shareImageFactory?: () => Promise<string | null | undefined>
+  label?: string
 }
 
 const props = defineProps<Props>()
@@ -189,7 +190,7 @@ async function shareToX() {
       <template #leading>
         <UIcon name="i-heroicons-share" class="w-4 h-4" />
       </template>
-      {{ $t('common.shareResult') }}
+      {{ label || $t('common.shareResult') }}
     </UButton>
 
     <Teleport to="body">

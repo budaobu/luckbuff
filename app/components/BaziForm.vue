@@ -79,7 +79,7 @@
         </button>
       </div>
       <div v-if="calendarMode === 'solar'">
-        <UPopover>
+        <UPopover :ui="{ content: 'z-[100]' }">
           <UButton
             color="neutral"
             variant="outline"
@@ -155,7 +155,7 @@
         :ui="{
           base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
           placeholder: 'text-[var(--text-placeholder)]',
-          content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
+          content: 'z-[100] bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl',
           item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
         }"
       />
@@ -370,7 +370,7 @@ const selectedHourValue = computed<string | number | undefined>({
 
 const compactSelectUi = {
   base: 'w-full bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)]',
-  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-60',
+  content: 'z-[100] bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-60',
   item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
 }
 
