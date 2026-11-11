@@ -1,5 +1,6 @@
 <template>
   <article class="ta-paper" :class="{ 'is-tearing': isTearing }" :aria-label="day ? day.date : t('todayAlmanac.loading')">
+    <div aria-hidden="true" class="ta-binding" />
     <div class="ta-paper-inner">
       <header class="ta-masthead">
         <div class="ta-masthead-main">
@@ -244,6 +245,7 @@ import type { TodayAlmanac } from '~/types/today-almanac'
 
 const props = defineProps<{
   day: TodayAlmanac | null
+  advancing?: boolean
   disabled?: boolean
 }>()
 
@@ -253,6 +255,9 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useI18n()
+const visibleDay = ref<TodayAlmanac | null>(props.day)
+const pendingDay = ref<TodayAlmanac | null>(null)
+const day = computed(() => visibleDay.value)
 const isTearing = ref(false)
 let tearTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -281,14 +286,34 @@ const monthLengthMark = computed(() => {
 
 function requestAdvance() {
   if (props.disabled || isTearing.value) return
+  pendingDay.value = null
   isTearing.value = true
   emit('advance')
   if (tearTimer) clearTimeout(tearTimer)
+  const tearDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 160 : 480
   tearTimer = setTimeout(() => {
     isTearing.value = false
+    if (pendingDay.value) {
+      visibleDay.value = pendingDay.value
+      pendingDay.value = null
+    }
     tearTimer = null
-  }, 320)
+  }, tearDuration)
 }
+
+watch(() => props.day, (nextDay) => {
+  if (isTearing.value || props.advancing) {
+    pendingDay.value = nextDay
+    return
+  }
+  visibleDay.value = nextDay
+})
+
+watch(() => props.advancing, (advancing) => {
+  if (advancing || isTearing.value || !pendingDay.value) return
+  visibleDay.value = pendingDay.value
+  pendingDay.value = null
+})
 
 onBeforeUnmount(() => {
   if (tearTimer) clearTimeout(tearTimer)
@@ -354,23 +379,75 @@ function weekdayLabel(weekday: number) {
   --ta-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
   position: relative;
-  overflow: hidden;
   width: min(720px, 100%);
   margin: 0 auto;
   color: var(--ta-ink);
   background-color: var(--ta-paper);
   background-image:
     radial-gradient(circle at 1px 1px, rgba(80, 30, 20, .035) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255, 255, 255, .18), transparent 42%);
-  background-size: 4px 4px, 100% 100%;
+    linear-gradient(90deg, rgba(255, 253, 247, .18), transparent 5%, transparent 95%, rgba(90, 30, 22, .08)),
+    linear-gradient(180deg, rgba(255, 255, 255, .18), transparent 48%, rgba(90, 30, 22, .06));
+  background-size: 4px 4px, 100% 100%, 100% 100%;
   border: 1px solid rgba(120, 25, 20, .24);
   border-radius: 2px;
-  box-shadow: 0 16px 34px rgba(64, 12, 12, .10);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .28),
+    -5px 6px 0 #f5ecd9,
+    -10px 12px 0 #ecdfc7,
+    -15px 18px 0 #dfcfae,
+    0 20px 38px rgba(64, 12, 12, .18),
+    0 38px 78px rgba(64, 12, 12, .16);
+  transform: perspective(1400px) rotateX(1.2deg);
+  transform-style: preserve-3d;
   font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
   font-variant-numeric: tabular-nums;
 }
 
+.ta-binding {
+  position: absolute;
+  z-index: -1;
+  top: -9px;
+  right: -5px;
+  left: -5px;
+  height: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 236, 206, .10), transparent 28%),
+    linear-gradient(180deg, #ae1c25, #751018);
+  border: 1px solid rgba(84, 8, 14, .62);
+  border-radius: 2px;
+  box-shadow:
+    0 6px 16px rgba(64, 12, 12, .24),
+    inset 0 -1px 0 rgba(255, 238, 203, .10);
+  transform: rotateX(2.6deg) translateZ(-4px);
+}
+
+.ta-binding::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  left: 14px;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, rgba(247, 240, 228, .52) 0 8px, transparent 8px 18px);
+}
+
+.ta-paper::after {
+  content: '';
+  position: absolute;
+  z-index: -3;
+  right: -20%;
+  bottom: -44px;
+  left: -20%;
+  height: 66px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(64, 10, 12, .44), transparent 72%);
+  filter: blur(15px);
+  transform: rotateX(68deg) translateZ(-24px);
+}
+
 .ta-paper-inner {
+  position: relative;
+  z-index: 1;
   padding: 24px;
 }
 
@@ -721,13 +798,14 @@ function weekdayLabel(weekday: number) {
   inset: 0;
   z-index: 2;
   overflow: hidden;
+  perspective: 680px;
   pointer-events: none;
   opacity: 0;
 }
 
 .ta-tear-line {
   position: absolute;
-  top: 91%;
+  top: 88%;
   right: 5%;
   left: 5%;
   height: 2px;
@@ -738,8 +816,8 @@ function weekdayLabel(weekday: number) {
 
 .ta-tear-flap {
   position: absolute;
+  top: 88%;
   right: -3%;
-  bottom: -2%;
   left: -3%;
   height: 12%;
   background:
@@ -750,19 +828,19 @@ function weekdayLabel(weekday: number) {
   clip-path: polygon(0 16%, 4% 4%, 9% 14%, 14% 2%, 19% 12%, 25% 4%, 31% 15%, 37% 5%, 43% 13%, 49% 3%, 55% 12%, 61% 4%, 67% 14%, 73% 5%, 79% 13%, 85% 4%, 91% 12%, 96% 5%, 100% 15%, 100% 100%, 0 100%);
   opacity: 0;
   transform-origin: 50% 0;
-  transform: translate3d(0, -8%, 0) rotate(0deg);
+  transform: rotateX(-2deg);
 }
 
 .is-tearing .ta-tear-layer {
-  animation: ta-tear-layer-opacity 260ms var(--ta-ease-out) both;
+  animation: ta-tear-layer-opacity 480ms var(--ta-ease-in-out) both;
 }
 
 .is-tearing .ta-tear-line {
-  animation: ta-tear-line 180ms var(--ta-ease-in-out) both;
+  animation: ta-tear-line 220ms var(--ta-ease-in-out) both;
 }
 
 .is-tearing .ta-tear-flap {
-  animation: ta-tear-flap 260ms var(--ta-ease-out) both;
+  animation: ta-tear-flap 480ms var(--ta-ease-in-out) both;
 }
 
 @keyframes ta-tear-layer-opacity {
@@ -789,19 +867,29 @@ function weekdayLabel(weekday: number) {
 @keyframes ta-tear-flap {
   0% {
     opacity: 0;
-    transform: translate3d(0, -8%, 0) rotate(0deg);
+    transform: rotateX(-2deg);
   }
   22% {
     opacity: .94;
-    transform: translate3d(0, 2%, 0) rotate(.24deg);
+    transform: rotateX(-42deg);
   }
   100% {
     opacity: 0;
-    transform: translate3d(0, 60%, 0) rotate(-.5deg);
+    transform: rotateX(-86deg) translate3d(0, 8%, -28px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ta-paper {
+    transform: none;
+    transform-style: flat;
+  }
+
+  .ta-binding,
+  .ta-paper::after {
+    transform: none;
+  }
+
   .ta-nav-button {
     transition: opacity 120ms ease;
   }

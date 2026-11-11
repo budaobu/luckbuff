@@ -9,6 +9,7 @@
       >
         <TodayAlmanacPaper
           :day="currentDay"
+          :advancing="advancing"
           :disabled="initialLoading || advancing || !!error"
           @advance="onAdvance"
           @today="loadCurrent"
@@ -560,6 +561,7 @@ useHead(() => ({
   gap: 6px;
   min-height: 34px;
   margin-right: 6px;
+  padding: 6px 10px;
   border: 1px solid rgba(165, 22, 27, .46);
   border-radius: 1px;
   background: transparent;
