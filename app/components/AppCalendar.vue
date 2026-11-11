@@ -133,6 +133,14 @@ function onPlaceholderUpdate(value: CalendarDateType) {
   selectedMonth.value = value.month
 }
 
+function onYearChange(event: Event) {
+  handleYearChange(Number((event.target as HTMLSelectElement).value))
+}
+
+function onMonthChange(event: Event) {
+  handleMonthChange(Number((event.target as HTMLSelectElement).value))
+}
+
 function handlePlaceholderUpdate(value: unknown) {
   if (value) {
     onPlaceholderUpdate(value as CalendarDateType)
@@ -143,33 +151,36 @@ function handleModelValueUpdate(value: unknown) {
   emit('update:modelValue', value as CalendarDateType)
 }
 
-const selectUi = {
-  base: 'bg-[var(--surface-input)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)] text-[var(--text-primary)] text-sm',
-  placeholder: 'text-[var(--text-placeholder)]',
-  content: 'bg-[var(--surface-dropdown)] border border-[var(--border-light)] rounded-xl shadow-2xl max-h-[240px]',
-  item: 'text-[var(--text-primary)] hover:bg-[var(--surface-card-hover)] data-[state=checked]:bg-[var(--accent-bg)] data-[state=checked]:text-[var(--accent)]',
-}
 </script>
 
 <template>
-  <div class="bg-[var(--surface-elevated)] border border-[var(--border-light)] rounded-xl shadow-2xl p-2">
+  <div
+    class="bg-[var(--surface-elevated)] border border-[var(--border-light)] rounded-xl shadow-2xl p-2"
+    data-testid="app-calendar"
+  >
     <div class="flex items-center gap-2 mb-2">
-      <USelect
-        :model-value="selectedYear"
-        :items="yearOptions"
-        color="warning"
-        class="w-24"
-        :ui="selectUi"
-        @update:model-value="handleYearChange($event)"
-      />
-      <USelect
-        :model-value="selectedMonth"
-        :items="months"
-        color="warning"
-        class="w-24"
-        :ui="selectUi"
-        @update:model-value="handleMonthChange($event)"
-      />
+      <select
+        :value="selectedYear"
+        class="h-8 w-24 rounded-md bg-[var(--surface-input)] px-2 text-sm text-[var(--text-primary)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)]"
+        data-testid="calendar-year-select"
+        :aria-label="$t('common.calendarYear')"
+        @change="onYearChange"
+      >
+        <option v-for="year in yearOptions" :key="year.value" :value="year.value">
+          {{ year.label }}
+        </option>
+      </select>
+      <select
+        :value="selectedMonth"
+        class="h-8 w-24 rounded-md bg-[var(--surface-input)] px-2 text-sm text-[var(--text-primary)] ring-1 ring-inset ring-[var(--border-light)] focus:ring-[var(--accent-border-hover)]"
+        data-testid="calendar-month-select"
+        :aria-label="$t('common.calendarMonth')"
+        @change="onMonthChange"
+      >
+        <option v-for="month in months" :key="month.value" :value="month.value">
+          {{ month.label }}
+        </option>
+      </select>
     </div>
     <UCalendar
       :model-value="modelValue"

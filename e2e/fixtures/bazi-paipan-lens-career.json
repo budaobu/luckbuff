@@ -1,0 +1,65 @@
+{
+  "topic": "career",
+  "date": "2026-11-11",
+  "scope": "today",
+  "natal": [
+    {
+      "id": "officer-seal",
+      "label": "官杀与印星",
+      "value": "正官 28% / 七杀 0%；偏印 14% / 正印 3%",
+      "evidence": "责任、规则与承接",
+      "pillarKeys": [
+        "month",
+        "day",
+        "hour"
+      ]
+    },
+    {
+      "id": "month-pattern",
+      "label": "月令格局",
+      "value": "伤官格 · 伤官格 · 未透",
+      "evidence": "月令主气：未 中 土·伤官；司令依据：小暑后 3 天，取 丁；透明检查：伤官 未透干；支持比：55.2%；根气：有效根",
+      "pillarKeys": [
+        "month"
+      ]
+    },
+    {
+      "id": "career-theme",
+      "label": "事业结构信号",
+      "value": "58/100 需取舍",
+      "evidence": "本命主题信号引擎",
+      "pillarKeys": []
+    }
+  ],
+  "today": {
+    "date": "2026-11-11",
+    "ganzhi": "庚寅",
+    "tenGod": "偏财",
+    "relations": [],
+    "dailyShenSha": [],
+    "nobleHints": []
+  },
+  "todayFields": [
+    {
+      "id": "today-ganzhi",
+      "label": "今日柱",
+      "value": "庚寅",
+      "evidence": "与 /tools/jishi 同用日柱口径",
+      "pillarKeys": []
+    },
+    {
+      "id": "today-ten-god",
+      "label": "流日十神",
+      "value": "偏财",
+      "evidence": "今日日干相对命局日主",
+      "pillarKeys": []
+    }
+  ],
+  "focusPillarKeys": [
+    "month",
+    "day",
+    "hour"
+  ],
+  "nobleHints": [],
+  "aiContext": "题目：career\n日期：2026-11-11\n四柱：年柱庚午 月柱癸未 日柱丙子 时柱甲午\n官杀与印星：正官 28% / 七杀 0%；偏印 14% / 正印 3%（责任、规则与承接）\n月令格局：伤官格 · 伤官格 · 未透（月令主气：未 中 土·伤官；司令依据：小暑后 3 天，取 丁；透明检查：伤官 未透干；支持比：55.2%；根气：有效根）\n事业结构信号：58/100 需取舍（本命主题信号引擎）\n今日柱：庚寅；流日十神：偏财\n今日柱：庚寅\n流日十神：偏财"
+}

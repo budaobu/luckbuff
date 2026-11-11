@@ -1,4 +1,4 @@
-import { TIAN_GAN, DI_ZHI, MONTH_ZHI } from './constants'
+import { TIAN_GAN, DI_ZHI, MONTH_ZHI } from './constants.ts'
 
 // 闰年判断
 export function isLeapYear(year: number): boolean {

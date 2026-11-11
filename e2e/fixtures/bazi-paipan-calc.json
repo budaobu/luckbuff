@@ -1,0 +1,5592 @@
+{
+  "pillars": [
+    {
+      "key": "year",
+      "label": "年柱",
+      "tag": null,
+      "gan": "庚",
+      "zhi": "午",
+      "ganzhi": "庚午",
+      "ganWuxing": "金",
+      "zhiWuxing": "火",
+      "shishenGan": "偏财",
+      "hiddenStems": [
+        {
+          "gan": "丁",
+          "type": "本气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": true
+        },
+        {
+          "gan": "己",
+          "type": "中气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": false
+        }
+      ],
+      "diShi": "帝旺",
+      "selfSitting": "沐浴",
+      "nayin": "路旁土",
+      "xun": "甲子",
+      "xunKong": [
+        "戌",
+        "亥"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "羊刃",
+          "classification": "凶",
+          "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "天医",
+          "classification": "吉",
+          "description": "利从事医疗、养生行业，身体恢复力强。"
+        }
+      ]
+    },
+    {
+      "key": "month",
+      "label": "月柱",
+      "tag": "月令核心",
+      "gan": "癸",
+      "zhi": "未",
+      "ganzhi": "癸未",
+      "ganWuxing": "水",
+      "zhiWuxing": "土",
+      "shishenGan": "正官",
+      "hiddenStems": [
+        {
+          "gan": "己",
+          "type": "本气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": true
+        },
+        {
+          "gan": "丁",
+          "type": "中气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": false
+        },
+        {
+          "gan": "乙",
+          "type": "余气",
+          "wuxing": "木",
+          "shishen": "正印",
+          "isMain": false
+        }
+      ],
+      "diShi": "衰",
+      "selfSitting": "墓",
+      "nayin": "杨柳木",
+      "xun": "甲戌",
+      "xunKong": [
+        "申",
+        "酉"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "天乙贵人",
+          "classification": "吉",
+          "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+        },
+        {
+          "name": "流霞",
+          "classification": "中性",
+          "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+        },
+        {
+          "name": "金舆",
+          "classification": "吉",
+          "description": "出行平安，常有好车代步，贵人接送。"
+        },
+        {
+          "name": "金匮",
+          "classification": "吉",
+          "description": "善于理财，钱财有库可存，利积累财富。"
+        }
+      ]
+    },
+    {
+      "key": "day",
+      "label": "日柱",
+      "tag": "日主核心",
+      "gan": "丙",
+      "zhi": "子",
+      "ganzhi": "丙子",
+      "ganWuxing": "火",
+      "zhiWuxing": "水",
+      "shishenGan": "比肩",
+      "hiddenStems": [
+        {
+          "gan": "癸",
+          "type": "本气",
+          "wuxing": "水",
+          "shishen": "正官",
+          "isMain": true
+        }
+      ],
+      "diShi": "胎",
+      "selfSitting": "胎",
+      "nayin": "涧下水",
+      "xun": "甲戌",
+      "xunKong": [
+        "申",
+        "酉"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "飞刃",
+          "classification": "凶",
+          "description": "意外之灾，防飞来横祸，出行需谨慎。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "灾煞",
+          "classification": "凶",
+          "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+        },
+        {
+          "name": "大耗",
+          "classification": "凶",
+          "description": "破大财，钱财难聚，防投资失利。"
+        },
+        {
+          "name": "阳错",
+          "classification": "凶",
+          "description": "情感错位，婚姻易有差错，与岳父母关系不睦。"
+        }
+      ]
+    },
+    {
+      "key": "hour",
+      "label": "时柱",
+      "tag": null,
+      "gan": "甲",
+      "zhi": "午",
+      "ganzhi": "甲午",
+      "ganWuxing": "木",
+      "zhiWuxing": "火",
+      "shishenGan": "偏印",
+      "hiddenStems": [
+        {
+          "gan": "丁",
+          "type": "本气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": true
+        },
+        {
+          "gan": "己",
+          "type": "中气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": false
+        }
+      ],
+      "diShi": "帝旺",
+      "selfSitting": "死",
+      "nayin": "沙中金",
+      "xun": "甲午",
+      "xunKong": [
+        "辰",
+        "巳"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "羊刃",
+          "classification": "凶",
+          "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "天德贵人",
+          "classification": "吉",
+          "description": "上天庇佑，逢凶化吉，品德高尚。"
+        },
+        {
+          "name": "月德贵人",
+          "classification": "吉",
+          "description": "月令贵人，一生少灾少难，平安顺遂。"
+        },
+        {
+          "name": "天医",
+          "classification": "吉",
+          "description": "利从事医疗、养生行业，身体恢复力强。"
+        },
+        {
+          "name": "天赦贵",
+          "classification": "吉",
+          "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+        }
+      ]
+    }
+  ],
+  "birth": {
+    "solarText": "1990-07-10",
+    "clockText": "12:00",
+    "trueSolarText": "12:00",
+    "trueSolarDateTime": "1990-07-10 12:00:00",
+    "lunarText": "五月十八",
+    "lunarDetail": "庚午年 闰五月十八 午时",
+    "lunarGanzhi": "庚午",
+    "zodiac": "马",
+    "season": "秋",
+    "weekday": "二",
+    "festivals": [],
+    "timezone": "Asia/Shanghai",
+    "timezoneOffsetMinutes": 540,
+    "locationName": "未填写",
+    "coordinates": null,
+    "solarTimeStatus": "uncorrected",
+    "solarTimeStatusText": "未填出生地点，按所选时辰中值排盘，未做真太阳时校正。",
+    "longitudeOffsetMinutes": 0,
+    "equationOfTimeMinutes": 0,
+    "standardMeridian": null,
+    "solarTimeAlgorithm": null,
+    "selectedHour": "午",
+    "effectiveHour": "午",
+    "genderText": "男",
+    "dayBoundaryChanged": false,
+    "solarTerm": {
+      "current": null,
+      "previous": {
+        "name": "小暑",
+        "datetime": "1990-07-07 17:00:28"
+      },
+      "next": {
+        "name": "立秋",
+        "datetime": "1990-08-08 02:45:32"
+      },
+      "progress": 9.9,
+      "siLing": {
+        "ganzhi": "丁",
+        "term": "小暑",
+        "daysAfterTerm": 3
+      }
+    }
+  },
+  "extras": {
+    "taiYuan": {
+      "label": "胎元",
+      "ganzhi": "甲戌",
+      "nayin": "山头火",
+      "shishen": "偏印",
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "红艳",
+          "classification": "中性",
+          "description": "桃花旺盛，异性缘好，感情丰富。"
+        },
+        {
+          "name": "金舆",
+          "classification": "吉",
+          "description": "出行平安，常有好车代步，贵人接送。"
+        },
+        {
+          "name": "华盖",
+          "classification": "中性",
+          "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+        },
+        {
+          "name": "寡宿",
+          "classification": "中性",
+          "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+        },
+        {
+          "name": "五鬼",
+          "classification": "凶",
+          "description": "口舌是非多，小人缠身，宜低调行事。"
+        },
+        {
+          "name": "天德贵人",
+          "classification": "吉",
+          "description": "上天庇佑，逢凶化吉，品德高尚。"
+        },
+        {
+          "name": "月德贵人",
+          "classification": "吉",
+          "description": "月令贵人，一生少灾少难，平安顺遂。"
+        }
+      ]
+    },
+    "mingGong": {
+      "label": "命宫",
+      "ganzhi": "庚辰",
+      "nayin": "白蜡金",
+      "shishen": "偏财",
+      "shensha": [
+        {
+          "name": "国印贵人",
+          "classification": "吉",
+          "description": "利从政、公职，掌权柄，受人尊重。"
+        },
+        {
+          "name": "流霞",
+          "classification": "中性",
+          "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+        },
+        {
+          "name": "华盖",
+          "classification": "中性",
+          "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+        },
+        {
+          "name": "寡宿",
+          "classification": "中性",
+          "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+        },
+        {
+          "name": "血刃",
+          "classification": "凶",
+          "description": "防血光之灾，手术、受伤、献血之象。"
+        },
+        {
+          "name": "天狗",
+          "classification": "凶",
+          "description": "防小人背后中伤，是非口舌，谨言慎行。"
+        },
+        {
+          "name": "魁罡",
+          "classification": "中性",
+          "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+        }
+      ]
+    },
+    "shenGong": {
+      "label": "身宫",
+      "ganzhi": "戊寅",
+      "nayin": "城头土",
+      "shishen": "食神",
+      "shensha": [
+        {
+          "name": "太极贵人",
+          "classification": "吉",
+          "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+        },
+        {
+          "name": "红艳",
+          "classification": "中性",
+          "description": "桃花旺盛，异性缘好，感情丰富。"
+        },
+        {
+          "name": "学堂",
+          "classification": "吉",
+          "description": "利学业、进修，学习能力强，适合深造。"
+        },
+        {
+          "name": "驿马",
+          "classification": "中性",
+          "description": "主奔波迁动，出差旅行多，适合外出发展。"
+        },
+        {
+          "name": "孤辰",
+          "classification": "中性",
+          "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+        },
+        {
+          "name": "白虎",
+          "classification": "凶",
+          "description": "血光丧事，防意外伤害，流年逢之多波折。"
+        }
+      ]
+    }
+  },
+  "energy": {
+    "strength": "身强",
+    "strengthLabel": "支持比充足",
+    "supportRatio": 55.2,
+    "rootStatus": "有效根",
+    "rootQuality": 83,
+    "monthCommand": "得令 · 生扶",
+    "monthCommandDetail": "小暑后 3 天，司令 丁",
+    "monthProgress": 9.9,
+    "primaryUseGod": "金",
+    "supportUseGod": "土",
+    "avoidGod": "火",
+    "adjustment": "优先泄、耗、控，降低过旺日主的对抗成本。",
+    "tenGods": [
+      {
+        "name": "正官",
+        "weight": 2,
+        "percent": 28,
+        "role": "秩序/责任"
+      },
+      {
+        "name": "伤官",
+        "weight": 1.5,
+        "percent": 21,
+        "role": "创新/突破"
+      },
+      {
+        "name": "劫财",
+        "weight": 1.4,
+        "percent": 20,
+        "role": "竞争/协作"
+      },
+      {
+        "name": "偏财",
+        "weight": 1,
+        "percent": 14,
+        "role": "机会/流动财"
+      },
+      {
+        "name": "偏印",
+        "weight": 1,
+        "percent": 14,
+        "role": "研究/直觉"
+      },
+      {
+        "name": "正印",
+        "weight": 0.2,
+        "percent": 3,
+        "role": "学习/庇护"
+      },
+      {
+        "name": "比肩",
+        "weight": 0,
+        "percent": 0,
+        "role": "自我/同辈"
+      },
+      {
+        "name": "食神",
+        "weight": 0,
+        "percent": 0,
+        "role": "表达/输出"
+      },
+      {
+        "name": "正财",
+        "weight": 0,
+        "percent": 0,
+        "role": "稳定/执行财"
+      },
+      {
+        "name": "七杀",
+        "weight": 0,
+        "percent": 0,
+        "role": "压力/规则"
+      }
+    ],
+    "wuxing": [
+      {
+        "key": "火",
+        "label": "火",
+        "weight": 3.9,
+        "percent": 34,
+        "visibleCount": 3,
+        "hiddenCount": 3,
+        "role": "日主",
+        "state": "unfavorable",
+        "stateLabel": "忌神方向",
+        "direction": "南方",
+        "organs": "心、小肠",
+        "evidence": "天干/地支 3 处，藏干信号 3 处"
+      },
+      {
+        "key": "水",
+        "label": "水",
+        "weight": 3,
+        "percent": 26,
+        "visibleCount": 2,
+        "hiddenCount": 1,
+        "role": "财星",
+        "state": "neutral",
+        "stateLabel": "中性",
+        "direction": "北方",
+        "organs": "肾、膀胱",
+        "evidence": "天干/地支 2 处，藏干信号 1 处"
+      },
+      {
+        "key": "土",
+        "label": "土",
+        "weight": 2.5,
+        "percent": 22,
+        "visibleCount": 1,
+        "hiddenCount": 3,
+        "role": "印星",
+        "state": "favorable",
+        "stateLabel": "喜用方向",
+        "direction": "中央",
+        "organs": "脾、胃",
+        "evidence": "天干/地支 1 处，藏干信号 3 处"
+      },
+      {
+        "key": "木",
+        "label": "木",
+        "weight": 1.2,
+        "percent": 10,
+        "visibleCount": 1,
+        "hiddenCount": 1,
+        "role": "财星",
+        "state": "neutral",
+        "stateLabel": "中性",
+        "direction": "东方",
+        "organs": "肝、胆",
+        "evidence": "天干/地支 1 处，藏干信号 1 处"
+      },
+      {
+        "key": "金",
+        "label": "金",
+        "weight": 1,
+        "percent": 9,
+        "visibleCount": 1,
+        "hiddenCount": 0,
+        "role": "官杀",
+        "state": "favorable",
+        "stateLabel": "喜用方向",
+        "direction": "西方",
+        "organs": "肺、大肠",
+        "evidence": "天干/地支 1 处，藏干信号 0 处"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "id": "CLASH-子午-day/year",
+      "group": "地支",
+      "type": "冲",
+      "value": "子午",
+      "positions": [
+        "日柱",
+        "年柱"
+      ],
+      "impact": "主变动、冲击、位置被推动",
+      "intensity": "强烈",
+      "status": "生效"
+    },
+    {
+      "id": "COMBINATION_2-午未-year/month",
+      "group": "地支",
+      "type": "合",
+      "value": "午未",
+      "positions": [
+        "年柱",
+        "月柱"
+      ],
+      "impact": "主牵绊、合作、能量合化",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "PUNISHMENT-午午-year/hour",
+      "group": "地支",
+      "type": "刑",
+      "value": "午午",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "impact": "主内耗、规则压力、隐性摩擦",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "HARM-子未-day/month",
+      "group": "地支",
+      "type": "害",
+      "value": "子未",
+      "positions": [
+        "日柱",
+        "月柱"
+      ],
+      "impact": "主暗耗、不顺、细节牵制",
+      "intensity": "轻微",
+      "status": "生效"
+    },
+    {
+      "id": "branch-combine-午未合火-year/month",
+      "group": "地支",
+      "type": "六合",
+      "value": "午未合火",
+      "positions": [
+        "年柱",
+        "月柱"
+      ],
+      "impact": "主牵绊、合作、能量合化",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "branch-harm-未子害-month/day",
+      "group": "地支",
+      "type": "相害",
+      "value": "未子害",
+      "positions": [
+        "月柱",
+        "日柱"
+      ],
+      "impact": "主暗耗、不顺、细节牵制",
+      "intensity": "轻微",
+      "status": "生效"
+    },
+    {
+      "id": "branch-clash-子午冲-day/hour",
+      "group": "地支",
+      "type": "相冲",
+      "value": "子午冲",
+      "positions": [
+        "日柱",
+        "时柱"
+      ],
+      "impact": "主变动、冲击、位置被推动",
+      "intensity": "强烈",
+      "status": "生效"
+    }
+  ],
+  "shensha": [
+    {
+      "name": "天乙贵人",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+    },
+    {
+      "name": "福星贵人",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "日柱",
+        "时柱"
+      ],
+      "description": "福气厚重，一生多得福报庇佑。"
+    },
+    {
+      "name": "流霞",
+      "classification": "中性",
+      "positions": [
+        "月柱"
+      ],
+      "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+    },
+    {
+      "name": "金舆",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "出行平安，常有好车代步，贵人接送。"
+    },
+    {
+      "name": "羊刃",
+      "classification": "凶",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+    },
+    {
+      "name": "飞刃",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "意外之灾，防飞来横祸，出行需谨慎。"
+    },
+    {
+      "name": "将星",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "日柱",
+        "时柱"
+      ],
+      "description": "领导力强，有统帅才能，适合管理岗位。"
+    },
+    {
+      "name": "金匮",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "善于理财，钱财有库可存，利积累财富。"
+    },
+    {
+      "name": "灾煞",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+    },
+    {
+      "name": "大耗",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "破大财，钱财难聚，防投资失利。"
+    },
+    {
+      "name": "天德贵人",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "上天庇佑，逢凶化吉，品德高尚。"
+    },
+    {
+      "name": "月德贵人",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "月令贵人，一生少灾少难，平安顺遂。"
+    },
+    {
+      "name": "天医",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "description": "利从事医疗、养生行业，身体恢复力强。"
+    },
+    {
+      "name": "阳错",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "情感错位，婚姻易有差错，与岳父母关系不睦。"
+    },
+    {
+      "name": "天赦贵",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+    }
+  ],
+  "shenshaCombinations": [
+    {
+      "name": "天月德同宫",
+      "value": "时柱",
+      "positions": [
+        "时柱"
+      ],
+      "note": "德德合力集中，该宫位更容易出现缓冲、修复与贵人协调。"
+    }
+  ],
+  "pattern": {
+    "name": "伤官格",
+    "status": "伤官格 · 未透",
+    "monthMainQi": "土·伤官",
+    "transparency": "未透干",
+    "rootStatus": "有效根",
+    "evidence": [
+      "月令主气：未 中 土·伤官",
+      "司令依据：小暑后 3 天，取 丁",
+      "透明检查：伤官 未透干",
+      "支持比：55.2%；根气：有效根"
+    ]
+  },
+  "structure": {
+    "dayStrength": "身强",
+    "rootStatus": "有效根",
+    "supportRatio": 55.2,
+    "forceDistribution": "火 34%",
+    "pattern": "伤官格 · 未透",
+    "patternEvidence": "取格线索：土·伤官；伤官格力量 21%",
+    "evidence": [
+      "月令主气：未 中 土·伤官",
+      "司令依据：小暑后 3 天，取 丁",
+      "透明检查：伤官 未透干",
+      "支持比：55.2%；根气：有效根"
+    ]
+  },
+  "natalThemes": [
+    {
+      "id": "love-attraction",
+      "title": "恋爱吸引信号",
+      "score": 28,
+      "tags": [
+        "关系星显度"
+      ],
+      "status": "需补强",
+      "evidenceLevel": "保守"
+    },
+    {
+      "id": "relationship-stability",
+      "title": "长期关系稳定信号",
+      "score": 45,
+      "tags": [
+        "配偶星清晰度",
+        "子午冲"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "中等"
+    },
+    {
+      "id": "wealth-capacity",
+      "title": "财富承载",
+      "score": 63,
+      "tags": [
+        "财星占比",
+        "财元素强度"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "中等"
+    },
+    {
+      "id": "career-structure",
+      "title": "事业结构力",
+      "score": 58,
+      "tags": [
+        "官杀占比",
+        "子午冲",
+        "午午刑",
+        "印星承接",
+        "将星"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "稳定"
+    },
+    {
+      "id": "learning-structure",
+      "title": "学习结构力",
+      "score": 79,
+      "tags": [
+        "印星占比",
+        "印元素强度"
+      ],
+      "status": "有优势",
+      "evidenceLevel": "中等"
+    }
+  ],
+  "dayuns": [
+    {
+      "index": 1,
+      "ganzhi": "甲申",
+      "startYear": 2000,
+      "endYear": 2009,
+      "startAge": 10,
+      "endAge": 19,
+      "shishenGan": "偏印",
+      "shishenZhi": "偏财",
+      "shensha": [
+        {
+          "name": "文昌",
+          "classification": "吉",
+          "description": "主聪明好学，利考试、升学、文职发展。"
+        },
+        {
+          "name": "驿马",
+          "classification": "中性",
+          "description": "主奔波迁动，出差旅行多，适合外出发展。"
+        },
+        {
+          "name": "孤辰",
+          "classification": "中性",
+          "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+        },
+        {
+          "name": "丧门",
+          "classification": "凶",
+          "description": "丧事孝服，防家中长辈健康，情绪低落。"
+        },
+        {
+          "name": "天德贵人",
+          "classification": "吉",
+          "description": "上天庇佑，逢凶化吉，品德高尚。"
+        },
+        {
+          "name": "月德贵人",
+          "classification": "吉",
+          "description": "月令贵人，一生少灾少难，平安顺遂。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2000,
+          "age": 11,
+          "ganzhi": "庚辰",
+          "shishenGan": "偏财",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2001,
+          "age": 12,
+          "ganzhi": "辛巳",
+          "shishenGan": "正财",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2002,
+          "age": 13,
+          "ganzhi": "壬午",
+          "shishenGan": "七杀",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2003,
+          "age": 14,
+          "ganzhi": "癸未",
+          "shishenGan": "正官",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2004,
+          "age": 15,
+          "ganzhi": "甲申",
+          "shishenGan": "偏印",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2005,
+          "age": 16,
+          "ganzhi": "乙酉",
+          "shishenGan": "正印",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2006,
+          "age": 17,
+          "ganzhi": "丙戌",
+          "shishenGan": "比肩",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2007,
+          "age": 18,
+          "ganzhi": "丁亥",
+          "shishenGan": "劫财",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2008,
+          "age": 19,
+          "ganzhi": "戊子",
+          "shishenGan": "食神",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2009,
+          "age": 20,
+          "ganzhi": "己丑",
+          "shishenGan": "伤官",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "ganzhi": "乙酉",
+      "startYear": 2010,
+      "endYear": 2019,
+      "startAge": 20,
+      "endAge": 29,
+      "shishenGan": "正印",
+      "shishenZhi": "正财",
+      "shensha": [
+        {
+          "name": "天乙贵人",
+          "classification": "吉",
+          "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+        },
+        {
+          "name": "太极贵人",
+          "classification": "吉",
+          "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+        },
+        {
+          "name": "桃花",
+          "classification": "中性",
+          "description": "异性缘旺，魅力四射，感情机会多。"
+        },
+        {
+          "name": "红鸾",
+          "classification": "中性",
+          "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2010,
+          "age": 21,
+          "ganzhi": "庚寅",
+          "shishenGan": "偏财",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2011,
+          "age": 22,
+          "ganzhi": "辛卯",
+          "shishenGan": "正财",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2012,
+          "age": 23,
+          "ganzhi": "壬辰",
+          "shishenGan": "七杀",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2013,
+          "age": 24,
+          "ganzhi": "癸巳",
+          "shishenGan": "正官",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2014,
+          "age": 25,
+          "ganzhi": "甲午",
+          "shishenGan": "偏印",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            },
+            {
+              "name": "天赦贵",
+              "classification": "吉",
+              "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2015,
+          "age": 26,
+          "ganzhi": "乙未",
+          "shishenGan": "正印",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2016,
+          "age": 27,
+          "ganzhi": "丙申",
+          "shishenGan": "比肩",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2017,
+          "age": 28,
+          "ganzhi": "丁酉",
+          "shishenGan": "劫财",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2018,
+          "age": 29,
+          "ganzhi": "戊戌",
+          "shishenGan": "食神",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2019,
+          "age": 30,
+          "ganzhi": "己亥",
+          "shishenGan": "伤官",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "ganzhi": "丙戌",
+      "startYear": 2020,
+      "endYear": 2029,
+      "startAge": 30,
+      "endAge": 39,
+      "shishenGan": "比肩",
+      "shishenZhi": "食神",
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "红艳",
+          "classification": "中性",
+          "description": "桃花旺盛，异性缘好，感情丰富。"
+        },
+        {
+          "name": "金舆",
+          "classification": "吉",
+          "description": "出行平安，常有好车代步，贵人接送。"
+        },
+        {
+          "name": "华盖",
+          "classification": "中性",
+          "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+        },
+        {
+          "name": "寡宿",
+          "classification": "中性",
+          "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+        },
+        {
+          "name": "五鬼",
+          "classification": "凶",
+          "description": "口舌是非多，小人缠身，宜低调行事。"
+        }
+      ],
+      "isCurrent": true,
+      "liunian": [
+        {
+          "year": 2020,
+          "age": 31,
+          "ganzhi": "庚子",
+          "shishenGan": "偏财",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2021,
+          "age": 32,
+          "ganzhi": "辛丑",
+          "shishenGan": "正财",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2022,
+          "age": 33,
+          "ganzhi": "壬寅",
+          "shishenGan": "七杀",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2023,
+          "age": 34,
+          "ganzhi": "癸卯",
+          "shishenGan": "正官",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2024,
+          "age": 35,
+          "ganzhi": "甲辰",
+          "shishenGan": "偏印",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2025,
+          "age": 36,
+          "ganzhi": "乙巳",
+          "shishenGan": "正印",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            },
+            {
+              "name": "词馆",
+              "classification": "吉",
+              "description": "文采出众，利写作、文学、传媒创作。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2026,
+          "age": 37,
+          "ganzhi": "丙午",
+          "shishenGan": "比肩",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            }
+          ],
+          "isCurrent": true,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2027,
+          "age": 38,
+          "ganzhi": "丁未",
+          "shishenGan": "劫财",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2028,
+          "age": 39,
+          "ganzhi": "戊申",
+          "shishenGan": "食神",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2029,
+          "age": 40,
+          "ganzhi": "己酉",
+          "shishenGan": "伤官",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "ganzhi": "丁亥",
+      "startYear": 2030,
+      "endYear": 2039,
+      "startAge": 40,
+      "endAge": 49,
+      "shishenGan": "劫财",
+      "shishenZhi": "七杀",
+      "shensha": [
+        {
+          "name": "天乙贵人",
+          "classification": "吉",
+          "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+        },
+        {
+          "name": "太极贵人",
+          "classification": "吉",
+          "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+        },
+        {
+          "name": "文昌",
+          "classification": "吉",
+          "description": "主聪明好学，利考试、升学、文职发展。"
+        },
+        {
+          "name": "天官贵人",
+          "classification": "吉",
+          "description": "利仕途升迁，官运亨通，易得上司赏识。"
+        },
+        {
+          "name": "劫煞",
+          "classification": "凶",
+          "description": "防小人暗算、破财、盗劫之事。"
+        },
+        {
+          "name": "亡神",
+          "classification": "凶",
+          "description": "精神不安，多疑多虑，防暗中损失。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2030,
+          "age": 41,
+          "ganzhi": "庚戌",
+          "shishenGan": "偏财",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2031,
+          "age": 42,
+          "ganzhi": "辛亥",
+          "shishenGan": "正财",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2032,
+          "age": 43,
+          "ganzhi": "壬子",
+          "shishenGan": "七杀",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2033,
+          "age": 44,
+          "ganzhi": "癸丑",
+          "shishenGan": "正官",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2034,
+          "age": 45,
+          "ganzhi": "甲寅",
+          "shishenGan": "偏印",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2035,
+          "age": 46,
+          "ganzhi": "乙卯",
+          "shishenGan": "正印",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2036,
+          "age": 47,
+          "ganzhi": "丙辰",
+          "shishenGan": "比肩",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2037,
+          "age": 48,
+          "ganzhi": "丁巳",
+          "shishenGan": "劫财",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2038,
+          "age": 49,
+          "ganzhi": "戊午",
+          "shishenGan": "食神",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2039,
+          "age": 50,
+          "ganzhi": "己未",
+          "shishenGan": "伤官",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "ganzhi": "戊子",
+      "startYear": 2040,
+      "endYear": 2049,
+      "startAge": 50,
+      "endAge": 59,
+      "shishenGan": "食神",
+      "shishenZhi": "正官",
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "飞刃",
+          "classification": "凶",
+          "description": "意外之灾，防飞来横祸，出行需谨慎。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "灾煞",
+          "classification": "凶",
+          "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+        },
+        {
+          "name": "大耗",
+          "classification": "凶",
+          "description": "破大财，钱财难聚，防投资失利。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2040,
+          "age": 51,
+          "ganzhi": "庚申",
+          "shishenGan": "偏财",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2041,
+          "age": 52,
+          "ganzhi": "辛酉",
+          "shishenGan": "正财",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2042,
+          "age": 53,
+          "ganzhi": "壬戌",
+          "shishenGan": "七杀",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2043,
+          "age": 54,
+          "ganzhi": "癸亥",
+          "shishenGan": "正官",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2044,
+          "age": 55,
+          "ganzhi": "甲子",
+          "shishenGan": "偏印",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2045,
+          "age": 56,
+          "ganzhi": "乙丑",
+          "shishenGan": "正印",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2046,
+          "age": 57,
+          "ganzhi": "丙寅",
+          "shishenGan": "比肩",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2047,
+          "age": 58,
+          "ganzhi": "丁卯",
+          "shishenGan": "劫财",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2048,
+          "age": 59,
+          "ganzhi": "戊辰",
+          "shishenGan": "食神",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2049,
+          "age": 60,
+          "ganzhi": "己巳",
+          "shishenGan": "伤官",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "ganzhi": "己丑",
+      "startYear": 2050,
+      "endYear": 2059,
+      "startAge": 60,
+      "endAge": 69,
+      "shishenGan": "伤官",
+      "shishenZhi": "伤官",
+      "shensha": [
+        {
+          "name": "天乙贵人",
+          "classification": "吉",
+          "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+        },
+        {
+          "name": "国印贵人",
+          "classification": "吉",
+          "description": "利从政、公职，掌权柄，受人尊重。"
+        },
+        {
+          "name": "金匮",
+          "classification": "吉",
+          "description": "善于理财，钱财有库可存，利积累财富。"
+        },
+        {
+          "name": "龙德贵人",
+          "classification": "吉",
+          "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2050,
+          "age": 61,
+          "ganzhi": "庚午",
+          "shishenGan": "偏财",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2051,
+          "age": 62,
+          "ganzhi": "辛未",
+          "shishenGan": "正财",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2052,
+          "age": 63,
+          "ganzhi": "壬申",
+          "shishenGan": "七杀",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2053,
+          "age": 64,
+          "ganzhi": "癸酉",
+          "shishenGan": "正官",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2054,
+          "age": 65,
+          "ganzhi": "甲戌",
+          "shishenGan": "偏印",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2055,
+          "age": 66,
+          "ganzhi": "乙亥",
+          "shishenGan": "正印",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2056,
+          "age": 67,
+          "ganzhi": "丙子",
+          "shishenGan": "比肩",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2057,
+          "age": 68,
+          "ganzhi": "丁丑",
+          "shishenGan": "劫财",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2058,
+          "age": 69,
+          "ganzhi": "戊寅",
+          "shishenGan": "食神",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2059,
+          "age": 70,
+          "ganzhi": "己卯",
+          "shishenGan": "伤官",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "ganzhi": "庚寅",
+      "startYear": 2060,
+      "endYear": 2069,
+      "startAge": 70,
+      "endAge": 79,
+      "shishenGan": "偏财",
+      "shishenZhi": "偏印",
+      "shensha": [
+        {
+          "name": "太极贵人",
+          "classification": "吉",
+          "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+        },
+        {
+          "name": "红艳",
+          "classification": "中性",
+          "description": "桃花旺盛，异性缘好，感情丰富。"
+        },
+        {
+          "name": "学堂",
+          "classification": "吉",
+          "description": "利学业、进修，学习能力强，适合深造。"
+        },
+        {
+          "name": "驿马",
+          "classification": "中性",
+          "description": "主奔波迁动，出差旅行多，适合外出发展。"
+        },
+        {
+          "name": "孤辰",
+          "classification": "中性",
+          "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+        },
+        {
+          "name": "白虎",
+          "classification": "凶",
+          "description": "血光丧事，防意外伤害，流年逢之多波折。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2060,
+          "age": 71,
+          "ganzhi": "庚辰",
+          "shishenGan": "偏财",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2061,
+          "age": 72,
+          "ganzhi": "辛巳",
+          "shishenGan": "正财",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2062,
+          "age": 73,
+          "ganzhi": "壬午",
+          "shishenGan": "七杀",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2063,
+          "age": 74,
+          "ganzhi": "癸未",
+          "shishenGan": "正官",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2064,
+          "age": 75,
+          "ganzhi": "甲申",
+          "shishenGan": "偏印",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2065,
+          "age": 76,
+          "ganzhi": "乙酉",
+          "shishenGan": "正印",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2066,
+          "age": 77,
+          "ganzhi": "丙戌",
+          "shishenGan": "比肩",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2067,
+          "age": 78,
+          "ganzhi": "丁亥",
+          "shishenGan": "劫财",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2068,
+          "age": 79,
+          "ganzhi": "戊子",
+          "shishenGan": "食神",
+          "shishenZhi": "正官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支水气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "飞刃",
+              "classification": "凶",
+              "description": "意外之灾，防飞来横祸，出行需谨慎。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "灾煞",
+              "classification": "凶",
+              "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+            },
+            {
+              "name": "大耗",
+              "classification": "凶",
+              "description": "破大财，钱财难聚，防投资失利。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2069,
+          "age": 80,
+          "ganzhi": "己丑",
+          "shishenGan": "伤官",
+          "shishenZhi": "伤官",
+          "intensity": "高波动",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "丑未",
+              "positions": [
+                "流年",
+                "月柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "子丑",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "丑午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            },
+            {
+              "name": "龙德贵人",
+              "classification": "吉",
+              "description": "逢年遇之，可化解灾厄，得贵人扶持。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "ganzhi": "辛卯",
+      "startYear": 2070,
+      "endYear": 2079,
+      "startAge": 80,
+      "endAge": 89,
+      "shishenGan": "正财",
+      "shishenZhi": "正印",
+      "shensha": [
+        {
+          "name": "太极贵人",
+          "classification": "吉",
+          "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+        },
+        {
+          "name": "桃花",
+          "classification": "中性",
+          "description": "异性缘旺，魅力四射，感情机会多。"
+        },
+        {
+          "name": "天喜",
+          "classification": "吉",
+          "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+        }
+      ],
+      "isCurrent": false,
+      "liunian": [
+        {
+          "year": 2070,
+          "age": 81,
+          "ganzhi": "庚寅",
+          "shishenGan": "偏财",
+          "shishenZhi": "偏印",
+          "intensity": "平稳",
+          "energyShifts": [
+            "偏财显象 · 机会/流动财",
+            "流年支木气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "学堂",
+              "classification": "吉",
+              "description": "利学业、进修，学习能力强，适合深造。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "白虎",
+              "classification": "凶",
+              "description": "血光丧事，防意外伤害，流年逢之多波折。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2071,
+          "age": 82,
+          "ganzhi": "辛卯",
+          "shishenGan": "正财",
+          "shishenZhi": "正印",
+          "intensity": "高波动",
+          "energyShifts": [
+            "正财显象 · 稳定/执行财",
+            "流年支木气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "刑",
+              "value": "子卯",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            },
+            {
+              "type": "破",
+              "value": "卯午",
+              "positions": [
+                "流年",
+                "年柱"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "天喜",
+              "classification": "吉",
+              "description": "喜庆之星，主婚嫁、添丁、喜事临门。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2072,
+          "age": 83,
+          "ganzhi": "壬辰",
+          "shishenGan": "七杀",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "七杀显象 · 压力/规则",
+            "流年支土气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "国印贵人",
+              "classification": "吉",
+              "description": "利从政、公职，掌权柄，受人尊重。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "血刃",
+              "classification": "凶",
+              "description": "防血光之灾，手术、受伤、献血之象。"
+            },
+            {
+              "name": "天狗",
+              "classification": "凶",
+              "description": "防小人背后中伤，是非口舌，谨言慎行。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2073,
+          "age": 84,
+          "ganzhi": "癸巳",
+          "shishenGan": "正官",
+          "shishenZhi": "比肩",
+          "intensity": "平稳",
+          "energyShifts": [
+            "正官显象 · 秩序/责任",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "方合",
+              "value": "巳午未",
+              "positions": [
+                "流年",
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主方向性集团力量"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "禄神",
+              "classification": "吉",
+              "description": "衣食无忧，正财稳定，主俸禄收入。"
+            },
+            {
+              "name": "天厨贵人",
+              "classification": "吉",
+              "description": "食禄丰厚，一生不愁吃穿，享口福。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            },
+            {
+              "name": "病符",
+              "classification": "凶",
+              "description": "身体欠佳，易生病，注意健康保养。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2074,
+          "age": 85,
+          "ganzhi": "甲午",
+          "shishenGan": "偏印",
+          "shishenZhi": "劫财",
+          "intensity": "高波动",
+          "energyShifts": [
+            "偏印显象 · 研究/直觉",
+            "流年支火气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "冲",
+              "value": "子午",
+              "positions": [
+                "日柱",
+                "年柱"
+              ],
+              "impact": "主变动、冲击、位置被推动"
+            },
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "刑",
+              "value": "午午",
+              "positions": [
+                "年柱",
+                "时柱"
+              ],
+              "impact": "主内耗、规则压力、隐性摩擦"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "羊刃",
+              "classification": "凶",
+              "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+            },
+            {
+              "name": "将星",
+              "classification": "吉",
+              "description": "领导力强，有统帅才能，适合管理岗位。"
+            },
+            {
+              "name": "天德贵人",
+              "classification": "吉",
+              "description": "上天庇佑，逢凶化吉，品德高尚。"
+            },
+            {
+              "name": "月德贵人",
+              "classification": "吉",
+              "description": "月令贵人，一生少灾少难，平安顺遂。"
+            },
+            {
+              "name": "天医",
+              "classification": "吉",
+              "description": "利从事医疗、养生行业，身体恢复力强。"
+            },
+            {
+              "name": "天赦贵",
+              "classification": "吉",
+              "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "冲刑或多方引动增强，重大决定先拆分验证。"
+        },
+        {
+          "year": 2075,
+          "age": 86,
+          "ganzhi": "乙未",
+          "shishenGan": "正印",
+          "shishenZhi": "伤官",
+          "intensity": "中等波动",
+          "energyShifts": [
+            "正印显象 · 学习/庇护",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "合",
+              "value": "午未",
+              "positions": [
+                "年柱",
+                "月柱"
+              ],
+              "impact": "主牵绊、合作、能量合化"
+            },
+            {
+              "type": "害",
+              "value": "子未",
+              "positions": [
+                "日柱",
+                "月柱"
+              ],
+              "impact": "主暗耗、不顺、细节牵制"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "流霞",
+              "classification": "中性",
+              "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "金匮",
+              "classification": "吉",
+              "description": "善于理财，钱财有库可存，利积累财富。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "合绊或局部联动增强，安排前先确认资源与边界。"
+        },
+        {
+          "year": 2076,
+          "age": 87,
+          "ganzhi": "丙申",
+          "shishenGan": "比肩",
+          "shishenZhi": "偏财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "比肩显象 · 自我/同辈",
+            "流年支金气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "驿马",
+              "classification": "中性",
+              "description": "主奔波迁动，出差旅行多，适合外出发展。"
+            },
+            {
+              "name": "孤辰",
+              "classification": "中性",
+              "description": "性格孤僻，喜独处，人际关系较疏离。男命逢之影响较大。"
+            },
+            {
+              "name": "丧门",
+              "classification": "凶",
+              "description": "丧事孝服，防家中长辈健康，情绪低落。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2077,
+          "age": 88,
+          "ganzhi": "丁酉",
+          "shishenGan": "劫财",
+          "shishenZhi": "正财",
+          "intensity": "平稳",
+          "energyShifts": [
+            "劫财显象 · 竞争/协作",
+            "流年支金气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "子酉",
+              "positions": [
+                "日柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "桃花",
+              "classification": "中性",
+              "description": "异性缘旺，魅力四射，感情机会多。"
+            },
+            {
+              "name": "红鸾",
+              "classification": "中性",
+              "description": "正缘桃花，主恋爱结婚，感情上有好消息。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2078,
+          "age": 89,
+          "ganzhi": "戊戌",
+          "shishenGan": "食神",
+          "shishenZhi": "食神",
+          "intensity": "平稳",
+          "energyShifts": [
+            "食神显象 · 表达/输出",
+            "流年支土气势被引动"
+          ],
+          "signals": [
+            {
+              "type": "破",
+              "value": "未戌",
+              "positions": [
+                "月柱",
+                "流年"
+              ],
+              "impact": "主松动、破局、原有连接变弱"
+            }
+          ],
+          "shensha": [
+            {
+              "name": "福星贵人",
+              "classification": "吉",
+              "description": "福气厚重，一生多得福报庇佑。"
+            },
+            {
+              "name": "红艳",
+              "classification": "中性",
+              "description": "桃花旺盛，异性缘好，感情丰富。"
+            },
+            {
+              "name": "金舆",
+              "classification": "吉",
+              "description": "出行平安，常有好车代步，贵人接送。"
+            },
+            {
+              "name": "华盖",
+              "classification": "中性",
+              "description": "聪慧孤高，适合艺术、宗教、学术研究。"
+            },
+            {
+              "name": "寡宿",
+              "classification": "中性",
+              "description": "婚姻迟缓，晚年孤独感重，宜广结善缘。女命逢之影响较大。"
+            },
+            {
+              "name": "五鬼",
+              "classification": "凶",
+              "description": "口舌是非多，小人缠身，宜低调行事。"
+            },
+            {
+              "name": "魁罡",
+              "classification": "中性",
+              "description": "性格刚强果断，有魄力，领导力强但脾气急。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        },
+        {
+          "year": 2079,
+          "age": 90,
+          "ganzhi": "己亥",
+          "shishenGan": "伤官",
+          "shishenZhi": "七杀",
+          "intensity": "平稳",
+          "energyShifts": [
+            "伤官显象 · 创新/突破",
+            "流年支水气势被引动"
+          ],
+          "signals": [],
+          "shensha": [
+            {
+              "name": "天乙贵人",
+              "classification": "吉",
+              "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+            },
+            {
+              "name": "太极贵人",
+              "classification": "吉",
+              "description": "智慧通达，善于思考，适合研究学术、宗教哲学。"
+            },
+            {
+              "name": "文昌",
+              "classification": "吉",
+              "description": "主聪明好学，利考试、升学、文职发展。"
+            },
+            {
+              "name": "天官贵人",
+              "classification": "吉",
+              "description": "利仕途升迁，官运亨通，易得上司赏识。"
+            },
+            {
+              "name": "劫煞",
+              "classification": "凶",
+              "description": "防小人暗算、破财、盗劫之事。"
+            },
+            {
+              "name": "亡神",
+              "classification": "凶",
+              "description": "精神不安，多疑多虑，防暗中损失。"
+            }
+          ],
+          "isCurrent": false,
+          "summary": "结构引动较少，按原有节奏推进。"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "ganzhi": "壬辰",
+      "startYear": 2080,
+      "endYear": 2089,
+      "startAge": 90,
+      "endAge": 99,
+      "shishenGan": "七杀",
+      "shishenZhi": "食神",
+      "shensha": [],
+      "isCurrent": false,
+      "liunian": []
+    }
+  ],
+  "dayunMeta": {
+    "direction": "顺行",
+    "isForward": true,
+    "startText": "9年6个月10天",
+    "startDate": "2000-01-20 12:00:00"
+  },
+  "methodology": {
+    "school": "子平法（月令为纲，扶抑格局并用，兼顾调候）",
+    "calendar": "阳历（公历）",
+    "trueSolarTime": "未启用：缺少出生地点坐标",
+    "dayBoundary": "23:00 换日",
+    "monthRule": "依节气，而非农历月",
+    "scorePolicy": "强弱/用神/信号为确定性启发结果，不预测具体事件",
+    "engines": [
+      "@openfate/bazi-engine",
+      "@soul-atelier/bazi"
+    ]
+  },
+  "generatedAt": "2026-11-11T04:02:18.218Z"
+}

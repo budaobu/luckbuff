@@ -10,8 +10,8 @@ import {
   WUXING_KE,
   ZI_SHI_GAN_INDEX,
   MONTH_ZHI,
-} from '~/utils/bazi/constants'
-import { solarToGanZhi, getMonthZhiIndex, getJieDayOfYear, dayOfYear, getDayPillar as _getDayPillar } from '~/utils/bazi/calendar'
+} from '../../app/utils/bazi/constants.ts'
+import { solarToGanZhi, getMonthZhiIndex, getJieDayOfYear, dayOfYear, getDayPillar as _getDayPillar } from '../../app/utils/bazi/calendar.ts'
 
 export type TianGan = typeof TIAN_GAN[number]
 export type DiZhi = typeof DI_ZHI[number]

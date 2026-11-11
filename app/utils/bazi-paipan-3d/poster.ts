@@ -7,6 +7,9 @@ export interface BaziPaipanPosterInput {
   result: BaziChartResult
   currentDayun: BaziDaYun | null
   siteName: string
+  posterKicker?: string
+  posterTitle?: string
+  posterMeta?: string
 }
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
@@ -19,7 +22,14 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: n
   ctx.closePath()
 }
 
-export async function createBaziPaipanInstrumentPoster({ result, currentDayun, siteName }: BaziPaipanPosterInput) {
+export async function createBaziPaipanInstrumentPoster({
+  result,
+  currentDayun,
+  siteName,
+  posterKicker,
+  posterTitle,
+  posterMeta,
+}: BaziPaipanPosterInput) {
   if (typeof document === 'undefined') return null
   if (document.fonts?.ready) await document.fonts.ready
 
@@ -46,10 +56,13 @@ export async function createBaziPaipanInstrumentPoster({ result, currentDayun, s
   ctx.textBaseline = 'middle'
   ctx.font = '500 22px "Noto Sans SC", ui-sans-serif, system-ui, sans-serif'
   ctx.fillStyle = '#b7892e'
-  ctx.fillText('BAZI · EASTERN INSTRUMENT', WIDTH / 2, 82)
+  ctx.fillText(posterKicker || 'BAZI · EASTERN INSTRUMENT', WIDTH / 2, 82)
   ctx.font = '700 68px "Noto Serif SC", "Songti SC", serif'
   ctx.fillStyle = '#f4f7ff'
-  ctx.fillText('八字天机仪', WIDTH / 2, 154)
+  ctx.font = posterTitle
+    ? `700 ${posterTitle.length > 8 ? 76 : 92}px "Noto Serif SC", "Songti SC", serif`
+    : '700 68px "Noto Serif SC", "Songti SC", serif'
+  ctx.fillText(posterTitle || '八字天机仪', WIDTH / 2, 154)
 
   const centerX = WIDTH / 2
   const centerY = 590
@@ -113,10 +126,10 @@ export async function createBaziPaipanInstrumentPoster({ result, currentDayun, s
 
   ctx.fillStyle = '#d4af6d'
   ctx.font = '600 22px "Noto Sans SC", ui-sans-serif, system-ui, sans-serif'
-  ctx.fillText('当前大运', 140, 1082)
+  ctx.fillText(posterMeta ? '所问之事' : '当前大运', 140, 1082)
   ctx.fillStyle = '#f4f7ff'
   ctx.font = '700 38px "Noto Serif SC", "Songti SC", serif'
-  ctx.fillText(currentDayunText, 140, 1136)
+  ctx.fillText(posterMeta || currentDayunText, 140, 1136)
 
   ctx.textAlign = 'left'
   ctx.font = '500 22px "Noto Sans SC", ui-sans-serif, system-ui, sans-serif'
