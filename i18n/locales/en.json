@@ -12399,6 +12399,8 @@
     "enter": "Enter the chart room",
     "chooseTopic": "What do you want to ask first?",
     "skipFull": "Skip the guide and open the full chart",
+    "roomLabel": "Bazi Chart Room",
+    "roomActions": "Bazi room actions",
     "askWhat": "Ask",
     "askAgain": "Ask again",
     "birthTitle": "Share birth details",

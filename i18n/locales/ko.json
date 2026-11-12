@@ -12485,6 +12485,8 @@
     "enter": "명판실 들어가기",
     "chooseTopic": "먼저 무엇을 물어볼까요?",
     "skipFull": "안내를 건너뛰고 전체 명판 보기",
+    "roomLabel": "사주 명반실",
+    "roomActions": "명반실 작업",
     "askWhat": "물어보기",
     "askAgain": "다시 묻기",
     "birthTitle": "생년월일 알리기",

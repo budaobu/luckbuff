@@ -6,7 +6,7 @@
     :data-error="stage.errorMessage.value || undefined"
     :data-model-pillars="model.pillars.map(pillar => `${pillar.key}:${pillar.gan}${pillar.zhi}`).join('|')"
     data-testid="bazi-room-canvas"
-    aria-label="Bazi chart room"
+    :aria-label="$t('baziPaipanRoom.roomLabel')"
   >
     <div ref="stageRoot" class="stage-root" />
 
