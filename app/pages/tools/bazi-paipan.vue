@@ -24,12 +24,24 @@
         <p>{{ $t('baziPaipanRoom.calculating') }}</p>
       </div>
 
-      <section
-        v-if="phase === 'revealed' && result && lens"
-        class="result-layout"
-        aria-live="polite"
-      >
-        <div class="topic-card">
+      <section v-if="birthValues" class="info-rail" aria-live="polite">
+        <section class="info-card user-info-card" data-testid="bazi-room-user-info-card">
+          <header>
+            <div>
+              <small>{{ $t('baziPaipanRoom.localReady') }}</small>
+              <h2>{{ $t('baziPaipanRoom.localBirthCard') }}</h2>
+            </div>
+            <UIcon name="i-lucide-user-round" class="h-5 w-5" />
+          </header>
+          <dl>
+            <div><dt>{{ $t('baziChart.solar') }}</dt><dd>{{ birthValues.birthDate }}</dd></div>
+            <div><dt>{{ $t('profileForm.birthHour') }}</dt><dd>{{ birthValues.birthHourUnknown ? $t('baziForm.unknownHour') : birthValues.birthHour }}</dd></div>
+            <div><dt>{{ $t('baziChart.location') }}</dt><dd>{{ birthValues.birthProvince || '—' }}</dd></div>
+            <div><dt>{{ $t('profileForm.gender') }}</dt><dd>{{ birthValues.gender === 'male' ? $t('common.male') : $t('common.female') }}</dd></div>
+          </dl>
+        </section>
+
+        <div v-if="phase === 'revealed' && result && lens" class="topic-card">
           <header>
             <div>
               <small>{{ dateLabel }}</small>
@@ -110,6 +122,39 @@
 
       <Transition name="side-panel">
         <section
+          v-if="sideView === 'topics'"
+          class="side-panel"
+          aria-label="Bazi question topics"
+          data-testid="bazi-room-topic-card"
+        >
+          <header>
+            <div>
+              <small>Bazi Chart Room</small>
+              <h2>{{ $t('baziPaipanRoom.chooseTopic') }}</h2>
+            </div>
+            <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="sideView = 'hidden'">
+              <UIcon name="i-lucide-x" class="h-4 w-4" />
+            </button>
+          </header>
+          <div class="side-panel-body">
+            <div class="guide-list">
+              <button
+                v-for="topic in BAZI_ROOM_TOPICS"
+                :key="topic.id"
+                type="button"
+                :data-testid="`bazi-room-topic-${topic.id}`"
+                @click="selectTopic(topic.id)"
+              >
+                <UIcon :name="topic.icon" class="h-4 w-4" />
+                {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
+              </button>
+            </div>
+          </div>
+        </section>
+      </Transition>
+
+      <Transition name="side-panel">
+        <section
           v-if="sideView === 'form'"
           class="side-panel"
           aria-label="Birth information form"
@@ -117,9 +162,12 @@
         >
           <header>
             <div>
-              <small>{{ $t('baziPaipanRoom.ritualLoading') }}</small>
+              <small>{{ $t(`baziPaipanRoom.topics.${activeTopic}`) }}</small>
               <h2>{{ $t('baziPaipanRoom.birthTitle') }}</h2>
             </div>
+            <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="sideView = 'hidden'">
+              <UIcon name="i-lucide-x" class="h-4 w-4" />
+            </button>
           </header>
           <div class="side-panel-body">
             <BaziForm
@@ -162,35 +210,6 @@
         </aside>
       </Transition>
 
-      <Transition name="scene-pop">
-        <aside
-          v-if="activeSceneCard === 'keeper'"
-          class="scene-popcard keeper-guide"
-          role="dialog"
-          aria-label="Bazi question topics"
-          data-testid="bazi-room-keeper-card"
-        >
-          <header>
-            <h2>{{ $t('baziPaipanRoom.chooseTopic') }}</h2>
-            <button type="button" :aria-label="$t('baziPaipanRoom.close')" @click="activeSceneCard = 'none'">
-              <UIcon name="i-lucide-x" class="h-3.5 w-3.5" />
-            </button>
-          </header>
-          <div class="guide-list">
-            <button
-              v-for="topic in BAZI_ROOM_TOPICS"
-              :key="topic.id"
-              type="button"
-              :data-testid="`bazi-room-topic-${topic.id}`"
-              @click="selectTopic(topic.id)"
-            >
-              <UIcon :name="topic.icon" class="h-4 w-4" />
-              {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
-            </button>
-          </div>
-        </aside>
-      </Transition>
-
       <nav class="room-actions" aria-label="Bazi room actions">
         <button
           type="button"
@@ -198,7 +217,7 @@
           @click="openKeeperGuide"
         >
           <UIcon name="i-lucide-repeat-2" class="h-4 w-4" />
-          {{ $t('baziPaipanRoom.changeTopic') }}
+          {{ topicActionLabel }}
         </button>
         <button
           type="button"
@@ -379,8 +398,8 @@ const chenyu = ref('')
 const readingContent = ref('')
 const readingStreaming = ref(false)
 const readingError = ref(false)
-const sideView = ref<'form' | 'result'>('form')
-const activeSceneCard = ref<'none' | 'visitor' | 'keeper'>('none')
+const sideView = ref<'topics' | 'form' | 'hidden'>('topics')
+const activeSceneCard = ref<'none' | 'visitor'>('none')
 const fullDialogOpen = ref(false)
 const fullTab = ref<'chart' | 'elements' | 'cycles' | 'relations'>('chart')
 const fullDialogRef = ref<HTMLElement | null>(null)
@@ -441,6 +460,9 @@ const fullTabs = computed(() => ([
   { id: 'cycles' as const, label: t('baziPaipanRoom.tabCycles') },
   { id: 'relations' as const, label: t('baziPaipanRoom.tabRelations') },
 ]))
+const topicActionLabel = computed(() => result.value && phase.value === 'revealed' && !readingStreaming.value
+  ? t('baziPaipanRoom.askAgain')
+  : t('baziPaipanRoom.askWhat'))
 const hasLocalBirth = computed(() => Boolean(birthValues.value))
 
 function trackRoomEvent(event: RoomAnalyticsEvent) {
@@ -492,6 +514,7 @@ function selectTopic(topic: BaziRoomTopicId) {
   activeSceneCard.value = 'none'
   trackRoomEvent({ type: 'topic', topic })
   if (birthValues.value) {
+    sideView.value = 'hidden'
     void revealTopic(topic)
   }
   else {
@@ -506,12 +529,22 @@ function openBirthForm(topic: BaziRoomTopicId) {
 }
 
 function openKeeperGuide() {
-  activeSceneCard.value = 'keeper'
+  sideView.value = 'topics'
+  activeSceneCard.value = 'none'
   trackRoomEvent({ type: 'topicChanged' })
 }
 
 function handleSceneSelect(target: 'keeper' | 'visitor') {
-  activeSceneCard.value = activeSceneCard.value === target ? 'none' : target
+  if (target === 'keeper') {
+    sideView.value = 'topics'
+    activeSceneCard.value = 'none'
+    return
+  }
+  if (!birthValues.value) {
+    sideView.value = 'form'
+    return
+  }
+  activeSceneCard.value = activeSceneCard.value === 'visitor' ? 'none' : 'visitor'
 }
 
 function clearLocal() {
@@ -531,7 +564,8 @@ function clearLocal() {
   chenyu.value = ''
   readingContent.value = ''
   readingError.value = false
-  sideView.value = 'form'
+  phase.value = 'idle'
+  sideView.value = 'topics'
   activeSceneCard.value = 'none'
   toast.add({ title: t('baziPaipanRoom.clearLocal'), color: 'success' })
 }
@@ -545,7 +579,8 @@ async function handleSubmit(values: FormValues) {
   const topic = pendingTopic.value ?? activeTopic.value
   activeTopic.value = topic
   lastFormValues.value = { ...values }
-  sideView.value = 'result'
+  sideView.value = 'hidden'
+  pendingTopic.value = null
   activeSceneCard.value = 'none'
   phase.value = 'calculating'
   trackRoomEvent({ type: 'birthSubmitted' })
@@ -872,7 +907,7 @@ onMounted(() => {
       birthValues.value = cachedChart.values
       result.value = cachedChart.result
       lastFormValues.value = { ...cachedChart.values }
-      sideView.value = 'result'
+      sideView.value = 'hidden'
       phase.value = 'calculating'
       void revealTopic(activeTopic.value)
     }
@@ -965,16 +1000,19 @@ onBeforeUnmount(() => {
 }
 
 .calculating-note,
-.result-layout {
+.info-rail {
   position: absolute;
   z-index: 8;
 }
 
-.result-layout {
-  top: 148px;
-  right: 24px;
+.info-rail {
+  top: 180px;
+  left: 24px;
   bottom: 104px;
-  width: min(430px, calc(100% - 48px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(380px, calc(100% - 48px));
   overflow: auto;
   padding-right: 4px;
   overscroll-behavior: contain;
@@ -1024,6 +1062,10 @@ onBeforeUnmount(() => {
 }
 
 .side-panel > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   padding: 16px 18px;
   border-bottom: 1px solid rgba(212, 175, 109, 0.16);
 }
@@ -1059,6 +1101,63 @@ onBeforeUnmount(() => {
   color: rgba(233, 238, 250, 0.52);
   font-size: 11px;
   line-height: 1.55;
+}
+
+.info-card {
+  border: 1px solid rgba(212, 175, 109, 0.22);
+  border-radius: 8px;
+  background: rgba(7, 11, 19, 0.86);
+  padding: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.user-info-card > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(212, 175, 109, 0.16);
+  color: #f2d998;
+}
+
+.user-info-card small {
+  display: block;
+  color: rgba(233, 238, 250, 0.48);
+  font-size: 11px;
+}
+
+.user-info-card h2 {
+  margin: 3px 0 0;
+  color: #f4f7ff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.user-info-card dl {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.user-info-card dl > div {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.user-info-card dt {
+  color: rgba(233, 238, 250, 0.45);
+  font-size: 12px;
+}
+
+.user-info-card dd {
+  min-width: 0;
+  margin: 0;
+  color: rgba(233, 238, 250, 0.82);
+  font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .scene-popcard {
@@ -1752,9 +1851,9 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 900px) {
-  .result-layout {
+  .info-rail {
     top: 168px;
-    right: 14px;
+    left: 14px;
     bottom: 104px;
     width: min(420px, calc(100% - 28px));
   }
@@ -1776,10 +1875,10 @@ onBeforeUnmount(() => {
     display: none;
   }
 
-  .result-layout {
+  .info-rail {
     top: 148px;
-    right: 10px;
-    bottom: 104px;
+    left: 10px;
+    bottom: 196px;
     width: calc(100% - 20px);
     padding-right: 0;
   }
@@ -1787,8 +1886,27 @@ onBeforeUnmount(() => {
   .side-panel {
     top: 148px;
     right: 10px;
-    bottom: 156px;
+    bottom: 196px;
     width: calc(100% - 20px);
+  }
+
+  .room-actions {
+    left: 10px;
+    right: 10px;
+    bottom: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+    translate: none;
+  }
+
+  .room-actions button {
+    justify-content: center;
+  }
+
+  .scene-footnote {
+    right: 10px;
+    bottom: 150px;
   }
 
   .pillar-summary {

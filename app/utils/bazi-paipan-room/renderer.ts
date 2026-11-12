@@ -114,7 +114,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 30)
   const raycaster = new THREE.Raycaster()
-  const cameraTarget = new THREE.Vector3(0.15, 1.32, -0.45)
+  const cameraTarget = new THREE.Vector3(0.15, 1.75, -0.45)
   const orbit = { yaw: 0, pitch: 0.085, targetYaw: 0, targetPitch: 0.085, distance: 5.35, targetDistance: 4.9 }
   let reducedMotion = options.reducedMotion
 
@@ -162,25 +162,25 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   signTexture.colorSpace = THREE.SRGBColorSpace
   disposables.push(signTexture)
   const roomSign = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.7, 0.68),
+    new THREE.PlaneGeometry(2.5, 0.6),
     new THREE.MeshBasicMaterial({ map: signTexture }),
   )
-  roomSign.position.set(0.45, 3.24, -4.1)
+  roomSign.position.set(0.45, 3.55, -4.1)
   const pillarFrame = new THREE.Mesh(
     new THREE.BoxGeometry(3.1, 1.85, 0.1),
     new THREE.MeshStandardMaterial({ color: 0x3f2c1c, roughness: 0.58, metalness: 0.12 }),
   )
-  pillarFrame.position.set(0.45, 1.82, -2.7)
+  pillarFrame.position.set(0.45, 1.12, -2.7)
   const pillarFrameTop = new THREE.Mesh(
     new THREE.BoxGeometry(3.3, 0.12, 0.16),
     new THREE.MeshStandardMaterial({ color: 0x6d4f2d, roughness: 0.4, metalness: 0.34 }),
   )
-  pillarFrameTop.position.set(0.45, 2.78, -2.68)
+  pillarFrameTop.position.set(0.45, 1.95, -2.68)
   const pillarFrameBase = new THREE.Mesh(
     new THREE.BoxGeometry(3.3, 0.16, 0.18),
     new THREE.MeshStandardMaterial({ color: 0x4b3524, roughness: 0.5, metalness: 0.2 }),
   )
-  pillarFrameBase.position.set(0.45, 0.88, -2.66)
+  pillarFrameBase.position.set(0.45, 0.32, -2.66)
   const counter = new THREE.Mesh(
     new THREE.BoxGeometry(5.2, 0.86, 1.05),
     new THREE.MeshStandardMaterial({ color: 0x3a291c, roughness: 0.68 }),
@@ -308,7 +308,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   const visitor = new THREE.Group()
   visitor.userData.roomRole = 'visitor'
-  visitor.position.set(-0.72, 0.64, 1.68)
+  visitor.position.set(1.15, 0.64, 1.62)
   visitor.scale.setScalar(0.82)
   visitor.rotation.y = Math.PI
   const seat = new THREE.Mesh(
