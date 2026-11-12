@@ -12485,6 +12485,8 @@
     "enter": "命盤室へ入る",
     "chooseTopic": "まず何を尋ねますか？",
     "skipFull": "案内を飛ばして完整排盤を見る",
+    "askWhat": "相談する",
+    "askAgain": "もう一度相談",
     "birthTitle": "生年月日を知らせる",
     "changePerson": "別の人に変える",
     "clearLocal": "ローカルデータを消す",
@@ -14201,5 +14203,3 @@
     }
   }
 }
-    "askWhat": "相談する",
-    "askAgain": "もう一度相談",

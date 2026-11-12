@@ -171,11 +171,12 @@
           </header>
           <div class="side-panel-body">
             <BaziForm
+              ref="birthFormRef"
               :initial-values="lastFormValues"
               :show-name="false"
               :show-former-name="false"
               require-hour
-              :submit-label="$t('baziPaipanRoom.reveal')"
+              hide-submit
               @submit="handleSubmit"
               @save-profile="handleSaveProfile"
             />
@@ -184,6 +185,17 @@
               <p>{{ $t('baziChart.privacyHint') }}</p>
             </div>
           </div>
+          <footer class="side-panel-footer">
+            <button
+              type="button"
+              data-testid="bazi-room-reveal"
+              :disabled="!birthFormRef?.isValid"
+              @click="birthFormRef?.submit()"
+            >
+              <UIcon name="i-heroicons-sparkles" class="h-4 w-4" />
+              {{ $t('baziPaipanRoom.reveal') }}
+            </button>
+          </footer>
         </section>
       </Transition>
 
@@ -403,6 +415,7 @@ const activeSceneCard = ref<'none' | 'visitor'>('none')
 const fullDialogOpen = ref(false)
 const fullTab = ref<'chart' | 'elements' | 'cycles' | 'relations'>('chart')
 const fullDialogRef = ref<HTMLElement | null>(null)
+const birthFormRef = ref<{ submit: () => void, isValid: boolean } | null>(null)
 let readingAbort: AbortController | null = null
 
 watch(fullDialogOpen, async (open) => {
@@ -1085,7 +1098,102 @@ onBeforeUnmount(() => {
   min-height: 0;
   flex: 1;
   overflow: auto;
-  padding: 18px;
+  padding: 12px 14px;
+}
+
+.side-panel-body :deep(.bazi-form-profile-hint),
+.side-panel-body :deep(.form-notes) {
+  display: none;
+}
+
+.side-panel-body :deep(.bazi-form-ganzhi) {
+  display: none;
+}
+
+.side-panel-body :deep(.space-y-5) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.side-panel-body :deep(.bazi-form-field-wide) {
+  grid-column: 1 / -1;
+}
+
+.side-panel-body :deep(.bazi-form-field) {
+  min-width: 0;
+}
+
+.side-panel-body :deep(.space-y-1\.5) {
+  gap: 5px;
+}
+
+.side-panel-body :deep(label) {
+  margin-bottom: 0;
+}
+
+.side-panel-body :deep(.h-8) {
+  height: 2rem;
+}
+
+.side-panel-body :deep(button) {
+  min-height: 34px;
+}
+
+.side-panel-footer {
+  flex-shrink: 0;
+  padding: 10px 14px 12px;
+  border-top: 1px solid rgba(212, 175, 109, 0.16);
+}
+
+.side-panel-footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(212, 175, 109, 0.5);
+  border-radius: 6px;
+  background: rgba(66, 43, 9, 0.9);
+  color: #f2d998;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.side-panel-footer button:hover:not(:disabled),
+.side-panel-footer button:focus-visible:not(:disabled) {
+  border-color: rgba(212, 175, 109, 0.72);
+  background: rgba(85, 54, 11, 0.96);
+}
+
+.side-panel-footer button:disabled {
+  opacity: 0.46;
+  cursor: not-allowed;
+}
+
+.side-panel-body :deep(.space-y-5) {
+  display: grid;
+  gap: 10px;
+}
+
+.side-panel-body :deep(.space-y-5 > .space-y-2) {
+  display: grid;
+  gap: 6px;
+}
+
+.side-panel-body :deep(.space-y-5 > div.rounded-lg) {
+  padding: 10px 12px;
+}
+
+.side-panel-body :deep(.text-sm) {
+  font-size: 13px;
+}
+
+.side-panel-body :deep(.h-4.w-4) {
+  height: 1rem;
+  width: 1rem;
 }
 
 .form-notes {
@@ -1363,6 +1471,11 @@ onBeforeUnmount(() => {
 @media (min-width: 768px) {
   .room-page {
     height: calc(100svh - 72px);
+  }
+
+  .side-panel {
+    top: 120px;
+    bottom: 100px;
   }
 }
 .reading-panel header button,
@@ -1660,23 +1773,28 @@ onBeforeUnmount(() => {
 
 .modal {
   --surface-dropdown: rgba(7, 11, 19, 0.98);
+  --surface-bg: #05080f;
   --surface-card: rgba(11, 17, 27, 0.88);
   --surface-card-hover: rgba(18, 25, 38, 0.88);
   --surface-input: rgba(15, 22, 34, 0.86);
   --surface-elevated: rgba(9, 14, 23, 0.94);
-  --border-subtle: rgba(233, 238, 250, 0.09);
-  --border-light: rgba(233, 238, 250, 0.13);
+  --border-subtle: rgba(233, 238, 250, 0.12);
+  --border-light: rgba(233, 238, 250, 0.17);
   --border-medium: rgba(212, 175, 109, 0.22);
   --text-primary: #f4f7ff;
-  --text-body: rgba(233, 238, 250, 0.84);
-  --text-muted: rgba(233, 238, 250, 0.66);
-  --text-faint: rgba(233, 238, 250, 0.48);
-  --text-placeholder: rgba(233, 238, 250, 0.36);
+  --text-body: rgba(240, 245, 255, 0.88);
+  --text-muted: rgba(233, 238, 250, 0.72);
+  --text-faint: rgba(233, 238, 250, 0.58);
+  --text-placeholder: rgba(233, 238, 250, 0.48);
   --accent: #f2d998;
   --accent-bg: rgba(45, 32, 14, 0.42);
   --accent-border: rgba(212, 175, 109, 0.32);
   --accent-border-hover: rgba(212, 175, 109, 0.58);
   --accent-faint: rgba(45, 32, 14, 0.28);
+  --warning: #facc15;
+  --warning-bg: rgba(250, 204, 21, 0.12);
+  --shadow-panel: 0 24px 70px rgba(0, 0, 0, 0.32);
+  color-scheme: dark;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
   width: min(680px, 100%);

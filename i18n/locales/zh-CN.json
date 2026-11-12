@@ -12423,6 +12423,8 @@
     "enter": "进入命盘室",
     "chooseTopic": "先说清楚，你想问什么？",
     "skipFull": "跳过引导，直接看完整排盘",
+    "askWhat": "问什么",
+    "askAgain": "再问",
     "birthTitle": "报上生辰",
     "changePerson": "换一个人",
     "clearLocal": "清除本地数据",
@@ -14139,5 +14141,3 @@
     }
   }
 }
-    "askWhat": "问什么",
-    "askAgain": "再问",

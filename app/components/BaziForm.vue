@@ -20,14 +20,14 @@
         </button>
       </div>
     </div>
-    <div v-else class="rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
+    <div v-else class="bazi-form-profile-hint rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-card)] px-4 py-3">
       <p class="text-sm text-[var(--text-faint)]">
         {{ $t('baziForm.noProfiles') }}<NuxtLink :to="localePath('/settings')" class="text-[var(--accent)] hover:underline">{{ $t('baziForm.goSettings') }}</NuxtLink>{{ $t('baziForm.createSuffix') }}
       </p>
     </div>
 
     <!-- 性别 -->
-    <div v-if="!minimal && showGender" class="space-y-1.5">
+    <div v-if="!minimal && showGender" class="bazi-form-field-wide space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.gender') }}
         <span class="text-[var(--accent)]">*</span>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- 生日 -->
-    <div class="space-y-1.5">
+    <div class="bazi-form-field-wide space-y-1.5">
       <label class="flex items-center gap-1 text-xs font-medium text-[var(--text-muted)]">
         {{ $t('baziForm.birthDateLabel') }}
         <span class="text-[var(--accent)]">*</span>
@@ -134,14 +134,14 @@
       <p v-else-if="calendarMode === 'lunar' && solarPreview" class="text-xs text-[var(--text-faint)]">
         {{ solarPreview }}
       </p>
-      <p v-if="birthGanZhi" class="text-xs text-[var(--accent)] flex items-center gap-1">
+      <p v-if="birthGanZhi" class="bazi-form-ganzhi text-xs text-[var(--accent)] flex items-center gap-1">
         <UIcon name="i-heroicons-sparkles" class="w-3 h-3" />
         {{ birthGanZhi }}
       </p>
     </div>
 
     <!-- 出生时辰 -->
-    <div class="space-y-1.5">
+    <div class="bazi-form-field space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">
         {{ $t('profileForm.birthHour') }}
         <span v-if="requireHour" class="text-[var(--accent)]">*</span>
@@ -205,7 +205,7 @@
     </div>
 
     <!-- 出生地点 -->
-    <div v-if="!minimal && showBirthProvince" class="space-y-1.5">
+    <div v-if="!minimal && showBirthProvince" class="bazi-form-field space-y-1.5">
       <label class="text-xs font-medium text-[var(--text-muted)]">{{ $t('profileForm.birthProvince') }}</label>
       <UInput
         v-model="form.birthProvince"
@@ -235,7 +235,7 @@
     </div>
 
     <UButton
-      v-if="!minimal"
+      v-if="!minimal && !hideSubmit"
       color="warning"
       size="lg"
       block
@@ -279,6 +279,7 @@ interface Props {
   requireHour?: boolean
   useTimeIndex?: boolean
   submitLabel?: string
+  hideSubmit?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -291,6 +292,7 @@ const props = withDefaults(defineProps<Props>(), {
   requireHour: false,
   useTimeIndex: false,
   submitLabel: undefined,
+  hideSubmit: false,
 })
 
 const emit = defineEmits<{
@@ -550,6 +552,11 @@ function saveToProfile() {
   }
 }
 
+function submit() {
+  if (!isValid.value) return
+  emit('submit', { ...form, birthHourUnknown: birthHourUnknown.value })
+}
+
 watch(() => props.initialValues, (v) => {
   if (v) {
     Object.assign(form, v)
@@ -572,5 +579,5 @@ onMounted(() => {
   }
 })
 
-defineExpose({ form })
+defineExpose({ form, submit, isValid })
 </script>

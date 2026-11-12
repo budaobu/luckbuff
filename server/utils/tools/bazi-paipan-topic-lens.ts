@@ -259,6 +259,25 @@ export function buildBaziChenyu(topic: BaziPaipanTopic, lens: BaziTopicLens): st
   return choices[topic][index] ?? choices[topic][0]!
 }
 
+export function buildBaziTopicFallback(lens: BaziTopicLens): string {
+  const evidence = lens.natal
+    .slice(0, 2)
+    .map(item => `${item.label}是${item.value}`)
+    .join('，')
+  const today = lens.today
+    ? `今日${lens.today.ganzhi}是${lens.today.tenGod}，先看它与命局的引动`
+    : '这一题先看本命结构，不用追流日'
+  const actions: Record<BaziPaipanTopic, string> = {
+    wealth: '今天只收一笔能落袋的小成果。',
+    marriage: '把话说清楚，比多猜一步更有用。',
+    career: '先做完主线里最小的一件事。',
+    fate: '照自己的节奏走，不用硬改方向。',
+    noble: '主动问一次，别把机会留在群里。',
+    study: '把今天读到的重点复述一遍。',
+  }
+  return `${evidence}。${today}。${actions[lens.topic]}`
+}
+
 export function baziTopicZodiacHint(lens: BaziTopicLens): string | null {
   if (!lens.nobleHints.length) return null
   const zodiac = lens.nobleHints.find(item => item.startsWith('生肖'))

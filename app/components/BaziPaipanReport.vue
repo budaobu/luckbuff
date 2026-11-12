@@ -874,8 +874,8 @@ async function copyPillars() {
   gap: 7px;
   border: 0;
   border-radius: 999px;
-  background: var(--text-primary);
-  color: var(--surface-bg);
+  background: var(--accent);
+  color: #171006;
   padding: 8px 14px;
   font-size: 13px;
   cursor: pointer;
@@ -999,13 +999,13 @@ async function copyPillars() {
 }
 
 .bpr-pill-tags .is-吉 {
-  background: color-mix(in srgb, #16a34a 10%, transparent);
-  color: #15803d;
+  background: color-mix(in srgb, #22c55e 14%, transparent);
+  color: #86efac;
 }
 
 .bpr-pill-tags .is-凶 {
-  background: color-mix(in srgb, #dc2626 9%, transparent);
-  color: #b91c1c;
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #fca5a5;
 }
 
 .bpr-pill-tags .is-combo {
@@ -1448,8 +1448,8 @@ async function copyPillars() {
 }
 
 .bpr-theme-head em.is-good {
-  background: color-mix(in srgb, #16a34a 10%, transparent);
-  color: #15803d;
+  background: color-mix(in srgb, #22c55e 14%, transparent);
+  color: #86efac;
 }
 
 .bpr-theme-head em.is-mixed {
@@ -1458,8 +1458,8 @@ async function copyPillars() {
 }
 
 .bpr-theme-head em.is-risk {
-  background: color-mix(in srgb, #dc2626 9%, transparent);
-  color: #b91c1c;
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #fca5a5;
 }
 
 .bpr-theme-head small {
@@ -1568,7 +1568,7 @@ async function copyPillars() {
 }
 
 .bpr-insight-error {
-  color: #b91c1c;
+  color: #fca5a5;
 }
 
 .bpr-insight-foot {
