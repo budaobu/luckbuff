@@ -14,6 +14,7 @@ export function useBaziPaipanStageKit(options: {
   reducedMotion: Ref<boolean>
   qualityOverride?: Ref<BaziRoomQuality | null>
   freeze?: Ref<boolean>
+  onSelect?: (target: 'keeper' | 'visitor') => void
 }) {
   const state: BaziStageKitState = {
     ready: ref(false),
@@ -35,6 +36,7 @@ export function useBaziPaipanStageKit(options: {
       reducedMotion: options.reducedMotion.value,
       qualityOverride: options.qualityOverride?.value ?? null,
       freeze: options.freeze?.value,
+      onSelect: target => options.onSelect?.(target),
       onReady: (stats) => {
         state.ready.value = true
         state.quality.value = stats.quality

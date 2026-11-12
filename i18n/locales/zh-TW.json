@@ -12427,6 +12427,7 @@
     "calculating": "天機儀轉動中",
     "reveal": "揭示今日盤面",
     "localReady": "已使用本地生辰",
+    "localBirthCard": "本地生辰",
     "todayTitle": "今日{topic}",
     "fateTitle": "本命總論",
     "natalSlice": "本命切片",

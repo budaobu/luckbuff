@@ -23,6 +23,7 @@ interface MountOptions {
   reducedMotion: boolean
   qualityOverride?: BaziRoomQuality | null
   freeze?: boolean
+  onSelect?: (target: 'keeper' | 'visitor') => void
   onReady?: (stats: BaziRoomRendererStats) => void
   onError?: (message: string) => void
 }
@@ -112,6 +113,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   scene.fog = new THREE.Fog(0x05080f, 6.4, 13.5)
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 30)
+  const raycaster = new THREE.Raycaster()
   const cameraTarget = new THREE.Vector3(0.15, 1.32, -0.45)
   const orbit = { yaw: 0, pitch: 0.085, targetYaw: 0, targetPitch: 0.085, distance: 5.35, targetDistance: 4.9 }
   let reducedMotion = options.reducedMotion
@@ -127,42 +129,35 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   const room = new THREE.Group()
   const floor = new THREE.Mesh(
-    new THREE.BoxGeometry(14, 0.2, 10),
-    new THREE.MeshStandardMaterial({ color: 0x141d2a, roughness: 0.82, metalness: 0.08 }),
+    new THREE.BoxGeometry(18, 0.2, 12),
+    new THREE.MeshStandardMaterial({ color: 0x111820, roughness: 0.82, metalness: 0.08 }),
   )
-  floor.position.set(0, -0.1, -0.35)
-  floor.material.color.set(0x17202e)
-  const floorRunner = new THREE.Mesh(
-    new THREE.BoxGeometry(5.6, 0.02, 6.8),
-    new THREE.MeshStandardMaterial({ color: 0x632a31, roughness: 0.86 }),
+  floor.position.set(0, -0.1, 0)
+  const carpet = new THREE.Mesh(
+    new THREE.BoxGeometry(7.4, 0.04, 5.8),
+    new THREE.MeshStandardMaterial({ color: 0x5f2a31, roughness: 0.88 }),
   )
-  floorRunner.position.set(0.2, 0.015, 0.15)
-  const rug = new THREE.Mesh(
-    new THREE.CircleGeometry(1.55, 48),
-    new THREE.MeshStandardMaterial({ color: 0x2b241c, roughness: 0.94 }),
-  )
-  rug.rotation.x = -Math.PI / 2
-  rug.position.set(0.2, 0.03, 0.25)
+  carpet.position.set(0, 0.02, 0.35)
   const backWall = new THREE.Mesh(
-    new THREE.BoxGeometry(14, 5.8, 0.26),
+    new THREE.BoxGeometry(18, 6.2, 0.26),
     new THREE.MeshStandardMaterial({ color: 0x141d29, roughness: 0.92, metalness: 0.04 }),
   )
-  backWall.position.set(0, 2.7, -4.35)
+  backWall.position.set(0, 2.9, -4.3)
   const wallPanel = new THREE.Mesh(
-    new THREE.BoxGeometry(8.8, 2.7, 0.08),
+    new THREE.BoxGeometry(9.6, 3.1, 0.08),
     new THREE.MeshStandardMaterial({ color: 0x23160d, roughness: 0.72, metalness: 0.06 }),
   )
-  wallPanel.position.set(0.45, 2.4, -4.18)
+  wallPanel.position.set(0.45, 2.35, -4.14)
   const wallTrim = new THREE.Mesh(
-    new THREE.BoxGeometry(9.2, 0.12, 0.18),
+    new THREE.BoxGeometry(10, 0.12, 0.18),
     new THREE.MeshStandardMaterial({ color: 0x6d4f2d, roughness: 0.42, metalness: 0.36 }),
   )
-  wallTrim.position.set(0.45, 3.8, -4.15)
+  wallTrim.position.set(0.45, 3.94, -4.11)
   const wallBase = new THREE.Mesh(
-    new THREE.BoxGeometry(9.2, 0.28, 0.2),
+    new THREE.BoxGeometry(10, 0.28, 0.2),
     new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.66 }),
   )
-  wallBase.position.set(0.45, 1.0, -4.16)
+  wallBase.position.set(0.45, 0.8, -4.12)
   const signTexture = new THREE.CanvasTexture(roomSignTexture('命盘室', '八字 · 问事 · 今日'))
   signTexture.colorSpace = THREE.SRGBColorSpace
   disposables.push(signTexture)
@@ -170,62 +165,52 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     new THREE.PlaneGeometry(2.7, 0.68),
     new THREE.MeshBasicMaterial({ map: signTexture }),
   )
-  roomSign.position.set(-1.65, 3.05, -4.16)
+  roomSign.position.set(0.45, 3.24, -4.1)
   const pillarFrame = new THREE.Mesh(
-    new THREE.BoxGeometry(2.75, 1.75, 0.1),
+    new THREE.BoxGeometry(3.1, 1.85, 0.1),
     new THREE.MeshStandardMaterial({ color: 0x3f2c1c, roughness: 0.58, metalness: 0.12 }),
   )
-  pillarFrame.position.set(0.5, 1.82, -2.78)
+  pillarFrame.position.set(0.45, 1.82, -2.7)
   const pillarFrameTop = new THREE.Mesh(
-    new THREE.BoxGeometry(2.95, 0.12, 0.16),
+    new THREE.BoxGeometry(3.3, 0.12, 0.16),
     new THREE.MeshStandardMaterial({ color: 0x6d4f2d, roughness: 0.4, metalness: 0.34 }),
   )
-  pillarFrameTop.position.set(0.5, 2.78, -2.76)
+  pillarFrameTop.position.set(0.45, 2.78, -2.68)
   const pillarFrameBase = new THREE.Mesh(
-    new THREE.BoxGeometry(2.95, 0.16, 0.18),
+    new THREE.BoxGeometry(3.3, 0.16, 0.18),
     new THREE.MeshStandardMaterial({ color: 0x4b3524, roughness: 0.5, metalness: 0.2 }),
   )
-  pillarFrameBase.position.set(0.5, 0.96, -2.74)
+  pillarFrameBase.position.set(0.45, 0.88, -2.66)
   const counter = new THREE.Mesh(
-    new THREE.BoxGeometry(4.9, 0.78, 0.95),
+    new THREE.BoxGeometry(5.2, 0.86, 1.05),
     new THREE.MeshStandardMaterial({ color: 0x3a291c, roughness: 0.68 }),
   )
-  counter.position.set(-0.15, 0.39, 0)
+  counter.position.set(-0.15, 0.43, -0.35)
   const counterTop = new THREE.Mesh(
-    new THREE.BoxGeometry(5.1, 0.1, 1.06),
+    new THREE.BoxGeometry(5.45, 0.1, 1.18),
     new THREE.MeshStandardMaterial({ color: 0x5b4530, roughness: 0.42, metalness: 0.22 }),
   )
-  counterTop.position.set(-0.15, 0.83, 0)
+  counterTop.position.set(-0.15, 0.91, -0.35)
   const counterFront = new THREE.Mesh(
-    new THREE.BoxGeometry(4.7, 0.08, 0.06),
+    new THREE.BoxGeometry(5, 0.08, 0.06),
     new THREE.MeshStandardMaterial({ color: 0x7a5a31, roughness: 0.35, metalness: 0.4 }),
   )
-  counterFront.position.set(-0.15, 0.56, 0.5)
-  const altar = new THREE.Mesh(
-    new THREE.BoxGeometry(2.5, 0.9, 1.4),
-    new THREE.MeshStandardMaterial({ color: 0x43301f, roughness: 0.66 }),
-  )
-  altar.position.set(0.75, 0.45, -1.6)
-  const altarTop = new THREE.Mesh(
-    new THREE.BoxGeometry(2.68, 0.1, 1.54),
-    new THREE.MeshStandardMaterial({ color: 0x5b4530, roughness: 0.44, metalness: 0.24 }),
-  )
-  altarTop.position.set(0.75, 0.95, -1.6)
+  counterFront.position.set(-0.15, 0.58, 0.17)
   const incenseBowl = new THREE.Mesh(
     new THREE.CylinderGeometry(0.18, 0.12, 0.16, 24),
     new THREE.MeshStandardMaterial({ color: 0x6a6f7a, roughness: 0.34, metalness: 0.66 }),
   )
-  incenseBowl.position.set(-1.85, 0.92, -0.16)
+  incenseBowl.position.set(1.95, 1.04, -0.45)
   const incense = new THREE.Mesh(
     new THREE.CylinderGeometry(0.012, 0.012, 0.34, 8),
     new THREE.MeshStandardMaterial({ color: 0x3a2f24, roughness: 0.9 }),
   )
-  incense.position.set(-1.85, 1.16, -0.16)
+  incense.position.set(1.95, 1.28, -0.45)
   const book = new THREE.Mesh(
     new THREE.BoxGeometry(0.38, 0.08, 0.26),
     new THREE.MeshStandardMaterial({ color: 0x8a4c33, roughness: 0.7 }),
   )
-  book.position.set(-0.45, 0.9, 0.08)
+  book.position.set(-1.05, 1, -0.3)
   const lanternGroup = new THREE.Group()
   const lanternMaterial = new THREE.MeshStandardMaterial({
     color: 0xa4312d,
@@ -234,19 +219,21 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     roughness: 0.42,
   })
   const lanternCapMaterial = new THREE.MeshStandardMaterial({ color: 0xd9b45d, roughness: 0.28, metalness: 0.62 })
-  ;([[-1.7, 3.5, -2.6], [2.3, 3.2, -2.2]] as Array<[number, number, number]>).forEach((position) => {
+  ;([[-2.55, 3.25, -2.05], [2.75, 3.15, -2.05]] as Array<[number, number, number]>).forEach((position) => {
     const lantern = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 20), lanternMaterial)
     const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.05, 18), lanternCapMaterial)
     const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.035, 0.22, 10), lanternCapMaterial)
+    const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.62, 8), lanternCapMaterial)
     lantern.position.set(position[0], position[1], position[2])
     cap.position.set(position[0], position[1] + 0.23, position[2])
     tassel.position.set(position[0], position[1] - 0.25, position[2])
-    lanternGroup.add(lantern, cap, tassel)
+    cord.position.set(position[0], position[1] + 0.58, position[2])
+    lanternGroup.add(lantern, cap, tassel, cord)
   })
-  scene.add(room, floor, floorRunner, rug, backWall, wallPanel, wallTrim, wallBase, roomSign, pillarFrame, pillarFrameTop, pillarFrameBase, counter, counterTop, counterFront, altar, altarTop, incenseBowl, incense, book, lanternGroup)
+  scene.add(room, floor, carpet, backWall, wallPanel, wallTrim, wallBase, roomSign, pillarFrame, pillarFrameTop, pillarFrameBase, counter, counterTop, counterFront, incenseBowl, incense, book, lanternGroup)
 
   const instrumentGroup = new THREE.Group()
-  instrumentGroup.position.set(0.75, 1.12, -1.65)
+  instrumentGroup.position.set(0.55, 1.02, -0.35)
   const instrumentBase = new THREE.Mesh(
     new THREE.CylinderGeometry(0.58, 0.66, 0.11, 64),
     new THREE.MeshStandardMaterial({ color: 0x654b2c, roughness: 0.46, metalness: 0.48 }),
@@ -276,7 +263,9 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   scene.add(instrumentGroup)
 
   const keeper = new THREE.Group()
-  keeper.position.set(-1.35, 0.98, -0.95)
+  keeper.userData.roomRole = 'keeper'
+  keeper.position.set(-1.35, 1.02, -0.92)
+  keeper.rotation.y = 0.14
   const robe = new THREE.Mesh(
     new THREE.ConeGeometry(0.38, 1.05, 24),
     new THREE.MeshStandardMaterial({ color: 0x354f47, roughness: 0.76 }),
@@ -318,7 +307,8 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   scene.add(keeper)
 
   const visitor = new THREE.Group()
-  visitor.position.set(-0.15, 0.66, 2.25)
+  visitor.userData.roomRole = 'visitor'
+  visitor.position.set(-0.72, 0.64, 1.68)
   visitor.scale.setScalar(0.82)
   visitor.rotation.y = Math.PI
   const seat = new THREE.Mesh(
@@ -346,6 +336,28 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   const dynamicGroup = new THREE.Group()
   scene.add(dynamicGroup)
+  const pickTargets = [keeper, visitor]
+
+  function roomRoleFromObject(object: THREE.Object3D): 'keeper' | 'visitor' | null {
+    let current: THREE.Object3D | null = object
+    while (current) {
+      const role = current.userData.roomRole
+      if (role === 'keeper' || role === 'visitor') return role
+      current = current.parent
+    }
+    return null
+  }
+
+  function pickRoomRole(clientX: number, clientY: number): 'keeper' | 'visitor' | null {
+    const rect = canvas.getBoundingClientRect()
+    const pointer = new THREE.Vector2(
+      ((clientX - rect.left) / rect.width) * 2 - 1,
+      -((clientY - rect.top) / rect.height) * 2 + 1,
+    )
+    raycaster.setFromCamera(pointer, camera)
+    const hit = raycaster.intersectObjects(pickTargets, true)[0]
+    return hit ? roomRoleFromObject(hit.object) : null
+  }
   let dirty = true
 
   function labelTexture(pillar: BaziRoomSceneModel['pillars'][number]) {
@@ -448,16 +460,21 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   let pointerActive = false
   let lastX = 0
   let lastY = 0
+  let pointerStartedAt = 0
+  let pointerMovedFar = false
   function pointerDown(event: PointerEvent) {
     pointerActive = true
     lastX = event.clientX
     lastY = event.clientY
+    pointerStartedAt = performance.now()
+    pointerMovedFar = false
     canvas.setPointerCapture(event.pointerId)
   }
   function pointerMove(event: PointerEvent) {
     if (!pointerActive) return
     const deltaX = event.clientX - lastX
     const deltaY = event.clientY - lastY
+    if (Math.hypot(deltaX, deltaY) >= 7) pointerMovedFar = true
     lastX = event.clientX
     lastY = event.clientY
     orbit.targetYaw = THREE.MathUtils.clamp(orbit.targetYaw - deltaX * 0.0035, -THREE.MathUtils.degToRad(25), THREE.MathUtils.degToRad(25))
@@ -467,12 +484,24 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   function pointerUp(event: PointerEvent) {
     pointerActive = false
     if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId)
+    void event
   }
   canvas.style.touchAction = 'pan-y'
+  const handleCanvasClick = (event: MouseEvent) => {
+    if (pointerMovedFar || performance.now() - pointerStartedAt >= 700) return
+    const role = pickRoomRole(event.clientX, event.clientY)
+    if (role) options.onSelect?.(role)
+  }
+  const updatePointerCursor = (event: PointerEvent) => {
+    if (pointerActive) return
+    canvas.style.cursor = pickRoomRole(event.clientX, event.clientY) ? 'pointer' : 'grab'
+  }
   canvas.addEventListener('pointerdown', pointerDown)
   canvas.addEventListener('pointermove', pointerMove)
+  canvas.addEventListener('pointermove', updatePointerCursor)
   canvas.addEventListener('pointerup', pointerUp)
   canvas.addEventListener('pointercancel', pointerUp)
+  canvas.addEventListener('click', handleCanvasClick)
 
   let visible = true
   const intersection = new IntersectionObserver((entries) => {
@@ -639,8 +668,10 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       document.removeEventListener('visibilitychange', visibility)
       canvas.removeEventListener('pointerdown', pointerDown)
       canvas.removeEventListener('pointermove', pointerMove)
+      canvas.removeEventListener('pointermove', updatePointerCursor)
       canvas.removeEventListener('pointerup', pointerUp)
       canvas.removeEventListener('pointercancel', pointerUp)
+      canvas.removeEventListener('click', handleCanvasClick)
       canvas.removeEventListener('webglcontextlost', onContextLost)
       disposables.forEach(item => item.dispose())
       scene.traverse(object => {
