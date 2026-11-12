@@ -326,7 +326,7 @@ export default defineNuxtConfig({
       siteName: 'ososn',
       googleSiteVerification: '',
       googleAdsenseClient: '',
-      baiduAnalyticsId: '',
+      googleTagManagerId: 'GTM-MXF48Z4Q',
     },
   },
 })

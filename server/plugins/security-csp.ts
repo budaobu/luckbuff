@@ -8,12 +8,15 @@ const SCRIPT_SOURCES = [
   'https://fundingchoicesmessages.google.com',
   'https://googleads.g.doubleclick.net',
   'https://www.googletagservices.com',
-  'https://hm.baidu.com',
+  'https://www.googletagmanager.com',
+  'https://www.google-analytics.com',
 ]
 
 const CONNECT_SOURCES = [
   'https://api2.gptniux.com',
-  'https://hm.baidu.com',
+  'https://www.googletagmanager.com',
+  'https://www.google-analytics.com',
+  'https://analytics.google.com',
   'https://geocoding-api.open-meteo.com',
   'https://nominatim.openstreetmap.org',
   'https://pagead2.googlesyndication.com',

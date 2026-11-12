@@ -733,7 +733,7 @@
     "section2Title": "Interpretation Service",
     "section2Content": "When you use the interpretation feature, your chart information (stems, branches, ten gods, fortune cycles, etc.) is forwarded to the interpretation service provider through our server proxy. We do not persistently store this information on our servers; we only act as a real-time request relay.",
     "section3Title": "Cookies & Tracking",
-    "section3Content": "We do not use any third-party tracking cookies. If you have configured analytics tools such as Baidu Analytics, data collection follows the privacy policy of the corresponding service provider.",
+    "section3Content": "We use Google Tag Manager for site analytics. It may collect anonymous visit data through cookies and similar technologies; data collection follows Google's privacy policy and terms of service.",
     "section4Title": "Data Deletion",
     "section4Content": "You can delete individual profiles at any time on the \"My Profiles\" page. When signed out, clearing your browser's local storage removes all data; when signed in, deletion also removes the corresponding data from your account on our servers.",
     "section5Title": "Contact Us",

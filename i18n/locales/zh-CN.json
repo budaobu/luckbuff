@@ -733,7 +733,7 @@
     "section2Title": "解读服务",
     "section2Content": "当您使用智能解读功能时，您的命盘信息（干支、十神、大运等）会通过我们的服务器代理转发至解读服务提供商。我们不会在服务器上持久化存储这些信息，仅作为实时请求的转发中介。",
     "section3Title": "Cookies 与追踪",
-    "section3Content": "我们不使用任何第三方追踪 Cookie。如您配置了百度统计等分析工具，相关数据收集遵循对应服务商的隐私政策。",
+    "section3Content": "本站使用 Google Tag Manager 进行访问统计，可能通过 Cookie 等技术收集匿名访问数据；相关数据收集遵循 Google 的隐私政策与使用条款。",
     "section4Title": "数据删除",
     "section4Content": "您可以随时在“我的档案”页面删除单条档案。未登录时，清除浏览器本地存储即可删除所有数据；登录后，删除操作会同时移除服务器上您账号内的对应数据。",
     "section5Title": "联系我们",
