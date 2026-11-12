@@ -82,7 +82,7 @@ export function buildBaziRoomSceneModel(options: {
     label: '今',
     gan: lens?.today?.ganzhi.slice(0, 1) ?? '〇',
     zhi: lens?.today?.ganzhi.slice(1, 2) ?? '〇',
-    position: [0.45, 2.62, -2.68],
+    position: [0.45, 2.32, -2.68],
     highlighted: true,
   }
   if (lens?.today) pillars.push(todayBase)

@@ -488,6 +488,7 @@ function reportKey(key: string) {
 }
 
 const TARGET_SELECTORS = [
+  '.bpr-section-label',
   '.bpr-chart-row:not(.bpr-chart-head) > div',
   '.bpr-char',
   '.bpr-methodology',
@@ -496,6 +497,9 @@ const TARGET_SELECTORS = [
   '.bpr-energy-head',
   '.bpr-card',
   'article',
+  '.bpr-subsection-title',
+  '.bpr-empty',
+  '.bpr-theme-note',
   '.bpr-bar',
   '.bpr-dayun-meta > div',
   '.bpr-annual-list > div',
@@ -714,6 +718,11 @@ watch(() => props.result, async () => {
   await nextTick()
   initializeTargets()
 }, { immediate: true })
+
+watch(() => props.section, async () => {
+  await nextTick()
+  initializeTargets()
+})
 
 onMounted(() => {
   nextTick(initializeTargets)

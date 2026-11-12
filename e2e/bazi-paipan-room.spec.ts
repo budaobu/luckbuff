@@ -28,6 +28,20 @@ async function mockRoomApis(page: Page) {
   })
   await page.route('**/api/tools/bazi-paipan/interpret', async (route) => {
     readingRequests += 1
+    const requestBody = JSON.parse(route.request().postData() ?? '{}')
+    if (requestBody.mode === 'target') {
+      await route.fulfill({
+        status: 200,
+        headers: { 'Content-Type': 'text/event-stream; charset=utf-8' },
+        body: [
+          'data: {"type":"text","text":"这段结构显示：先稳住主轴，再处理可迁移的细节。"}',
+          '',
+          'data: [DONE]',
+          '',
+        ].join('\n'),
+      })
+      return
+    }
     await route.fulfill({
       status: 200,
       headers: {
@@ -54,8 +68,13 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.goto(`/tools/bazi-paipan?baziRoomE2E=1&baziRoomQuality=${quality}`)
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-quality', quality === 'low' ? 'low' : /high|mid/, { timeout: 15000 })
-  await expect(page.getByTestId('bazi-room-form-card')).toBeVisible()
+  const topicCard = page.getByTestId('bazi-room-topic-card')
+  await expect(topicCard).toBeVisible()
   await expect(page.getByTestId('bazi-room-change-topic')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-change-topic')).toContainText('问什么')
+  await topicCard.getByTestId('bazi-room-topic-wealth').click()
+  await expect(page.getByTestId('bazi-room-form-card')).toBeVisible()
+  await expect(topicCard).toHaveCount(0)
   const idleCanvas = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png'))
 
   const formCard = page.getByTestId('bazi-room-form-card')
@@ -88,8 +107,10 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await expect(hourSelect).toContainText('午')
   await page.getByRole('button', { name: '揭示今日盘面' }).click()
   await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
+  await expect(page.getByTestId('bazi-room-user-info-card')).toBeVisible()
   await expect(page.getByTestId('bazi-room-form-card')).toHaveCount(0)
-  await expect(page.locator('.result-layout')).toBeVisible()
+  await expect(page.locator('.info-rail')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-change-topic')).toContainText('再问')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
     'data-model-pillars',
     'year:庚午|month:癸未|day:丙子|hour:甲午|today:庚寅',
@@ -120,6 +141,7 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   for (const tab of ['chart', 'elements', 'cycles', 'relations']) {
     await page.getByTestId(`bazi-full-tab-${tab}`).click()
     await expect(page.getByTestId(`bazi-full-tab-${tab}`)).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('.modal-body [data-bpr-ai-target]').first()).toBeVisible()
   }
   await page.getByTestId('bazi-full-tab-cycles').click()
   await expect(page.getByTestId('bazi-room-today-timeline')).toContainText('庚寅')
@@ -129,15 +151,15 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   await expect(page.getByRole('dialog')).toHaveCount(0)
 
   await page.getByTestId('bazi-room-change-topic').click()
-  const keeperCard = page.getByTestId('bazi-room-keeper-card')
-  await expect(keeperCard).toBeVisible()
-  await expect(keeperCard.getByTestId('bazi-room-topic-career')).toBeVisible()
-  await keeperCard.getByRole('button').first().click()
-  await expect(keeperCard).toHaveCount(0)
+  const changedTopicCard = page.getByTestId('bazi-room-topic-card')
+  await expect(changedTopicCard).toBeVisible()
+  await expect(changedTopicCard.getByTestId('bazi-room-topic-career')).toBeVisible()
+  await changedTopicCard.getByRole('button').first().click()
+  await expect(changedTopicCard).toHaveCount(0)
 
   const canvasBox = await page.getByTestId('bazi-room-canvas').boundingBox()
   expect(canvasBox).not.toBeNull()
-  await page.mouse.click(canvasBox!.x + canvasBox!.width * 0.3, canvasBox!.y + canvasBox!.height * 0.72)
+  await page.mouse.click(canvasBox!.x + canvasBox!.width * 0.72, canvasBox!.y + canvasBox!.height * 0.76)
   const visitorCard = page.getByTestId('bazi-room-user-card')
   await expect(visitorCard).toBeVisible()
   await expect(visitorCard).toContainText('1990-07-10')
@@ -148,7 +170,7 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
 
   await page.getByTestId('bazi-room-change-topic').click()
   await page.getByTestId('bazi-room-topic-career').click()
-  await expect(page.getByRole('heading', { level: 2 }).first()).toContainText('今日事业')
+  await expect(page.getByRole('heading', { level: 2, name: '今日事业' })).toBeVisible()
   expect(api.readingRequests()).toBe(2)
 
   await page.getByTestId('bazi-room-change-topic').click()
@@ -161,6 +183,11 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   await page.locator('.fixed.inset-0').last().locator('button').first().click()
 
   await expect(page.getByTestId('bazi-room-deep-link')).toHaveAttribute('href', '/tools/bazi-wealth')
+  await page.getByTestId('bazi-room-clear-local').click()
+  await expect(page.getByTestId('bazi-room-user-info-card')).toHaveCount(0)
+  await expect(page.locator('.info-rail')).toHaveCount(0)
+  await expect(page.getByTestId('bazi-room-topic-card')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-change-topic')).toContainText('问什么')
   expect(errors).toEqual([])
 })
 
@@ -205,6 +232,7 @@ test.describe('visual baselines', () => {
     await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
     await runRevealFlow(page, 'high')
     await page.clock.resume()
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(300)
     await expect(page).toHaveScreenshot('bazi-room-desktop.png', {
       maxDiffPixelRatio: 0.05,
@@ -218,6 +246,7 @@ test.describe('visual baselines', () => {
     await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
     await runRevealFlow(page, 'high')
     await page.clock.resume()
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(300)
     await expect(page).toHaveScreenshot('bazi-room-mobile.png', {
       maxDiffPixelRatio: 0.08,
