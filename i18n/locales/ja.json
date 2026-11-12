@@ -12491,6 +12491,7 @@
     "calculating": "天機儀が回っています",
     "reveal": "今日の盤を開く",
     "localReady": "ローカルの生年月日を使用中",
+    "localBirthCard": "ローカルの出生情報",
     "todayTitle": "今日の{topic}",
     "fateTitle": "本命総論",
     "natalSlice": "本命スライス",

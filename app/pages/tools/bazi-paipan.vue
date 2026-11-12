@@ -19,53 +19,13 @@
         </div>
       </header>
 
-      <div v-if="phase === 'idle'" class="hero-action">
-        <button
-          type="button"
-          data-testid="bazi-room-enter"
-          :disabled="!roomStage.ready.value && !roomStage.errorMessage.value"
-          @click="startGuide"
-        >
-          <UIcon name="i-lucide-door-open" class="h-4 w-4" />
-          {{ $t('baziPaipanRoom.enter') }}
-        </button>
-        <button
-          type="button"
-          class="ghost"
-          data-testid="bazi-room-skip"
-          :disabled="!roomStage.ready.value && !roomStage.errorMessage.value"
-          @click="skipToFullChart"
-        >
-          {{ $t('baziPaipanRoom.skipFull') }}
-        </button>
-      </div>
-
-      <div v-else-if="phase === 'topic'" class="topic-board" role="group" aria-label="Bazi question topics">
-        <p>{{ $t('baziPaipanRoom.chooseTopic') }}</p>
-        <div class="topic-list">
-          <button
-            v-for="topic in BAZI_ROOM_TOPICS"
-            :key="topic.id"
-            type="button"
-            :data-testid="`bazi-room-topic-${topic.id}`"
-            @click="selectTopic(topic.id)"
-          >
-            <UIcon :name="topic.icon" class="h-4 w-4" />
-            {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
-          </button>
-        </div>
-        <button type="button" class="ghost" @click="skipToFullChart">
-          {{ $t('baziPaipanRoom.skipFull') }}
-        </button>
-      </div>
-
-      <div v-else-if="phase === 'calculating'" class="calculating-note" aria-live="polite">
+      <div v-if="phase === 'calculating'" class="calculating-note" aria-live="polite">
         <span class="turning-mark" aria-hidden="true">儀</span>
         <p>{{ $t('baziPaipanRoom.calculating') }}</p>
       </div>
 
       <section
-        v-else-if="phase === 'revealed' && result && lens"
+        v-if="phase === 'revealed' && result && lens"
         class="result-layout"
         aria-live="polite"
       >
@@ -145,117 +105,142 @@
             </NuxtLink>
           </section>
 
-          <footer class="topic-actions">
-            <button type="button" data-testid="bazi-room-change-topic" @click="phase = 'topic'; trackRoomEvent({ type: 'topicChanged' })">
-              <UIcon name="i-lucide-repeat-2" class="h-4 w-4" />
-              {{ $t('baziPaipanRoom.changeTopic') }}
-            </button>
-            <button type="button" data-testid="bazi-room-open-full" @click="openFullChart">
-              <UIcon name="i-lucide-table-properties" class="h-4 w-4" />
-              {{ $t('baziPaipanRoom.fullResult') }}
-            </button>
-            <AppShareButton
-              tool="bazi-paipan"
-              :summary="posterSummary"
-              :filename="`bazi-room-${todayDate}-${activeTopic}.png`"
-              :share-image-factory="createPoster"
-              :label="$t('baziPaipanRoom.poster')"
-            />
-            <button type="button" @click="openBirthDialog(activeTopic)">
-              <UIcon name="i-lucide-user-round-pen" class="h-4 w-4" />
-              {{ $t('baziPaipanRoom.changePerson') }}
-            </button>
-          </footer>
         </div>
-
-        <aside class="birth-aside">
-          <p>{{ $t('baziPaipanRoom.localReady') }}</p>
-          <dl>
-            <div>
-              <dt>{{ $t('baziChart.formTitle') }}</dt>
-              <dd>{{ birthValues?.birthDate }} {{ birthValues?.birthHourUnknown ? '' : birthValues?.birthHour }}</dd>
-            </div>
-            <div>
-              <dt>{{ $t('profileForm.gender') }}</dt>
-              <dd>{{ birthValues?.gender === 'male' ? $t('common.male') : $t('common.female') }}</dd>
-            </div>
-          </dl>
-          <button type="button" class="danger" @click="clearLocal">
-            {{ $t('baziPaipanRoom.clearLocal') }}
-          </button>
-        </aside>
-      </section>
-    </section>
-
-    <div class="room-content">
-      <section class="intro-hints" aria-label="Bazi chart notes">
-        <article>
-          <UIcon name="i-heroicons-clock" class="h-4 w-4" />
-          <p>{{ $t('baziChart.hourHint') }}</p>
-        </article>
-        <article>
-          <UIcon name="i-heroicons-map-pin" class="h-4 w-4" />
-          <p>{{ $t('baziChart.locationHint') }}</p>
-        </article>
-        <article>
-          <UIcon name="i-heroicons-shield-check" class="h-4 w-4" />
-          <p>{{ $t('baziChart.privacyHint') }}</p>
-        </article>
       </section>
 
-      <p class="disclaimer">{{ $t('baziChart.disclaimer') }}</p>
-    </div>
-
-    <Teleport to="body">
-      <Transition name="room-modal">
-        <div
-          v-if="birthDialogOpen"
-          class="modal-layer"
-          role="presentation"
-          @click.self="closeBirthDialog"
+      <Transition name="side-panel">
+        <section
+          v-if="sideView === 'form'"
+          class="side-panel"
+          aria-label="Birth information form"
+          data-testid="bazi-room-form-card"
         >
-          <section
-            ref="birthDialogRef"
-            class="modal birth-modal"
-            role="dialog"
-            aria-modal="true"
-            :aria-label="$t('baziPaipanRoom.birthTitle')"
-            @keydown="handleDialogKeydown"
-          >
-            <header>
-              <div>
-                <small>{{ $t('baziPaipanRoom.ritualLoading') }}</small>
-                <h2>{{ $t('baziPaipanRoom.birthTitle') }}</h2>
-              </div>
-              <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="closeBirthDialog">
-                <UIcon name="i-lucide-x" class="h-4 w-4" />
-              </button>
-            </header>
-
-            <div class="modal-body">
-              <BaziForm
-                :initial-values="lastFormValues"
-                :show-name="false"
-                :show-former-name="false"
-                require-hour
-                :submit-label="$t('baziPaipanRoom.reveal')"
-                @submit="handleSubmit"
-                @save-profile="handleSaveProfile"
-              />
+          <header>
+            <div>
+              <small>{{ $t('baziPaipanRoom.ritualLoading') }}</small>
+              <h2>{{ $t('baziPaipanRoom.birthTitle') }}</h2>
             </div>
-
-            <footer v-if="hasLocalBirth">
-              <button type="button" @click="forgetLocalAndKeepDialog">
-                {{ $t('baziPaipanRoom.changePerson') }}
-              </button>
-              <button type="button" class="danger" @click="clearLocal">
-                {{ $t('baziPaipanRoom.clearLocal') }}
-              </button>
-            </footer>
-          </section>
-        </div>
+          </header>
+          <div class="side-panel-body">
+            <BaziForm
+              :initial-values="lastFormValues"
+              :show-name="false"
+              :show-former-name="false"
+              require-hour
+              :submit-label="$t('baziPaipanRoom.reveal')"
+              @submit="handleSubmit"
+              @save-profile="handleSaveProfile"
+            />
+            <div class="form-notes">
+              <p>{{ $t('baziChart.hourHint') }}</p>
+              <p>{{ $t('baziChart.privacyHint') }}</p>
+            </div>
+          </div>
+        </section>
       </Transition>
-    </Teleport>
+
+      <Transition name="scene-pop">
+        <aside
+          v-if="activeSceneCard === 'visitor'"
+          class="scene-popcard"
+          role="dialog"
+          aria-label="Local birth information"
+          data-testid="bazi-room-user-card"
+        >
+          <header>
+            <h2>{{ $t('baziPaipanRoom.localBirthCard') }}</h2>
+            <button type="button" :aria-label="$t('baziPaipanRoom.close')" @click="activeSceneCard = 'none'">
+              <UIcon name="i-lucide-x" class="h-3.5 w-3.5" />
+            </button>
+          </header>
+          <dl>
+            <div><dt>{{ $t('baziChart.solar') }}</dt><dd>{{ birthValues?.birthDate || '—' }}</dd></div>
+            <div><dt>{{ $t('profileForm.birthHour') }}</dt><dd>{{ birthValues?.birthHourUnknown ? $t('baziForm.unknownHour') : birthValues?.birthHour || '—' }}</dd></div>
+            <div><dt>{{ $t('baziChart.location') }}</dt><dd>{{ birthValues?.birthProvince || '—' }}</dd></div>
+            <div><dt>{{ $t('profileForm.gender') }}</dt><dd>{{ birthValues?.gender === 'male' ? $t('common.male') : $t('common.female') }}</dd></div>
+          </dl>
+        </aside>
+      </Transition>
+
+      <Transition name="scene-pop">
+        <aside
+          v-if="activeSceneCard === 'keeper'"
+          class="scene-popcard keeper-guide"
+          role="dialog"
+          aria-label="Bazi question topics"
+          data-testid="bazi-room-keeper-card"
+        >
+          <header>
+            <h2>{{ $t('baziPaipanRoom.chooseTopic') }}</h2>
+            <button type="button" :aria-label="$t('baziPaipanRoom.close')" @click="activeSceneCard = 'none'">
+              <UIcon name="i-lucide-x" class="h-3.5 w-3.5" />
+            </button>
+          </header>
+          <div class="guide-list">
+            <button
+              v-for="topic in BAZI_ROOM_TOPICS"
+              :key="topic.id"
+              type="button"
+              :data-testid="`bazi-room-topic-${topic.id}`"
+              @click="selectTopic(topic.id)"
+            >
+              <UIcon :name="topic.icon" class="h-4 w-4" />
+              {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
+            </button>
+          </div>
+        </aside>
+      </Transition>
+
+      <nav class="room-actions" aria-label="Bazi room actions">
+        <button
+          type="button"
+          data-testid="bazi-room-change-topic"
+          @click="openKeeperGuide"
+        >
+          <UIcon name="i-lucide-repeat-2" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.changeTopic') }}
+        </button>
+        <button
+          type="button"
+          data-testid="bazi-room-open-full"
+          :disabled="!result"
+          @click="openFullChart"
+        >
+          <UIcon name="i-lucide-table-properties" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.fullResult') }}
+        </button>
+        <button
+          type="button"
+          data-testid="bazi-room-change-person"
+          @click="openBirthForm(activeTopic)"
+        >
+          <UIcon name="i-lucide-user-round-pen" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.changePerson') }}
+        </button>
+        <button
+          type="button"
+          class="danger"
+          data-testid="bazi-room-clear-local"
+          :disabled="!birthValues"
+          @click="clearLocal"
+        >
+          <UIcon name="i-lucide-eraser" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.clearLocal') }}
+        </button>
+        <AppShareButton
+          tool="bazi-paipan"
+          :summary="posterSummary"
+          :filename="`bazi-room-${todayDate}-${activeTopic}.png`"
+          :share-image-factory="createPoster"
+          :label="$t('baziPaipanRoom.poster')"
+          :disabled="!result"
+        />
+      </nav>
+
+      <footer class="scene-footnote">
+        <p>{{ $t('baziChart.disclaimer') }}</p>
+      </footer>
+    </section>
 
     <Teleport to="body">
       <Transition name="room-modal">
@@ -279,13 +264,6 @@
                 <h2>{{ $t('baziPaipanRoom.fullTitle') }}</h2>
               </div>
               <div class="full-tools">
-                <AppShareButton
-                  tool="bazi-paipan"
-                  :summary="posterSummary"
-                  :filename="`bazi-room-${todayDate}-${activeTopic}.png`"
-                  :share-image-factory="createPoster"
-                  :label="$t('baziPaipanRoom.poster')"
-                />
                 <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="closeFullChart">
                   <UIcon name="i-lucide-x" class="h-4 w-4" />
                 </button>
@@ -401,18 +379,12 @@ const chenyu = ref('')
 const readingContent = ref('')
 const readingStreaming = ref(false)
 const readingError = ref(false)
-const birthDialogOpen = ref(false)
+const sideView = ref<'form' | 'result'>('form')
+const activeSceneCard = ref<'none' | 'visitor' | 'keeper'>('none')
 const fullDialogOpen = ref(false)
 const fullTab = ref<'chart' | 'elements' | 'cycles' | 'relations'>('chart')
-const birthDialogRef = ref<HTMLElement | null>(null)
 const fullDialogRef = ref<HTMLElement | null>(null)
 let readingAbort: AbortController | null = null
-
-watch(birthDialogOpen, async (open) => {
-  if (!open) return
-  await nextTick()
-  birthDialogRef.value?.querySelector<HTMLElement>('button')?.focus()
-})
 
 watch(fullDialogOpen, async (open) => {
   if (!open) return
@@ -432,6 +404,7 @@ const roomStage = useBaziPaipanStageKit({
   reducedMotion,
   qualityOverride,
   freeze: freezeScene,
+  onSelect: handleSceneSelect,
 })
 const roomModel = computed(() => buildBaziRoomSceneModel({
   phase: phase.value,
@@ -514,45 +487,31 @@ async function resolveLocation(name: string) {
   return { name }
 }
 
-function startGuide() {
-  phase.value = 'topic'
-  trackRoomEvent({ type: 'enter' })
-}
-
 function selectTopic(topic: BaziRoomTopicId) {
   activeTopic.value = topic
+  activeSceneCard.value = 'none'
   trackRoomEvent({ type: 'topic', topic })
   if (birthValues.value) {
     void revealTopic(topic)
   }
   else {
-    openBirthDialog(topic)
+    openBirthForm(topic)
   }
 }
 
-function skipToFullChart() {
-  trackRoomEvent({ type: 'guideSkipped' })
-  if (birthValues.value) {
-    activeTopic.value = 'fate'
-    openFullAfterReveal.value = true
-    void revealTopic('fate')
-  }
-  else {
-    openBirthDialog('fate')
-    openFullAfterReveal.value = true
-  }
-}
-
-function openBirthDialog(topic: BaziRoomTopicId) {
+function openBirthForm(topic: BaziRoomTopicId) {
   pendingTopic.value = topic
-  birthDialogOpen.value = true
+  sideView.value = 'form'
+  activeSceneCard.value = 'none'
 }
 
-function closeBirthDialog() {
-  if (phase.value === 'calculating') return
-  birthDialogOpen.value = false
-  pendingTopic.value = null
-  if (phase.value === 'idle') phase.value = 'topic'
+function openKeeperGuide() {
+  activeSceneCard.value = 'keeper'
+  trackRoomEvent({ type: 'topicChanged' })
+}
+
+function handleSceneSelect(target: 'keeper' | 'visitor') {
+  activeSceneCard.value = activeSceneCard.value === target ? 'none' : target
 }
 
 function clearLocal() {
@@ -572,23 +531,9 @@ function clearLocal() {
   chenyu.value = ''
   readingContent.value = ''
   readingError.value = false
-  phase.value = 'topic'
+  sideView.value = 'form'
+  activeSceneCard.value = 'none'
   toast.add({ title: t('baziPaipanRoom.clearLocal'), color: 'success' })
-}
-
-function forgetLocalAndKeepDialog() {
-  if (!birthValues.value) return
-  try {
-    for (const key of Object.keys(window.localStorage)) {
-      if (key.startsWith('bazi-room:chart:') || key.startsWith('bazi-room:reading:')) {
-        window.localStorage.removeItem(key)
-      }
-    }
-  }
-  catch { /* ignore */ }
-  birthValues.value = null
-  result.value = null
-  lens.value = null
 }
 
 async function handleSubmit(values: FormValues) {
@@ -600,7 +545,8 @@ async function handleSubmit(values: FormValues) {
   const topic = pendingTopic.value ?? activeTopic.value
   activeTopic.value = topic
   lastFormValues.value = { ...values }
-  birthDialogOpen.value = false
+  sideView.value = 'result'
+  activeSceneCard.value = 'none'
   phase.value = 'calculating'
   trackRoomEvent({ type: 'birthSubmitted' })
 
@@ -631,8 +577,7 @@ async function handleSubmit(values: FormValues) {
     applyResult(values, nextResult, nextLens)
   }
   catch (error: any) {
-    phase.value = 'topic'
-    birthDialogOpen.value = true
+    sideView.value = 'form'
     toast.add({
       title: t('baziChart.fail'),
       description: error?.data?.statusMessage || error?.message || t('baziChart.pleaseRetry'),
@@ -819,8 +764,7 @@ function handleDialogKeydown(event: KeyboardEvent) {
     const target = event.target as HTMLElement | null
     if (target?.closest('[aria-haspopup="dialog"], [role="combobox"]')) return
     event.preventDefault()
-    if (birthDialogOpen.value) closeBirthDialog()
-    else closeFullChart()
+    closeFullChart()
     return
   }
   if (event.key !== 'Tab') return
@@ -928,6 +872,9 @@ onMounted(() => {
       birthValues.value = cachedChart.values
       result.value = cachedChart.result
       lastFormValues.value = { ...cachedChart.values }
+      sideView.value = 'result'
+      phase.value = 'calculating'
+      void revealTopic(activeTopic.value)
     }
   }
   catch { /* local storage optional */ }
@@ -966,15 +913,15 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .room-page {
-  min-height: 100svh;
+  height: calc(100svh - 4rem);
+  overflow: hidden;
   background: #05080f;
   color: #e9eefa;
 }
 
 .room-hero {
   position: relative;
-  height: 100svh;
-  min-height: 560px;
+  height: 100%;
   overflow: hidden;
   background: #05080f;
 }
@@ -1017,107 +964,282 @@ onBeforeUnmount(() => {
   font-size: 13px;
 }
 
-.hero-action,
-.topic-board,
 .calculating-note,
 .result-layout {
   position: absolute;
   z-index: 8;
+}
+
+.result-layout {
+  top: 148px;
+  right: 24px;
+  bottom: 104px;
+  width: min(430px, calc(100% - 48px));
+  overflow: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 109, 0.35) transparent;
+}
+
+.calculating-note {
   left: 50%;
   translate: -50% 0;
 }
 
-.hero-action {
-  bottom: clamp(74px, 12vh, 130px);
+.side-panel {
+  --surface-dropdown: rgba(7, 11, 19, 0.98);
+  --surface-card: rgba(11, 17, 27, 0.88);
+  --surface-card-hover: rgba(18, 25, 38, 0.88);
+  --surface-input: rgba(15, 22, 34, 0.86);
+  --surface-elevated: rgba(9, 14, 23, 0.94);
+  --border-subtle: rgba(233, 238, 250, 0.09);
+  --border-light: rgba(233, 238, 250, 0.13);
+  --border-medium: rgba(212, 175, 109, 0.22);
+  --text-primary: #f4f7ff;
+  --text-body: rgba(233, 238, 250, 0.84);
+  --text-muted: rgba(233, 238, 250, 0.66);
+  --text-faint: rgba(233, 238, 250, 0.48);
+  --text-placeholder: rgba(233, 238, 250, 0.36);
+  --accent: #f2d998;
+  --accent-bg: rgba(45, 32, 14, 0.42);
+  --accent-border: rgba(212, 175, 109, 0.32);
+  --accent-border-hover: rgba(212, 175, 109, 0.58);
+  --accent-faint: rgba(45, 32, 14, 0.28);
+  position: absolute;
+  z-index: 10;
+  top: 148px;
+  right: 24px;
+  bottom: 104px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  width: min(520px, calc(100% - 32px));
+  flex-direction: column;
+  width: min(420px, calc(100% - 48px));
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 109, 0.24);
+  border-radius: 8px;
+  background: rgba(7, 11, 19, 0.94);
+  color: #e9eefa;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(20px);
 }
 
-.hero-action button,
-.topic-board > button,
-.topic-list button,
-.topic-actions button,
-.reading-panel header button,
-.birth-aside button,
-.modal footer button {
-  min-height: 40px;
-  border: 1px solid rgba(233, 238, 250, 0.18);
-  border-radius: 6px;
-  background: rgba(7, 11, 19, 0.78);
+.side-panel > header {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(212, 175, 109, 0.16);
+}
+
+.side-panel h2 {
+  margin: 3px 0 0;
+  color: #f4f7ff;
+  font-size: 18px;
+}
+
+.side-panel small {
+  color: rgba(233, 238, 250, 0.48);
+  font-size: 12px;
+}
+
+.side-panel-body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 18px;
+}
+
+.form-notes {
+  display: grid;
+  gap: 7px;
+  margin-top: 16px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(233, 238, 250, 0.08);
+}
+
+.form-notes p {
+  margin: 0;
+  color: rgba(233, 238, 250, 0.52);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.scene-popcard {
+  position: absolute;
+  z-index: 12;
+  left: 24px;
+  bottom: 104px;
+  width: min(330px, calc(100% - 48px));
+  padding: 14px;
+  border: 1px solid rgba(212, 175, 109, 0.28);
+  border-radius: 8px;
+  background: rgba(7, 11, 19, 0.94);
   color: #e9eefa;
-  padding: 0 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(20px);
+}
+
+.scene-popcard header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.scene-popcard h2 {
+  margin: 0;
+  color: #f2d998;
+  font-size: 14px;
+}
+
+.scene-popcard button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(233, 238, 250, 0.13);
+  border-radius: 5px;
+  background: rgba(18, 25, 38, 0.8);
+  color: rgba(233, 238, 250, 0.65);
+  cursor: pointer;
+}
+
+.scene-popcard dl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.scene-popcard dl > div {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.scene-popcard dt {
+  color: rgba(233, 238, 250, 0.45);
+  font-size: 12px;
+}
+
+.scene-popcard dd {
+  min-width: 0;
+  margin: 0;
+  color: rgba(233, 238, 250, 0.82);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.guide-list {
+  display: grid;
+  gap: 7px;
+}
+
+.guide-list button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid rgba(233, 238, 250, 0.12);
+  border-radius: 6px;
+  background: rgba(15, 22, 34, 0.68);
+  color: rgba(233, 238, 250, 0.78);
   font-size: 13px;
   cursor: pointer;
-  backdrop-filter: blur(12px);
 }
 
-.hero-action button:first-child {
-  border-color: rgba(212, 175, 109, 0.72);
+.guide-list button:hover,
+.guide-list button:focus-visible {
+  border-color: rgba(212, 175, 109, 0.52);
   color: #f2d998;
 }
 
-.hero-action button:disabled {
-  opacity: 0.56;
-  cursor: wait;
-}
-
-.hero-action .ghost,
-.topic-board > .ghost {
-  border-color: transparent;
-  background: rgba(7, 11, 19, 0.42);
-  color: rgba(233, 238, 250, 0.66);
-}
-
-.hero-action button:hover,
-.hero-action button:focus-visible,
-.topic-list button:hover,
-.topic-list button:focus-visible,
-.topic-actions button:hover,
-.topic-actions button:focus-visible,
-.birth-aside button:hover,
-.birth-aside button:focus-visible {
-  border-color: rgba(212, 175, 109, 0.62);
-  color: #f2d998;
-}
-
-.topic-board {
-  bottom: 70px;
-  display: grid;
-  justify-items: center;
-  gap: 13px;
-  width: min(620px, calc(100% - 32px));
-  padding: 18px;
-  border: 1px solid rgba(233, 238, 250, 0.13);
+.room-actions {
+  position: absolute;
+  z-index: 12;
+  left: 50%;
+  bottom: 20px;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: min(720px, calc(100% - 32px));
+  padding: 8px 10px;
+  border: 1px solid rgba(212, 175, 109, 0.2);
   border-radius: 8px;
-  background: rgba(7, 11, 19, 0.74);
-  color: #e9eefa;
+  background: rgba(5, 9, 16, 0.84);
   backdrop-filter: blur(16px);
 }
 
-.topic-board p {
-  margin: 0;
-  color: #f2d998;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.topic-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  width: 100%;
-}
-
-.topic-list button {
+.room-actions button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 7px;
-  width: 100%;
-  padding: 0 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(233, 238, 250, 0.14);
+  border-radius: 6px;
+  background: rgba(18, 25, 38, 0.8);
+  color: rgba(233, 238, 250, 0.78);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.room-actions button:hover,
+.room-actions button:focus-visible {
+  border-color: rgba(212, 175, 109, 0.52);
+  color: #f2d998;
+}
+
+.room-actions button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.room-actions button.danger {
+  border-color: color-mix(in srgb, #b91c1c 28%, transparent);
+  color: #d98080;
+}
+
+.room-actions button.danger:hover,
+.room-actions button.danger:focus-visible {
+  border-color: color-mix(in srgb, #b91c1c 52%, transparent);
+  color: #ef4444;
+}
+
+.scene-footnote {
+  position: absolute;
+  z-index: 5;
+  right: 24px;
+  bottom: 4px;
+  width: min(360px, calc(100% - 48px));
+}
+
+.scene-footnote p {
+  margin: 0;
+  color: rgba(233, 238, 250, 0.3);
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.side-panel-enter-active,
+.side-panel-leave-active,
+.scene-pop-enter-active,
+.scene-pop-leave-active {
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.side-panel-enter-from,
+.side-panel-leave-to {
+  opacity: 0;
+  transform: translateX(24px);
+}
+
+.scene-pop-enter-from,
+.scene-pop-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
 }
 
 .calculating-note {
@@ -1139,24 +1261,31 @@ onBeforeUnmount(() => {
   animation: turn 1.4s ease-in-out infinite;
 }
 
-.room-content {
-  width: 100%;
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 64px 20px 72px;
-  background:
-    linear-gradient(180deg, rgba(5, 8, 15, 0.96) 0%, rgba(7, 12, 20, 0.94) 100%);
-  border-top: 1px solid rgba(212, 175, 109, 0.16);
+@media (min-width: 768px) {
+  .room-page {
+    height: calc(100svh - 72px);
+  }
+}
+.reading-panel header button,
+.modal footer button {
+  min-height: 40px;
+  border: 1px solid rgba(233, 238, 250, 0.18);
+  border-radius: 6px;
+  background: rgba(7, 11, 19, 0.78);
+  color: #e9eefa;
+  padding: 0 14px;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
 }
 
 .scene-header {
   position: absolute;
   z-index: 9;
   top: 14px;
-  left: 50%;
-  translate: -50% 0;
-  width: min(680px, calc(100% - 32px));
-  text-align: center;
+  left: 24px;
+  width: min(380px, calc(100% - 48px));
+  text-align: left;
   pointer-events: none;
   padding: 12px 18px;
   border: 1px solid rgba(212, 175, 109, 0.18);
@@ -1183,35 +1312,14 @@ onBeforeUnmount(() => {
 }
 
 .scene-subtitle {
-  max-width: 680px;
-  margin: 10px auto 0;
+  max-width: 360px;
+  margin: 10px 0 0;
   color: rgba(233, 238, 250, 0.66);
   font-size: 14px;
   line-height: 1.7;
 }
 
-.result-layout {
-  position: absolute;
-  z-index: 9;
-  left: auto;
-  translate: none;
-  top: 148px;
-  right: 24px;
-  bottom: 26px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 14px;
-  align-content: start;
-  width: min(430px, calc(100% - 48px));
-  overflow: auto;
-  padding-right: 4px;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(212, 175, 109, 0.35) transparent;
-}
-
-.topic-card,
-.birth-aside {
+.topic-card {
   border: 1px solid rgba(212, 175, 109, 0.22);
   border-radius: 8px;
   background: rgba(7, 11, 19, 0.82);
@@ -1342,8 +1450,7 @@ onBeforeUnmount(() => {
   margin: 0;
 }
 
-.slice-group dl > div,
-.birth-aside dl > div {
+.slice-group dl > div {
   display: grid;
   grid-template-columns: 108px minmax(0, 1fr);
   gap: 10px;
@@ -1351,14 +1458,12 @@ onBeforeUnmount(() => {
   border-top: 1px solid rgba(233, 238, 250, 0.08);
 }
 
-.slice-group dt,
-.birth-aside dt {
+.slice-group dt {
   color: rgba(233, 238, 250, 0.45);
   font-size: 12px;
 }
 
-.slice-group dd,
-.birth-aside dd {
+.slice-group dd {
   min-width: 0;
   margin: 0;
   color: rgba(233, 238, 250, 0.74);
@@ -1438,82 +1543,9 @@ onBeforeUnmount(() => {
   font-weight: 700;
 }
 
-.topic-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.topic-actions button,
-.birth-aside button {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(18, 25, 38, 0.82);
-  color: rgba(233, 238, 250, 0.72);
-}
-
-.birth-aside {
-  display: grid;
-  gap: 13px;
-}
-
-.birth-aside > p {
-  margin: 0;
-  color: #f2d998;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.birth-aside dl {
-  margin: 0;
-}
-
-.birth-aside button {
-  justify-content: center;
-}
-
-.birth-aside .danger,
 .modal footer .danger {
   border-color: color-mix(in srgb, #b91c1c 34%, transparent);
   color: #b91c1c;
-}
-
-.intro-hints {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  padding: 14px;
-  border: 1px solid rgba(212, 175, 109, 0.16);
-  border-radius: 8px;
-  background: rgba(7, 11, 19, 0.72);
-  backdrop-filter: blur(14px);
-}
-
-.intro-hints article {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  padding: 13px;
-  border: 1px solid rgba(233, 238, 250, 0.08);
-  border-radius: 8px;
-  background: rgba(15, 22, 34, 0.6);
-  color: #f2d998;
-}
-
-.intro-hints p {
-  margin: 0;
-  color: rgba(233, 238, 250, 0.68);
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-.disclaimer {
-  margin: 24px 0 0;
-  color: rgba(233, 238, 250, 0.4);
-  font-size: 12px;
-  line-height: 1.7;
 }
 
 .modal-layer {
@@ -1719,61 +1751,51 @@ onBeforeUnmount(() => {
   100% { opacity: 1; transform: rotate(7deg) scale(0.9); }
 }
 
-@media (min-width: 900px) {
-  .room-content {
-    padding-top: 54px;
-  }
-}
-
 @media (max-width: 900px) {
   .result-layout {
     top: 168px;
     right: 14px;
-    bottom: 18px;
+    bottom: 104px;
     width: min(420px, calc(100% - 28px));
-  }
-
-  .intro-hints {
-    grid-template-columns: 1fr;
   }
 
   .pillar-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .side-panel {
+    top: 168px;
+    right: 14px;
+    bottom: 104px;
+    width: min(420px, calc(100% - 28px));
+  }
 }
 
 @media (max-width: 640px) {
-  .room-hero {
-    min-height: 520px;
-  }
-
-  .topic-board {
-    bottom: 58px;
-    padding: 14px;
-  }
-
-  .topic-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .scene-subtitle {
     display: none;
   }
 
   .result-layout {
-    top: 138px;
+    top: 148px;
     right: 10px;
-    bottom: 12px;
+    bottom: 104px;
     width: calc(100% - 20px);
     padding-right: 0;
+  }
+
+  .side-panel {
+    top: 148px;
+    right: 10px;
+    bottom: 156px;
+    width: calc(100% - 20px);
   }
 
   .pillar-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .slice-group dl > div,
-  .birth-aside dl > div {
+  .slice-group dl > div {
     grid-template-columns: 1fr;
   }
 
@@ -1810,5 +1832,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-  color: #f4f7ff;
-  color: #f4f7ff;

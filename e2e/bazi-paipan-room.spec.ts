@@ -54,12 +54,12 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.goto(`/tools/bazi-paipan?baziRoomE2E=1&baziRoomQuality=${quality}`)
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-quality', quality === 'low' ? 'low' : /high|mid/, { timeout: 15000 })
+  await expect(page.getByTestId('bazi-room-form-card')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-change-topic')).toBeVisible()
   const idleCanvas = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png'))
-  await page.getByTestId('bazi-room-enter').click()
-  await page.getByTestId('bazi-room-topic-wealth').click()
-  await expect(page.getByRole('dialog', { name: '报上生辰' })).toBeVisible()
 
-  const dateButton = page.getByRole('dialog', { name: '报上生辰' }).locator('button[aria-haspopup="dialog"]').first()
+  const formCard = page.getByTestId('bazi-room-form-card')
+  const dateButton = formCard.locator('button[aria-haspopup="dialog"]').first()
   await dateButton.click()
   const calendarLayer = page.locator('[data-reka-popper-content-wrapper], [data-radix-popper-content-wrapper]').last()
   await expect(calendarLayer).toBeVisible()
@@ -82,12 +82,14 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await expect(dateButton).toContainText('1990年7月10日')
   await page.keyboard.press('Escape')
 
-  const hourSelect = page.getByRole('dialog', { name: '报上生辰' }).getByRole('combobox')
+  const hourSelect = formCard.getByRole('combobox')
   await hourSelect.click()
   await page.getByRole('option', { name: /午/ }).click()
   await expect(hourSelect).toContainText('午')
   await page.getByRole('button', { name: '揭示今日盘面' }).click()
   await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
+  await expect(page.getByTestId('bazi-room-form-card')).toHaveCount(0)
+  await expect(page.locator('.result-layout')).toBeVisible()
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
     'data-model-pillars',
     'year:庚午|month:癸未|day:丙子|hour:甲午|today:庚寅',
@@ -125,6 +127,24 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   await expect(page.getByTestId('bazi-room-month-timeline').locator('.current')).toContainText('11月')
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toHaveCount(0)
+
+  await page.getByTestId('bazi-room-change-topic').click()
+  const keeperCard = page.getByTestId('bazi-room-keeper-card')
+  await expect(keeperCard).toBeVisible()
+  await expect(keeperCard.getByTestId('bazi-room-topic-career')).toBeVisible()
+  await keeperCard.getByRole('button').first().click()
+  await expect(keeperCard).toHaveCount(0)
+
+  const canvasBox = await page.getByTestId('bazi-room-canvas').boundingBox()
+  expect(canvasBox).not.toBeNull()
+  await page.mouse.click(canvasBox!.x + canvasBox!.width * 0.3, canvasBox!.y + canvasBox!.height * 0.72)
+  const visitorCard = page.getByTestId('bazi-room-user-card')
+  await expect(visitorCard).toBeVisible()
+  await expect(visitorCard).toContainText('1990-07-10')
+  await expect(visitorCard).toContainText('午')
+  await expect(visitorCard).toContainText('男')
+  await visitorCard.getByRole('button').first().click()
+  await expect(visitorCard).toHaveCount(0)
 
   await page.getByTestId('bazi-room-change-topic').click()
   await page.getByTestId('bazi-room-topic-career').click()
@@ -169,10 +189,13 @@ test('invalidates the Bazi reading cache on the next date', async ({ page }) => 
   await page.clock.setFixedTime(new Date('2026-11-12T10:00:00+08:00'))
   await page.reload()
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-quality', 'low', { timeout: 15000 })
-  await page.getByTestId('bazi-room-enter').click()
-  await page.getByTestId('bazi-room-topic-wealth').click()
   await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
   expect(api.readingRequests()).toBe(2)
+
+  await page.getByTestId('bazi-room-change-topic').click()
+  await page.getByTestId('bazi-room-topic-wealth').click()
+  await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
+  expect(api.readingRequests()).toBe(3)
 })
 
 test.describe('visual baselines', () => {

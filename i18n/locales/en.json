@@ -12405,6 +12405,7 @@
     "calculating": "The instrument is turning",
     "reveal": "Reveal today's chart",
     "localReady": "Using birth details saved locally",
+    "localBirthCard": "Local birth details",
     "todayTitle": "Today's {topic}",
     "fateTitle": "Natal overview",
     "natalSlice": "Natal slice",
