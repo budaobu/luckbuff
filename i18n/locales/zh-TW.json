@@ -12421,6 +12421,8 @@
     "enter": "進入命盤室",
     "chooseTopic": "先說清楚，你想問什麼？",
     "skipFull": "跳過引導，直接看完整排盤",
+    "roomLabel": "命盤室",
+    "roomActions": "命盤室操作",
     "askWhat": "問什麼",
     "askAgain": "再問",
     "birthTitle": "報上生辰",

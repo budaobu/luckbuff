@@ -13,7 +13,7 @@
 
       <header class="scene-header">
         <div>
-          <p class="scene-eyebrow">Bazi Chart Room</p>
+          <p class="scene-eyebrow">{{ $t('baziPaipanRoom.roomLabel') }}</p>
           <h1 id="bazi-room-title" class="scene-title">{{ $t('baziChart.title') }}</h1>
           <p class="scene-subtitle">{{ $t('baziChart.subtitle') }}</p>
         </div>
@@ -124,12 +124,12 @@
         <section
           v-if="sideView === 'topics'"
           class="side-panel"
-          aria-label="Bazi question topics"
+          :aria-label="$t('baziPaipanRoom.chooseTopic')"
           data-testid="bazi-room-topic-card"
         >
           <header>
             <div>
-              <small>Bazi Chart Room</small>
+              <small>{{ $t('baziPaipanRoom.roomLabel') }}</small>
               <h2>{{ $t('baziPaipanRoom.chooseTopic') }}</h2>
             </div>
             <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="sideView = 'hidden'">
@@ -157,7 +157,7 @@
         <section
           v-if="sideView === 'form'"
           class="side-panel"
-          aria-label="Birth information form"
+          :aria-label="$t('baziPaipanRoom.birthTitle')"
           data-testid="bazi-room-form-card"
         >
           <header>
@@ -204,7 +204,7 @@
           v-if="activeSceneCard === 'visitor'"
           class="scene-popcard"
           role="dialog"
-          aria-label="Local birth information"
+          :aria-label="$t('baziPaipanRoom.localBirthCard')"
           data-testid="bazi-room-user-card"
         >
           <header>
@@ -222,7 +222,7 @@
         </aside>
       </Transition>
 
-      <nav class="room-actions" aria-label="Bazi room actions">
+      <nav class="room-actions" :aria-label="$t('baziPaipanRoom.roomActions')">
         <button
           type="button"
           data-testid="bazi-room-change-topic"
