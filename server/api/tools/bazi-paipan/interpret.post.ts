@@ -3,6 +3,7 @@ import { calculateBaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import { getAuthSession } from '~~/server/utils/auth-session'
 import {
   buildBaziChenyu,
+  buildBaziTopicFallback,
   buildBaziTopicLens,
   isBaziPaipanTopic,
   type BaziPaipanTopic,
@@ -126,6 +127,19 @@ ${context}
 只解读该元素与命局的直接关系，忽略无关部分。${lang.user}`
 }
 
+function buildTargetFallback(body: InterpretBody, locale: Locale) {
+  const label = (body.target?.label || '命盘元素').slice(0, 120)
+  const evidence = (body.target?.content || body.chartContext || '').replace(/\s+/g, ' ').slice(0, 180)
+  const templates: Record<Locale, (label: string, evidence: string) => string> = {
+    'zh-CN': (label, evidence) => `${label}的结构含义是：${evidence}。建议只调整一件与它直接相关的事。`,
+    'zh-TW': (label, evidence) => `${label}的結構含義是：${evidence}。建議只調整一件與它直接相關的事。`,
+    en: (label, evidence) => `${label} means: ${evidence}. Adjust one directly related part today.`,
+    ja: (label, evidence) => `${label}の構造的意味：${evidence}。今日は関連する一つだけ調整しましょう。`,
+    ko: (label, evidence) => `${label}의 구조적 의미: ${evidence}. 오늘은 직접 관련된 한 가지만 조정하세요.`,
+  }
+  return templates[locale](label, evidence)
+}
+
 function buildFullPrompt(body: InterpretBody, locale: Locale) {
   const lang = languageHook(locale)
   return `请基于以下完整八字命盘摘要，生成全盘 AI 分析报告。
@@ -239,9 +253,22 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  const emitFallback = () => {
+    if (mode === 'topic' && topicLens) {
+      emit({ type: 'reading', text: buildBaziTopicFallback(topicLens) })
+      return
+    }
+    if (mode === 'target') {
+      emit({ type: 'text', text: buildTargetFallback(body!, locale) })
+      return
+    }
+    emit({ type: 'error', message: 'AI 服务暂不可用' })
+  }
+
   if (topicLens) emit({ type: 'chenyu', text: buildBaziChenyu(topicLens.topic, topicLens) })
 
   let upstream: Response
+  let receivedReading = false
   try {
     upstream = await fetch(config.aiBaseUrl as string, {
       method: 'POST',
@@ -254,15 +281,14 @@ export default defineEventHandler(async (event) => {
     })
   }
   catch (error) {
-    emit({ type: 'error', message: `AI 服务连接失败：${error instanceof Error ? error.message : error}` })
+    emitFallback()
     res.write('data: [DONE]\n\n')
     res.end()
     return
   }
 
   if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => '')
-    emit({ type: 'error', message: `AI 服务错误（${upstream.status}）${detail.slice(0, 240)}` })
+    emitFallback()
     res.write('data: [DONE]\n\n')
     res.end()
     return
@@ -293,15 +319,19 @@ export default defineEventHandler(async (event) => {
             ? chunk.choices?.[0]?.delta?.content
             : (chunk.response ?? chunk.choices?.[0]?.delta?.content)
           if (token) emit({ type: mode === 'topic' ? 'reading' : 'text', text: token })
+          receivedReading = true
         }
         catch { /* Ignore provider keep-alive lines. */ }
       }
     }
   }
   catch (error) {
-    emit({ type: 'error', message: `读取 AI 流失败：${error instanceof Error ? error.message : error}` })
+    if (receivedReading) {
+      emit({ type: 'error', message: `读取 AI 流失败：${error instanceof Error ? error.message : error}` })
+    }
   }
   finally {
+    if (!receivedReading) emitFallback()
     res.write('data: [DONE]\n\n')
     res.end()
   }
