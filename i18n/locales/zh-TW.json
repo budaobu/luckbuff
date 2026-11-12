@@ -733,7 +733,7 @@
     "section2Title": "解讀服務",
     "section2Content": "當您使用智能解讀功能時，您的命盤信息（干支、十神、大運等）會通過我們的服務器代理轉發至解讀服務提供商。我們不會在服務器上持久化存儲這些信息，僅作為實時請求的轉發中介。",
     "section3Title": "Cookies 與追蹤",
-    "section3Content": "我們不使用任何第三方追蹤 Cookie。如您配置了百度統計等分析工具，相關數據收集遵循對應服務商的隱私政策。",
+    "section3Content": "本站使用 Google Tag Manager 進行訪問統計，可能透過 Cookie 等技術收集匿名訪問數據；相關數據收集遵循 Google 的隱私政策與使用條款。",
     "section4Title": "數據刪除",
     "section4Content": "您可以隨時在「我的檔案」頁面刪除單條檔案。未登錄時，清除瀏覽器本地存儲即可刪除所有數據；登錄後，刪除操作會同時移除伺服器上您帳號內的對應數據。",
     "section5Title": "聯系我們",

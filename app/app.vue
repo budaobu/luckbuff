@@ -16,7 +16,7 @@ const uiLocale = computed(() => {
   }
 })
 
-const baiduAnalyticsId = config.public.baiduAnalyticsId
+const googleTagManagerId = config.public.googleTagManagerId?.trim()
 const googleSiteVerification = config.public.googleSiteVerification
 const googleAdsenseClient = config.public.googleAdsenseClient?.trim()
 
@@ -30,14 +30,29 @@ useHead(() => ({
     dir: (head.value.htmlAttrs.dir || 'ltr') as 'ltr' | 'rtl' | 'auto',
   },
   link: head.value.link || [],
-  script: googleAdsenseClient
-    ? [{
-        src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseClient}`,
-        async: true,
-        crossorigin: 'anonymous',
-        tagPosition: 'head',
-      }]
-    : [],
+  script: [
+    ...(googleAdsenseClient
+      ? [{
+          src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${googleAdsenseClient}`,
+          async: true,
+          crossorigin: 'anonymous' as const,
+          tagPosition: 'head' as const,
+        }]
+      : []),
+    ...(googleTagManagerId
+      ? [
+          {
+            src: `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(googleTagManagerId)}`,
+            async: true,
+            tagPosition: 'head' as const,
+          },
+          {
+            innerHTML: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date());`,
+            tagPosition: 'head' as const,
+          },
+        ]
+      : []),
+  ],
   meta: [
     ...(head.value.meta || []),
     ...(googleSiteVerification
@@ -46,37 +61,6 @@ useHead(() => ({
   ],
 }))
 
-const interactionController = ref<AbortController | null>(null)
-
-function loadThirdPartyScripts() {
-  if (interactionController.value) {
-    interactionController.value.abort()
-    interactionController.value = null
-  }
-
-  if (baiduAnalyticsId) {
-    const analyticsScript = document.createElement('script')
-    analyticsScript.async = true
-    analyticsScript.defer = true
-    analyticsScript.src = `https://hm.baidu.com/hm.js?${baiduAnalyticsId}`
-    document.head.appendChild(analyticsScript)
-  }
-}
-
-onMounted(() => {
-  const controller = new AbortController()
-  interactionController.value = controller
-  const options: AddEventListenerOptions = { signal: controller.signal, passive: true }
-
-  for (const event of ['pointerdown', 'keydown', 'touchstart', 'scroll', 'wheel'] as const) {
-    window.addEventListener(event, loadThirdPartyScripts, { ...options, once: true })
-  }
-})
-
-onBeforeUnmount(() => {
-  interactionController.value?.abort()
-  interactionController.value = null
-})
 </script>
 
 <template>

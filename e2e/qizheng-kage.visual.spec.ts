@@ -29,7 +29,7 @@ async function mockNetwork(page: Page) {
       results: [{ latitude: 31.2304, longitude: 121.4737, timezone: 'Asia/Shanghai' }],
     }),
   }))
-  for (const pattern of ['**/hm.baidu.com/**', '**/googletagmanager.com/**', '**/google-analytics.com/**']) {
+  for (const pattern of ['**/googletagmanager.com/**', '**/google-analytics.com/**']) {
     await page.route(pattern, async route => route.fulfill({
       status: 200,
       contentType: 'application/javascript',
