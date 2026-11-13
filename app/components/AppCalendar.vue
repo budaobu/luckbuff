@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { CalendarDate } from '@internationalized/date'
-import type { CalendarDate as CalendarDateType } from '@internationalized/date'
+import { parseDate } from '@internationalized/date'
+import type { CalendarDate as CalendarDateType, DateValue } from '@internationalized/date'
 
 interface AppCalendarProps {
-  modelValue?: any
+  modelValue?: string | DateValue
+  iso?: string
   color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
   variant?: 'solid' | 'outline' | 'soft' | 'subtle'
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
@@ -18,10 +20,9 @@ interface AppCalendarProps {
   pagedNavigation?: boolean
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
   fixedWeeks?: boolean
-  minValue?: any
-  maxValue?: any
+  minValue?: string | DateValue
+  maxValue?: string | DateValue
   preventDeselect?: boolean
-  modelType?: 'date' | 'iso'
   ui?: Record<string, string>
   class?: string
 }
@@ -35,21 +36,20 @@ const props = withDefaults(defineProps<AppCalendarProps>(), {
   fixedWeeks: true,
   weekStartsOn: 0,
   preventDeselect: true,
-  modelType: 'date'
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: any]
+  'update:iso': [value: string]
 }>()
 
 const { t } = useI18n()
 const { solarToLunar } = useLunar()
 
 const selectedDate = computed(() => {
-  const value = props.modelValue
+  const value = props.iso ?? props.modelValue
   if (!value) return null
-  if (Array.isArray(value)) return value[0] ?? null
-  return value
+  return typeof value === 'string' ? parseDate(value) : value
 })
 
 const lunarDate = computed(() => {
@@ -57,17 +57,16 @@ const lunarDate = computed(() => {
   return solarToLunar(selectedDate.value.year, selectedDate.value.month, selectedDate.value.day)
 })
 
-const currentYear = computed(() => {
-  return props.modelValue
-    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue).year
-    : new Date().getFullYear()
-})
+const currentYear = computed(() => selectedDate.value?.year ?? new Date().getFullYear())
+const currentMonth = computed(() => selectedDate.value?.month ?? new Date().getMonth() + 1)
 
-const currentMonth = computed(() => {
-  return props.modelValue
-    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue).month
-    : new Date().getMonth() + 1
-})
+function toCalendarDate(value?: string | DateValue): DateValue | undefined {
+  if (typeof value === 'string') return value ? parseDate(value) : undefined
+  return value
+}
+
+const minDate = computed(() => toCalendarDate(props.minValue))
+const maxDate = computed(() => toCalendarDate(props.maxValue))
 
 const years = computed(() => {
   const now = new Date().getFullYear()
@@ -96,36 +95,34 @@ const months = computed(() => [
 const selectedYear = ref(currentYear.value)
 const selectedMonth = ref(currentMonth.value)
 
-watch(() => props.modelValue, (newVal) => {
+watch(() => props.iso ?? props.modelValue, (newVal) => {
   if (newVal) {
-    const current = Array.isArray(newVal) ? newVal[0] : newVal
-    selectedYear.value = current.year
-    selectedMonth.value = current.month
+    const current = selectedDate.value
+    if (current) {
+      selectedYear.value = current.year
+      selectedMonth.value = current.month
+    }
   }
 }, { immediate: true })
 
 function handleYearChange(year: number) {
   selectedYear.value = year
-  const hasValue = !!props.modelValue
-  const current = hasValue
-    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue)
-    : null
+  const current = selectedDate.value
   const month = current ? current.month : selectedMonth.value
   const day = current ? current.day : 1
-  const newDate = new CalendarDate(year, month, day)
-  emit('update:modelValue', newDate)
+  const value = new CalendarDate(year, month, day).toString()
+  emit('update:modelValue', value)
+  emit('update:iso', value)
 }
 
 function handleMonthChange(month: number) {
   selectedMonth.value = month
-  const hasValue = !!props.modelValue
-  const current = hasValue
-    ? (Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue)
-    : null
+  const current = selectedDate.value
   const year = current ? current.year : selectedYear.value
   const day = current ? current.day : 1
-  const newDate = new CalendarDate(year, month, day)
-  emit('update:modelValue', newDate)
+  const value = new CalendarDate(year, month, day).toString()
+  emit('update:modelValue', value)
+  emit('update:iso', value)
 }
 
 function onPlaceholderUpdate(value: CalendarDateType) {
@@ -148,7 +145,9 @@ function handlePlaceholderUpdate(value: unknown) {
 }
 
 function handleModelValueUpdate(value: unknown) {
-  emit('update:modelValue', value as CalendarDateType)
+  const isoDate = (value as CalendarDateType).toString()
+  emit('update:modelValue', value)
+  emit('update:iso', isoDate)
 }
 
 </script>
@@ -183,7 +182,7 @@ function handleModelValueUpdate(value: unknown) {
       </select>
     </div>
     <UCalendar
-      :model-value="modelValue"
+      :model-value="selectedDate"
       :color="color"
       :variant="variant"
       :size="size"
@@ -197,10 +196,9 @@ function handleModelValueUpdate(value: unknown) {
       :paged-navigation="pagedNavigation"
       :week-starts-on="weekStartsOn"
       :fixed-weeks="fixedWeeks"
-      :min-value="minValue"
-      :max-value="maxValue"
+      :min-value="minDate"
+      :max-value="maxDate"
       :prevent-deselect="preventDeselect"
-      :model-type="modelType"
       :ui="{
         root: '',
         header: '',

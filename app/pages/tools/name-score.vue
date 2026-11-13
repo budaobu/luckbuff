@@ -117,11 +117,11 @@
                     :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('nameScore.birthDatePlaceholder') }}
+                    {{ formatIsoDate(form.birthDate, locale) || $t('nameScore.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
                     <LazyAppCalendar
-                      v-model="calendarDate"
+                      v-model:iso="form.birthDate"
                       color="warning"
                       class="p-2"
                     />
@@ -410,10 +410,10 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
 import type { BaziChart, WuxingScore } from '~/types/bazi'
+import { formatIsoDate } from '~/utils/form-date'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -435,20 +435,7 @@ const form = reactive({
 const chart = ref<BaziChart | null>(null)
 
 // 日历 picker
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDate = ref<CalendarDate | undefined>(undefined)
-
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-})
-
 function clearBirthDate() {
-  calendarDate.value = undefined
   form.birthDate = ''
 }
 
@@ -460,14 +447,7 @@ function selectProfile(profile: UserProfile) {
   selectedProfileId.value = profile.id
   form.name = profile.name || profile.label || ''
   form.gender = profile.gender
-  if (profile.birthDate) {
-    const [y, m, d] = profile.birthDate.split('-').map(Number) as [number, number, number]
-    calendarDate.value = new CalendarDate(y, m, d)
-    form.birthDate = profile.birthDate
-  } else {
-    calendarDate.value = undefined
-    form.birthDate = ''
-  }
+  form.birthDate = profile.birthDate || ''
   form.birthHour = profile.birthHour
 }
 

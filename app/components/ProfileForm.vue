@@ -107,11 +107,11 @@
                 :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
               >
                 <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+                {{ formatIsoDate(form.birthDate, locale) || $t('profileForm.birthDatePlaceholder') }}
               </UButton>
               <template #content>
                 <LazyAppCalendar
-                  v-model="calendarDate"
+                  v-model:iso="form.birthDate"
                   color="warning"
                   class="p-2"
                 />
@@ -241,7 +241,7 @@
 <script setup lang="ts">
 import type { UserProfile, DiZhi } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 
 interface Props {
   profile?: UserProfile | null
@@ -288,23 +288,6 @@ const hourOptions = SHICHEN_OPTIONS.map(s => ({
 const birthGanZhi = ref('')
 const { dateToGanZhi } = useBaziCalc()
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
-
-function syncBirthDateFromCalendar() {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-  onBirthDateChange()
-}
-
-watch(calendarDate, () => {
-  syncBirthDateFromCalendar()
-})
-
 function onBirthDateChange() {
   if (!form.birthDate) {
     birthGanZhi.value = ''
@@ -329,15 +312,6 @@ watch(() => props.profile, (p) => {
     form.birthHour = p.birthHour
     form.birthProvince = p.birthProvince || ''
     form.isDefault = p.isDefault || false
-    if (form.birthDate) {
-      try {
-        calendarDate.value = parseDate(form.birthDate)
-      } catch {
-        calendarDate.value = undefined
-      }
-    } else {
-      calendarDate.value = undefined
-    }
     onBirthDateChange()
   } else {
     form.label = ''
@@ -346,7 +320,6 @@ watch(() => props.profile, (p) => {
     form.formerNameChangedYear = undefined
     form.gender = 'male'
     form.birthDate = ''
-    calendarDate.value = undefined
     form.birthHour = undefined
     form.birthProvince = ''
     form.isDefault = false

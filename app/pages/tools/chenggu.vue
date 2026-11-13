@@ -104,11 +104,11 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('chenggu.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, 'zh-CN') || $t('chenggu.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
-                    v-model="calendarDate"
+                    v-model:iso="form.birthDate"
                     color="warning"
                     class="p-2"
                   />
@@ -273,7 +273,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { UserProfile, DiZhi } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
 
@@ -319,17 +319,7 @@ const { profiles, defaultProfile } = useProfiles()
 const localePath = useLocalePath()
 const selectedProfileId = ref<string | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-})
 
 const hourOptions: { label: string; value: DiZhi }[] = SHICHEN_OPTIONS.map(s => ({
   label: `${s.label}（${s.range}）`,
@@ -342,13 +332,7 @@ function selectProfile(profile: UserProfile) {
   form.birthDate = profile.birthDate || ''
   form.birthHour = profile.birthHour
   if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
   } else {
-    calendarDate.value = undefined
   }
 }
 

@@ -105,10 +105,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !manualForm.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ manualForm.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+                  {{ formatIsoDate(manualForm.birthDate, locale) || $t('profileForm.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="manualForm.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -168,10 +168,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !formValues.startDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ formValues.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('huangdao.startDatePlaceholder') }}
+                    {{ formatIsoDate(formValues.startDate, locale) || $t('huangdao.startDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="formValues.startDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -185,10 +185,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !formValues.endDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ formValues.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('huangdao.endDatePlaceholder') }}
+                    {{ formatIsoDate(formValues.endDate, locale) || $t('huangdao.endDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="formValues.endDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -368,7 +368,7 @@
 <script setup lang="ts">
 import type { HuangdaoDay, HuangdaoFormValues } from '~/types/huangdao'
 import type { DiZhi } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { useProfilesStore } from '~/stores/profiles'
 
 const { t, locale } = useI18n()
@@ -394,15 +394,6 @@ function selectProfile(profile: typeof store.list[0]) {
   manualForm.gender = profile.gender
   manualForm.birthDate = profile.birthDate || ''
   manualForm.birthHour = profile.birthHour
-  if (manualForm.birthDate) {
-    try {
-      calendarDate.value = parseDate(manualForm.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
-  } else {
-    calendarDate.value = undefined
-  }
 }
 
 // 手动表单
@@ -413,28 +404,6 @@ const manualForm = reactive({
   birthHour: undefined as DiZhi | undefined,
 })
 
-const calendarDate = ref<CalendarDate | undefined>(undefined)
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    manualForm.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  }
-})
-
-// 日期范围
-const startCalendarDate = ref<CalendarDate | undefined>(undefined)
-const endCalendarDate = ref<CalendarDate | undefined>(undefined)
-
-watch(startCalendarDate, () => {
-  if (startCalendarDate.value) {
-    formValues.startDate = `${startCalendarDate.value.year}-${String(startCalendarDate.value.month).padStart(2, '0')}-${String(startCalendarDate.value.day).padStart(2, '0')}`
-  }
-})
-
-watch(endCalendarDate, () => {
-  if (endCalendarDate.value) {
-    formValues.endDate = `${endCalendarDate.value.year}-${String(endCalendarDate.value.month).padStart(2, '0')}-${String(endCalendarDate.value.day).padStart(2, '0')}`
-  }
-})
 
 // 主表单
 const formValues = reactive<HuangdaoFormValues>({
@@ -484,8 +453,6 @@ const hourOptions = [
   ].map(s => ({ label: `${s.label}（${s.range}）`, value: s.dizhi })),
 ]
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' })
 
 // 初始化默认日期（今天到一个月后）
 onMounted(() => {
@@ -494,10 +461,6 @@ onMounted(() => {
   nextMonth.setMonth(nextMonth.getMonth() + 1)
   formValues.startDate = formatDate(today)
   formValues.endDate = formatDate(nextMonth)
-  try {
-    startCalendarDate.value = parseDate(formValues.startDate)
-    endCalendarDate.value = parseDate(formValues.endDate)
-  } catch { /* ignore */ }
 })
 
 function formatDate(d: Date): string {

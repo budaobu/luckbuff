@@ -43,11 +43,12 @@
           :class="{ 'text-[var(--text-placeholder)]': !birthDate }"
         >
           <UIcon name="i-heroicons-calendar" class="mr-2 h-4 w-4 text-[var(--text-faint)]" />
-          {{ birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+          {{ formatIsoDate(birthDate, locale) || $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
           <LazyAppCalendar
-            v-model="calendarDate"
+            :iso="birthDate"
+            @update:iso="emit('update:birthDate', $event)"
             color="warning"
             :min-value="minDate"
             :max-value="maxDate"
@@ -60,8 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
-import type { DateValue } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { UserProfile } from '~/types/user'
 
 const props = withDefaults(defineProps<{
@@ -83,21 +83,6 @@ const { locale } = useI18n()
 const localePath = useLocalePath()
 const { profiles } = useProfiles()
 
-const tz = getLocalTimeZone()
-const dateFormatter = computed(() => new DateFormatter(
-  locale.value === 'en' ? 'en-US' : 'zh-CN',
-  { dateStyle: 'long' },
-))
-
-const minDate = new CalendarDate(1900, 1, 1)
-const maxDate = new CalendarDate(2100, 12, 31)
-const calendarDate = shallowRef<DateValue>()
-
-watch(() => props.birthDate, (value) => {
-  calendarDate.value = value ? parseDate(value) : undefined
-}, { immediate: true })
-
-watch(calendarDate, (value) => {
-  emit('update:birthDate', value ? value.toString() : '')
-})
+const minDate = '1900-01-01'
+const maxDate = '2100-12-31'
 </script>

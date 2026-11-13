@@ -47,7 +47,7 @@
                   {{ formattedBirthDate(key) }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDates[key]" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="people[key].birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </fieldset>
@@ -111,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { LifePathCalcResult } from '~~/server/utils/tools/lifepath-peidui-data'
 
 type PersonKey = 'personA' | 'personB'
@@ -133,33 +133,10 @@ const people = ref<{ personA: PersonForm; personB: PersonForm }>({
   personB: { name: '', birthDate: '' },
 })
 
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(
-  locale.value === 'en' ? 'en-US' : locale.value === 'zh-TW' ? 'zh-TW' : locale.value === 'ja' ? 'ja-JP' : 'zh-CN',
-  { dateStyle: 'long' },
-))
-const calendarDates = ref<Record<PersonKey, CalendarDate | undefined>>({
-  personA: undefined,
-  personB: undefined,
-})
-
-watch(() => calendarDates.value.personA, (value) => {
-  people.value.personA.birthDate = value
-    ? `${value.year}-${String(value.month).padStart(2, '0')}-${String(value.day).padStart(2, '0')}`
-    : ''
-})
-
-watch(() => calendarDates.value.personB, (value) => {
-  people.value.personB.birthDate = value
-    ? `${value.year}-${String(value.month).padStart(2, '0')}-${String(value.day).padStart(2, '0')}`
-    : ''
-})
 
 function formattedBirthDate(key: PersonKey) {
-  const value = calendarDates.value[key]
-  return value && people.value[key].birthDate
-    ? df.value.format(value.toDate(tz))
-    : t('lifePathPeidui.birthDatePlaceholder')
+  return formatIsoDate(people.value[key].birthDate, locale.value)
+    || t('lifePathPeidui.birthDatePlaceholder')
 }
 
 const shareName = computed(() => {

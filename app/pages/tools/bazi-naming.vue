@@ -83,11 +83,11 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate ? formatBirthDate(form.birthDate) : $t('baziNaming.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, locale) || $t('baziNaming.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
-                    v-model="calendarDate"
+                    v-model:iso="form.birthDate"
                     color="warning"
                     class="p-2"
                   />
@@ -419,6 +419,7 @@
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { DiZhi } from '~/types/user'
 import type { BaziChart, WuxingScore } from '~/types/bazi'
+import { formatIsoDate } from '~/utils/form-date'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -431,40 +432,6 @@ const form = reactive({
   nameStyle: '',
 })
 const chart = ref<BaziChart | null>(null)
-
-interface CalendarLikeDate {
-  year: number
-  month: number
-  day: number
-}
-
-// 日历 picker：CalendarDate 由 LazyAppCalendar 在选择时提供，表单首包不引入完整历法库。
-const df = computed(() => new Intl.DateTimeFormat(
-  locale.value === 'en'
-    ? 'en-US'
-    : locale.value === 'zh-TW'
-      ? 'zh-TW'
-      : locale.value === 'ja'
-        ? 'ja-JP'
-        : locale.value === 'ko'
-          ? 'ko-KR'
-          : 'zh-CN',
-  { dateStyle: 'long', timeZone: 'UTC' },
-))
-const calendarDate = shallowRef<CalendarLikeDate | undefined>(undefined)
-
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-})
-
-function formatBirthDate(value: string) {
-  const [year, month, day] = value.split('-').map(Number) as [number, number, number]
-  return df.value.format(new Date(Date.UTC(year, month - 1, day)))
-}
 
 // AI 起名状态
 const aiContent = ref('')
@@ -622,7 +589,6 @@ function resetForm() {
   aiStreaming.value = false
   aiStarted.value = false
   aiError.value = null
-  calendarDate.value = undefined
   form.surname = ''
   form.gender = '男'
   form.birthDate = ''

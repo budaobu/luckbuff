@@ -44,10 +44,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !selectedDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ selectedDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('jishi.datePlaceholder') }}
+                  {{ formatIsoDate(selectedDate, locale) || $t('jishi.datePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="selectedDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
 
@@ -227,7 +227,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 
 interface ShiChenItem {
@@ -264,37 +264,31 @@ const selectedDate = ref('')
 const calcResult = ref<CalcResult | null>(null)
 const posterRef = ref<HTMLDivElement | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), {
-  dateStyle: 'medium',
-})
-
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 const selectedQuickKey = ref<'today' | 'tomorrow' | 'dayAfterTomorrow' | null>(null)
 
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    selectedDate.value = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-    syncQuickKey()
-  }
-})
+watch(selectedDate, syncQuickKey)
 
 function selectQuickDate(offset: number, key: 'today' | 'tomorrow' | 'dayAfterTomorrow') {
-  const d = today(tz).add({ days: offset })
-  calendarDate.value = d
+  const d = new Date()
+  d.setDate(d.getDate() + offset)
+  selectedDate.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   selectedQuickKey.value = key
 }
 
 function syncQuickKey() {
-  const selected = formatDate(calendarDate.value)
+  const selected = selectedDate.value
   if (!selected) {
     selectedQuickKey.value = null
     return
   }
-  const todayDate = today(tz)
-  const todayStr = formatDate(todayDate)
-  const tomorrowStr = formatDate(todayDate.add({ days: 1 }))
-  const dayAfterTomorrowStr = formatDate(todayDate.add({ days: 2 }))
+  const isoOffset = (offset: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() + offset)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+  const todayStr = isoOffset(0)
+  const tomorrowStr = isoOffset(1)
+  const dayAfterTomorrowStr = isoOffset(2)
   if (selected === todayStr) selectedQuickKey.value = 'today'
   else if (selected === tomorrowStr) selectedQuickKey.value = 'tomorrow'
   else if (selected === dayAfterTomorrowStr) selectedQuickKey.value = 'dayAfterTomorrow'
@@ -306,11 +300,6 @@ const quickDateButtons = computed(() => [
   { key: 'tomorrow' as const, label: t('jishi.tomorrow'), offset: 1 },
   { key: 'dayAfterTomorrow' as const, label: t('jishi.dayAfterTomorrow'), offset: 2 },
 ])
-
-function formatDate(date: { year: number; month: number; day: number } | undefined): string {
-  if (!date) return ''
-  return `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
-}
 
 onMounted(() => {
   selectQuickDate(0, 'today')

@@ -50,10 +50,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !queryDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ queryDate && queryCalendarDate ? df.format(queryCalendarDate.toDate(tz)) : $t('chongShengxiao.queryDatePlaceholder') }}
+                    {{ formatIsoDate(queryDate, locale) || $t('chongShengxiao.queryDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="queryCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="queryDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
 
@@ -370,7 +370,7 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
-import { parseDate, CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { formatIsoDate, parseIsoDateParts } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 
 interface FormValues {
@@ -441,30 +441,23 @@ const calcResult = ref<CalcResult | null>(null)
 const baziFormRef = ref<{ form: FormValues } | null>(null)
 const resultRef = ref<HTMLDivElement | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value, { dateStyle: 'long' })
-const queryCalendarDate = ref<CalendarDate | undefined>(undefined)
 const queryDate = ref('')
 const quickDateOffset = ref<0 | 1 | 2 | null>(null)
 
-watch(queryCalendarDate, () => {
-  if (queryCalendarDate.value) {
-    queryDate.value = `${queryCalendarDate.value.year}-${String(queryCalendarDate.value.month).padStart(2, '0')}-${String(queryCalendarDate.value.day).padStart(2, '0')}`
-  }
-  else {
-    queryDate.value = ''
+watch(queryDate, (value) => {
+  if (!value) {
+    quickDateOffset.value = null
+    return
   }
 
-  const selected = queryCalendarDate.value?.toDate(tz)
-  if (selected) {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    const diffDays = Math.round((selected.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-    quickDateOffset.value = diffDays >= 0 && diffDays <= 2 ? (diffDays as 0 | 1 | 2) : null
-  }
-  else {
-    quickDateOffset.value = null
-  }
+  const parts = parseIsoDateParts(value)
+  if (!parts) return
+
+  const selected = new Date(parts.year, parts.month - 1, parts.day)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const diffDays = Math.round((selected.getTime() - today.getTime()) / 86_400_000)
+  quickDateOffset.value = diffDays >= 0 && diffDays <= 2 ? (diffDays as 0 | 1 | 2) : null
 })
 
 const quickDateOptions = computed(() => [
@@ -476,10 +469,9 @@ const quickDateOptions = computed(() => [
 function setQuickDate(offset: number) {
   const d = new Date()
   d.setDate(d.getDate() + offset)
-  const year = d.getFullYear()
-  const month = d.getMonth() + 1
-  const day = d.getDate()
-  queryCalendarDate.value = new CalendarDate(year, month, day)
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  queryDate.value = `${d.getFullYear()}-${month}-${day}`
   quickDateOffset.value = offset as 0 | 1 | 2
 }
 
@@ -566,12 +558,6 @@ async function handleNextDay() {
   const month = d.getMonth() + 1
   const day = d.getDate()
   queryDate.value = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-  try {
-    queryCalendarDate.value = parseDate(queryDate.value)
-  }
-  catch {
-    queryCalendarDate.value = undefined
-  }
 
   phase.value = 'animating'
   calcResult.value = null

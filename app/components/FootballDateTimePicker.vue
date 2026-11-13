@@ -53,7 +53,7 @@
           </div>
 
           <LazyAppCalendar
-            v-model="calendarDate"
+            v-model:iso="calendarDate"
             color="warning"
             class="border-0 bg-transparent p-2 shadow-none"
           />
@@ -117,8 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate } from '@internationalized/date'
-import type { CalendarDate as CalendarDateType } from '@internationalized/date'
+import { parseIsoDateParts } from '~/utils/form-date'
 
 const props = withDefaults(defineProps<{
   modelValue?: string
@@ -143,7 +142,7 @@ const emit = defineEmits<{
 const { locale } = useI18n()
 const open = ref(false)
 const timezone = ref('Asia/Shanghai')
-const calendarDate = shallowRef<CalendarDateType>()
+const calendarDate = ref('')
 const hour = ref<number>()
 const minute = ref<number>()
 
@@ -180,25 +179,18 @@ const triggerText = computed(() => {
   }).format(new Date(props.modelValue))
 })
 
-function syncFromDate(date: Date) {
-  timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai'
-  calendarDate.value = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
-  hour.value = date.getHours()
-  minute.value = date.getMinutes()
+function emitSelected() {
+  const parts = parseIsoDateParts(calendarDate.value)
+  if (!parts || hour.value == null || minute.value == null) return
+  const date = new Date(parts.year, parts.month - 1, parts.day, hour.value, minute.value, 0, 0)
+  emit('update:modelValue', date.toISOString())
 }
 
-function emitSelected() {
-  if (!calendarDate.value || hour.value == null || minute.value == null) return
-  const date = new Date(
-    calendarDate.value.year,
-    calendarDate.value.month - 1,
-    calendarDate.value.day,
-    hour.value,
-    minute.value,
-    0,
-    0,
-  )
-  emit('update:modelValue', date.toISOString())
+function syncFromDate(date: Date) {
+  timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Shanghai'
+  calendarDate.value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  hour.value = date.getHours()
+  minute.value = date.getMinutes()
 }
 
 function setNow() {
@@ -220,9 +212,9 @@ watch(() => props.modelValue, (value) => {
   const date = new Date(value)
   const current = calendarDate.value
   const sameMinute = current
-    && date.getFullYear() === current.year
-    && date.getMonth() + 1 === current.month
-    && date.getDate() === current.day
+    && date.getFullYear() === Number(current.slice(0, 4))
+    && date.getMonth() + 1 === Number(current.slice(5, 7))
+    && date.getDate() === Number(current.slice(8, 10))
     && hour.value === date.getHours()
     && minute.value === date.getMinutes()
   if (!sameMinute) syncFromDate(date)
@@ -238,11 +230,8 @@ onMounted(() => {
     setNow()
   }
   else {
-    calendarDate.value = new CalendarDate(
-      new Date().getFullYear(),
-      new Date().getMonth() + 1,
-      new Date().getDate(),
-    )
+    const today = new Date()
+    calendarDate.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
   }
 })
 </script>

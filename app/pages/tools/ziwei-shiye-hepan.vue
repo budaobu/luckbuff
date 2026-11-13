@@ -102,10 +102,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !formA.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ formA.birthDate && calendarDateA ? df.format(calendarDateA.toDate(tz)) : $t('ziweiShiyeHepan.birthDatePlaceholder') }}
+                  {{ formatIsoDate(formA.birthDate, locale) || $t('ziweiShiyeHepan.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDateA" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="formA.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -217,10 +217,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !formB.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ formB.birthDate && calendarDateB ? df.format(calendarDateB.toDate(tz)) : $t('ziweiShiyeHepan.birthDatePlaceholder') }}
+                  {{ formatIsoDate(formB.birthDate, locale) || $t('ziweiShiyeHepan.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDateB" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="formB.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -417,7 +417,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
 import type { ZwdsChart } from '~/types/zwds'
@@ -451,27 +451,6 @@ const { profiles, defaultProfile } = useProfiles()
 const selectedA = ref<string | null>(null)
 const selectedB = ref<string | null>(null)
 
-// Calendar pickers
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDateA = ref<CalendarDate | undefined>(undefined)
-const calendarDateB = ref<CalendarDate | undefined>(undefined)
-
-watch(calendarDateA, () => {
-  if (calendarDateA.value) {
-    formA.birthDate = `${calendarDateA.value.year}-${String(calendarDateA.value.month).padStart(2, '0')}-${String(calendarDateA.value.day).padStart(2, '0')}`
-  } else {
-    formA.birthDate = ''
-  }
-})
-
-watch(calendarDateB, () => {
-  if (calendarDateB.value) {
-    formB.birthDate = `${calendarDateB.value.year}-${String(calendarDateB.value.month).padStart(2, '0')}-${String(calendarDateB.value.day).padStart(2, '0')}`
-  } else {
-    formB.birthDate = ''
-  }
-})
 
 function selectProfile(profile: UserProfile, target: 'A' | 'B') {
   if (target === 'A') {
@@ -481,11 +460,6 @@ function selectProfile(profile: UserProfile, target: 'A' | 'B') {
     formA.birthDate = profile.birthDate || ''
     formA.birthHour = profile.birthHour
     formA.birthProvince = profile.birthProvince || ''
-    if (formA.birthDate) {
-      try { calendarDateA.value = parseDate(formA.birthDate) } catch { calendarDateA.value = undefined }
-    } else {
-      calendarDateA.value = undefined
-    }
   } else {
     selectedB.value = profile.id
     formB.name = profile.name || profile.label || ''
@@ -493,11 +467,6 @@ function selectProfile(profile: UserProfile, target: 'A' | 'B') {
     formB.birthDate = profile.birthDate || ''
     formB.birthHour = profile.birthHour
     formB.birthProvince = profile.birthProvince || ''
-    if (formB.birthDate) {
-      try { calendarDateB.value = parseDate(formB.birthDate) } catch { calendarDateB.value = undefined }
-    } else {
-      calendarDateB.value = undefined
-    }
   }
 }
 
@@ -645,8 +614,6 @@ function resetForm() {
   aiError.value = null
   selectedA.value = null
   selectedB.value = null
-  calendarDateA.value = undefined
-  calendarDateB.value = undefined
   formA.name = ''
   formA.gender = 'male'
   formA.birthDate = ''

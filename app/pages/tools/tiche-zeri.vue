@@ -45,10 +45,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !form.startDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ form.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('ticheZeri.startPlaceholder') }}
+                    {{ formatIsoDate(form.startDate, locale) || $t('ticheZeri.startPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="form.startDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
                 <UPopover>
@@ -59,10 +59,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !form.endDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ form.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('ticheZeri.endPlaceholder') }}
+                    {{ formatIsoDate(form.endDate, locale) || $t('ticheZeri.endPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="form.endDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -108,10 +108,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !owner.birthDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ owner.birthDate && ownerCalendarDate ? df.format(ownerCalendarDate.toDate(tz)) : $t('ticheZeri.birthDatePlaceholder') }}
+                    {{ formatIsoDate(owner.birthDate, locale) || $t('ticheZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="ownerCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="owner.birthDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -257,7 +257,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 import { useProfilesStore } from '~/stores/profiles'
 
@@ -316,40 +316,23 @@ const phase = ref<'form' | 'animating' | 'result'>('form')
 const calcResult = ref<CalcResult | null>(null)
 const posterRef = ref<HTMLDivElement | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), {
-  dateStyle: 'medium',
-})
 
 /* ---------- 表单状态 ---------- */
 
 const form = reactive({ startDate: '', endDate: '' })
 const owner = reactive({ birthDate: '', birthHour: undefined as DiZhi | undefined })
 
-const startCalendarDate = ref<CalendarDate | undefined>(undefined)
-const endCalendarDate = ref<CalendarDate | undefined>(undefined)
-const ownerCalendarDate = ref<CalendarDate | undefined>(undefined)
 
 const ownerProfileId = ref('')
 
-function toDateStr(v: { year: number; month: number; day: number }): string {
-  return `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}`
+function toDateStr(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
-
-watch(startCalendarDate, () => { if (startCalendarDate.value) form.startDate = toDateStr(startCalendarDate.value) })
-watch(endCalendarDate, () => { if (endCalendarDate.value) form.endDate = toDateStr(endCalendarDate.value) })
-watch(ownerCalendarDate, () => { if (ownerCalendarDate.value) owner.birthDate = toDateStr(ownerCalendarDate.value) })
 
 function selectProfile(profile: typeof store.list[0]) {
   ownerProfileId.value = profile.id
   owner.birthDate = profile.birthDate || ''
   owner.birthHour = profile.birthHour
-  try {
-    ownerCalendarDate.value = owner.birthDate ? parseDate(owner.birthDate) : undefined
-  }
-  catch {
-    ownerCalendarDate.value = undefined
-  }
 }
 
 const hourOptions = computed(() => {
@@ -376,13 +359,8 @@ onMounted(() => {
   const today = new Date()
   const oneMonth = new Date(today)
   oneMonth.setMonth(oneMonth.getMonth() + 1)
-  form.startDate = toDateStr({ year: today.getFullYear(), month: today.getMonth() + 1, day: today.getDate() })
-  form.endDate = toDateStr({ year: oneMonth.getFullYear(), month: oneMonth.getMonth() + 1, day: oneMonth.getDate() })
-  try {
-    startCalendarDate.value = parseDate(form.startDate)
-    endCalendarDate.value = parseDate(form.endDate)
-  }
-  catch { /* ignore */ }
+  form.startDate = toDateStr(today)
+  form.endDate = toDateStr(oneMonth)
 })
 
 /* ---------- 提交计算 ---------- */

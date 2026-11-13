@@ -77,10 +77,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('childActivityInterest.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, 'zh-CN') || $t('childActivityInterest.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="form.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -364,7 +364,7 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { ChildActivityInterestCalcResult } from '~/types/child-activity-interest'
@@ -395,18 +395,12 @@ const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 const resultRef = ref<HTMLDivElement>()
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
 const hourOptions = SHICHEN_OPTIONS.map(s => ({
   label: `${s.label}（${s.range}）`,
   value: s.dizhi,
 }))
 
-watch(calendarDate, (v) => {
-  form.birthDate = v ? `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}` : ''
-})
 
 const isValid = computed(() => {
   return form.gender && form.birthDate

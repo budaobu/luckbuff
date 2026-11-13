@@ -82,10 +82,10 @@
                       :class="{ 'text-[var(--text-placeholder)]': !form.personA.birthDate }"
                     >
                       <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                      {{ form.personA.birthDate && personACalendarDate ? df.format(personACalendarDate.toDate(tz)) : $t('marriageXiangxing.birthDatePlaceholder') }}
+                      {{ formatIsoDate(form.personA.birthDate, 'zh-CN') || $t('marriageXiangxing.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <LazyAppCalendar v-model="personACalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model:iso="form.personA.birthDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -159,10 +159,10 @@
                       :class="{ 'text-[var(--text-placeholder)]': !form.personB.birthDate }"
                     >
                       <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                      {{ form.personB.birthDate && personBCalendarDate ? df.format(personBCalendarDate.toDate(tz)) : $t('marriageXiangxing.birthDatePlaceholder') }}
+                      {{ formatIsoDate(form.personB.birthDate, 'zh-CN') || $t('marriageXiangxing.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <LazyAppCalendar v-model="personBCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model:iso="form.personB.birthDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -477,7 +477,7 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { MarriageXiangxingCalcResult } from '~/types/marriage-xiangxing'
@@ -505,22 +505,12 @@ const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 const resultRef = ref<HTMLDivElement>()
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const personACalendarDate = ref<CalendarDate | undefined>(undefined)
-const personBCalendarDate = ref<CalendarDate | undefined>(undefined)
 
 const hourOptions = SHICHEN_OPTIONS.map(s => ({
   label: `${s.label}（${s.range}）`,
   value: s.dizhi,
 }))
 
-watch(personACalendarDate, (v) => {
-  form.personA.birthDate = v ? `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}` : ''
-})
-watch(personBCalendarDate, (v) => {
-  form.personB.birthDate = v ? `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}` : ''
-})
 
 const isValid = computed(() => {
   return (

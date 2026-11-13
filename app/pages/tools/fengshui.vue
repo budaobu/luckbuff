@@ -100,10 +100,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('kanyu.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, locale) || $t('kanyu.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="form.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -310,7 +310,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile } from '~/types/user'
 import type { KanyuCalcResult } from '~~/server/api/tools/fengshui/calc.post'
@@ -334,18 +334,8 @@ const form = reactive({
   moveInYear: undefined as number | undefined,
 })
 
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-})
 
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
 
 const shichenOptions: { dizhi: DiZhi; label: string }[] = SHICHEN_OPTIONS.map(s => ({
   dizhi: s.dizhi,
@@ -362,13 +352,7 @@ function selectProfile(profile: UserProfile) {
   form.birthDate = profile.birthDate || ''
   form.birthHour = profile.birthHour
   if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
   } else {
-    calendarDate.value = undefined
   }
 }
 
@@ -516,7 +500,6 @@ function resetForm() {
   form.direction = undefined
   form.buildYear = undefined
   form.moveInYear = undefined
-  calendarDate.value = undefined
 }
 
 function handleCopy() {

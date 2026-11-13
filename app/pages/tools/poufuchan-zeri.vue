@@ -45,10 +45,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !form.startDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ form.startDate && startCalendarDate ? df.format(startCalendarDate.toDate(tz)) : $t('poufuchanZeri.startPlaceholder') }}
+                    {{ formatIsoDate(form.startDate, locale) || $t('poufuchanZeri.startPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="startCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="form.startDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
                 <UPopover>
@@ -59,10 +59,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !form.endDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ form.endDate && endCalendarDate ? df.format(endCalendarDate.toDate(tz)) : $t('poufuchanZeri.endPlaceholder') }}
+                    {{ formatIsoDate(form.endDate, locale) || $t('poufuchanZeri.endPlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="endCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="form.endDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -107,10 +107,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !mother.birthDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ mother.birthDate && motherCalendarDate ? df.format(motherCalendarDate.toDate(tz)) : $t('poufuchanZeri.birthDatePlaceholder') }}
+                    {{ formatIsoDate(mother.birthDate, locale) || $t('poufuchanZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="motherCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="mother.birthDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -168,10 +168,10 @@
                     :class="{ 'text-[var(--text-placeholder)]': !father.birthDate }"
                   >
                     <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                    {{ father.birthDate && fatherCalendarDate ? df.format(fatherCalendarDate.toDate(tz)) : $t('poufuchanZeri.birthDatePlaceholder') }}
+                    {{ formatIsoDate(father.birthDate, locale) || $t('poufuchanZeri.birthDatePlaceholder') }}
                   </UButton>
                   <template #content>
-                    <LazyAppCalendar v-model="fatherCalendarDate" color="warning" class="p-2" />
+                    <LazyAppCalendar v-model:iso="father.birthDate" color="warning" class="p-2" />
                   </template>
                 </UPopover>
               </div>
@@ -314,7 +314,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 import { useProfilesStore } from '~/stores/profiles'
 
@@ -394,10 +394,6 @@ const phase = ref<'form' | 'animating' | 'result'>('form')
 const calcResult = ref<CalcResult | null>(null)
 const posterRef = ref<HTMLDivElement | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), {
-  dateStyle: 'medium',
-})
 
 /* ---------- 表单状态 ---------- */
 
@@ -405,22 +401,13 @@ const form = reactive({ startDate: '', endDate: '' })
 const mother = reactive({ birthDate: '', birthHour: undefined as DiZhi | undefined })
 const father = reactive({ birthDate: '', birthHour: undefined as DiZhi | undefined })
 
-const startCalendarDate = ref<CalendarDate | undefined>(undefined)
-const endCalendarDate = ref<CalendarDate | undefined>(undefined)
-const motherCalendarDate = ref<CalendarDate | undefined>(undefined)
-const fatherCalendarDate = ref<CalendarDate | undefined>(undefined)
 
 const motherProfileId = ref('')
 const fatherProfileId = ref('')
 
-function toDateStr(v: { year: number; month: number; day: number }): string {
-  return `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}`
+function toDateStr(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
-
-watch(startCalendarDate, () => { if (startCalendarDate.value) form.startDate = toDateStr(startCalendarDate.value) })
-watch(endCalendarDate, () => { if (endCalendarDate.value) form.endDate = toDateStr(endCalendarDate.value) })
-watch(motherCalendarDate, () => { if (motherCalendarDate.value) mother.birthDate = toDateStr(motherCalendarDate.value) })
-watch(fatherCalendarDate, () => { if (fatherCalendarDate.value) father.birthDate = toDateStr(fatherCalendarDate.value) })
 
 function selectProfile(which: 'mother' | 'father', profile: typeof store.list[0]) {
   const target = which === 'mother' ? mother : father
@@ -428,13 +415,6 @@ function selectProfile(which: 'mother' | 'father', profile: typeof store.list[0]
   else fatherProfileId.value = profile.id
   target.birthDate = profile.birthDate || ''
   target.birthHour = profile.birthHour
-  const calRef = which === 'mother' ? motherCalendarDate : fatherCalendarDate
-  try {
-    calRef.value = target.birthDate ? parseDate(target.birthDate) : undefined
-  }
-  catch {
-    calRef.value = undefined
-  }
 }
 
 const hourOptions = computed(() => {
@@ -461,13 +441,8 @@ onMounted(() => {
   const today = new Date()
   const twoWeeks = new Date(today)
   twoWeeks.setDate(twoWeeks.getDate() + 14)
-  form.startDate = toDateStr({ year: today.getFullYear(), month: today.getMonth() + 1, day: today.getDate() })
-  form.endDate = toDateStr({ year: twoWeeks.getFullYear(), month: twoWeeks.getMonth() + 1, day: twoWeeks.getDate() })
-  try {
-    startCalendarDate.value = parseDate(form.startDate)
-    endCalendarDate.value = parseDate(form.endDate)
-  }
-  catch { /* ignore */ }
+  form.startDate = toDateStr(today)
+  form.endDate = toDateStr(twoWeeks)
 })
 
 /* ---------- 提交计算 ---------- */

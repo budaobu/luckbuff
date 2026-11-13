@@ -102,10 +102,10 @@
                       :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                     >
                       <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                      {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('babyNaming.birthDatePlaceholder') }}
+                      {{ formatIsoDate(form.birthDate, 'zh-CN') || $t('babyNaming.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model:iso="form.birthDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                   <USelect
@@ -605,7 +605,7 @@
 
 <script setup lang="ts">
 import { toGregorian, toLunar, formatLunar } from 'lunar'
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { SHICHEN_OPTIONS, type DiZhi } from '~/types/user'
 
 const { t, locale } = useI18n()
@@ -717,15 +717,7 @@ const selectUi = {
 }
 
 // ---------- 日期选择（复用 AppCalendar + 时辰下拉） ----------
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, (val) => {
-  form.birthDate = val
-    ? `${val.year}-${String(val.month).padStart(2, '0')}-${String(val.day).padStart(2, '0')}`
-    : ''
-})
 
 // 时辰地支 → 该时辰中间小时（与 useBaziCalc 一致）
 const SHICHEN_MID_HOUR: Record<string, number> = {

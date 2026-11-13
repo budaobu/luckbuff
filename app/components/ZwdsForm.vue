@@ -72,11 +72,11 @@
           :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
         >
           <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-          {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('profileForm.birthDatePlaceholder') }}
+          {{ formatIsoDate(form.birthDate, 'zh-CN') || $t('profileForm.birthDatePlaceholder') }}
         </UButton>
         <template #content>
           <LazyAppCalendar
-            v-model="calendarDate"
+            v-model:iso="form.birthDate"
             color="warning"
             class="p-2"
           />
@@ -170,7 +170,7 @@
 <script setup lang="ts">
 import type { DiZhi, UserProfile } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, type DateValue } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -216,23 +216,6 @@ const hourOptions = SHICHEN_OPTIONS.map(s => ({
 const birthGanZhi = ref('')
 const { dateToGanZhi } = useZwdsCalc()
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = shallowRef<DateValue | undefined>(undefined)
-
-function syncBirthDateFromCalendar() {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-  onBirthDateChange()
-}
-
-watch(calendarDate, () => {
-  syncBirthDateFromCalendar()
-})
-
 function onBirthDateChange() {
   if (!form.birthDate) {
     birthGanZhi.value = ''
@@ -270,15 +253,6 @@ function selectProfile(profile: UserProfile, autoSubmit = false) {
   form.birthHour = profile.birthHour
   form.name = profile.name || ''
   form.birthProvince = profile.birthProvince || ''
-  if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
-  } else {
-    calendarDate.value = undefined
-  }
   onBirthDateChange()
   // 回访流程：选择完整档案后自动排盘
   if (autoSubmit && form.gender && form.birthDate) {
@@ -295,13 +269,6 @@ function saveToProfile() {
 watch(() => props.initialValues, (v) => {
   if (v) {
     Object.assign(form, v)
-    if (form.birthDate) {
-      try {
-        calendarDate.value = parseDate(form.birthDate)
-      } catch {
-        calendarDate.value = undefined
-      }
-    }
     onBirthDateChange()
   }
 }, { immediate: true })

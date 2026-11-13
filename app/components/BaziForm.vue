@@ -91,7 +91,7 @@
           </UButton>
           <template #content>
             <LazyAppCalendar
-              v-model="calendarDate"
+              v-model:iso="form.birthDate"
               color="warning"
               class="p-2"
             />
@@ -255,7 +255,7 @@
 import type { DiZhi, UserProfile } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import { toGregorian, toLunar } from 'lunar'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate, parseIsoDateParts } from '~/utils/form-date'
 
 interface FormValues {
   gender: 'male' | 'female'
@@ -379,10 +379,6 @@ const compactSelectUi = {
 const birthGanZhi = ref('')
 const { dateToGanZhi } = useBaziCalc()
 
-const tz = getLocalTimeZone()
-const dateFormatter = computed(() => new DateFormatter(locale.value === 'ja' ? 'ja-JP' : 'zh-CN', { dateStyle: 'long' }))
-const calendarDate = ref<CalendarDate | undefined>(undefined)
-
 const lunarYearOptions = computed(() => Array.from({ length: 201 }, (_, index) => ({
   label: String(1900 + index),
   value: 1900 + index,
@@ -426,7 +422,7 @@ function setSolarFromLunar() {
       isLeapMonth: lunarLeap.value,
     })
     const date = ('date' in result ? result.date : result) as Date
-    calendarDate.value = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+    form.birthDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
   } catch {
     lunarError.value = t('baziForm.invalidLunarDate')
   }
@@ -434,14 +430,15 @@ function setSolarFromLunar() {
 
 function setCalendarMode(mode: 'solar' | 'lunar') {
   calendarMode.value = mode
-  if (mode === 'lunar' && calendarDate.value) syncLunarFromSolar(calendarDate.value)
+  const parts = parseIsoDateParts(form.birthDate)
+  if (mode === 'lunar' && parts) syncLunarFromSolar(parts)
   if (mode === 'solar') setSolarFromLunar()
 }
 
 const selectedDateText = computed(() => {
   if (calendarMode.value === 'solar') {
-    return form.birthDate && calendarDate.value
-      ? dateFormatter.value.format(calendarDate.value.toDate(tz))
+    return form.birthDate
+      ? formatIsoDate(form.birthDate, locale.value === 'ja' ? 'ja' : 'zh-CN')
       : t('profileForm.birthDatePlaceholder')
   }
   return lunarError.value
@@ -450,24 +447,13 @@ const selectedDateText = computed(() => {
 })
 
 const solarPreview = computed(() => {
-  if (!form.birthDate) return ''
-  const [year, month, day] = form.birthDate.split('-').map(Number)
-  if (!year || !month || !day) return ''
-  return dateFormatter.value.format(new CalendarDate(year, month, day).toDate(tz))
+  return formatIsoDate(form.birthDate, locale.value === 'ja' ? 'ja' : 'zh-CN')
 })
 
-function syncBirthDateFromCalendar() {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
+watch(() => form.birthDate, () => {
+  const parts = parseIsoDateParts(form.birthDate)
+  if (parts) syncLunarFromSolar(parts)
   onBirthDateChange()
-}
-
-watch(calendarDate, () => {
-  if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
-  syncBirthDateFromCalendar()
 })
 
 watch([lunarYear, lunarMonth, lunarDay, lunarLeap], () => {
@@ -533,16 +519,8 @@ function selectProfile(profile: UserProfile) {
   form.formerName = profile.formerName || ''
   form.formerNameChangedYear = profile.formerNameChangedYear
   form.birthProvince = profile.birthProvince || ''
-  if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
-  } else {
-    calendarDate.value = undefined
-  }
-  if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
+  const parts = parseIsoDateParts(form.birthDate)
+  if (parts) syncLunarFromSolar(parts)
   onBirthDateChange()
 }
 
@@ -560,14 +538,8 @@ function submit() {
 watch(() => props.initialValues, (v) => {
   if (v) {
     Object.assign(form, v)
-    if (form.birthDate) {
-      try {
-        calendarDate.value = parseDate(form.birthDate)
-      } catch {
-        calendarDate.value = undefined
-      }
-    }
-    if (calendarDate.value) syncLunarFromSolar(calendarDate.value)
+    const parts = parseIsoDateParts(form.birthDate)
+    if (parts) syncLunarFromSolar(parts)
     onBirthDateChange()
   }
 }, { immediate: true })
