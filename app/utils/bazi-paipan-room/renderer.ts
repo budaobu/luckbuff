@@ -10,6 +10,15 @@ export interface BaziRoomRendererStats {
   renderer: { geometries: number, textures: number, programs: number }
 }
 
+export interface BaziRoomRendererLabels {
+  room: string
+  chart: string
+  idle: string
+  calculating: string
+  revealed: string
+  today: string
+}
+
 export interface BaziRoomMount {
   setScene: (model: BaziRoomSceneModel) => void
   setReducedMotion: (value: boolean) => void
@@ -20,41 +29,13 @@ export interface BaziRoomMount {
 interface MountOptions {
   root: HTMLElement
   initialModel: BaziRoomSceneModel
+  labels: BaziRoomRendererLabels
   reducedMotion: boolean
   qualityOverride?: BaziRoomQuality | null
   freeze?: boolean
   onSelect?: (target: 'keeper' | 'visitor') => void
   onReady?: (stats: BaziRoomRendererStats) => void
   onError?: (message: string) => void
-}
-
-const LINK_COLORS: Record<string, number> = {
-  combine: 0x63d49b,
-  clash: 0xe26868,
-  generates: 0x6aa7df,
-  controls: 0xd7a54a,
-  harm: 0x9c86c8,
-}
-
-function canvasLabel(lines: string[], accent = '#f2d998') {
-  const canvas = document.createElement('canvas')
-  canvas.width = 256
-  canvas.height = 256
-  const ctx = canvas.getContext('2d')
-  if (ctx) {
-    ctx.clearRect(0, 0, 256, 256)
-    ctx.fillStyle = 'rgba(10, 16, 27, 0.84)'
-    ctx.fillRect(0, 0, 256, 256)
-    ctx.strokeStyle = accent
-    ctx.lineWidth = 6
-    ctx.strokeRect(8, 8, 240, 240)
-    ctx.fillStyle = '#f5f8ff'
-    ctx.font = '700 92px "Noto Serif SC", "Songti SC", serif'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    lines.forEach((line, index) => ctx.fillText(line, 128, 84 + index * 94))
-  }
-  return canvas
 }
 
 function roomSignTexture(title: string, subtitle: string) {
@@ -77,6 +58,58 @@ function roomSignTexture(title: string, subtitle: string) {
     ctx.fillStyle = 'rgba(242, 217, 152, 0.68)'
     ctx.fillText(subtitle, canvas.width / 2, 196)
   }
+  return canvas
+}
+
+function ganzhiDiskTexture() {
+  const canvas = document.createElement('canvas')
+  canvas.width = 512
+  canvas.height = 512
+  const ctx = canvas.getContext('2d')
+  if (ctx) {
+    const center = 256
+    ctx.fillStyle = '#201408'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.translate(center, center)
+    for (let radius = 232; radius >= 96; radius -= 44) {
+      ctx.beginPath()
+      ctx.arc(0, 0, radius, 0, Math.PI * 2)
+      ctx.strokeStyle = radius % 88 === 0 ? '#d9b45d' : '#8a683d'
+      ctx.lineWidth = radius === 232 ? 14 : 7
+      ctx.stroke()
+    }
+    const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
+    const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
+    ctx.fillStyle = '#f2d998'
+    ctx.font = '700 32px "Noto Serif SC", "Songti SC", serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    stems.forEach((stem, index) => {
+      const angle = (index / stems.length) * Math.PI * 2 - Math.PI / 2
+      ctx.fillText(stem, Math.cos(angle) * 188, Math.sin(angle) * 188)
+    })
+    ctx.fillStyle = '#dfe8f7'
+    branches.forEach((branch, index) => {
+      const angle = (index / branches.length) * Math.PI * 2 - Math.PI / 2
+      ctx.fillText(branch, Math.cos(angle) * 122, Math.sin(angle) * 122)
+    })
+    ctx.beginPath()
+    ctx.arc(0, 0, 46, 0, Math.PI * 2)
+    ctx.fillStyle = '#2e2115'
+    ctx.fill()
+    ctx.strokeStyle = '#d9b45d'
+    ctx.lineWidth = 8
+    ctx.stroke()
+    ctx.fillStyle = '#f2d998'
+    ctx.fillText('命', 0, 2)
+  }
+  return canvas
+}
+
+function createProjectionCanvas() {
+  const canvas = document.createElement('canvas')
+  canvas.width = 2048
+  canvas.height = 1024
   return canvas
 }
 
@@ -114,7 +147,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 30)
   const raycaster = new THREE.Raycaster()
-  const cameraTarget = new THREE.Vector3(0.15, 1.75, -0.45)
+  const cameraTarget = new THREE.Vector3(0.15, 1.95, -0.45)
   const orbit = { yaw: 0, pitch: 0.085, targetYaw: 0, targetPitch: 0.085, distance: 5.35, targetDistance: 4.9 }
   let reducedMotion = options.reducedMotion
 
@@ -144,43 +177,28 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   )
   backWall.position.set(0, 2.9, -4.3)
   const wallPanel = new THREE.Mesh(
-    new THREE.BoxGeometry(9.6, 3.1, 0.08),
+    new THREE.BoxGeometry(9.2, 4.4, 0.08),
     new THREE.MeshStandardMaterial({ color: 0x23160d, roughness: 0.72, metalness: 0.06 }),
   )
-  wallPanel.position.set(0.45, 2.35, -4.14)
+  wallPanel.position.set(0, 2.45, -4.14)
   const wallTrim = new THREE.Mesh(
-    new THREE.BoxGeometry(10, 0.12, 0.18),
+    new THREE.BoxGeometry(9.8, 0.16, 0.22),
     new THREE.MeshStandardMaterial({ color: 0x6d4f2d, roughness: 0.42, metalness: 0.36 }),
   )
-  wallTrim.position.set(0.45, 3.94, -4.11)
+  wallTrim.position.set(0, 4.45, -4.11)
   const wallBase = new THREE.Mesh(
     new THREE.BoxGeometry(10, 0.28, 0.2),
     new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.66 }),
   )
   wallBase.position.set(0.45, 0.8, -4.12)
-  const signTexture = new THREE.CanvasTexture(roomSignTexture('命盘室', '八字 · 问事 · 今日'))
+  const signTexture = new THREE.CanvasTexture(roomSignTexture(options.labels.room, options.labels.chart))
   signTexture.colorSpace = THREE.SRGBColorSpace
   disposables.push(signTexture)
   const roomSign = new THREE.Mesh(
     new THREE.PlaneGeometry(2.5, 0.6),
     new THREE.MeshBasicMaterial({ map: signTexture }),
   )
-  roomSign.position.set(0.45, 3.55, -4.1)
-  const pillarFrame = new THREE.Mesh(
-    new THREE.BoxGeometry(3.1, 1.85, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x3f2c1c, roughness: 0.58, metalness: 0.12 }),
-  )
-  pillarFrame.position.set(0.45, 1.12, -2.7)
-  const pillarFrameTop = new THREE.Mesh(
-    new THREE.BoxGeometry(3.3, 0.12, 0.16),
-    new THREE.MeshStandardMaterial({ color: 0x6d4f2d, roughness: 0.4, metalness: 0.34 }),
-  )
-  pillarFrameTop.position.set(0.45, 1.95, -2.68)
-  const pillarFrameBase = new THREE.Mesh(
-    new THREE.BoxGeometry(3.3, 0.16, 0.18),
-    new THREE.MeshStandardMaterial({ color: 0x4b3524, roughness: 0.5, metalness: 0.2 }),
-  )
-  pillarFrameBase.position.set(0.45, 0.32, -2.66)
+  roomSign.position.set(0, 5.05, -4.1)
   const counter = new THREE.Mesh(
     new THREE.BoxGeometry(5.2, 0.86, 1.05),
     new THREE.MeshStandardMaterial({ color: 0x3a291c, roughness: 0.68 }),
@@ -230,7 +248,111 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     cord.position.set(position[0], position[1] + 0.58, position[2])
     lanternGroup.add(lantern, cap, tassel, cord)
   })
-  scene.add(room, floor, carpet, backWall, wallPanel, wallTrim, wallBase, roomSign, pillarFrame, pillarFrameTop, pillarFrameBase, counter, counterTop, counterFront, incenseBowl, incense, book, lanternGroup)
+  scene.add(room, floor, carpet, backWall, wallPanel, wallTrim, wallBase, roomSign, counter, counterTop, counterFront, incenseBowl, incense, book, lanternGroup)
+
+  const ganzhiDisk = new THREE.Group()
+  const diskBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5, 0.52, 0.07, 64),
+    new THREE.MeshStandardMaterial({ color: 0x5d3f25, roughness: 0.36, metalness: 0.38 }),
+  )
+  const diskFaceTexture = new THREE.CanvasTexture(ganzhiDiskTexture())
+  diskFaceTexture.colorSpace = THREE.SRGBColorSpace
+  const diskFace = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.88, 0.88),
+    new THREE.MeshStandardMaterial({ map: diskFaceTexture, roughness: 0.48, metalness: 0.08 }),
+  )
+  diskFace.rotation.x = -Math.PI / 2
+  diskFace.position.y = 0.041
+  const diskDial = new THREE.Mesh(
+    new THREE.TorusGeometry(0.44, 0.016, 10, 72),
+    new THREE.MeshStandardMaterial({ color: 0xd9b45d, roughness: 0.24, metalness: 0.82 }),
+  )
+  diskDial.rotation.x = Math.PI / 2
+  diskDial.position.y = 0.05
+  ganzhiDisk.add(diskBase, diskFace, diskDial)
+  ganzhiDisk.position.set(1.45, 1.02, 0.02)
+
+  const fiveElements = new THREE.Group()
+  const elementsTray = new THREE.Mesh(
+    new THREE.BoxGeometry(0.82, 0.05, 0.2),
+    new THREE.MeshStandardMaterial({ color: 0x4b3524, roughness: 0.54, metalness: 0.16 }),
+  )
+  fiveElements.add(elementsTray)
+  const elementSpecs = [
+    { geometry: new THREE.CylinderGeometry(0.028, 0.038, 0.09, 10), color: 0x4e8a58, emissive: 0x143020 },
+    { geometry: new THREE.ConeGeometry(0.038, 0.1, 12), color: 0xd45d3b, emissive: 0x591708 },
+    { geometry: new THREE.BoxGeometry(0.08, 0.08, 0.08), color: 0xb38644, emissive: 0x3c2a0c },
+    { geometry: new THREE.OctahedronGeometry(0.052), color: 0xcfd5de, emissive: 0x2e353d },
+    { geometry: new THREE.SphereGeometry(0.048, 18, 14), color: 0x517bd1, emissive: 0x13244d },
+  ]
+  elementSpecs.forEach((spec, index) => {
+    const element = new THREE.Mesh(
+      spec.geometry,
+      new THREE.MeshStandardMaterial({ color: spec.color, emissive: spec.emissive, roughness: 0.34, metalness: 0.2 }),
+    )
+    element.position.set(-0.3 + index * 0.15, 0.075, 0)
+    element.rotation.y = index * 0.4
+    fiveElements.add(element)
+  })
+  fiveElements.position.set(-0.98, 1.02, 0.03)
+
+  const deskComputer = new THREE.Group()
+  const computerDeck = new THREE.Mesh(
+    new THREE.BoxGeometry(0.48, 0.025, 0.34),
+    new THREE.MeshStandardMaterial({ color: 0x28313f, roughness: 0.46, metalness: 0.34 }),
+  )
+  const computerKeyboard = new THREE.Mesh(
+    new THREE.BoxGeometry(0.38, 0.012, 0.22),
+    new THREE.MeshStandardMaterial({ color: 0x1d2530, roughness: 0.68 }),
+  )
+  computerKeyboard.position.y = 0.017
+  const computerScreenTexture = new THREE.CanvasTexture(roomSignTexture(options.labels.room, options.labels.today))
+  computerScreenTexture.colorSpace = THREE.SRGBColorSpace
+  const computerScreen = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.4, 0.26),
+    new THREE.MeshBasicMaterial({ map: computerScreenTexture }),
+  )
+  computerScreen.position.set(0, 0.16, -0.14)
+  computerScreen.rotation.x = -0.18
+  const computerLid = new THREE.Mesh(
+    new THREE.BoxGeometry(0.46, 0.31, 0.02),
+    new THREE.MeshStandardMaterial({ color: 0x222b36, roughness: 0.42, metalness: 0.38 }),
+  )
+  computerLid.position.set(0, 0.16, -0.16)
+  computerLid.rotation.x = -0.18
+  deskComputer.add(computerDeck, computerKeyboard, computerLid, computerScreen)
+  deskComputer.position.set(-0.42, 1.03, -0.48)
+  deskComputer.rotation.y = 0.14
+  book.position.set(-1.86, 1, -0.48)
+  book.rotation.y = 0.2
+  scene.add(ganzhiDisk, fiveElements, deskComputer)
+
+  const projectionFrame = new THREE.Mesh(
+    new THREE.BoxGeometry(7.6, 3.7, 0.14),
+    new THREE.MeshStandardMaterial({ color: 0x181f2a, roughness: 0.38, metalness: 0.5 }),
+  )
+  projectionFrame.position.set(1.35, 2.42, -4.02)
+  const projectionCanvas = createProjectionCanvas()
+  const projectionContext = projectionCanvas.getContext('2d')
+  const projectionTexture = new THREE.CanvasTexture(projectionCanvas)
+  projectionTexture.colorSpace = THREE.SRGBColorSpace
+  projectionTexture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+  projectionTexture.generateMipmaps = false
+  projectionTexture.minFilter = THREE.LinearFilter
+  projectionTexture.magFilter = THREE.LinearFilter
+  const projectionScreen = new THREE.Mesh(
+    new THREE.PlaneGeometry(7.2, 3.3),
+    new THREE.MeshBasicMaterial({ map: projectionTexture, fog: false }),
+  )
+  projectionScreen.position.set(1.35, 2.42, -3.88)
+  const projector = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.09, 0.11, 0.18, 24),
+    new THREE.MeshStandardMaterial({ color: 0x313a46, roughness: 0.42, metalness: 0.62 }),
+  )
+  projector.position.set(0, 4.78, -0.35)
+  projector.rotation.x = 0.85
+  disposables.push(diskFaceTexture, computerScreenTexture, projectionTexture)
+  scene.add(projectionFrame, projectionScreen, projector)
 
   const instrumentGroup = new THREE.Group()
   instrumentGroup.position.set(0.55, 1.02, -0.35)
@@ -359,20 +481,15 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     return hit ? roomRoleFromObject(hit.object) : null
   }
   let dirty = true
+  let currentModel = options.initialModel
 
-  function labelTexture(pillar: BaziRoomSceneModel['pillars'][number]) {
-    const texture = new THREE.CanvasTexture(canvasLabel([pillar.gan, pillar.zhi], pillar.highlighted ? '#ffd879' : '#b9c6d8'))
-    texture.colorSpace = THREE.SRGBColorSpace
-    disposables.push(texture)
-    return texture
-  }
-
-  function rebuildDynamic(model: BaziRoomSceneModel) {
+  function rebuildDynamic() {
     for (const child of [...dynamicGroup.children]) {
       dynamicGroup.remove(child)
       if (child instanceof THREE.Mesh) {
         child.geometry.dispose()
         const material = child.material
+        if (!Array.isArray(material) && material.map) material.map.dispose()
         if (Array.isArray(material)) material.forEach(item => item.dispose())
         else material.dispose()
       }
@@ -384,65 +501,109 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       }
     }
 
-    for (const pillar of model.pillars) {
-      const plate = new THREE.Mesh(
-        new THREE.BoxGeometry(0.42, 0.68, 0.05),
-        new THREE.MeshStandardMaterial({
-          color: pillar.key === 'today' ? 0x1d5344 : 0x243346,
-          emissive: pillar.highlighted ? (pillar.key === 'today' ? 0x1d7a5b : 0x2e4a71) : 0x080d14,
-          emissiveIntensity: pillar.highlighted ? 0.85 : 0.14,
-          roughness: 0.48,
-          metalness: 0.16,
-        }),
-      )
-      plate.position.set(...pillar.position)
-      plate.lookAt(0.5, pillar.position[1] + 0.08, 3.0)
+  }
 
-      const face = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.36, 0.58),
-        new THREE.MeshBasicMaterial({ map: labelTexture(pillar), transparent: true }),
-      )
-      face.position.copy(plate.position)
-      face.quaternion.copy(plate.quaternion)
-      face.translateZ(0.035)
+  const PROJECTION_COLORS: Record<string, string> = {
+    combine: '#63d49b',
+    clash: '#e26868',
+    generates: '#6aa7df',
+    controls: '#d7a54a',
+    harm: '#9c86c8',
+  }
+  let lastProjectionDraw = Number.NEGATIVE_INFINITY
 
-      if (pillar.highlighted) {
-        const halo = new THREE.Mesh(
-          new THREE.RingGeometry(0.27, 0.33, 32),
-          new THREE.MeshBasicMaterial({ color: pillar.key === 'today' ? 0x64e0aa : 0x86b8ff, transparent: true, opacity: 0.48, side: THREE.DoubleSide }),
-        )
-        halo.position.copy(plate.position)
-        halo.quaternion.copy(plate.quaternion)
-        halo.translateZ(-0.035)
-        dynamicGroup.add(halo)
+  function drawProjection(elapsed = 0) {
+    if (!projectionContext) return
+    const model = currentModel
+    const width = projectionCanvas.width / 2
+    const height = projectionCanvas.height / 2
+    projectionContext.setTransform(2, 0, 0, 2, 0, 0)
+    projectionContext.fillStyle = '#072033'
+    projectionContext.fillRect(0, 0, width, height)
+    const glow = projectionContext.createRadialGradient(width / 2, height / 2, 70, width / 2, height / 2, 610)
+    glow.addColorStop(0, 'rgba(74, 147, 193, 0.16)')
+    glow.addColorStop(1, 'rgba(5, 16, 27, 0)')
+    projectionContext.fillStyle = glow
+    projectionContext.fillRect(0, 0, width, height)
+    projectionContext.strokeStyle = 'rgba(212, 175, 109, 0.38)'
+    projectionContext.lineWidth = 7
+    projectionContext.strokeRect(20, 20, width - 40, height - 40)
+    projectionContext.fillStyle = '#f2d998'
+    projectionContext.font = '700 44px "Noto Serif SC", "Songti SC", serif'
+    projectionContext.textAlign = 'center'
+    projectionContext.textBaseline = 'middle'
+    projectionContext.fillText(options.labels.chart, width / 2, 72)
+    const cards = model.pillars.slice(0, 5).map((pillar, index) => ({
+      ...pillar,
+      x: 85 + index * 176,
+      y: 148,
+    }))
+    if (model.phase === 'revealed') {
+      for (const link of model.links) {
+        const from = cards.find(card => card.key === link.from)
+        const to = cards.find(card => card.key === link.to)
+        if (!from || !to) continue
+        projectionContext.beginPath()
+        projectionContext.moveTo(from.x + 72, from.y + 100)
+        projectionContext.quadraticCurveTo((from.x + to.x) / 2 + 72, 106, to.x + 72, to.y + 100)
+        projectionContext.strokeStyle = PROJECTION_COLORS[link.type] ?? '#8fa8c0'
+        projectionContext.globalAlpha = 0.62
+        projectionContext.lineWidth = link.type === 'clash' ? 4 : 3
+        if (link.type === 'clash') projectionContext.setLineDash([11, 9])
+        else if (link.type === 'combine') projectionContext.setLineDash([4, 5])
+        else projectionContext.setLineDash([13, 6])
+        projectionContext.stroke()
+        projectionContext.setLineDash([])
+        projectionContext.globalAlpha = 1
+        projectionContext.fillStyle = PROJECTION_COLORS[link.type] ?? '#8fa8c0'
+        projectionContext.font = '500 17px "Noto Sans SC", ui-sans-serif, system-ui, sans-serif'
+        projectionContext.textAlign = 'center'
+        projectionContext.fillText(link.label, (from.x + to.x) / 2 + 72, 112)
       }
-      dynamicGroup.add(plate, face)
     }
 
-    for (const link of model.links) {
-      const from = model.pillars.find(pillar => pillar.key === link.from)
-      const to = model.pillars.find(pillar => pillar.key === link.to)
-      if (!from || !to) continue
-      const geometry = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(...from.position),
-        new THREE.Vector3(
-          (from.position[0] + to.position[0]) / 2,
-          Math.max(from.position[1], to.position[1]) + 0.16,
-          (from.position[2] + to.position[2]) / 2,
-        ),
-        new THREE.Vector3(...to.position),
-      ])
-      const line = new THREE.Line(geometry, new THREE.LineDashedMaterial({
-        color: LINK_COLORS[link.type] ?? 0x9aa8b8,
-        linewidth: 2,
-        dashSize: link.type === 'clash' ? 0.045 : link.type === 'controls' ? 0.09 : 0.07,
-        gapSize: link.type === 'combine' ? 0.015 : 0.05,
-        transparent: true,
-        opacity: 0.9,
-      }))
-      line.computeLineDistances()
-      dynamicGroup.add(line)
+    for (const card of cards) {
+      const highlighted = model.phase !== 'idle' && card.highlighted
+      projectionContext.fillStyle = card.key === 'today' ? 'rgba(9, 49, 38, 0.94)' : 'rgba(12, 23, 36, 0.92)'
+      projectionContext.fillRect(card.x, card.y, 144, 190)
+      projectionContext.strokeStyle = highlighted ? '#ffd879' : 'rgba(180, 204, 224, 0.32)'
+      projectionContext.lineWidth = highlighted ? 4 : 2
+      projectionContext.strokeRect(card.x, card.y, 144, 190)
+      projectionContext.textAlign = 'center'
+      projectionContext.textBaseline = 'middle'
+      projectionContext.fillStyle = highlighted ? '#ffd879' : 'rgba(209, 225, 240, 0.52)'
+      projectionContext.font = '500 18px "Noto Sans SC", ui-sans-serif, system-ui, sans-serif'
+      projectionContext.fillText(card.label, card.x + 72, card.y + 28)
+      projectionContext.fillStyle = card.key === 'today' ? '#9df5cf' : '#f4f8ff'
+      projectionContext.font = '700 42px "Noto Serif SC", "Songti SC", serif'
+      projectionContext.fillText(card.gan, card.x + 72, card.y + 92)
+      projectionContext.fillText(card.zhi, card.x + 72, card.y + 152)
+      if (card.key === 'today') {
+        projectionContext.fillStyle = 'rgba(100, 224, 170, 0.24)'
+        projectionContext.fillRect(card.x, card.y, 144, 5)
+      }
     }
+
+    if (model.phase === 'calculating') {
+      projectionContext.save()
+      projectionContext.translate(width / 2, height / 2)
+      projectionContext.rotate(elapsed * 1.7)
+      projectionContext.strokeStyle = 'rgba(217, 180, 93, 0.72)'
+      projectionContext.lineWidth = 6
+      projectionContext.setLineDash([38, 30])
+      projectionContext.beginPath()
+      projectionContext.arc(0, 0, 118, 0, Math.PI * 2)
+      projectionContext.stroke()
+      projectionContext.restore()
+    }
+    else {
+      const sweep = (elapsed * 0.17) % 1
+      projectionContext.globalAlpha = model.phase === 'revealed' ? 0.24 : 0.13
+      projectionContext.fillStyle = '#9adfff'
+      projectionContext.fillRect(40, 392 + sweep * 76, width - 80, 2)
+      projectionContext.globalAlpha = 1
+    }
+    projectionTexture.needsUpdate = true
   }
 
   function resize() {
@@ -517,7 +678,8 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   let composer: { render: () => void, setSize: (width: number, height: number) => void } | null = null
   let quality: BaziRoomQuality = 'mid'
   let sampleFrameMs = 0
-  rebuildDynamic(options.initialModel)
+  rebuildDynamic()
+  drawProjection(0)
   resize()
 
   const samples: number[] = []
@@ -534,31 +696,33 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       ?? (sampleFrameMs <= 10 ? 'high' : sampleFrameMs <= 24 ? 'mid' : 'low')
 
   if (quality === 'high' && !options.freeze) {
-    const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }, { OutputPass }] = await Promise.all([
+    const [{ EffectComposer }, { RenderPass }, { OutputPass }] = await Promise.all([
       import('three/examples/jsm/postprocessing/EffectComposer.js'),
       import('three/examples/jsm/postprocessing/RenderPass.js'),
-      import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
       import('three/examples/jsm/postprocessing/OutputPass.js'),
     ])
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene, camera))
-    effectComposer.addPass(new UnrealBloomPass(new THREE.Vector2(root.clientWidth, root.clientHeight), 0.22, 0.65, 0.86))
     effectComposer.addPass(new OutputPass())
     composer = effectComposer
   }
   renderer.setPixelRatio(quality === 'high' ? Math.min(window.devicePixelRatio, 2) : quality === 'mid' ? Math.min(window.devicePixelRatio, 1.5) : 1)
   resize()
 
-  if (BAZI_ROOM_ASSET_MANIFEST.assets.instrument.glb || BAZI_ROOM_ASSET_MANIFEST.assets.keeper.glb) {
+  if (Object.values(BAZI_ROOM_ASSET_MANIFEST.assets).some(asset => asset.glb)) {
     const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
     const loader = new GLTFLoader()
+    const loadGltf = (glb: string | null, parent: THREE.Object3D) => (
+      glb ? loader.loadAsync(glb).then(gltf => parent.add(gltf.scene)) : Promise.resolve()
+    )
+    const assets = BAZI_ROOM_ASSET_MANIFEST.assets
     await Promise.all([
-      BAZI_ROOM_ASSET_MANIFEST.assets.instrument.glb
-        ? loader.loadAsync(BAZI_ROOM_ASSET_MANIFEST.assets.instrument.glb).then(gltf => instrumentGroup.add(gltf.scene))
-        : Promise.resolve(),
-      BAZI_ROOM_ASSET_MANIFEST.assets.keeper.glb
-        ? loader.loadAsync(BAZI_ROOM_ASSET_MANIFEST.assets.keeper.glb).then(gltf => keeper.add(gltf.scene))
-        : Promise.resolve(),
+      loadGltf(assets.instrument.glb, instrumentGroup),
+      loadGltf(assets.keeper.glb, keeper),
+      loadGltf(assets.ganzhiDisk.glb, ganzhiDisk),
+      loadGltf(assets.fiveElements.glb, fiveElements),
+      loadGltf(assets.deskComputer.glb, deskComputer),
+      loadGltf(assets.projectionScreen.glb, scene),
     ])
   }
 
@@ -587,7 +751,6 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     dirty = false
   }
 
-  let currentModel = options.initialModel
   function tick(now: number) {
     frame = requestAnimationFrame(tick)
     if (!visible || document.visibilityState === 'hidden') return
@@ -597,6 +760,10 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     }
 
     const elapsed = now / 1000
+    if (now - lastProjectionDraw >= 100) {
+      lastProjectionDraw = now
+      drawProjection(elapsed)
+    }
     rings.forEach((ring, index) => {
       ring.rotation.z += currentModel.instrumentSpeed * (index % 2 ? 0.0012 : -0.0009)
     })
@@ -637,7 +804,8 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   return {
     setScene(model: BaziRoomSceneModel) {
       currentModel = model
-      rebuildDynamic(model)
+      rebuildDynamic()
+      drawProjection(0)
       orbit.targetDistance = model.phase === 'idle' ? 6.15 : model.phase === 'topic' ? 5.7 : model.phase === 'calculating' ? 5.35 : 4.85
       markDirty()
       if (quality === 'low' || reducedMotion) renderCurrent()
