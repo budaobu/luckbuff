@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { VedicHepanFormData, VedicHepanCalcResult } from '~/types/vedic-hepan'
 import type { DiZhi, UserProfile } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
@@ -29,28 +29,6 @@ const selectedB = ref<string | null>(null)
 
 const shichenOptions = [...SHICHEN_OPTIONS]
 
-// Calendar pickers
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDateA = ref<CalendarDate | undefined>(undefined)
-const calendarDateB = ref<CalendarDate | undefined>(undefined)
-
-watch(calendarDateA, () => {
-  if (calendarDateA.value) {
-    form.value.personA.birthDate = `${calendarDateA.value.year}-${String(calendarDateA.value.month).padStart(2, '0')}-${String(calendarDateA.value.day).padStart(2, '0')}`
-  } else {
-    form.value.personA.birthDate = ''
-  }
-})
-
-watch(calendarDateB, () => {
-  if (calendarDateB.value) {
-    form.value.personB.birthDate = `${calendarDateB.value.year}-${String(calendarDateB.value.month).padStart(2, '0')}-${String(calendarDateB.value.day).padStart(2, '0')}`
-  } else {
-    form.value.personB.birthDate = ''
-  }
-})
-
 function diZhiToTime(dizhi?: DiZhi): string {
   if (!dizhi) return ''
   const map: Record<DiZhi, string> = {
@@ -61,21 +39,6 @@ function diZhiToTime(dizhi?: DiZhi): string {
   return map[dizhi] || ''
 }
 
-function setCalendarFromBirthDate(dateStr: string, target: 'A' | 'B') {
-  if (dateStr) {
-    try {
-      if (target === 'A') calendarDateA.value = parseDate(dateStr)
-      else calendarDateB.value = parseDate(dateStr)
-    } catch {
-      if (target === 'A') calendarDateA.value = undefined
-      else calendarDateB.value = undefined
-    }
-  } else {
-    if (target === 'A') calendarDateA.value = undefined
-    else calendarDateB.value = undefined
-  }
-}
-
 function selectProfile(profile: UserProfile, target: 'A' | 'B') {
   if (target === 'A') {
     selectedA.value = profile.id
@@ -84,7 +47,6 @@ function selectProfile(profile: UserProfile, target: 'A' | 'B') {
     form.value.personA.birthDate = profile.birthDate || ''
     form.value.personA.birthTime = profile.birthHour ? diZhiToTime(profile.birthHour) : ''
     form.value.personA.birthCity = profile.birthProvince || ''
-    setCalendarFromBirthDate(form.value.personA.birthDate, 'A')
   } else {
     selectedB.value = profile.id
     form.value.personB.name = profile.name || profile.label || ''
@@ -92,7 +54,6 @@ function selectProfile(profile: UserProfile, target: 'A' | 'B') {
     form.value.personB.birthDate = profile.birthDate || ''
     form.value.personB.birthTime = profile.birthHour ? diZhiToTime(profile.birthHour) : ''
     form.value.personB.birthCity = profile.birthProvince || ''
-    setCalendarFromBirthDate(form.value.personB.birthDate, 'B')
   }
 }
 
@@ -207,10 +168,10 @@ const selectUi = {
               :class="{ 'text-[var(--text-placeholder)]': !form.personA.birthDate }"
             >
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-              {{ form.personA.birthDate && calendarDateA ? df.format(calendarDateA.toDate(tz)) : $t('vedicHepan.birthDatePlaceholder') }}
+              {{ formatIsoDate(form.personA.birthDate, locale) || $t('vedicHepan.birthDatePlaceholder') }}
             </UButton>
             <template #content>
-              <LazyAppCalendar v-model="calendarDateA" color="warning" class="p-2" />
+              <LazyAppCalendar v-model:iso="form.personA.birthDate" color="warning" class="p-2" />
             </template>
           </UPopover>
         </div>
@@ -295,10 +256,10 @@ const selectUi = {
               :class="{ 'text-[var(--text-placeholder)]': !form.personB.birthDate }"
             >
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-              {{ form.personB.birthDate && calendarDateB ? df.format(calendarDateB.toDate(tz)) : $t('vedicHepan.birthDatePlaceholder') }}
+              {{ formatIsoDate(form.personB.birthDate, locale) || $t('vedicHepan.birthDatePlaceholder') }}
             </UButton>
             <template #content>
-              <LazyAppCalendar v-model="calendarDateB" color="warning" class="p-2" />
+              <LazyAppCalendar v-model:iso="form.personB.birthDate" color="warning" class="p-2" />
             </template>
           </UPopover>
         </div>

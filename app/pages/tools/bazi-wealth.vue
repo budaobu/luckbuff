@@ -100,11 +100,11 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('baziWealth.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, locale) || $t('baziWealth.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
-                    v-model="calendarDate"
+                    v-model:iso="form.birthDate"
                     color="warning"
                     class="p-2"
                   />
@@ -314,7 +314,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { UserProfile, DiZhi } from '~/types/user'
 import type { BaziChart } from '~/types/bazi'
@@ -336,17 +336,7 @@ const localePath = useLocalePath()
 const selectedProfileId = ref<string | null>(null)
 
 // 日历 picker
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthDate = ''
-  }
-})
 
 function selectProfile(profile: UserProfile) {
   selectedProfileId.value = profile.id
@@ -356,13 +346,7 @@ function selectProfile(profile: UserProfile) {
   form.birthHour = profile.birthHour
   form.birthProvince = profile.birthProvince || ''
   if (form.birthDate) {
-    try {
-      calendarDate.value = parseDate(form.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
   } else {
-    calendarDate.value = undefined
   }
 }
 
@@ -480,7 +464,6 @@ function resetForm() {
   aiStarted.value = false
   aiError.value = null
   selectedProfileId.value = null
-  calendarDate.value = undefined
   form.name = ''
   form.birthProvince = ''
 }

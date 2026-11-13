@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VedicFormData } from '~/types/vedic'
 import type { DiZhi, UserProfile } from '~/types/user'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, type DateValue } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 
 const DIZHI_TO_TIME: Record<DiZhi, string> = {
   '子': '00:00',
@@ -36,34 +36,9 @@ const localePath = useLocalePath()
 
 const selectedProfileId = ref<string | null>(null)
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = shallowRef<DateValue | undefined>(undefined)
-
-function syncBirthDateFromCalendar() {
-  if (calendarDate.value) {
-    local.birthDate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    local.birthDate = ''
-  }
-}
-
-watch(calendarDate, () => {
-  syncBirthDateFromCalendar()
-})
-
 const local = reactive({ ...props.modelValue })
 watch(() => props.modelValue, (v) => {
   Object.assign(local, v)
-  if (v.birthDate) {
-    try {
-      calendarDate.value = parseDate(v.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
-  } else {
-    calendarDate.value = undefined
-  }
 }, { deep: true })
 watch(local, v => emit('update:modelValue', { ...v }), { deep: true })
 
@@ -128,15 +103,6 @@ function selectProfile(profile: UserProfile, autoSubmit = false) {
   selectedProfileId.value = profile.id
   local.gender = profile.gender
   local.birthDate = profile.birthDate || ''
-  if (profile.birthDate) {
-    try {
-      calendarDate.value = parseDate(profile.birthDate)
-    } catch {
-      calendarDate.value = undefined
-    }
-  } else {
-    calendarDate.value = undefined
-  }
   if (profile.birthHour && DIZHI_TO_TIME[profile.birthHour]) {
     local.birthTime = DIZHI_TO_TIME[profile.birthHour]
   } else {
@@ -222,11 +188,11 @@ onMounted(() => {
           :class="{ 'text-[var(--text-placeholder)]': !local.birthDate }"
         >
           <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-          {{ local.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('vedic.form.birthDate') }}
+          {{ formatIsoDate(local.birthDate, 'zh-CN') || $t('vedic.form.birthDate') }}
         </UButton>
         <template #content>
           <LazyAppCalendar
-            v-model="calendarDate"
+            v-model:iso="local.birthDate"
             color="warning"
             class="p-2"
           />

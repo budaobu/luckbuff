@@ -5,17 +5,18 @@ export default defineEventHandler((event) => {
   const url = new URL(getRequestURL(event))
   if (!/^\/_i18n\/[^/]+\/[^/]+\/messages\.json$/.test(url.pathname)) return
 
+  event.node.res.setHeader('Vary', 'Accept-Encoding')
   const acceptEncoding = getRequestHeader(event, 'accept-encoding') ?? ''
   if (!acceptEncoding.toLowerCase().includes('gzip')) return
+
+  if (event.method !== 'GET' && event.method !== 'HEAD') return
+  if (getRequestHeaders(event)['content-encoding']) return
 
   const res = event.node.res
   const originalSetHeader = res.setHeader.bind(res)
   const originalWrite = res.write.bind(res)
   const originalEnd = res.end.bind(res)
   const chunks: Buffer[] = []
-
-  originalSetHeader('Content-Encoding', 'gzip')
-  originalSetHeader('Vary', 'Accept-Encoding')
 
   res.setHeader = ((name: string | number, value: unknown) => {
     if (typeof name === 'string' && name.toLowerCase() === 'content-length') return res
@@ -44,9 +45,16 @@ export default defineEventHandler((event) => {
     }
 
     try {
-      originalWrite(gzipSync(Buffer.concat(chunks), { level: 9 }))
+      if (res.writableEnded || !chunks.length) {
+        originalEnd(callback)
+        return res as ServerResponse<IncomingMessage>
+      }
+
+      originalSetHeader('Content-Encoding', 'gzip')
+      originalWrite(gzipSync(Buffer.concat(chunks), { level: 6 }))
       originalEnd(callback)
     } catch {
+      res.removeHeader('content-encoding')
       res.statusCode = 500
       originalEnd('i18n message compression failed')
     }

@@ -97,11 +97,11 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('bedroomFengshui.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, 'zh-CN') || $t('bedroomFengshui.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
-                    v-model="calendarDate"
+                    v-model:iso="form.birthDate"
                     color="warning"
                     class="p-2"
                   />
@@ -406,7 +406,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import { MOUNTAINS_24 } from '~/utils/bazhai'
 import type { BedroomFengshuiResult, BedroomTaboos } from '~/utils/bedroom-fengshui'
 
@@ -448,18 +448,7 @@ const siteUrl = computed(() => (config.public.siteUrl as string) || 'https://www
 const pageUrl = useLocalizedSeoUrl('/tools/bedroom-fengshui')
 
 // 阳历生日日历
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, (val) => {
-  if (val) {
-    form.birthDate = `${val.year}-${String(val.month).padStart(2, '0')}-${String(val.day).padStart(2, '0')}`
-  }
-  else {
-    form.birthDate = ''
-  }
-})
 
 // 房间类型选项
 const roomOptions = computed<{ value: RoomType; label: string; sublabel: string }[]>(() => [
@@ -815,7 +804,6 @@ function resetForm() {
     kitchenWall: false,
     slopedCeiling: false,
   }
-  calendarDate.value = undefined
   selectedMountain.value = ''
   selectedBedMountain.value = ''
 }

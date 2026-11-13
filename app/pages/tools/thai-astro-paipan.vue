@@ -29,10 +29,10 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="mr-2 h-4 w-4 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? dateFormatter.format(calendarDate.toDate(timezone)) : $t('thaiAstro.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthDate, locale) || $t('thaiAstro.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
-                  <LazyAppCalendar v-model="calendarDate" color="warning" class="p-2" />
+                  <LazyAppCalendar v-model:iso="form.birthDate" color="warning" class="p-2" />
                 </template>
               </UPopover>
             </div>
@@ -132,9 +132,9 @@
 </template>
 
 <script setup lang="ts">
+import { formatIsoDate } from '~/utils/form-date'
 import type { ThaiAstroChartResult } from '~~/server/utils/tools/thai-astro-paipan'
 import ThaiAstro3DStage from '~/components/thai-astro-3d/ThaiAstro3DStage.vue'
-import { DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date'
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -150,15 +150,6 @@ const form = reactive({
   gender: 'unknown',
 })
 
-const timezone = getLocalTimeZone()
-const dateFormatter = computed(() => new DateFormatter(locale.value, { dateStyle: 'long' }))
-const calendarDate = shallowRef<DateValue | undefined>(undefined)
-
-watch(calendarDate, (date) => {
-  form.birthDate = date
-    ? `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`
-    : ''
-})
 
 const genderOptions = computed(() => [
   { label: t('thaiAstro.genderUnknown'), value: 'unknown' },

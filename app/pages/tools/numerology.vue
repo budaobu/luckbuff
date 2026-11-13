@@ -87,11 +87,11 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthdate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthdate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('numerology.birthDatePlaceholder') }}
+                  {{ formatIsoDate(form.birthdate, locale) || $t('numerology.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
-                    v-model="calendarDate"
+                    v-model:iso="form.birthdate"
                     color="warning"
                     class="p-2"
                   />
@@ -241,7 +241,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { UserProfile } from '~/types/user'
 
 interface NumerologyCalcResult {
@@ -281,30 +281,14 @@ const localePath = useLocalePath()
 const selectedProfileId = ref<string | null>(null)
 
 // 日历 picker
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDate = ref<CalendarDate | undefined>(undefined)
 
-watch(calendarDate, () => {
-  if (calendarDate.value) {
-    form.birthdate = `${calendarDate.value.year}-${String(calendarDate.value.month).padStart(2, '0')}-${String(calendarDate.value.day).padStart(2, '0')}`
-  } else {
-    form.birthdate = ''
-  }
-})
 
 function selectProfile(profile: UserProfile) {
   selectedProfileId.value = profile.id
   form.name = profile.name || profile.label || ''
   form.birthdate = profile.birthDate || ''
   if (form.birthdate) {
-    try {
-      calendarDate.value = parseDate(form.birthdate)
-    } catch {
-      calendarDate.value = undefined
-    }
   } else {
-    calendarDate.value = undefined
   }
 }
 
@@ -432,7 +416,6 @@ function resetForm() {
   aiStarted.value = false
   aiError.value = null
   selectedProfileId.value = null
-  calendarDate.value = undefined
 }
 
 function handleCopy() {

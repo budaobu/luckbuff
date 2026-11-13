@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { AstroZhichangFormData } from '~/types/astro-zhichang-hepan'
 
 interface Props {
@@ -27,22 +27,6 @@ const labelB = computed(() =>
     ? t('astroZhichangHepan.personBColleague')
     : t('astroZhichangHepan.personB'),
 )
-
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDateA = ref<CalendarDate | undefined>(undefined)
-const calendarDateB = ref<CalendarDate | undefined>(undefined)
-
-watch(calendarDateA, () => {
-  form.value.personA.birthDate = calendarDateA.value
-    ? `${calendarDateA.value.year}-${String(calendarDateA.value.month).padStart(2, '0')}-${String(calendarDateA.value.day).padStart(2, '0')}`
-    : ''
-})
-watch(calendarDateB, () => {
-  form.value.personB.birthDate = calendarDateB.value
-    ? `${calendarDateB.value.year}-${String(calendarDateB.value.month).padStart(2, '0')}-${String(calendarDateB.value.day).padStart(2, '0')}`
-    : ''
-})
 
 const isValid = computed(() =>
   form.value.personA.birthDate && form.value.personA.birthTime && form.value.personA.birthCity.trim()
@@ -128,9 +112,9 @@ const inputUi = {
           <UPopover>
             <UButton color="neutral" variant="outline" class="w-full justify-start bg-[var(--surface-input)] border-[var(--border-light)] text-[var(--text-primary)]" :class="{ 'text-[var(--text-placeholder)]': !form.personA.birthDate }">
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-              {{ form.personA.birthDate && calendarDateA ? df.format(calendarDateA.toDate(tz)) : $t('astroZhichangHepan.birthDatePlaceholder') }}
+              {{ formatIsoDate(form.personA.birthDate, locale) || $t('astroZhichangHepan.birthDatePlaceholder') }}
             </UButton>
-            <template #content><LazyAppCalendar v-model="calendarDateA" color="warning" class="p-2" /></template>
+            <template #content><LazyAppCalendar v-model:iso="form.personA.birthDate" color="warning" class="p-2" /></template>
           </UPopover>
         </div>
         <div class="space-y-1.5">
@@ -179,9 +163,9 @@ const inputUi = {
           <UPopover>
             <UButton color="neutral" variant="outline" class="w-full justify-start bg-[var(--surface-input)] border-[var(--border-light)] text-[var(--text-primary)]" :class="{ 'text-[var(--text-placeholder)]': !form.personB.birthDate }">
               <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-              {{ form.personB.birthDate && calendarDateB ? df.format(calendarDateB.toDate(tz)) : $t('astroZhichangHepan.birthDatePlaceholder') }}
+              {{ formatIsoDate(form.personB.birthDate, locale) || $t('astroZhichangHepan.birthDatePlaceholder') }}
             </UButton>
-            <template #content><LazyAppCalendar v-model="calendarDateB" color="warning" class="p-2" /></template>
+            <template #content><LazyAppCalendar v-model:iso="form.personB.birthDate" color="warning" class="p-2" /></template>
           </UPopover>
         </div>
         <div class="space-y-1.5">

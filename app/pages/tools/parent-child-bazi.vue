@@ -82,10 +82,10 @@
                       :class="{ 'text-[var(--text-placeholder)]': !form.parent.birthDate }"
                     >
                       <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                      {{ form.parent.birthDate && parentCalendarDate ? df.format(parentCalendarDate.toDate(tz)) : $t('parentChildBazi.birthDatePlaceholder') }}
+                      {{ formatIsoDate(form.parent.birthDate, 'zh-CN') || $t('parentChildBazi.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <LazyAppCalendar v-model="parentCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model:iso="form.parent.birthDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -159,10 +159,10 @@
                       :class="{ 'text-[var(--text-placeholder)]': !form.child.birthDate }"
                     >
                       <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                      {{ form.child.birthDate && childCalendarDate ? df.format(childCalendarDate.toDate(tz)) : $t('parentChildBazi.birthDatePlaceholder') }}
+                      {{ formatIsoDate(form.child.birthDate, 'zh-CN') || $t('parentChildBazi.birthDatePlaceholder') }}
                     </UButton>
                     <template #content>
-                      <LazyAppCalendar v-model="childCalendarDate" color="warning" class="p-2" />
+                      <LazyAppCalendar v-model:iso="form.child.birthDate" color="warning" class="p-2" />
                     </template>
                   </UPopover>
                 </div>
@@ -466,7 +466,7 @@
 
 <script setup lang="ts">
 import { marked } from 'marked'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date'
+import { formatIsoDate } from '~/utils/form-date'
 import type { DiZhi } from '~/types/user'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { ParentChildBaziCalcResult } from '~/types/parent-child-bazi'
@@ -494,22 +494,12 @@ const aiStarted = ref(false)
 const aiError = ref<string | null>(null)
 const resultRef = ref<HTMLDivElement>()
 
-const tz = getLocalTimeZone()
-const df = new DateFormatter('zh-CN', { dateStyle: 'long' })
-const parentCalendarDate = ref<CalendarDate | undefined>(undefined)
-const childCalendarDate = ref<CalendarDate | undefined>(undefined)
 
 const hourOptions = SHICHEN_OPTIONS.map(s => ({
   label: `${s.label}（${s.range}）`,
   value: s.dizhi,
 }))
 
-watch(parentCalendarDate, (v) => {
-  form.parent.birthDate = v ? `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}` : ''
-})
-watch(childCalendarDate, (v) => {
-  form.child.birthDate = v ? `${v.year}-${String(v.month).padStart(2, '0')}-${String(v.day).padStart(2, '0')}` : ''
-})
 
 const isValid = computed(() => {
   return (
