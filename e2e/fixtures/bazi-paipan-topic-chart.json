@@ -1,0 +1,713 @@
+{
+  "pillars": [
+    {
+      "key": "year",
+      "label": "年柱",
+      "tag": null,
+      "gan": "庚",
+      "zhi": "午",
+      "ganzhi": "庚午",
+      "ganWuxing": "金",
+      "zhiWuxing": "火",
+      "shishenGan": "偏财",
+      "hiddenStems": [
+        {
+          "gan": "丁",
+          "type": "本气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": true
+        },
+        {
+          "gan": "己",
+          "type": "中气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": false
+        }
+      ],
+      "diShi": "帝旺",
+      "selfSitting": "沐浴",
+      "nayin": "路旁土",
+      "xun": "甲子",
+      "xunKong": [
+        "戌",
+        "亥"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "羊刃",
+          "classification": "凶",
+          "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "天医",
+          "classification": "吉",
+          "description": "利从事医疗、养生行业，身体恢复力强。"
+        }
+      ]
+    },
+    {
+      "key": "month",
+      "label": "月柱",
+      "tag": "月令核心",
+      "gan": "癸",
+      "zhi": "未",
+      "ganzhi": "癸未",
+      "ganWuxing": "水",
+      "zhiWuxing": "土",
+      "shishenGan": "正官",
+      "hiddenStems": [
+        {
+          "gan": "己",
+          "type": "本气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": true
+        },
+        {
+          "gan": "丁",
+          "type": "中气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": false
+        },
+        {
+          "gan": "乙",
+          "type": "余气",
+          "wuxing": "木",
+          "shishen": "正印",
+          "isMain": false
+        }
+      ],
+      "diShi": "衰",
+      "selfSitting": "墓",
+      "nayin": "杨柳木",
+      "xun": "甲戌",
+      "xunKong": [
+        "申",
+        "酉"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "天乙贵人",
+          "classification": "吉",
+          "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+        },
+        {
+          "name": "流霞",
+          "classification": "中性",
+          "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+        },
+        {
+          "name": "金舆",
+          "classification": "吉",
+          "description": "出行平安，常有好车代步，贵人接送。"
+        },
+        {
+          "name": "金匮",
+          "classification": "吉",
+          "description": "善于理财，钱财有库可存，利积累财富。"
+        }
+      ]
+    },
+    {
+      "key": "day",
+      "label": "日柱",
+      "tag": "日主核心",
+      "gan": "丙",
+      "zhi": "子",
+      "ganzhi": "丙子",
+      "ganWuxing": "火",
+      "zhiWuxing": "水",
+      "shishenGan": "比肩",
+      "hiddenStems": [
+        {
+          "gan": "癸",
+          "type": "本气",
+          "wuxing": "水",
+          "shishen": "正官",
+          "isMain": true
+        }
+      ],
+      "diShi": "胎",
+      "selfSitting": "胎",
+      "nayin": "涧下水",
+      "xun": "甲戌",
+      "xunKong": [
+        "申",
+        "酉"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "飞刃",
+          "classification": "凶",
+          "description": "意外之灾，防飞来横祸，出行需谨慎。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "灾煞",
+          "classification": "凶",
+          "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+        },
+        {
+          "name": "大耗",
+          "classification": "凶",
+          "description": "破大财，钱财难聚，防投资失利。"
+        },
+        {
+          "name": "阳错",
+          "classification": "凶",
+          "description": "情感错位，婚姻易有差错，与岳父母关系不睦。"
+        }
+      ]
+    },
+    {
+      "key": "hour",
+      "label": "时柱",
+      "tag": null,
+      "gan": "甲",
+      "zhi": "午",
+      "ganzhi": "甲午",
+      "ganWuxing": "木",
+      "zhiWuxing": "火",
+      "shishenGan": "偏印",
+      "hiddenStems": [
+        {
+          "gan": "丁",
+          "type": "本气",
+          "wuxing": "火",
+          "shishen": "劫财",
+          "isMain": true
+        },
+        {
+          "gan": "己",
+          "type": "中气",
+          "wuxing": "土",
+          "shishen": "伤官",
+          "isMain": false
+        }
+      ],
+      "diShi": "帝旺",
+      "selfSitting": "死",
+      "nayin": "沙中金",
+      "xun": "甲午",
+      "xunKong": [
+        "辰",
+        "巳"
+      ],
+      "voidKinds": [],
+      "shensha": [
+        {
+          "name": "福星贵人",
+          "classification": "吉",
+          "description": "福气厚重，一生多得福报庇佑。"
+        },
+        {
+          "name": "羊刃",
+          "classification": "凶",
+          "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+        },
+        {
+          "name": "将星",
+          "classification": "吉",
+          "description": "领导力强，有统帅才能，适合管理岗位。"
+        },
+        {
+          "name": "天德贵人",
+          "classification": "吉",
+          "description": "上天庇佑，逢凶化吉，品德高尚。"
+        },
+        {
+          "name": "月德贵人",
+          "classification": "吉",
+          "description": "月令贵人，一生少灾少难，平安顺遂。"
+        },
+        {
+          "name": "天医",
+          "classification": "吉",
+          "description": "利从事医疗、养生行业，身体恢复力强。"
+        },
+        {
+          "name": "天赦贵",
+          "classification": "吉",
+          "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+        }
+      ]
+    }
+  ],
+  "birth": {
+    "genderText": "男"
+  },
+  "energy": {
+    "tenGods": [
+      {
+        "name": "正官",
+        "weight": 2,
+        "percent": 28,
+        "role": "秩序/责任"
+      },
+      {
+        "name": "伤官",
+        "weight": 1.5,
+        "percent": 21,
+        "role": "创新/突破"
+      },
+      {
+        "name": "劫财",
+        "weight": 1.4,
+        "percent": 20,
+        "role": "竞争/协作"
+      },
+      {
+        "name": "偏财",
+        "weight": 1,
+        "percent": 14,
+        "role": "机会/流动财"
+      },
+      {
+        "name": "偏印",
+        "weight": 1,
+        "percent": 14,
+        "role": "研究/直觉"
+      },
+      {
+        "name": "正印",
+        "weight": 0.2,
+        "percent": 3,
+        "role": "学习/庇护"
+      },
+      {
+        "name": "比肩",
+        "weight": 0,
+        "percent": 0,
+        "role": "自我/同辈"
+      },
+      {
+        "name": "食神",
+        "weight": 0,
+        "percent": 0,
+        "role": "表达/输出"
+      },
+      {
+        "name": "正财",
+        "weight": 0,
+        "percent": 0,
+        "role": "稳定/执行财"
+      },
+      {
+        "name": "七杀",
+        "weight": 0,
+        "percent": 0,
+        "role": "压力/规则"
+      }
+    ],
+    "wuxing": [
+      {
+        "key": "火",
+        "label": "火",
+        "weight": 3.9,
+        "percent": 34,
+        "visibleCount": 3,
+        "hiddenCount": 3,
+        "role": "日主",
+        "state": "unfavorable",
+        "stateLabel": "忌神方向",
+        "direction": "南方",
+        "organs": "心、小肠",
+        "evidence": "天干/地支 3 处，藏干信号 3 处"
+      },
+      {
+        "key": "水",
+        "label": "水",
+        "weight": 3,
+        "percent": 26,
+        "visibleCount": 2,
+        "hiddenCount": 1,
+        "role": "财星",
+        "state": "neutral",
+        "stateLabel": "中性",
+        "direction": "北方",
+        "organs": "肾、膀胱",
+        "evidence": "天干/地支 2 处，藏干信号 1 处"
+      },
+      {
+        "key": "土",
+        "label": "土",
+        "weight": 2.5,
+        "percent": 22,
+        "visibleCount": 1,
+        "hiddenCount": 3,
+        "role": "印星",
+        "state": "favorable",
+        "stateLabel": "喜用方向",
+        "direction": "中央",
+        "organs": "脾、胃",
+        "evidence": "天干/地支 1 处，藏干信号 3 处"
+      },
+      {
+        "key": "木",
+        "label": "木",
+        "weight": 1.2,
+        "percent": 10,
+        "visibleCount": 1,
+        "hiddenCount": 1,
+        "role": "财星",
+        "state": "neutral",
+        "stateLabel": "中性",
+        "direction": "东方",
+        "organs": "肝、胆",
+        "evidence": "天干/地支 1 处，藏干信号 1 处"
+      },
+      {
+        "key": "金",
+        "label": "金",
+        "weight": 1,
+        "percent": 9,
+        "visibleCount": 1,
+        "hiddenCount": 0,
+        "role": "官杀",
+        "state": "favorable",
+        "stateLabel": "喜用方向",
+        "direction": "西方",
+        "organs": "肺、大肠",
+        "evidence": "天干/地支 1 处，藏干信号 0 处"
+      }
+    ],
+    "strength": "身强",
+    "supportRatio": 55.2,
+    "rootStatus": "有效根",
+    "monthCommand": "得令 · 生扶",
+    "monthCommandDetail": "小暑后 3 天，司令 丁",
+    "primaryUseGod": "金",
+    "supportUseGod": "土",
+    "avoidGod": "火",
+    "adjustment": "优先泄、耗、控，降低过旺日主的对抗成本。"
+  },
+  "relations": [
+    {
+      "id": "CLASH-子午-day/year",
+      "group": "地支",
+      "type": "冲",
+      "value": "子午",
+      "positions": [
+        "日柱",
+        "年柱"
+      ],
+      "impact": "主变动、冲击、位置被推动",
+      "intensity": "强烈",
+      "status": "生效"
+    },
+    {
+      "id": "COMBINATION_2-午未-year/month",
+      "group": "地支",
+      "type": "合",
+      "value": "午未",
+      "positions": [
+        "年柱",
+        "月柱"
+      ],
+      "impact": "主牵绊、合作、能量合化",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "PUNISHMENT-午午-year/hour",
+      "group": "地支",
+      "type": "刑",
+      "value": "午午",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "impact": "主内耗、规则压力、隐性摩擦",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "HARM-子未-day/month",
+      "group": "地支",
+      "type": "害",
+      "value": "子未",
+      "positions": [
+        "日柱",
+        "月柱"
+      ],
+      "impact": "主暗耗、不顺、细节牵制",
+      "intensity": "轻微",
+      "status": "生效"
+    },
+    {
+      "id": "branch-combine-午未合火-year/month",
+      "group": "地支",
+      "type": "六合",
+      "value": "午未合火",
+      "positions": [
+        "年柱",
+        "月柱"
+      ],
+      "impact": "主牵绊、合作、能量合化",
+      "intensity": "中等",
+      "status": "生效"
+    },
+    {
+      "id": "branch-harm-未子害-month/day",
+      "group": "地支",
+      "type": "相害",
+      "value": "未子害",
+      "positions": [
+        "月柱",
+        "日柱"
+      ],
+      "impact": "主暗耗、不顺、细节牵制",
+      "intensity": "轻微",
+      "status": "生效"
+    },
+    {
+      "id": "branch-clash-子午冲-day/hour",
+      "group": "地支",
+      "type": "相冲",
+      "value": "子午冲",
+      "positions": [
+        "日柱",
+        "时柱"
+      ],
+      "impact": "主变动、冲击、位置被推动",
+      "intensity": "强烈",
+      "status": "生效"
+    }
+  ],
+  "shensha": [
+    {
+      "name": "天乙贵人",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "最大贵人星，遇困难时总有人相助，逢凶化吉。"
+    },
+    {
+      "name": "福星贵人",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "日柱",
+        "时柱"
+      ],
+      "description": "福气厚重，一生多得福报庇佑。"
+    },
+    {
+      "name": "流霞",
+      "classification": "中性",
+      "positions": [
+        "月柱"
+      ],
+      "description": "防酒色之灾，饮食不慎，沉迷享乐。"
+    },
+    {
+      "name": "金舆",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "出行平安，常有好车代步，贵人接送。"
+    },
+    {
+      "name": "羊刃",
+      "classification": "凶",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "description": "性格刚烈，做事果断但易冲动，注意刀伤血光。"
+    },
+    {
+      "name": "飞刃",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "意外之灾，防飞来横祸，出行需谨慎。"
+    },
+    {
+      "name": "将星",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "日柱",
+        "时柱"
+      ],
+      "description": "领导力强，有统帅才能，适合管理岗位。"
+    },
+    {
+      "name": "金匮",
+      "classification": "吉",
+      "positions": [
+        "月柱"
+      ],
+      "description": "善于理财，钱财有库可存，利积累财富。"
+    },
+    {
+      "name": "灾煞",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "天灾人祸，防意外事故，流年逢之需谨慎。"
+    },
+    {
+      "name": "大耗",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "破大财，钱财难聚，防投资失利。"
+    },
+    {
+      "name": "天德贵人",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "上天庇佑，逢凶化吉，品德高尚。"
+    },
+    {
+      "name": "月德贵人",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "月令贵人，一生少灾少难，平安顺遂。"
+    },
+    {
+      "name": "天医",
+      "classification": "吉",
+      "positions": [
+        "年柱",
+        "时柱"
+      ],
+      "description": "利从事医疗、养生行业，身体恢复力强。"
+    },
+    {
+      "name": "阳错",
+      "classification": "凶",
+      "positions": [
+        "日柱"
+      ],
+      "description": "情感错位，婚姻易有差错，与岳父母关系不睦。"
+    },
+    {
+      "name": "天赦贵",
+      "classification": "吉",
+      "positions": [
+        "时柱"
+      ],
+      "description": "天赦日生人，犯错易得原谅，逢灾可解。"
+    }
+  ],
+  "pattern": {
+    "name": "伤官格",
+    "status": "伤官格 · 未透",
+    "monthMainQi": "土·伤官",
+    "transparency": "未透干",
+    "rootStatus": "有效根",
+    "evidence": [
+      "月令主气：未 中 土·伤官",
+      "司令依据：小暑后 3 天，取 丁",
+      "透明检查：伤官 未透干",
+      "支持比：55.2%；根气：有效根"
+    ]
+  },
+  "natalThemes": [
+    {
+      "id": "love-attraction",
+      "title": "恋爱吸引信号",
+      "score": 28,
+      "tags": [
+        "关系星显度"
+      ],
+      "status": "需补强",
+      "evidenceLevel": "保守"
+    },
+    {
+      "id": "relationship-stability",
+      "title": "长期关系稳定信号",
+      "score": 45,
+      "tags": [
+        "配偶星清晰度",
+        "子午冲"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "中等"
+    },
+    {
+      "id": "wealth-capacity",
+      "title": "财富承载",
+      "score": 63,
+      "tags": [
+        "财星占比",
+        "财元素强度"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "中等"
+    },
+    {
+      "id": "career-structure",
+      "title": "事业结构力",
+      "score": 58,
+      "tags": [
+        "官杀占比",
+        "子午冲",
+        "午午刑",
+        "印星承接",
+        "将星"
+      ],
+      "status": "需取舍",
+      "evidenceLevel": "稳定"
+    },
+    {
+      "id": "learning-structure",
+      "title": "学习结构力",
+      "score": 79,
+      "tags": [
+        "印星占比",
+        "印元素强度"
+      ],
+      "status": "有优势",
+      "evidenceLevel": "中等"
+    }
+  ],
+  "dayuns": [
+    {
+      "index": 3,
+      "ganzhi": "丙戌",
+      "startYear": 2020,
+      "endYear": 2029,
+      "shishenGan": "比肩",
+      "shishenZhi": "食神",
+      "isCurrent": false
+    }
+  ]
+}

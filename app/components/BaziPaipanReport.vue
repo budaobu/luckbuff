@@ -6,7 +6,7 @@
     @keydown.enter.prevent="handleReportKeydown"
     @keydown.space.prevent="handleReportKeydown"
   >
-      <section class="bpr-card bpr-hero">
+      <section v-if="isSectionVisible('chart')" class="bpr-card bpr-hero">
         <p v-if="props.terminology === 'shichu-suimei'" class="bpr-system">
           {{ $t(reportKey('system')) }}
         </p>
@@ -45,7 +45,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('chart')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('chartTitle')) }}</h2>
         <p>{{ $t(reportKey('chartSubtitle')) }}</p>
@@ -142,7 +142,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('elements')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('wuxingTitle')) }}</h2>
         <p>{{ $t(reportKey('energySubtitle')) }}</p>
@@ -185,7 +185,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('relations')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('signalTitle')) }}</h2>
         <p>{{ $t(reportKey('signalSubtitle')) }}</p>
@@ -227,7 +227,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('cycles')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('dayunTitle')) }}</h2>
         <p>{{ $t(reportKey('dayunSubtitle')) }}</p>
@@ -283,7 +283,7 @@
       </div>
     </section>
 
-    <section class="bpr-section">
+    <section v-if="isSectionVisible('elements')" class="bpr-section">
       <header class="bpr-section-label">
         <h2>{{ $t(reportKey('structureTitle')) }}</h2>
         <p>{{ $t(reportKey('structureSubtitle')) }}</p>
@@ -416,10 +416,12 @@ const props = withDefaults(defineProps<{
   terminology?: 'bazi' | 'shichu-suimei'
   aiEndpoint?: string
   activeDayunIndex?: number | null
+  section?: 'all' | 'chart' | 'elements' | 'cycles' | 'relations'
 }>(), {
   terminology: 'bazi',
   aiEndpoint: '/api/tools/bazi-paipan/interpret',
   activeDayunIndex: null,
+  section: 'all',
 })
 const toast = useToast()
 const route = useRoute()
@@ -428,6 +430,10 @@ const { isLoggedIn, signInWithGoogle, signInWithTelegram } = useAuth()
 
 const fourPillars = computed(() => props.result.pillars.map(pillar => pillar.ganzhi).join(' '))
 const reportRoot = ref<HTMLElement | null>(null)
+
+function isSectionVisible(section: 'chart' | 'elements' | 'cycles' | 'relations') {
+  return props.section === 'all' || props.section === section
+}
 
 const insightOpen = ref(false)
 const insightMode = ref<'target' | 'full'>('target')
@@ -482,6 +488,7 @@ function reportKey(key: string) {
 }
 
 const TARGET_SELECTORS = [
+  '.bpr-section-label',
   '.bpr-chart-row:not(.bpr-chart-head) > div',
   '.bpr-char',
   '.bpr-methodology',
@@ -490,6 +497,9 @@ const TARGET_SELECTORS = [
   '.bpr-energy-head',
   '.bpr-card',
   'article',
+  '.bpr-subsection-title',
+  '.bpr-empty',
+  '.bpr-theme-note',
   '.bpr-bar',
   '.bpr-dayun-meta > div',
   '.bpr-annual-list > div',
@@ -709,6 +719,11 @@ watch(() => props.result, async () => {
   initializeTargets()
 }, { immediate: true })
 
+watch(() => props.section, async () => {
+  await nextTick()
+  initializeTargets()
+})
+
 onMounted(() => {
   nextTick(initializeTargets)
 })
@@ -859,8 +874,8 @@ async function copyPillars() {
   gap: 7px;
   border: 0;
   border-radius: 999px;
-  background: var(--text-primary);
-  color: var(--surface-bg);
+  background: var(--accent);
+  color: #171006;
   padding: 8px 14px;
   font-size: 13px;
   cursor: pointer;
@@ -984,13 +999,13 @@ async function copyPillars() {
 }
 
 .bpr-pill-tags .is-吉 {
-  background: color-mix(in srgb, #16a34a 10%, transparent);
-  color: #15803d;
+  background: color-mix(in srgb, #22c55e 14%, transparent);
+  color: #86efac;
 }
 
 .bpr-pill-tags .is-凶 {
-  background: color-mix(in srgb, #dc2626 9%, transparent);
-  color: #b91c1c;
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #fca5a5;
 }
 
 .bpr-pill-tags .is-combo {
@@ -1433,8 +1448,8 @@ async function copyPillars() {
 }
 
 .bpr-theme-head em.is-good {
-  background: color-mix(in srgb, #16a34a 10%, transparent);
-  color: #15803d;
+  background: color-mix(in srgb, #22c55e 14%, transparent);
+  color: #86efac;
 }
 
 .bpr-theme-head em.is-mixed {
@@ -1443,8 +1458,8 @@ async function copyPillars() {
 }
 
 .bpr-theme-head em.is-risk {
-  background: color-mix(in srgb, #dc2626 9%, transparent);
-  color: #b91c1c;
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+  color: #fca5a5;
 }
 
 .bpr-theme-head small {
@@ -1553,7 +1568,7 @@ async function copyPillars() {
 }
 
 .bpr-insight-error {
-  color: #b91c1c;
+  color: #fca5a5;
 }
 
 .bpr-insight-foot {
