@@ -1,5 +1,5 @@
 import type { BaziRoomSceneModel } from '~/utils/bazi-paipan-room/model'
-import type { BaziRoomMount, BaziRoomQuality, BaziRoomRendererStats } from '~/utils/bazi-paipan-room/renderer'
+import type { BaziRoomMount, BaziRoomQuality, BaziRoomRendererLabels, BaziRoomRendererStats } from '~/utils/bazi-paipan-room/renderer'
 
 export interface BaziStageKitState {
   ready: Ref<boolean>
@@ -26,13 +26,14 @@ export function useBaziPaipanStageKit(options: {
   let mount: BaziRoomMount | null = null
   let disposed = false
 
-  async function attach(root: HTMLElement) {
+  async function attach(root: HTMLElement, labels: BaziRoomRendererLabels) {
     if (mount || disposed) return
     const { mountBaziPaipanRoom } = await import('~/utils/bazi-paipan-room/renderer')
     if (disposed) return
     mount = await mountBaziPaipanRoom({
       root,
       initialModel: options.initialModel,
+      labels,
       reducedMotion: options.reducedMotion.value,
       qualityOverride: options.qualityOverride?.value ?? null,
       freeze: options.freeze?.value,

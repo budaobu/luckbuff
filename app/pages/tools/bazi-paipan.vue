@@ -2,7 +2,11 @@
   <div class="room-page">
     <section class="room-hero" aria-labelledby="bazi-room-title">
       <ClientOnly>
-        <BaziPaipanRoomStage :model="roomModel" :stage="roomStage" />
+        <BaziPaipanRoomStage
+          :model="roomModel"
+          :stage="roomStage"
+          :labels="roomRendererLabels"
+        />
         <template #fallback>
           <div class="stage-fallback">
             <span aria-hidden="true">命</span>
@@ -12,6 +16,17 @@
       </ClientOnly>
 
       <header class="scene-header">
+        <button
+          type="button"
+          class="back-button"
+          data-testid="bazi-room-back"
+          :aria-label="$t('baziPaipanRoom.back')"
+          :title="$t('baziPaipanRoom.back')"
+          @click="goBack"
+        >
+          <UIcon name="i-lucide-arrow-left" class="h-4 w-4" />
+          <span>{{ $t('baziPaipanRoom.back') }}</span>
+        </button>
         <div>
           <p class="scene-eyebrow">{{ $t('baziPaipanRoom.roomLabel') }}</p>
           <h1 id="bazi-room-title" class="scene-title">{{ $t('baziChart.title') }}</h1>
@@ -395,6 +410,7 @@ const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const toast = useToast()
 const route = useRoute()
+const router = useRouter()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
 
 const phase = ref<BaziRoomPhase>('idle')
@@ -431,6 +447,14 @@ const qualityOverride = computed(() => {
 })
 const freezeScene = computed(() => route.query.freeze === '1' || qualityOverride.value === 'low')
 const reducedMotion = ref(false)
+const roomRendererLabels = computed(() => ({
+  room: t('baziPaipanRoom.roomLabel'),
+  chart: t('baziChart.title'),
+  idle: t('baziPaipanRoom.ritualLoading'),
+  calculating: t('baziPaipanRoom.calculating'),
+  revealed: t('baziPaipanRoom.fullTitle'),
+  today: t('baziPaipanRoom.todayTimeline'),
+}))
 const roomStage = useBaziPaipanStageKit({
   initialModel: initialRoomModel,
   reducedMotion,
@@ -539,6 +563,11 @@ function openBirthForm(topic: BaziRoomTopicId) {
   pendingTopic.value = topic
   sideView.value = 'form'
   activeSceneCard.value = 'none'
+}
+
+function goBack() {
+  if (window.history.state?.back) router.back()
+  else void navigateTo(localePath('/tools'))
 }
 
 function openKeeperGuide() {
@@ -961,7 +990,10 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .room-page {
-  height: calc(100svh - 4rem);
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  height: 100svh;
   overflow: hidden;
   background: #05080f;
   color: #e9eefa;
@@ -1019,7 +1051,7 @@ onBeforeUnmount(() => {
 }
 
 .info-rail {
-  top: 180px;
+  top: 224px;
   left: 24px;
   bottom: 104px;
   display: flex;
@@ -1470,7 +1502,7 @@ onBeforeUnmount(() => {
 
 @media (min-width: 768px) {
   .room-page {
-    height: calc(100svh - 72px);
+    height: 100svh;
   }
 
   .side-panel {
@@ -1504,6 +1536,28 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   background: rgba(5, 9, 16, 0.58);
   backdrop-filter: blur(16px);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  margin-bottom: 12px;
+  padding: 0 9px;
+  border: 1px solid rgba(233, 238, 250, 0.16);
+  border-radius: 6px;
+  background: rgba(11, 17, 27, 0.82);
+  color: rgba(233, 238, 250, 0.78);
+  font-size: 12px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  border-color: rgba(212, 175, 109, 0.55);
+  color: #f2d998;
 }
 
 .scene-eyebrow {

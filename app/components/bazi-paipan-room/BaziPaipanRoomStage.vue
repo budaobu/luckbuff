@@ -35,10 +35,12 @@
 
 <script setup lang="ts">
 import type { BaziRoomSceneModel } from '~/utils/bazi-paipan-room/model'
+import type { BaziRoomRendererLabels } from '~/utils/bazi-paipan-room/renderer'
 
 const props = defineProps<{
   model: BaziRoomSceneModel
   stage: ReturnType<typeof useBaziPaipanStageKit>
+  labels: BaziRoomRendererLabels
 }>()
 
 const { t } = useI18n()
@@ -52,11 +54,20 @@ const qualityLabel = computed(() => ({
   low: t('baziPaipanRoom.qualityLow'),
 })[props.stage.quality.value])
 
+const rendererLabels = computed(() => ({
+  room: props.labels.room,
+  chart: props.labels.chart,
+  idle: props.labels.idle,
+  calculating: props.labels.calculating,
+  revealed: props.labels.revealed,
+  today: props.labels.today,
+}))
+
 onMounted(async () => {
   mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
   reducedMotion.value = mediaQuery.matches
   mediaQuery.addEventListener('change', handleMotion)
-  if (stageRoot.value) await props.stage.attach(stageRoot.value)
+  if (stageRoot.value) await props.stage.attach(stageRoot.value, rendererLabels.value)
 })
 
 function handleMotion(event: MediaQueryListEvent) {

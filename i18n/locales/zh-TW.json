@@ -161,45 +161,108 @@
     "loadFailed": "運勢資料載入失敗，請稍後重試。",
     "updatedToday": "每日更新",
     "signs": {
-      "aries": "牡羊座", "taurus": "金牛座", "gemini": "雙子座", "cancer": "巨蟹座",
-      "leo": "獅子座", "virgo": "處女座", "libra": "天秤座", "scorpio": "天蠍座",
-      "sagittarius": "射手座", "capricorn": "摩羯座", "aquarius": "水瓶座", "pisces": "雙魚座"
+      "aries": "牡羊座",
+      "taurus": "金牛座",
+      "gemini": "雙子座",
+      "cancer": "巨蟹座",
+      "leo": "獅子座",
+      "virgo": "處女座",
+      "libra": "天秤座",
+      "scorpio": "天蠍座",
+      "sagittarius": "射手座",
+      "capricorn": "摩羯座",
+      "aquarius": "水瓶座",
+      "pisces": "雙魚座"
     },
     "fields": {
-      "overall": "綜合", "love": "愛情", "work": "工作", "wealth": "財運", "health": "健康",
-      "luckyNumber": "幸運數", "luckyColor": "幸運色", "moonSign": "月亮星座", "moonPhase": "月相",
-      "compatibility": "互動星座", "direction": "幸運方位"
+      "overall": "綜合",
+      "love": "愛情",
+      "work": "工作",
+      "wealth": "財運",
+      "health": "健康",
+      "luckyNumber": "幸運數",
+      "luckyColor": "幸運色",
+      "moonSign": "月亮星座",
+      "moonPhase": "月相",
+      "compatibility": "互動星座",
+      "direction": "幸運方位"
     },
     "sections": {
-      "scores": "分項指數", "scoresSubtitle": "本地確定性規則生成", "sky": "當日星象", "skySubtitle": "12:00 Asia/Shanghai",
-      "positions": "行星星座", "aspects": "關鍵相位", "method": "計算口徑"
+      "scores": "分項指數",
+      "scoresSubtitle": "本地確定性規則生成",
+      "sky": "當日星象",
+      "skySubtitle": "12:00 Asia/Shanghai",
+      "positions": "行星星座",
+      "aspects": "關鍵相位",
+      "method": "計算口徑"
     },
-    "empty": { "aspects": "今日無 6.5° 內主要相位。" },
+    "empty": {
+      "aspects": "今日無 6.5° 內主要相位。"
+    },
     "ai": {
-      "action": "AI 解讀", "title": "AI 解讀", "summary": "今日綜合摘要", "close": "關閉",
-      "connecting": "正在解讀星象訊號…", "error": "AI 解讀失敗，請稍後重試", "noResult": "AI 未回傳解讀結果",
-      "disclaimer": "解讀基於當日星座結構，僅供文化娛樂參考。", "fullReport": "完整分析報告",
-      "fullReportLogin": "完整分析報告 · 登入後可查看", "fullReportTitle": "完整星座運勢 AI 分析報告",
+      "action": "AI 解讀",
+      "title": "AI 解讀",
+      "summary": "今日綜合摘要",
+      "close": "關閉",
+      "connecting": "正在解讀星象訊號…",
+      "error": "AI 解讀失敗，請稍後重試",
+      "noResult": "AI 未回傳解讀結果",
+      "disclaimer": "解讀基於當日星座結構，僅供文化娛樂參考。",
+      "fullReport": "完整分析報告",
+      "fullReportLogin": "完整分析報告 · 登入後可查看",
+      "fullReportTitle": "完整星座運勢 AI 分析報告",
       "loginRequired": "登入後可生成完整星座運勢 AI 分析報告。"
     },
     "phases": {
-      "new": "新月", "waxing-crescent": "娥眉月", "first-quarter": "上弦月", "waxing-gibbous": "盈凸月",
-      "full": "滿月", "waning-gibbous": "虧凸月", "last-quarter": "下弦月", "waning-crescent": "殘月"
+      "new": "新月",
+      "waxing-crescent": "娥眉月",
+      "first-quarter": "上弦月",
+      "waxing-gibbous": "盈凸月",
+      "full": "滿月",
+      "waning-gibbous": "虧凸月",
+      "last-quarter": "下弦月",
+      "waning-crescent": "殘月"
     },
     "colors": {
-      "crimson": "緋紅", "amber": "琥珀", "emerald": "祖母綠", "sky": "天青", "indigo": "靛藍", "violet": "紫羅蘭",
-      "rose": "玫瑰", "slate": "岩灰", "gold": "鎏金", "teal": "青瓷", "mint": "薄荷", "coral": "珊瑚"
+      "crimson": "緋紅",
+      "amber": "琥珀",
+      "emerald": "祖母綠",
+      "sky": "天青",
+      "indigo": "靛藍",
+      "violet": "紫羅蘭",
+      "rose": "玫瑰",
+      "slate": "岩灰",
+      "gold": "鎏金",
+      "teal": "青瓷",
+      "mint": "薄荷",
+      "coral": "珊瑚"
     },
     "directions": {
-      "east": "正東", "southeast": "東南", "south": "正南", "southwest": "西南",
-      "west": "正西", "northwest": "西北", "north": "正北", "northeast": "東北"
+      "east": "正東",
+      "southeast": "東南",
+      "south": "正南",
+      "southwest": "西南",
+      "west": "正西",
+      "northwest": "西北",
+      "north": "正北",
+      "northeast": "東北"
     },
     "calendar": {
-      "title": "訂閱日曆", "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
+      "title": "訂閱日曆",
+      "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
       "overallIndex": "綜合指數",
-      "sign": "星座", "range": "時間範圍", "today": "當天", "threeDays": "3天", "sevenDays": "7天",
-      "types": "運勢類型", "subscribe": "訂閱到日曆", "download": "下載 ICS", "copied": "訂閱連結已複製",
-      "copy": "複製 URL", "copyFailed": "複製失敗，請手動複製", "url": "訂閱日曆 URL",
+      "sign": "星座",
+      "range": "時間範圍",
+      "today": "當天",
+      "threeDays": "3天",
+      "sevenDays": "7天",
+      "types": "運勢類型",
+      "subscribe": "訂閱到日曆",
+      "download": "下載 ICS",
+      "copied": "訂閱連結已複製",
+      "copy": "複製 URL",
+      "copyFailed": "複製失敗，請手動複製",
+      "url": "訂閱日曆 URL",
       "hint": "URL 使用 webcal 協議開啟本機日曆；ICS 也可手動匯入 Apple 日曆、Outlook、Google 日曆或 Android 日曆。"
     },
     "faq": {
@@ -5211,7 +5274,7 @@
     "hourPillar": "時辰柱",
     "sceneFallback": "通用"
   },
-    "todayAlmanac": {
+  "todayAlmanac": {
     "title": "今日黃曆",
     "subtitle": "完整查看當日宜忌、吉時、方位、沖煞、顏色與節氣資訊。",
     "dailyQuoteLabel": "今日吉句",
@@ -12425,6 +12488,7 @@
     "roomActions": "命盤室操作",
     "askWhat": "問什麼",
     "askAgain": "再問",
+    "back": "返回",
     "birthTitle": "報上生辰",
     "changePerson": "換一個人",
     "clearLocal": "清除本地資料",
