@@ -83,7 +83,7 @@
                   :class="{ 'text-[var(--text-placeholder)]': !form.birthDate }"
                 >
                   <UIcon name="i-heroicons-calendar" class="w-4 h-4 mr-2 text-[var(--text-faint)]" />
-                  {{ form.birthDate && calendarDate ? df.format(calendarDate.toDate(tz)) : $t('baziNaming.birthDatePlaceholder') }}
+                  {{ form.birthDate ? formatBirthDate(form.birthDate) : $t('baziNaming.birthDatePlaceholder') }}
                 </UButton>
                 <template #content>
                   <LazyAppCalendar
@@ -380,7 +380,7 @@
             </template>
             {{ $t('baziNaming.copyResult') }}
           </UButton>
-          <AppShareButton
+          <LazyAppShareButton
             tool="bazi-naming"
             :name="form.surname"
             :summary="`姓${form.surname} · 日主${chart.riZhu}（${chart.riZhuStrength}）· 喜用${chart.xiyong}`"
@@ -416,8 +416,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from 'marked'
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { SHICHEN_OPTIONS } from '~/types/user'
 import type { DiZhi } from '~/types/user'
 import type { BaziChart, WuxingScore } from '~/types/bazi'
@@ -434,10 +432,26 @@ const form = reactive({
 })
 const chart = ref<BaziChart | null>(null)
 
-// 日历 picker
-const tz = getLocalTimeZone()
-const df = computed(() => new DateFormatter(locale.value === 'en' ? 'en-US' : (locale.value === 'zh-TW' ? 'zh-TW' : 'zh-CN'), { dateStyle: 'long' }))
-const calendarDate = ref<CalendarDate | undefined>(undefined)
+interface CalendarLikeDate {
+  year: number
+  month: number
+  day: number
+}
+
+// 日历 picker：CalendarDate 由 LazyAppCalendar 在选择时提供，表单首包不引入完整历法库。
+const df = computed(() => new Intl.DateTimeFormat(
+  locale.value === 'en'
+    ? 'en-US'
+    : locale.value === 'zh-TW'
+      ? 'zh-TW'
+      : locale.value === 'ja'
+        ? 'ja-JP'
+        : locale.value === 'ko'
+          ? 'ko-KR'
+          : 'zh-CN',
+  { dateStyle: 'long', timeZone: 'UTC' },
+))
+const calendarDate = shallowRef<CalendarLikeDate | undefined>(undefined)
 
 watch(calendarDate, () => {
   if (calendarDate.value) {
@@ -447,6 +461,11 @@ watch(calendarDate, () => {
   }
 })
 
+function formatBirthDate(value: string) {
+  const [year, month, day] = value.split('-').map(Number) as [number, number, number]
+  return df.value.format(new Date(Date.UTC(year, month - 1, day)))
+}
+
 // AI 起名状态
 const aiContent = ref('')
 const aiStreaming = ref(false)
@@ -455,7 +474,6 @@ const aiError = ref<string | null>(null)
 const resultRef = ref<HTMLDivElement>()
 
 const toast = useToast()
-const { calc } = useBaziCalc()
 
 const canSubmit = computed(() => {
   return form.surname.trim().length > 0 && form.birthDate.length > 0
@@ -514,7 +532,8 @@ async function handleSubmit() {
 
   const [year, month, day] = form.birthDate.split('-').map(Number) as [number, number, number]
   const genderForCalc = form.gender === '男' ? 'male' : 'female'
-  const calculatedChart = calc(year, month, day, form.birthHour ?? null, genderForCalc)
+  const { useBaziCalc } = await import('~/composables/useBaziCalc')
+  const calculatedChart = useBaziCalc().calc(year, month, day, form.birthHour ?? null, genderForCalc)
 
   phase.value = 'animating'
   chart.value = null
@@ -539,6 +558,7 @@ async function startAiStream() {
   aiError.value = null
 
   await nextTick()
+  void loadMarkdownRenderer()
 
   try {
     const response = await fetch('/api/tools/bazi-naming/naming', {
@@ -646,7 +666,16 @@ const nameCards = computed(() => {
 
 function renderMarkdown(text: string): string {
   if (!text) return ''
-  return marked.parse(text, { async: false }) as string
+  if (markdownParse) return markdownParse(text)
+  return `<p>${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>`
+}
+
+let markdownParse: ((text: string) => string) | null = null
+
+async function loadMarkdownRenderer() {
+  if (markdownParse) return
+  const { marked } = await import('marked')
+  markdownParse = text => marked.parse(text, { async: false }) as string
 }
 
 // UI Config
