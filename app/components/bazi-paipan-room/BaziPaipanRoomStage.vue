@@ -3,8 +3,14 @@
     class="room-stage"
     :data-quality="stage.quality.value"
     :data-state="model.phase"
+    :data-flow="model.flowStage"
     :data-error="stage.errorMessage.value || undefined"
     :data-model-pillars="model.pillars.map(pillar => `${pillar.key}:${pillar.gan}${pillar.zhi}`).join('|')"
+    :data-current-pillars="model.currentPillars.map(pillar => `${pillar.key}:${pillar.gan}${pillar.zhi}`).join('|')"
+    :data-screen-slide="model.slideId || undefined"
+    :data-screen-title="model.slideTitle || undefined"
+    :data-screen-detail="model.slideDetail || undefined"
+    :data-screen-page="`${model.slideIndex + 1}/${model.slideCount}`"
     data-testid="bazi-room-canvas"
     :aria-label="$t('baziPaipanRoom.roomLabel')"
   >
@@ -43,6 +49,10 @@ const props = defineProps<{
   labels: BaziRoomRendererLabels
 }>()
 
+const emit = defineEmits<{
+  keeperAnchor: [anchor: { x: number, y: number }]
+}>()
+
 const { t } = useI18n()
 const stageRoot = ref<HTMLElement | null>(null)
 const reducedMotion = ref(false)
@@ -61,6 +71,14 @@ const rendererLabels = computed(() => ({
   calculating: props.labels.calculating,
   revealed: props.labels.revealed,
   today: props.labels.today,
+  currentBazi: props.labels.currentBazi,
+  flowYear: props.labels.flowYear,
+  flowMonth: props.labels.flowMonth,
+  flowDay: props.labels.flowDay,
+  flowHour: props.labels.flowHour,
+  pillars: props.labels.pillars,
+  reading: props.labels.reading,
+  fullChart: props.labels.fullChart,
 }))
 
 onMounted(async () => {
@@ -76,6 +94,7 @@ function handleMotion(event: MediaQueryListEvent) {
 }
 
 watch(() => props.model, model => props.stage.setScene(model), { immediate: true })
+watch(() => props.stage.keeperAnchor.value, anchor => emit('keeperAnchor', anchor), { immediate: true })
 
 onBeforeUnmount(() => {
   mediaQuery?.removeEventListener('change', handleMotion)

@@ -1,11 +1,12 @@
 <template>
   <div class="room-page">
-    <section class="room-hero" aria-labelledby="bazi-room-title">
+    <section class="room-hero" :style="roomHeroStyle" aria-labelledby="bazi-room-title">
       <ClientOnly>
         <BaziPaipanRoomStage
           :model="roomModel"
           :stage="roomStage"
           :labels="roomRendererLabels"
+          @keeper-anchor="keeperAnchor = $event"
         />
         <template #fallback>
           <div class="stage-fallback">
@@ -34,139 +35,40 @@
         </div>
       </header>
 
-      <div v-if="phase === 'calculating'" class="calculating-note" aria-live="polite">
-        <span class="turning-mark" aria-hidden="true">儀</span>
-        <p>{{ $t('baziPaipanRoom.calculating') }}</p>
+      <div v-if="flowStage === 'calculating'" class="calculating-note" aria-live="polite">
+        <span class="turning-mark" aria-hidden="true">盘</span>
+        <p>{{ $t('baziPaipanRoom.calculatingRoom') }}</p>
       </div>
 
-      <section v-if="birthValues" class="info-rail" aria-live="polite">
-        <section class="info-card user-info-card" data-testid="bazi-room-user-info-card">
-          <header>
-            <div>
-              <small>{{ $t('baziPaipanRoom.localReady') }}</small>
-              <h2>{{ $t('baziPaipanRoom.localBirthCard') }}</h2>
-            </div>
-            <UIcon name="i-lucide-user-round" class="h-5 w-5" />
-          </header>
-          <dl>
-            <div><dt>{{ $t('baziChart.solar') }}</dt><dd>{{ birthValues.birthDate }}</dd></div>
-            <div><dt>{{ $t('profileForm.birthHour') }}</dt><dd>{{ birthValues.birthHourUnknown ? $t('baziForm.unknownHour') : birthValues.birthHour }}</dd></div>
-            <div><dt>{{ $t('baziChart.location') }}</dt><dd>{{ birthValues.birthProvince || '—' }}</dd></div>
-            <div><dt>{{ $t('profileForm.gender') }}</dt><dd>{{ birthValues.gender === 'male' ? $t('common.male') : $t('common.female') }}</dd></div>
-          </dl>
-        </section>
+      <div
+        v-if="flowStage === 'boot' || flowStage === 'start' || flowStage === 'question' || flowStage === 'birth'"
+        class="keeper-bubble"
+        data-testid="bazi-room-keeper-bubble"
+        aria-live="polite"
+      >
+        {{ keeperBubble }}
+      </div>
 
-        <div v-if="phase === 'revealed' && result && lens" class="topic-card">
-          <header>
-            <div>
-              <small>{{ dateLabel }}</small>
-              <h2>{{ cardTitle }}</h2>
-            </div>
-            <UIcon :name="activeTopicConfig.icon" class="h-5 w-5" />
-          </header>
+      <div v-if="flowStage === 'slideshow'" class="screen-reader-only" aria-live="polite">
+        {{ activeSlideTitle }}。{{ projectionSlideDetail }}
+      </div>
 
-          <div class="chenyu-seal" data-testid="bazi-room-chenyu">
-            <small>{{ $t('baziPaipanRoom.chenyu') }}</small>
-            <strong>{{ chenyu || $t('baziPaipanRoom.readingWaiting') }}</strong>
-          </div>
+      <div v-if="flowStage === 'slideshow' && result" class="top-share">
+        <AppShareButton
+          tool="bazi-paipan"
+          :summary="posterSummary"
+          :filename="`bazi-room-${todayDate}-${activeTopic}.png`"
+          :share-image-factory="createPoster"
+          :aria-label="$t('baziPaipanRoom.poster')"
+        />
+      </div>
 
-          <dl class="pillar-summary">
-            <div v-for="pillar in result.pillars" :key="pillar.key" :class="{ active: lens.focusPillarKeys.includes(pillar.key) }">
-              <dt>{{ pillar.label }}</dt>
-              <dd>{{ pillar.ganzhi }}</dd>
-            </div>
-            <div v-if="lens.today" class="today">
-              <dt>{{ $t('baziPaipanRoom.todayTimeline') }}</dt>
-              <dd>{{ lens.today.ganzhi }}</dd>
-            </div>
-          </dl>
-
-          <section class="slice-group">
-            <h3>{{ $t('baziPaipanRoom.natalSlice') }}</h3>
-            <dl>
-              <div v-for="item in lens.natal" :key="item.id" data-testid="bazi-room-natal-slice">
-                <dt>{{ item.label }}</dt>
-                <dd>{{ item.value }}</dd>
-              </div>
-            </dl>
-          </section>
-
-          <section class="slice-group">
-            <h3>{{ lens.today ? $t('baziPaipanRoom.todaySlice') : $t('baziPaipanRoom.noTodaySlice') }}</h3>
-            <dl v-if="lens.todayFields.length">
-              <div v-for="item in lens.todayFields" :key="item.id" data-testid="bazi-room-today-slice">
-                <dt>{{ item.label }}</dt>
-                <dd>{{ item.value }}</dd>
-              </div>
-            </dl>
-          </section>
-
-          <section v-if="lens.nobleHints.length" class="noble-hints">
-            <h3>{{ $t('baziPaipanRoom.nobleHints') }}</h3>
-            <ul>
-              <li v-for="item in lens.nobleHints" :key="item">{{ item }}</li>
-            </ul>
-          </section>
-
-          <section class="reading-panel" data-testid="bazi-room-reading">
-            <header>
-              <h3>{{ $t('baziPaipanRoom.reading') }}</h3>
-              <button v-if="readingError" type="button" @click="startReading(true)">
-                <UIcon name="i-lucide-rotate-cw" class="h-3.5 w-3.5" />
-                {{ $t('baziPaipanRoom.retry') }}
-              </button>
-            </header>
-            <p v-if="readingStreaming" class="reading-wait">{{ $t('baziPaipanRoom.readingWaiting') }}</p>
-            <p v-else-if="readingError" class="reading-error">{{ $t('baziPaipanRoom.readingFailed') }}</p>
-            <div v-else class="reading-body">{{ readingContent }}</div>
-
-            <NuxtLink
-              v-if="!readingStreaming"
-              class="deep-link"
-              :to="localePath(activeTopicConfig.link)"
-              data-testid="bazi-room-deep-link"
-              @click="trackRoomEvent({ type: 'deepLinkClick' })"
-            >
-              {{ $t('baziPaipanRoom.deepLink') }}
-              <UIcon name="i-lucide-arrow-right" class="h-3.5 w-3.5" />
-            </NuxtLink>
-          </section>
-
-        </div>
-      </section>
-
-      <Transition name="side-panel">
-        <section
-          v-if="sideView === 'topics'"
-          class="side-panel"
-          :aria-label="$t('baziPaipanRoom.chooseTopic')"
-          data-testid="bazi-room-topic-card"
-        >
-          <header>
-            <div>
-              <small>{{ $t('baziPaipanRoom.roomLabel') }}</small>
-              <h2>{{ $t('baziPaipanRoom.chooseTopic') }}</h2>
-            </div>
-            <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="sideView = 'hidden'">
-              <UIcon name="i-lucide-x" class="h-4 w-4" />
-            </button>
-          </header>
-          <div class="side-panel-body">
-            <div class="guide-list">
-              <button
-                v-for="topic in BAZI_ROOM_TOPICS"
-                :key="topic.id"
-                type="button"
-                :data-testid="`bazi-room-topic-${topic.id}`"
-                @click="selectTopic(topic.id)"
-              >
-                <UIcon :name="topic.icon" class="h-4 w-4" />
-                {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
-              </button>
-            </div>
-          </div>
-        </section>
-      </Transition>
+      <div v-if="flowStage === 'slideshow' && activeSlideId === 'full-chart'" class="screen-cta">
+        <button type="button" data-testid="bazi-room-open-full-screen" @click="openFullChart">
+          <UIcon name="i-lucide-table-properties" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.fullResult') }}
+        </button>
+      </div>
 
       <Transition name="side-panel">
         <section
@@ -180,7 +82,7 @@
               <small>{{ $t(`baziPaipanRoom.topics.${activeTopic}`) }}</small>
               <h2>{{ $t('baziPaipanRoom.birthTitle') }}</h2>
             </div>
-            <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="sideView = 'hidden'">
+            <button type="button" class="icon-only" :aria-label="$t('baziPaipanRoom.close')" @click="closeBirthForm">
               <UIcon name="i-lucide-x" class="h-4 w-4" />
             </button>
           </header>
@@ -237,50 +139,118 @@
         </aside>
       </Transition>
 
-      <nav class="room-actions" :aria-label="$t('baziPaipanRoom.roomActions')">
+      <nav
+        v-if="flowStage === 'boot' || flowStage === 'start' || flowStage === 'question' || flowStage === 'birth'"
+        class="room-actions flow-actions"
+        :aria-label="$t('baziPaipanRoom.roomActions')"
+      >
         <button
+          v-if="flowStage === 'boot'"
           type="button"
-          data-testid="bazi-room-change-topic"
-          @click="openKeeperGuide"
+          class="start-button"
+          data-testid="bazi-room-start"
+          @click="startFlow"
         >
-          <UIcon name="i-lucide-repeat-2" class="h-4 w-4" />
-          {{ topicActionLabel }}
+          <UIcon name="i-lucide-play" class="h-4 w-4" />
+          {{ $t('baziPaipanRoom.start') }}
         </button>
-        <button
-          type="button"
-          data-testid="bazi-room-open-full"
-          :disabled="!result"
-          @click="openFullChart"
-        >
-          <UIcon name="i-lucide-table-properties" class="h-4 w-4" />
-          {{ $t('baziPaipanRoom.fullResult') }}
-        </button>
-        <button
-          type="button"
-          data-testid="bazi-room-change-person"
-          @click="openBirthForm(activeTopic)"
-        >
-          <UIcon name="i-lucide-user-round-pen" class="h-4 w-4" />
-          {{ $t('baziPaipanRoom.changePerson') }}
-        </button>
-        <button
-          type="button"
-          class="danger"
-          data-testid="bazi-room-clear-local"
-          :disabled="!birthValues"
-          @click="clearLocal"
-        >
-          <UIcon name="i-lucide-eraser" class="h-4 w-4" />
-          {{ $t('baziPaipanRoom.clearLocal') }}
-        </button>
-        <AppShareButton
-          tool="bazi-paipan"
-          :summary="posterSummary"
-          :filename="`bazi-room-${todayDate}-${activeTopic}.png`"
-          :share-image-factory="createPoster"
-          :label="$t('baziPaipanRoom.poster')"
-          :disabled="!result"
-        />
+        <template v-else-if="flowStage === 'start' || flowStage === 'question'">
+          <button
+            v-for="topic in BAZI_ROOM_TOPICS"
+            :key="topic.id"
+            type="button"
+            class="topic-option"
+            :data-testid="`bazi-room-topic-${topic.id}`"
+            @click="selectTopic(topic.id)"
+          >
+            <UIcon :name="topic.icon" class="h-4 w-4" />
+            {{ $t(`baziPaipanRoom.topics.${topic.id}`) }}
+          </button>
+        </template>
+        <span v-else class="flow-hint">{{ $t('baziPaipanRoom.birthTitle') }}</span>
+      </nav>
+
+      <nav
+        v-if="flowStage === 'slideshow'"
+        class="room-actions slide-shortcuts"
+        :aria-label="$t('baziPaipanRoom.slideNavigation')"
+        data-testid="bazi-room-slideshow"
+      >
+        <div class="slide-pager">
+          <button
+            type="button"
+            :disabled="slideIndex === 0"
+            :aria-label="$t('baziPaipanRoom.previousSlide')"
+            :title="$t('baziPaipanRoom.previousSlide')"
+            data-testid="bazi-room-prev-slide"
+            @click="goToSlide(slideIndex - 1)"
+          >
+            <UIcon name="i-lucide-chevron-left" class="h-4 w-4" />
+          </button>
+
+          <div class="slide-progress" aria-hidden="true">
+            <div class="slide-dots">
+              <span v-for="(slide, index) in slideIds" :key="slide" :class="{ active: index === slideIndex }" />
+            </div>
+            <span class="slide-number">{{ slideIndex + 1 }} / {{ slideIds.length }}</span>
+          </div>
+          <button
+            type="button"
+            :disabled="slideIndex === slideIds.length - 1"
+            :aria-label="$t('baziPaipanRoom.nextSlide')"
+            :title="$t('baziPaipanRoom.nextSlide')"
+            data-testid="bazi-room-next-slide"
+            @click="goToSlide(slideIndex + 1)"
+          >
+            <UIcon name="i-lucide-chevron-right" class="h-4 w-4" />
+          </button>
+        </div>
+
+        <span class="action-divider" aria-hidden="true" />
+        <div class="slide-actions">
+          <button
+            type="button"
+            data-testid="bazi-room-change-topic"
+            :aria-label="$t('baziPaipanRoom.askAgain')"
+            :title="$t('baziPaipanRoom.askAgain')"
+            @click="openKeeperGuide"
+          >
+            <UIcon name="i-lucide-repeat-2" class="h-4 w-4" />
+            {{ $t('baziPaipanRoom.actionAskAgain') }}
+          </button>
+          <button
+            type="button"
+            data-testid="bazi-room-change-person"
+            :aria-label="$t('baziPaipanRoom.changePerson')"
+            :title="$t('baziPaipanRoom.changePerson')"
+            @click="openBirthForm(activeTopic)"
+          >
+            <UIcon name="i-lucide-user-round-pen" class="h-4 w-4" />
+            {{ $t('baziPaipanRoom.actionChangePerson') }}
+          </button>
+          <button
+            type="button"
+            v-if="activeSlideId !== 'full-chart'"
+            data-testid="bazi-room-open-full"
+            :aria-label="$t('baziPaipanRoom.fullResult')"
+            :title="$t('baziPaipanRoom.fullResult')"
+            @click="openFullChart"
+          >
+            <UIcon name="i-lucide-table-properties" class="h-4 w-4" />
+            {{ $t('baziPaipanRoom.actionFullChart') }}
+          </button>
+          <button
+            type="button"
+            class="danger"
+            data-testid="bazi-room-clear-local"
+            :aria-label="$t('baziPaipanRoom.clearLocal')"
+            :title="$t('baziPaipanRoom.clearLocal')"
+            @click="clearLocal"
+          >
+            <UIcon name="i-lucide-eraser" class="h-4 w-4" />
+            {{ $t('baziPaipanRoom.actionClear') }}
+          </button>
+        </div>
       </nav>
 
       <footer class="scene-footnote">
@@ -362,9 +332,16 @@
 import type { DiZhi } from '~/types/user'
 import type { BaziChartResult } from '~~/server/utils/tools/bazi-chart'
 import type { BaziTopicLens } from '~~/server/utils/tools/bazi-paipan-topic-lens'
+import type { BaziCurrentPillarsResult } from '~~/server/api/tools/bazi-paipan/current.get'
 import BaziPaipanRoomStage from '~/components/bazi-paipan-room/BaziPaipanRoomStage.vue'
-import { getMonthPillar } from '~/utils/bazi/calendar'
-import { buildBaziRoomSceneModel, type BaziRoomPhase } from '~/utils/bazi-paipan-room/model'
+import { getMonthPillar, solarToGanZhi } from '~/utils/bazi/calendar'
+import {
+  buildBaziRoomSceneModel,
+  type BaziRoomFlowStage,
+  type BaziRoomPhase,
+  type BaziRoomPillar,
+  type BaziRoomSlideId,
+} from '~/utils/bazi-paipan-room/model'
 import { BAZI_ROOM_TOPICS, type BaziRoomTopicId } from '~/utils/bazi-paipan-room/topics'
 import { useBaziPaipanStageKit } from '~/composables/useBaziPaipanStageKit'
 
@@ -414,8 +391,10 @@ const router = useRouter()
 const { resolveCityCoords, resolveCityCoordsFallback } = useGeolocation()
 
 const phase = ref<BaziRoomPhase>('idle')
+const flowStage = ref<BaziRoomFlowStage>('boot')
 const result = ref<BaziChartResult | null>(null)
 const lens = ref<BaziTopicLens | null>(null)
+const currentPillars = ref<BaziRoomPillar[]>(import.meta.client ? localCurrentPillars(new Date()) : [])
 const activeTopic = ref<BaziRoomTopicId>('fate')
 const pendingTopic = ref<BaziRoomTopicId | null>(null)
 const openFullAfterReveal = ref(false)
@@ -426,7 +405,8 @@ const chenyu = ref('')
 const readingContent = ref('')
 const readingStreaming = ref(false)
 const readingError = ref(false)
-const sideView = ref<'topics' | 'form' | 'hidden'>('topics')
+const sideView = ref<'form' | 'hidden'>('hidden')
+const slideIndex = ref(0)
 const activeSceneCard = ref<'none' | 'visitor'>('none')
 const fullDialogOpen = ref(false)
 const fullTab = ref<'chart' | 'elements' | 'cycles' | 'relations'>('chart')
@@ -440,13 +420,20 @@ watch(fullDialogOpen, async (open) => {
   fullDialogRef.value?.querySelector<HTMLElement>('[role="tab"]')?.focus()
 })
 
-const initialRoomModel = buildBaziRoomSceneModel({ phase: 'idle', result: null, lens: null })
+const initialRoomModel = buildBaziRoomSceneModel({
+  phase: 'idle',
+  flowStage: 'boot',
+  currentPillars: currentPillars.value,
+  result: null,
+  lens: null,
+})
 const qualityOverride = computed(() => {
   const value = route.query.baziRoomQuality
   return value === 'high' || value === 'mid' || value === 'low' ? value : null
 })
 const freezeScene = computed(() => route.query.freeze === '1' || qualityOverride.value === 'low')
 const reducedMotion = ref(false)
+const keeperAnchor = ref({ x: 31, y: 41 })
 const roomRendererLabels = computed(() => ({
   room: t('baziPaipanRoom.roomLabel'),
   chart: t('baziChart.title'),
@@ -454,6 +441,14 @@ const roomRendererLabels = computed(() => ({
   calculating: t('baziPaipanRoom.calculating'),
   revealed: t('baziPaipanRoom.fullTitle'),
   today: t('baziPaipanRoom.todayTimeline'),
+  currentBazi: t('baziPaipanRoom.currentBazi'),
+  flowYear: t('baziPaipanRoom.flowYear'),
+  flowMonth: t('baziPaipanRoom.flowMonth'),
+  flowDay: t('baziPaipanRoom.flowDay'),
+  flowHour: t('baziPaipanRoom.flowHour'),
+  pillars: t('baziPaipanRoom.pillarSummary'),
+  reading: t('baziPaipanRoom.reading'),
+  fullChart: t('baziPaipanRoom.fullResult'),
 }))
 const roomStage = useBaziPaipanStageKit({
   initialModel: initialRoomModel,
@@ -462,8 +457,19 @@ const roomStage = useBaziPaipanStageKit({
   freeze: freezeScene,
   onSelect: handleSceneSelect,
 })
+const roomHeroStyle = computed(() => ({
+  '--keeper-x': `${keeperAnchor.value.x}%`,
+  '--keeper-y': `${keeperAnchor.value.y}%`,
+}))
 const roomModel = computed(() => buildBaziRoomSceneModel({
   phase: phase.value,
+  flowStage: flowStage.value,
+  currentPillars: currentPillars.value,
+  slideId: activeSlideId.value,
+  slideTitle: activeSlideTitle.value,
+  slideDetail: flowStage.value === 'slideshow' ? projectionSlideDetail.value : t('baziPaipanRoom.currentCycleNote'),
+  slideIndex: slideIndex.value,
+  slideCount: slideIds.value.length,
   result: result.value,
   lens: lens.value,
 }))
@@ -497,9 +503,57 @@ const fullTabs = computed(() => ([
   { id: 'cycles' as const, label: t('baziPaipanRoom.tabCycles') },
   { id: 'relations' as const, label: t('baziPaipanRoom.tabRelations') },
 ]))
-const topicActionLabel = computed(() => result.value && phase.value === 'revealed' && !readingStreaming.value
-  ? t('baziPaipanRoom.askAgain')
-  : t('baziPaipanRoom.askWhat'))
+const slideIds = computed<BaziRoomSlideId[]>(() => [
+  'natal',
+  'topic-natal',
+  ...((lens.value?.natal.length ?? 0) > 3 ? ['topic-extra' as const] : []),
+  ...(lens.value?.today ? ['topic-current' as const] : []),
+  'reading',
+  'full-chart',
+])
+const activeSlideId = computed(() => slideIds.value[slideIndex.value] ?? 'natal')
+const activeSlideTitle = computed(() => ({
+  'natal': t('baziPaipanRoom.userBazi'),
+  'topic-natal': t('baziPaipanRoom.topicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
+  'topic-extra': t('baziPaipanRoom.topicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
+  'topic-current': t('baziPaipanRoom.currentTopicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
+  'reading': cardTitle.value,
+  'full-chart': t('baziPaipanRoom.fullResult'),
+})[activeSlideId.value])
+const projectionSlideDetail = computed(() => {
+  if (activeSlideId.value === 'natal') {
+    const currentDayun = result.value?.dayuns.find(dayun => dayun.isCurrent)
+    return [
+      fourPillars.value,
+      currentDayun ? `${t('baziPaipanRoom.currentDayun')}：${currentDayun.ganzhi}` : '',
+    ].filter(Boolean).join('\n')
+  }
+  if (activeSlideId.value === 'topic-natal') {
+    return (lens.value?.natal ?? []).slice(0, 3).map(item => `${item.label}：${item.value}（${item.evidence}）`).join('\n')
+  }
+  if (activeSlideId.value === 'topic-extra') {
+    return (lens.value?.natal ?? []).slice(3).map(item => `${item.label}：${item.value}（${item.evidence}）`).join('\n')
+  }
+  if (activeSlideId.value === 'topic-current') {
+    return [
+      ...(lens.value?.todayFields ?? []).map(item => `${item.label}：${item.value}`),
+      ...(lens.value?.nobleHints ?? []),
+    ].join('\n')
+  }
+  if (activeSlideId.value === 'reading') {
+    if (readingStreaming.value) return t('baziPaipanRoom.readingWaiting')
+    return [chenyu.value, readingContent.value].filter(Boolean).join('。') || t('baziPaipanRoom.readingWaiting')
+  }
+  return t('baziPaipanRoom.fullEntryHint')
+})
+const keeperBubble = computed(() => ({
+  boot: t('baziPaipanRoom.bootBubble'),
+  start: t('baziPaipanRoom.questionBubble'),
+  question: t('baziPaipanRoom.questionBubble'),
+  birth: t('baziPaipanRoom.birthBubble'),
+  calculating: t('baziPaipanRoom.calculating'),
+  slideshow: cardTitle.value,
+})[flowStage.value])
 const hasLocalBirth = computed(() => Boolean(birthValues.value))
 
 function trackRoomEvent(event: RoomAnalyticsEvent) {
@@ -509,6 +563,56 @@ function trackRoomEvent(event: RoomAnalyticsEvent) {
 
 function localDateString(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+function currentPillarLabels() {
+  return {
+    year: t('baziPaipanRoom.flowYear'),
+    month: t('baziPaipanRoom.flowMonth'),
+    day: t('baziPaipanRoom.flowDay'),
+    hour: t('baziPaipanRoom.flowHour'),
+  } as const
+}
+
+function toRoomCurrentPillars(value: BaziCurrentPillarsResult): BaziRoomPillar[] {
+  const labels = currentPillarLabels()
+  return value.pillars.map(pillar => ({
+    key: `flow${pillar.key.charAt(0).toUpperCase()}${pillar.key.slice(1)}` as BaziRoomPillar['key'],
+    label: labels[pillar.key],
+    gan: pillar.gan,
+    zhi: pillar.zhi,
+    position: [0, 0, 0],
+    highlighted: true,
+  }))
+}
+
+function localCurrentPillars(date = new Date()): BaziRoomPillar[] {
+  const result = solarToGanZhi(date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours())
+  const values = [
+    { key: 'flowYear' as const, label: t('baziPaipanRoom.flowYear'), ...result.year },
+    { key: 'flowMonth' as const, label: t('baziPaipanRoom.flowMonth'), ...result.month },
+    { key: 'flowDay' as const, label: t('baziPaipanRoom.flowDay'), ...result.day },
+    { key: 'flowHour' as const, label: t('baziPaipanRoom.flowHour'), ...result.hour! },
+  ]
+  return values.map(value => ({
+    key: value.key,
+    label: value.label,
+    gan: value.gan,
+    zhi: value.zhi,
+    position: [0, 0, 0],
+    highlighted: true,
+  }))
+}
+
+async function loadCurrentPillars() {
+  const now = new Date()
+  currentPillars.value = localCurrentPillars(now)
+  try {
+    const query = new URLSearchParams({ date: localDateString(now), hour: String(now.getHours()) })
+    const response = await plainFetch<BaziCurrentPillarsResult>(`/api/tools/bazi-paipan/current?${query}`)
+    currentPillars.value = toRoomCurrentPillars(response)
+  }
+  catch { /* keep the same-engine local result rendered above */ }
 }
 
 function stableHash(value: string) {
@@ -552,6 +656,7 @@ function selectTopic(topic: BaziRoomTopicId) {
   trackRoomEvent({ type: 'topic', topic })
   if (birthValues.value) {
     sideView.value = 'hidden'
+    flowStage.value = 'calculating'
     void revealTopic(topic)
   }
   else {
@@ -562,7 +667,19 @@ function selectTopic(topic: BaziRoomTopicId) {
 function openBirthForm(topic: BaziRoomTopicId) {
   pendingTopic.value = topic
   sideView.value = 'form'
+  flowStage.value = 'birth'
   activeSceneCard.value = 'none'
+}
+
+function startFlow() {
+  sideView.value = 'hidden'
+  flowStage.value = 'start'
+  trackRoomEvent({ type: 'guideSkipped' })
+}
+
+function closeBirthForm() {
+  sideView.value = 'hidden'
+  flowStage.value = result.value ? 'slideshow' : 'start'
 }
 
 function goBack() {
@@ -571,19 +688,20 @@ function goBack() {
 }
 
 function openKeeperGuide() {
-  sideView.value = 'topics'
+  sideView.value = 'hidden'
+  flowStage.value = 'question'
   activeSceneCard.value = 'none'
   trackRoomEvent({ type: 'topicChanged' })
 }
 
 function handleSceneSelect(target: 'keeper' | 'visitor') {
   if (target === 'keeper') {
-    sideView.value = 'topics'
+    openKeeperGuide()
     activeSceneCard.value = 'none'
     return
   }
   if (!birthValues.value) {
-    sideView.value = 'form'
+    openBirthForm(activeTopic.value)
     return
   }
   activeSceneCard.value = activeSceneCard.value === 'visitor' ? 'none' : 'visitor'
@@ -607,7 +725,9 @@ function clearLocal() {
   readingContent.value = ''
   readingError.value = false
   phase.value = 'idle'
-  sideView.value = 'topics'
+  flowStage.value = 'boot'
+  sideView.value = 'hidden'
+  slideIndex.value = 0
   activeSceneCard.value = 'none'
   toast.add({ title: t('baziPaipanRoom.clearLocal'), color: 'success' })
 }
@@ -625,6 +745,7 @@ async function handleSubmit(values: FormValues) {
   pendingTopic.value = null
   activeSceneCard.value = 'none'
   phase.value = 'calculating'
+  flowStage.value = 'calculating'
   trackRoomEvent({ type: 'birthSubmitted' })
 
   try {
@@ -655,6 +776,7 @@ async function handleSubmit(values: FormValues) {
   }
   catch (error: any) {
     sideView.value = 'form'
+    flowStage.value = 'birth'
     toast.add({
       title: t('baziChart.fail'),
       description: error?.data?.statusMessage || error?.message || t('baziChart.pleaseRetry'),
@@ -669,6 +791,9 @@ async function applyResult(values: FormValues, nextResult: BaziChartResult, next
   birthValues.value = { ...values }
   activeTopic.value = nextLens.topic
   phase.value = 'revealed'
+  flowStage.value = 'slideshow'
+  sideView.value = 'hidden'
+  slideIndex.value = 0
   await nextTick()
   window.scrollTo({ top: 0, behavior: 'smooth' })
 
@@ -696,6 +821,7 @@ async function revealTopic(topic: BaziRoomTopicId) {
   if (!birthValues.value) return
   activeTopic.value = topic
   phase.value = 'calculating'
+  flowStage.value = 'calculating'
   chenyu.value = ''
   readingContent.value = ''
   readingError.value = false
@@ -710,11 +836,14 @@ async function revealTopic(topic: BaziRoomTopicId) {
       },
     })
     phase.value = 'revealed'
+    flowStage.value = 'slideshow'
+    slideIndex.value = 0
     trackRoomEvent({ type: 'revealCompleted', topic })
     void startReading()
   }
   catch (error: any) {
     phase.value = 'revealed'
+    flowStage.value = 'slideshow'
     toast.add({
       title: t('baziChart.fail'),
       description: error?.data?.statusMessage || error?.message || t('baziChart.pleaseRetry'),
@@ -836,6 +965,25 @@ function closeFullChart() {
   fullDialogOpen.value = false
 }
 
+function goToSlide(index: number) {
+  slideIndex.value = Math.min(Math.max(index, 0), slideIds.value.length - 1)
+}
+
+function handleSlideKeydown(event: KeyboardEvent) {
+  if (flowStage.value !== 'slideshow' || fullDialogOpen.value || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return
+  const target = event.target as HTMLElement | null
+  if (target?.closest('input, select, textarea, button, a, [contenteditable="true"]')) return
+
+  if (event.key === 'ArrowRight' || event.key === 'j' || event.key === 'J') {
+    event.preventDefault()
+    goToSlide(slideIndex.value + 1)
+  }
+  else if (event.key === 'ArrowLeft' || event.key === 'k' || event.key === 'K') {
+    event.preventDefault()
+    goToSlide(slideIndex.value - 1)
+  }
+}
+
 function handleDialogKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
     const target = event.target as HTMLElement | null
@@ -924,6 +1072,8 @@ useHead(() => ({
 onMounted(() => {
   todayDate.value = localDateString()
   reducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  window.addEventListener('keydown', handleSlideKeydown)
+  void loadCurrentPillars()
 
   try {
     const started = performance.now()
@@ -950,8 +1100,8 @@ onMounted(() => {
       result.value = cachedChart.result
       lastFormValues.value = { ...cachedChart.values }
       sideView.value = 'hidden'
-      phase.value = 'calculating'
-      void revealTopic(activeTopic.value)
+      phase.value = 'idle'
+      flowStage.value = 'boot'
     }
   }
   catch { /* local storage optional */ }
@@ -984,6 +1134,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   readingAbort?.abort()
+  window.removeEventListener('keydown', handleSlideKeydown)
   delete (window as Window & { __baziPaipanRoomE2E?: unknown }).__baziPaipanRoomE2E
 })
 </script>
@@ -1048,6 +1199,230 @@ onBeforeUnmount(() => {
 .info-rail {
   position: absolute;
   z-index: 8;
+}
+
+.keeper-bubble {
+  position: absolute;
+  z-index: 9;
+  top: clamp(118px, calc(var(--keeper-y, 41%) - 84px), calc(100% - 148px));
+  left: clamp(8px, calc(var(--keeper-x, 31%) - 160px), calc(100% - 328px));
+  width: min(320px, calc(100% - 36px));
+  padding: 11px 14px;
+  border: 1px solid rgba(212, 175, 109, 0.3);
+  border-radius: 8px;
+  background: rgba(7, 11, 19, 0.9);
+  color: rgba(238, 243, 255, 0.88);
+  font-size: 14px;
+  line-height: 1.6;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(16px);
+}
+
+.keeper-bubble::after {
+  content: '';
+  position: absolute;
+  left: clamp(18px, var(--keeper-x, 31%), calc(100% - 18px));
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  border-left: 1px solid rgba(212, 175, 109, 0.3);
+  border-bottom: 1px solid rgba(212, 175, 109, 0.3);
+  background: rgba(7, 11, 19, 0.94);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.top-share {
+  position: absolute;
+  z-index: 14;
+  top: 14px;
+  right: 24px;
+}
+
+.top-share :deep(button) {
+  min-height: 38px;
+  padding-right: 12px;
+  padding-left: 12px;
+  font-size: 12px;
+}
+
+.screen-cta {
+  position: absolute;
+  z-index: 13;
+  left: 50%;
+  bottom: 84px;
+  translate: -50% 0;
+}
+
+.screen-cta button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid rgba(212, 175, 109, 0.58);
+  border-radius: 6px;
+  background: rgba(68, 44, 10, 0.94);
+  color: #ffe8ab;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+}
+
+.screen-cta button:hover,
+.screen-cta button:focus-visible {
+  border-color: rgba(242, 217, 152, 0.82);
+  background: rgba(88, 57, 13, 0.96);
+}
+
+.result-carousel {
+  position: absolute;
+  z-index: 10;
+  top: 118px;
+  right: 24px;
+  bottom: 106px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(426px, calc(100% - 48px));
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 109, 0.24);
+  border-radius: 8px;
+  background: rgba(7, 11, 19, 0.88);
+  color: #e9eefa;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+}
+
+.result-carousel > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(212, 175, 109, 0.16);
+  color: #f2d998;
+}
+
+.result-carousel small {
+  display: block;
+  color: rgba(233, 238, 250, 0.48);
+  font-size: 11px;
+}
+
+.result-carousel h2 {
+  margin: 3px 0 0;
+  color: #f4f7ff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.slide-body {
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+  overscroll-behavior: contain;
+}
+
+.flow-slide {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+}
+
+.large-ganzhi {
+  display: grid;
+  min-width: 138px;
+  min-height: 138px;
+  place-items: center;
+  border: 1px solid rgba(212, 175, 109, 0.36);
+  border-radius: 8px;
+  background: rgba(23, 17, 8, 0.58);
+  color: #f4f7ff;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 46px;
+  font-weight: 700;
+}
+
+.flow-slide > dl {
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  margin: 0;
+}
+
+.flow-slide > dl > div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(233, 238, 250, 0.08);
+}
+
+.flow-slide dt {
+  color: rgba(233, 238, 250, 0.46);
+  font-size: 12px;
+}
+
+.flow-slide dd {
+  min-width: 0;
+  margin: 0;
+  color: rgba(233, 238, 250, 0.82);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cycle-strip,
+.current-cycles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cycle-strip {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cycle-strip span,
+.current-cycles span {
+  display: grid;
+  min-width: 58px;
+  place-items: center;
+  gap: 2px;
+  padding: 6px 7px;
+  border: 1px solid rgba(233, 238, 250, 0.1);
+  border-radius: 6px;
+  background: rgba(15, 22, 34, 0.68);
+}
+
+.cycle-strip span.active,
+.current-cycles span {
+  border-color: rgba(212, 175, 109, 0.42);
+  background: rgba(45, 32, 14, 0.56);
+}
+
+.cycle-strip small,
+.current-cycles small {
+  color: rgba(233, 238, 250, 0.48);
+  font-size: 11px;
+}
+
+.cycle-strip strong,
+.current-cycles strong {
+  color: #f2d998;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 15px;
 }
 
 .info-rail {
@@ -1244,6 +1619,11 @@ onBeforeUnmount(() => {
 }
 
 .info-card {
+  position: absolute;
+  z-index: 9;
+  left: 24px;
+  bottom: 106px;
+  width: min(316px, calc(100% - 48px));
   border: 1px solid rgba(212, 175, 109, 0.22);
   border-radius: 8px;
   background: rgba(7, 11, 19, 0.86);
@@ -1408,6 +1788,64 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   background: rgba(5, 9, 16, 0.84);
   backdrop-filter: blur(16px);
+}
+
+.flow-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: min(700px, calc(100% - 32px));
+}
+
+.current-cycles {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.start-button {
+  border-color: rgba(212, 175, 109, 0.62) !important;
+  background: rgba(74, 48, 11, 0.94) !important;
+  color: #ffe8ab !important;
+  font-weight: 700;
+  animation: start-pulse 1.8s ease-in-out infinite;
+}
+
+.topic-option {
+  flex: 0 0 auto;
+}
+
+.slide-shortcuts {
+  gap: 8px;
+}
+
+.slide-pager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slide-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slide-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(233, 238, 250, 0.14);
+}
+
+.flow-hint {
+  color: rgba(233, 238, 250, 0.52);
+  font-size: 12px;
 }
 
 .room-actions button {
@@ -1695,6 +2133,110 @@ onBeforeUnmount(() => {
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 17px;
   font-weight: 800;
+}
+
+.slide-pillars {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+.chenyu-seal.compact {
+  width: 100%;
+  margin: 0;
+  padding: 12px;
+}
+
+.chenyu-seal.compact strong {
+  min-height: 32px;
+  font-size: 22px;
+}
+
+.reading-slide,
+.full-entry-slide {
+  display: grid;
+  gap: 13px;
+  align-content: start;
+}
+
+.reading-slide > button,
+.full-entry-slide > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  border: 1px solid rgba(233, 238, 250, 0.16);
+  border-radius: 6px;
+  background: rgba(18, 25, 38, 0.84);
+  color: rgba(233, 238, 250, 0.8);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.full-entry-slide > p {
+  margin: 0;
+  color: rgba(233, 238, 250, 0.68);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.full-entry-slide > button {
+  border-color: rgba(212, 175, 109, 0.5);
+  background: rgba(66, 43, 9, 0.9);
+  color: #f2d998;
+  font-weight: 700;
+}
+
+.secondary-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.secondary-actions > * {
+  min-width: 0;
+}
+
+.result-carousel > footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(212, 175, 109, 0.16);
+}
+
+.result-carousel > footer > button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+
+.slide-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.slide-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(233, 238, 250, 0.24);
+}
+
+.slide-dots span.active {
+  background: #f2d998;
+}
+
+.slide-number {
+  min-width: 38px;
+  color: rgba(233, 238, 250, 0.55);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .slice-group {
@@ -2022,6 +2564,17 @@ onBeforeUnmount(() => {
   100% { opacity: 1; transform: rotate(7deg) scale(0.9); }
 }
 
+@keyframes start-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 109, 0);
+    opacity: 0.88;
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(212, 175, 109, 0.12);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 900px) {
   .info-rail {
     top: 168px;
@@ -2032,6 +2585,13 @@ onBeforeUnmount(() => {
 
   .pillar-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .result-carousel {
+    top: 148px;
+    right: 14px;
+    bottom: 104px;
+    width: min(420px, calc(100% - 28px));
   }
 
   .side-panel {
@@ -2045,6 +2605,52 @@ onBeforeUnmount(() => {
 @media (max-width: 640px) {
   .scene-subtitle {
     display: none;
+  }
+
+  .scene-header {
+    top: 8px;
+    left: 8px;
+    width: calc(100% - 112px);
+    padding: 9px 11px;
+  }
+
+  .scene-title {
+    font-size: 21px;
+  }
+
+  .keeper-bubble {
+    width: calc(100% - 20px);
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .keeper-bubble::after {
+  }
+
+  .result-carousel {
+    top: 166px;
+    right: 8px;
+    bottom: 78px;
+    width: calc(100% - 16px);
+  }
+
+  .result-carousel h2 {
+    font-size: 16px;
+  }
+
+  .slide-body {
+    padding: 12px;
+  }
+
+  .large-ganzhi {
+    min-width: 112px;
+    min-height: 112px;
+    font-size: 36px;
+  }
+
+  .flow-slide > dl > div {
+    grid-template-columns: 1fr;
+    gap: 3px;
   }
 
   .info-rail {
@@ -2076,9 +2682,69 @@ onBeforeUnmount(() => {
     justify-content: center;
   }
 
+  .flow-actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .topic-option {
+    flex: 1 0 calc(33% - 8px);
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .slide-shortcuts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    overflow: visible;
+  }
+
+  .slide-pager {
+    justify-content: center;
+  }
+
+  .slide-progress {
+    flex: 0 0 auto;
+  }
+
+  .slide-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .slide-actions button {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    padding: 0 5px;
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .action-divider {
+    display: none;
+  }
+
+  .top-share {
+    top: 8px;
+    right: 8px;
+  }
+
+  .screen-cta {
+    bottom: 116px;
+  }
+
+  .secondary-actions {
+    grid-template-columns: 1fr;
+  }
+
   .scene-footnote {
-    right: 10px;
-    bottom: 150px;
+    display: none;
+  }
+
+  .user-info-card {
+    display: none;
   }
 
   .pillar-summary {
@@ -2114,6 +2780,11 @@ onBeforeUnmount(() => {
 @media (prefers-reduced-motion: reduce) {
   .turning-mark {
     animation: none;
+  }
+
+  .start-button {
+    animation: none;
+    opacity: 1;
   }
 
   .chenyu-seal::after {
