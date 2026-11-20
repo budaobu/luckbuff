@@ -503,17 +503,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.shengxiaoPeiduiDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('shengxiaoPeidui.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('seo.shengxiaoPeiduiOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

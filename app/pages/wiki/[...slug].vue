@@ -50,7 +50,7 @@ import type { WikiEntryDetail, WikiEntryMeta, WikiSeo } from '~~/server/utils/wi
 
 interface WikiDetailResponse {
   entry: WikiEntryDetail
-  entries: WikiEntryMeta[]
+  relatedEntries: WikiEntryMeta[]
 }
 
 const route = useRoute()
@@ -71,7 +71,11 @@ const { data, error } = await useAsyncData(
       plainFetch<WikiEntryDetail>(requestPath.value, { query: { locale: locale.value } }),
       plainFetch<{ entries: WikiEntryMeta[] }>('/api/wiki', { query: { locale: locale.value } }),
     ])
-    return { entry, entries: index.entries } satisfies WikiDetailResponse
+    const relatedEntries = index.entries
+      .filter(item => item.category === entry.category && item.sourcePath !== entry.sourcePath)
+      .slice(0, 6)
+
+    return { entry, relatedEntries } satisfies WikiDetailResponse
   },
   { server: true, watch: [locale] },
 )
@@ -81,9 +85,7 @@ if (error.value || !data.value) {
 }
 
 const entry = computed(() => data.value!.entry)
-const relatedEntries = computed(() => data.value!.entries
-  .filter(item => item.category === entry.value.category && item.sourcePath !== entry.value.sourcePath)
-  .slice(0, 6))
+const relatedEntries = computed(() => data.value!.relatedEntries)
 
 function escapeHtml(value: string): string {
   return value
@@ -105,10 +107,16 @@ renderer.link = ({ href, title, tokens }) => {
   return `<a href="${escapeHtml(localizedHref)}"${titleAttribute}${rel}>${label}</a>`
 }
 
-const renderedContent = computed(() => marked.parse(entry.value.content, {
+function demoteArticleHeadings(html: string) {
+  return html
+    .replace(/<h1(\s[^>]*)?>/g, '<h2$1>')
+    .replace(/<\/h1>/g, '</h2>')
+}
+
+const renderedContent = computed(() => demoteArticleHeadings(marked.parse(entry.value.content, {
   async: false,
   renderer,
-}) as string)
+}) as string))
 
 const siteName = useRuntimeConfig().public.siteName
 const description = entry.value.description || entry.value.excerpt

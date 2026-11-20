@@ -338,17 +338,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.baziFortuneTuneDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('baziFortuneTune.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('baziFortuneTune.subtitle'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

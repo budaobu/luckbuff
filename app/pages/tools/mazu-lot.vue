@@ -553,17 +553,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.mazuLotDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('mazuLot.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('seo.mazuLotOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

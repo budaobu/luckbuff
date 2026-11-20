@@ -441,17 +441,10 @@ useHead(() => ({
         url: zipingBaziPageUrl.value,
         description: t('seo.zipingBaziDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('zipingBazi.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: zipingBaziPageUrl.value,
           description: t('zipingBazi.subtitle'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

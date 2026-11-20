@@ -277,17 +277,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.mangpaiBaziDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('mangpaiBazi.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('seo.mangpaiBaziOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

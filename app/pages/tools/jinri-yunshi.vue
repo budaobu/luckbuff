@@ -666,17 +666,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.jinriYunshiDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('jinriYunshi.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('seo.jinriYunshiOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

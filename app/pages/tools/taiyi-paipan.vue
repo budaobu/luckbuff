@@ -222,13 +222,10 @@ useHead(() => ({
     type: 'application/ld+json',
     innerHTML: JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
+      '@type': 'WebPage',
       name: t('taiyiPaipan.title'),
-      applicationCategory: 'LifestyleApplication',
-      operatingSystem: 'Any',
       url: pageUrl.value,
       description: t('seo.taiyiPaipanDesc'),
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
     }),
   }],
 }))

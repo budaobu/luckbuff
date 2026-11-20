@@ -666,17 +666,10 @@ useSeoMeta({
          url: pageUrl.value,
          description: t('seo.ziweiHunpanDesc'),
          mainEntity: {
-           '@type': 'SoftwareApplication',
+           '@type': 'Thing',
            name: t('ziweiHunpan.title'),
-           applicationCategory: 'LifestyleApplication',
-           operatingSystem: 'Any',
            url: pageUrl.value,
            description: t('seo.ziweiHunpanOgDesc'),
-           offers: {
-             '@type': 'Offer',
-             price: '0',
-             priceCurrency: 'CNY',
-           },
          },
        }),
      },

@@ -743,17 +743,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.ziweiZhichangHepanDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('ziweiZhichangHepan.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('seo.ziweiZhichangHepanOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

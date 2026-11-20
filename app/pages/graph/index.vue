@@ -53,7 +53,7 @@
               v-for="(chart, index) in group.charts"
               :key="chart.id"
               v-reveal="{ delay: index % 4 }"
-              :to="localePath(`/graph/${chart.id}`)"
+              :to="localePath(`/graph/${chartSlug(chart.id)}`)"
               :no-prefetch="true"
               class="chart-card"
               :style="{ '--card-accent': group.meta.color, transitionDelay: `${Math.min(index, 3) * 55}ms` }"
@@ -120,6 +120,10 @@ function categoryLabel(category: string) {
   return category === 'all' ? t('graph.all') : t(`graph.category.${category}`)
 }
 
+function chartSlug(id: string) {
+  return id.replace(/_/g, '-')
+}
+
 const categoryOptions = computed(() => ['all', ...categories])
 const visibleGroups = computed(() => categories
   .map(category => ({
@@ -161,7 +165,7 @@ useHead(() => ({
           '@type': 'ListItem',
           position: index + 1,
           name: chart.title,
-          url: seoPath(`/graph/${chart.id}`),
+          url: seoPath(`/graph/${chartSlug(chart.id)}`),
         })),
       },
     }),

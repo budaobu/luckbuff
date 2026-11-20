@@ -237,17 +237,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: t('seo.astroFortuneTuneDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('astroFortuneTune.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('astroFortuneTune.subtitle'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

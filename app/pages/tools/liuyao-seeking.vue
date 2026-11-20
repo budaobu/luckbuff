@@ -805,17 +805,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('liuyaoSeeking.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('liuyaoSeeking.subtitle'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

@@ -585,17 +585,10 @@ useHead(() => ({
         url: `${siteUrl}${pagePath}`,
         description: t('seo.bztiBirthdayPersonalityDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('bztiBirthdayPersonality.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: `${siteUrl}${pagePath}`,
           description: t('seo.bztiBirthdayPersonalityOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

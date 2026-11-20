@@ -90,7 +90,7 @@ const sitemapUrls = [
     _i18nTransform: true,
   })),
   ...graphCharts.charts.map(chart => ({
-    loc: `/graph/${chart.id}`,
+    loc: `/graph/${chart.id.replace(/_/g, '-')}`,
     changefreq: 'weekly' as const,
     priority: 0.7,
     _i18nTransform: true,
@@ -130,6 +130,9 @@ const sitemapUrls = [
 
 export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
+  features: {
+    inlineStyles: false,
+  },
   srcDir: 'app',
   serverDir: 'server',
   modules: [

@@ -460,17 +460,10 @@ useHead(() => ({
         url: `${siteUrl}${pagePath}`,
         description: t('seo.fuckClaudeDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('fuckClaude.title'),
-          applicationCategory: 'UtilityApplication',
-          operatingSystem: 'Any',
           url: `${siteUrl}${pagePath}`,
           description: t('seo.fuckClaudeOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },
