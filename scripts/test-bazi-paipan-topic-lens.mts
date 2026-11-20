@@ -44,11 +44,18 @@ test('builds deterministic natal and today slices for a fixed chart and date', (
   assert.deepEqual(byTopic.noble!.natal.map(item => item.value), ['天乙贵人', '天德贵人', '月德贵人'])
   assert.equal(byTopic.study!.natal.find(item => item.id === 'resource-star')?.value, '偏印 14% / 正印 3%')
 
-  for (const lens of lenses.filter(item => item.topic !== 'fate')) {
+  for (const lens of lenses) {
     assert.equal(lens.today?.ganzhi, '庚寅')
     assert.equal(lens.today?.tenGod, '偏财')
   }
-  assert.equal(byTopic.fate!.today, null)
+})
+
+test('keeps noble and daily-result slides non-empty', () => {
+  const withoutNobleStars = { ...chart, shensha: [] } as BaziChartResult
+  const noble = buildBaziTopicLens({ chart: withoutNobleStars, topic: 'noble', date })
+  assert.equal(noble.natal.length, 1)
+  assert.equal(noble.natal[0]?.value, '未检出天乙 / 天德 / 月德 / 文昌')
+  assert.equal(noble.today?.ganzhi, '庚寅')
 })
 
 test('uses the existing almanac engine fields for daily stars and noble hints', () => {

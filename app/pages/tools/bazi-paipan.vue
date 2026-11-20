@@ -10,8 +10,15 @@
         />
         <template #fallback>
           <div class="stage-fallback">
-            <span aria-hidden="true">命</span>
-            <p>{{ $t('baziPaipanRoom.ritualLoading') }}</p>
+            <div class="boot-emblem" aria-hidden="true">
+              <span class="boot-halo" />
+              <span class="boot-ring" />
+              <span class="boot-orbit">
+                <i />
+              </span>
+              <span class="boot-mark">命</span>
+            </div>
+            <p class="boot-text">{{ $t('baziPaipanRoom.ritualLoading') }}</p>
           </div>
         </template>
       </ClientOnly>
@@ -40,13 +47,16 @@
         <p>{{ $t('baziPaipanRoom.calculatingRoom') }}</p>
       </div>
 
-      <div
-        v-if="flowStage === 'boot' || flowStage === 'start' || flowStage === 'question' || flowStage === 'birth'"
-        class="keeper-bubble"
-        data-testid="bazi-room-keeper-bubble"
-        aria-live="polite"
-      >
-        {{ keeperBubble }}
+      <div v-if="showKeeperBubble" class="keeper-bubble-host">
+        <Transition name="keeper-bubble">
+          <div
+            class="keeper-bubble"
+            data-testid="bazi-room-keeper-bubble"
+            aria-live="polite"
+          >
+            {{ keeperBubble }}
+          </div>
+        </Transition>
       </div>
 
       <div v-if="flowStage === 'slideshow'" class="screen-reader-only" aria-live="polite">
@@ -433,6 +443,7 @@ const qualityOverride = computed(() => {
 })
 const freezeScene = computed(() => route.query.freeze === '1' || qualityOverride.value === 'low')
 const reducedMotion = ref(false)
+const roomIntroAcknowledged = ref(false)
 const keeperAnchor = ref({ x: 31, y: 41 })
 const roomRendererLabels = computed(() => ({
   room: t('baziPaipanRoom.roomLabel'),
@@ -447,7 +458,10 @@ const roomRendererLabels = computed(() => ({
   flowDay: t('baziPaipanRoom.flowDay'),
   flowHour: t('baziPaipanRoom.flowHour'),
   pillars: t('baziPaipanRoom.pillarSummary'),
+  currentDayun: t('baziPaipanRoom.currentDayun'),
   reading: t('baziPaipanRoom.reading'),
+  chenyu: t('baziPaipanRoom.chenyu'),
+  readingWaiting: t('baziPaipanRoom.readingWaiting'),
   fullChart: t('baziPaipanRoom.fullResult'),
 }))
 const roomStage = useBaziPaipanStageKit({
@@ -456,6 +470,7 @@ const roomStage = useBaziPaipanStageKit({
   qualityOverride,
   freeze: freezeScene,
   onSelect: handleSceneSelect,
+  onBackgroundClick: handleRoomBackgroundClick,
 })
 const roomHeroStyle = computed(() => ({
   '--keeper-x': `${keeperAnchor.value.x}%`,
@@ -506,7 +521,6 @@ const fullTabs = computed(() => ([
 const slideIds = computed<BaziRoomSlideId[]>(() => [
   'natal',
   'topic-natal',
-  ...((lens.value?.natal.length ?? 0) > 3 ? ['topic-extra' as const] : []),
   ...(lens.value?.today ? ['topic-current' as const] : []),
   'reading',
   'full-chart',
@@ -515,7 +529,6 @@ const activeSlideId = computed(() => slideIds.value[slideIndex.value] ?? 'natal'
 const activeSlideTitle = computed(() => ({
   'natal': t('baziPaipanRoom.userBazi'),
   'topic-natal': t('baziPaipanRoom.topicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
-  'topic-extra': t('baziPaipanRoom.topicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
   'topic-current': t('baziPaipanRoom.currentTopicResultTitle', { topic: t(`baziPaipanRoom.topics.${activeTopic.value}`) }),
   'reading': cardTitle.value,
   'full-chart': t('baziPaipanRoom.fullResult'),
@@ -530,9 +543,6 @@ const projectionSlideDetail = computed(() => {
   }
   if (activeSlideId.value === 'topic-natal') {
     return (lens.value?.natal ?? []).slice(0, 3).map(item => `${item.label}：${item.value}（${item.evidence}）`).join('\n')
-  }
-  if (activeSlideId.value === 'topic-extra') {
-    return (lens.value?.natal ?? []).slice(3).map(item => `${item.label}：${item.value}（${item.evidence}）`).join('\n')
   }
   if (activeSlideId.value === 'topic-current') {
     return [
@@ -554,6 +564,12 @@ const keeperBubble = computed(() => ({
   calculating: t('baziPaipanRoom.calculating'),
   slideshow: cardTitle.value,
 })[flowStage.value])
+const showKeeperBubble = computed(() => {
+  if (!['boot', 'start', 'question', 'birth'].includes(flowStage.value)) return false
+  return flowStage.value === 'boot'
+    ? roomStage.ready.value && roomIntroAcknowledged.value
+    : true
+})
 const hasLocalBirth = computed(() => Boolean(birthValues.value))
 
 function trackRoomEvent(event: RoomAnalyticsEvent) {
@@ -705,6 +721,10 @@ function handleSceneSelect(target: 'keeper' | 'visitor') {
     return
   }
   activeSceneCard.value = activeSceneCard.value === 'visitor' ? 'none' : 'visitor'
+}
+
+function handleRoomBackgroundClick() {
+  if (roomStage.ready.value && flowStage.value === 'boot') roomIntroAcknowledged.value = true
 }
 
 function clearLocal() {
@@ -1177,16 +1197,119 @@ onBeforeUnmount(() => {
   color: #e9eefa;
 }
 
-.stage-fallback span {
+.boot-emblem {
+  position: relative;
   display: grid;
-  width: 52px;
-  height: 52px;
+  width: 112px;
+  height: 112px;
   place-items: center;
-  border: 1px solid rgba(212, 175, 109, 0.6);
-  border-radius: 4px;
+}
+
+.boot-halo,
+.boot-ring,
+.boot-orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.boot-halo {
+  background: radial-gradient(circle, rgba(217, 180, 93, 0.14) 0, rgba(217, 180, 93, 0) 68%);
+  animation: room-boot-breathe 2.4s ease-in-out infinite;
+}
+
+.boot-ring {
+  inset: 12px;
+  border: 1px solid rgba(212, 175, 109, 0.24);
+  border-top-color: rgba(242, 217, 152, 0.82);
+  animation: room-boot-spin 1.8s linear infinite;
+}
+
+.boot-orbit {
+  inset: 2px;
+  animation: room-boot-spin 3.6s linear infinite reverse;
+}
+
+.boot-orbit i {
+  position: absolute;
+  top: -2px;
+  left: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f2d998;
+  box-shadow: 0 0 12px rgba(242, 217, 152, 0.7);
+}
+
+.boot-mark {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid rgba(212, 175, 109, 0.5);
+  border-radius: 5px;
+  background: rgba(7, 11, 19, 0.64);
   color: #f2d998;
   font-family: 'Noto Serif SC', 'Songti SC', serif;
   font-size: 25px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(242, 217, 152, 0.08);
+  animation: room-boot-float 2.4s ease-in-out infinite;
+}
+
+.boot-text {
+  animation: room-boot-text 2.4s ease-in-out infinite;
+}
+
+@keyframes room-boot-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes room-boot-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes room-boot-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes room-boot-text {
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-halo,
+  .boot-ring,
+  .boot-orbit,
+  .boot-mark,
+  .boot-text {
+    animation: none;
+  }
 }
 
 .stage-fallback p,
@@ -1201,34 +1324,67 @@ onBeforeUnmount(() => {
   z-index: 8;
 }
 
-.keeper-bubble {
+.keeper-bubble-host {
   position: absolute;
-  z-index: 9;
-  top: clamp(118px, calc(var(--keeper-y, 41%) - 84px), calc(100% - 148px));
-  left: clamp(8px, calc(var(--keeper-x, 31%) - 160px), calc(100% - 328px));
-  width: min(320px, calc(100% - 36px));
+  z-index: 12;
+  top: clamp(116px, calc(var(--keeper-y, 41%) - 126px), calc(100% - 158px));
+  left: clamp(8px, calc(var(--keeper-x, 31%) - 150px), calc(100vw - 308px));
+  width: min(300px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.keeper-bubble {
+  position: relative;
+  z-index: 1;
+  width: min(300px, calc(100vw - 32px));
   padding: 11px 14px;
-  border: 1px solid rgba(212, 175, 109, 0.3);
-  border-radius: 8px;
-  background: rgba(7, 11, 19, 0.9);
+  border: 1px solid rgba(212, 175, 109, 0.34);
+  border-radius: 10px;
+  background: rgba(8, 12, 21, 0.92);
   color: rgba(238, 243, 255, 0.88);
   font-size: 14px;
   line-height: 1.6;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(16px);
+  pointer-events: auto;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(242, 217, 152, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.keeper-bubble::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  z-index: -2;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(212, 175, 109, 0.4);
+  border-radius: 3px;
+  background: rgba(8, 12, 21, 0.92);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .keeper-bubble::after {
   content: '';
   position: absolute;
-  left: clamp(18px, var(--keeper-x, 31%), calc(100% - 18px));
-  bottom: -8px;
+  left: 50%;
+  bottom: -1px;
+  z-index: 2;
   width: 14px;
   height: 14px;
-  border-left: 1px solid rgba(212, 175, 109, 0.3);
-  border-bottom: 1px solid rgba(212, 175, 109, 0.3);
-  background: rgba(7, 11, 19, 0.94);
+  border-radius: 2px;
+  background: rgba(8, 12, 21, 0.92);
   transform: translateX(-50%) rotate(45deg);
+}
+
+.keeper-bubble-enter-active,
+.keeper-bubble-leave-active {
+  transition: opacity 180ms ease, transform 180ms cubic-bezier(.2, 1.2, .3, 1);
+}
+
+.keeper-bubble-enter-from,
+.keeper-bubble-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(.98);
 }
 
 .screen-reader-only {
@@ -2619,12 +2775,29 @@ onBeforeUnmount(() => {
   }
 
   .keeper-bubble {
-    width: calc(100% - 20px);
+    top: auto;
+    bottom: 84px;
+    width: min(286px, calc(100vw - 28px));
     padding: 9px 11px;
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .keeper-bubble-host {
+    top: auto;
+    bottom: 84px;
+    left: 14px;
+    width: min(286px, calc(100vw - 28px));
+  }
+
+  .keeper-bubble::before {
+    top: -10px;
+    bottom: auto;
   }
 
   .keeper-bubble::after {
+    top: -2px;
+    bottom: auto;
   }
 
   .result-carousel {

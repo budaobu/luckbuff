@@ -16,6 +16,7 @@ export function useBaziPaipanStageKit(options: {
   qualityOverride?: Ref<BaziRoomQuality | null>
   freeze?: Ref<boolean>
   onSelect?: (target: 'keeper' | 'visitor') => void
+  onBackgroundClick?: () => void
   onKeeperAnchor?: (x: number, y: number) => void
 }) {
   const state: BaziStageKitState = {
@@ -42,6 +43,7 @@ export function useBaziPaipanStageKit(options: {
       qualityOverride: options.qualityOverride?.value ?? null,
       freeze: options.freeze?.value,
       onSelect: target => options.onSelect?.(target),
+      onBackgroundClick: () => options.onBackgroundClick?.(),
       onKeeperAnchor: (x, y) => {
         const current = state.keeperAnchor.value
         if (Math.abs(current.x - x) < 0.2 && Math.abs(current.y - y) < 0.2) return

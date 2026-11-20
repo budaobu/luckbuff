@@ -4,7 +4,7 @@ import type { BaziTopicLens } from '~~/server/utils/tools/bazi-paipan-topic-lens
 export type BaziRoomPhase = 'idle' | 'topic' | 'calculating' | 'revealed'
 export type BaziRoomLinkType = 'combine' | 'clash' | 'generates' | 'controls' | 'harm'
 export type BaziRoomFlowStage = 'boot' | 'start' | 'question' | 'birth' | 'calculating' | 'slideshow'
-export type BaziRoomSlideId = 'natal' | 'topic-natal' | 'topic-extra' | 'topic-current' | 'reading' | 'full-chart'
+export type BaziRoomSlideId = 'natal' | 'topic-natal' | 'topic-current' | 'reading' | 'full-chart'
 
 export interface BaziRoomPillar {
   key: 'year' | 'month' | 'day' | 'hour' | 'today' | 'flowYear' | 'flowMonth' | 'flowDay' | 'flowHour'
@@ -29,6 +29,8 @@ export interface BaziRoomSceneModel {
   pillars: BaziRoomPillar[]
   currentPillars: BaziRoomPillar[]
   links: BaziRoomLink[]
+  chart: BaziChartResult | null
+  topicLens: BaziTopicLens | null
   focusX: number
   compassSpeed: number
   keeperGesture: 'idle' | 'invite' | 'calculating' | 'present'
@@ -82,6 +84,8 @@ export function buildBaziRoomSceneModel(options: {
       pillars: BASE_PILLARS,
       currentPillars,
       links: [],
+      chart: result,
+      topicLens: lens,
       focusX: 0,
       compassSpeed: flowStage === 'calculating' ? 2.2 : 0.28,
       keeperGesture: flowStage === 'calculating'
@@ -90,7 +94,7 @@ export function buildBaziRoomSceneModel(options: {
           ? 'invite'
           : flowStage === 'slideshow'
             ? 'present'
-            : 'idle',
+            : 'invite',
       slideId,
       slideTitle,
       slideDetail,
@@ -152,6 +156,8 @@ export function buildBaziRoomSceneModel(options: {
     pillars,
     currentPillars,
     links,
+    chart: result,
+    topicLens: lens,
     focusX: phase === 'revealed' ? focusX : 0.45,
     compassSpeed: flowStage === 'calculating' ? 2.6 : 0.3,
     keeperGesture: flowStage === 'calculating'

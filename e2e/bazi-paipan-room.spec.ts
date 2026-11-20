@@ -67,6 +67,9 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await page.waitForTimeout(200)
 
   await expect(page.getByTestId('bazi-room-topic-card')).toHaveCount(0)
+  await expect(page.getByTestId('bazi-room-keeper-bubble')).toHaveCount(0)
+  const viewport = page.viewportSize() ?? { width: 1280, height: 720 }
+  await page.mouse.click(56, Math.max(280, viewport.height - 220))
   await expect(page.getByTestId('bazi-room-keeper-bubble')).toContainText('点击开始按钮')
   await expect(page.getByTestId('bazi-room-current-cycles')).toHaveCount(0)
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
@@ -105,7 +108,7 @@ async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await expect(page.getByTestId('bazi-room-clear-local')).toContainText('清除')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-title', '用户八字')
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-page', '1/6')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-page', '1/5')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-flow', 'slideshow')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
     'data-model-pillars',
@@ -144,18 +147,17 @@ test('runs the guided desktop flow and result slideshow', async ({ page }) => {
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /财星/)
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /比劫夺财/)
   await page.keyboard.press('j')
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-extra')
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /财库/)
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /当前大运财星/)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-current')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-title', '财运当日引动')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /今日柱：庚寅/)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /流日十神：偏财/)
   await page.keyboard.press('k')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-natal')
   await page.keyboard.press('ArrowLeft')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
 
-  for (let index = 0; index < 3; index += 1) await page.getByTestId('bazi-room-next-slide').click()
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-current')
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /今日柱：庚寅/)
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /流日十神：偏财/)
+  await page.getByTestId('bazi-room-next-slide').click()
+  await page.getByTestId('bazi-room-next-slide').click()
   await page.getByTestId('bazi-room-next-slide').click()
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'reading')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /财星清楚|小步取实/)
@@ -203,7 +205,7 @@ test('keeps the mobile stage and result flow usable at 390px', async ({ page }) 
 
   await expect(page.getByTestId('bazi-room-slideshow')).toBeVisible()
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
-  await expect(page.locator('.slide-number')).toContainText('1 / 6')
+  await expect(page.locator('.slide-number')).toContainText('1 / 5')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
   await page.screenshot({ path: 'output/playwright/bazi-room-mobile-flow.png', fullPage: true })
   expect(api.readingRequests()).toBeGreaterThanOrEqual(1)

@@ -139,7 +139,7 @@ const TOPIC_LENS_CONFIG: Record<BaziPaipanTopic, {
   },
   fate: {
     scope: 'today',
-    useToday: false,
+    useToday: true,
     natal: chart => [
       field('day-strength', '日主旺衰', `${chart.energy.strength} · 支持比${chart.energy.supportRatio}% · ${chart.energy.rootStatus}`, chart.energy.monthCommandDetail),
       field('pattern', '格局', `${chart.pattern.name} · ${chart.pattern.status}`, chart.pattern.evidence.join('；')),
@@ -150,7 +150,12 @@ const TOPIC_LENS_CONFIG: Record<BaziPaipanTopic, {
   noble: {
     scope: 'today',
     useToday: true,
-    natal: chart => shenShaFields(chart, /天乙贵人|天德贵人|月德贵人|文昌/, 'noble-star', '贵人类神煞'),
+    natal: (chart) => {
+      const fields = shenShaFields(chart, /天乙贵人|天德贵人|月德贵人|文昌/, 'noble-star', '贵人类神煞')
+      return fields.length
+        ? fields
+        : [field('noble-star-empty', '贵人类神煞', '未检出天乙 / 天德 / 月德 / 文昌', '本命四柱与神煞引擎')]
+    },
   },
   study: {
     scope: 'today',

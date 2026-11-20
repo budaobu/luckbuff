@@ -1,5 +1,17 @@
 import type * as THREE from 'three'
+import type { BaziRoomPillar } from './model'
 import type { BaziRoomSceneModel } from './model'
+import { makeSoftCharacter, restSittingPose, type SoftCharacterRig } from './character'
+import {
+  makeBrush,
+  makeBrushRack,
+  makeCoin,
+  makeDeskCup,
+  makeDeskTeapot,
+  makeInkstone,
+  makePaperweight,
+  makeSeal,
+} from './desk-props'
 
 export type BaziRoomQuality = 'high' | 'mid' | 'low'
 
@@ -22,7 +34,10 @@ export interface BaziRoomRendererLabels {
   flowDay: string
   flowHour: string
   pillars: string
+  currentDayun: string
   reading: string
+  chenyu: string
+  readingWaiting: string
   fullChart: string
 }
 
@@ -41,30 +56,10 @@ interface MountOptions {
   qualityOverride?: BaziRoomQuality | null
   freeze?: boolean
   onSelect?: (target: 'keeper' | 'visitor') => void
+  onBackgroundClick?: () => void
   onKeeperAnchor?: (xPercent: number, yPercent: number) => void
   onReady?: (stats: BaziRoomRendererStats) => void
   onError?: (message: string) => void
-}
-
-interface ArmRig {
-  shoulder: THREE.Group
-  elbow: THREE.Group
-  wrist: THREE.Group
-  palm: THREE.Group
-}
-
-interface LegRig {
-  hip: THREE.Group
-  knee: THREE.Group
-  ankle: THREE.Group
-}
-
-interface CharacterRig {
-  root: THREE.Group
-  head: THREE.Group
-  leftArm: ArmRig
-  rightArm: ArmRig
-  legs: LegRig[]
 }
 
 const MOUNTAINS = [
@@ -85,18 +80,18 @@ function canvas2d(width: number, height: number) {
 }
 
 function bookSpineTexture(title: string) {
-  const { canvas, context } = canvas2d(96, 512)
+  const { canvas, context } = canvas2d(128, 768)
   if (context) {
-    context.fillStyle = '#7b402e'
+    context.fillStyle = title.includes('滴天') ? '#7b3528' : title.includes('穷通') ? '#5c4b2a' : title.includes('三命') ? '#2e5548' : '#6b3a30'
     context.fillRect(0, 0, canvas.width, canvas.height)
     context.fillStyle = 'rgba(28, 17, 9, 0.35)'
     context.fillRect(8, 18, canvas.width - 16, canvas.height - 36)
-    context.fillStyle = '#f0d79b'
-    context.font = '700 44px "Noto Serif SC", "Songti SC", serif'
+    context.fillStyle = '#ffeab5'
+    context.font = '700 64px "Noto Serif SC", "Songti SC", serif'
     context.textAlign = 'center'
     context.textBaseline = 'middle'
     title.split('').forEach((character, index) => {
-      context.fillText(character, canvas.width / 2, 92 + index * 88)
+      context.fillText(character, canvas.width / 2, 116 + index * 124)
     })
   }
   return canvas
@@ -198,194 +193,6 @@ function disposeObject(object: THREE.Object3D) {
   })
 }
 
-function makeArm(THREE: typeof import('three'), side: -1 | 1, sleeveColor: number, skinColor: number): ArmRig {
-  const shoulder = new THREE.Group()
-  shoulder.position.set(side * 0.235, 0.325, 0)
-  const sleeveMaterial = new THREE.MeshStandardMaterial({ color: sleeveColor, roughness: 0.75 })
-  const upperArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.23, 4, 10), sleeveMaterial)
-  upperArm.position.y = -0.15
-  shoulder.add(upperArm)
-
-  const elbow = new THREE.Group()
-  elbow.position.y = -0.3
-  const lowerArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.047, 0.21, 4, 10), sleeveMaterial)
-  lowerArm.position.y = -0.14
-  elbow.add(lowerArm)
-  shoulder.add(elbow)
-
-  const wrist = new THREE.Group()
-  wrist.position.y = -0.29
-  elbow.add(wrist)
-  const palm = new THREE.Group()
-  const handMaterial = new THREE.MeshStandardMaterial({ color: skinColor, roughness: 0.62 })
-  palm.add(new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.038), handMaterial))
-  wrist.add(palm)
-  for (let index = 0; index < 4; index += 1) {
-    const finger = new THREE.Mesh(new THREE.CapsuleGeometry(0.009, 0.048, 2, 6), handMaterial)
-    finger.position.set(-0.03 + index * 0.02, -0.078, 0)
-    finger.rotation.x = -0.18
-    palm.add(finger)
-  }
-  const thumb = new THREE.Mesh(new THREE.CapsuleGeometry(0.011, 0.042, 2, 6), handMaterial)
-  thumb.position.set(side * 0.047, -0.04, 0.012)
-  thumb.rotation.z = side * -0.65
-  palm.add(thumb)
-  return { shoulder, elbow, wrist, palm }
-}
-
-function makeLeg(THREE: typeof import('three'), side: -1 | 1, pantColor: number, shoeColor: number): LegRig {
-  const hip = new THREE.Group()
-  hip.position.set(side * 0.105, 0, 0)
-  const pantMaterial = new THREE.MeshStandardMaterial({ color: pantColor, roughness: 0.78 })
-  const thigh = new THREE.Mesh(new THREE.CapsuleGeometry(0.068, 0.24, 4, 10), pantMaterial)
-  thigh.position.y = -0.17
-  hip.add(thigh)
-  const knee = new THREE.Group()
-  knee.position.y = -0.34
-  const shin = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.23, 4, 10), pantMaterial)
-  shin.position.y = -0.16
-  knee.add(shin)
-  hip.add(knee)
-  const ankle = new THREE.Group()
-  ankle.position.y = -0.32
-  const shoe = new THREE.Mesh(
-    new THREE.BoxGeometry(0.105, 0.068, 0.21),
-    new THREE.MeshStandardMaterial({ color: shoeColor, roughness: 0.48 }),
-  )
-  shoe.position.set(0, -0.032, 0.042)
-  ankle.add(shoe)
-  knee.add(ankle)
-  hip.rotation.x = -1.42
-  knee.rotation.x = 1.38
-  ankle.rotation.x = 0.14
-  return { hip, knee, ankle }
-}
-
-function makeKeeper(THREE: typeof import('three')): CharacterRig {
-  const root = new THREE.Group()
-  root.userData.roomRole = 'keeper'
-  root.position.set(-1.2, 0, -0.82)
-  root.rotation.y = 0.24
-  const skin = 0xd8b294
-  const robeColor = 0x365f56
-  const legs = [makeLeg(THREE, -1, 0x2b4039, 0x24170f), makeLeg(THREE, 1, 0x2b4039, 0x24170f)]
-  const pelvis = new THREE.Group()
-  pelvis.position.y = 0.67
-  legs.forEach(leg => pelvis.add(leg.hip))
-  root.add(pelvis)
-
-  const torso = new THREE.Group()
-  torso.position.y = 0.67
-  const robe = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.22, 0.31, 0.58, 18),
-    new THREE.MeshStandardMaterial({ color: robeColor, roughness: 0.76 }),
-  )
-  robe.position.y = 0.27
-  const shoulderBlock = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.18, 0.24, 6, 14),
-    new THREE.MeshStandardMaterial({ color: robeColor, roughness: 0.72 }),
-  )
-  shoulderBlock.position.y = 0.51
-  torso.add(robe, shoulderBlock)
-  for (let index = 0; index < 5; index += 1) {
-    const button = new THREE.Mesh(
-      new THREE.SphereGeometry(0.014, 8, 8),
-      new THREE.MeshStandardMaterial({ color: 0xd8b160, roughness: 0.3, metalness: 0.55 }),
-    )
-    button.position.set(0.025, 0.47 - index * 0.095, 0.215)
-    torso.add(button)
-  }
-  root.add(torso)
-
-  const leftArm = makeArm(THREE, -1, 0x3f6b60, skin)
-  const rightArm = makeArm(THREE, 1, 0x3f6b60, skin)
-  torso.add(leftArm.shoulder, rightArm.shoulder)
-
-  const head = new THREE.Group()
-  head.position.y = 0.72
-  const skull = new THREE.Mesh(
-    new THREE.SphereGeometry(0.155, 22, 18),
-    new THREE.MeshStandardMaterial({ color: skin, roughness: 0.62 }),
-  )
-  const crown = new THREE.Mesh(
-    new THREE.SphereGeometry(0.158, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.5),
-    new THREE.MeshStandardMaterial({ color: 0x23160d, roughness: 0.55 }),
-  )
-  crown.position.y = 0.035
-  const hatBrim = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.175, 0.175, 0.018, 24),
-    new THREE.MeshStandardMaterial({ color: 0x1c1109, roughness: 0.5 }),
-  )
-  hatBrim.position.y = 0.04
-  const beard = new THREE.Mesh(
-    new THREE.ConeGeometry(0.088, 0.2, 14),
-    new THREE.MeshStandardMaterial({ color: 0xe8eef7, roughness: 0.78 }),
-  )
-  beard.position.set(0, -0.115, 0.112)
-  beard.rotation.x = 0.24
-  head.add(skull, crown, hatBrim, beard)
-  const glassesMaterial = new THREE.MeshStandardMaterial({ color: 0xc9ab68, roughness: 0.25, metalness: 0.72 })
-  ;[-0.062, 0.062].forEach((x) => {
-    const lens = new THREE.Mesh(new THREE.TorusGeometry(0.041, 0.007, 8, 22), glassesMaterial)
-    lens.position.set(x, 0.015, 0.135)
-    head.add(lens)
-  })
-  const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.008, 0.01), glassesMaterial)
-  bridge.position.set(0, 0.018, 0.142)
-  head.add(bridge)
-  torso.add(head)
-  return { root, head, leftArm, rightArm, legs }
-}
-
-function makeVisitor(THREE: typeof import('three')): CharacterRig {
-  const root = new THREE.Group()
-  root.userData.roomRole = 'visitor'
-  root.position.set(1.08, 0, 1.18)
-  root.rotation.y = Math.PI - 0.2
-  const skin = 0xcaa27e
-  const legs = [makeLeg(THREE, -1, 0x39506d, 0xf2f4f7), makeLeg(THREE, 1, 0x39506d, 0xf2f4f7)]
-  const pelvis = new THREE.Group()
-  pelvis.position.y = 0.62
-  legs.forEach(leg => pelvis.add(leg.hip))
-  root.add(pelvis)
-  const torso = new THREE.Group()
-  torso.position.y = 0.62
-  const jacket = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.19, 0.23, 0.5, 18),
-    new THREE.MeshStandardMaterial({ color: 0xd86d26, roughness: 0.72 }),
-  )
-  jacket.position.y = 0.28
-  const chest = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.16, 0.2, 6, 14),
-    new THREE.MeshStandardMaterial({ color: 0xe07d31, roughness: 0.68 }),
-  )
-  chest.position.y = 0.46
-  const backpack = new THREE.Mesh(
-    new THREE.BoxGeometry(0.3, 0.36, 0.15),
-    new THREE.MeshStandardMaterial({ color: 0x3c434d, roughness: 0.82 }),
-  )
-  backpack.position.set(0, 0.34, -0.18)
-  torso.add(jacket, chest, backpack)
-  root.add(torso)
-  const leftArm = makeArm(THREE, -1, 0xd86d26, skin)
-  const rightArm = makeArm(THREE, 1, 0xd86d26, skin)
-  torso.add(leftArm.shoulder, rightArm.shoulder)
-  const head = new THREE.Group()
-  head.position.y = 0.7
-  const skull = new THREE.Mesh(
-    new THREE.SphereGeometry(0.145, 22, 18),
-    new THREE.MeshStandardMaterial({ color: skin, roughness: 0.62 }),
-  )
-  const hair = new THREE.Mesh(
-    new THREE.SphereGeometry(0.151, 20, 16, 0, Math.PI * 2, 0, Math.PI * 0.56),
-    new THREE.MeshStandardMaterial({ color: 0x241c17, roughness: 0.72 }),
-  )
-  hair.rotation.x = -0.18
-  head.add(skull, hair)
-  torso.add(head)
-  return { root, head, leftArm, rightArm, legs }
-}
-
 export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRoomMount> {
   const THREE = await import('three')
   const root = options.root
@@ -411,46 +218,66 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   }
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.16
+  renderer.toneMappingExposure = 1.3
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
   const scene = new THREE.Scene()
   scene.background = new THREE.Color(0x05080f)
-  scene.fog = new THREE.Fog(0x05080f, 7, 14)
+  scene.fog = new THREE.Fog(0x05080f, 12, 32)
   const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 30)
   const raycaster = new THREE.Raycaster()
   const keeperAnchorVector = new THREE.Vector3()
-  const cameraTarget = new THREE.Vector3(0.05, 1.28, -0.1)
-  const orbit = { yaw: 0, pitch: 0.1, targetYaw: 0, targetPitch: 0.1, distance: 6, targetDistance: 4.95 }
+  const cupWorldQuaternion = new THREE.Quaternion()
+  const handWorldPosition = new THREE.Vector3()
+  const cameraTarget = new THREE.Vector3(0.12, 1.44, -0.2)
+  const orbit = { yaw: -0.42, pitch: 0.07, targetYaw: -0.42, targetPitch: 0.07, distance: 9.4, targetDistance: 8.7 }
   let reducedMotion = options.reducedMotion
-  const key = new THREE.DirectionalLight(0xffe2ab, 1.78)
+  const key = new THREE.DirectionalLight(0xffe2ab, 2.05)
   key.position.set(2.8, 4.6, 3.1)
+  key.castShadow = true
+  key.shadow.mapSize.set(1024, 1024)
+  key.shadow.camera.near = 1
+  key.shadow.camera.far = 18
+  key.shadow.camera.left = -8
+  key.shadow.camera.right = 8
+  key.shadow.camera.top = 6
+  key.shadow.camera.bottom = -4
+  key.shadow.bias = -0.0004
+  key.shadow.normalBias = 0.018
   const rim = new THREE.DirectionalLight(0x74a9ff, 0.72)
   rim.position.set(-3.2, 2.4, -2.4)
-  scene.add(new THREE.AmbientLight(0xdcecff, 0.7), key, rim)
+  const frontFill = new THREE.DirectionalLight(0xf5e7cd, 1.05)
+  frontFill.position.set(2.2, 2.8, 7)
+  scene.add(new THREE.AmbientLight(0xdcecff, 0.82), key, rim, frontFill)
 
   const disposables: Array<THREE.BufferGeometry | THREE.Material | THREE.Texture> = []
   const room = new THREE.Group()
   const floor = new THREE.Mesh(
-    new THREE.BoxGeometry(18, 0.2, 12),
+    new THREE.BoxGeometry(26, 0.2, 17),
     new THREE.MeshStandardMaterial({ color: 0x111820, roughness: 0.84, metalness: 0.06 }),
   )
   floor.position.y = -0.1
   const carpet = new THREE.Mesh(
-    new THREE.BoxGeometry(7.6, 0.04, 5.9),
+    new THREE.BoxGeometry(10.4, 0.04, 7.2),
     new THREE.MeshStandardMaterial({ color: 0x5d2a31, roughness: 0.88 }),
   )
   carpet.position.set(0, 0.02, 0.35)
   const backWall = new THREE.Mesh(
-    new THREE.BoxGeometry(18, 6.4, 0.26),
+    new THREE.BoxGeometry(26, 7.4, 0.26),
     new THREE.MeshStandardMaterial({ color: 0x141d29, roughness: 0.92 }),
   )
   backWall.position.set(0, 3, -4.3)
   const wallPanel = new THREE.Mesh(
-    new THREE.BoxGeometry(9.4, 4.6, 0.08),
+    new THREE.BoxGeometry(11.4, 5.4, 0.08),
     new THREE.MeshStandardMaterial({ color: 0x23160d, roughness: 0.72 }),
   )
   wallPanel.position.set(0, 2.5, -4.14)
   room.add(floor, carpet, backWall, wallPanel)
+  floor.receiveShadow = true
+  carpet.receiveShadow = true
+  backWall.receiveShadow = true
+  wallPanel.receiveShadow = true
 
   const signMap = new THREE.CanvasTexture(signTexture(options.labels.room, options.labels.chart))
   signMap.colorSpace = THREE.SRGBColorSpace
@@ -464,12 +291,18 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   const ceramic = new THREE.MeshStandardMaterial({ color: 0xd9d3c7, roughness: 0.38, metalness: 0.06 })
 
   const bookshelf = new THREE.Group()
+  const SHELF_Y = [0.12, 0.88, 1.62, 2.14]
+  const BOOK_HEIGHT = 0.6
+  const BOOK_SHELF_Y = 0.88
+  const shelfBack = new THREE.Mesh(new THREE.BoxGeometry(1.66, 2.2, 0.08), woodDark)
+  shelfBack.position.set(0, 1.1, -0.55)
+  bookshelf.add(shelfBack)
   const shelfSideLeft = new THREE.Mesh(new THREE.BoxGeometry(0.12, 2.2, 1.22), woodDark)
   shelfSideLeft.position.set(-0.82, 1.1, 0)
   const shelfSideRight = shelfSideLeft.clone()
   shelfSideRight.position.x = 0.82
   bookshelf.add(shelfSideLeft, shelfSideRight)
-  ;[0.18, 0.76, 1.34, 1.92].forEach((y) => {
+  SHELF_Y.forEach((y) => {
     const shelf = new THREE.Mesh(new THREE.BoxGeometry(1.64, 0.07, 1.14), woodMid)
     shelf.position.y = y
     bookshelf.add(shelf)
@@ -479,19 +312,24 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     texture.colorSpace = THREE.SRGBColorSpace
     disposables.push(texture)
     const book = new THREE.Mesh(
-      new THREE.BoxGeometry(0.075, 0.52, 0.36),
+      new THREE.BoxGeometry(0.095, BOOK_HEIGHT, 0.46),
       new THREE.MeshStandardMaterial({ color: 0x7b402e, roughness: 0.72 }),
     )
-    const spine = new THREE.Mesh(new THREE.PlaneGeometry(0.068, 0.5), new THREE.MeshBasicMaterial({ map: texture }))
-    spine.rotation.y = -Math.PI / 2
-    spine.position.x = -0.039
+    const spine = new THREE.Mesh(new THREE.PlaneGeometry(0.092, 0.58), new THREE.MeshBasicMaterial({ map: texture }))
+    spine.rotation.y = 0
+    spine.position.z = 0.243
     book.add(spine)
-    book.position.set(-0.52 + index * 0.13, 1.08, -0.28 + (index % 2) * 0.06)
+    book.position.set(
+      -0.56 + index * 0.19,
+      BOOK_SHELF_Y + 0.035 + 0.012 + BOOK_HEIGHT / 2,
+      -0.28 + (index % 2) * 0.08,
+    )
     book.rotation.z = index === 3 ? -0.16 : 0
     bookshelf.add(book)
   })
-  bookshelf.position.set(-3.95, 0, -3.1)
-  bookshelf.rotation.y = 0.25
+  bookshelf.position.set(-5.8, 0, -3.55)
+  bookshelf.scale.setScalar(1.55)
+  bookshelf.rotation.y = 0.58
 
   const desk = new THREE.Group()
   const deskTop = new THREE.Mesh(new THREE.BoxGeometry(4.9, 0.1, 1.28), woodMid)
@@ -512,7 +350,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   const compassBase = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.58, 0.045, 56), woodDark)
   const compassFace = new THREE.Mesh(
     new THREE.CircleGeometry(0.53, 64),
-    new THREE.MeshStandardMaterial({ map: compassMap, roughness: 0.46, metalness: 0.08 }),
+    new THREE.MeshStandardMaterial({ map: compassMap, roughness: 0.38, metalness: 0.08, emissive: 0x372813, emissiveIntensity: 0.34 }),
   )
   compassFace.rotation.x = -Math.PI / 2
   compassFace.position.y = 0.027
@@ -526,18 +364,12 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   redLine.position.y = 0.034
   redLine.rotation.y = 0.22
   compass.add(compassBase, compassFace, compassRim, redLine)
-  compass.position.set(0.8, 1.43, -0.18)
-  compass.rotation.x = -0.45
-  const compassStand = new THREE.Group()
-  ;[-0.25, 0.25].forEach((x) => {
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.032, 0.48, 10), woodDark)
-    leg.position.set(x + 0.8, 1.19, -0.04)
-    leg.rotation.z = x > 0 ? -0.2 : 0.2
-    compassStand.add(leg)
-  })
-  const compassCrossbar = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.05, 0.09), woodMid)
-  compassCrossbar.position.set(0.8, 1.13, -0.09)
-  compassStand.add(compassCrossbar)
+  compass.scale.setScalar(0.24)
+  compass.position.set(0.42, 2.346, 0.22)
+  compass.rotation.set(1.08, 0, 0)
+  const compassSupport = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.055, 0.16), woodMid)
+  compassSupport.position.set(0.42, 2.2025, 0.34)
+  bookshelf.add(compass, compassSupport)
 
   const objects = new THREE.Group()
   const lotTube = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.062, 0.25, 18), woodDark)
@@ -554,59 +386,107 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     stick.rotation.x = Math.sin(angle) * -0.1
     objects.add(stick)
   }
-  const brushPot = new THREE.Mesh(new THREE.CylinderGeometry(0.088, 0.075, 0.18, 20), ceramic)
-  brushPot.position.set(1.58, 1.08, -0.44)
-  objects.add(brushPot)
-  ;[-0.16, 0.04, 0.2].forEach((rotation) => {
-    const handle = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.007, 0.009, 0.36, 7),
-      new THREE.MeshStandardMaterial({ color: 0x2b1c12, roughness: 0.6 }),
-    )
-    handle.position.set(1.58 + rotation * 0.18, 1.24, -0.44)
-    handle.rotation.z = rotation
-    objects.add(handle)
-  })
-  const inkstone = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.045, 0.2), woodDark)
-  inkstone.position.set(0.05, 1.01, -0.46)
-  const inkPool = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.055, 0.055, 0.02, 18),
-    new THREE.MeshStandardMaterial({ color: 0x12100f, roughness: 0.24 }),
-  )
-  inkPool.position.set(0, 1.038, -0.46)
-  objects.add(inkstone, inkPool)
-  ;[-0.68, -0.54].forEach((x, index) => {
-    const paperRoll = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.035, 0.035, 0.54, 16),
+
+  const inkMaterial = new THREE.MeshStandardMaterial({ color: 0x12100f, roughness: 0.18 })
+  const inkstone = makeInkstone(woodDark, inkMaterial)
+  inkstone.position.set(0.04, 0.995, -0.44)
+  inkstone.rotation.y = -0.08
+  objects.add(inkstone)
+  const paperStack = new THREE.Group()
+  for (let index = 0; index < 3; index += 1) {
+    const sheet = new THREE.Mesh(
+      new THREE.BoxGeometry(0.4, 0.003, 0.29),
       new THREE.MeshStandardMaterial({ color: 0xe6dcc5, roughness: 0.82 }),
     )
-    paperRoll.rotation.z = Math.PI / 2
-    paperRoll.rotation.y = index * 0.1
-    paperRoll.position.set(x, 1.015, -0.32)
-    objects.add(paperRoll)
-  })
-  const teapot = new THREE.Group()
-  const potBody = new THREE.Mesh(new THREE.SphereGeometry(0.092, 20, 16), ceramic)
-  const potSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.025, 0.12, 9), ceramic)
-  potSpout.position.set(0.09, 0.015, 0)
-  potSpout.rotation.z = -0.82
-  const potLid = new THREE.Mesh(new THREE.SphereGeometry(0.035, 14, 10), ceramic)
-  potLid.position.y = 0.082
-  teapot.add(potBody, potSpout, potLid)
-  teapot.position.set(-1.42, 1.05, -0.3)
+    sheet.position.set(-0.73, 1.0 + index * 0.004, -0.31)
+    sheet.rotation.y = -0.16 + index * 0.05
+    paperStack.add(sheet)
+  }
+  const curledPaper = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.032, 0.032, 0.43, 20, 1, true),
+    new THREE.MeshStandardMaterial({ color: 0xeee5cf, roughness: 0.84, side: THREE.DoubleSide }),
+  )
+  curledPaper.rotation.set(Math.PI / 2, 0, Math.PI / 2)
+  curledPaper.position.set(-0.62, 1.05, -0.16)
+  objects.add(paperStack, curledPaper)
+
+  const glaze = new THREE.MeshPhysicalMaterial({ color: 0xe8ece8, roughness: 0.18, metalness: 0.03, clearcoat: 0.65, clearcoatRoughness: 0.12 })
+  const lidGlaze = new THREE.MeshStandardMaterial({ color: 0x536872, roughness: 0.24, metalness: 0.06 })
+  const teapot = makeDeskTeapot(THREE, glaze, lidGlaze)
+  teapot.position.set(-1.47, 0.995, -0.31)
   objects.add(teapot)
-  const cupOffsets: Array<[number, number]> = [[0.26, 0], [0.4, 0.07]]
-  cupOffsets.forEach(([x, z]) => {
-    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.037, 0.028, 0.043, 16), ceramic)
-    cup.position.set(-1.42 + x, 1.016, -0.3 + z)
-    objects.add(cup)
+  const pourStream = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.016, 0.01, 1, 16),
+    new THREE.MeshStandardMaterial({
+      color: 0x8d4d20,
+      emissive: 0x2f1607,
+      transparent: true,
+      opacity: 0,
+      roughness: 0.16,
+      depthWrite: false,
+      depthTest: false,
+    }),
+  )
+  pourStream.renderOrder = 12
+  pourStream.position.set(-1.09, 1.085, -0.285)
+  objects.add(pourStream)
+  const teapotSpoutTip = teapot.getObjectByName('bazi-room-teapot-spout-tip')
+  const cupTeaMaterial = new THREE.MeshStandardMaterial({ color: 0xa2662e, transparent: true, opacity: 0, roughness: 0.22 })
+  const cupBuild = makeDeskCup(THREE, glaze, cupTeaMaterial)
+  const visitorCup = cupBuild.cup
+  const cupTea = cupBuild.tea
+  const cupSteam = cupBuild.steam
+  visitorCup.position.set(-1.11, 0.995, -0.29)
+  const restingCupPosition = visitorCup.position.clone()
+  objects.add(visitorCup)
+  const keeperCupBuild = makeDeskCup(THREE, glaze, cupTeaMaterial.clone())
+  keeperCupBuild.cup.scale.setScalar(0.94)
+  keeperCupBuild.cup.position.set(-0.7, 0.998, 0.12)
+  keeperCupBuild.cup.rotation.y = 0.5
+  objects.add(keeperCupBuild.cup)
+
+  const brushHandles = new THREE.MeshStandardMaterial({ color: 0x2d1d14, roughness: 0.48 })
+  const ferrule = new THREE.MeshStandardMaterial({ color: 0xc8b891, roughness: 0.35, metalness: 0.35 })
+  const bristles = new THREE.MeshStandardMaterial({ color: 0x5a3d27, roughness: 0.82 })
+  const brushRack = makeBrushRack(woodDark, [
+    makeBrush(brushHandles, ferrule, bristles),
+    makeBrush(brushHandles, ferrule, bristles),
+  ])
+  brushRack.position.set(1.64, 0.995, -0.41)
+  brushRack.rotation.y = -0.12
+  objects.add(brushRack)
+  const brushPotProfile = [
+    new THREE.Vector2(0.001, 0), new THREE.Vector2(0.064, 0),
+    new THREE.Vector2(0.075, 0.012), new THREE.Vector2(0.082, 0.084),
+    new THREE.Vector2(0.072, 0.155), new THREE.Vector2(0.076, 0.168),
+  ]
+  const brushPot = new THREE.Mesh(new THREE.LatheGeometry(brushPotProfile, 30), ceramic)
+  brushPot.position.set(2.03, 0.995, -0.43)
+  objects.add(brushPot)
+  ;[-0.18, 0, 0.17].forEach((rotation, index) => {
+    const brush = makeBrush(brushHandles, ferrule, bristles)
+    brush.position.set(2.03 + index * 0.015, 1.16, -0.43 + (index % 2) * 0.014)
+    brush.rotation.set(rotation * 0.5, 0, rotation)
+    objects.add(brush)
   })
-  for (let index = 0; index < 3; index += 1) {
-    const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.005, 20), brass)
-    coin.position.set(-0.72, 0.975 + index * 0.007, 0.1)
-    coin.rotation.x = Math.PI / 2 + index * 0.12 - 0.1
-    coin.rotation.z = index * 0.5
+
+  const coinMaterial = brass.clone()
+  for (let index = 0; index < 5; index += 1) {
+    const coin = makeCoin(coinMaterial)
+    coin.position.set(-0.33 + (index % 3) * 0.055, 0.993 + Math.floor(index / 3) * 0.006, 0.07 + Math.floor(index / 3) * 0.05)
+    coin.rotation.set(Math.PI / 2 + (index % 2) * 0.05, index * 0.45, index * 0.1)
     objects.add(coin)
   }
+  const paperweight = makePaperweight(woodDark, new THREE.MeshStandardMaterial({ color: 0xb3372d, roughness: 0.42 }))
+  paperweight.position.set(-1.73, 0.995, 0.07)
+  paperweight.rotation.y = 0.08
+  objects.add(paperweight)
+  const sealMaterial = new THREE.MeshStandardMaterial({ color: 0x733323, roughness: 0.48 })
+  const sealPaste = new THREE.MeshStandardMaterial({ color: 0xb63a30, roughness: 0.28 })
+  const seal = makeSeal(sealMaterial, sealPaste)
+  seal.position.set(1.89, 0.995, 0.03)
+  seal.rotation.y = -0.22
+  objects.add(seal)
   const incenseBurner = new THREE.Group()
   const burner = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.085, 0.11, 22), brass)
   const burnerFoot = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.09, 0.025, 16), woodDark)
@@ -650,18 +530,68 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   projector.rotation.x = 0.82
 
   const keeperChair = new THREE.Group()
-  const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.82, 1.28, 0.09), woodDark)
-  chairBack.position.set(-1.2, 1.16, -1.24)
-  const chairSeat = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.08, 0.72), woodMid)
-  chairSeat.position.set(-1.2, 0.65, -0.86)
-  keeperChair.add(chairBack, chairSeat)
-  const visitorStool = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.34, 0.1, 22), woodMid)
-  visitorStool.position.set(1.08, 0.56, 1.18)
+  keeperChair.position.set(-1.18, 0, -0.86)
+  const chairSeat = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.06, 0.6), woodMid)
+  chairSeat.position.y = 0.62
+  const chairCushion = new THREE.Mesh(new THREE.SphereGeometry(0.315, 24, 18), new THREE.MeshStandardMaterial({ color: 0x663a2c, roughness: 0.85 }))
+  chairCushion.scale.set(1, 0.2, 0.92)
+  chairCushion.position.y = 0.65
+  const chairBackPanel = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.66, 0.06), woodMid)
+  chairBackPanel.position.set(0, 1.03, -0.28)
+  chairBackPanel.rotation.x = -0.05
+  const chairBackRail = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.58, 12), woodDark)
+  chairBackRail.rotation.z = Math.PI / 2
+  chairBackRail.position.set(0, 1.34, -0.28)
+  keeperChair.add(chairSeat, chairCushion, chairBackPanel, chairBackRail)
+  const keeperChairLegs: Array<[number, number]> = [
+    [-0.28, -0.25], [0.28, -0.25], [-0.28, 0.25], [0.28, 0.25],
+  ]
+  keeperChairLegs.forEach(([x, z]) => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.032, 0.026, 0.62, 12), woodDark)
+    leg.position.set(x, 0.31, z)
+    keeperChair.add(leg)
+  })
+  const chairStretchers: Array<[number, number]> = [[0.24, 0], [-0.24, 0]]
+  chairStretchers.forEach(([x]) => {
+    const stretcher = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.56, 10), woodDark)
+    stretcher.rotation.z = Math.PI / 2
+    stretcher.position.set(x, 0.19, 0)
+    keeperChair.add(stretcher)
+  })
 
-  const keeper = makeKeeper(THREE)
-  const visitor = makeVisitor(THREE)
+  const visitorStool = new THREE.Group()
+  visitorStool.position.set(1.1, 0, 1.1)
+  const stoolTop = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.06, 28), woodMid)
+  stoolTop.position.y = 0.58
+  const stoolCushion = new THREE.Mesh(new THREE.SphereGeometry(0.285, 24, 18), new THREE.MeshStandardMaterial({ color: 0x516073, roughness: 0.85 }))
+  stoolCushion.scale.set(1, 0.2, 1)
+  stoolCushion.position.y = 0.61
+  visitorStool.add(stoolTop, stoolCushion)
+  const visitorStoolLegs: Array<[number, number]> = [
+    [-0.22, -0.22], [0.22, -0.22], [-0.22, 0.22], [0.22, 0.22],
+  ]
+  visitorStoolLegs.forEach(([x, z]) => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.024, 0.58, 12), woodDark)
+    leg.position.set(x, 0.29, z)
+    visitorStool.add(leg)
+  })
+
+  const keeper = makeSoftCharacter(THREE, { kind: 'keeper', position: [-1.18, 0.03, -0.78], rotationY: 0.2 })
+  const visitor = makeSoftCharacter(THREE, { kind: 'visitor', position: [1.1, 0.01, 1.08], rotationY: Math.PI - 0.22 })
+  restSittingPose(keeper)
+  restSittingPose(visitor)
+  room.traverse((child) => {
+    const mesh = child as THREE.Mesh
+    if (!mesh.isMesh) return
+    mesh.castShadow = true
+    mesh.receiveShadow = true
+  })
+  floor.castShadow = false
+  backWall.castShadow = false
+  projectionScreen.castShadow = false
+  projectionFrame.castShadow = false
   room.add(
-    roomSign, desk, bookshelf, compass, compassStand, objects,
+    roomSign, desk, bookshelf, objects,
     projectionFrame, projectionScreen, projector, keeperChair,
     visitorStool, keeper.root, visitor.root,
   )
@@ -690,12 +620,16 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
 
   let dirty = true
   let currentModel = options.initialModel
+  let currentFlowStage = options.initialModel.flowStage
+  let stageStartedAt = performance.now()
   let lastProjectionDraw = Number.NEGATIVE_INFINITY
+  let slideTransitionStartedAt = Number.NEGATIVE_INFINITY
+  let slideTransitionUntil = Number.NEGATIVE_INFINITY
 
   function drawPillarCard(
     context: CanvasRenderingContext2D,
     x: number, y: number, width: number, height: number,
-    label: string, value: string, highlighted: boolean,
+    label: string, value: string, highlighted: boolean, valueSize = 44,
   ) {
     context.fillStyle = highlighted ? 'rgba(43, 55, 35, 0.94)' : 'rgba(13, 24, 37, 0.92)'
     context.fillRect(x, y, width, height)
@@ -708,7 +642,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     context.font = '500 20px "Noto Sans SC", "PingFang SC", sans-serif'
     context.fillText(label, x + width / 2, y + 30)
     context.fillStyle = highlighted ? '#f4f8ff' : '#dce8f6'
-    context.font = '700 44px "Noto Serif SC", "Songti SC", serif'
+    context.font = `700 ${valueSize}px "Noto Serif SC", "Songti SC", serif`
     context.fillText(value, x + width / 2, y + height / 2 + 18)
   }
 
@@ -738,6 +672,178 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       }
     }
     if (line && lineCount < maxLines) context.fillText(line, centerX, yPos)
+  }
+
+  const elementColors: Record<string, string> = {
+    木: '#65a66d', 火: '#d1544a', 土: '#c08a48', 金: '#d9c47c', 水: '#5a8dc0',
+  }
+
+  function drawVisualPillars(
+    context: CanvasRenderingContext2D,
+    pillars: BaziRoomPillar[],
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    progress = 1,
+  ) {
+    const visible = pillars.slice(0, 5)
+    const cardWidth = Math.min(150, (width - (visible.length - 1) * 12) / Math.max(visible.length, 1))
+    const totalWidth = visible.length * cardWidth + (visible.length - 1) * 12
+    visible.forEach((pillar, index) => {
+      drawPillarCard(
+        context,
+        x + (width - totalWidth) / 2 + index * (cardWidth + 12),
+        y,
+        cardWidth,
+        height,
+        pillar.label,
+        `${pillar.gan}${pillar.zhi}`,
+        pillar.highlighted,
+        visible.length > 4 ? 28 : visible.length > 3 ? 33 : 42,
+      )
+    })
+  }
+
+  function drawHorizontalBars(
+    context: CanvasRenderingContext2D,
+    items: Array<{ label: string, percent: number }>,
+    x: number,
+    y: number,
+    width: number,
+    progress = 1,
+  ) {
+    context.textAlign = 'left'
+    context.textBaseline = 'middle'
+    items.slice(0, 5).forEach((item, index) => {
+      const rowY = y + index * 35
+      context.fillStyle = 'rgba(226,237,249,.76)'
+      context.font = '600 19px "Noto Sans SC", "PingFang SC", sans-serif'
+      context.fillText(item.label, x, rowY + 9)
+      const trackX = x + 44
+      const trackWidth = width - 88
+      context.fillStyle = 'rgba(233,238,250,.1)'
+      context.beginPath()
+      context.roundRect(trackX, rowY, trackWidth, 18, 9)
+      context.fill()
+      const fillWidth = trackWidth * Math.min(1, Math.max(0.02, item.percent / 100)) * progress
+      context.fillStyle = elementColors[item.label] ?? '#d9b45d'
+      context.beginPath()
+      context.roundRect(trackX, rowY, fillWidth, 18, 9)
+      context.fill()
+      context.fillStyle = 'rgba(242,247,255,.88)'
+      context.font = '700 15px "Noto Sans SC", "PingFang SC", sans-serif'
+      context.textAlign = 'right'
+      context.fillText(`${item.percent}%`, x + width, rowY + 9)
+      context.textAlign = 'left'
+    })
+  }
+
+  function drawLensCards(
+    context: CanvasRenderingContext2D,
+    fields: Array<{ label: string, value: string, evidence?: string }>,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    progress = 1,
+  ) {
+    const visible = fields.slice(0, 3)
+    if (!visible.length) return
+    const gap = 15
+    const cardWidth = (width - gap * (visible.length - 1)) / visible.length
+    visible.forEach((field, index) => {
+      const cardX = x + index * (cardWidth + gap)
+      const reveal = Math.min(1, Math.max(0, progress * 1.7 - index * 0.2))
+      context.save()
+      context.globalAlpha = reveal
+      context.translate(0, (1 - reveal) * 12)
+      context.fillStyle = 'rgba(9,21,34,.94)'
+      context.strokeStyle = 'rgba(212,175,109,.34)'
+      context.lineWidth = 2
+      context.beginPath()
+      context.roundRect(cardX, y, cardWidth, height, 10)
+      context.fill()
+      context.stroke()
+      context.textAlign = 'center'
+      context.fillStyle = 'rgba(242,217,152,.9)'
+      context.font = '700 20px "Noto Sans SC", "PingFang SC", sans-serif'
+      context.fillText(field.label, cardX + cardWidth / 2, y + 28)
+      context.fillStyle = '#f4f7ff'
+      context.font = '800 31px "Noto Serif SC", "Songti SC", serif'
+      drawWrappedText(context, field.value.slice(0, 18), cardX + cardWidth / 2, y + 68, cardWidth - 30, 3, 34)
+      if (field.evidence) {
+        context.fillStyle = 'rgba(226,237,249,.52)'
+        context.font = '400 14px "Noto Sans SC", "PingFang SC", sans-serif'
+        drawWrappedText(context, field.evidence, cardX + cardWidth / 2, y + height - 58, cardWidth - 28, 3, 19)
+      }
+      context.restore()
+    })
+  }
+
+  function drawTodayVisual(context: CanvasRenderingContext2D, model: BaziRoomSceneModel, progress: number) {
+    const today = model.topicLens?.today
+    const centerX = 340
+    const centerY = 212
+    const radius = 95
+    context.save()
+    context.strokeStyle = 'rgba(212,175,109,.34)'
+    context.lineWidth = 7
+    context.beginPath()
+    context.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, progress))
+    context.stroke()
+    context.fillStyle = 'rgba(9,21,34,.94)'
+    context.beginPath()
+    context.arc(centerX, centerY, radius - 15, 0, Math.PI * 2)
+    context.fill()
+    context.textAlign = 'center'
+    context.fillStyle = 'rgba(226,237,249,.58)'
+    context.font = '500 17px "Noto Sans SC", "PingFang SC", sans-serif'
+    context.fillText(today?.date || options.labels.today, centerX, centerY - 30)
+    context.fillStyle = '#f4f7ff'
+    context.font = '800 44px "Noto Serif SC", "Songti SC", serif'
+    context.fillText(today?.ganzhi || options.labels.currentBazi, centerX, centerY + 5)
+    context.fillStyle = '#f2d998'
+    context.font = '700 18px "Noto Sans SC", "PingFang SC", sans-serif'
+    context.fillText(today?.tenGod || '', centerX, centerY + 42)
+
+    context.textAlign = 'left'
+    context.fillStyle = 'rgba(226,237,249,.82)'
+    context.font = '700 20px "Noto Sans SC", "PingFang SC", sans-serif'
+    context.fillText(options.labels.today, 502, 134)
+    drawLensCards(context, (model.topicLens?.todayFields ?? []).slice(0, 2), 492, 156, 340, 168, progress)
+    const tags = [
+      ...(today?.relations ?? []).map(item => item.value),
+      ...(model.topicLens?.todayFields ?? []).slice(2).map(item => item.value),
+      ...(model.topicLens?.nobleHints ?? []),
+    ].filter(Boolean).slice(0, 5)
+    context.fillStyle = 'rgba(233,238,250,.62)'
+    context.font = '500 15px "Noto Sans SC", "PingFang SC", sans-serif'
+    if (!tags.length) {
+      drawWrappedText(context, model.slideDetail, 502, 358, 330, 3, 21)
+    }
+    else {
+      tags.forEach((tag, index) => {
+        const width = Math.min(150, 34 + tag.length * 13)
+        if (context.measureText(tag).width > width - 20) return
+        const row = Math.floor(index / 2)
+        const column = index % 2
+        const x = 492 + column * 172
+        const y = 350 + row * 39
+        context.fillStyle = 'rgba(45,32,14,.62)'
+        context.strokeStyle = 'rgba(212,175,109,.3)'
+        context.lineWidth = 1.5
+        context.beginPath()
+        context.roundRect(x, y, width, 30, 7)
+        context.fill()
+        context.stroke()
+        context.fillStyle = 'rgba(242,217,152,.88)'
+        context.textAlign = 'center'
+        context.fillText(tag.slice(0, 9), x + width / 2, y + 15)
+        context.textAlign = 'left'
+      })
+    }
+    context.restore()
   }
 
   function drawProjection(elapsed = 0) {
@@ -771,68 +877,109 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     if (isResult) {
       context.font = '500 20px "Noto Sans SC", "PingFang SC", sans-serif'
       context.fillStyle = 'rgba(242, 217, 152, 0.82)'
-      context.fillText(`${currentModel.slideIndex + 1} / ${currentModel.slideCount}`, width / 2, 452)
-      const progressWidth = (width - 160) * ((currentModel.slideIndex + 1) / currentModel.slideCount)
+      context.textAlign = 'left'
+      context.fillText(`${currentModel.slideIndex + 1} / ${currentModel.slideCount}`, 72, 452)
+      context.textAlign = 'center'
+      const progressWidth = (width - 144) * ((currentModel.slideIndex + 1) / currentModel.slideCount)
       context.fillStyle = 'rgba(233, 238, 250, 0.12)'
-      context.fillRect(80, 470, width - 160, 3)
+      context.fillRect(72, 470, width - 144, 3)
       context.fillStyle = '#d9b45d'
-      context.fillRect(80, 470, progressWidth, 3)
+      context.fillRect(72, 470, progressWidth, 3)
       context.fillStyle = '#f2d998'
     }
 
-    if (isResult && currentModel.slideId === 'full-chart') {
-      context.textAlign = 'left'
-      context.fillStyle = 'rgba(226, 237, 249, 0.84)'
-      context.font = '400 24px "Noto Sans SC", "PingFang SC", sans-serif'
-      drawWrappedText(context, currentModel.slideDetail || options.labels.revealed, 148, 148, 730, 5, 38)
-      context.textAlign = 'center'
-      context.fillStyle = '#f2d998'
-      context.strokeStyle = 'rgba(217, 180, 93, 0.75)'
-      context.lineWidth = 3
-      context.beginPath()
-      context.roundRect(width / 2 - 155, 326, 310, 62, 8)
-      context.fill()
-      context.stroke()
-      context.fillStyle = '#25190a'
-      context.font = '700 24px "Noto Sans SC", "PingFang SC", sans-serif'
-      context.fillText(options.labels.fullChart, width / 2, 358)
-    }
-    else if (isResult && (
-      currentModel.slideId === 'reading'
-      || currentModel.slideId === 'topic-natal'
-      || currentModel.slideId === 'topic-extra'
-      || currentModel.slideId === 'topic-current'
-    )) {
-      context.textAlign = 'left'
-      context.fillStyle = 'rgba(226, 237, 249, 0.84)'
-      context.font = '400 23px "Noto Sans SC", "PingFang SC", sans-serif'
-      drawWrappedText(context, currentModel.slideDetail || options.labels.revealed, 148, 146, 730, 8, 36)
-      context.textAlign = 'center'
+    if (isResult) {
+      const reveal = Math.min(1, Math.max(0, (performance.now() - slideTransitionStartedAt) / 420))
+      context.save()
+      context.globalAlpha = 0.22 + reveal * 0.78
+      context.translate((1 - reveal) * 52, (1 - reveal) * 5)
+      if (currentModel.slideId === 'full-chart') {
+        drawVisualPillars(context, currentModel.pillars, 260, 148, width - 520, 168, reveal)
+      }
+      else if (currentModel.slideId === 'natal') {
+        drawVisualPillars(context, currentModel.pillars.filter(pillar => pillar.key !== 'today'), 250, 128, 348, 158, reveal)
+        const currentDayun = currentModel.chart?.dayuns.find(dayun => dayun.isCurrent) ?? currentModel.chart?.dayuns[0]
+        context.textAlign = 'left'
+        context.fillStyle = 'rgba(226,237,249,.56)'
+        context.font = '500 16px "Noto Sans SC", "PingFang SC", sans-serif'
+        context.fillText(options.labels.currentDayun, 252, 334)
+        context.fillStyle = '#f2d998'
+        context.font = '800 27px "Noto Serif SC", "Songti SC", serif'
+        context.fillText(currentDayun ? `${currentDayun.ganzhi} · ${currentDayun.startAge}-${currentDayun.endAge}` : currentModel.slideDetail, 336, 334)
+        context.fillStyle = 'rgba(226,237,249,.72)'
+        context.font = '600 18px "Noto Sans SC", "PingFang SC", sans-serif'
+        context.fillText('五行', 686, 132)
+        drawHorizontalBars(
+          context,
+          (currentModel.chart?.energy.wuxing ?? []).map(item => ({ label: item.label, percent: item.percent })),
+          676, 156, 276, reveal,
+        )
+      }
+      else if (currentModel.slideId === 'topic-current') {
+        drawTodayVisual(context, currentModel, reveal)
+      }
+      else if (currentModel.slideId === 'reading') {
+        const sealText = currentModel.slideDetail.split('。')[0] || options.labels.reading
+        const readingBody = currentModel.slideDetail.slice(sealText.length + 1) || currentModel.slideDetail
+        context.fillStyle = 'rgba(9,21,34,.94)'
+        context.strokeStyle = 'rgba(212,175,109,.42)'
+        context.lineWidth = 3
+        context.beginPath()
+        context.roundRect(72, 126, 288, 264, 12)
+        context.fill()
+        context.stroke()
+        context.strokeStyle = 'rgba(212,175,109,.16)'
+        context.lineWidth = 2
+        context.beginPath()
+        context.moveTo(412, 146)
+        context.lineTo(412, 370)
+        context.stroke()
+        context.textAlign = 'center'
+        context.fillStyle = 'rgba(242,217,152,.78)'
+        context.font = '600 18px "Noto Sans SC", "PingFang SC", sans-serif'
+        context.fillText(options.labels.chenyu, 216, 160)
+        context.fillStyle = '#f4f7ff'
+        context.font = '800 40px "Noto Serif SC", "Songti SC", serif'
+        drawWrappedText(context, sealText, 216, 236, 232, 3, 48)
+        context.textAlign = 'left'
+        context.fillStyle = 'rgba(226,237,249,.56)'
+        context.font = '600 17px "Noto Sans SC", "PingFang SC", sans-serif'
+        context.fillText(`${options.labels.today} · 解读`, 452, 134)
+        context.fillStyle = 'rgba(238,244,252,.9)'
+        context.font = '400 21px "Noto Sans SC", "PingFang SC", sans-serif'
+        drawWrappedText(context, readingBody || options.labels.readingWaiting, 452, 172, 500, 8, 34)
+        if (currentModel.flowStage === 'slideshow' && reveal < 1) {
+          context.fillStyle = 'rgba(217,180,93,.72)'
+          context.fillRect(452, 418, Math.min(500, reveal * 500), 2)
+        }
+      }
+      else {
+        drawLensCards(
+          context,
+          currentModel.topicLens?.natal ?? [],
+          220,
+          128,
+          width - 440,
+          230,
+          reveal,
+        )
+      }
+      context.restore()
     }
     else {
-      const bootCards = currentModel.currentPillars.length
+      const bootCards: BaziRoomPillar[] = currentModel.currentPillars.length
         ? currentModel.currentPillars
-        : [
+        : ([
             { label: options.labels.flowYear, gan: '—', zhi: '—', highlighted: false },
             { label: options.labels.flowMonth, gan: '—', zhi: '—', highlighted: false },
             { label: options.labels.flowDay, gan: '—', zhi: '—', highlighted: false },
             { label: options.labels.flowHour, gan: '—', zhi: '—', highlighted: false },
-          ]
+          ] as BaziRoomPillar[])
       const cards = isResult && currentModel.slideId === 'natal'
         ? currentModel.pillars.filter(pillar => pillar.key !== 'today')
         : bootCards
       const visibleCards = cards.slice(0, 5)
-      const cardWidth = 156
-      const gap = 16
-      const totalWidth = visibleCards.length * cardWidth + (visibleCards.length - 1) * gap
-      visibleCards.forEach((pillar, index) => {
-        const x = (width - totalWidth) / 2 + index * (cardWidth + gap)
-        drawPillarCard(
-          context, x, 138, cardWidth, 194,
-          pillar.label, `${pillar.gan}${pillar.zhi}`,
-          isResult ? pillar.highlighted : true,
-        )
-      })
+      drawVisualPillars(context, visibleCards, 224, 138, width - 448, 194)
       if (!isResult) {
         context.fillStyle = 'rgba(226, 237, 249, 0.68)'
         context.font = '400 20px "Noto Sans SC", "PingFang SC", sans-serif'
@@ -858,9 +1005,9 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     }
     else {
       const sweep = (elapsed * 0.16) % 1
-      context.globalAlpha = isResult ? 0.22 : 0.12
+      context.globalAlpha = 0.12
       context.fillStyle = '#9adfff'
-      context.fillRect(48, 400 + sweep * 68, width - 96, 2)
+      context.fillRect(48, (isResult ? 488 : 400) + sweep * (isResult ? 12 : 68), width - 96, 2)
       context.globalAlpha = 1
     }
     projectionTexture.needsUpdate = true
@@ -873,8 +1020,13 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     camera.aspect = width / height
     // A portrait viewport sees a horizontally compressed frustum. Widen the
     // lens and nudge the target so the keeper and projection stay in frame.
-    camera.fov = camera.aspect < 0.8 ? 52 : 38
-    cameraTarget.x = camera.aspect < 0.8 ? -0.18 : 0.05
+    camera.fov = camera.aspect < 0.8 ? 54 : 34
+    cameraTarget.x = camera.aspect < 0.8 ? 0.72 : 0.16
+    cameraTarget.y = camera.aspect < 0.8 ? 1.55 : 1.42
+    const portraitProjection = camera.aspect < 0.8
+    projectionFrame.scale.set(portraitProjection ? 1.08 : 1, portraitProjection ? 1.28 : 1, 1)
+    projectionScreen.scale.copy(projectionFrame.scale)
+    projector.scale.setScalar(portraitProjection ? 0.72 : 1)
     camera.updateProjectionMatrix()
     dirty = true
   }
@@ -886,6 +1038,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   let lastY = 0
   let pointerStartedAt = 0
   let pointerMovedFar = false
+  const parallax = { x: 0, y: 0, targetX: 0, targetY: 0 }
   function pointerDown(event: PointerEvent) {
     pointerActive = true
     lastX = event.clientX
@@ -902,12 +1055,19 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       lastX = event.clientX
       lastY = event.clientY
       orbit.targetYaw = THREE.MathUtils.clamp(orbit.targetYaw - deltaX * 0.0032, -0.42, 0.42)
-      orbit.targetPitch = THREE.MathUtils.clamp(orbit.targetPitch + deltaY * 0.0025, 0.035, 0.24)
+      orbit.targetPitch = THREE.MathUtils.clamp(orbit.targetPitch + deltaY * 0.0025, 0.025, 0.2)
       dirty = true
     }
     else {
+      const rect = canvas.getBoundingClientRect()
+      parallax.targetX = (((event.clientX - rect.left) / rect.width) - 0.5) * 0.5
+      parallax.targetY = (0.5 - ((event.clientY - rect.top) / rect.height)) * 0.26
       canvas.style.cursor = pickRoomRole(event.clientX, event.clientY) ? 'pointer' : 'grab'
     }
+  }
+  function pointerLeave() {
+    parallax.targetX = 0
+    parallax.targetY = 0
   }
   function pointerUp(event: PointerEvent) {
     pointerActive = false
@@ -918,11 +1078,13 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     if (pointerMovedFar || performance.now() - pointerStartedAt >= 700) return
     const role = pickRoomRole(event.clientX, event.clientY)
     if (role) options.onSelect?.(role)
+    else options.onBackgroundClick?.()
   }
   canvas.addEventListener('pointerdown', pointerDown)
   canvas.addEventListener('pointermove', pointerMove)
   canvas.addEventListener('pointerup', pointerUp)
   canvas.addEventListener('pointercancel', pointerUp)
+  canvas.addEventListener('pointerleave', pointerLeave)
   canvas.addEventListener('click', handleCanvasClick)
 
   let visible = true
@@ -974,55 +1136,228 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
     orbit.yaw += (orbit.targetYaw - orbit.yaw) * 0.08
     orbit.pitch += (orbit.targetPitch - orbit.pitch) * 0.08
     orbit.distance += (orbit.targetDistance - orbit.distance) * 0.035
-    const x = cameraTarget.x + orbit.distance * Math.sin(orbit.yaw) * Math.cos(orbit.pitch)
-    const y = cameraTarget.y + orbit.distance * Math.sin(orbit.pitch)
+    parallax.x += (parallax.targetX - parallax.x) * 0.045
+    parallax.y += (parallax.targetY - parallax.y) * 0.045
+    const lookX = cameraTarget.x + parallax.x
+    const lookY = cameraTarget.y + parallax.y
+    const x = lookX + orbit.distance * Math.sin(orbit.yaw) * Math.cos(orbit.pitch) + parallax.x * 0.45
+    const y = lookY + orbit.distance * Math.sin(orbit.pitch) + parallax.y * 0.25
     const z = cameraTarget.z + orbit.distance * Math.cos(orbit.yaw) * Math.cos(orbit.pitch)
     camera.position.set(x, y, z)
-    camera.lookAt(cameraTarget)
+    camera.lookAt(lookX, lookY, cameraTarget.z)
   }
-  function updateKeeper(elapsed: number) {
+  function updateKeeper(elapsed: number, stageSeconds: number) {
     const gesture = currentModel.keeperGesture
-    keeper.root.rotation.y = 0.22 + Math.sin(elapsed * 0.42) * 0.025
-    keeper.head.rotation.x = gesture === 'calculating' ? 0.31 : 0.05 + Math.sin(elapsed * 0.65) * 0.025
-    keeper.head.rotation.y = gesture === 'present' ? -0.12 : Math.sin(elapsed * 0.29) * 0.05
-    if (gesture === 'invite') {
-      keeper.rightArm.shoulder.rotation.set(0.25, 0, -1.22)
-      keeper.rightArm.elbow.rotation.set(0, 0, -0.38)
-      keeper.rightArm.wrist.rotation.x = -0.2
-      keeper.rightArm.palm.rotation.x = -0.45
+    const serving = (currentModel.flowStage === 'start' || currentModel.flowStage === 'question') && stageSeconds < 4
+    const npcDrinkCycle = currentModel.flowStage === 'slideshow' ? (stageSeconds % 12) : Number.POSITIVE_INFINITY
+    const npcDrinking = npcDrinkCycle > 7.2 && npcDrinkCycle < 10.6
+    const breathing = Math.sin(elapsed * 0.72)
+    keeper.root.rotation.y = 0.2 + Math.sin(elapsed * 0.42) * 0.022
+    keeper.hips.rotation.set(breathing * 0.008, 0, 0)
+    keeper.spine.rotation.set(0.11 + breathing * 0.012, 0, Math.sin(elapsed * 0.31) * 0.012)
+    keeper.chest.rotation.set(0.035 + breathing * 0.01, 0, Math.sin(elapsed * 0.37) * 0.01)
+    keeper.head.rotation.x = gesture === 'calculating' ? 0.22 : -0.03 + Math.sin(elapsed * 0.65) * 0.018
+    keeper.head.rotation.y = gesture === 'present' ? -0.1 : Math.sin(elapsed * 0.29) * 0.045
+
+    if (serving) {
+      const reach = THREE.MathUtils.smoothstep(stageSeconds, 0.25, 1)
+      const pour = THREE.MathUtils.smoothstep(stageSeconds, 1.15, 1.75) * (1 - THREE.MathUtils.smoothstep(stageSeconds, 3.15, 3.65))
+      const returnToRest = THREE.MathUtils.smoothstep(stageSeconds, 3.65, 4.3)
+      const forwardReach = reach - returnToRest
+      keeper.rightArm.shoulder.rotation.set(
+        0.02 - forwardReach * 0.82,
+        0,
+        -0.1 + forwardReach * 0.04,
+      )
+      keeper.rightArm.elbow.rotation.set(-0.02 + forwardReach * -0.08 - pour * 0.08, 0, -0.02)
+      keeper.rightArm.wrist.rotation.set(-0.08 - pour * 0.3, 0, -0.02)
+      keeper.leftArm.shoulder.rotation.set(-0.42 + breathing * 0.02, 0, 0.08 + pour * 0.04)
+      keeper.leftArm.elbow.rotation.set(-0.34, 0, 0.04)
+      keeper.leftArm.wrist.rotation.set(-0.12, 0, 0)
+    }
+    else if (gesture === 'invite') {
+      const wave = Math.sin(elapsed * 2.5) * 0.11
+      keeper.rightArm.shoulder.rotation.set(0.26, 0, 1.7 + wave)
+      keeper.rightArm.elbow.rotation.set(-0.1, 0, -1.45)
+      keeper.rightArm.wrist.rotation.set(-0.24 + wave * 0.7, 0, -0.08)
+      keeper.leftArm.shoulder.rotation.set(-0.42 + breathing * 0.02, 0, 0.08)
+      keeper.leftArm.elbow.rotation.set(-0.34, 0, 0.04)
+      keeper.leftArm.wrist.rotation.set(-0.12, 0, 0)
+    }
+    else if (npcDrinking) {
+      const lift = THREE.MathUtils.smoothstep(npcDrinkCycle, 7.2, 7.9) * (1 - THREE.MathUtils.smoothstep(npcDrinkCycle, 10.1, 10.6))
+      keeper.leftArm.shoulder.rotation.set(-0.52 - lift * 1.0, 0, 0.1 + lift * 0.09)
+      keeper.leftArm.elbow.rotation.set(-0.28 - lift * 0.16, 0, 0.03)
+      keeper.leftArm.wrist.rotation.set(-0.06 - lift * 0.24, 0, 0)
+      keeper.rightArm.shoulder.rotation.set(-0.38 - lift * 0.04, 0, -0.08)
+      keeper.rightArm.elbow.rotation.set(-0.32, 0, -0.03)
+      keeper.rightArm.wrist.rotation.set(-0.12, 0, 0)
+      keeper.neck.rotation.set(-0.02 - lift * 0.09, 0, 0)
     }
     else if (gesture === 'calculating') {
       const motion = Math.sin(elapsed * 3.2)
-      keeper.rightArm.shoulder.rotation.set(0.72, 0, -0.58 + motion * 0.05)
-      keeper.rightArm.elbow.rotation.set(0, 0, -0.95)
-      keeper.rightArm.wrist.rotation.x = -0.35
-      keeper.rightArm.palm.rotation.x = -0.52
+      keeper.rightArm.shoulder.rotation.set(-0.46, 0, -0.06 + motion * 0.035)
+      keeper.rightArm.elbow.rotation.set(-0.28 + motion * 0.04, 0, -0.06)
+      keeper.rightArm.wrist.rotation.set(-0.34, 0, 0)
+      keeper.leftArm.shoulder.rotation.set(-0.44 + motion * 0.02, 0, 0.1)
+      keeper.leftArm.elbow.rotation.set(-0.32, 0, 0.04)
+      keeper.leftArm.wrist.rotation.set(-0.24, 0, 0)
     }
     else {
-      keeper.rightArm.shoulder.rotation.set(0.08, 0, gesture === 'present' ? -0.68 : Math.sin(elapsed * 0.7) * 0.06)
-      keeper.rightArm.elbow.rotation.set(0, 0, gesture === 'present' ? -0.72 : 0.58)
-      keeper.rightArm.wrist.rotation.x = -0.12
-      keeper.rightArm.palm.rotation.x = gesture === 'present' ? -0.38 : -0.18
+      const wave = Math.sin(elapsed * 2.2) * 0.07
+      const presenting = gesture === 'present'
+      keeper.rightArm.shoulder.rotation.set(presenting ? -0.4 : -0.44, 0, presenting ? 1.28 + wave : -0.1 + Math.sin(elapsed * 0.7) * 0.03)
+      keeper.rightArm.elbow.rotation.set(presenting ? -0.22 : -0.34, 0, presenting ? 0.05 : -0.08)
+      keeper.rightArm.wrist.rotation.set(presenting ? -0.2 : -0.12, 0, presenting ? 0.08 : 0)
+      keeper.leftArm.shoulder.rotation.set(-0.42 + breathing * 0.02, 0, presenting ? 0.16 : 0.08)
+      keeper.leftArm.elbow.rotation.set(presenting ? -0.28 : -0.34, 0, 0.04)
+      keeper.leftArm.wrist.rotation.set(presenting ? -0.18 : -0.12, 0, 0)
     }
-    keeper.leftArm.shoulder.rotation.set(0.08, 0, -Math.sin(elapsed * 0.7) * 0.06)
-    keeper.leftArm.elbow.rotation.set(0, 0, -0.58)
-    keeper.leftArm.wrist.rotation.x = -0.12
-    keeper.leftArm.palm.rotation.x = -0.18
   }
-  function updateVisitor(elapsed: number) {
+  function updateVisitor(elapsed: number, stageSeconds: number) {
     const watching = currentModel.flowStage === 'calculating' || currentModel.flowStage === 'slideshow'
-    visitor.root.rotation.y = Math.PI - (watching ? 0.62 : 0.2)
-    visitor.head.rotation.x = watching ? -0.2 : Math.sin(elapsed * 0.5) * 0.035
-    visitor.head.rotation.y = watching ? -0.16 : Math.sin(elapsed * 0.31) * 0.07
-    const idle = Math.sin(elapsed * 0.65) * 0.06
-    visitor.leftArm.shoulder.rotation.set(0.12, 0, 0.24 + idle)
-    visitor.leftArm.elbow.rotation.set(0, 0, 0.68)
-    visitor.leftArm.wrist.rotation.x = -0.16
-    visitor.leftArm.palm.rotation.x = -0.24
-    visitor.rightArm.shoulder.rotation.set(watching ? 0.16 : 0.1, 0, -0.24 - idle)
-    visitor.rightArm.elbow.rotation.set(0, 0, watching ? -0.92 : -0.68)
-    visitor.rightArm.wrist.rotation.x = -0.16
-    visitor.rightArm.palm.rotation.x = -0.24
+    const greeting = currentModel.flowStage === 'boot' && stageSeconds < 3.2
+    const reaching = (currentModel.flowStage === 'start' || currentModel.flowStage === 'question') && stageSeconds > 4
+    const drinkCycle = currentModel.flowStage === 'slideshow' ? (stageSeconds % 9) : Number.POSITIVE_INFINITY
+    const drinking = drinkCycle > 3.5 && drinkCycle < 6.6
+    const npcDrinkCycle = currentModel.flowStage === 'slideshow' ? (stageSeconds % 12) : Number.POSITIVE_INFINITY
+    const npcDrinking = npcDrinkCycle > 7.2 && npcDrinkCycle < 10.6
+    const breathing = Math.sin(elapsed * 0.68)
+    visitor.root.rotation.y = Math.PI - (watching ? 0.52 : 0.2)
+    visitor.hips.rotation.set(breathing * 0.006, 0, 0)
+    visitor.spine.rotation.set((watching ? 0.16 : 0.11) + breathing * 0.012, 0, Math.sin(elapsed * 0.33) * 0.01)
+    visitor.chest.rotation.set((watching ? 0.06 : 0.035) + breathing * 0.01, 0, 0)
+
+    if (greeting) {
+      const wave = Math.sin(elapsed * 2.6) * 0.12
+      visitor.rightArm.shoulder.rotation.set(-0.2, 0, -1.68 + wave)
+      visitor.rightArm.elbow.rotation.set(-0.12, 0, 1.42)
+      visitor.rightArm.wrist.rotation.set(-0.2 + wave * 0.7, 0, 0.08)
+      visitor.leftArm.shoulder.rotation.set(-0.42, 0, 0.09)
+      visitor.leftArm.elbow.rotation.set(-0.34, 0, 0.03)
+      visitor.leftArm.wrist.rotation.set(-0.12, 0, 0)
+      visitor.neck.rotation.set(-0.04 + Math.sin(elapsed * 1.3) * 0.02, Math.sin(elapsed * 0.7) * 0.06, 0)
+    }
+    else if (reaching) {
+      const reach = THREE.MathUtils.smoothstep(stageSeconds - 4, 0.25, 1.15)
+      visitor.rightArm.shoulder.rotation.set(-0.3 - reach * 0.28, 0, -0.08 - reach * 0.02)
+      visitor.rightArm.elbow.rotation.set(-0.16 - reach * 0.16, 0, -0.02)
+      visitor.rightArm.wrist.rotation.set(-0.08 - reach * 0.2, 0, 0)
+      visitor.spine.rotation.set(0.11 - reach * 0.05, reach * 0.08, 0)
+      visitor.neck.rotation.set(-0.05 - reach * 0.05, reach * 0.08, 0)
+      visitor.leftArm.shoulder.rotation.set(-0.42, 0, 0.09)
+      visitor.leftArm.elbow.rotation.set(-0.34, 0, 0.03)
+      visitor.leftArm.wrist.rotation.set(-0.12, 0, 0)
+    }
+    else if (drinking) {
+      const lift = THREE.MathUtils.smoothstep(drinkCycle, 3.5, 4.15) * (1 - THREE.MathUtils.smoothstep(drinkCycle, 6.1, 6.6))
+      visitor.rightArm.shoulder.rotation.set(-0.62 - lift * 0.76, 0, -0.08 - lift * 0.08)
+      visitor.rightArm.elbow.rotation.set(-0.34 - lift * 0.1, 0, -0.03)
+      visitor.rightArm.wrist.rotation.set(-0.06 - lift * 0.24, 0, 0)
+      visitor.spine.rotation.set(0.16 + lift * 0.035, 0, 0)
+      visitor.neck.rotation.set(-0.04 - lift * 0.08, 0, 0)
+      visitor.leftArm.shoulder.rotation.set(-0.4, 0, 0.09)
+      visitor.leftArm.elbow.rotation.set(-0.3, 0, 0.03)
+      visitor.leftArm.wrist.rotation.set(-0.14, 0, 0)
+    }
+    else {
+      const gazeCycle = Math.sin(elapsed * 0.28)
+      const focus = watching ? 1 : 0.35
+      visitor.rightArm.shoulder.rotation.set((watching ? -0.4 : -0.38) + breathing * 0.015, 0, -0.08 + breathing * 0.015)
+      visitor.rightArm.elbow.rotation.set(watching ? -0.34 : -0.32, 0, -0.03)
+      visitor.rightArm.wrist.rotation.set(-0.18, 0, 0)
+      visitor.leftArm.shoulder.rotation.set((watching ? -0.44 : -0.42) + breathing * 0.015, 0, 0.09 + breathing * 0.015)
+      visitor.leftArm.elbow.rotation.set(watching ? -0.36 : -0.34, 0, 0.03)
+      visitor.leftArm.wrist.rotation.set(-0.16, 0, 0)
+      visitor.neck.rotation.set(
+        watching ? -0.16 + Math.sin(elapsed * 0.42) * 0.015 : -0.04 + Math.sin(elapsed * 0.5) * 0.02,
+        gazeCycle * (watching ? 0.22 : 0.1) + focus * 0.04,
+        gazeCycle * (watching ? 0.035 : 0.015),
+      )
+    }
+  }
+  function updateTea(elapsed: number, stageSeconds: number) {
+    const drinkCycle = currentModel.flowStage === 'slideshow' ? (stageSeconds % 9) : Number.POSITIVE_INFINITY
+    const drinking = drinkCycle > 3.5 && drinkCycle < 6.6
+    const npcDrinkCycle = currentModel.flowStage === 'slideshow' ? (stageSeconds % 12) : Number.POSITIVE_INFINITY
+    const npcDrinking = npcDrinkCycle > 7.2 && npcDrinkCycle < 10.6
+    const serving = currentModel.flowStage === 'start' || currentModel.flowStage === 'question'
+    const filled = currentModel.flowStage === 'birth' || currentModel.flowStage === 'calculating' || currentModel.flowStage === 'slideshow'
+    const pour = serving && stageSeconds > 1.15 && stageSeconds < 3.65
+      ? Math.sin((THREE.MathUtils.clamp(stageSeconds - 1.15, 0, 2.5) / 2.5) * Math.PI)
+      : 0
+
+    if (serving && stageSeconds > 0.55 && stageSeconds < 4.15) {
+      if (teapot.parent !== keeper.rightArm.hand) {
+        objects.remove(teapot)
+        keeper.rightArm.hand.add(teapot)
+      }
+      teapot.position.set(-0.01, 0.036, 0.132)
+    }
+    else if (teapot.parent !== objects) {
+      keeper.rightArm.hand.remove(teapot)
+      objects.add(teapot)
+      teapot.position.set(-1.47, 0.995, -0.31)
+    }
+    teapot.rotation.set(pour * 0.58, -0.86, -pour * 0.22)
+    if (teapotSpoutTip) {
+      teapotSpoutTip.updateWorldMatrix(true, false)
+      teapotSpoutTip.getWorldPosition(handWorldPosition)
+      const cupMouth = restingCupPosition.clone().setY(restingCupPosition.y + 0.045)
+      const streamDirection = cupMouth.clone().sub(handWorldPosition)
+      const streamLength = Math.max(0.02, streamDirection.length())
+      pourStream.position.copy(handWorldPosition).add(cupMouth).multiplyScalar(0.5)
+      pourStream.quaternion.setFromUnitVectors(
+        new THREE.Vector3(0, 1, 0),
+        streamDirection.normalize(),
+      )
+      pourStream.scale.set(1, Math.max(0.18, streamLength), 1)
+    }
+    else {
+      pourStream.position.set(-1.09, 1.075 + pour * 0.035, -0.285)
+      pourStream.scale.set(1, Math.max(0.05, pour), 1)
+    }
+    ;(pourStream.material as THREE.MeshStandardMaterial).opacity = pour > 0.06 ? 0.58 + pour * 0.22 : 0
+    cupTeaMaterial.opacity = filled || (serving && stageSeconds > 1.8) ? 0.86 : Math.max(0, pour * 0.14)
+    const teaScale = filled || (serving && stageSeconds > 1.8) ? 1 : Math.max(0.02, pour * 0.28)
+    cupTea.scale.y = teaScale
+    cupSteam.material.opacity = filled ? 0.12 + Math.sin(elapsed * 1.7) * 0.045 : 0
+    cupSteam.rotation.y = elapsed * 0.7
+
+    const holdCup = filled
+      || ((currentModel.flowStage === 'start' || currentModel.flowStage === 'question') && stageSeconds > 4.25)
+    if (holdCup) {
+      if (visitorCup.parent !== visitor.rightArm.hand) {
+        objects.remove(visitorCup)
+        visitor.rightArm.hand.add(visitorCup)
+      }
+      visitorCup.position.set(drinking ? 0.185 : 0.098, -0.026, drinking ? 0.066 : 0.094)
+      visitorCup.rotation.set(0, 0, 0)
+    }
+    else if (visitorCup.parent !== objects) {
+      visitor.rightArm.hand.remove(visitorCup)
+      objects.add(visitorCup)
+      visitorCup.position.copy(restingCupPosition)
+      visitorCup.rotation.set(0, 0, 0)
+    }
+    if (holdCup && drinking) {
+      visitor.rightArm.hand.getWorldQuaternion(cupWorldQuaternion)
+      visitorCup.quaternion.copy(cupWorldQuaternion).invert()
+    }
+    if (npcDrinking) {
+      if (keeperCupBuild.cup.parent !== keeper.leftArm.hand) {
+        objects.remove(keeperCupBuild.cup)
+        keeper.leftArm.hand.add(keeperCupBuild.cup)
+      }
+      keeperCupBuild.cup.position.set(-0.088, -0.028, 0.074)
+      keeperCupBuild.cup.rotation.set(0, 0, 0)
+    }
+    else if (keeperCupBuild.cup.parent !== objects) {
+      keeper.leftArm.hand.remove(keeperCupBuild.cup)
+      objects.add(keeperCupBuild.cup)
+      keeperCupBuild.cup.position.set(-0.7, 0.998, 0.12)
+      keeperCupBuild.cup.rotation.set(0, 0.5, 0)
+    }
   }
   function renderCurrent() {
     updateCamera()
@@ -1043,14 +1378,16 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       return
     }
     const elapsed = now / 1000
-    if (now - lastProjectionDraw >= 100) {
+    if (now - lastProjectionDraw >= 100 || now < slideTransitionUntil) {
       lastProjectionDraw = now
       drawProjection(elapsed)
     }
     compass.rotation.z += currentModel.compassSpeed * 0.00055
     redLine.rotation.y = 0.22 + Math.sin(elapsed * 0.25) * 0.08
-    updateKeeper(elapsed)
-    updateVisitor(elapsed)
+    const stageSeconds = Math.max(0, (performance.now() - stageStartedAt) / 1000)
+    updateKeeper(elapsed, stageSeconds)
+    updateVisitor(elapsed, stageSeconds)
+    updateTea(elapsed, stageSeconds)
     renderCurrent()
   }
   function onContextLost(event: Event) {
@@ -1079,18 +1416,27 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
   return {
     setScene(model: BaziRoomSceneModel) {
       currentModel = model
+      if (model.flowStage !== currentFlowStage) {
+        currentFlowStage = model.flowStage
+        stageStartedAt = performance.now()
+      }
       drawProjection(0)
+      const instant = quality === 'low' || reducedMotion
+      slideTransitionStartedAt = instant ? performance.now() - 1000 : performance.now()
+      slideTransitionUntil = instant ? Number.NEGATIVE_INFINITY : performance.now() + 460
       orbit.targetDistance = model.flowStage === 'boot'
-        ? 6.25
+        ? 8.7
         : model.flowStage === 'calculating'
-          ? 5.35
+          ? 7.8
           : model.flowStage === 'slideshow'
-            ? 5.05
-            : 5.65
+            ? 8.0
+            : 8.2
+      if (camera.aspect < 0.8) orbit.targetDistance += 2.35
       dirty = true
       if (quality === 'low' || reducedMotion) {
-        updateKeeper(0)
-        updateVisitor(0)
+        updateKeeper(0, 0)
+        updateVisitor(0, 0)
+        updateTea(0, 0)
         renderCurrent()
       }
     },
@@ -1104,16 +1450,17 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       }
       if (value) {
         cancelAnimationFrame(frame)
-        updateKeeper(0)
-        updateVisitor(0)
+        updateKeeper(0, 0)
+        updateVisitor(0, 0)
+        updateTea(0, 0)
         dirty = true
         renderCurrent()
       }
       else if (quality !== 'low') frame = requestAnimationFrame(tick)
     },
     resetView() {
-      orbit.targetYaw = 0
-      orbit.targetPitch = 0.1
+      orbit.targetYaw = -0.42
+      orbit.targetPitch = 0.07
       markDirty()
     },
     dispose() {
@@ -1125,6 +1472,7 @@ export async function mountBaziPaipanRoom(options: MountOptions): Promise<BaziRo
       canvas.removeEventListener('pointermove', pointerMove)
       canvas.removeEventListener('pointerup', pointerUp)
       canvas.removeEventListener('pointercancel', pointerUp)
+      canvas.removeEventListener('pointerleave', pointerLeave)
       canvas.removeEventListener('click', handleCanvasClick)
       canvas.removeEventListener('webglcontextlost', onContextLost)
       disposables.forEach(item => item.dispose())
