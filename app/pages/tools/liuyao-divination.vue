@@ -733,17 +733,10 @@ useHead(() => ({
         url: pageUrl.value,
         description: pageDescription.value,
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('home.toolLiuyaoDivinationTitle'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: pageUrl.value,
           description: t('home.toolLiuyaoDivinationDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

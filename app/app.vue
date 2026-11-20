@@ -1,6 +1,39 @@
 <script setup lang="ts">
 import { zh_cn, zh_tw, en, ja, ko } from '@nuxt/ui/locale'
 
+// useLocaleHead emits both primary (`ja`) and regional (`ja-JP`) tags for the
+// same page. Keep the tag that matches the rendered document language.
+function dedupeAlternateLinks<T extends { rel?: string; href?: string; hreflang?: string }>(
+  links: T[],
+  documentLanguage: string,
+): T[] {
+  const localeFamilies = new Map<string, Map<string, T>>()
+  for (const link of links) {
+    if (link.rel !== 'alternate' || !link.href || !link.hreflang) continue
+    const hrefFamilies = localeFamilies.get(link.href) ?? new Map()
+    const primaryLanguage = link.hreflang.split('-')[0] || ''
+    const family = hrefFamilies.get(primaryLanguage)
+
+    if (!family) {
+      hrefFamilies.set(primaryLanguage, link)
+      localeFamilies.set(link.href, hrefFamilies)
+      continue
+    }
+
+    if (link.hreflang === documentLanguage || family.hreflang !== documentLanguage) {
+      hrefFamilies.set(primaryLanguage, link)
+    }
+  }
+
+  return links.filter((link) => {
+    const hreflang = link.hreflang
+    const href = link.href || ''
+    const primaryLanguage = (hreflang || '').split('-')[0] || ''
+    return link.rel !== 'alternate' || !hreflang || hreflang === 'x-default'
+      || localeFamilies.get(href)?.get(primaryLanguage) === link
+  })
+}
+
 const { locale } = useI18n()
 const config = useRuntimeConfig()
 const route = useRoute()
@@ -24,12 +57,16 @@ const head = useLocaleHead({
   seo: true,
 })
 
-useHead(() => ({
+useHead(() => {
+  const documentLanguage = head.value.htmlAttrs.lang || 'zh-CN'
+  const alternateLinks = dedupeAlternateLinks(head.value.link, documentLanguage)
+
+  return {
   htmlAttrs: {
-    lang: head.value.htmlAttrs.lang || 'zh-CN',
+    lang: documentLanguage,
     dir: (head.value.htmlAttrs.dir || 'ltr') as 'ltr' | 'rtl' | 'auto',
   },
-  link: head.value.link || [],
+  link: alternateLinks,
   script: [
     ...(googleAdsenseClient
       ? [{
@@ -58,8 +95,9 @@ useHead(() => ({
     ...(googleSiteVerification
       ? [{ name: 'google-site-verification', content: googleSiteVerification }]
       : []),
-  ],
-}))
+    ],
+  }
+})
 
 </script>
 

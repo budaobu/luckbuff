@@ -16,7 +16,7 @@
 
         <dl v-if="data" class="insights-metrics">
           <div>
-            <dd>{{ data.total }}</dd>
+            <dd>{{ data.totalArticles }}</dd>
             <dt>{{ $t('insights.articlesLabel') }}</dt>
           </div>
           <i aria-hidden="true" />
@@ -151,6 +151,7 @@ interface InsightListItem {
 
 interface InsightListResponse {
   total: number
+  totalArticles: number
   categories: string[]
   articles: InsightListItem[]
 }
@@ -160,41 +161,44 @@ const localePath = useLocalePath()
 
 const requestInsights = $fetch as unknown as (
   url: '/api/insights',
-  options: { query: { lang: string } },
+  options: { query: { lang: string; category?: string; page: number; pageSize: number } },
 ) => Promise<InsightListResponse>
 
+const activeCategory = ref('all')
+const PAGE_SIZE = 10
+const currentPage = ref(1)
+
 const { data, status } = await useAsyncData<InsightListResponse>(
-  () => `insights-list-${locale.value}`,
+  'insights-list',
   () => requestInsights('/api/insights', {
-    query: { lang: locale.value },
+    query: {
+      lang: locale.value,
+      category: activeCategory.value === 'all' ? undefined : activeCategory.value,
+      page: currentPage.value,
+      pageSize: PAGE_SIZE,
+    },
   }),
-  { server: true, watch: [locale] }
+  { server: true, watch: [locale, activeCategory, currentPage] }
 )
 
 const pending = computed(() => status.value === 'pending')
 
-const activeCategory = ref('all')
-
 const categories = computed(() => ['all', ...(data.value?.categories || [])])
 
-const filteredArticles = computed(() => {
-  const articles = data.value?.articles || []
-  if (activeCategory.value === 'all') return articles
-  return articles.filter(a => a.category === activeCategory.value)
-})
+const filteredArticles = computed(() => data.value?.articles || [])
 
-const PAGE_SIZE = 10
-const currentPage = ref(1)
-
-const totalPages = computed(() => Math.max(1, Math.ceil(filteredArticles.value.length / PAGE_SIZE)))
+const filteredTotal = computed(() => data.value?.total || 0)
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredTotal.value / PAGE_SIZE)))
 
 const pagedArticles = computed(() => {
-  const start = (currentPage.value - 1) * PAGE_SIZE
-  return filteredArticles.value.slice(start, start + PAGE_SIZE)
+  return filteredArticles.value.slice(0, PAGE_SIZE)
 })
 
 // 切换分类时回到第一页
 watch(activeCategory, () => { currentPage.value = 1 })
+watch(filteredTotal, () => {
+  if (currentPage.value > 1 && currentPage.value > totalPages.value) currentPage.value = 1
+})
 
 function categoryLabel(cat: string): string {
   const key = `insights.categories.${cat}`
@@ -241,7 +245,7 @@ useHead(() => ({
           name: siteName,
           url: 'https://www.ososn.com',
         },
-        blogPost: (data.value?.articles || []).map((a, i) => ({
+        blogPost: filteredArticles.value.map((a, i) => ({
           '@type': 'BlogPosting',
           position: i + 1,
           headline: a.title,

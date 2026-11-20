@@ -699,17 +699,10 @@ useHead(() => ({
         url: `${siteUrl}${pagePath}`,
         description: t('seo.nameScoreDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('nameScore.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: `${siteUrl}${pagePath}`,
           description: t('seo.nameScoreOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

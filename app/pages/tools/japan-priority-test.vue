@@ -528,17 +528,10 @@ useHead(() => ({
         url: `${siteUrl}${pagePath}`,
         description: t('seo.japanPriorityTestDesc'),
         mainEntity: {
-          '@type': 'SoftwareApplication',
+          '@type': 'Thing',
           name: t('japanPriorityTest.title'),
-          applicationCategory: 'LifestyleApplication',
-          operatingSystem: 'Any',
           url: `${siteUrl}${pagePath}`,
           description: t('seo.japanPriorityTestOgDesc'),
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-          },
         },
       }),
     },

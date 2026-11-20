@@ -26,16 +26,17 @@ const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const siteName = useRuntimeConfig().public.siteName
-const slug = computed(() => String(route.params.slug || ''))
+const slug = computed(() => String(route.params.slug || '').replace(/_/g, '-'))
+const chartId = computed(() => slug.value.replace(/-/g, '_'))
 
 const charts = graphData.charts as GraphChart[]
-const chart = charts.find(item => item.id === slug.value)
+const chart = charts.find(item => item.id === chartId.value)
 
 if (!chart) {
   throw createError({ statusCode: 404, statusMessage: 'Graph not found' })
 }
 
-const pageUrl = useLocalizedSeoUrl(`/graph/${chart.id}`)
+const pageUrl = useLocalizedSeoUrl(`/graph/${slug.value}`)
 
 useSeoMeta({
   title: () => `${chart.title} - ${siteName}`,

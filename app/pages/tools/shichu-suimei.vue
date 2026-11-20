@@ -188,17 +188,10 @@ useHead(() => ({
       type: 'application/ld+json',
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'SoftwareApplication',
+        '@type': 'WebPage',
         name: t('shichuSuimei.title'),
-        applicationCategory: 'LifestyleApplication',
-        operatingSystem: 'Any',
         url: localizedToolUrl.value,
         description: t('seo.shichuSuimeiDesc'),
-        offers: {
-          '@type': 'Offer',
-          price: '0',
-          priceCurrency: locale.value === 'ja' ? 'JPY' : 'CNY',
-        },
       }),
     },
   ],
