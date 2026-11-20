@@ -915,6 +915,22 @@ const analysisToolCategories: ToolCategory[] = [
     ],
   },
   {
+    id: 'sansatemple',
+    icon: 'i-heroicons-building-office-2',
+    titleKey: 'sansatemple.title',
+    subtitleKey: 'sansatemple.subtitle',
+    sectionPath: '/tools/sansatemple',
+    tools: [
+      {
+        icon: 'i-heroicons-building-office-2',
+        titleKey: 'sansatemple.title',
+        descKey: 'sansatemple.subtitle',
+        ctaKey: 'sansatemple.enter',
+        path: '/tools/sansatemple',
+      },
+    ],
+  },
+  {
     id: 'draw-a-lot',
     icon: 'i-heroicons-gift-top',
     titleKey: 'tools.categoryDrawALot',

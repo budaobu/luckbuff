@@ -7,6 +7,7 @@ export interface BaziStageKitState {
   frameMs: Ref<number>
   errorMessage: Ref<string>
   rendererStats: Ref<BaziRoomRendererStats['renderer'] | null>
+  keeperAnchor: Ref<{ x: number, y: number }>
 }
 
 export function useBaziPaipanStageKit(options: {
@@ -15,6 +16,8 @@ export function useBaziPaipanStageKit(options: {
   qualityOverride?: Ref<BaziRoomQuality | null>
   freeze?: Ref<boolean>
   onSelect?: (target: 'keeper' | 'visitor') => void
+  onBackgroundClick?: () => void
+  onKeeperAnchor?: (x: number, y: number) => void
 }) {
   const state: BaziStageKitState = {
     ready: ref(false),
@@ -22,9 +25,11 @@ export function useBaziPaipanStageKit(options: {
     frameMs: ref(0),
     errorMessage: ref(''),
     rendererStats: ref(null),
+    keeperAnchor: ref({ x: 31, y: 41 }),
   }
   let mount: BaziRoomMount | null = null
   let disposed = false
+  let latestModel = options.initialModel
 
   async function attach(root: HTMLElement, labels: BaziRoomRendererLabels) {
     if (mount || disposed) return
@@ -32,12 +37,18 @@ export function useBaziPaipanStageKit(options: {
     if (disposed) return
     mount = await mountBaziPaipanRoom({
       root,
-      initialModel: options.initialModel,
+      initialModel: latestModel,
       labels,
       reducedMotion: options.reducedMotion.value,
       qualityOverride: options.qualityOverride?.value ?? null,
       freeze: options.freeze?.value,
       onSelect: target => options.onSelect?.(target),
+      onBackgroundClick: () => options.onBackgroundClick?.(),
+      onKeeperAnchor: (x, y) => {
+        const current = state.keeperAnchor.value
+        if (Math.abs(current.x - x) < 0.2 && Math.abs(current.y - y) < 0.2) return
+        state.keeperAnchor.value = { x, y }
+      },
       onReady: (stats) => {
         state.ready.value = true
         state.quality.value = stats.quality
@@ -49,6 +60,7 @@ export function useBaziPaipanStageKit(options: {
   }
 
   function setScene(model: BaziRoomSceneModel) {
+    latestModel = model
     mount?.setScene(model)
   }
 

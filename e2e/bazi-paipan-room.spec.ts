@@ -11,16 +11,27 @@ test.use({
   baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://127.0.0.1:3069',
   reducedMotion: 'no-preference',
   launchOptions: {
-    args: [
-      '--use-gl=swiftshader',
-      '--enable-unsafe-swiftshader',
-      '--disable-gpu',
-    ],
+    args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu'],
   },
 })
 
 async function mockRoomApis(page: Page) {
   let readingRequests = 0
+  await page.route('**/api/tools/bazi-paipan/current', async (route) => {
+    await new Promise(resolve => setTimeout(resolve, 250))
+    await route.fulfill({
+      json: {
+        date: '2026-11-11',
+        hour: 10,
+        pillars: [
+          { key: 'year', gan: '丙', zhi: '午', ganzhi: '丙午' },
+          { key: 'month', gan: '己', zhi: '亥', ganzhi: '己亥' },
+          { key: 'day', gan: '庚', zhi: '寅', ganzhi: '庚寅' },
+          { key: 'hour', gan: '辛', zhi: '巳', ganzhi: '辛巳' },
+        ],
+      },
+    })
+  })
   await page.route('**/api/tools/bazi-paipan/calc', route => route.fulfill({ json: calcResult }))
   await page.route('**/api/tools/bazi-paipan/lens', async (route) => {
     const body = JSON.parse(route.request().postData() ?? '{}')
@@ -28,26 +39,9 @@ async function mockRoomApis(page: Page) {
   })
   await page.route('**/api/tools/bazi-paipan/interpret', async (route) => {
     readingRequests += 1
-    const requestBody = JSON.parse(route.request().postData() ?? '{}')
-    if (requestBody.mode === 'target') {
-      await route.fulfill({
-        status: 200,
-        headers: { 'Content-Type': 'text/event-stream; charset=utf-8' },
-        body: [
-          'data: {"type":"text","text":"这段结构显示：先稳住主轴，再处理可迁移的细节。"}',
-          '',
-          'data: [DONE]',
-          '',
-        ].join('\n'),
-      })
-      return
-    }
     await route.fulfill({
       status: 200,
-      headers: {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-      },
+      headers: { 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform' },
       body: [
         'data: {"type":"chenyu","text":"小步取实，不追热闹"}',
         '',
@@ -55,82 +49,91 @@ async function mockRoomApis(page: Page) {
         '',
         'data: [DONE]',
         '',
-        '',
       ].join('\n'),
     })
   })
-  return {
-    readingRequests: () => readingRequests,
-  }
+  return { readingRequests: () => readingRequests }
 }
 
 async function runRevealFlow(page: Page, quality: 'low' | 'high' = 'low') {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.goto(`/tools/bazi-paipan?baziRoomE2E=1&baziRoomQuality=${quality}`)
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-quality', quality === 'low' ? 'low' : /high|mid/, { timeout: 15000 })
-  const viewport = page.viewportSize()
-  const roomBox = await page.locator('.room-page').boundingBox()
-  expect(roomBox?.x).toBe(0)
-  expect(roomBox?.y).toBe(0)
-  expect(roomBox?.height).toBe(viewport?.height)
-  await expect(page.getByTestId('bazi-room-back')).toBeVisible()
-  const topicCard = page.getByTestId('bazi-room-topic-card')
-  await expect(topicCard).toBeVisible()
-  await expect(page.getByTestId('bazi-room-change-topic')).toBeVisible()
-  await expect(page.getByTestId('bazi-room-change-topic')).toContainText('问什么')
-  await topicCard.getByTestId('bazi-room-topic-wealth').click()
-  await expect(page.getByTestId('bazi-room-form-card')).toBeVisible()
-  await expect(topicCard).toHaveCount(0)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
+    'data-quality',
+    quality === 'low' ? 'low' : /high|mid/,
+    { timeout: 15000 },
+  )
+  await expect(page.getByTestId('bazi-room-start')).toBeVisible()
+  await page.waitForTimeout(200)
+
+  await expect(page.getByTestId('bazi-room-topic-card')).toHaveCount(0)
+  await expect(page.getByTestId('bazi-room-keeper-bubble')).toHaveCount(0)
+  const viewport = page.viewportSize() ?? { width: 1280, height: 720 }
+  await page.mouse.click(56, Math.max(280, viewport.height - 220))
+  await expect(page.getByTestId('bazi-room-keeper-bubble')).toContainText('点击开始按钮')
+  await expect(page.getByTestId('bazi-room-current-cycles')).toHaveCount(0)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
+    'data-current-pillars',
+    'flowYear:丙午|flowMonth:己亥|flowDay:庚寅|flowHour:辛巳',
+  )
+  const bootCanvasLength = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png').length)
+  expect(bootCanvasLength).toBeGreaterThan(10000)
+
+  await page.getByTestId('bazi-room-start').click()
+  await expect(page.getByTestId('bazi-room-keeper-bubble')).toContainText('这次你想问什么？')
+  await expect(page.getByTestId('bazi-room-topic-wealth')).toBeVisible()
   const idleCanvas = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png'))
 
-  const formCard = page.getByTestId('bazi-room-form-card')
-  const dateButton = formCard.locator('button[aria-haspopup="dialog"]').first()
-  await dateButton.click()
-  const calendarLayer = page.locator('[data-reka-popper-content-wrapper], [data-radix-popper-content-wrapper]').last()
-  await expect(calendarLayer).toBeVisible()
-  await expect.poll(() => calendarLayer.evaluate((node) => {
-    const rect = node.getBoundingClientRect()
-    const hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2)
-    return Boolean(hit && (hit === node || node.contains(hit)))
-  })).toBe(true)
+  await page.getByTestId('bazi-room-topic-wealth').click()
+  await expect(page.getByTestId('bazi-room-form-card')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-keeper-bubble')).toContainText('麻烦告知你的生辰')
+  await page.evaluate(async () => {
+    await window.__baziPaipanRoomE2E?.submit({
+      gender: 'male',
+      birthDate: '1990-07-10',
+      birthHour: '午',
+      name: '',
+      formerName: '',
+      birthProvince: '',
+    })
+  })
 
-  const calendar = page.getByTestId('app-calendar')
-  const yearSelect = page.getByTestId('calendar-year-select')
-  await yearSelect.selectOption('1990')
-  await expect(yearSelect).toContainText('1990')
-
-  const monthSelect = page.getByTestId('calendar-month-select')
-  await monthSelect.selectOption('7')
-  await expect(monthSelect).toContainText('七月')
-  await expect(calendar).toContainText('1990年7月')
-  await calendar.getByRole('button', { name: /1990年7月10日/ }).click()
-  await expect(dateButton).toContainText('1990年7月10日')
-  await page.keyboard.press('Escape')
-
-  const hourSelect = formCard.getByRole('combobox')
-  await hourSelect.click()
-  await page.getByRole('option', { name: /午/ }).click()
-  await expect(hourSelect).toContainText('午')
-  await page.getByRole('button', { name: '揭示今日盘面' }).click()
-  await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
-  await expect(page.getByTestId('bazi-room-user-info-card')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-slideshow')).toBeVisible({ timeout: 15000 })
   await expect(page.getByTestId('bazi-room-form-card')).toHaveCount(0)
-  await expect(page.locator('.info-rail')).toBeVisible()
+  await expect(page.locator('.result-carousel')).toHaveCount(0)
+  await expect(page.locator('.top-share')).toBeVisible()
   await expect(page.getByTestId('bazi-room-change-topic')).toContainText('再问')
+  await expect(page.getByTestId('bazi-room-change-person')).toContainText('换人')
+  await expect(page.getByTestId('bazi-room-open-full')).toContainText('全盘')
+  await expect(page.getByTestId('bazi-room-clear-local')).toContainText('清除')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-title', '用户八字')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-page', '1/5')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-flow', 'slideshow')
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute(
     'data-model-pillars',
     'year:庚午|month:癸未|day:丙子|hour:甲午|today:庚寅',
   )
-  await expect(page.getByTestId('bazi-room-natal-slice').first()).toContainText('财星')
-  await expect(page.getByTestId('bazi-room-today-slice').first()).toContainText('庚寅')
-  await expect(page.getByTestId('bazi-room-reading')).toContainText('财星清楚')
   const revealedCanvas = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png'))
   expect(revealedCanvas).not.toBe(idleCanvas)
-  await page.clock.runFor(1000)
-  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-state', 'revealed')
 }
 
-test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
+declare global {
+  interface Window {
+    __baziPaipanRoomE2E?: {
+      submit: (values: {
+        gender: 'male' | 'female'
+        birthDate: string
+        birthHour?: '子' | '丑' | '寅' | '卯' | '辰' | '巳' | '午' | '未' | '申' | '酉' | '戌' | '亥'
+        name: string
+        formerName: string
+        birthProvince: string
+      }) => void
+    }
+  }
+}
+
+test('runs the guided desktop flow and result slideshow', async ({ page }) => {
   test.setTimeout(45000)
   const errors: string[] = []
   page.on('pageerror', error => errors.push(error.message))
@@ -138,12 +141,32 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
   await runRevealFlow(page)
 
-  const canvasData = await page.locator('.room-stage canvas').evaluate(canvas => (canvas as HTMLCanvasElement).toDataURL('image/png').length)
-  expect(canvasData).toBeGreaterThan(10000)
-  await expect(page.locator('h1')).toHaveText('八字排盘')
-  await expect(page.locator('body')).not.toContainText('隐士')
+  await page.keyboard.press('ArrowRight')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-natal')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-title', '财运排盘结果')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /财星/)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /比劫夺财/)
+  await page.keyboard.press('j')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-current')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-title', '财运当日引动')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /今日柱：庚寅/)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /流日十神：偏财/)
+  await page.keyboard.press('k')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'topic-natal')
+  await page.keyboard.press('ArrowLeft')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
 
-  await page.getByTestId('bazi-room-open-full').click()
+  await page.getByTestId('bazi-room-next-slide').click()
+  await page.getByTestId('bazi-room-next-slide').click()
+  await page.getByTestId('bazi-room-next-slide').click()
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'reading')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-detail', /财星清楚|小步取实/)
+  await page.getByTestId('bazi-room-next-slide').click()
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'full-chart')
+  await expect(page.getByTestId('bazi-room-open-full-screen')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-open-full-screen')).toContainText('看完整排盘结果')
+
+  await page.getByTestId('bazi-room-open-full-screen').click()
   for (const tab of ['chart', 'elements', 'cycles', 'relations']) {
     await page.getByTestId(`bazi-full-tab-${tab}`).click()
     await expect(page.getByTestId(`bazi-full-tab-${tab}`)).toHaveAttribute('aria-selected', 'true')
@@ -152,48 +175,25 @@ test('runs the frozen Bazi room flow on desktop', async ({ page }) => {
   await page.getByTestId('bazi-full-tab-cycles').click()
   await expect(page.getByTestId('bazi-room-today-timeline')).toContainText('庚寅')
   await expect(page.getByTestId('bazi-room-month-timeline').locator('span')).toHaveCount(12)
-  await expect(page.getByTestId('bazi-room-month-timeline').locator('.current')).toContainText('11月')
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toHaveCount(0)
 
   await page.getByTestId('bazi-room-change-topic').click()
-  const changedTopicCard = page.getByTestId('bazi-room-topic-card')
-  await expect(changedTopicCard).toBeVisible()
-  await expect(changedTopicCard.getByTestId('bazi-room-topic-career')).toBeVisible()
-  await changedTopicCard.getByRole('button').first().click()
-  await expect(changedTopicCard).toHaveCount(0)
-
-  const canvasBox = await page.getByTestId('bazi-room-canvas').boundingBox()
-  expect(canvasBox).not.toBeNull()
-  await page.mouse.click(canvasBox!.x + canvasBox!.width * 0.76, canvasBox!.y + canvasBox!.height * 0.87)
-  const visitorCard = page.getByTestId('bazi-room-user-card')
-  await expect(visitorCard).toBeVisible()
-  await expect(visitorCard).toContainText('1990-07-10')
-  await expect(visitorCard).toContainText('午')
-  await expect(visitorCard).toContainText('男')
-  await visitorCard.getByRole('button').first().click()
-  await expect(visitorCard).toHaveCount(0)
-
-  await page.getByTestId('bazi-room-change-topic').click()
+  await expect(page.getByTestId('bazi-room-topic-career')).toBeVisible()
   await page.getByTestId('bazi-room-topic-career').click()
-  await expect(page.getByRole('heading', { level: 2, name: '今日事业' })).toBeVisible()
-  expect(api.readingRequests()).toBe(2)
-
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal', { timeout: 15000 })
   await page.getByTestId('bazi-room-change-topic').click()
   await page.getByTestId('bazi-room-topic-wealth').click()
-  await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
   expect(api.readingRequests()).toBe(2)
 
-  await page.getByRole('button', { name: '生成海报' }).first().click()
-  await expect(page.getByRole('heading', { name: '分享结果' })).toBeVisible()
-  await page.locator('.fixed.inset-0').last().locator('button').first().click()
-
-  await expect(page.getByTestId('bazi-room-deep-link')).toHaveAttribute('href', '/tools/bazi-wealth')
+  await page.getByTestId('bazi-room-change-person').click()
+  const birthCard = page.getByTestId('bazi-room-form-card')
+  await expect(birthCard).toBeVisible()
+  await birthCard.locator('.icon-only').click()
   await page.getByTestId('bazi-room-clear-local').click()
-  await expect(page.getByTestId('bazi-room-user-info-card')).toHaveCount(0)
-  await expect(page.locator('.info-rail')).toHaveCount(0)
-  await expect(page.getByTestId('bazi-room-topic-card')).toBeVisible()
-  await expect(page.getByTestId('bazi-room-change-topic')).toContainText('问什么')
+  await expect(page.getByTestId('bazi-room-start')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-topic-card')).toHaveCount(0)
   expect(errors).toEqual([])
 })
 
@@ -203,13 +203,11 @@ test('keeps the mobile stage and result flow usable at 390px', async ({ page }) 
   await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
   await runRevealFlow(page)
 
-  await expect(page.getByTestId('bazi-room-open-full')).toBeVisible()
-  await page.getByTestId('bazi-room-open-full').click()
-  await expect(page.getByRole('dialog')).toBeVisible()
-  await page.getByTestId('bazi-full-tab-elements').click()
-  await expect(page.getByTestId('bazi-full-tab-elements')).toHaveAttribute('aria-selected', 'true')
-  await page.screenshot({ path: 'output/playwright/bazi-room-mobile-full-elements.png', fullPage: true })
-  await page.keyboard.press('Escape')
+  await expect(page.getByTestId('bazi-room-slideshow')).toBeVisible()
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal')
+  await expect(page.locator('.slide-number')).toContainText('1 / 5')
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  await page.screenshot({ path: 'output/playwright/bazi-room-mobile-flow.png', fullPage: true })
   expect(api.readingRequests()).toBeGreaterThanOrEqual(1)
 })
 
@@ -222,13 +220,11 @@ test('invalidates the Bazi reading cache on the next date', async ({ page }) => 
   await page.clock.setFixedTime(new Date('2026-11-12T10:00:00+08:00'))
   await page.reload()
   await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-quality', 'low', { timeout: 15000 })
-  await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
-  expect(api.readingRequests()).toBe(2)
-
-  await page.getByTestId('bazi-room-change-topic').click()
+  await expect(page.getByTestId('bazi-room-start')).toBeVisible()
+  await page.getByTestId('bazi-room-start').click()
   await page.getByTestId('bazi-room-topic-wealth').click()
-  await expect(page.getByTestId('bazi-room-chenyu')).toContainText('小步取实')
-  expect(api.readingRequests()).toBe(3)
+  await expect(page.getByTestId('bazi-room-canvas')).toHaveAttribute('data-screen-slide', 'natal', { timeout: 15000 })
+  expect(api.readingRequests()).toBe(2)
 })
 
 test.describe('visual baselines', () => {
@@ -238,12 +234,8 @@ test.describe('visual baselines', () => {
     await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
     await runRevealFlow(page, 'high')
     await page.clock.resume()
-    await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(300)
-    await expect(page).toHaveScreenshot('bazi-room-desktop.png', {
-      maxDiffPixelRatio: 0.05,
-      animations: 'disabled',
-    })
+    await expect(page).toHaveScreenshot('bazi-room-desktop.png', { maxDiffPixelRatio: 0.05, animations: 'disabled' })
   })
 
   test('mobile first screen', async ({ page }) => {
@@ -252,11 +244,7 @@ test.describe('visual baselines', () => {
     await page.clock.setFixedTime(new Date('2026-11-11T10:00:00+08:00'))
     await runRevealFlow(page, 'high')
     await page.clock.resume()
-    await page.evaluate(() => window.scrollTo(0, 0))
     await page.waitForTimeout(300)
-    await expect(page).toHaveScreenshot('bazi-room-mobile.png', {
-      maxDiffPixelRatio: 0.08,
-      animations: 'disabled',
-    })
+    await expect(page).toHaveScreenshot('bazi-room-mobile.png', { maxDiffPixelRatio: 0.08, animations: 'disabled' })
   })
 })

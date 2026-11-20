@@ -12482,6 +12482,29 @@
   },
   "baziPaipanRoom": {
     "ritualLoading": "명판실 불을 밝히는 중",
+    "start": "시작",
+    "bootBubble": "시작 버튼을 눌러 이번 사주 명판을 시작하세요.",
+    "questionBubble": "이번에는 무엇을 물어볼까요?",
+    "birthBubble": "생년월일을 알려주세요",
+    "calculatingRoom": "주인이 명판을 짜고 있어요",
+    "currentBazi": "현재 시간 사주",
+    "chartResult": "명판 결과",
+    "userBazi": "사용자 사주",
+    "topicResultTitle": "{topic} 명판 결과",
+    "currentTopicResultTitle": "{topic} 오늘 작용",
+    "flowYear": "세운",
+    "flowMonth": "월운",
+    "flowDay": "일운",
+    "flowHour": "시운",
+    "currentCycle": "현재 층위",
+    "engineSource": "방식",
+    "currentCycleNote": "명판 엔진과 같은 간지 알고리즘 사용",
+    "pillarSummary": "사주 요약",
+    "slideNavigation": "결과 슬라이드",
+    "previousSlide": "이전 슬라이드",
+    "nextSlide": "다음 슬라이드",
+    "fullEntryHint": "여기에는 이번 질문 요약만 둡니다. 전체 명판에는 오행, 대운과 세운, 신살, 지지 관계가 포함됩니다.",
+    "currentDayun": "현재 대운",
     "enter": "명판실 들어가기",
     "chooseTopic": "먼저 무엇을 물어볼까요?",
     "skipFull": "안내를 건너뛰고 전체 명판 보기",
@@ -12489,10 +12512,13 @@
     "roomActions": "명반실 작업",
     "askWhat": "물어보기",
     "askAgain": "다시 묻기",
+    "actionAskAgain": "다시",
     "back": "뒤로",
     "birthTitle": "생년월일 알리기",
     "changePerson": "다른 사람으로 바꾸기",
+    "actionChangePerson": "변경",
     "clearLocal": "로컬 데이터 삭제",
+    "actionClear": "삭제",
     "calculating": "천기의가 돌아갑니다",
     "reveal": "오늘의 명판 보기",
     "localReady": "로컬 생년월일 사용 중",
@@ -12509,6 +12535,7 @@
     "retry": "다시 시도",
     "deepLink": "더 깊이 보기",
     "fullResult": "전체 명판 보기",
+    "actionFullChart": "전체",
     "changeTopic": "다른 질문하기",
     "poster": "포스터 만들기",
     "fullTitle": "전체 바자 명판",
@@ -14203,6 +14230,96 @@
       "rooster": "유시",
       "dog": "술시",
       "pig": "해시"
+    }
+  },
+  "sansatemple": {
+    "map": {
+      "title": "사원 지도",
+      "current": "현재",
+      "travel": "이동",
+      "zones": {
+        "entrance": "입구",
+        "mainHall": "법당",
+        "coffee": "차 머무는 곳",
+        "teaHall": "청연당",
+        "forest": "숲길",
+        "pondRest": "연못 쉼터",
+        "pagodaWalk": "탑 주변 길",
+        "riverside": "강변 산책로",
+        "bamboo": "대나무 숲",
+        "persimmon": "감 말리는 덕장",
+        "bell": "범종각",
+        "workshop": "작업장"
+      }
+    },
+    "title": "온라인 사원",
+    "subtitle": "조용히 같은 법당에 머무는 경험",
+    "kicker": "Online Temple",
+    "noscript": "3D 법당을 열려면 JavaScript가 필요합니다.",
+    "webglFallback": "WebGL을 사용할 수 없어 정적 포스터를 표시합니다.",
+    "loading": "채널 읽는 중",
+    "opening": "법당 여는 중",
+    "failedTitle": "지금은 들어갈 수 없습니다",
+    "failedText": "연결되지 않았습니다. 나중에 다시 시도하세요.",
+    "retry": "다시 들어가기",
+    "enter": "들어가기",
+    "menu": "설정",
+    "close": "닫기",
+    "leave": "나가기",
+    "disclaimer": "이것은 온라인 체험이며 실제 사원의 법회나 기도 서비스가 아닙니다.",
+    "inspiration": "sansatemple.com에서 영감",
+    "reverenceNotice": "{name}님이 합장했습니다",
+    "notices": {
+      "channelFull": "채널이 가득 찼습니다.",
+      "connectionFailed": "연결에 실패했습니다.",
+      "reconnectFailed": "재연결에 실패해 입구로 돌아왔습니다."
+    },
+    "channels": {
+      "title": "채널 선택",
+      "name": "채널 {n}",
+      "full": "만원",
+      "queue": "모든 채널이 만원입니다. 대기 안내가 표시됩니다."
+    },
+    "settings": {
+      "title": "소리와 화질",
+      "master": "전체",
+      "environment": "환경음",
+      "chanting": "독경",
+      "effects": "효과음",
+      "mode": "독경 방식",
+      "personal": "개인",
+      "common": "공동",
+      "next": "다음: {time}",
+      "quality": "화질",
+      "auto": "자동",
+      "high": "높음",
+      "medium": "중간",
+      "low": "낮음"
+    },
+    "actions": {
+      "pray": "절하기",
+      "beads": "염주",
+      "reverence": "합장",
+      "woodfish": "목탁",
+      "incense": "향",
+      "meditate": "{n}분 좌선"
+    },
+    "states": {
+      "praying": "절하는 중",
+      "incense": "향 {n}/3"
+    },
+    "meditation": {
+      "remaining": "{time} 남음"
+    },
+    "beads": {
+      "title": "염주",
+      "advance": "한 칸 넘기기",
+      "reset": "초기화",
+      "localOnly": "횟수는 이 기기에만 저장됩니다."
+    },
+    "seo": {
+      "title": "온라인 사원_3D 법당 체험",
+      "description": "절차적으로 생성한 3D 사원에서 돌길과 법당을 걷고 좌선, 절, 염주, 목탁, 향을 조용히 체험합니다."
     }
   }
 }

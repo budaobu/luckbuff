@@ -161,45 +161,108 @@
     "loadFailed": "運勢資料載入失敗，請稍後重試。",
     "updatedToday": "每日更新",
     "signs": {
-      "aries": "牡羊座", "taurus": "金牛座", "gemini": "雙子座", "cancer": "巨蟹座",
-      "leo": "獅子座", "virgo": "處女座", "libra": "天秤座", "scorpio": "天蠍座",
-      "sagittarius": "射手座", "capricorn": "摩羯座", "aquarius": "水瓶座", "pisces": "雙魚座"
+      "aries": "牡羊座",
+      "taurus": "金牛座",
+      "gemini": "雙子座",
+      "cancer": "巨蟹座",
+      "leo": "獅子座",
+      "virgo": "處女座",
+      "libra": "天秤座",
+      "scorpio": "天蠍座",
+      "sagittarius": "射手座",
+      "capricorn": "摩羯座",
+      "aquarius": "水瓶座",
+      "pisces": "雙魚座"
     },
     "fields": {
-      "overall": "綜合", "love": "愛情", "work": "工作", "wealth": "財運", "health": "健康",
-      "luckyNumber": "幸運數", "luckyColor": "幸運色", "moonSign": "月亮星座", "moonPhase": "月相",
-      "compatibility": "互動星座", "direction": "幸運方位"
+      "overall": "綜合",
+      "love": "愛情",
+      "work": "工作",
+      "wealth": "財運",
+      "health": "健康",
+      "luckyNumber": "幸運數",
+      "luckyColor": "幸運色",
+      "moonSign": "月亮星座",
+      "moonPhase": "月相",
+      "compatibility": "互動星座",
+      "direction": "幸運方位"
     },
     "sections": {
-      "scores": "分項指數", "scoresSubtitle": "本地確定性規則生成", "sky": "當日星象", "skySubtitle": "12:00 Asia/Shanghai",
-      "positions": "行星星座", "aspects": "關鍵相位", "method": "計算口徑"
+      "scores": "分項指數",
+      "scoresSubtitle": "本地確定性規則生成",
+      "sky": "當日星象",
+      "skySubtitle": "12:00 Asia/Shanghai",
+      "positions": "行星星座",
+      "aspects": "關鍵相位",
+      "method": "計算口徑"
     },
-    "empty": { "aspects": "今日無 6.5° 內主要相位。" },
+    "empty": {
+      "aspects": "今日無 6.5° 內主要相位。"
+    },
     "ai": {
-      "action": "AI 解讀", "title": "AI 解讀", "summary": "今日綜合摘要", "close": "關閉",
-      "connecting": "正在解讀星象訊號…", "error": "AI 解讀失敗，請稍後重試", "noResult": "AI 未回傳解讀結果",
-      "disclaimer": "解讀基於當日星座結構，僅供文化娛樂參考。", "fullReport": "完整分析報告",
-      "fullReportLogin": "完整分析報告 · 登入後可查看", "fullReportTitle": "完整星座運勢 AI 分析報告",
+      "action": "AI 解讀",
+      "title": "AI 解讀",
+      "summary": "今日綜合摘要",
+      "close": "關閉",
+      "connecting": "正在解讀星象訊號…",
+      "error": "AI 解讀失敗，請稍後重試",
+      "noResult": "AI 未回傳解讀結果",
+      "disclaimer": "解讀基於當日星座結構，僅供文化娛樂參考。",
+      "fullReport": "完整分析報告",
+      "fullReportLogin": "完整分析報告 · 登入後可查看",
+      "fullReportTitle": "完整星座運勢 AI 分析報告",
       "loginRequired": "登入後可生成完整星座運勢 AI 分析報告。"
     },
     "phases": {
-      "new": "新月", "waxing-crescent": "娥眉月", "first-quarter": "上弦月", "waxing-gibbous": "盈凸月",
-      "full": "滿月", "waning-gibbous": "虧凸月", "last-quarter": "下弦月", "waning-crescent": "殘月"
+      "new": "新月",
+      "waxing-crescent": "娥眉月",
+      "first-quarter": "上弦月",
+      "waxing-gibbous": "盈凸月",
+      "full": "滿月",
+      "waning-gibbous": "虧凸月",
+      "last-quarter": "下弦月",
+      "waning-crescent": "殘月"
     },
     "colors": {
-      "crimson": "緋紅", "amber": "琥珀", "emerald": "祖母綠", "sky": "天青", "indigo": "靛藍", "violet": "紫羅蘭",
-      "rose": "玫瑰", "slate": "岩灰", "gold": "鎏金", "teal": "青瓷", "mint": "薄荷", "coral": "珊瑚"
+      "crimson": "緋紅",
+      "amber": "琥珀",
+      "emerald": "祖母綠",
+      "sky": "天青",
+      "indigo": "靛藍",
+      "violet": "紫羅蘭",
+      "rose": "玫瑰",
+      "slate": "岩灰",
+      "gold": "鎏金",
+      "teal": "青瓷",
+      "mint": "薄荷",
+      "coral": "珊瑚"
     },
     "directions": {
-      "east": "正東", "southeast": "東南", "south": "正南", "southwest": "西南",
-      "west": "正西", "northwest": "西北", "north": "正北", "northeast": "東北"
+      "east": "正東",
+      "southeast": "東南",
+      "south": "正南",
+      "southwest": "西南",
+      "west": "正西",
+      "northwest": "西北",
+      "north": "正北",
+      "northeast": "東北"
     },
     "calendar": {
-      "title": "訂閱日曆", "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
+      "title": "訂閱日曆",
+      "subtitle": "選擇星座、時間範圍與運勢類型，訂閱到 macOS、Windows、iOS、Android 本機日曆用戶端。",
       "overallIndex": "綜合指數",
-      "sign": "星座", "range": "時間範圍", "today": "當天", "threeDays": "3天", "sevenDays": "7天",
-      "types": "運勢類型", "subscribe": "訂閱到日曆", "download": "下載 ICS", "copied": "訂閱連結已複製",
-      "copy": "複製 URL", "copyFailed": "複製失敗，請手動複製", "url": "訂閱日曆 URL",
+      "sign": "星座",
+      "range": "時間範圍",
+      "today": "當天",
+      "threeDays": "3天",
+      "sevenDays": "7天",
+      "types": "運勢類型",
+      "subscribe": "訂閱到日曆",
+      "download": "下載 ICS",
+      "copied": "訂閱連結已複製",
+      "copy": "複製 URL",
+      "copyFailed": "複製失敗，請手動複製",
+      "url": "訂閱日曆 URL",
       "hint": "URL 使用 webcal 協議開啟本機日曆；ICS 也可手動匯入 Apple 日曆、Outlook、Google 日曆或 Android 日曆。"
     },
     "faq": {
@@ -5211,7 +5274,7 @@
     "hourPillar": "時辰柱",
     "sceneFallback": "通用"
   },
-    "todayAlmanac": {
+  "todayAlmanac": {
     "title": "今日黃曆",
     "subtitle": "完整查看當日宜忌、吉時、方位、沖煞、顏色與節氣資訊。",
     "dailyQuoteLabel": "今日吉句",
@@ -12418,6 +12481,29 @@
   },
   "baziPaipanRoom": {
     "ritualLoading": "正在點燈安盤，請稍候",
+    "start": "開始",
+    "bootBubble": "點擊開始按鈕，開始本次八字排盤。",
+    "questionBubble": "這次你想問什麼？",
+    "birthBubble": "麻煩告知你的生辰",
+    "calculatingRoom": "掌櫃正在起局",
+    "currentBazi": "當前時間八字",
+    "chartResult": "排盤結果",
+    "userBazi": "用戶八字",
+    "topicResultTitle": "{topic}排盤結果",
+    "currentTopicResultTitle": "{topic}當日引動",
+    "flowYear": "流年",
+    "flowMonth": "流月",
+    "flowDay": "流日",
+    "flowHour": "流時",
+    "currentCycle": "當前層級",
+    "engineSource": "口徑",
+    "currentCycleNote": "與排盤引擎共用年月日時干支算法",
+    "pillarSummary": "四柱摘要",
+    "slideNavigation": "結果分頁",
+    "previousSlide": "上一頁",
+    "nextSlide": "下一頁",
+    "fullEntryHint": "這裡只保留本次問題的摘要。完整命盤包含五行、大運流年、神煞與地支關係。",
+    "currentDayun": "當前大運",
     "enter": "進入命盤室",
     "chooseTopic": "先說清楚，你想問什麼？",
     "skipFull": "跳過引導，直接看完整排盤",
@@ -12425,10 +12511,13 @@
     "roomActions": "命盤室操作",
     "askWhat": "問什麼",
     "askAgain": "再問",
+    "actionAskAgain": "再問",
     "back": "返回",
     "birthTitle": "報上生辰",
     "changePerson": "換一個人",
+    "actionChangePerson": "換人",
     "clearLocal": "清除本地資料",
+    "actionClear": "清除",
     "calculating": "天機儀轉動中",
     "reveal": "揭示今日盤面",
     "localReady": "已使用本地生辰",
@@ -12445,6 +12534,7 @@
     "retry": "重試",
     "deepLink": "繼續深入",
     "fullResult": "看完整排盤結果",
+    "actionFullChart": "全盤",
     "changeTopic": "換個問題再問",
     "poster": "生成海報",
     "fullTitle": "完整八字排盤",
@@ -14139,6 +14229,96 @@
       "rooster": "酉時",
       "dog": "戌時",
       "pig": "亥時"
+    }
+  },
+  "sansatemple": {
+    "map": {
+      "title": "寺廟地圖",
+      "current": "目前",
+      "travel": "前往",
+      "zones": {
+        "entrance": "入口",
+        "mainHall": "法堂",
+        "coffee": "茶歇座",
+        "teaHall": "清然堂",
+        "forest": "林間小徑",
+        "pondRest": "池畔休息處",
+        "pagodaWalk": "塔邊步道",
+        "riverside": "河邊散步道",
+        "bamboo": "竹林",
+        "persimmon": "柿架",
+        "bell": "梵鐘亭",
+        "workshop": "工坊"
+      }
+    },
+    "title": "線上寺廟",
+    "subtitle": "安靜同堂的線上體驗",
+    "kicker": "Online Temple",
+    "noscript": "需要啟用 JavaScript 才能進入 3D 法堂。",
+    "webglFallback": "目前瀏覽器不支援 WebGL，已顯示靜態海報。",
+    "loading": "正在讀取頻道",
+    "opening": "正在開啟法堂",
+    "failedTitle": "暫時無法進入",
+    "failedText": "連線沒有建立，可以稍後重試。",
+    "retry": "重新進入",
+    "enter": "進入",
+    "menu": "設定",
+    "close": "關閉",
+    "leave": "離開",
+    "disclaimer": "這是線上體驗，不是真實寺院的法會或祈福服務。",
+    "inspiration": "靈感來自 sansatemple.com",
+    "reverenceNotice": "{name} 向你合十",
+    "notices": {
+      "channelFull": "頻道已滿，請稍後再試。",
+      "connectionFailed": "連線失敗，請重新進入。",
+      "reconnectFailed": "重新連線失敗，已回到入口。"
+    },
+    "channels": {
+      "title": "選擇頻道",
+      "name": "頻道 {n}",
+      "full": "滿員",
+      "queue": "所有頻道都已滿，正在排隊提示。"
+    },
+    "settings": {
+      "title": "聲音與畫質",
+      "master": "總開關",
+      "environment": "環境音",
+      "chanting": "誦經",
+      "effects": "音效",
+      "mode": "誦經方式",
+      "personal": "個人聽",
+      "common": "共同聽",
+      "next": "下一場：{time}",
+      "quality": "畫質",
+      "auto": "自動",
+      "high": "高檔",
+      "medium": "中檔",
+      "low": "低檔"
+    },
+    "actions": {
+      "pray": "拜佛",
+      "beads": "念珠",
+      "reverence": "合十",
+      "woodfish": "木魚",
+      "incense": "燒香",
+      "meditate": "打坐 {n} 分"
+    },
+    "states": {
+      "praying": "正在拜佛",
+      "incense": "香 {n}/3"
+    },
+    "meditation": {
+      "remaining": "剩餘 {time}"
+    },
+    "beads": {
+      "title": "念珠",
+      "advance": "撥一顆",
+      "reset": "歸零",
+      "localOnly": "計數只保存在這台裝置。"
+    },
+    "seo": {
+      "title": "線上寺廟_3D法堂共修體驗",
+      "description": "進入程式生成的 3D 寺廟場景，在石徑與法堂中靜坐、拜佛、撥念珠、敲木魚、燒香，並與同頻道的人安靜同堂。"
     }
   }
 }

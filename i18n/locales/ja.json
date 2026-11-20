@@ -12482,6 +12482,29 @@
   },
   "baziPaipanRoom": {
     "ritualLoading": "命盤室の灯をともしています",
+    "start": "始める",
+    "bootBubble": "開始ボタンを押して八字排盤を始めてください。",
+    "questionBubble": "今回は何を尋ねますか？",
+    "birthBubble": "生年月日を教えてください",
+    "calculatingRoom": "店主が盤を組んでいます",
+    "currentBazi": "現在の時刻の四柱",
+    "chartResult": "排盤結果",
+    "userBazi": "利用者の四柱",
+    "topicResultTitle": "{topic}の排盤結果",
+    "currentTopicResultTitle": "{topic}の今日の作用",
+    "flowYear": "流年",
+    "flowMonth": "流月",
+    "flowDay": "流日",
+    "flowHour": "流時",
+    "currentCycle": "現在の層",
+    "engineSource": "方式",
+    "currentCycleNote": "排盤エンジンと同じ干支算法を使用",
+    "pillarSummary": "四柱の要約",
+    "slideNavigation": "結果スライド",
+    "previousSlide": "前のスライド",
+    "nextSlide": "次のスライド",
+    "fullEntryHint": "ここには今回の質問の要約だけを表示します。完全命盤には五行、大運流年、神煞、地支関係が含まれます。",
+    "currentDayun": "現在の大運",
     "enter": "命盤室へ入る",
     "chooseTopic": "まず何を尋ねますか？",
     "skipFull": "案内を飛ばして完整排盤を見る",
@@ -12489,10 +12512,13 @@
     "roomActions": "命盤ルームの操作",
     "askWhat": "相談する",
     "askAgain": "もう一度相談",
+    "actionAskAgain": "再質問",
     "back": "戻る",
     "birthTitle": "生年月日を知らせる",
     "changePerson": "別の人に変える",
+    "actionChangePerson": "交代",
     "clearLocal": "ローカルデータを消す",
+    "actionClear": "削除",
     "calculating": "天機儀が回っています",
     "reveal": "今日の盤を開く",
     "localReady": "ローカルの生年月日を使用中",
@@ -12509,6 +12535,7 @@
     "retry": "再試行",
     "deepLink": "さらに深める",
     "fullResult": "完整排盤を見る",
+    "actionFullChart": "全盤",
     "changeTopic": "別の質問をする",
     "poster": "ポスターを作る",
     "fullTitle": "四柱推命 完整排盤",
@@ -14203,6 +14230,96 @@
       "rooster": "酉の刻",
       "dog": "戌の刻",
       "pig": "亥の刻"
+    }
+  },
+  "sansatemple": {
+    "map": {
+      "title": "寺廟マップ",
+      "current": "現在地",
+      "travel": "移動",
+      "zones": {
+        "entrance": "入り口",
+        "mainHall": "法堂",
+        "coffee": "茶席",
+        "teaHall": "清然堂",
+        "forest": "林の小道",
+        "pondRest": "池畔の休憩場",
+        "pagodaWalk": "塔の周辺路",
+        "riverside": "川辺の遊歩道",
+        "bamboo": "竹林",
+        "persimmon": "柿干し架",
+        "bell": "梵鐘亭",
+        "workshop": "作業場"
+      }
+    },
+    "title": "オンライン寺廟",
+    "subtitle": "静かに同じ堂に集う体験",
+    "kicker": "Online Temple",
+    "noscript": "3D の法堂を開くには JavaScript が必要です。",
+    "webglFallback": "WebGL に対応していないため、静止ポスターを表示しています。",
+    "loading": "チャンネルを読み込み中",
+    "opening": "法堂を開いています",
+    "failedTitle": "現在入れません",
+    "failedText": "接続できませんでした。あとでお試しください。",
+    "retry": "再入場",
+    "enter": "入る",
+    "menu": "設定",
+    "close": "閉じる",
+    "leave": "退出",
+    "disclaimer": "これはオンライン体験であり、実際の寺院の法会や祈願ではありません。",
+    "inspiration": "sansatemple.com から着想",
+    "reverenceNotice": "{name} さんが合掌しました",
+    "notices": {
+      "channelFull": "チャンネルが満員です。",
+      "connectionFailed": "接続に失敗しました。",
+      "reconnectFailed": "再接続できず、入り口に戻りました。"
+    },
+    "channels": {
+      "title": "チャンネルを選ぶ",
+      "name": "チャンネル {n}",
+      "full": "満員",
+      "queue": "すべてのチャンネルが満員のため、順番待ちです。"
+    },
+    "settings": {
+      "title": "音と画質",
+      "master": "全体",
+      "environment": "環境音",
+      "chanting": "読経",
+      "effects": "効果音",
+      "mode": "読経モード",
+      "personal": "個人",
+      "common": "共同",
+      "next": "次回：{time}",
+      "quality": "画質",
+      "auto": "自動",
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "actions": {
+      "pray": "礼拝",
+      "beads": "数珠",
+      "reverence": "合掌",
+      "woodfish": "木魚",
+      "incense": "線香",
+      "meditate": "{n}分座禅"
+    },
+    "states": {
+      "praying": "礼拝中",
+      "incense": "線香 {n}/3"
+    },
+    "meditation": {
+      "remaining": "残り {time}"
+    },
+    "beads": {
+      "title": "数珠",
+      "advance": "一つ進める",
+      "reset": "リセット",
+      "localOnly": "回数はこの端末だけに保存します。"
+    },
+    "seo": {
+      "title": "オンライン寺廟_3D法堂体験",
+      "description": "手続き的に生成した 3D 寺院で、石畳と法堂を歩き、静座や礼拝、数珠、木魚、線香を体験できます。"
     }
   }
 }

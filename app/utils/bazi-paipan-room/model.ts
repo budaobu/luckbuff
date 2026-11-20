@@ -3,9 +3,11 @@ import type { BaziTopicLens } from '~~/server/utils/tools/bazi-paipan-topic-lens
 
 export type BaziRoomPhase = 'idle' | 'topic' | 'calculating' | 'revealed'
 export type BaziRoomLinkType = 'combine' | 'clash' | 'generates' | 'controls' | 'harm'
+export type BaziRoomFlowStage = 'boot' | 'start' | 'question' | 'birth' | 'calculating' | 'slideshow'
+export type BaziRoomSlideId = 'natal' | 'topic-natal' | 'topic-current' | 'reading' | 'full-chart'
 
 export interface BaziRoomPillar {
-  key: 'year' | 'month' | 'day' | 'hour' | 'today'
+  key: 'year' | 'month' | 'day' | 'hour' | 'today' | 'flowYear' | 'flowMonth' | 'flowDay' | 'flowHour'
   label: string
   gan: string
   zhi: string
@@ -23,11 +25,20 @@ export interface BaziRoomLink {
 
 export interface BaziRoomSceneModel {
   phase: BaziRoomPhase
+  flowStage: BaziRoomFlowStage
   pillars: BaziRoomPillar[]
+  currentPillars: BaziRoomPillar[]
   links: BaziRoomLink[]
+  chart: BaziChartResult | null
+  topicLens: BaziTopicLens | null
   focusX: number
-  instrumentSpeed: number
+  compassSpeed: number
   keeperGesture: 'idle' | 'invite' | 'calculating' | 'present'
+  slideId: BaziRoomSlideId | null
+  slideTitle: string
+  slideDetail: string
+  slideIndex: number
+  slideCount: number
 }
 
 const BASE_PILLARS: BaziRoomPillar[] = [
@@ -52,18 +63,43 @@ function linkTypeFromRelation(type: string): BaziRoomLinkType {
 
 export function buildBaziRoomSceneModel(options: {
   phase: BaziRoomPhase
+  flowStage: BaziRoomFlowStage
+  currentPillars?: BaziRoomPillar[]
+  slideId?: BaziRoomSlideId | null
+  slideTitle?: string
+  slideDetail?: string
+  slideIndex?: number
+  slideCount?: number
   result: BaziChartResult | null
   lens: BaziTopicLens | null
 }): BaziRoomSceneModel {
-  const { phase, result, lens } = options
+  const {
+    phase, flowStage, currentPillars = [], slideId = null, slideTitle = '', slideDetail = '',
+    slideIndex = 0, slideCount = 1, result, lens,
+  } = options
   if (!result) {
     return {
       phase,
+      flowStage,
       pillars: BASE_PILLARS,
+      currentPillars,
       links: [],
+      chart: result,
+      topicLens: lens,
       focusX: 0,
-      instrumentSpeed: phase === 'calculating' ? 2.2 : 0.28,
-      keeperGesture: phase === 'calculating' ? 'calculating' : phase === 'topic' ? 'invite' : 'idle',
+      compassSpeed: flowStage === 'calculating' ? 2.2 : 0.28,
+      keeperGesture: flowStage === 'calculating'
+        ? 'calculating'
+        : flowStage === 'start' || flowStage === 'question' || flowStage === 'birth'
+          ? 'invite'
+          : flowStage === 'slideshow'
+            ? 'present'
+            : 'invite',
+      slideId,
+      slideTitle,
+      slideDetail,
+      slideIndex,
+      slideCount,
     }
   }
 
@@ -116,10 +152,23 @@ export function buildBaziRoomSceneModel(options: {
 
   return {
     phase,
+    flowStage,
     pillars,
+    currentPillars,
     links,
+    chart: result,
+    topicLens: lens,
     focusX: phase === 'revealed' ? focusX : 0.45,
-    instrumentSpeed: phase === 'calculating' ? 2.6 : 0.3,
-    keeperGesture: phase === 'calculating' ? 'calculating' : phase === 'revealed' ? 'present' : 'invite',
+    compassSpeed: flowStage === 'calculating' ? 2.6 : 0.3,
+    keeperGesture: flowStage === 'calculating'
+      ? 'calculating'
+      : flowStage === 'slideshow'
+        ? 'present'
+        : 'invite',
+    slideId,
+    slideTitle,
+    slideDetail,
+    slideIndex,
+    slideCount,
   }
 }

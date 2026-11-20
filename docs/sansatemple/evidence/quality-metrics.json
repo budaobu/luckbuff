@@ -1,0 +1,40 @@
+{
+  "measuredAt": "2026-11-10T09:30:35.190Z",
+  "records": [
+    {
+      "quality": "high",
+      "calls": 316,
+      "triangles": 30754,
+      "textures": 5
+    },
+    {
+      "quality": "medium",
+      "calls": 16,
+      "triangles": 5992,
+      "textures": 5
+    },
+    {
+      "quality": "low",
+      "calls": 16,
+      "triangles": 5992,
+      "textures": 5
+    }
+  ],
+  "budgets": {
+    "high": {
+      "calls": 325,
+      "triangles": 600000,
+      "textures": 100
+    },
+    "medium": {
+      "calls": 150,
+      "triangles": 350000,
+      "textures": 80
+    },
+    "low": {
+      "calls": 88,
+      "triangles": 150000,
+      "textures": 50
+    }
+  }
+}
